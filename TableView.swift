@@ -108,7 +108,10 @@ public final class TableView: UITableView {
   }
 
   private func listItemAtIndexPath(indexPath: NSIndexPath) -> ListItemStructure {
-    guard let structure = structure else { assert(false, "Can't load list item with nil structure") }
+    guard let structure = structure else {
+      assert(false, "Can't load list item with nil structure")
+      return ListItemStructure(itemId: ListItemId(reuseId: "", dataId: ""))
+    }
 
     // Note: Default UITableView section headers are "sticky" at the top of the page.
     // We don't want this behavior, so we are implementing our section headers as cells
