@@ -3,6 +3,8 @@
 
 import UIKit
 
+/// An internal cell class for use in a `TableView`. It handles displaying a `Divider` and
+/// wraps view classes passed to it through a `ViewMaker`.
 final class TableViewCell: UITableViewCell {
 
   // MARK: Lifecycle
@@ -20,6 +22,7 @@ final class TableViewCell: UITableViewCell {
   private(set) var dividerView: UIView?
   private(set) var view: UIView?
 
+  /// Pass a `ViewMaker` to generate a view for this cell's reuseId that the cell will pin to the edges of its `contentView`.
   func makeView(with viewMaker: ViewMaker) {
     if self.view != nil {
       return
@@ -35,6 +38,7 @@ final class TableViewCell: UITableViewCell {
     }
   }
 
+  /// Pass a `ViewMaker` to generate a `Divider` for this cell's reuseId that the cell will pin to the bottom of its `contentView`.
   func makeDividerView(with viewMaker: ViewMaker) {
     if self.dividerView != nil {
       return

@@ -3,70 +3,10 @@
 
 import Foundation
 
-// MARK: ListItemDividerType
-
-enum ListItemDividerType {
-  case RowDivider
-  case SectionHeaderDivider
-  case None
-}
-
-// MARK: ListInternalTableViewItemStructure
-
-struct ListInternalTableViewItemStructure {
-
-  init(
-    listItem: ListItemStructure,
-    dividerType: ListItemDividerType)
-  {
-    self.listItem = listItem
-    self.dividerType = dividerType
-  }
-
-  let listItem: ListItemStructure
-  let dividerType: ListItemDividerType
-}
-
-extension ListInternalTableViewItemStructure: QuickDiffable {
-  func isEqualToDiffableItem(diffableItem: QuickDiffable) -> Bool {
-    guard let diffableListItem = diffableItem as? ListInternalTableViewItemStructure else { return false }
-    return listItem.isEqualToDiffableItem(diffableListItem.listItem)
-  }
-
-  var diffIdentifier: String {
-    return listItem.diffIdentifier
-  }
-}
-
-// MARK: ListInternalTableViewSectionStructure
-
-struct ListInternalTableViewSectionStructure {
-
-  init(
-    dataId: String,
-    items: [ListInternalTableViewItemStructure])
-  {
-    self.dataId = dataId
-    self.items = items
-  }
-
-  let dataId: String
-  let items: [ListInternalTableViewItemStructure]
-}
-
-extension ListInternalTableViewSectionStructure: QuickDiffable {
-  func isEqualToDiffableItem(diffableItem: QuickDiffable) -> Bool {
-    guard let diffableSection = diffableItem as? ListInternalTableViewSectionStructure else { return false }
-    return dataId == diffableSection.dataId
-  }
-
-  var diffIdentifier: String {
-    return dataId
-  }
-}
-
 // MARK: ListInternalTableViewStructure
 
+/// An internal data structure constructed from a `ListStructure` that is specific
+/// to display in a `UITableView` implementation.
 struct ListInternalTableViewStructure {
 
   init(sections: [ListInternalTableViewSectionStructure])
@@ -75,20 +15,6 @@ struct ListInternalTableViewStructure {
   }
 
   let sections: [ListInternalTableViewSectionStructure]
-}
-
-struct ListInternalTableViewStructureChangeset {
-
-  init(
-    sectionChangeset: QuickDiffIndexSetChangeset,
-    itemChangeset: QuickDiffIndexPathChangeset)
-  {
-    self.sectionChangeset = sectionChangeset
-    self.itemChangeset = itemChangeset
-  }
-
-  let sectionChangeset: QuickDiffIndexSetChangeset
-  let itemChangeset: QuickDiffIndexPathChangeset
 }
 
 extension ListInternalTableViewStructure {
@@ -132,7 +58,7 @@ extension ListInternalTableViewStructure {
 
   static func diff(oldStructure
     oldStructure: ListInternalTableViewStructure,
-                   newStructure: ListInternalTableViewStructure) -> ListInternalTableViewStructureChangeset
+    newStructure: ListInternalTableViewStructure) -> ListInternalTableViewStructureChangeset
   {
     let sectionChangeset = QuickDiff.diffIndexSets(
       oldArray: oldStructure.sections,
@@ -175,5 +101,85 @@ extension ListInternalTableViewStructure {
     return ListInternalTableViewStructureChangeset(
       sectionChangeset: sectionChangeset,
       itemChangeset: itemChangeset)
+  }
+}
+
+/// An internal data structure changeset for use in updating a `UITableView`.
+struct ListInternalTableViewStructureChangeset {
+
+  init(
+    sectionChangeset: QuickDiffIndexSetChangeset,
+    itemChangeset: QuickDiffIndexPathChangeset)
+  {
+    self.sectionChangeset = sectionChangeset
+    self.itemChangeset = itemChangeset
+  }
+
+  let sectionChangeset: QuickDiffIndexSetChangeset
+  let itemChangeset: QuickDiffIndexPathChangeset
+}
+
+// MARK: ListInternalTableViewSectionStructure
+
+/// A section in a `ListInternalTableViewStructure`.
+struct ListInternalTableViewSectionStructure {
+
+  init(
+    dataId: String,
+    items: [ListInternalTableViewItemStructure])
+  {
+    self.dataId = dataId
+    self.items = items
+  }
+
+  let dataId: String
+  let items: [ListInternalTableViewItemStructure]
+}
+
+extension ListInternalTableViewSectionStructure: QuickDiffable {
+  func isEqualToDiffableItem(diffableItem: QuickDiffable) -> Bool {
+    guard let diffableSection = diffableItem as? ListInternalTableViewSectionStructure else { return false }
+    return dataId == diffableSection.dataId
+  }
+
+  var diffIdentifier: String {
+    return dataId
+  }
+}
+
+// MARK: ListItemDividerType
+
+/// Tells the cell which divider type to use in a view pinned to the cell's bottom.
+enum ListItemDividerType {
+  case RowDivider
+  case SectionHeaderDivider
+  case None
+}
+
+// MARK: ListInternalTableViewItemStructure
+
+/// An item in a `ListInternalTableViewSectionStructure`, representing either a row or a section header.
+struct ListInternalTableViewItemStructure {
+
+  init(
+    listItem: ListItemStructure,
+    dividerType: ListItemDividerType)
+  {
+    self.listItem = listItem
+    self.dividerType = dividerType
+  }
+
+  let listItem: ListItemStructure
+  let dividerType: ListItemDividerType
+}
+
+extension ListInternalTableViewItemStructure: QuickDiffable {
+  func isEqualToDiffableItem(diffableItem: QuickDiffable) -> Bool {
+    guard let diffableListItem = diffableItem as? ListInternalTableViewItemStructure else { return false }
+    return listItem.isEqualToDiffableItem(diffableListItem.listItem)
+  }
+
+  var diffIdentifier: String {
+    return listItem.diffIdentifier
   }
 }

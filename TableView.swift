@@ -108,6 +108,22 @@ public final class TableView: UITableView {
     sectionHeaderDividerViewMaker = viewMaker
   }
 
+  public override func registerClass(cellClass: AnyClass?, forCellReuseIdentifier identifier: String) {
+    assert(false, "You shouldn't be registering cell classes on a TableView. Use registerReuseId:viewMaker:viewConfigurer instead.")
+  }
+
+  public override func registerNib(nib: UINib?, forCellReuseIdentifier identifier: String) {
+    assert(false, "You shouldn't be registering cell nibs on a TableView. Use registerReuseId:viewMaker:viewConfigurer instead.")
+  }
+
+  public override func registerNib(nib: UINib?, forHeaderFooterViewReuseIdentifier identifier: String) {
+    assert(false, "You shouldn't be registering header or footer nibs on a TableView. Use registerReuseId:viewMaker:viewConfigurer instead.")
+  }
+
+  public override func registerClass(aClass: AnyClass?, forHeaderFooterViewReuseIdentifier identifier: String) {
+    assert(false, "You shouldn't be registering header or footer classes on a TableView. Use registerReuseId:viewMaker:viewConfigurer instead.")
+  }
+
   // MARK: Private
 
   private let updateBehavior: TableViewUpdateBehavior
@@ -127,15 +143,15 @@ public final class TableView: UITableView {
   }
 
   private func registerCellForReuseId(reuseId: String) {
-    registerClass(TableViewCell.self,
-                  forCellReuseIdentifier: reuseId)
+    super.registerClass(TableViewCell.self,
+                        forCellReuseIdentifier: reuseId)
   }
 
   private func listItemAtIndexPath(indexPath: NSIndexPath) -> ListInternalTableViewItemStructure {
     guard let structure = structure else {
       assert(false, "Can't load list item with nil structure")
       return ListInternalTableViewItemStructure(
-        listItem: ListItemStructure(itemId:ListItemId(reuseId: "", dataId: "")),
+        listItem: ListItemStructure(itemId: ListItemId(reuseId: "", dataId: "")),
         dividerType: .None)
     }
     return structure.sections[indexPath.section].items[indexPath.row]
