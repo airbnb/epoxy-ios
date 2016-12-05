@@ -3,6 +3,11 @@
 
 import UIKit
 
+public typealias MakeViewBlock = () -> UIView
+public typealias ConfigureListItemViewBlock = (UIView, ListItemId) -> Void
+public typealias SelectListItemBlock = (ListItemId) -> Void
+
+
 /// The behavior of the TableView on update.
 ///
 /// - Diffs: The TableView animates row inserts, deletes, moves, and updates.
@@ -33,33 +38,23 @@ public final class TableView: UITableView {
 
   // MARK: Public
 
-  /// Sets the TableView's data and optionally updates its cell configuration block
-  /// and selection block. By default, this will diff the new `ListStructure` against the
+  /// Sets the TableView's data. By default, this will diff the new `ListStructure` against the
   /// existing `ListStructure` and animate the changes to the TableView.
   /// Set `shouldDiff` to `false` if you want the TableView to do a full reload with the new content.
   ///
   /// - Parameters:
   ///     - structure: The `ListStructure` instance representing the TableView's data.
-  ///     - configurationBlock: Optional block used to configure cells or section headers as they appear.
-  ///     - selectionBlock: Optional block fired when a cell is selected.
-  ///
-  /// - Warning: The `configurationBlock` must be set at least once before the initial load.
-  public func setStructure(structure: ListStructure?,
-                           configurationBlock: ((UIView, ListItemId) -> Void)? = nil,
-                           selectionBlock: ((ListItemId) -> Void)? = nil) {
+  public func setStructure(structure: ListStructure?) {
 
-    if let configurationBlock = configurationBlock {
-      self.configurationBlock = configurationBlock
-    }
-
-    if let selectionBlock = selectionBlock {
-      self.selectionBlock = selectionBlock
+    var newInternalStructure: ListInternalTableViewStructure?
+    if let structure = structure {
+     newInternalStructure = ListInternalTableViewStructure.makeWithListStructure(structure)
     }
 
     guard let oldStructure = self.structure,
-      let newStructure = structure else {
+      let newStructure = newInternalStructure else {
 
-        self.structure = structure
+        self.structure = newInternalStructure
         reloadData()
         return
     }
@@ -68,37 +63,61 @@ public final class TableView: UITableView {
 
     switch updateBehavior {
     case .Diffs:
-      let changeset = ListStructure.diffForTableView(oldStructure: oldStructure, newStructure: newStructure)
+      let changeset = ListInternalTableViewStructure.diff(oldStructure: oldStructure, newStructure: newStructure)
       applyChangeset(changeset)
     case .Reloads:
       reloadData()
     }
   }
 
-  /// Registers a cell view class for reuse in the TableView.
+  /// Registers a `reuseId` for the table view. Use the `makeViewBlock` to return the view you'd like to
+  /// use for this `reuseId`. Use the `configureViewBlock` to configure that view using the `dataId`
+  /// for a particular row. Use the optional `selectListItemBlock` to handle selection for rows with
+  /// this `reuseId`.
   ///
   /// - Parameters:
-  ///     - cellClass: Expects a `UITableViewCell` or subclass.
-  ///     - forReuseId: A `reuseId` must be linked with only one cell class.
-  public func registerCellClass(cellClass: AnyClass?, forReuseId reuseId: String) {
-    registerClass(cellClass, forCellReuseIdentifier: reuseId)
+  ///     - reuseId: String identifier that is unique to this set of make/configure/select blocks.
+  ///     - makeViewBlock: Block that should return an initialized view of the type you'd like to use for this `reuseId`.
+  ///     - configurationBlock: Block used to configure cells or section headers as they appear.
+  ///     - selectionBlock: Optional block fired when a cell with this `reuseId` is selected.
+  public func registerReuseId(
+    reuseId: String, forMakeViewBlock
+    makeViewBlock: MakeViewBlock,
+    configureViewBlock: ConfigureListItemViewBlock,
+    selectListItemBlock: SelectListItemBlock? = nil)
+  {
+    registerCellForReuseId(reuseId)
+    makeViewBlocks[reuseId] = makeViewBlock
+    configurationBlocks[reuseId] = configureViewBlock
+    selectionBlocks[reuseId] = selectListItemBlock
   }
 
-  /// Registers a section header view class for reuse in the TableView.
+  /// Sets the `MakeViewBlock` to use for the dividers between rows.
   ///
   /// - Parameters:
-  ///     - sectionHeaderClass: Expects a `UITableViewCell` or subclass.
-  ///     - forReuseId: A `reuseId` must be linked with only one section header class, and cannot be the same as a cell class `reuseId`.
-  public func registerSectionHeaderClass(sectionHeaderClass: AnyClass?, forReuseId reuseId: String) {
-    registerClass(sectionHeaderClass, forCellReuseIdentifier: reuseId)
+  ///     - makeViewBlock: Block that should return an initialized view of the type you'd like to use for this divider.
+  public func setMakeRowDividerBlock(makeViewBlock: () -> UIView) {
+    makeRowDividerBlock = makeViewBlock
+  }
+
+  /// Sets the `MakeViewBlock` to use for the dividers between a section header and its rows.
+  ///
+  /// - Parameters:
+  ///     - makeViewBlock: Block that should return an initialized view of the type you'd like to use for this divider.
+  public func setMakeSectionHeaderDividerBlock(makeViewBlock: () -> UIView) {
+    makeSectionHeaderDividerBlock = makeViewBlock
   }
 
   // MARK: Private
 
   private let updateBehavior: TableViewUpdateBehavior
-  private var structure: ListStructure?
-  private var configurationBlock: ((UIView, ListItemId) -> Void)?
-  private var selectionBlock: ((ListItemId) -> Void)?
+  private var structure: ListInternalTableViewStructure?
+
+  private var makeRowDividerBlock: MakeViewBlock?
+  private var makeSectionHeaderDividerBlock: MakeViewBlock?
+  private var makeViewBlocks = [String: MakeViewBlock]()
+  private var configurationBlocks = [String: ConfigureListItemViewBlock]()
+  private var selectionBlocks = [String: SelectListItemBlock]()
 
   private func setUp() {
     delegate = self
@@ -107,45 +126,48 @@ public final class TableView: UITableView {
     estimatedRowHeight = 44
   }
 
-  private func listItemAtIndexPath(indexPath: NSIndexPath) -> ListItemStructure {
+  private func registerCellForReuseId(reuseId: String) {
+    registerClass(TableViewCell.self,
+                  forCellReuseIdentifier: reuseId)
+  }
+
+  private func listItemAtIndexPath(indexPath: NSIndexPath) -> ListInternalTableViewItemStructure {
     guard let structure = structure else {
       assert(false, "Can't load list item with nil structure")
-      return ListItemStructure(itemId: ListItemId(reuseId: "", dataId: ""))
+      return ListInternalTableViewItemStructure(
+        listItem: ListItemStructure(itemId:ListItemId(reuseId: "", dataId: "")),
+        dividerType: .None)
     }
+    return structure.sections[indexPath.section].items[indexPath.row]
+  }
 
-    // Note: Default UITableView section headers are "sticky" at the top of the page.
-    // We don't want this behavior, so we are implementing our section headers as cells
-    // in the UITableView implementation.
-
-    let section = structure.sections[indexPath.section]
-
-    var sectionHeaderOffset: Int = 0
-    if let sectionHeader = section.sectionHeader {
-      if indexPath.row == 0 {
-        return sectionHeader
+  private func updateDividerForCell(cell: TableViewCell, dividerType: ListItemDividerType) {
+    switch dividerType {
+    case .None:
+      cell.dividerView?.hidden = true
+    case .RowDivider:
+      if let makeRowDividerBlock = makeRowDividerBlock {
+        cell.dividerView?.hidden = false
+        cell.makeDividerView(with: makeRowDividerBlock)
       }
-      sectionHeaderOffset = 1
+    case .SectionHeaderDivider:
+      if let makeSectionHeaderDividerBlock = makeSectionHeaderDividerBlock {
+        cell.dividerView?.hidden = false
+        cell.makeDividerView(with: makeSectionHeaderDividerBlock)
+      }
     }
-
-    return structure.sections[indexPath.section].items[indexPath.row - sectionHeaderOffset]
   }
 
-  private func itemCountForSection(section: Int) -> Int {
-    guard let structure = structure else { return 0 }
-    let section = structure.sections[section]
-    let sectionHeaderCount = section.sectionHeader != nil ? 1 : 0
-    return section.items.count + sectionHeaderCount
-  }
-
-  private func applyChangeset(changeset: ListStructureChangeset) {
+  private func applyChangeset(changeset: ListInternalTableViewStructureChangeset) {
 
     beginUpdates()
 
     changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
-      if let cell = cellForRowAtIndexPath(fromIndexPath) {
-        let item = listItemAtIndexPath(toIndexPath)
-        if let configurationBlock = configurationBlock {
-          configurationBlock(cell, item.itemId)
+      if let cell = cellForRowAtIndexPath(fromIndexPath) as? TableViewCell,
+        let view = cell.view {
+        let itemId = listItemAtIndexPath(toIndexPath).listItem.itemId
+        if let configurationBlock = configurationBlocks[itemId.reuseId] {
+          configurationBlock(view, itemId)
         } else {
           assert(false, "The configuration block should be set before the tableview's initial load.")
         }
@@ -168,6 +190,15 @@ public final class TableView: UITableView {
     }
     
     endUpdates()
+
+    indexPathsForVisibleRows?.forEach { indexPath in
+      guard let cell = cellForRowAtIndexPath(indexPath) as? TableViewCell else {
+        assert(false, "Only TableViewCell and subclasses are allowed in a TableView.")
+        return
+      }
+      let item = listItemAtIndexPath(indexPath)
+      self.updateDividerForCell(cell, dividerType: item.dividerType)
+    }
   }
 }
 
@@ -182,17 +213,27 @@ extension TableView: UITableViewDataSource {
   }
 
   public func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return itemCountForSection(section)
+    guard let structure = structure else { return 0 }
+
+    return structure.sections[section].items.count
   }
 
   public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
     let item = listItemAtIndexPath(indexPath)
-    let cell = tableView.dequeueReusableCellWithIdentifier(item.itemId.reuseId,
+    let cell = tableView.dequeueReusableCellWithIdentifier(item.listItem.itemId.reuseId,
                                                            forIndexPath: indexPath)
-    if let configurationBlock = configurationBlock {
-      configurationBlock(cell, item.itemId)
+
+    if let cell = cell as? TableViewCell,
+      let view = cell.view {
+      updateDividerForCell(cell, dividerType: item.dividerType)
+
+      if let configurationBlock = configurationBlocks[item.listItem.itemId.reuseId] {
+        configurationBlock(view, item.listItem.itemId)
+      } else {
+        assert(false, "The configuration block should be set before the tableview's initial load.")
+      }
     } else {
-      assert(false, "The configuration block should be set before the tableview's initial load.")
+      assert(false, "Only TableViewCell and subclasses are allowed in a TableView.")
     }
     return cell
   }
@@ -206,62 +247,6 @@ extension TableView: UITableViewDelegate {
     guard let structure = structure else { return }
 
     let item = structure.sections[indexPath.section].items[indexPath.row]
-    selectionBlock?(item.itemId)
-  }
-}
-
-extension ListStructure {
-  public static func diffForTableView(oldStructure
-    oldStructure: ListStructure,
-    newStructure: ListStructure) -> ListStructureChangeset
-  {
-    let sectionChangeset = QuickDiff.diffIndexSets(
-      oldArray: oldStructure.sections,
-      newArray: newStructure.sections)
-
-    var itemChangesetsForSections = [QuickDiffIndexPathChangeset]()
-    for i in 0..<oldStructure.sections.count {
-      if let newSectionIndex = sectionChangeset.newIndices[i] {
-
-        let fromSection = i
-        let toSection = newSectionIndex
-
-        var fromArray = oldStructure.sections[fromSection].items
-        if let sectionHeader = oldStructure.sections[fromSection].sectionHeader {
-          fromArray.insert(sectionHeader, atIndex: 0)
-        }
-
-        var toArray = newStructure.sections[toSection].items
-        if let sectionHeader = newStructure.sections[toSection].sectionHeader {
-          toArray.insert(sectionHeader, atIndex: 0)
-        }
-
-        let itemIndexChangeset = QuickDiff.diffIndexPaths(
-          oldArray: fromArray,
-          newArray: toArray,
-          fromSection: fromSection,
-          toSection: toSection)
-
-        itemChangesetsForSections.append(itemIndexChangeset)
-      }
-    }
-
-    let itemChangeset: QuickDiffIndexPathChangeset = itemChangesetsForSections.reduce(QuickDiffIndexPathChangeset()) { masterChangeset, thisChangeset in
-
-      let inserts: [NSIndexPath] = masterChangeset.inserts + thisChangeset.inserts
-      let deletes: [NSIndexPath] = masterChangeset.deletes + thisChangeset.deletes
-      let updates: [(NSIndexPath, NSIndexPath)] = masterChangeset.updates + thisChangeset.updates
-      let moves: [(NSIndexPath, NSIndexPath)] = masterChangeset.moves + thisChangeset.moves
-
-      return QuickDiffIndexPathChangeset(
-        inserts: inserts,
-        deletes: deletes,
-        updates: updates,
-        moves: moves)
-    }
-    
-    return ListStructureChangeset(
-      sectionChangeset: sectionChangeset,
-      itemChangeset: itemChangeset)
+    selectionBlocks[item.listItem.itemId.reuseId]?(item.listItem.itemId)
   }
 }

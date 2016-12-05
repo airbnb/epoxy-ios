@@ -52,7 +52,7 @@ extension ListItemStructure: QuickDiffable {
   }
 
   public var diffIdentifier: String {
-    return itemId.dataId
+    return itemId.reuseId + "__" + itemId.dataId
   }
 }
 
