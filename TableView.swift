@@ -3,9 +3,9 @@
 
 import UIKit
 
-public typealias MakeViewBlock = () -> UIView
-public typealias ConfigureListItemViewBlock = (UIView, ListItemId) -> Void
-public typealias SelectListItemBlock = (ListItemId) -> Void
+public typealias ViewMaker = () -> UIView
+public typealias ListItemViewConfigurer = (UIView, ListItemId) -> Void
+public typealias ListItemSelectionHandler = (ListItemId) -> Void
 
 
 /// The behavior of the TableView on update.
@@ -70,42 +70,42 @@ public final class TableView: UITableView {
     }
   }
 
-  /// Registers a `reuseId` for the table view. Use the `makeViewBlock` to return the view you'd like to
-  /// use for this `reuseId`. Use the `configureViewBlock` to configure that view using the `dataId`
-  /// for a particular row. Use the optional `selectListItemBlock` to handle selection for rows with
+  /// Registers a `reuseId` for the table view. Use the `viewMaker` to return the view you'd like to
+  /// use for this `reuseId`. Use the `viewConfigurer` to configure that view using the `dataId`
+  /// for a particular row. Use the optional `selectionHandler` to handle selection for rows with
   /// this `reuseId`.
   ///
   /// - Parameters:
   ///     - reuseId: String identifier that is unique to this set of make/configure/select blocks.
-  ///     - makeViewBlock: Block that should return an initialized view of the type you'd like to use for this `reuseId`.
-  ///     - configurationBlock: Block used to configure cells or section headers as they appear.
-  ///     - selectionBlock: Optional block fired when a cell with this `reuseId` is selected.
+  ///     - viewMaker: Block that should return an initialized view of the type you'd like to use for this `reuseId`.
+  ///     - viewConfigurer: Block used to configure cells or section headers as they appear.
+  ///     - selectionHandler: Optional block fired when a cell with this `reuseId` is selected.
   public func registerReuseId(
-    reuseId: String, forMakeViewBlock
-    makeViewBlock: MakeViewBlock,
-    configureViewBlock: ConfigureListItemViewBlock,
-    selectListItemBlock: SelectListItemBlock? = nil)
+    reuseId: String, forViewMaker
+    viewMaker: ViewMaker,
+    viewConfigurer: ListItemViewConfigurer,
+    selectionHandler: ListItemSelectionHandler? = nil)
   {
     registerCellForReuseId(reuseId)
-    makeViewBlocks[reuseId] = makeViewBlock
-    configurationBlocks[reuseId] = configureViewBlock
-    selectionBlocks[reuseId] = selectListItemBlock
+    viewMakers[reuseId] = viewMaker
+    listItemViewConfigurers[reuseId] = viewConfigurer
+    listItemSelectionHandlers[reuseId] = selectionHandler
   }
 
-  /// Sets the `MakeViewBlock` to use for the dividers between rows.
+  /// Sets the `ViewMaker` to use for the dividers between rows.
   ///
   /// - Parameters:
-  ///     - makeViewBlock: Block that should return an initialized view of the type you'd like to use for this divider.
-  public func setMakeRowDividerBlock(makeViewBlock: () -> UIView) {
-    makeRowDividerBlock = makeViewBlock
+  ///     - viewMaker: Block that should return an initialized view of the type you'd like to use for this divider.
+  public func setDividerViewMaker(viewMaker: ViewMaker) {
+    rowDividerViewMaker = viewMaker
   }
 
-  /// Sets the `MakeViewBlock` to use for the dividers between a section header and its rows.
+  /// Sets the `ViewMaker` to use for the dividers between a section header and its rows.
   ///
   /// - Parameters:
-  ///     - makeViewBlock: Block that should return an initialized view of the type you'd like to use for this divider.
-  public func setMakeSectionHeaderDividerBlock(makeViewBlock: () -> UIView) {
-    makeSectionHeaderDividerBlock = makeViewBlock
+  ///     - viewMaker: Block that should return an initialized view of the type you'd like to use for this divider.
+  public func setSectionHeaderDividerViewMaker(viewMaker: ViewMaker) {
+    sectionHeaderDividerViewMaker = viewMaker
   }
 
   // MARK: Private
@@ -113,11 +113,11 @@ public final class TableView: UITableView {
   private let updateBehavior: TableViewUpdateBehavior
   private var structure: ListInternalTableViewStructure?
 
-  private var makeRowDividerBlock: MakeViewBlock?
-  private var makeSectionHeaderDividerBlock: MakeViewBlock?
-  private var makeViewBlocks = [String: MakeViewBlock]()
-  private var configurationBlocks = [String: ConfigureListItemViewBlock]()
-  private var selectionBlocks = [String: SelectListItemBlock]()
+  private var rowDividerViewMaker: ViewMaker?
+  private var sectionHeaderDividerViewMaker: ViewMaker?
+  private var viewMakers = [String: ViewMaker]()
+  private var listItemViewConfigurers = [String: ListItemViewConfigurer]()
+  private var listItemSelectionHandlers = [String: ListItemSelectionHandler]()
 
   private func setUp() {
     delegate = self
@@ -146,14 +146,14 @@ public final class TableView: UITableView {
     case .None:
       cell.dividerView?.hidden = true
     case .RowDivider:
-      if let makeRowDividerBlock = makeRowDividerBlock {
+      if let rowDividerViewMaker = rowDividerViewMaker {
         cell.dividerView?.hidden = false
-        cell.makeDividerView(with: makeRowDividerBlock)
+        cell.makeDividerView(with: rowDividerViewMaker)
       }
     case .SectionHeaderDivider:
-      if let makeSectionHeaderDividerBlock = makeSectionHeaderDividerBlock {
+      if let sectionHeaderDividerViewMaker = sectionHeaderDividerViewMaker {
         cell.dividerView?.hidden = false
-        cell.makeDividerView(with: makeSectionHeaderDividerBlock)
+        cell.makeDividerView(with: sectionHeaderDividerViewMaker)
       }
     }
   }
@@ -166,11 +166,7 @@ public final class TableView: UITableView {
       if let cell = cellForRowAtIndexPath(fromIndexPath) as? TableViewCell,
         let view = cell.view {
         let itemId = listItemAtIndexPath(toIndexPath).listItem.itemId
-        if let configurationBlock = configurationBlocks[itemId.reuseId] {
-          configurationBlock(view, itemId)
-        } else {
-          assert(false, "The configuration block should be set before the tableview's initial load.")
-        }
+        listItemViewConfigurers[itemId.reuseId]?(view, itemId)
       }
     }
 
@@ -226,12 +222,7 @@ extension TableView: UITableViewDataSource {
     if let cell = cell as? TableViewCell,
       let view = cell.view {
       updateDividerForCell(cell, dividerType: item.dividerType)
-
-      if let configurationBlock = configurationBlocks[item.listItem.itemId.reuseId] {
-        configurationBlock(view, item.listItem.itemId)
-      } else {
-        assert(false, "The configuration block should be set before the tableview's initial load.")
-      }
+      listItemViewConfigurers[item.listItem.itemId.reuseId]?(view, item.listItem.itemId)
     } else {
       assert(false, "Only TableViewCell and subclasses are allowed in a TableView.")
     }
@@ -247,6 +238,6 @@ extension TableView: UITableViewDelegate {
     guard let structure = structure else { return }
 
     let item = structure.sections[indexPath.section].items[indexPath.row]
-    selectionBlocks[item.listItem.itemId.reuseId]?(item.listItem.itemId)
+    listItemSelectionHandlers[item.listItem.itemId.reuseId]?(item.listItem.itemId)
   }
 }

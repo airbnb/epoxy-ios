@@ -20,11 +20,11 @@ final class TableViewCell: UITableViewCell {
   private(set) var dividerView: UIView?
   private(set) var view: UIView?
 
-  func makeView(with makeViewBlock: MakeViewBlock) {
+  func makeView(with viewMaker: ViewMaker) {
     if self.view != nil {
       return
     }
-    let view = makeViewBlock()
+    let view = viewMaker()
     view.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(view)
     view.constrainToSuperview(attributes: [.bottom, .top, .trailing, .leading])
@@ -35,11 +35,11 @@ final class TableViewCell: UITableViewCell {
     }
   }
 
-  func makeDividerView(with makeViewBlock: () -> UIView) {
+  func makeDividerView(with viewMaker: ViewMaker) {
     if self.dividerView != nil {
       return
     }
-    let dividerView = makeViewBlock()
+    let dividerView = viewMaker()
     dividerView.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(dividerView)
     dividerView.constrainToSuperview(attributes: [.bottom, .trailing, .leading])
