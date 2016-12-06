@@ -17,6 +17,7 @@ public enum TableViewUpdateBehavior {
   case Reloads
 }
 
+
 /// A TableView class that handles updates through its `setStructure` method, and optionally animates diffs.
 public final class TableView: UITableView {
 
@@ -29,6 +30,7 @@ public final class TableView: UITableView {
   public init(updateBehavior: TableViewUpdateBehavior) {
     self.updateBehavior = updateBehavior
     super.init(frame: .zero, style: .Plain)
+    translatesAutoresizingMaskIntoConstraints = false
     setUp()
   }
 
@@ -93,6 +95,7 @@ public final class TableView: UITableView {
   }
 
   /// Sets the `ViewMaker` to use for the dividers between rows.
+
   ///
   /// - Parameters:
   ///     - viewMaker: Block that should return an initialized view of the type you'd like to use for this divider.
@@ -232,13 +235,16 @@ extension TableView: UITableViewDataSource {
 
   public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
     let item = listItemAtIndexPath(indexPath)
-    let cell = tableView.dequeueReusableCellWithIdentifier(item.listItem.itemId.reuseId,
+    let reuseId = item.listItem.itemId.reuseId
+    let cell = tableView.dequeueReusableCellWithIdentifier(reuseId,
                                                            forIndexPath: indexPath)
 
-    if let cell = cell as? TableViewCell,
-      let view = cell.view {
+    if let cell = cell as? TableViewCell {
+      if let viewMaker = viewMakers[reuseId] {
+        cell.makeView(with: viewMaker)
+      }
       updateDividerForCell(cell, dividerType: item.dividerType)
-      listItemViewConfigurers[item.listItem.itemId.reuseId]?(view, item.listItem.itemId)
+      listItemViewConfigurers[item.listItem.itemId.reuseId]?(cell.view!, item.listItem.itemId)
     } else {
       assert(false, "Only TableViewCell and subclasses are allowed in a TableView.")
     }

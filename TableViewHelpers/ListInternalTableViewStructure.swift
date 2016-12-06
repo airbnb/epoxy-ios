@@ -41,7 +41,7 @@ extension ListInternalTableViewStructure {
           dividerType: .RowDivider))
       }
 
-      if index == lastSectionIndex {
+      if index == lastSectionIndex && !items.isEmpty {
         let lastItem = items.removeLast() // Remove last row divider
         items.append(ListInternalTableViewItemStructure(
           listItem: lastItem.listItem,
