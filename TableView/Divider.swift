@@ -12,7 +12,7 @@ public class Divider: UIView {
 
   public init() {
     dividerView = UIView()
-    super.init(frame: CGRectZero)
+    super.init(frame: .zero)
 
     translatesAutoresizingMaskIntoConstraints = false
     setUp()
@@ -70,9 +70,9 @@ public class Divider: UIView {
 
   private func setUpConstraints() {
     dividerView.translatesAutoresizingMaskIntoConstraints = false
-    dividerView.constrainToSuperview(attributes: [.top, .bottom])
-    dividerHeightConstraint = dividerView.constrain(dimension: .height, to: 1)
-    dividerLeadingConstraint = dividerView.constrain(attribute: .leading, to: .leading, of: self)
-    dividerTrailingConstraint = dividerView.constrain(attribute: .trailing, to: .trailing, of: self)
+    dividerView.constrainToParent([.Top, .Bottom])
+    dividerHeightConstraint = dividerView.constrain(.Height, .Equal, 1)
+    dividerLeadingConstraint = dividerView.constrain(.Leading, .Equal, self, .Leading)
+    dividerTrailingConstraint = dividerView.constrain(.Trailing, .Equal, self, .Trailing)
   }
 }

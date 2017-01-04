@@ -4,8 +4,8 @@
 import UIKit
 
 public typealias ViewMaker = () -> UIView
-public typealias ListItemViewConfigurer = (UIView, ListItemId) -> Void
-public typealias ListItemSelectionHandler = (ListItemId) -> Void
+public typealias ListItemViewConfigurer = (UIView, ListItemID, Bool) -> Void
+public typealias ListItemSelectionHandler = (ListItemID) -> Void
 
 
 /// The behavior of the TableView on update.
@@ -16,7 +16,6 @@ public enum TableViewUpdateBehavior {
   case Diffs
   case Reloads
 }
-
 
 /// A TableView class that handles updates through its `setStructure` method, and optionally animates diffs.
 public final class TableView: UITableView {
@@ -30,7 +29,6 @@ public final class TableView: UITableView {
   public init(updateBehavior: TableViewUpdateBehavior) {
     self.updateBehavior = updateBehavior
     super.init(frame: .zero, style: .Plain)
-    translatesAutoresizingMaskIntoConstraints = false
     setUp()
   }
 
@@ -40,6 +38,10 @@ public final class TableView: UITableView {
 
   // MARK: Public
 
+  /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
+  /// Ignores zooming delegate methods.
+  public weak var scrollDelegate: UIScrollViewDelegate?
+
   /// Sets the TableView's data. By default, this will diff the new `ListStructure` against the
   /// existing `ListStructure` and animate the changes to the TableView.
   /// Set `shouldDiff` to `false` if you want the TableView to do a full reload with the new content.
@@ -47,6 +49,8 @@ public final class TableView: UITableView {
   /// - Parameters:
   ///     - structure: The `ListStructure` instance representing the TableView's data.
   public func setStructure(structure: ListStructure?) {
+
+    // TODO(ls): Add repeated calls to queue
 
     var newInternalStructure: ListInternalTableViewStructure?
     if let structure = structure {
@@ -65,37 +69,47 @@ public final class TableView: UITableView {
 
     switch updateBehavior {
     case .Diffs:
-      let changeset = ListInternalTableViewStructure.diff(oldStructure: oldStructure, newStructure: newStructure)
+      let changeset = newStructure.makeChangeset(from: oldStructure)
       applyChangeset(changeset)
     case .Reloads:
       reloadData()
     }
   }
 
-  /// Registers a `reuseId` for the table view. Use the `viewMaker` to return the view you'd like to
-  /// use for this `reuseId`. Use the `viewConfigurer` to configure that view using the `dataId`
+  /// Registers a `reuseID` for the table view. Use the `viewMaker` to return the view you'd like to
+  /// use for this `reuseID`. Use the `viewConfigurer` to configure that view using the `dataID`
   /// for a particular row. Use the optional `selectionHandler` to handle selection for rows with
-  /// this `reuseId`.
+  /// this `reuseID`.
   ///
   /// - Parameters:
-  ///     - reuseId: String identifier that is unique to this set of make/configure/select blocks.
-  ///     - viewMaker: Block that should return an initialized view of the type you'd like to use for this `reuseId`.
+  ///     - reuseID: String identifier that is unique to this set of make/configure/select blocks.
+  ///     - viewMaker: Block that should return an initialized view of the type you'd like to use for this `reuseID`.
   ///     - viewConfigurer: Block used to configure cells or section headers as they appear.
-  ///     - selectionHandler: Optional block fired when a cell with this `reuseId` is selected.
-  public func registerReuseId(
-    reuseId: String, forViewMaker
-    viewMaker: ViewMaker,
-    viewConfigurer: ListItemViewConfigurer,
+  ///     - selectionHandler: Optional block fired when a cell with this `reuseID` is selected.
+  public func registerReuseID<T where T: UIView>(
+    reuseID: String, forViewMaker
+    viewMaker: () -> T,
+    viewConfigurer: (T, ListItemID, Bool) -> Void,
     selectionHandler: ListItemSelectionHandler? = nil)
   {
-    registerCellForReuseId(reuseId)
-    viewMakers[reuseId] = viewMaker
-    listItemViewConfigurers[reuseId] = viewConfigurer
-    listItemSelectionHandlers[reuseId] = selectionHandler
+    cellHandlerContainers[reuseID] = CellHandlerContainer(
+      viewMaker: {
+        return viewMaker()
+      },
+      listItemViewConfigurer: { view, listItemID, animated in
+        guard let view = view as? T else {
+          assert(false, "View type is incorrect.")
+          return
+        }
+        viewConfigurer(view, listItemID, animated)
+      },
+      listItemSelectionHandler: selectionHandler)
+
+    super.registerClass(TableViewCell.self,
+                        forCellReuseIdentifier: reuseID)
   }
 
   /// Sets the `ViewMaker` to use for the dividers between rows.
-
   ///
   /// - Parameters:
   ///     - viewMaker: Block that should return an initialized view of the type you'd like to use for this divider.
@@ -110,21 +124,21 @@ public final class TableView: UITableView {
   public func setSectionHeaderDividerViewMaker(viewMaker: ViewMaker) {
     sectionHeaderDividerViewMaker = viewMaker
   }
-
+  
   public override func registerClass(cellClass: AnyClass?, forCellReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering cell classes on a TableView. Use registerReuseId:viewMaker:viewConfigurer instead.")
+    assert(false, "You shouldn't be registering cell classes on a TableView. Use registerReuseID:viewMaker:viewConfigurer instead.")
   }
 
   public override func registerNib(nib: UINib?, forCellReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering cell nibs on a TableView. Use registerReuseId:viewMaker:viewConfigurer instead.")
+    assert(false, "You shouldn't be registering cell nibs on a TableView. Use registerReuseID:viewMaker:viewConfigurer instead.")
   }
 
   public override func registerNib(nib: UINib?, forHeaderFooterViewReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering header or footer nibs on a TableView. Use registerReuseId:viewMaker:viewConfigurer instead.")
+    assert(false, "You shouldn't be registering header or footer nibs on a TableView. Use registerReuseID:viewMaker:viewConfigurer instead.")
   }
 
   public override func registerClass(aClass: AnyClass?, forHeaderFooterViewReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering header or footer classes on a TableView. Use registerReuseId:viewMaker:viewConfigurer instead.")
+    assert(false, "You shouldn't be registering header or footer classes on a TableView. Use registerReuseID:viewMaker:viewConfigurer instead.")
   }
 
   // MARK: Private
@@ -134,27 +148,23 @@ public final class TableView: UITableView {
 
   private var rowDividerViewMaker: ViewMaker?
   private var sectionHeaderDividerViewMaker: ViewMaker?
-  private var viewMakers = [String: ViewMaker]()
-  private var listItemViewConfigurers = [String: ListItemViewConfigurer]()
-  private var listItemSelectionHandlers = [String: ListItemSelectionHandler]()
+  private var cellHandlerContainers = [String: CellHandlerContainer]()
 
   private func setUp() {
     delegate = self
     dataSource = self
     rowHeight = UITableViewAutomaticDimension
-    estimatedRowHeight = 44
-  }
-
-  private func registerCellForReuseId(reuseId: String) {
-    super.registerClass(TableViewCell.self,
-                        forCellReuseIdentifier: reuseId)
+    estimatedRowHeight = 44 // TODO(ls): Use better estimated height
+    separatorColor = .clearColor()
+    backgroundColor = .clearColor()
+    translatesAutoresizingMaskIntoConstraints = false
   }
 
   private func listItemAtIndexPath(indexPath: NSIndexPath) -> ListInternalTableViewItemStructure {
     guard let structure = structure else {
       assert(false, "Can't load list item with nil structure")
       return ListInternalTableViewItemStructure(
-        listItem: ListItemStructure(itemId: ListItemId(reuseId: "", dataId: "")),
+        listItem: ListItemStructure(itemID: ListItemID(reuseID: "", dataID: "")),
         dividerType: .None)
     }
     return structure.sections[indexPath.section].items[indexPath.row]
@@ -167,12 +177,12 @@ public final class TableView: UITableView {
     case .RowDivider:
       if let rowDividerViewMaker = rowDividerViewMaker {
         cell.dividerView?.hidden = false
-        cell.makeDividerView(with: rowDividerViewMaker)
+        cell.makeDividerViewIfNeeded(with: rowDividerViewMaker)
       }
     case .SectionHeaderDivider:
       if let sectionHeaderDividerViewMaker = sectionHeaderDividerViewMaker {
         cell.dividerView?.hidden = false
-        cell.makeDividerView(with: sectionHeaderDividerViewMaker)
+        cell.makeDividerViewIfNeeded(with: sectionHeaderDividerViewMaker)
       }
     }
   }
@@ -184,8 +194,8 @@ public final class TableView: UITableView {
     changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
       if let cell = cellForRowAtIndexPath(fromIndexPath) as? TableViewCell,
         let view = cell.view {
-        let itemId = listItemAtIndexPath(toIndexPath).listItem.itemId
-        listItemViewConfigurers[itemId.reuseId]?(view, itemId)
+        let itemID = listItemAtIndexPath(toIndexPath).listItem.itemID
+        cellHandlerContainers[itemID.reuseID]?.listItemViewConfigurer(view, itemID, true)
       }
     }
 
@@ -235,16 +245,18 @@ extension TableView: UITableViewDataSource {
 
   public func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
     let item = listItemAtIndexPath(indexPath)
-    let reuseId = item.listItem.itemId.reuseId
-    let cell = tableView.dequeueReusableCellWithIdentifier(reuseId,
+    let cell = tableView.dequeueReusableCellWithIdentifier(item.listItem.itemID.reuseID,
                                                            forIndexPath: indexPath)
 
     if let cell = cell as? TableViewCell {
-      if let viewMaker = viewMakers[reuseId] {
-        cell.makeView(with: viewMaker)
-      }
+      let cellHandlerContainer = cellHandlerContainers[item.listItem.itemID.reuseID]!
+      cell.makeViewIfNeeded(with: cellHandlerContainer.viewMaker)
+      let view = cell.view!
       updateDividerForCell(cell, dividerType: item.dividerType)
-      listItemViewConfigurers[item.listItem.itemId.reuseId]?(cell.view!, item.listItem.itemId)
+      cellHandlerContainer.listItemViewConfigurer(view, item.listItem.itemID, false)
+      if item.dividerType == .SectionHeaderDivider {
+        cell.selectionStyle = .None
+      }
     } else {
       assert(false, "Only TableViewCell and subclasses are allowed in a TableView.")
     }
@@ -260,6 +272,62 @@ extension TableView: UITableViewDelegate {
     guard let structure = structure else { return }
 
     let item = structure.sections[indexPath.section].items[indexPath.row]
-    listItemSelectionHandlers[item.listItem.itemId.reuseId]?(item.listItem.itemId)
+    cellHandlerContainers[item.listItem.itemID.reuseID]?.listItemSelectionHandler?(item.listItem.itemID)
+    tableView.deselectRowAtIndexPath(indexPath, animated: true)
   }
+
+  public func scrollViewDidScroll(scrollView: UIScrollView) {
+    scrollDelegate?.scrollViewDidScroll?(scrollView)
+  }
+
+  public func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    scrollDelegate?.scrollViewWillBeginDragging?(scrollView)
+  }
+
+  public func scrollViewWillEndDragging(
+    scrollView: UIScrollView, withVelocity
+    velocity: CGPoint,
+    targetContentOffset: UnsafeMutablePointer<CGPoint>)
+  {
+    scrollDelegate?.scrollViewWillEndDragging?(scrollView, withVelocity: velocity, targetContentOffset: targetContentOffset)
+  }
+
+  public func scrollViewDidEndDragging(
+    scrollView: UIScrollView, willDecelerate
+    decelerate: Bool)
+  {
+    scrollDelegate?.scrollViewDidEndDragging?(scrollView, willDecelerate: decelerate)
+  }
+
+  public func scrollViewShouldScrollToTop(scrollView: UIScrollView) -> Bool {
+    return scrollDelegate?.scrollViewShouldScrollToTop?(scrollView) ?? true
+  }
+
+  public func scrollViewDidScrollToTop(scrollView: UIScrollView) {
+    scrollDelegate?.scrollViewDidScrollToTop?(scrollView)
+  }
+
+  public func scrollViewWillBeginDecelerating(scrollView: UIScrollView) {
+    scrollDelegate?.scrollViewWillBeginDecelerating?(scrollView)
+  }
+
+  public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    scrollDelegate?.scrollViewDidEndDecelerating?(scrollView)
+  }
+
+  public func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+    scrollDelegate?.scrollViewDidEndScrollingAnimation?(scrollView)
+  }
+}
+
+// MARK: CellHandlerContainer
+
+private struct CellHandlerContainer {
+  let viewMaker: ViewMaker
+  let listItemViewConfigurer: ListItemViewConfigurer
+  let listItemSelectionHandler: ListItemSelectionHandler?
+}
+
+extension TableView: ListInterface {
+  
 }

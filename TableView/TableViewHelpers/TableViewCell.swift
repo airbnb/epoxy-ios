@@ -11,6 +11,7 @@ final class TableViewCell: UITableViewCell {
 
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
+    backgroundColor = .clearColor()
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -22,15 +23,15 @@ final class TableViewCell: UITableViewCell {
   private(set) var dividerView: UIView?
   private(set) var view: UIView?
 
-  /// Pass a `ViewMaker` to generate a view for this cell's reuseId that the cell will pin to the edges of its `contentView`.
-  func makeView(with viewMaker: ViewMaker) {
+  /// Pass a `ViewMaker` to generate a view for this cell's reuseID that the cell will pin to the edges of its `contentView`.
+  func makeViewIfNeeded(with viewMaker: ViewMaker) {
     if self.view != nil {
       return
     }
     let view = viewMaker()
     view.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(view)
-    view.constrainToSuperview(attributes: [.bottom, .top, .trailing, .leading])
+    view.constrainToParent()
     self.view = view
 
     if let dividerView = dividerView {
@@ -38,15 +39,15 @@ final class TableViewCell: UITableViewCell {
     }
   }
 
-  /// Pass a `ViewMaker` to generate a `Divider` for this cell's reuseId that the cell will pin to the bottom of its `contentView`.
-  func makeDividerView(with viewMaker: ViewMaker) {
+  /// Pass a `ViewMaker` to generate a `Divider` for this cell's reuseID that the cell will pin to the bottom of its `contentView`.
+  func makeDividerViewIfNeeded(with viewMaker: ViewMaker) {
     if self.dividerView != nil {
       return
     }
     let dividerView = viewMaker()
     dividerView.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(dividerView)
-    dividerView.constrainToSuperview(attributes: [.bottom, .trailing, .leading])
+    dividerView.constrainToParent([.Bottom, .Trailing, .Leading])
     self.dividerView = dividerView
   }
 }

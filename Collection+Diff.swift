@@ -1,0 +1,350 @@
+//  Created by Laura Skelton on 11/25/16.
+//  Copyright © 2016 Airbnb. All rights reserved.
+
+import Foundation
+
+/// A protocol that allows us to check identity and equality between items for the purposes of diffing.
+public protocol Diffable {
+
+  /// Checks for equality between items when diffing.
+  ///
+  /// - Parameters:
+  ///     - otherDiffableItem: The other item to check equality against while diffing.
+  func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool
+
+  /// The identifier to use when checking identity while diffing.
+  var diffIdentifier: String { get }
+}
+
+// MARK: - Stack
+
+private final class Stack<T> {
+  /// Pushes the element onto the top of the Stack.
+  func push(itemToPush: T){
+    stackArray.append(itemToPush)
+  }
+
+  /**
+   Pops the top element from the Stack in O(1).
+   - Requires: `count > 0`
+   */
+  func pop() -> T {
+    return stackArray.removeLast()
+  }
+
+  private var stackArray = [T]()
+}
+
+// MARK: - Entry
+
+private final class Entry {
+  var oldIndices = Stack<Int?>()
+  var updated: Bool = false
+}
+
+// MARK: - Record
+
+private final class Record {
+
+  init(entry: Entry) {
+    self.entry = entry
+  }
+
+  var entry: Entry
+  var correspondingIndex: Int? = nil
+}
+
+// MARK: - IndexChangeset
+
+/// A set of inserts, deletes, updates, and moves that define the changes between two arrays.
+public struct IndexChangeset {
+
+  public init(
+    inserts: [Int] = [Int](),
+    deletes: [Int] = [Int](),
+    updates: [(Int, Int)] = [(Int, Int)](),
+    moves: [(Int, Int)] = [(Int, Int)](),
+    newIndices: [Int: Int?] = [Int: Int?]())
+  {
+    self.inserts = inserts
+    self.deletes = deletes
+    self.updates = updates
+    self.moves = moves
+    self.newIndices = newIndices
+  }
+
+  /// The inserted indices needed to get from the old array to the new array.
+  public let inserts: [Int]
+
+  /// The deleted indices needed to get from the old array to the new array.
+  public let deletes: [Int]
+
+  /// The updated indices needed to get from the old array to the new array.
+  public let updates: [(Int, Int)]
+
+  /// The moved indices needed to get from the old array to the new array.
+  public let moves: [(Int, Int)]
+
+  /// A record for each old array item of what its index (if any) is in the new array.
+  public let newIndices: [Int: Int?]
+}
+
+// MARK: - IndexPathChangeset
+
+public struct IndexPathChangeset {
+
+  init(
+    inserts: [NSIndexPath] = [NSIndexPath](),
+    deletes: [NSIndexPath] = [NSIndexPath](),
+    updates: [(NSIndexPath, NSIndexPath)] = [(NSIndexPath, NSIndexPath)](),
+    moves: [(NSIndexPath, NSIndexPath)] = [(NSIndexPath, NSIndexPath)]())
+  {
+    self.inserts = inserts
+    self.deletes = deletes
+    self.updates = updates
+    self.moves = moves
+  }
+
+  /// The inserted `NSIndexPath`s needed to get from the old array to the new array.
+  public let inserts: [NSIndexPath]
+
+  /// The deleted `NSIndexPath`s needed to get from the old array to the new array.
+  public let deletes: [NSIndexPath]
+
+  /// The updated `NSIndexPath`s needed to get from the old array to the new array.
+  public let updates: [(NSIndexPath, NSIndexPath)]
+
+  /// The moved `NSIndexPath`s needed to get from the old array to the new array.
+  public let moves: [(NSIndexPath, NSIndexPath)]
+}
+
+public func +(left: IndexPathChangeset, right: IndexPathChangeset) -> IndexPathChangeset {
+  let inserts: [NSIndexPath] = left.inserts + right.inserts
+  let deletes: [NSIndexPath] = left.deletes + right.deletes
+  let updates: [(NSIndexPath, NSIndexPath)] = left.updates + right.updates
+  let moves: [(NSIndexPath, NSIndexPath)] = left.moves + right.moves
+
+  return IndexPathChangeset(
+    inserts: inserts,
+    deletes: deletes,
+    updates: updates,
+    moves: moves)
+}
+
+// MARK: - IndexSetChangeset
+
+public struct IndexSetChangeset {
+
+  public init(
+    inserts: NSIndexSet,
+    deletes: NSIndexSet,
+    updates: [(Int, Int)],
+    moves: [(Int, Int)],
+    newIndices: [Int: Int?] = [Int: Int?]())
+  {
+    self.inserts = inserts
+    self.deletes = deletes
+    self.updates = updates
+    self.moves = moves
+    self.newIndices = newIndices
+  }
+
+  /// An `NSIndexSet` of inserts needed to get from the old array to the new array.
+  public let inserts: NSIndexSet
+
+  /// An `NSIndexSet` of deletes needed to get from the old array to the new array.
+  public let deletes: NSIndexSet
+
+  /// The updated indices needed to get from the old array to the new array.
+  public let updates: [(Int, Int)]
+
+  /// The moved indices needed to get from the old array to the new array.
+  public let moves: [(Int, Int)]
+
+  /// A record for each old array item of what its index (if any) is in the new array.
+  public let newIndices: [Int: Int?]
+}
+
+extension CollectionType where Self.Generator.Element: Diffable, Self.Index == Int {
+
+  /// Diffs between two collections (eg. `Array`s) of `Diffable` items, and returns an `IndexChangeset`
+  /// representing the minimal set of changes to get from the other collection to this collection.
+  ///
+  /// - Parameters:
+  ///     - from otherCollection: The collection of old data
+  public func makeChangeset(from
+    otherCollection: Self) -> IndexChangeset
+  {
+    var entries = [String: Entry]()
+
+    var newResultsArray = [Int: Record]()
+    for i in startIndex..<endIndex {
+      let entry: Entry
+      if let existingEntry = entries[self[i].diffIdentifier] {
+        entry = existingEntry
+      } else {
+        entry = Entry()
+      }
+      entry.oldIndices.push(nil)
+      entries[self[i].diffIdentifier] = entry
+      newResultsArray[i] = (Record(entry: entry))
+    }
+
+    // Old array must be done in reverse to stack indices in correct order
+    var oldResultsArray = [Int: Record]()
+    for i in (otherCollection.startIndex..<otherCollection.endIndex).reverse() {
+      let entry: Entry
+      if let existingEntry = entries[otherCollection[i].diffIdentifier] {
+        entry = existingEntry
+      } else {
+        entry = Entry()
+      }
+      entry.oldIndices.push(i)
+      entries[otherCollection[i].diffIdentifier] = entry
+      oldResultsArray[i] = (Record(entry: entry))
+    }
+
+    for i in startIndex..<endIndex {
+      let entry = newResultsArray[i]!.entry
+      if let originalIndex = entry.oldIndices.pop() {
+
+        let newItem = self[i]
+        let oldItem = otherCollection[originalIndex]
+
+        if !oldItem.isDiffableItemEqual(to: newItem) {
+          entry.updated = true
+        }
+
+        newResultsArray[i]!.correspondingIndex = originalIndex
+        oldResultsArray[originalIndex]!.correspondingIndex = i
+      }
+    }
+
+    var inserts = [Int]()
+    var updates = [(Int, Int)]()
+    var deletes = [Int]()
+    var moves = [(Int, Int)]()
+
+    var deleteOffsets = [Int]()
+    var insertOffsets = [Int]()
+
+    var runningDeleteOffset: Int = 0
+
+    for i in otherCollection.startIndex..<otherCollection.endIndex {
+      deleteOffsets.append(runningDeleteOffset)
+
+      let record = oldResultsArray[i]!
+
+      if record.correspondingIndex == nil {
+        deletes.append(i)
+        runningDeleteOffset += 1
+      }
+    }
+
+    var runningInsertOffset: Int = 0
+
+    for i in startIndex..<endIndex {
+      insertOffsets.append(runningInsertOffset)
+
+      let record = newResultsArray[i]!
+
+      if let oldArrayIndex = record.correspondingIndex {
+
+        if record.entry.updated {
+          updates.append((oldArrayIndex, i))
+        }
+
+        let insertOffset = insertOffsets[i]
+        let deleteOffset = deleteOffsets[oldArrayIndex]
+        if ((oldArrayIndex - deleteOffset + insertOffset) != i) {
+          moves.append((oldArrayIndex, i))
+        }
+
+      } else {
+        inserts.append(i)
+        runningInsertOffset += 1
+      }
+    }
+
+    assert(otherCollection.count + inserts.count - deletes.count == self.count,
+           "Failed sanity check for old array count with changes matching new array count.")
+
+    let newIndicesArray: [(Int, Int?)] = oldResultsArray.map { (index, record) in
+      return (index, record.correspondingIndex)
+    }
+
+    return IndexChangeset(
+      inserts: inserts,
+      deletes: deletes,
+      updates: updates,
+      moves: moves,
+      newIndices: newIndicesArray.toDictionary { $0 })
+  }
+
+  /// Diffs between two collections (eg. `Array`s) of `Diffable` items, and returns an `IndexPathChangeset`
+  /// representing the minimal set of changes to get from the other collection to this collection.
+  ///
+  /// - Parameters:
+  ///     - from otherCollection: The collection of old data
+  ///     - fromSection: The section the other collection's data exists within. Defaults to `0`.
+  ///     - toSection: The section this collection's data exists within. Defaults to `0`.
+  public func makeIndexPathChangeset(from
+    otherCollection: Self,
+    fromSection: Int = 0,
+    toSection: Int = 0) -> IndexPathChangeset
+  {
+    let indexChangeset = makeChangeset(from: otherCollection)
+
+    let inserts: [NSIndexPath] = indexChangeset.inserts.map { index in
+      return NSIndexPath(forItem: index, inSection: toSection)
+    }
+
+    let deletes: [NSIndexPath] = indexChangeset.deletes.map { index in
+      return NSIndexPath(forItem: index, inSection: fromSection)
+    }
+
+    let updates: [(NSIndexPath, NSIndexPath)] = indexChangeset.updates.map { fromIndex, toIndex in
+      return (NSIndexPath(forItem: fromIndex, inSection: fromSection),
+        NSIndexPath(forItem: toIndex, inSection: toSection))
+    }
+
+    let moves: [(NSIndexPath, NSIndexPath)] = indexChangeset.moves.map { fromIndex, toIndex in
+      return (NSIndexPath(forItem: fromIndex, inSection: fromSection),
+        NSIndexPath(forItem: toIndex, inSection: toSection))
+    }
+
+    return IndexPathChangeset(
+      inserts: inserts,
+      deletes: deletes,
+      updates: updates,
+      moves: moves)
+  }
+
+  /// Diffs between two collections (eg. `Array`s) of `Diffable` items, and returns an `IndexSetChangeset`
+  /// representing the minimal set of changes to get from the other collection to this collection.
+  ///
+  /// - Parameters:
+  ///     - from otherCollection: The collection of old data
+  public func makeIndexSetChangeset(from
+    otherCollection: Self) -> IndexSetChangeset
+  {
+    let indexChangeset = makeChangeset(from: otherCollection)
+
+    let inserts = NSMutableIndexSet()
+    indexChangeset.inserts.forEach { index in
+      inserts.addIndex(index)
+    }
+
+    let deletes = NSMutableIndexSet()
+    indexChangeset.deletes.forEach { index in
+      deletes.addIndex(index)
+    }
+
+    return IndexSetChangeset(
+      inserts: inserts,
+      deletes: deletes,
+      updates: indexChangeset.updates,
+      moves: indexChangeset.moves,
+      newIndices: indexChangeset.newIndices)
+  }
+}

@@ -49,34 +49,30 @@ extension ListInternalTableViewStructure {
       }
 
       return ListInternalTableViewSectionStructure(
-        dataId: section.dataId,
+        dataID: section.dataID,
         items: items)
     }
 
     return ListInternalTableViewStructure(sections: sections)
   }
 
-  static func diff(oldStructure
-    oldStructure: ListInternalTableViewStructure,
-    newStructure: ListInternalTableViewStructure) -> ListInternalTableViewStructureChangeset
+  func makeChangeset(from
+    otherStructure: ListInternalTableViewStructure) -> ListInternalTableViewStructureChangeset
   {
-    let sectionChangeset = QuickDiff.diffIndexSets(
-      oldArray: oldStructure.sections,
-      newArray: newStructure.sections)
+    let sectionChangeset = sections.makeIndexSetChangeset(from: otherStructure.sections)
 
-    var itemChangesetsForSections = [QuickDiffIndexPathChangeset]()
-    for i in 0..<oldStructure.sections.count {
-      if let newSectionIndex = sectionChangeset.newIndices[i] {
+    var itemChangesetsForSections = [IndexPathChangeset]()
+    for i in 0..<otherStructure.sections.count {
+      if let newSectionIndex = sectionChangeset.newIndices[i]! {
 
         let fromSection = i
         let toSection = newSectionIndex
 
-        let fromArray = oldStructure.sections[fromSection].items
-        let toArray = newStructure.sections[toSection].items
+        let fromArray = otherStructure.sections[fromSection].items
+        let toArray = sections[toSection].items
 
-        let itemIndexChangeset = QuickDiff.diffIndexPaths(
-          oldArray: fromArray,
-          newArray: toArray,
+        let itemIndexChangeset = toArray.makeIndexPathChangeset(
+          from: fromArray,
           fromSection: fromSection,
           toSection: toSection)
 
@@ -84,19 +80,7 @@ extension ListInternalTableViewStructure {
       }
     }
 
-    let itemChangeset: QuickDiffIndexPathChangeset = itemChangesetsForSections.reduce(QuickDiffIndexPathChangeset()) { masterChangeset, thisChangeset in
-
-      let inserts: [NSIndexPath] = masterChangeset.inserts + thisChangeset.inserts
-      let deletes: [NSIndexPath] = masterChangeset.deletes + thisChangeset.deletes
-      let updates: [(NSIndexPath, NSIndexPath)] = masterChangeset.updates + thisChangeset.updates
-      let moves: [(NSIndexPath, NSIndexPath)] = masterChangeset.moves + thisChangeset.moves
-
-      return QuickDiffIndexPathChangeset(
-        inserts: inserts,
-        deletes: deletes,
-        updates: updates,
-        moves: moves)
-    }
+    let itemChangeset: IndexPathChangeset = itemChangesetsForSections.reduce(IndexPathChangeset(), combine: +)
 
     return ListInternalTableViewStructureChangeset(
       sectionChangeset: sectionChangeset,
@@ -108,15 +92,15 @@ extension ListInternalTableViewStructure {
 struct ListInternalTableViewStructureChangeset {
 
   init(
-    sectionChangeset: QuickDiffIndexSetChangeset,
-    itemChangeset: QuickDiffIndexPathChangeset)
+    sectionChangeset: IndexSetChangeset,
+    itemChangeset: IndexPathChangeset)
   {
     self.sectionChangeset = sectionChangeset
     self.itemChangeset = itemChangeset
   }
 
-  let sectionChangeset: QuickDiffIndexSetChangeset
-  let itemChangeset: QuickDiffIndexPathChangeset
+  let sectionChangeset: IndexSetChangeset
+  let itemChangeset: IndexPathChangeset
 }
 
 // MARK: ListInternalTableViewSectionStructure
@@ -125,25 +109,25 @@ struct ListInternalTableViewStructureChangeset {
 struct ListInternalTableViewSectionStructure {
 
   init(
-    dataId: String,
+    dataID: String,
     items: [ListInternalTableViewItemStructure])
   {
-    self.dataId = dataId
+    self.dataID = dataID
     self.items = items
   }
 
-  let dataId: String
+  let dataID: String
   let items: [ListInternalTableViewItemStructure]
 }
 
-extension ListInternalTableViewSectionStructure: QuickDiffable {
-  func isEqualToDiffableItem(diffableItem: QuickDiffable) -> Bool {
-    guard let diffableSection = diffableItem as? ListInternalTableViewSectionStructure else { return false }
-    return dataId == diffableSection.dataId
+extension ListInternalTableViewSectionStructure: Diffable {
+  func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
+    guard let otherDiffableSection = otherDiffableItem as? ListInternalTableViewSectionStructure else { return false }
+    return dataID == otherDiffableSection.dataID
   }
 
   var diffIdentifier: String {
-    return dataId
+    return dataID
   }
 }
 
@@ -173,10 +157,10 @@ struct ListInternalTableViewItemStructure {
   let dividerType: ListItemDividerType
 }
 
-extension ListInternalTableViewItemStructure: QuickDiffable {
-  func isEqualToDiffableItem(diffableItem: QuickDiffable) -> Bool {
-    guard let diffableListItem = diffableItem as? ListInternalTableViewItemStructure else { return false }
-    return listItem.isEqualToDiffableItem(diffableListItem.listItem)
+extension ListInternalTableViewItemStructure: Diffable {
+  func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
+    guard let otherDiffableListItem = otherDiffableItem as? ListInternalTableViewItemStructure else { return false }
+    return listItem.isDiffableItemEqual(to: otherDiffableListItem.listItem)
   }
 
   var diffIdentifier: String {
