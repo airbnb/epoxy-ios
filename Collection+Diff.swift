@@ -94,10 +94,10 @@ public struct IndexChangeset {
 public struct IndexPathChangeset {
 
   init(
-    inserts: [NSIndexPath] = [NSIndexPath](),
-    deletes: [NSIndexPath] = [NSIndexPath](),
-    updates: [(NSIndexPath, NSIndexPath)] = [(NSIndexPath, NSIndexPath)](),
-    moves: [(NSIndexPath, NSIndexPath)] = [(NSIndexPath, NSIndexPath)]())
+    inserts: [IndexPath] = [IndexPath](),
+    deletes: [IndexPath] = [IndexPath](),
+    updates: [(IndexPath, IndexPath)] = [(IndexPath, IndexPath)](),
+    moves: [(IndexPath, IndexPath)] = [(IndexPath, IndexPath)]())
   {
     self.inserts = inserts
     self.deletes = deletes
@@ -105,24 +105,24 @@ public struct IndexPathChangeset {
     self.moves = moves
   }
 
-  /// The inserted `NSIndexPath`s needed to get from the old array to the new array.
-  public let inserts: [NSIndexPath]
+  /// The inserted `IndexPath`s needed to get from the old array to the new array.
+  public let inserts: [IndexPath]
 
-  /// The deleted `NSIndexPath`s needed to get from the old array to the new array.
-  public let deletes: [NSIndexPath]
+  /// The deleted `IndexPath`s needed to get from the old array to the new array.
+  public let deletes: [IndexPath]
 
-  /// The updated `NSIndexPath`s needed to get from the old array to the new array.
-  public let updates: [(NSIndexPath, NSIndexPath)]
+  /// The updated `IndexPath`s needed to get from the old array to the new array.
+  public let updates: [(IndexPath, IndexPath)]
 
-  /// The moved `NSIndexPath`s needed to get from the old array to the new array.
-  public let moves: [(NSIndexPath, NSIndexPath)]
+  /// The moved `IndexPath`s needed to get from the old array to the new array.
+  public let moves: [(IndexPath, IndexPath)]
 }
 
 public func +(left: IndexPathChangeset, right: IndexPathChangeset) -> IndexPathChangeset {
-  let inserts: [NSIndexPath] = left.inserts + right.inserts
-  let deletes: [NSIndexPath] = left.deletes + right.deletes
-  let updates: [(NSIndexPath, NSIndexPath)] = left.updates + right.updates
-  let moves: [(NSIndexPath, NSIndexPath)] = left.moves + right.moves
+  let inserts: [IndexPath] = left.inserts + right.inserts
+  let deletes: [IndexPath] = left.deletes + right.deletes
+  let updates: [(IndexPath, IndexPath)] = left.updates + right.updates
+  let moves: [(IndexPath, IndexPath)] = left.moves + right.moves
 
   return IndexPathChangeset(
     inserts: inserts,
@@ -165,7 +165,7 @@ public struct IndexSetChangeset {
   public let newIndices: [Int: Int?]
 }
 
-extension CollectionType where Self.Generator.Element: Diffable, Self.Index == Int {
+extension Collection where Self.Iterator.Element: Diffable, Self.Index == Int, Self.IndexDistance == Int {
 
   /// Diffs between two collections (eg. `Array`s) of `Diffable` items, and returns an `IndexChangeset`
   /// representing the minimal set of changes to get from the other collection to this collection.
@@ -185,21 +185,21 @@ extension CollectionType where Self.Generator.Element: Diffable, Self.Index == I
       } else {
         entry = Entry()
       }
-      entry.oldIndices.push(nil)
+      entry.oldIndices.push(itemToPush: nil)
       entries[self[i].diffIdentifier] = entry
       newResultsArray[i] = (Record(entry: entry))
     }
 
     // Old array must be done in reverse to stack indices in correct order
     var oldResultsArray = [Int: Record]()
-    for i in (otherCollection.startIndex..<otherCollection.endIndex).reverse() {
+    for i in (otherCollection.startIndex..<otherCollection.endIndex).reversed() {
       let entry: Entry
       if let existingEntry = entries[otherCollection[i].diffIdentifier] {
         entry = existingEntry
       } else {
         entry = Entry()
       }
-      entry.oldIndices.push(i)
+      entry.oldIndices.push(itemToPush: i)
       entries[otherCollection[i].diffIdentifier] = entry
       oldResultsArray[i] = (Record(entry: entry))
     }
@@ -295,22 +295,22 @@ extension CollectionType where Self.Generator.Element: Diffable, Self.Index == I
   {
     let indexChangeset = makeChangeset(from: otherCollection)
 
-    let inserts: [NSIndexPath] = indexChangeset.inserts.map { index in
-      return NSIndexPath(forItem: index, inSection: toSection)
+    let inserts: [IndexPath] = indexChangeset.inserts.map { index in
+      return IndexPath(item: index, section: toSection)
     }
 
-    let deletes: [NSIndexPath] = indexChangeset.deletes.map { index in
-      return NSIndexPath(forItem: index, inSection: fromSection)
+    let deletes: [IndexPath] = indexChangeset.deletes.map { index in
+      return IndexPath(item: index, section: fromSection)
     }
 
-    let updates: [(NSIndexPath, NSIndexPath)] = indexChangeset.updates.map { fromIndex, toIndex in
-      return (NSIndexPath(forItem: fromIndex, inSection: fromSection),
-        NSIndexPath(forItem: toIndex, inSection: toSection))
+    let updates: [(IndexPath, IndexPath)] = indexChangeset.updates.map { fromIndex, toIndex in
+      return (IndexPath(item: fromIndex, section: fromSection),
+        IndexPath(item: toIndex, section: toSection))
     }
 
-    let moves: [(NSIndexPath, NSIndexPath)] = indexChangeset.moves.map { fromIndex, toIndex in
-      return (NSIndexPath(forItem: fromIndex, inSection: fromSection),
-        NSIndexPath(forItem: toIndex, inSection: toSection))
+    let moves: [(IndexPath, IndexPath)] = indexChangeset.moves.map { fromIndex, toIndex in
+      return (IndexPath(item: fromIndex, section: fromSection),
+        IndexPath(item: toIndex, section: toSection))
     }
 
     return IndexPathChangeset(
@@ -332,12 +332,12 @@ extension CollectionType where Self.Generator.Element: Diffable, Self.Index == I
 
     let inserts = NSMutableIndexSet()
     indexChangeset.inserts.forEach { index in
-      inserts.addIndex(index)
+      inserts.add(index)
     }
 
     let deletes = NSMutableIndexSet()
     indexChangeset.deletes.forEach { index in
-      deletes.addIndex(index)
+      deletes.add(index)
     }
 
     return IndexSetChangeset(

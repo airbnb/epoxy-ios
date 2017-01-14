@@ -11,7 +11,7 @@ final class TableViewCell: UITableViewCell {
 
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
-    backgroundColor = .clearColor()
+    backgroundColor = .clear
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -35,7 +35,7 @@ final class TableViewCell: UITableViewCell {
     self.view = view
 
     if let dividerView = dividerView {
-      contentView.bringSubviewToFront(dividerView)
+      contentView.bringSubview(toFront: dividerView)
     }
   }
 
@@ -47,7 +47,7 @@ final class TableViewCell: UITableViewCell {
     let dividerView = viewMaker()
     dividerView.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(dividerView)
-    dividerView.constrainToParent([.Bottom, .Trailing, .Leading])
+    dividerView.constrainToParent([.bottom, .trailing, .leading])
     self.dividerView = dividerView
   }
 }

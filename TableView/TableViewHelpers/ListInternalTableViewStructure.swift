@@ -19,10 +19,10 @@ struct ListInternalTableViewStructure {
 
 extension ListInternalTableViewStructure {
 
-  static func makeWithListStructure(listStructure: ListStructure) -> ListInternalTableViewStructure {
+  static func make(with listStructure: ListStructure) -> ListInternalTableViewStructure {
 
     let lastSectionIndex = listStructure.sections.count - 1
-    let sections: [ListInternalTableViewSectionStructure] = listStructure.sections.enumerate().map { index, section in
+    let sections: [ListInternalTableViewSectionStructure] = listStructure.sections.enumerated().map { index, section in
 
       var items = [ListInternalTableViewItemStructure]()
 
@@ -32,20 +32,20 @@ extension ListInternalTableViewStructure {
       if let existingSectionHeader = section.sectionHeader {
         items.append(ListInternalTableViewItemStructure(
           listItem: existingSectionHeader,
-          dividerType: .SectionHeaderDivider))
+          dividerType: .sectionHeaderDivider))
       }
 
       section.items.forEach { item in
         items.append(ListInternalTableViewItemStructure(
           listItem: item,
-          dividerType: .RowDivider))
+          dividerType: .rowDivider))
       }
 
       if index == lastSectionIndex && !items.isEmpty {
         let lastItem = items.removeLast() // Remove last row divider
         items.append(ListInternalTableViewItemStructure(
           listItem: lastItem.listItem,
-          dividerType: .None))
+          dividerType: .none))
       }
 
       return ListInternalTableViewSectionStructure(
@@ -80,7 +80,7 @@ extension ListInternalTableViewStructure {
       }
     }
 
-    let itemChangeset: IndexPathChangeset = itemChangesetsForSections.reduce(IndexPathChangeset(), combine: +)
+    let itemChangeset: IndexPathChangeset = itemChangesetsForSections.reduce(IndexPathChangeset(), +)
 
     return ListInternalTableViewStructureChangeset(
       sectionChangeset: sectionChangeset,
@@ -135,9 +135,9 @@ extension ListInternalTableViewSectionStructure: Diffable {
 
 /// Tells the cell which divider type to use in a view pinned to the cell's bottom.
 enum ListItemDividerType {
-  case RowDivider
-  case SectionHeaderDivider
-  case None
+  case rowDivider
+  case sectionHeaderDivider
+  case none
 }
 
 // MARK: ListInternalTableViewItemStructure

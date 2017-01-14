@@ -64,15 +64,15 @@ public class Divider: UIView {
   private var dividerLeadingConstraint: NSLayoutConstraint!
   private var dividerTrailingConstraint: NSLayoutConstraint!
 
-  private func setUp() {
+  fileprivate func setUp() {
     addSubview(dividerView)
   }
 
-  private func setUpConstraints() {
+  fileprivate func setUpConstraints() {
     dividerView.translatesAutoresizingMaskIntoConstraints = false
-    dividerView.constrainToParent([.Top, .Bottom])
-    dividerHeightConstraint = dividerView.constrain(.Height, .Equal, 1)
-    dividerLeadingConstraint = dividerView.constrain(.Leading, .Equal, self, .Leading)
-    dividerTrailingConstraint = dividerView.constrain(.Trailing, .Equal, self, .Trailing)
+    dividerView.constrainToParent([.top, .bottom])
+    dividerHeightConstraint = dividerView.constrain(.height, .equal, 1)
+    dividerLeadingConstraint = dividerView.constrain(.leading, .equal, self, .leading)
+    dividerTrailingConstraint = dividerView.constrain(.trailing, .equal, self, .trailing)
   }
 }
