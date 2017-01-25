@@ -126,7 +126,7 @@ extension ListInternalTableViewSectionStructure: Diffable {
     return dataID == otherDiffableSection.dataID
   }
 
-  var diffIdentifier: String {
+  var diffIdentifier: String? {
     return dataID
   }
 }
@@ -146,14 +146,14 @@ enum ListItemDividerType {
 struct ListInternalTableViewItemStructure {
 
   init(
-    listItem: ListItemStructure,
+    listItem: ListItem,
     dividerType: ListItemDividerType)
   {
     self.listItem = listItem
     self.dividerType = dividerType
   }
 
-  let listItem: ListItemStructure
+  let listItem: ListItem
   let dividerType: ListItemDividerType
 }
 
@@ -163,7 +163,7 @@ extension ListInternalTableViewItemStructure: Diffable {
     return listItem.isDiffableItemEqual(to: otherDiffableListItem.listItem)
   }
 
-  var diffIdentifier: String {
+  var diffIdentifier: String? {
     return listItem.diffIdentifier
   }
 }

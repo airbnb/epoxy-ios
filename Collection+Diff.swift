@@ -13,7 +13,7 @@ public protocol Diffable {
   func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool
 
   /// The identifier to use when checking identity while diffing.
-  var diffIdentifier: String { get }
+  var diffIdentifier: String? { get }
 }
 
 // MARK: - Stack
@@ -180,13 +180,16 @@ extension Collection where Self.Iterator.Element: Diffable, Self.Index == Int, S
     var newResultsArray = [Int: Record]()
     for i in startIndex..<endIndex {
       let entry: Entry
-      if let existingEntry = entries[self[i].diffIdentifier] {
+      if let diffIdentifier = self[i].diffIdentifier,
+        let existingEntry = entries[diffIdentifier] {
         entry = existingEntry
       } else {
         entry = Entry()
       }
       entry.oldIndices.push(itemToPush: nil)
-      entries[self[i].diffIdentifier] = entry
+      if let diffIdentifier = self[i].diffIdentifier {
+        entries[diffIdentifier] = entry
+      }
       newResultsArray[i] = (Record(entry: entry))
     }
 
@@ -194,13 +197,16 @@ extension Collection where Self.Iterator.Element: Diffable, Self.Index == Int, S
     var oldResultsArray = [Int: Record]()
     for i in (otherCollection.startIndex..<otherCollection.endIndex).reversed() {
       let entry: Entry
-      if let existingEntry = entries[otherCollection[i].diffIdentifier] {
+      if let diffIdentifier = otherCollection[i].diffIdentifier,
+        let existingEntry = entries[diffIdentifier] {
         entry = existingEntry
       } else {
         entry = Entry()
       }
       entry.oldIndices.push(itemToPush: i)
-      entries[otherCollection[i].diffIdentifier] = entry
+      if let diffIdentifier = otherCollection[i].diffIdentifier {
+        entries[diffIdentifier] = entry
+      }
       oldResultsArray[i] = (Record(entry: entry))
     }
 

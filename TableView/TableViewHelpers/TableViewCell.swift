@@ -4,7 +4,7 @@
 import UIKit
 
 /// An internal cell class for use in a `TableView`. It handles displaying a `Divider` and
-/// wraps view classes passed to it through a `ViewMaker`.
+/// wraps view classes passed to it.
 final class TableViewCell: UITableViewCell {
 
   // MARK: Lifecycle
@@ -23,12 +23,11 @@ final class TableViewCell: UITableViewCell {
   private(set) var dividerView: UIView?
   private(set) var view: UIView?
 
-  /// Pass a `ViewMaker` to generate a view for this cell's reuseID that the cell will pin to the edges of its `contentView`.
-  func makeViewIfNeeded(with viewMaker: ViewMaker) {
+  /// Pass a view for this cell's reuseID that the cell will pin to the edges of its `contentView`.
+  func setViewIfNeeded(view: UIView) {
     if self.view != nil {
       return
     }
-    let view = viewMaker()
     view.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(view)
     view.constrainToParent()
@@ -39,15 +38,19 @@ final class TableViewCell: UITableViewCell {
     }
   }
 
-  /// Pass a `ViewMaker` to generate a `Divider` for this cell's reuseID that the cell will pin to the bottom of its `contentView`.
-  func makeDividerViewIfNeeded(with viewMaker: ViewMaker) {
+  /// Pass a `ViewMaker` that generates a `Divider` for this cell's reuseID that the cell will pin to the bottom of its `contentView`.
+  func makeDividerViewIfNeeded(with dividerViewMaker: ViewMaker) {
     if self.dividerView != nil {
       return
     }
-    let dividerView = viewMaker()
+    let dividerView = dividerViewMaker()
     dividerView.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(dividerView)
     dividerView.constrainToParent([.bottom, .trailing, .leading])
     self.dividerView = dividerView
   }
+}
+
+extension TableViewCell: ListCell {
+  
 }
