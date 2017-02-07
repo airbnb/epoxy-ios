@@ -9,13 +9,13 @@ public protocol ViewConfigurer: ListItem {
   associatedtype View: UIView
 
   func makeView() -> View
-  func configure(view: View, animated: Bool)
+  func configureView(_ view: View, animated: Bool)
 }
 
 extension ViewConfigurer {
   public func configure(cell: ListCell, animated: Bool) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
-    configure(view: view, animated: animated)
+    configureView(view, animated: animated)
   }
 }
