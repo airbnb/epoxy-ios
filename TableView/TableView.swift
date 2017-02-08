@@ -257,12 +257,13 @@ extension TableView: UITableViewDataSource {
       return UITableViewCell(style: .default, reuseIdentifier: "")
     }
     
-  let cell = tableView.dequeueReusableCell(withIdentifier: item.listItem.reuseID,
-  for: indexPath)
+    let cell = tableView.dequeueReusableCell(
+      withIdentifier: item.listItem.reuseID,
+      for: indexPath)
 
     if let cell = cell as? TableViewCell {
       item.listItem.configure(cell: cell, animated: false)
-  updateDivider(for: cell, dividerType: item.dividerType)
+      updateDivider(for: cell, dividerType: item.dividerType)
     } else {
       assert(false, "Only TableViewCell and subclasses are allowed in a TableView.")
     }
