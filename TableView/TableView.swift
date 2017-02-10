@@ -37,6 +37,10 @@ public final class TableView: UITableView {
   /// Ignores zooming delegate methods.
   public weak var scrollDelegate: UIScrollViewDelegate?
 
+  /// Delegate which indicates when a list item will be displayed, typically used
+  /// for logging.
+  public weak var listItemDisplayDelegate: TableViewListItemDisplayDelegate?
+
   /// Sets the TableView's data. By default, this will diff the new `ListStructure` against the
   /// existing `ListStructure` and animate the changes to the TableView.
   /// Set `shouldDiff` to `false` if you want the TableView to do a full reload with the new content.
@@ -274,6 +278,18 @@ extension TableView: UITableViewDataSource {
 // MARK: UITableViewDelegate
 
 extension TableView: UITableViewDelegate {
+
+  public func tableView(
+    _ tableView: UITableView,
+    willDisplay cell: UITableViewCell,
+    forRowAt indexPath: IndexPath)
+  {
+    guard let item = listItem(at: indexPath) else {
+      assert(false, "Index path is out of bounds.")
+      return
+    }
+    listItemDisplayDelegate?.tableView(self, willDisplay: item.listItem)
+  }
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
     scrollDelegate?.scrollViewDidScroll?(scrollView)
