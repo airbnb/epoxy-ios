@@ -124,7 +124,7 @@ public final class TableView: UITableView {
     rowHeight = UITableViewAutomaticDimension
     estimatedRowHeight = 44 // TODO(ls): Use better estimated height
     allowsSelection = false // Handle selection in subviews if desired
-    separatorColor = .clear
+    separatorStyle = .none
     backgroundColor = .clear
     translatesAutoresizingMaskIntoConstraints = false
   }
