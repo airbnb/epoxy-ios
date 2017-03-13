@@ -11,12 +11,9 @@ public class Divider: UIView {
   // MARK: Lifecycle
 
   public init() {
-    dividerView = UIView()
     super.init(frame: .zero)
-
+    isOpaque = false
     translatesAutoresizingMaskIntoConstraints = false
-    setUp()
-    setUpConstraints()
   }
 
   public required init?(coder aDecoder: NSCoder) {
@@ -25,54 +22,60 @@ public class Divider: UIView {
 
   // MARK: Public
 
-  /// Sets the height of the divider.
-  ///
-  /// - Parameters:
-  ///     - height: The height of the divider.
-  public func setHeight(height: CGFloat) {
-    dividerHeightConstraint.constant = height
+  /// The height of the divider.
+  public var height: CGFloat = 0 {
+    didSet {
+      if height != oldValue {
+        setNeedsDisplay()
+        invalidateIntrinsicContentSize()
+      }
+    }
   }
 
-  /// Sets the leading padding of the divider.
-  ///
-  /// - Parameters:
-  ///     - leadingPadding: The leadingPadding of the divider.
-  public func setLeadingPadding(leadingPadding: CGFloat) {
-    dividerLeadingConstraint.constant = leadingPadding
+  /// The leading padding of the divider.
+  public var leadingPadding: CGFloat = 0 {
+    didSet {
+      if leadingPadding != oldValue {
+        setNeedsDisplay()
+      }
+    }
   }
 
-  /// Sets the trailing padding of the divider.
-  ///
-  /// - Parameters:
-  ///     - trailingPadding: The trailingPadding of the divider.
-  public func setTrailingPadding(trailingPadding: CGFloat) {
-    dividerTrailingConstraint.constant = -trailingPadding
+  /// The trailing padding of the divider.
+  public var trailingPadding: CGFloat = 0 {
+    didSet {
+      if trailingPadding != oldValue {
+        setNeedsDisplay()
+      }
+    }
   }
 
-  /// Sets the color of the divider.
-  ///
-  /// - Parameters:
-  ///     - color: The color of the divider.
-  public func setColor(color: UIColor?) {
-    dividerView.backgroundColor = color
+  /// The color of the divider.
+  public var color: UIColor? {
+    didSet {
+      if color != oldValue {
+        setNeedsDisplay()
+      }
+    }
   }
 
-  // MARK: Private
-
-  private let dividerView: UIView
-  private var dividerHeightConstraint: NSLayoutConstraint!
-  private var dividerLeadingConstraint: NSLayoutConstraint!
-  private var dividerTrailingConstraint: NSLayoutConstraint!
-
-  fileprivate func setUp() {
-    addSubview(dividerView)
+  public override var intrinsicContentSize: CGSize {
+    return CGSize(width: UIViewNoIntrinsicMetric, height: height)
   }
 
-  fileprivate func setUpConstraints() {
-    dividerView.translatesAutoresizingMaskIntoConstraints = false
-    dividerView.constrainToParent([.top, .bottom])
-    dividerHeightConstraint = dividerView.constrain(.height, .equal, 1)
-    dividerLeadingConstraint = dividerView.constrain(.leading, .equal, self, .leading)
-    dividerTrailingConstraint = dividerView.constrain(.trailing, .equal, self, .trailing)
+  public override func draw(_ rect: CGRect) {
+    guard let color = color else {
+      assert(false, "You shouldn't be using a divider without a color")
+      return
+    }
+
+    let context = UIGraphicsGetCurrentContext()!
+    context.clear(rect)
+    var dividerRect = rect
+    dividerRect.origin.x = leadingPadding
+    dividerRect.size.width -= leadingPadding + trailingPadding
+
+    context.setFillColor(color.cgColor)
+    context.fill(dividerRect)
   }
 }
