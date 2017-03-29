@@ -190,11 +190,15 @@ public final class TableView: UITableView {
       if let rowDividerViewMaker = rowDividerViewMaker {
         cell.dividerView?.isHidden = false
         cell.makeDividerViewIfNeeded(with: rowDividerViewMaker)
+      } else {
+        cell.dividerView?.isHidden = true
       }
     case .sectionHeaderDivider:
       if let sectionHeaderDividerViewMaker = sectionHeaderDividerViewMaker {
         cell.dividerView?.isHidden = false
         cell.makeDividerViewIfNeeded(with: sectionHeaderDividerViewMaker)
+      } else {
+        cell.dividerView?.isHidden = true
       }
     }
   }
