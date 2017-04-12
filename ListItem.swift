@@ -9,6 +9,9 @@ public protocol ListItem: Diffable {
   var reuseID: String { get }
   var dataID: String? { get }
   func configure(cell: ListCell, animated: Bool)
+
+  var isSelectable: Bool { get }
+  func didSelect()
 }
 
 extension ListItem {
@@ -28,4 +31,10 @@ extension ListItem {
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     return false
   }
+
+  public var selectionStyle: UITableViewCellSelectionStyle { return .default }
+
+  public var isSelectable: Bool { return false }
+
+  public func didSelect() { }
 }

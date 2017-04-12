@@ -41,6 +41,9 @@ public final class TableView: UITableView {
   /// for logging.
   public weak var listItemDisplayDelegate: TableViewListItemDisplayDelegate?
 
+  /// Selection style for the `UITableViewCell`s of `ListItem`s that have `isSelectable == true`
+  public var selectionStyle: UITableViewCellSelectionStyle = .default
+
   /// Sets the TableView's data. By default, this will diff the new `ListStructure` against the
   /// existing `ListStructure` and animate the changes to the TableView.
   /// Set `shouldDiff` to `false` if you want the TableView to do a full reload with the new content.
@@ -269,6 +272,8 @@ extension TableView: UITableViewDataSource {
       withIdentifier: item.listItem.reuseID,
       for: indexPath)
 
+    cell.selectionStyle = selectionStyle
+
     if let cell = cell as? TableViewCell {
       item.listItem.configure(cell: cell, animated: false)
       updateDivider(for: cell, dividerType: item.dividerType)
@@ -293,6 +298,39 @@ extension TableView: UITableViewDelegate {
       return
     }
     listItemDisplayDelegate?.tableView(self, willDisplay: item.listItem)
+  }
+
+  public func tableView(
+    _ tableView: UITableView,
+    shouldHighlightRowAt indexPath: IndexPath) -> Bool
+  {
+    guard let item = listItem(at: indexPath) else {
+      assertionFailure("Index path is out of bounds")
+      return false
+    }
+    return item.listItem.isSelectable
+  }
+
+  public func tableView(
+    _ tableView: UITableView,
+    willSelectRowAt indexPath: IndexPath) -> IndexPath?
+  {
+    guard let item = listItem(at: indexPath) else {
+      assertionFailure("Index path is out of bounds")
+      return nil
+    }
+    return item.listItem.isSelectable ? indexPath : nil
+  }
+
+  public func tableView(
+    _ tableView: UITableView,
+    didSelectRowAt indexPath: IndexPath)
+  {
+    guard let item = listItem(at: indexPath) else {
+      assertionFailure("Index path is out of bounds")
+      return
+    }
+    item.listItem.didSelect()
   }
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
