@@ -3,26 +3,19 @@
 
 import UIKit
 
-/// The behavior of the TableView on update.
-///
-/// - Diffs: The TableView animates row inserts, deletes, moves, and updates.
-/// - Reloads: The TableView reloads completely.
-public enum TableViewUpdateBehavior {
-  case Diffs
-  case Reloads
-}
-
 /// A TableView class that handles updates through its `setStructure` method, and optionally animates diffs.
-public final class TableView: UITableView {
+public class TableView: UITableView, DiffableListInterface {
+
+  public typealias Structure = ListInternalTableViewStructure
+  public typealias Cell = TableViewCell
 
   // MARK: Lifecycle
 
-  /// Initializes the TableView and configures its behavior on update.
+  /// Initializes the TableView
   ///
-  /// - Parameters:
-  ///     - updateBehavior: Use `.Diffs` if you want the TableView to animate changes through inserts, deletes, moves, and updates. Use `.Reloads` if you want the TableView to completely reload when the Structure is set.
-  public init(updateBehavior: TableViewUpdateBehavior) {
-    self.updateBehavior = updateBehavior
+  /// Warning: In most cases you should use the factory methods in TableView+DLS instead of directly
+  /// initializing this. Otherwise you'll need to manually set up the data source.
+  public init() {
     super.init(frame: .zero, style: .plain)
     setUp()
   }
@@ -32,6 +25,17 @@ public final class TableView: UITableView {
   }
 
   // MARK: Public
+
+  /// The data source must be an instance of TableViewListDataSource
+  open override weak var dataSource: UITableViewDataSource? {
+    didSet {
+      guard let listDataSource = dataSource as? TableViewListDataSource else {
+        assert(false, "TableView requires TableViewListDataSource as its data source.")
+        return
+      }
+      self.listDataSource = listDataSource
+    }
+  }
 
   /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
   /// Ignores zooming delegate methods.
@@ -44,148 +48,121 @@ public final class TableView: UITableView {
   /// Selection style for the `UITableViewCell`s of `ListItem`s that have `isSelectable == true`
   public var selectionStyle: UITableViewCellSelectionStyle = .default
 
-  /// Sets the TableView's data. By default, this will diff the new `ListStructure` against the
-  /// existing `ListStructure` and animate the changes to the TableView.
-  /// Set `shouldDiff` to `false` if you want the TableView to do a full reload with the new content.
-  ///
-  /// - Parameters:
-  ///     - structure: The `ListStructure` instance representing the TableView's data.
-  public func setStructure(_ structure: ListStructure?) {
+  /// Optional data source which is retained by the TableView to preserve legacy built-in-data-source behavior
+  public var retainedDataSource: TableViewListDataSource?
 
-    // TODO(ls): Add repeated calls to queue
+  /// Block that should return an initialized view of the type you'd like to use for this divider.
+  public var rowDividerViewMaker: ViewMaker?
 
-    var newInternalStructure: ListInternalTableViewStructure?
-    if let structure = structure {
-      let internalStructure = ListInternalTableViewStructure.make(with: structure)
-      registerReuseIDs(with: internalStructure)
-      newInternalStructure = internalStructure
+  /// Block that should return an initialized view of the type you'd like to use for this divider.
+  public var sectionHeaderDividerViewMaker: ViewMaker?
+
+  public var visibleTypedCells: [Cell] {
+    return visibleCells.map { $0 as! Cell }
+  }
+
+  public func register(reuseID: String) {
+    super.register(TableViewCell.self,
+                   forCellReuseIdentifier: reuseID)
+  }
+
+  public func unregister(reuseID: String) {
+    super.register((nil as AnyClass?),
+                   forCellReuseIdentifier: reuseID)
+  }
+
+  public func configure(cell: Cell, with item: Structure.Item) {
+    configure(cell: cell, with: item, animated: false)
+    cell.selectionStyle = selectionStyle
+  }
+
+  public func reloadItem(at indexPath: IndexPath, animated: Bool) {
+    if let cell = cellForRow(at: indexPath as IndexPath) as? TableViewCell,
+      let item = listDataSource?.listItem(at: indexPath) {
+      configure(cell: cell, with: item, animated: animated)
+    }
+  }
+
+  public func apply(_ changeset: ListInternalTableViewStructureChangeset) {
+
+    beginUpdates()
+
+    changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
+      if let cell = cellForRow(at: fromIndexPath as IndexPath) as? TableViewCell,
+        let listItem = listDataSource?.listItem(at: toIndexPath)?.listItem {
+        listItem.configure(cell: cell, animated: true)
+      }
     }
 
-    guard let oldStructure = self.structure,
-      let newStructure = newInternalStructure else {
+    // TODO(ls): Make animations configurable
+    deleteRows(at: changeset.itemChangeset.deletes as [IndexPath], with: .fade)
+    deleteSections(changeset.sectionChangeset.deletes as IndexSet, with: .fade)
 
-        self.structure = newInternalStructure
-        reloadData()
+    insertRows(at: changeset.itemChangeset.inserts, with: .fade)
+    insertSections(changeset.sectionChangeset.inserts as IndexSet, with: .fade)
+
+    changeset.sectionChangeset.moves.forEach { (fromIndex, toIndex) in
+      moveSection(fromIndex, toSection: toIndex)
+    }
+
+    changeset.itemChangeset.moves.forEach { (fromIndexPath, toIndexPath) in
+      moveRow(at: fromIndexPath, to: toIndexPath)
+    }
+
+    endUpdates()
+
+    indexPathsForVisibleRows?.forEach { indexPath in
+      guard let cell = cellForRow(at: indexPath) as? TableViewCell else {
+        assert(false, "Only TableViewCell and subclasses are allowed in a TableView.")
         return
-    }
-
-    self.structure = newStructure
-
-    switch updateBehavior {
-    case .Diffs:
-      let changeset = newStructure.makeChangeset(from: oldStructure)
-      apply(changeset)
-    case .Reloads:
-      reloadData()
+      }
+      if let item = listDataSource?.listItem(at: indexPath) {
+        self.updateDivider(for: cell, dividerType: item.dividerType)
+      }
     }
   }
 
-  /// Sets the `ViewMaker` to use for the dividers between rows.
-  ///
-  /// - Parameters:
-  ///     - viewMaker: Block that should return an initialized view of the type you'd like to use for this divider.
-  public func setDividerViewMaker(viewMaker: @escaping ViewMaker) {
-    rowDividerViewMaker = viewMaker
-  }
-
-  /// Sets the `ViewMaker` to use for the dividers between a section header and its rows.
-  ///
-  /// - Parameters:
-  ///     - viewMaker: Block that should return an initialized view of the type you'd like to use for this divider.
-  public func setSectionHeaderDividerViewMaker(viewMaker: @escaping ViewMaker) {
-    sectionHeaderDividerViewMaker = viewMaker
-  }
-  
+  @available (*, unavailable, message: "You shouldn't be registering cell classes on a TableView. The TableViewListDataSource handles this for you.")
   public override func register(_ cellClass: AnyClass?, forCellReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering cell classes on a TableView. Use registerReuseID:viewMaker:viewConfigurer instead.")
+    assert(false, "You shouldn't be registering cell classes on a TableView. The TableViewListDataSource handles this for you.")
   }
 
+  @available (*, unavailable, message: "You shouldn't be registering cell nibs on a TableView. The TableViewListDataSource handles this for you.")
   public override func register(_ nib: UINib?, forCellReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering cell nibs on a TableView. Use registerReuseID:viewMaker:viewConfigurer instead.")
+    assert(false, "You shouldn't be registering cell nibs on a TableView. The TableViewListDataSource handles this for you.")
   }
 
+  @available (*, unavailable, message: "You shouldn't be header or footer nibs on a TableView. The TableViewListDataSource handles this for you.")
   public override func register(_ nib: UINib?, forHeaderFooterViewReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering header or footer nibs on a TableView. Use registerReuseID:viewMaker:viewConfigurer instead.")
+    assert(false, "You shouldn't be registering header or footer nibs on a TableView. The TableViewListDataSource handles this for you.")
   }
 
+  @available (*, unavailable, message: "You shouldn't be registering header or footer classes on a TableView. The TableViewListDataSource handles this for you.")
   public override func register(_ aClass: AnyClass?, forHeaderFooterViewReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering header or footer classes on a TableView. Use registerReuseID:viewMaker:viewConfigurer instead.")
+    assert(false, "You shouldn't be registering header or footer classes on a TableView. The TableViewListDataSource handles this for you.")
   }
 
   // MARK: Fileprivate
 
-  fileprivate let updateBehavior: TableViewUpdateBehavior
-  fileprivate var structure: ListInternalTableViewStructure?
+  fileprivate weak var listDataSource: TableViewListDataSource?
 
-  fileprivate var rowDividerViewMaker: ViewMaker?
-  fileprivate var sectionHeaderDividerViewMaker: ViewMaker?
-  fileprivate var reuseIDs = Set<String>()
+  // MARK: Private
 
-  fileprivate func setUp() {
+  private func setUp() {
     delegate = self
-    dataSource = self
     rowHeight = UITableViewAutomaticDimension
     estimatedRowHeight = 44 // TODO(ls): Use better estimated height
-    allowsSelection = false // Handle selection in subviews if desired
     separatorStyle = .none
     backgroundColor = .clear
     translatesAutoresizingMaskIntoConstraints = false
   }
 
-  fileprivate func registerReuseIDs(with listStructure: ListInternalTableViewStructure) {
-
-    var newReuseIDs = Set<String>()
-    listStructure.sections.forEach { section in
-      section.items.forEach { item in
-        newReuseIDs.insert(item.listItem.reuseID)
-      }
-    }
-
-    reuseIDs.forEach { reuseID in
-      if !newReuseIDs.contains(reuseID) {
-        unregister(reuseID: reuseID)
-      }
-    }
-
-    newReuseIDs.forEach { reuseID in
-      if !reuseIDs.contains(reuseID) {
-        register(reuseID: reuseID)
-      }
-    }
-
-    reuseIDs = newReuseIDs
+  private func configure(cell: Cell, with item: Structure.Item, animated: Bool) {
+    item.listItem.configure(cell: cell, animated: animated)
+    updateDivider(for: cell, dividerType: item.dividerType)
   }
 
-  fileprivate func register(reuseID: String) {
-    super.register(TableViewCell.self,
-                   forCellReuseIdentifier: reuseID)
-  }
-
-  fileprivate func unregister(reuseID: String) {
-    super.register((nil as AnyClass?),
-                   forCellReuseIdentifier: reuseID)
-  }
-
-  fileprivate func listItem(at indexPath: IndexPath) -> ListInternalTableViewItemStructure? {
-    guard let structure = structure else {
-      assert(false, "Can't load list item with nil structure")
-      return nil
-    }
-
-    if structure.sections.count < indexPath.section + 1 {
-      return nil
-    }
-
-    let section = structure.sections[indexPath.section]
-
-    if section.items.count < indexPath.row + 1 {
-      return nil
-    }
-
-    return section.items[indexPath.row]
-  }
-
-  fileprivate func updateDivider(for cell: TableViewCell, dividerType: ListItemDividerType) {
+  private func updateDivider(for cell: TableViewCell, dividerType: ListItemDividerType) {
     switch dividerType {
     case .none:
       cell.dividerView?.isHidden = true
@@ -206,82 +183,6 @@ public final class TableView: UITableView {
     }
   }
 
-  fileprivate func apply(_ changeset: ListInternalTableViewStructureChangeset) {
-
-    beginUpdates()
-
-    changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
-      if let cell = cellForRow(at: fromIndexPath as IndexPath) as? TableViewCell,
-        let listItem = listItem(at: toIndexPath)?.listItem {
-        listItem.configure(cell: cell, animated: true)
-      }
-    }
-
-    // TODO(ls): Make animations configurable
-    deleteRows(at: changeset.itemChangeset.deletes as [IndexPath], with: .fade)
-    deleteSections(changeset.sectionChangeset.deletes as IndexSet, with: .fade)
-
-    insertRows(at: changeset.itemChangeset.inserts, with: .fade)
-    insertSections(changeset.sectionChangeset.inserts as IndexSet, with: .fade)
-
-    changeset.sectionChangeset.moves.forEach { (fromIndex, toIndex) in
-      moveSection(fromIndex, toSection: toIndex)
-    }
-
-    changeset.itemChangeset.moves.forEach { (fromIndexPath, toIndexPath) in
-      moveRow(at: fromIndexPath, to: toIndexPath)
-    }
-    
-    endUpdates()
-
-    indexPathsForVisibleRows?.forEach { indexPath in
-      guard let cell = cellForRow(at: indexPath) as? TableViewCell else {
-        assert(false, "Only TableViewCell and subclasses are allowed in a TableView.")
-        return
-      }
-      if let item = listItem(at: indexPath) {
-        self.updateDivider(for: cell, dividerType: item.dividerType)
-      }
-    }
-  }
-}
-
-// MARK: UITableViewDataSource
-
-extension TableView: UITableViewDataSource {
-
-  public func numberOfSections(in tableView: UITableView) -> Int {
-    guard let structure = structure else { return 0 }
-
-    return structure.sections.count
-  }
-
-  public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    guard let structure = structure else { return 0 }
-
-    return structure.sections[section].items.count
-  }
-
-  public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let item = listItem(at: indexPath) else {
-      assert(false, "Index path is out of bounds.")
-      return UITableViewCell(style: .default, reuseIdentifier: "")
-    }
-    
-    let cell = tableView.dequeueReusableCell(
-      withIdentifier: item.listItem.reuseID,
-      for: indexPath)
-
-    cell.selectionStyle = selectionStyle
-
-    if let cell = cell as? TableViewCell {
-      item.listItem.configure(cell: cell, animated: false)
-      updateDivider(for: cell, dividerType: item.dividerType)
-    } else {
-      assert(false, "Only TableViewCell and subclasses are allowed in a TableView.")
-    }
-    return cell
-  }
 }
 
 // MARK: UITableViewDelegate
@@ -293,7 +194,7 @@ extension TableView: UITableViewDelegate {
     willDisplay cell: UITableViewCell,
     forRowAt indexPath: IndexPath)
   {
-    guard let item = listItem(at: indexPath) else {
+    guard let item = listDataSource?.listItem(at: indexPath) else {
       assert(false, "Index path is out of bounds.")
       return
     }
@@ -304,7 +205,7 @@ extension TableView: UITableViewDelegate {
     _ tableView: UITableView,
     shouldHighlightRowAt indexPath: IndexPath) -> Bool
   {
-    guard let item = listItem(at: indexPath) else {
+    guard let item = listDataSource?.listItem(at: indexPath) else {
       assertionFailure("Index path is out of bounds")
       return false
     }
@@ -315,7 +216,7 @@ extension TableView: UITableViewDelegate {
     _ tableView: UITableView,
     willSelectRowAt indexPath: IndexPath) -> IndexPath?
   {
-    guard let item = listItem(at: indexPath) else {
+    guard let item = listDataSource?.listItem(at: indexPath) else {
       assertionFailure("Index path is out of bounds")
       return nil
     }
@@ -326,7 +227,7 @@ extension TableView: UITableViewDelegate {
     _ tableView: UITableView,
     didSelectRowAt indexPath: IndexPath)
   {
-    guard let item = listItem(at: indexPath) else {
+    guard let item = listDataSource?.listItem(at: indexPath) else {
       assertionFailure("Index path is out of bounds")
       return
     }
@@ -377,6 +278,28 @@ extension TableView: UITableViewDelegate {
   }
 }
 
-extension TableView: ListInterface {
-  
+extension TableView {
+
+  /// Temporary method to preserve legacy built-in-data-source behavior
+  public func setStructure(_ structure: ListStructure?) {
+    guard let retainedDataSource = retainedDataSource else {
+      assert(false, "You must set the retainedDataSource to use this legacy built-in-data-source behavior.")
+      return
+    }
+    retainedDataSource.setStructure(structure)
+  }
+
+  /// Temporary method to preserve legacy built-in-data-source behavior
+  public func updateItem(
+    at dataID: String,
+    with item: ListItem,
+    animated: Bool)
+  {
+    guard let retainedDataSource = retainedDataSource else {
+      assert(false, "You must set the retainedDataSource to use this legacy built-in-data-source behavior.")
+      return
+    }
+    retainedDataSource.updateItem(at: dataID, with: item, animated: animated)
+  }
+
 }

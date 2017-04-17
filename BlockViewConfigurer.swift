@@ -43,7 +43,7 @@ public class BlockViewConfigurer<ViewType, DataType>: ViewConfigurer where
    */
   public init(
     builder: @escaping @autoclosure () -> ViewType,
-    configurer: @escaping (ViewType, DataType) -> (),
+    configurer: @escaping (ViewType, DataType) -> Void,
     data: DataType,
     dataID: String? = nil)
   {
@@ -77,7 +77,7 @@ public class BlockViewConfigurer<ViewType, DataType>: ViewConfigurer where
   // MARK: Private
 
   private let builder: () -> ViewType
-  private let configurer: (ViewType, DataType) -> ()
+  private let configurer: (ViewType, DataType) -> Void
 }
 
 extension BlockConfigurableView where
@@ -131,4 +131,61 @@ extension BlockConfigurableView where
       data: data,
       dataID: dataID)
   }
+}
+
+/// If you mark a view with this protocol, you can use these nice convenience methods to create 
+/// a BlockViewConfigurer, eg. `MyCustomView.listItem(....)
+public protocol ConfigurableView { }
+
+extension ConfigurableView where
+Self: UIView
+{
+  /**
+   A convenience method to create a `ListItem` that creates and configures this type of view for display in a `ListInterface`.
+
+   - Parameter builder: Something that returns this view type. It will be wrapped in a closure and called as needed to lazily create views.
+   - Parameter configurer: Something that configures this view type with the given data.
+   - Parameter data: The data this view takes for configuration, specific to this particular list item instance.
+   - Parameter dataID: An optional ID to differentiate this row from other rows, used when diffing.
+
+   - Returns: A `ListItem` instance that will create the specified view type with this data.
+
+   - Note: The `builder` parameter will be wrapped in a closure automatically. The view will not be created until it is needed.
+   */
+  public static func listItem<DataType: Equatable>(
+    builder: @escaping @autoclosure () -> Self,
+    configurer: @escaping (Self, DataType) -> Void,
+    data: DataType,
+    dataID: String? = nil) -> BlockViewConfigurer<Self, DataType>
+  {
+    return BlockViewConfigurer<Self, DataType>(
+      builder: builder,
+      configurer: configurer,
+      data: data,
+      dataID: dataID)
+  }
+
+  /**
+   A convenience method to create a `ListItem` that creates and configures this type of view for display in a `ListInterface`.
+
+   - Parameter configurer: Something that configures this view type with the given data.
+   - Parameter data: The data this view takes for configuration, specific to this particular list item instance.
+   - Parameter dataID: An optional ID to differentiate this row from other rows, used when diffing.
+
+   - Returns: A `ListItem` instance that will create the specified view type with this data.
+
+   - Note: This uses an empty `init()` to create the view. Don't use this if you need to use a different `init()`.
+   */
+  public static func listItem<DataType: Equatable>(
+    configurer: @escaping (Self, DataType) -> Void,
+    data: DataType,
+    dataID: String? = nil) -> BlockViewConfigurer<Self, DataType>
+  {
+    return BlockViewConfigurer<Self, DataType>(
+      builder: Self(),
+      configurer: configurer,
+      data: data,
+      dataID: dataID)
+  }
+
 }

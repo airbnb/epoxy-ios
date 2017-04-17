@@ -7,22 +7,43 @@ import Foundation
 
 /// An internal data structure constructed from a `ListStructure` that is specific
 /// to display in a `UITableView` implementation.
-struct ListInternalTableViewStructure {
+public final class ListInternalTableViewStructure: DiffableListInternalStructure {
 
-  init(sections: [ListInternalTableViewSectionStructure])
+  public typealias Changeset = ListInternalTableViewStructureChangeset
+  public typealias Item = ListInternalTableViewItemStructure
+
+  init(
+    sections: [ListInternalTableViewSectionStructure],
+    sectionIndexMap: [String: Int],
+    itemIndexMap: [String: IndexPath])
   {
     self.sections = sections
+    self.sectionIndexMap = sectionIndexMap
+    self.itemIndexMap = itemIndexMap
   }
 
-  let sections: [ListInternalTableViewSectionStructure]
+  var sections: [ListInternalTableViewSectionStructure]
+
+  // MARK: Fileprivate
+
+  fileprivate var sectionIndexMap = [String: Int]()
+  fileprivate var itemIndexMap = [String: IndexPath]()
+
 }
 
 extension ListInternalTableViewStructure {
 
-  static func make(with listStructure: ListStructure) -> ListInternalTableViewStructure {
+  public static func make(with listStructure: ListStructure) -> ListInternalTableViewStructure {
+
+    var sectionIndexMap = [String: Int]()
+    var itemIndexMap = [String: IndexPath]()
 
     let lastSectionIndex = listStructure.sections.count - 1
-    let sections: [ListInternalTableViewSectionStructure] = listStructure.sections.enumerated().map { index, section in
+    let sections: [ListInternalTableViewSectionStructure] = listStructure.sections.enumerated().map { sectionIndex, section in
+
+      sectionIndexMap[section.dataID] = sectionIndex
+
+      var itemIndex = 0
 
       var items = [ListInternalTableViewItemStructure]()
 
@@ -33,15 +54,27 @@ extension ListInternalTableViewStructure {
         items.append(ListInternalTableViewItemStructure(
           listItem: existingSectionHeader,
           dividerType: .sectionHeaderDivider))
+
+        if let dataID = existingSectionHeader.dataID {
+          itemIndexMap[dataID] = IndexPath(item: itemIndex, section: sectionIndex)
+        }
+
+        itemIndex += 1
       }
 
       section.items.forEach { item in
         items.append(ListInternalTableViewItemStructure(
           listItem: item,
           dividerType: .rowDivider))
+
+        if let dataID = item.dataID {
+          itemIndexMap[dataID] = IndexPath(item: itemIndex, section: sectionIndex)
+        }
+
+        itemIndex += 1
       }
 
-      if index == lastSectionIndex && !items.isEmpty {
+      if sectionIndex == lastSectionIndex && !items.isEmpty {
         let lastItem = items.removeLast() // Remove last row divider
         items.append(ListInternalTableViewItemStructure(
           listItem: lastItem.listItem,
@@ -53,10 +86,13 @@ extension ListInternalTableViewStructure {
         items: items)
     }
 
-    return ListInternalTableViewStructure(sections: sections)
+    return ListInternalTableViewStructure(
+      sections: sections,
+      sectionIndexMap: sectionIndexMap,
+      itemIndexMap: itemIndexMap)
   }
 
-  func makeChangeset(from
+  public func makeChangeset(from
     otherStructure: ListInternalTableViewStructure) -> ListInternalTableViewStructureChangeset
   {
     let sectionChangeset = sections.makeIndexSetChangeset(from: otherStructure.sections)
@@ -86,10 +122,28 @@ extension ListInternalTableViewStructure {
       sectionChangeset: sectionChangeset,
       itemChangeset: itemChangeset)
   }
+
+  public func updateItem(at dataID: String, with item: ListItem) -> IndexPath? {
+    guard let indexPath = itemIndexMap[dataID] else {
+      assert(false, "No item with that dataID exists")
+      return nil
+    }
+
+    let oldItem = sections[indexPath.section].items[indexPath.item]
+
+    assert(oldItem.listItem.reuseID == item.reuseID, "Cannot update item with a different reuse ID.")
+
+    sections[indexPath.section].items[indexPath.item] = ListInternalTableViewItemStructure(
+      listItem: item,
+      dividerType: oldItem.dividerType)
+
+    return indexPath
+  }
+
 }
 
 /// An internal data structure changeset for use in updating a `UITableView`.
-struct ListInternalTableViewStructureChangeset {
+public struct ListInternalTableViewStructureChangeset {
 
   init(
     sectionChangeset: IndexSetChangeset,
@@ -106,7 +160,7 @@ struct ListInternalTableViewStructureChangeset {
 // MARK: ListInternalTableViewSectionStructure
 
 /// A section in a `ListInternalTableViewStructure`.
-struct ListInternalTableViewSectionStructure {
+public struct ListInternalTableViewSectionStructure {
 
   init(
     dataID: String,
@@ -117,16 +171,16 @@ struct ListInternalTableViewSectionStructure {
   }
 
   let dataID: String
-  let items: [ListInternalTableViewItemStructure]
+  var items: [ListInternalTableViewItemStructure]
 }
 
 extension ListInternalTableViewSectionStructure: Diffable {
-  func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
+  public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let otherDiffableSection = otherDiffableItem as? ListInternalTableViewSectionStructure else { return false }
     return dataID == otherDiffableSection.dataID
   }
 
-  var diffIdentifier: String? {
+  public var diffIdentifier: String? {
     return dataID
   }
 }
@@ -143,7 +197,7 @@ enum ListItemDividerType {
 // MARK: ListInternalTableViewItemStructure
 
 /// An item in a `ListInternalTableViewSectionStructure`, representing either a row or a section header.
-struct ListInternalTableViewItemStructure {
+public struct ListInternalTableViewItemStructure {
 
   init(
     listItem: ListItem,
@@ -154,16 +208,16 @@ struct ListInternalTableViewItemStructure {
   }
 
   let listItem: ListItem
-  let dividerType: ListItemDividerType
+  var dividerType: ListItemDividerType
 }
 
 extension ListInternalTableViewItemStructure: Diffable {
-  func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
+  public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let otherDiffableListItem = otherDiffableItem as? ListInternalTableViewItemStructure else { return false }
     return listItem.isDiffableItemEqual(to: otherDiffableListItem.listItem)
   }
 
-  var diffIdentifier: String? {
+  public var diffIdentifier: String? {
     return listItem.diffIdentifier
   }
 }

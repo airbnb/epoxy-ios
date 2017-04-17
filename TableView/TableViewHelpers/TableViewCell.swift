@@ -5,7 +5,7 @@ import UIKit
 
 /// An internal cell class for use in a `TableView`. It handles displaying a `Divider` and
 /// wraps view classes passed to it.
-final class TableViewCell: UITableViewCell {
+public final class TableViewCell: UITableViewCell {
 
   // MARK: Lifecycle
 
@@ -14,17 +14,17 @@ final class TableViewCell: UITableViewCell {
     backgroundColor = .clear
   }
 
-  required init?(coder aDecoder: NSCoder) {
+  public required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: Internal
 
   private(set) var dividerView: UIView?
-  private(set) var view: UIView?
+  public private(set) var view: UIView?
 
   /// Pass a view for this cell's reuseID that the cell will pin to the edges of its `contentView`.
-  func setViewIfNeeded(view: UIView) {
+  public func setViewIfNeeded(view: UIView) {
     if self.view != nil {
       return
     }
