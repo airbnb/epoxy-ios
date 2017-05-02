@@ -96,7 +96,7 @@ extension BlockConfigurableView where
    - Note: The `builder` parameter will be wrapped in a closure automatically. The view will not be created until it is needed.
    */
   public static func with(
-    builder: @escaping @autoclosure () -> Self,
+    builder: @escaping @autoclosure () -> Self = Self(),
     data: Data,
     dataID: String? = nil) -> BlockViewConfigurer<Self, Data>
   {
@@ -119,6 +119,7 @@ extension BlockConfigurableView where
    
    - Note: This uses an empty `init()` to create the view. Don't use this if you need to use a different `init()`.
    */
+  /*
   public static func with(
     data: Data,
     dataID: String? = nil) -> BlockViewConfigurer<Self, Data>
@@ -131,6 +132,7 @@ extension BlockConfigurableView where
       data: data,
       dataID: dataID)
   }
+ */
 }
 
 /// If you mark a view with this protocol, you can use these nice convenience methods to create 
