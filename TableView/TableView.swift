@@ -29,6 +29,10 @@ public class TableView: UITableView, DiffableListInterface {
   /// The data source must be an instance of TableViewListDataSource
   open override weak var dataSource: UITableViewDataSource? {
     didSet {
+      if dataSource == nil {
+        self.listDataSource = nil
+        return
+      }
       guard let listDataSource = dataSource as? TableViewListDataSource else {
         assert(false, "TableView requires TableViewListDataSource as its data source.")
         return
