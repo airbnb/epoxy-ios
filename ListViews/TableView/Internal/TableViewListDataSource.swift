@@ -8,15 +8,15 @@ public class TableViewListDataSource: ListDataSource<TableView>, UITableViewData
   // MARK: Public
 
   public func numberOfSections(in tableView: UITableView) -> Int {
-    guard let structure = internalStructure else { return 0 }
+    guard let data = internalData else { return 0 }
 
-    return structure.sections.count
+    return data.sections.count
   }
 
   public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    guard let structure = internalStructure else { return 0 }
+    guard let data = internalData else { return 0 }
 
-    return structure.sections[section].items.count
+    return data.sections[section].items.count
   }
 
   public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -39,17 +39,17 @@ public class TableViewListDataSource: ListDataSource<TableView>, UITableViewData
 
   // MARK: Internal
 
-  func listItem(at indexPath: IndexPath) -> ListInternalTableViewItemStructure? {
-    guard let structure = internalStructure else {
-      assert(false, "Can't load list item with nil structure")
+  func listItem(at indexPath: IndexPath) -> InternalTableViewListItem? {
+    guard let data = internalData else {
+      assert(false, "Can't load list item with nil data")
       return nil
     }
 
-    if structure.sections.count < indexPath.section + 1 {
+    if data.sections.count < indexPath.section + 1 {
       return nil
     }
 
-    let section = structure.sections[indexPath.section]
+    let section = data.sections[indexPath.section]
 
     if section.items.count < indexPath.row + 1 {
       return nil

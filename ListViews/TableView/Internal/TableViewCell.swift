@@ -5,7 +5,7 @@ import UIKit
 
 /// An internal cell class for use in a `TableView`. It handles displaying a `Divider` and
 /// wraps view classes passed to it.
-public final class TableViewCell: UITableViewCell {
+public final class TableViewCell: UITableViewCell, ListCell {
 
   // MARK: Lifecycle
 
@@ -18,9 +18,8 @@ public final class TableViewCell: UITableViewCell {
     fatalError("init(coder:) has not been implemented")
   }
 
-  // MARK: Internal
+  // MARK: Public
 
-  private(set) var dividerView: UIView?
   public private(set) var view: UIView?
 
   /// Pass a view for this cell's reuseID that the cell will pin to the edges of its `contentView`.
@@ -30,13 +29,20 @@ public final class TableViewCell: UITableViewCell {
     }
     view.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(view)
-    view.constrainToParent()
+    view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+    view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+    view.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+    view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     self.view = view
 
     if let dividerView = dividerView {
       contentView.bringSubview(toFront: dividerView)
     }
   }
+
+  // MARK: Internal
+
+  private(set) var dividerView: UIView?
 
   /// Pass a `ViewMaker` that generates a `Divider` for this cell's reuseID that the cell will pin to the bottom of its `contentView`.
   func makeDividerViewIfNeeded(with dividerViewMaker: ViewMaker) {
@@ -46,11 +52,9 @@ public final class TableViewCell: UITableViewCell {
     let dividerView = dividerViewMaker()
     dividerView.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(dividerView)
-    dividerView.constrainToParent([.bottom, .trailing, .leading])
+    dividerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
+    dividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
+    dividerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     self.dividerView = dividerView
   }
-}
-
-extension TableViewCell: ListCell {
-  
 }

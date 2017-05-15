@@ -4,18 +4,19 @@
 import UIKit
 
 /// A TableView class that handles updates through its `setStructure` method, and optionally animates diffs.
-public class TableView: UITableView, DiffableListInterface {
+public class TableView: UITableView, InternalListInterface {
 
-  public typealias Structure = ListInternalTableViewStructure
+  public typealias DataType = InternalTableViewListData
   public typealias Cell = TableViewCell
 
   // MARK: Lifecycle
 
-  /// Initializes the TableView
+  /// Initializes the TableView and configures its behavior on update.
   ///
-  /// Warning: In most cases you should use the factory methods in TableView+DLS instead of directly
-  /// initializing this. Otherwise you'll need to manually set up the data source.
-  public init() {
+  /// - Parameters:
+  ///     - updateBehavior: Use `.Diffs` if you want the ListInterface to animate changes through inserts, deletes, moves, and updates. Use `.Reloads` if you want the ListInterface to completely reload when the Structure is set.
+  public init(updateBehavior: ListUpdateBehavior) {
+    self.listDataSource = TableViewListDataSource(updateBehavior: updateBehavior)
     super.init(frame: .zero, style: .plain)
     setUp()
   }
@@ -26,19 +27,16 @@ public class TableView: UITableView, DiffableListInterface {
 
   // MARK: Public
 
-  /// The data source must be an instance of TableViewListDataSource
-  open override weak var dataSource: UITableViewDataSource? {
-    didSet {
-      if dataSource == nil {
-        self.listDataSource = nil
-        return
-      }
-      guard let listDataSource = dataSource as? TableViewListDataSource else {
-        assert(false, "TableView requires TableViewListDataSource as its data source.")
-        return
-      }
-      self.listDataSource = listDataSource
-    }
+  public func setSections(_ sections: [ListSection]?) {
+    listDataSource.setSections(sections)
+  }
+
+  public func updateItem(
+    at dataID: String,
+    with item: ListItem,
+    animated: Bool)
+  {
+    listDataSource.updateItem(at: dataID, with: item, animated: animated)
   }
 
   /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
@@ -52,17 +50,14 @@ public class TableView: UITableView, DiffableListInterface {
   /// Selection style for the `UITableViewCell`s of `ListItem`s that have `isSelectable == true`
   public var selectionStyle: UITableViewCellSelectionStyle = .default
 
-  /// Optional data source which is retained by the TableView to preserve legacy built-in-data-source behavior
-  public var retainedDataSource: TableViewListDataSource?
-
   /// Block that should return an initialized view of the type you'd like to use for this divider.
   public var rowDividerViewMaker: ViewMaker?
 
   /// Block that should return an initialized view of the type you'd like to use for this divider.
   public var sectionHeaderDividerViewMaker: ViewMaker?
 
-  public var visibleTypedCells: [Cell] {
-    return visibleCells.map { $0 as! Cell }
+  public var visibleIndexPaths: [IndexPath] {
+    return indexPathsForVisibleRows ?? []
   }
 
   public func register(reuseID: String) {
@@ -75,26 +70,34 @@ public class TableView: UITableView, DiffableListInterface {
                    forCellReuseIdentifier: reuseID)
   }
 
-  public func configure(cell: Cell, with item: Structure.Item) {
+  public func configure(cell: Cell, with item: DataType.Item) {
     configure(cell: cell, with: item, animated: false)
     cell.selectionStyle = selectionStyle
   }
 
   public func reloadItem(at indexPath: IndexPath, animated: Bool) {
     if let cell = cellForRow(at: indexPath as IndexPath) as? TableViewCell,
-      let item = listDataSource?.listItem(at: indexPath) {
+      let item = listDataSource.listItem(at: indexPath) {
       configure(cell: cell, with: item, animated: animated)
     }
   }
 
-  public func apply(_ changeset: ListInternalTableViewStructureChangeset) {
+  public func setBehavior(at indexPath: IndexPath) {
+    if let cell = cellForRow(at: indexPath as IndexPath) as? TableViewCell,
+      let item = listDataSource.listItem(at: indexPath) {
+      item.listItem.setBehavior(cell: cell)
+    }
+  }
+
+  public func apply(_ changeset: InternalTableViewListDataChangeset) {
 
     beginUpdates()
 
     changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
       if let cell = cellForRow(at: fromIndexPath as IndexPath) as? TableViewCell,
-        let listItem = listDataSource?.listItem(at: toIndexPath)?.listItem {
+        let listItem = listDataSource.listItem(at: toIndexPath)?.listItem {
         listItem.configure(cell: cell, animated: true)
+        listItem.configure(cell: cell, forState: cell.state)
       }
     }
 
@@ -120,7 +123,7 @@ public class TableView: UITableView, DiffableListInterface {
         assert(false, "Only TableViewCell and subclasses are allowed in a TableView.")
         return
       }
-      if let item = listDataSource?.listItem(at: indexPath) {
+      if let item = listDataSource.listItem(at: indexPath) {
         self.updateDivider(for: cell, dividerType: item.dividerType)
       }
     }
@@ -148,12 +151,14 @@ public class TableView: UITableView, DiffableListInterface {
 
   // MARK: Fileprivate
 
-  fileprivate weak var listDataSource: TableViewListDataSource?
+  fileprivate let listDataSource: TableViewListDataSource
 
   // MARK: Private
 
   private func setUp() {
     delegate = self
+    listDataSource.listInterface = self
+    dataSource = listDataSource
     rowHeight = UITableViewAutomaticDimension
     estimatedRowHeight = 44 // TODO(ls): Use better estimated height
     separatorStyle = .none
@@ -161,8 +166,9 @@ public class TableView: UITableView, DiffableListInterface {
     translatesAutoresizingMaskIntoConstraints = false
   }
 
-  private func configure(cell: Cell, with item: Structure.Item, animated: Bool) {
+  private func configure(cell: Cell, with item: DataType.Item, animated: Bool) {
     item.listItem.configure(cell: cell, animated: animated)
+    item.listItem.setBehavior(cell: cell)
     updateDivider(for: cell, dividerType: item.dividerType)
   }
 
@@ -198,7 +204,7 @@ extension TableView: UITableViewDelegate {
     willDisplay cell: UITableViewCell,
     forRowAt indexPath: IndexPath)
   {
-    guard let item = listDataSource?.listItem(at: indexPath) else {
+    guard let item = listDataSource.listItem(at: indexPath) else {
       assert(false, "Index path is out of bounds.")
       return
     }
@@ -209,7 +215,7 @@ extension TableView: UITableViewDelegate {
     _ tableView: UITableView,
     shouldHighlightRowAt indexPath: IndexPath) -> Bool
   {
-    guard let item = listDataSource?.listItem(at: indexPath) else {
+    guard let item = listDataSource.listItem(at: indexPath) else {
       assertionFailure("Index path is out of bounds")
       return false
     }
@@ -218,9 +224,33 @@ extension TableView: UITableViewDelegate {
 
   public func tableView(
     _ tableView: UITableView,
+    didHighlightRowAt indexPath: IndexPath)
+  {
+    guard let item = listDataSource.listItem(at: indexPath),
+      let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
+      assertionFailure("Index path is out of bounds")
+      return
+    }
+    item.listItem.configure(cell: cell, forState: .highlighted)
+  }
+
+  public func tableView(
+    _ tableView: UITableView,
+    didUnhighlightRowAt indexPath: IndexPath)
+  {
+    guard let item = listDataSource.listItem(at: indexPath),
+      let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
+        assertionFailure("Index path is out of bounds")
+        return
+    }
+    item.listItem.configure(cell: cell, forState: .normal)
+  }
+
+  public func tableView(
+    _ tableView: UITableView,
     willSelectRowAt indexPath: IndexPath) -> IndexPath?
   {
-    guard let item = listDataSource?.listItem(at: indexPath) else {
+    guard let item = listDataSource.listItem(at: indexPath) else {
       assertionFailure("Index path is out of bounds")
       return nil
     }
@@ -231,11 +261,25 @@ extension TableView: UITableViewDelegate {
     _ tableView: UITableView,
     didSelectRowAt indexPath: IndexPath)
   {
-    guard let item = listDataSource?.listItem(at: indexPath) else {
+    guard let item = listDataSource.listItem(at: indexPath),
+      let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
       assertionFailure("Index path is out of bounds")
       return
     }
+    item.listItem.configure(cell: cell, forState: .selected)
     item.listItem.didSelect()
+  }
+
+  public func tableView(
+    _ tableView: UITableView,
+    didDeselectRowAt indexPath: IndexPath)
+  {
+    guard let item = listDataSource.listItem(at: indexPath),
+      let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
+        assertionFailure("Index path is out of bounds")
+        return
+    }
+    item.listItem.configure(cell: cell, forState: .normal)
   }
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -280,30 +324,4 @@ extension TableView: UITableViewDelegate {
   public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     scrollDelegate?.scrollViewDidEndScrollingAnimation?(scrollView)
   }
-}
-
-extension TableView {
-
-  /// Temporary method to preserve legacy built-in-data-source behavior
-  public func setStructure(_ structure: ListStructure?) {
-    guard let retainedDataSource = retainedDataSource else {
-      assert(false, "You must set the retainedDataSource to use this legacy built-in-data-source behavior.")
-      return
-    }
-    retainedDataSource.setStructure(structure)
-  }
-
-  /// Temporary method to preserve legacy built-in-data-source behavior
-  public func updateItem(
-    at dataID: String,
-    with item: ListItem,
-    animated: Bool)
-  {
-    guard let retainedDataSource = retainedDataSource else {
-      assert(false, "You must set the retainedDataSource to use this legacy built-in-data-source behavior.")
-      return
-    }
-    retainedDataSource.updateItem(at: dataID, with: item, animated: animated)
-  }
-
 }

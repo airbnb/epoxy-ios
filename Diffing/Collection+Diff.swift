@@ -3,19 +3,6 @@
 
 import Foundation
 
-/// A protocol that allows us to check identity and equality between items for the purposes of diffing.
-public protocol Diffable {
-
-  /// Checks for equality between items when diffing.
-  ///
-  /// - Parameters:
-  ///     - otherDiffableItem: The other item to check equality against while diffing.
-  func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool
-
-  /// The identifier to use when checking identity while diffing.
-  var diffIdentifier: String? { get }
-}
-
 // MARK: - Stack
 
 private final class Stack<T> {
@@ -352,5 +339,23 @@ extension Collection where Self.Iterator.Element: Diffable, Self.Index == Int, S
       updates: indexChangeset.updates,
       moves: indexChangeset.moves,
       newIndices: indexChangeset.newIndices)
+  }
+}
+
+// MARK: - Collection
+
+extension Collection {
+
+  /// Quickly generate a `Dictionary` from an `Array` (or other `CollectionType`), returning either a `(key, value)` tuple or `nil` for each `Array` element
+  fileprivate func toDictionary<K, V>
+    (_ transform:(_ element: Self.Iterator.Element) -> (key: K, value: V)?) -> [K : V] {
+    var dictionary = [K: V]()
+    for element in self {
+      if let (key, value) = transform(element) {
+        dictionary[key] = value
+      }
+    }
+
+    return dictionary
   }
 }

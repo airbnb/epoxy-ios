@@ -9,6 +9,8 @@ public protocol ListItem: Diffable {
   var reuseID: String { get }
   var dataID: String? { get }
   func configure(cell: ListCell, animated: Bool)
+  func configure(cell: ListCell, forState state: ListCellState)
+  func setBehavior(cell: ListCell)
 
   var isSelectable: Bool { get }
   func didSelect()
@@ -37,4 +39,7 @@ extension ListItem {
   public var isSelectable: Bool { return false }
 
   public func didSelect() { }
+
+  public func configure(cell: ListCell, forState state: ListCellState) { }
+
 }
