@@ -45,7 +45,7 @@ public final class TableViewCell: UITableViewCell, ListCell {
   private(set) var dividerView: UIView?
 
   /// Pass a `ViewMaker` that generates a `Divider` for this cell's reuseID that the cell will pin to the bottom of its `contentView`.
-  func makeDividerViewIfNeeded(with dividerViewMaker: ViewMaker) {
+  func makeDividerViewIfNeeded(with dividerViewMaker: () -> UIView) {
     if self.dividerView != nil {
       return
     }

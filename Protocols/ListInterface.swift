@@ -3,9 +3,6 @@
 
 import UIKit
 
-/// A block that makes a `UIView`
-public typealias ViewMaker = () -> UIView
-
 /// A protocol for a view that can be powered by a `[ListSection]`
 public protocol ListInterface: class {
 

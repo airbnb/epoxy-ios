@@ -32,10 +32,6 @@ public protocol InternalListInterface: ListInterface {
   /// Reloads a particular item at the given index path and sets its behavior
   func reloadItem(at indexPath: IndexPath, animated: Bool)
 
-  /// Sets the behavior (such as blocks or delegate) for the item at the given index path without
-  /// reloading the view
-  func setBehavior(at indexPath: IndexPath)
-
   /// Configures the given cell with the given item and sets its behavior
   func configure(cell: Cell, with item: DataType.Item)
 

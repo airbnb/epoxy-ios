@@ -83,7 +83,6 @@ public class ListDataSource<ListInterfaceType: InternalListInterface>: NSObject 
     case .diffs:
       let changeset = newData.makeChangeset(from: oldData)
       listInterface?.apply(changeset)
-      setVisibleCellsBehavior()
     case .reloads:
       listInterface?.reloadData()
     }
@@ -122,12 +121,6 @@ public class ListDataSource<ListInterfaceType: InternalListInterface>: NSObject 
     }
 
     reuseIDs = newReuseIDs
-  }
-
-  fileprivate func setVisibleCellsBehavior() {
-    listInterface?.visibleIndexPaths.forEach { indexPath in
-      listInterface?.setBehavior(at: indexPath)
-    }
   }
 
 }

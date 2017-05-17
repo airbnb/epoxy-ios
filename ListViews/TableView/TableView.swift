@@ -51,10 +51,16 @@ public class TableView: UITableView, InternalListInterface {
   public var selectionStyle: UITableViewCellSelectionStyle = .default
 
   /// Block that should return an initialized view of the type you'd like to use for this divider.
-  public var rowDividerViewMaker: ViewMaker?
+  public var rowDividerBuilder: (() -> UIView)?
+
+  /// Block that configures the divider.
+  public var rowDividerConfigurer: ((UIView) -> Void)?
 
   /// Block that should return an initialized view of the type you'd like to use for this divider.
-  public var sectionHeaderDividerViewMaker: ViewMaker?
+  public var sectionHeaderDividerBuilder: (() -> UIView)?
+
+  /// Block that configures this divider.
+  public var sectionHeaderDividerConfigurer: ((UIView) -> Void)?
 
   public var visibleIndexPaths: [IndexPath] {
     return indexPathsForVisibleRows ?? []
@@ -79,13 +85,6 @@ public class TableView: UITableView, InternalListInterface {
     if let cell = cellForRow(at: indexPath as IndexPath) as? TableViewCell,
       let item = listDataSource.listItem(at: indexPath) {
       configure(cell: cell, with: item, animated: animated)
-    }
-  }
-
-  public func setBehavior(at indexPath: IndexPath) {
-    if let cell = cellForRow(at: indexPath as IndexPath) as? TableViewCell,
-      let item = listDataSource.listItem(at: indexPath) {
-      item.listItem.setBehavior(cell: cell)
     }
   }
 
@@ -124,6 +123,7 @@ public class TableView: UITableView, InternalListInterface {
         return
       }
       if let item = listDataSource.listItem(at: indexPath) {
+        item.listItem.setBehavior(cell: cell)
         self.updateDivider(for: cell, dividerType: item.dividerType)
       }
     }
@@ -177,16 +177,22 @@ public class TableView: UITableView, InternalListInterface {
     case .none:
       cell.dividerView?.isHidden = true
     case .rowDivider:
-      if let rowDividerViewMaker = rowDividerViewMaker {
+      if let rowDividerBuilder = rowDividerBuilder {
         cell.dividerView?.isHidden = false
-        cell.makeDividerViewIfNeeded(with: rowDividerViewMaker)
+        cell.makeDividerViewIfNeeded(with: rowDividerBuilder)
+        if let divider = cell.dividerView {
+          rowDividerConfigurer?(divider)
+        }
       } else {
         cell.dividerView?.isHidden = true
       }
     case .sectionHeaderDivider:
-      if let sectionHeaderDividerViewMaker = sectionHeaderDividerViewMaker {
+      if let sectionHeaderDividerBuilder = sectionHeaderDividerBuilder {
         cell.dividerView?.isHidden = false
-        cell.makeDividerViewIfNeeded(with: sectionHeaderDividerViewMaker)
+        cell.makeDividerViewIfNeeded(with: sectionHeaderDividerBuilder)
+        if let divider = cell.dividerView {
+          sectionHeaderDividerConfigurer?(divider)
+        }
       } else {
         cell.dividerView?.isHidden = true
       }
