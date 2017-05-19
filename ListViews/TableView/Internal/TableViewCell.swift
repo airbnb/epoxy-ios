@@ -32,7 +32,9 @@ public final class TableViewCell: UITableViewCell, ListCell {
     view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
     view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
     view.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-    view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+    let bottomConstraint = view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+    bottomConstraint.priority = UILayoutPriorityDefaultHigh - 1
+    bottomConstraint.isActive = true
     self.view = view
 
     if let dividerView = dividerView {
