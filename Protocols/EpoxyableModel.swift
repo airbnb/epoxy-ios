@@ -3,20 +3,20 @@
 
 import Foundation
 
-/// The `ListItem` contains the reference id for the model backing an item, the hash value of the item, as well as the reuse id for the item's type.
-public protocol ListItem: Diffable {
+/// The `EpoxyModel` contains the reference id for the model backing an item, the hash value of the item, as well as the reuse id for the item's type.
+public protocol EpoxyableModel: Diffable {
 
   var reuseID: String { get }
   var dataID: String? { get }
-  func configure(cell: ListCell, animated: Bool)
-  func configure(cell: ListCell, forState state: ListCellState)
-  func setBehavior(cell: ListCell)
+  func configure(cell: EpoxyCell, animated: Bool)
+  func configure(cell: EpoxyCell, forState state: EpoxyCellState)
+  func setBehavior(cell: EpoxyCell)
 
   var isSelectable: Bool { get }
   func didSelect()
 }
 
-extension ListItem {
+extension EpoxyableModel {
 
   public var diffIdentifier: String? {
     return dataID
@@ -40,6 +40,6 @@ extension ListItem {
 
   public func didSelect() { }
 
-  public func configure(cell: ListCell, forState state: ListCellState) { }
+  public func configure(cell: EpoxyCell, forState state: EpoxyCellState) { }
 
 }

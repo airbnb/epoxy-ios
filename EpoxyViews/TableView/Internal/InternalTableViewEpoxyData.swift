@@ -3,17 +3,17 @@
 
 import Foundation
 
-// MARK: InternalTableViewListData
+// MARK: InternalTableViewEpoxyData
 
-/// An internal data structure constructed from an array of `ListSection`s that is specific
+/// An internal data structure constructed from an array of `EpoxySection`s that is specific
 /// to display in a `UITableView` implementation.
-public final class InternalTableViewListData: DiffableInternalListDataType {
+public final class InternalTableViewEpoxyData: DiffableInternalEpoxyDataType {
 
-  public typealias Changeset = InternalTableViewListDataChangeset
-  public typealias Item = InternalTableViewListItem
+  public typealias Changeset = EpoxyChangeset
+  public typealias Item = InternalTableViewEpoxyModel
 
   init(
-    sections: [InternalTableViewListSection],
+    sections: [InternalTableViewEpoxySection],
     sectionIndexMap: [String: Int],
     itemIndexMap: [String: IndexPath])
   {
@@ -22,7 +22,7 @@ public final class InternalTableViewListData: DiffableInternalListDataType {
     self.itemIndexMap = itemIndexMap
   }
 
-  var sections: [InternalTableViewListSection]
+  var sections: [InternalTableViewEpoxySection]
 
   // MARK: Fileprivate
 
@@ -31,28 +31,28 @@ public final class InternalTableViewListData: DiffableInternalListDataType {
 
 }
 
-extension InternalTableViewListData {
+extension InternalTableViewEpoxyData {
 
-  public static func make(with sections: [ListSection]) -> InternalTableViewListData {
+  public static func make(with sections: [EpoxySection]) -> InternalTableViewEpoxyData {
 
     var sectionIndexMap = [String: Int]()
     var itemIndexMap = [String: IndexPath]()
 
     let lastSectionIndex = sections.count - 1
-    let sections: [InternalTableViewListSection] = sections.enumerated().map { sectionIndex, section in
+    let sections: [InternalTableViewEpoxySection] = sections.enumerated().map { sectionIndex, section in
 
       sectionIndexMap[section.dataID] = sectionIndex
 
       var itemIndex = 0
 
-      var items = [InternalTableViewListItem]()
+      var items = [InternalTableViewEpoxyModel]()
 
       // Note: Default UITableView section headers are "sticky" at the top of the page.
       // We don't want this behavior, so we are implementing our section headers as cells
       // in the UITableView implementation.
       if let existingSectionHeader = section.sectionHeader {
-        items.append(InternalTableViewListItem(
-          listItem: existingSectionHeader,
+        items.append(InternalTableViewEpoxyModel(
+          epoxyModel: existingSectionHeader,
           dividerType: .sectionHeaderDivider))
 
         if let dataID = existingSectionHeader.dataID {
@@ -63,8 +63,8 @@ extension InternalTableViewListData {
       }
 
       section.items.forEach { item in
-        items.append(InternalTableViewListItem(
-          listItem: item,
+        items.append(InternalTableViewEpoxyModel(
+          epoxyModel: item,
           dividerType: .rowDivider))
 
         if let dataID = item.dataID {
@@ -76,35 +76,35 @@ extension InternalTableViewListData {
 
       if sectionIndex == lastSectionIndex && !items.isEmpty {
         let lastItem = items.removeLast() // Remove last row divider
-        items.append(InternalTableViewListItem(
-          listItem: lastItem.listItem,
+        items.append(InternalTableViewEpoxyModel(
+          epoxyModel: lastItem.epoxyModel,
           dividerType: .none))
       }
 
-      return InternalTableViewListSection(
+      return InternalTableViewEpoxySection(
         dataID: section.dataID,
         items: items)
     }
 
-    return InternalTableViewListData(
+    return InternalTableViewEpoxyData(
       sections: sections,
       sectionIndexMap: sectionIndexMap,
       itemIndexMap: itemIndexMap)
   }
 
   public func makeChangeset(from
-    otherStructure: InternalTableViewListData) -> InternalTableViewListDataChangeset
+    otherData: InternalTableViewEpoxyData) -> EpoxyChangeset
   {
-    let sectionChangeset = sections.makeIndexSetChangeset(from: otherStructure.sections)
+    let sectionChangeset = sections.makeIndexSetChangeset(from: otherData.sections)
 
     var itemChangesetsForSections = [IndexPathChangeset]()
-    for i in 0..<otherStructure.sections.count {
+    for i in 0..<otherData.sections.count {
       if let newSectionIndex = sectionChangeset.newIndices[i]! {
 
         let fromSection = i
         let toSection = newSectionIndex
 
-        let fromArray = otherStructure.sections[fromSection].items
+        let fromArray = otherData.sections[fromSection].items
         let toArray = sections[toSection].items
 
         let itemIndexChangeset = toArray.makeIndexPathChangeset(
@@ -118,12 +118,12 @@ extension InternalTableViewListData {
 
     let itemChangeset: IndexPathChangeset = itemChangesetsForSections.reduce(IndexPathChangeset(), +)
 
-    return InternalTableViewListDataChangeset(
+    return EpoxyChangeset(
       sectionChangeset: sectionChangeset,
       itemChangeset: itemChangeset)
   }
 
-  public func updateItem(at dataID: String, with item: ListItem) -> IndexPath? {
+  public func updateItem(at dataID: String, with item: EpoxyableModel) -> IndexPath? {
     guard let indexPath = itemIndexMap[dataID] else {
       assert(false, "No item with that dataID exists")
       return nil
@@ -131,10 +131,10 @@ extension InternalTableViewListData {
 
     let oldItem = sections[indexPath.section].items[indexPath.item]
 
-    assert(oldItem.listItem.reuseID == item.reuseID, "Cannot update item with a different reuse ID.")
+    assert(oldItem.epoxyModel.reuseID == item.reuseID, "Cannot update item with a different reuse ID.")
 
-    sections[indexPath.section].items[indexPath.item] = InternalTableViewListItem(
-      listItem: item,
+    sections[indexPath.section].items[indexPath.item] = InternalTableViewEpoxyModel(
+      epoxyModel: item,
       dividerType: oldItem.dividerType)
 
     return indexPath
@@ -142,41 +142,26 @@ extension InternalTableViewListData {
 
 }
 
-/// An internal data changeset for use in updating a `UITableView`.
-public struct InternalTableViewListDataChangeset {
+// MARK: InternalTableViewEpoxySection
 
-  init(
-    sectionChangeset: IndexSetChangeset,
-    itemChangeset: IndexPathChangeset)
-  {
-    self.sectionChangeset = sectionChangeset
-    self.itemChangeset = itemChangeset
-  }
-
-  let sectionChangeset: IndexSetChangeset
-  let itemChangeset: IndexPathChangeset
-}
-
-// MARK: InternalTableViewListSection
-
-/// A section in the `InternalTableViewListData`.
-public struct InternalTableViewListSection {
+/// A section in the `InternalTableViewEpoxyData`.
+public struct InternalTableViewEpoxySection {
 
   init(
     dataID: String,
-    items: [InternalTableViewListItem])
+    items: [InternalTableViewEpoxyModel])
   {
     self.dataID = dataID
     self.items = items
   }
 
   let dataID: String
-  var items: [InternalTableViewListItem]
+  var items: [InternalTableViewEpoxyModel]
 }
 
-extension InternalTableViewListSection: Diffable {
+extension InternalTableViewEpoxySection: Diffable {
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let otherDiffableSection = otherDiffableItem as? InternalTableViewListSection else { return false }
+    guard let otherDiffableSection = otherDiffableItem as? InternalTableViewEpoxySection else { return false }
     return dataID == otherDiffableSection.dataID
   }
 
@@ -185,39 +170,39 @@ extension InternalTableViewListSection: Diffable {
   }
 }
 
-// MARK: ListItemDividerType
+// MARK: EpoxyModelDividerType
 
 /// Tells the cell which divider type to use in a view pinned to the cell's bottom.
-public enum ListItemDividerType {
+public enum EpoxyModelDividerType {
   case rowDivider
   case sectionHeaderDivider
   case none
 }
 
-// MARK: InternalTableViewListItem
+// MARK: InternalTableViewEpoxyModel
 
-/// An item in a `InternalTableViewListSection`, representing either a row or a section header.
-public struct InternalTableViewListItem {
+/// An item in a `InternalTableViewEpoxySection`, representing either a row or a section header.
+public struct InternalTableViewEpoxyModel {
 
   init(
-    listItem: ListItem,
-    dividerType: ListItemDividerType)
+    epoxyModel: EpoxyableModel,
+    dividerType: EpoxyModelDividerType)
   {
-    self.listItem = listItem
+    self.epoxyModel = epoxyModel
     self.dividerType = dividerType
   }
 
-  let listItem: ListItem
-  var dividerType: ListItemDividerType
+  let epoxyModel: EpoxyableModel
+  var dividerType: EpoxyModelDividerType
 }
 
-extension InternalTableViewListItem: Diffable {
+extension InternalTableViewEpoxyModel: Diffable {
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let otherDiffableListItem = otherDiffableItem as? InternalTableViewListItem else { return false }
-    return listItem.isDiffableItemEqual(to: otherDiffableListItem.listItem)
+    guard let otherDiffableEpoxyModel = otherDiffableItem as? InternalTableViewEpoxyModel else { return false }
+    return epoxyModel.isDiffableItemEqual(to: otherDiffableEpoxyModel.epoxyModel)
   }
 
   public var diffIdentifier: String? {
-    return listItem.diffIdentifier
+    return epoxyModel.diffIdentifier
   }
 }

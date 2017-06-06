@@ -3,20 +3,17 @@
 
 import UIKit
 
-/// A TableView class that handles updates through its `setStructure` method, and optionally animates diffs.
-public class TableView: UITableView, InternalListInterface {
+/// A TableView class that handles updates through its `setSections` method, and optionally animates diffs.
+public class TableView: UITableView, InternalEpoxyInterface {
 
-  public typealias DataType = InternalTableViewListData
+  public typealias DataType = InternalTableViewEpoxyData
   public typealias Cell = TableViewCell
 
   // MARK: Lifecycle
 
-  /// Initializes the TableView and configures its behavior on update.
-  ///
-  /// - Parameters:
-  ///     - updateBehavior: Use `.Diffs` if you want the ListInterface to animate changes through inserts, deletes, moves, and updates. Use `.Reloads` if you want the ListInterface to completely reload when the Structure is set.
-  public init(updateBehavior: ListUpdateBehavior) {
-    self.listDataSource = TableViewListDataSource(updateBehavior: updateBehavior)
+  /// Initializes the TableView
+  public init() {
+    self.epoxyDataSource = TableViewEpoxyDataSource()
     super.init(frame: .zero, style: .plain)
     setUp()
   }
@@ -27,28 +24,31 @@ public class TableView: UITableView, InternalListInterface {
 
   // MARK: Public
 
-  public func setSections(_ sections: [ListSection]?) {
-    listDataSource.setSections(sections)
+  public func setSections(_ sections: [EpoxySection]?, animated: Bool) {
+    epoxyDataSource.setSections(sections, animated: animated)
   }
 
   public func updateItem(
     at dataID: String,
-    with item: ListItem,
+    with item: EpoxyableModel,
     animated: Bool)
   {
-    listDataSource.updateItem(at: dataID, with: item, animated: animated)
+    epoxyDataSource.updateItem(at: dataID, with: item, animated: animated)
   }
 
   /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
   /// Ignores zooming delegate methods.
   public weak var scrollDelegate: UIScrollViewDelegate?
 
-  /// Delegate which indicates when a list item will be displayed, typically used
+  /// Delegate which indicates when an epoxy item will be displayed, typically used
   /// for logging.
-  public weak var listItemDisplayDelegate: TableViewListItemDisplayDelegate?
+  public weak var epoxyModelDisplayDelegate: TableViewEpoxyModelDisplayDelegate?
 
-  /// Selection style for the `UITableViewCell`s of `ListItem`s that have `isSelectable == true`
+  /// Selection style for the `UITableViewCell`s of `EpoxyModel`s that have `isSelectable == true`
   public var selectionStyle: UITableViewCellSelectionStyle = .default
+
+  /// Whether or not the final item in the list shows a bottom divider. Defaults to false.
+  public var showsLastDivider: Bool = false
 
   /// Block that should return an initialized view of the type you'd like to use for this divider.
   public var rowDividerBuilder: (() -> UIView)?
@@ -67,13 +67,15 @@ public class TableView: UITableView, InternalListInterface {
   }
 
   public func register(reuseID: String) {
-    super.register(TableViewCell.self,
-                   forCellReuseIdentifier: reuseID)
+    super.register(
+      TableViewCell.self,
+      forCellReuseIdentifier: reuseID)
   }
 
   public func unregister(reuseID: String) {
-    super.register((nil as AnyClass?),
-                   forCellReuseIdentifier: reuseID)
+    super.register(
+      (nil as AnyClass?),
+      forCellReuseIdentifier: reuseID)
   }
 
   public func configure(cell: Cell, with item: DataType.Item) {
@@ -83,20 +85,20 @@ public class TableView: UITableView, InternalListInterface {
 
   public func reloadItem(at indexPath: IndexPath, animated: Bool) {
     if let cell = cellForRow(at: indexPath as IndexPath) as? TableViewCell,
-      let item = listDataSource.listItem(at: indexPath) {
+      let item = epoxyDataSource.epoxyModel(at: indexPath) {
       configure(cell: cell, with: item, animated: animated)
     }
   }
 
-  public func apply(_ changeset: InternalTableViewListDataChangeset) {
+  public func apply(_ changeset: EpoxyChangeset) {
 
     beginUpdates()
 
     changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
       if let cell = cellForRow(at: fromIndexPath as IndexPath) as? TableViewCell,
-        let listItem = listDataSource.listItem(at: toIndexPath)?.listItem {
-        listItem.configure(cell: cell, animated: true)
-        listItem.configure(cell: cell, forState: cell.state)
+        let epoxyModel = epoxyDataSource.epoxyModel(at: toIndexPath)?.epoxyModel {
+        epoxyModel.configure(cell: cell, animated: true)
+        epoxyModel.configure(cell: cell, forState: cell.state)
       }
     }
 
@@ -119,46 +121,26 @@ public class TableView: UITableView, InternalListInterface {
 
     indexPathsForVisibleRows?.forEach { indexPath in
       guard let cell = cellForRow(at: indexPath) as? TableViewCell else {
-        assert(false, "Only TableViewCell and subclasses are allowed in a TableView.")
+        assertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
         return
       }
-      if let item = listDataSource.listItem(at: indexPath) {
-        item.listItem.setBehavior(cell: cell)
+      if let item = epoxyDataSource.epoxyModel(at: indexPath) {
+        item.epoxyModel.setBehavior(cell: cell)
         self.updateDivider(for: cell, dividerType: item.dividerType)
       }
     }
   }
 
-  @available (*, unavailable, message: "You shouldn't be registering cell classes on a TableView. The TableViewListDataSource handles this for you.")
-  public override func register(_ cellClass: AnyClass?, forCellReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering cell classes on a TableView. The TableViewListDataSource handles this for you.")
-  }
-
-  @available (*, unavailable, message: "You shouldn't be registering cell nibs on a TableView. The TableViewListDataSource handles this for you.")
-  public override func register(_ nib: UINib?, forCellReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering cell nibs on a TableView. The TableViewListDataSource handles this for you.")
-  }
-
-  @available (*, unavailable, message: "You shouldn't be header or footer nibs on a TableView. The TableViewListDataSource handles this for you.")
-  public override func register(_ nib: UINib?, forHeaderFooterViewReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering header or footer nibs on a TableView. The TableViewListDataSource handles this for you.")
-  }
-
-  @available (*, unavailable, message: "You shouldn't be registering header or footer classes on a TableView. The TableViewListDataSource handles this for you.")
-  public override func register(_ aClass: AnyClass?, forHeaderFooterViewReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering header or footer classes on a TableView. The TableViewListDataSource handles this for you.")
-  }
-
   // MARK: Fileprivate
 
-  fileprivate let listDataSource: TableViewListDataSource
+  fileprivate let epoxyDataSource: TableViewEpoxyDataSource
 
   // MARK: Private
 
   private func setUp() {
     delegate = self
-    listDataSource.listInterface = self
-    dataSource = listDataSource
+    epoxyDataSource.epoxyInterface = self
+    dataSource = epoxyDataSource
     rowHeight = UITableViewAutomaticDimension
     estimatedRowHeight = 44 // TODO(ls): Use better estimated height
     separatorStyle = .none
@@ -167,35 +149,47 @@ public class TableView: UITableView, InternalListInterface {
   }
 
   private func configure(cell: Cell, with item: DataType.Item, animated: Bool) {
-    item.listItem.configure(cell: cell, animated: animated)
-    item.listItem.setBehavior(cell: cell)
+    item.epoxyModel.configure(cell: cell, animated: animated)
+    item.epoxyModel.setBehavior(cell: cell)
     updateDivider(for: cell, dividerType: item.dividerType)
   }
 
-  private func updateDivider(for cell: TableViewCell, dividerType: ListItemDividerType) {
+  private func updateDivider(for cell: TableViewCell, dividerType: EpoxyModelDividerType) {
     switch dividerType {
     case .none:
-      cell.dividerView?.isHidden = true
+      if !showsLastDivider {
+        cell.dividerView?.isHidden = true
+      } else {
+        configureCellWithRowDivider(cell: cell)
+      }
     case .rowDivider:
-      if let rowDividerBuilder = rowDividerBuilder {
-        cell.dividerView?.isHidden = false
-        cell.makeDividerViewIfNeeded(with: rowDividerBuilder)
-        if let divider = cell.dividerView {
-          rowDividerConfigurer?(divider)
-        }
-      } else {
-        cell.dividerView?.isHidden = true
-      }
+      configureCellWithRowDivider(cell: cell)
     case .sectionHeaderDivider:
-      if let sectionHeaderDividerBuilder = sectionHeaderDividerBuilder {
-        cell.dividerView?.isHidden = false
-        cell.makeDividerViewIfNeeded(with: sectionHeaderDividerBuilder)
-        if let divider = cell.dividerView {
-          sectionHeaderDividerConfigurer?(divider)
-        }
-      } else {
-        cell.dividerView?.isHidden = true
+      configureCellWithSectionHeaderDivider(cell: cell)
+    }
+  }
+
+  private func configureCellWithRowDivider(cell: TableViewCell) {
+    if let rowDividerBuilder = rowDividerBuilder {
+      cell.dividerView?.isHidden = false
+      cell.makeDividerViewIfNeeded(with: rowDividerBuilder)
+      if let divider = cell.dividerView {
+        rowDividerConfigurer?(divider)
       }
+    } else {
+      cell.dividerView?.isHidden = true
+    }
+  }
+
+  private func configureCellWithSectionHeaderDivider(cell: TableViewCell) {
+    if let sectionHeaderDividerBuilder = sectionHeaderDividerBuilder {
+      cell.dividerView?.isHidden = false
+      cell.makeDividerViewIfNeeded(with: sectionHeaderDividerBuilder)
+      if let divider = cell.dividerView {
+        sectionHeaderDividerConfigurer?(divider)
+      }
+    } else {
+      cell.dividerView?.isHidden = true
     }
   }
 
@@ -210,82 +204,82 @@ extension TableView: UITableViewDelegate {
     willDisplay cell: UITableViewCell,
     forRowAt indexPath: IndexPath)
   {
-    guard let item = listDataSource.listItem(at: indexPath) else {
-      assert(false, "Index path is out of bounds.")
+    guard let item = epoxyDataSource.epoxyModel(at: indexPath) else {
+      assertionFailure("Index path is out of bounds.")
       return
     }
-    listItemDisplayDelegate?.tableView(self, willDisplay: item.listItem)
+    epoxyModelDisplayDelegate?.tableView(self, willDisplay: item.epoxyModel)
   }
 
   public func tableView(
     _ tableView: UITableView,
     shouldHighlightRowAt indexPath: IndexPath) -> Bool
   {
-    guard let item = listDataSource.listItem(at: indexPath) else {
+    guard let item = epoxyDataSource.epoxyModel(at: indexPath) else {
       assertionFailure("Index path is out of bounds")
       return false
     }
-    return item.listItem.isSelectable
+    return item.epoxyModel.isSelectable
   }
 
   public func tableView(
     _ tableView: UITableView,
     didHighlightRowAt indexPath: IndexPath)
   {
-    guard let item = listDataSource.listItem(at: indexPath),
+    guard let item = epoxyDataSource.epoxyModel(at: indexPath),
       let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
       assertionFailure("Index path is out of bounds")
       return
     }
-    item.listItem.configure(cell: cell, forState: .highlighted)
+    item.epoxyModel.configure(cell: cell, forState: .highlighted)
   }
 
   public func tableView(
     _ tableView: UITableView,
     didUnhighlightRowAt indexPath: IndexPath)
   {
-    guard let item = listDataSource.listItem(at: indexPath),
+    guard let item = epoxyDataSource.epoxyModel(at: indexPath),
       let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.listItem.configure(cell: cell, forState: .normal)
+    item.epoxyModel.configure(cell: cell, forState: .normal)
   }
 
   public func tableView(
     _ tableView: UITableView,
     willSelectRowAt indexPath: IndexPath) -> IndexPath?
   {
-    guard let item = listDataSource.listItem(at: indexPath) else {
+    guard let item = epoxyDataSource.epoxyModel(at: indexPath) else {
       assertionFailure("Index path is out of bounds")
       return nil
     }
-    return item.listItem.isSelectable ? indexPath : nil
+    return item.epoxyModel.isSelectable ? indexPath : nil
   }
 
   public func tableView(
     _ tableView: UITableView,
     didSelectRowAt indexPath: IndexPath)
   {
-    guard let item = listDataSource.listItem(at: indexPath),
+    guard let item = epoxyDataSource.epoxyModel(at: indexPath),
       let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
       assertionFailure("Index path is out of bounds")
       return
     }
-    item.listItem.configure(cell: cell, forState: .selected)
-    item.listItem.didSelect()
+    item.epoxyModel.configure(cell: cell, forState: .selected)
+    item.epoxyModel.didSelect()
   }
 
   public func tableView(
     _ tableView: UITableView,
     didDeselectRowAt indexPath: IndexPath)
   {
-    guard let item = listDataSource.listItem(at: indexPath),
+    guard let item = epoxyDataSource.epoxyModel(at: indexPath),
       let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.listItem.configure(cell: cell, forState: .normal)
+    item.epoxyModel.configure(cell: cell, forState: .normal)
   }
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -330,4 +324,30 @@ extension TableView: UITableViewDelegate {
   public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     scrollDelegate?.scrollViewDidEndScrollingAnimation?(scrollView)
   }
+}
+
+// MARK: Unavailable Methods
+
+extension TableView {
+
+  @available (*, unavailable, message: "You shouldn't be registering cell classes on a TableView. The TableViewEpoxyDataSource handles this for you.")
+  public override func register(_ cellClass: AnyClass?, forCellReuseIdentifier identifier: String) {
+    assert(false, "You shouldn't be registering cell classes on a TableView. The TableViewEpoxyDataSource handles this for you.")
+  }
+
+  @available (*, unavailable, message: "You shouldn't be registering cell nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
+  public override func register(_ nib: UINib?, forCellReuseIdentifier identifier: String) {
+    assert(false, "You shouldn't be registering cell nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
+  }
+
+  @available (*, unavailable, message: "You shouldn't be header or footer nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
+  public override func register(_ nib: UINib?, forHeaderFooterViewReuseIdentifier identifier: String) {
+    assert(false, "You shouldn't be registering header or footer nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
+  }
+
+  @available (*, unavailable, message: "You shouldn't be registering header or footer classes on a TableView. The TableViewEpoxyDataSource handles this for you.")
+  public override func register(_ aClass: AnyClass?, forHeaderFooterViewReuseIdentifier identifier: String) {
+    assert(false, "You shouldn't be registering header or footer classes on a TableView. The TableViewEpoxyDataSource handles this for you.")
+  }
+
 }

@@ -3,15 +3,15 @@
 
 import Foundation
 
-/// The `ListSection` contains the section data for a type of list, such as a TableView.
-public struct ListSection {
+/// The `EpoxySection` contains the section data for a type of list, such as a TableView.
+public struct EpoxySection {
 
   // MARK: Lifecycle
 
   public init(
     dataID: String,
-    sectionHeader: ListItem?,
-    items: [ListItem])
+    sectionHeader: EpoxyableModel?,
+    items: [EpoxyableModel])
   {
     self.dataID = dataID
     self.sectionHeader = sectionHeader
@@ -19,8 +19,8 @@ public struct ListSection {
   }
 
   public init(
-    sectionHeader: ListItem?,
-    items: [ListItem])
+    sectionHeader: EpoxyableModel?,
+    items: [EpoxyableModel])
   {
     self.init(
       dataID: "",
@@ -28,7 +28,7 @@ public struct ListSection {
       items: items)
   }
 
-  public init(items: [ListItem]) {
+  public init(items: [EpoxyableModel]) {
     self.init(
       dataID: "",
       sectionHeader: nil,
@@ -41,17 +41,17 @@ public struct ListSection {
   public let dataID: String
 
   /// The data for the section header to be displayed in this section.
-  public let sectionHeader: ListItem?
+  public let sectionHeader: EpoxyableModel?
 
   /// The data for the items to be displayed in this section.
-  public let items: [ListItem]
+  public let items: [EpoxyableModel]
 }
 
 // MARK: Diffable
 
-extension ListSection: Diffable {
+extension EpoxySection: Diffable {
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let otherDiffableSection = otherDiffableItem as? ListSection else { return false }
+    guard let otherDiffableSection = otherDiffableItem as? EpoxySection else { return false }
     return dataID == otherDiffableSection.dataID
   }
 

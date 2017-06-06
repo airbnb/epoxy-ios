@@ -3,7 +3,7 @@
 
 import UIKit
 
-public class TableViewListDataSource: ListDataSource<TableView>, UITableViewDataSource {
+public class TableViewEpoxyDataSource: EpoxyDataSource<TableView>, UITableViewDataSource {
 
   // MARK: Public
 
@@ -20,28 +20,28 @@ public class TableViewListDataSource: ListDataSource<TableView>, UITableViewData
   }
 
   public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    guard let item = listItem(at: indexPath) else {
-      assert(false, "Index path is out of bounds.")
+    guard let item = epoxyModel(at: indexPath) else {
+      assertionFailure("Index path is out of bounds.")
       return UITableViewCell(style: .default, reuseIdentifier: "")
     }
 
     let cell = tableView.dequeueReusableCell(
-      withIdentifier: item.listItem.reuseID,
+      withIdentifier: item.epoxyModel.reuseID,
       for: indexPath)
 
     if let cell = cell as? TableViewCell {
-      listInterface?.configure(cell: cell, with: item)
+      epoxyInterface?.configure(cell: cell, with: item)
     } else {
-      assert(false, "Only TableViewCell and subclasses are allowed in a TableView.")
+      assertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
     }
     return cell
   }
 
   // MARK: Internal
 
-  func listItem(at indexPath: IndexPath) -> InternalTableViewListItem? {
+  func epoxyModel(at indexPath: IndexPath) -> InternalTableViewEpoxyModel? {
     guard let data = internalData else {
-      assert(false, "Can't load list item with nil data")
+      assertionFailure("Can't load epoxy item with nil data")
       return nil
     }
 

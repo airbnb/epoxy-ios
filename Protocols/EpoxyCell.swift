@@ -3,17 +3,17 @@
 
 import UIKit
 
-public protocol ListCell {
+public protocol EpoxyCell {
   var view: UIView? { get }
   func setViewIfNeeded(view: UIView)
   var isHighlighted: Bool { get }
   var isSelected: Bool { get }
 }
 
-extension ListCell {
+extension EpoxyCell {
 
-  public var state: ListCellState {
-    var state: ListCellState = .normal
+  public var state: EpoxyCellState {
+    var state: EpoxyCellState = .normal
     if isHighlighted {
       state = .highlighted
     }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-public enum ListCellState {
+public enum EpoxyCellState {
   case normal
   case highlighted
   case selected

@@ -3,8 +3,8 @@
 
 import Foundation
 
-/// A set of the minimum changes to get from one array of `ListSection`s to another, used for diffing.
-public struct ListChangeset {
+/// A set of the minimum changes to get from one array of `EpoxySection`s to another, used for diffing.
+public struct EpoxyChangeset {
 
   public init(
     sectionChangeset: IndexSetChangeset,

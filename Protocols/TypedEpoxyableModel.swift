@@ -4,30 +4,30 @@
 import UIKit
 
 /// This contains the view's data and methods for lazily creating views and applying the data to a view.
-public protocol ViewConfigurer: ListItem {
+public protocol TypedEpoxyableModel: EpoxyableModel {
 
   associatedtype View: UIView
 
   func makeView() -> View
   func configureView(_ view: View, animated: Bool)
-  func configureView(_ view: View, forState state: ListCellState)
+  func configureView(_ view: View, forState state: EpoxyCellState)
   func setViewBehavior(_ view: View)
 }
 
-extension ViewConfigurer {
-  public func configure(cell: ListCell, animated: Bool) {
+extension TypedEpoxyableModel {
+  public func configure(cell: EpoxyCell, animated: Bool) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
     configureView(view, animated: animated)
   }
 
-  public func configure(cell: ListCell, forState state: ListCellState) {
+  public func configure(cell: EpoxyCell, forState state: EpoxyCellState) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
     configureView(view, forState: state)
   }
 
-  public func setBehavior(cell: ListCell) {
+  public func setBehavior(cell: EpoxyCell) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
     setViewBehavior(view)
@@ -35,6 +35,6 @@ extension ViewConfigurer {
 
   public func setViewBehavior(_ view: View) { }
 
-  public func configureView(_ view: View, forState state: ListCellState) { }
+  public func configureView(_ view: View, forState state: EpoxyCellState) { }
 
 }

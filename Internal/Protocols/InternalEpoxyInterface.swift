@@ -1,20 +1,15 @@
-//
-//  InternalListInterface.swift
-//  List
-//
 //  Created by Laura Skelton on 5/12/17.
 //  Copyright © 2017 Airbnb. All rights reserved.
-//
 
 import Foundation
 
-/// A protocol used internally for a view that can be powered by a `[ListSection]`
-public protocol InternalListInterface: ListInterface {
+/// A protocol used internally for a view that can be powered by an array of`EpoxySection`s
+public protocol InternalEpoxyInterface: EpoxyInterface {
 
-  /// The associated internal data type that powers this type of `ListInterface`
-  associatedtype DataType: DiffableInternalListDataType
+  /// The associated internal data type that powers this type of `EpoxyInterface`
+  associatedtype DataType: DiffableInternalEpoxyDataType
 
-  /// The type of cell view that this type of `ListInterface` contains
+  /// The type of cell view that this type of `EpoxyInterface` contains
   associatedtype Cell: UIView
 
   /// The currently visible index paths
