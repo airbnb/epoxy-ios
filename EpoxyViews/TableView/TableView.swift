@@ -268,6 +268,7 @@ extension TableView: UITableViewDelegate {
     }
     item.epoxyModel.configure(cell: cell, forState: .selected)
     item.epoxyModel.didSelect()
+    tableView.deselectRow(at: indexPath, animated: true)
   }
 
   public func tableView(
