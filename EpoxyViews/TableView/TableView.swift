@@ -4,7 +4,7 @@
 import UIKit
 
 /// A TableView class that handles updates through its `setSections` method, and optionally animates diffs.
-public class TableView: UITableView, InternalEpoxyInterface {
+public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
 
   public typealias DataType = InternalTableViewEpoxyData
   public typealias Cell = TableViewCell

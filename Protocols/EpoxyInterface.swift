@@ -22,3 +22,24 @@ extension EpoxyInterface {
     setSections([section], animated: animated)
   }
 }
+
+/// A protocol to allow us to lay out any EpoxyView on a page without knowing the specific class type.
+public protocol EpoxyView: EpoxyInterface {
+
+  var translatesAutoresizingMaskIntoConstraints: Bool { get set }
+  var layoutMargins: UIEdgeInsets { get set }
+  var topAnchor: NSLayoutYAxisAnchor { get }
+  var leadingAnchor: NSLayoutXAxisAnchor { get }
+  var bottomAnchor: NSLayoutYAxisAnchor { get }
+  var trailingAnchor: NSLayoutXAxisAnchor { get }
+  func addAsSubview(to view: UIView)
+  
+}
+
+extension UIView {
+
+  public func addAsSubview(to view: UIView) {
+    view.addSubview(self)
+  }
+
+}
