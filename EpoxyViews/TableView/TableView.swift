@@ -131,9 +131,33 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
     }
   }
 
+  public func addInfiniteScrolling<LoaderView>(
+    delegate: InfiniteScrollingDelegate,
+    loaderView: LoaderView)
+    where LoaderView: UIView, LoaderView: Animatable
+  {
+    let height = loaderView.compressedHeight(forWidth: bounds.width)
+    loaderView.translatesAutoresizingMaskIntoConstraints = true
+    loaderView.frame.size.height = height
+    tableFooterView = loaderView
+
+    infiniteScrollingLoader = loaderView
+    infiniteScrollingDelegate = delegate
+  }
+
   // MARK: Fileprivate
 
   fileprivate let epoxyDataSource: TableViewEpoxyDataSource
+
+  fileprivate weak var infiniteScrollingDelegate: InfiniteScrollingDelegate?
+  fileprivate var infiniteScrollingState: InfiniteScrollingState = .stopped
+  fileprivate var infiniteScrollingLoader: Animatable?
+  
+  fileprivate func updatedInfiniteScrollingState(in scrollView: UIScrollView) -> (InfiniteScrollingState, Bool) {
+    let previousState = infiniteScrollingState
+    let newState = previousState.next(in: scrollView)
+    return (newState, previousState == .triggered && newState == .loading)
+  }
 
   // MARK: Private
 
@@ -285,6 +309,15 @@ extension TableView: UITableViewDelegate {
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
     scrollDelegate?.scrollViewDidScroll?(scrollView)
+    let (newState, shouldTrigger) = updatedInfiniteScrollingState(in: scrollView)
+    infiniteScrollingState = newState
+    if shouldTrigger {
+      infiniteScrollingLoader?.startAnimating()
+      infiniteScrollingDelegate?.didScrollToInfiniteLoader { [weak self] in
+        self?.infiniteScrollingLoader?.stopAnimating()
+        self?.infiniteScrollingState = .stopped
+      }
+    }
   }
 
   public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
