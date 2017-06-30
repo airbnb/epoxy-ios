@@ -32,6 +32,7 @@ public protocol EpoxyView: EpoxyInterface {
   var leadingAnchor: NSLayoutXAxisAnchor { get }
   var bottomAnchor: NSLayoutYAxisAnchor { get }
   var trailingAnchor: NSLayoutXAxisAnchor { get }
+  var contentOffset: CGPoint { get }
   func addAsSubview(to view: UIView)
   
 }

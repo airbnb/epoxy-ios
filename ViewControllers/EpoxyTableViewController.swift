@@ -29,7 +29,7 @@ open class EpoxyTableViewController: UIViewController {
   open func makeEpoxyView() -> EpoxyView {
     let tableView = TableView.standardTableView
     tableView.rowDividerConfigurer = { [weak self] divider in
-      guard let divider = divider as? Divider else { return }
+      guard let divider = divider as? EpoxyDivider else { return }
       if self?.traitCollection.horizontalSizeClass == .regular {
         divider.leadingPadding = Sizes.horizontalPadding(for: .regular)
         divider.trailingPadding = Sizes.horizontalPadding(for: .regular)
@@ -42,6 +42,10 @@ open class EpoxyTableViewController: UIViewController {
   }
 
   // MARK: Public
+
+  public var contentOffset: CGPoint? {
+    return epoxyView?.contentOffset
+  }
 
   /// Returns the Epoxy view as an `EpoxyInterface`
   public var epoxyInterface: EpoxyInterface? {

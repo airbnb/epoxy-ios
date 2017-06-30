@@ -3,10 +3,10 @@
 
 import UIKit
 
-// MARK: - Divider
+// MARK: - EpoxyDivider
 
 /// A divider for use in a TableView
-public class Divider: UIView {
+public class EpoxyDivider: UIView {
 
   // MARK: Lifecycle
 
