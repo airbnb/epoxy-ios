@@ -50,6 +50,20 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
   /// Whether or not the final item in the list shows a bottom divider. Defaults to false.
   public var showsLastDivider: Bool = false
 
+  /// Hides the bottom divider for the given dataIDs
+  public func hideBottomDivider(for dataIDs: [String]) {
+    dataIDsForHidingDividers = dataIDs
+    indexPathsForVisibleRows?.forEach { indexPath in
+      guard let cell = cellForRow(at: indexPath) as? TableViewCell else {
+        assertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
+        return
+      }
+      if let item = epoxyDataSource.epoxyModel(at: indexPath) {
+        self.updateDivider(for: cell, dividerType: item.dividerType, dataID: item.epoxyModel.dataID)
+      }
+    }
+  }
+
   /// Block that should return an initialized view of the type you'd like to use for this divider.
   public var rowDividerBuilder: (() -> UIView)?
 
@@ -126,7 +140,7 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
       }
       if let item = epoxyDataSource.epoxyModel(at: indexPath) {
         item.epoxyModel.setBehavior(cell: cell)
-        self.updateDivider(for: cell, dividerType: item.dividerType)
+        self.updateDivider(for: cell, dividerType: item.dividerType, dataID: item.epoxyModel.dataID)
       }
     }
   }
@@ -161,6 +175,8 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
 
   // MARK: Private
 
+  private var dataIDsForHidingDividers = [String]()
+
   private func setUp() {
     delegate = self
     epoxyDataSource.epoxyInterface = self
@@ -175,10 +191,16 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
   private func configure(cell: Cell, with item: DataType.Item, animated: Bool) {
     item.epoxyModel.configure(cell: cell, animated: animated)
     item.epoxyModel.setBehavior(cell: cell)
-    updateDivider(for: cell, dividerType: item.dividerType)
+    updateDivider(for: cell, dividerType: item.dividerType, dataID: item.epoxyModel.dataID)
   }
 
-  private func updateDivider(for cell: TableViewCell, dividerType: EpoxyModelDividerType) {
+  private func updateDivider(for cell: TableViewCell, dividerType: EpoxyModelDividerType, dataID: String?) {
+    if let dataID = dataID,
+      dataIDsForHidingDividers.contains(dataID)
+    {
+      cell.dividerView?.isHidden = true
+      return
+    }
     switch dividerType {
     case .none:
       if !showsLastDivider {
