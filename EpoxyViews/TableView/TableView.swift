@@ -186,6 +186,7 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
     separatorStyle = .none
     backgroundColor = .clear
     translatesAutoresizingMaskIntoConstraints = false
+    cellLayoutMarginsFollowReadableWidth = false
   }
 
   private func configure(cell: Cell, with item: DataType.Item, animated: Bool) {

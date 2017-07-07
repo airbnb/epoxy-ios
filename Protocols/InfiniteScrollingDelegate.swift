@@ -12,5 +12,5 @@ public protocol InfiniteScrollingDelegate: class {
     - parameters:
       - completionHandler: Block to inform the delegate's owner to finish loading
   */
-  func didScrollToInfiniteLoader(completionHander: () -> Void)
+  func didScrollToInfiniteLoader(completionHander: @escaping () -> Void)
 }
