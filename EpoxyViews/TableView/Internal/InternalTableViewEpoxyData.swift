@@ -62,12 +62,12 @@ extension InternalTableViewEpoxyData {
         itemIndex += 1
       }
 
-      section.items.forEach { item in
+      section.items.forEach { model in
         items.append(InternalTableViewEpoxyModel(
-          epoxyModel: item,
+          epoxyModel: model,
           dividerType: .rowDivider))
 
-        if let dataID = item.dataID {
+        if let dataID = model.dataID {
           itemIndexMap[dataID] = IndexPath(item: itemIndex, section: sectionIndex)
         }
 
@@ -75,9 +75,9 @@ extension InternalTableViewEpoxyData {
       }
 
       if sectionIndex == lastSectionIndex && !items.isEmpty {
-        let lastItem = items.removeLast() // Remove last row divider
+        let lastModel = items.removeLast() // Remove last row divider
         items.append(InternalTableViewEpoxyModel(
-          epoxyModel: lastItem.epoxyModel,
+          epoxyModel: lastModel.epoxyModel,
           dividerType: .none))
       }
 
@@ -125,13 +125,13 @@ extension InternalTableViewEpoxyData {
 
   public func updateItem(at dataID: String, with item: EpoxyableModel) -> IndexPath? {
     guard let indexPath = itemIndexMap[dataID] else {
-      assert(false, "No item with that dataID exists")
+      assert(false, "No model with that dataID exists")
       return nil
     }
 
     let oldItem = sections[indexPath.section].items[indexPath.item]
 
-    assert(oldItem.epoxyModel.reuseID == item.reuseID, "Cannot update item with a different reuse ID.")
+    assert(oldItem.epoxyModel.reuseID == item.reuseID, "Cannot update model with a different reuse ID.")
 
     sections[indexPath.section].items[indexPath.item] = InternalTableViewEpoxyModel(
       epoxyModel: item,
@@ -181,7 +181,7 @@ public enum EpoxyModelDividerType {
 
 // MARK: InternalTableViewEpoxyModel
 
-/// An item in a `InternalTableViewEpoxySection`, representing either a row or a section header.
+/// A model in a `InternalTableViewEpoxySection`, representing either a row or a section header.
 public struct InternalTableViewEpoxyModel {
 
   init(

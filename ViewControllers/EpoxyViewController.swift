@@ -4,7 +4,8 @@
 import UIKit
 import DLSPrimitives
 
-open class EpoxyTableViewController: UIViewController {
+/// Configures an Epoxy view and handles adaptivity. Subclass this to set your content in `epoxySections()`.
+open class EpoxyViewController: UIViewController {
 
   // MARK: Open
 

@@ -86,12 +86,6 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
       forCellReuseIdentifier: reuseID)
   }
 
-  public func unregister(reuseID: String) {
-    super.register(
-      (nil as AnyClass?),
-      forCellReuseIdentifier: reuseID)
-  }
-
   public func configure(cell: Cell, with item: DataType.Item) {
     configure(cell: cell, with: item, animated: false)
     cell.selectionStyle = selectionStyle
@@ -104,31 +98,46 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
     }
   }
 
-  public func apply(_ changeset: EpoxyChangeset) {
+  public func apply(
+    _ newData: DataType?,
+    animated: Bool,
+    changesetMaker: @escaping (DataType?) -> DataType.Changeset?)
+  {
+    guard animated,
+      newData != nil,
+      let sectionCount = dataSource?.numberOfSections?(in: self),
+      sectionCount > 0
+      else {
+        _ = changesetMaker(newData)
+        reloadData()
+        return
+    }
 
     beginUpdates()
 
-    changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
-      if let cell = cellForRow(at: fromIndexPath as IndexPath) as? TableViewCell,
-        let epoxyModel = epoxyDataSource.epoxyModel(at: toIndexPath)?.epoxyModel {
-        epoxyModel.configure(cell: cell, animated: true)
-        epoxyModel.configure(cell: cell, forState: cell.state)
+    if let changeset = changesetMaker(newData) {
+      changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
+        if let cell = cellForRow(at: fromIndexPath as IndexPath) as? TableViewCell,
+          let epoxyModel = epoxyDataSource.epoxyModel(at: toIndexPath)?.epoxyModel {
+          epoxyModel.configure(cell: cell, animated: true)
+          epoxyModel.configure(cell: cell, forState: cell.state)
+        }
       }
-    }
 
-    // TODO(ls): Make animations configurable
-    deleteRows(at: changeset.itemChangeset.deletes as [IndexPath], with: .fade)
-    deleteSections(changeset.sectionChangeset.deletes as IndexSet, with: .fade)
+      // TODO(ls): Make animations configurable
+      deleteRows(at: changeset.itemChangeset.deletes as [IndexPath], with: .fade)
+      deleteSections(changeset.sectionChangeset.deletes as IndexSet, with: .fade)
 
-    insertRows(at: changeset.itemChangeset.inserts, with: .fade)
-    insertSections(changeset.sectionChangeset.inserts as IndexSet, with: .fade)
+      insertRows(at: changeset.itemChangeset.inserts, with: .fade)
+      insertSections(changeset.sectionChangeset.inserts as IndexSet, with: .fade)
 
-    changeset.sectionChangeset.moves.forEach { (fromIndex, toIndex) in
-      moveSection(fromIndex, toSection: toIndex)
-    }
+      changeset.sectionChangeset.moves.forEach { (fromIndex, toIndex) in
+        moveSection(fromIndex, toSection: toIndex)
+      }
 
-    changeset.itemChangeset.moves.forEach { (fromIndexPath, toIndexPath) in
-      moveRow(at: fromIndexPath, to: toIndexPath)
+      changeset.itemChangeset.moves.forEach { (fromIndexPath, toIndexPath) in
+        moveRow(at: fromIndexPath, to: toIndexPath)
+      }
     }
 
     endUpdates()

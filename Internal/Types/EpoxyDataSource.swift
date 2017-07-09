@@ -23,14 +23,14 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
   private(set) var internalData: EpoxyInterfaceType.DataType?
 
   func setSections(_ sections: [EpoxySection]?, animated: Bool) {
+    assert(Thread.isMainThread, "This method must be called on the main thread.")
     registerReuseIDs(with: sections)
-    let oldInternalData = internalData
+    var newInternalData: EpoxyInterfaceType.DataType? = nil
     if let sections = sections {
-      internalData = EpoxyInterfaceType.DataType.make(with: sections)
-    } else {
-      internalData = nil
+      newInternalData = EpoxyInterfaceType.DataType.make(with: sections)
     }
-    applyData(oldData: oldInternalData, animated: animated)
+
+    applyData(newInternalData: newInternalData, animated: animated)
   }
 
   func updateItem(
@@ -58,18 +58,16 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
 
   private var reuseIDs = Set<String>()
 
-  private func applyData(oldData: EpoxyInterfaceType.DataType?, animated: Bool) {
-    guard let oldData = oldData,
-      let newData = internalData else {
-        epoxyInterface?.reloadData()
-        return
-    }
-
-    if animated {
-      let changeset = newData.makeChangeset(from: oldData)
-      epoxyInterface?.apply(changeset)
-    } else {
-      epoxyInterface?.reloadData()
+  private func applyData(newInternalData: EpoxyInterfaceType.DataType?, animated: Bool) {
+    epoxyInterface?.apply(
+      newInternalData,
+      animated: animated) { [unowned self] newData in
+        let oldInternalData = self.internalData
+        self.internalData = newData
+        guard let oldData = oldInternalData else {
+          return nil
+        }
+        return newData?.makeChangeset(from: oldData)
     }
   }
 
@@ -79,9 +77,8 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
 
   private func registerReuseIDs(with sections: [EpoxySection]?) {
     let newReuseIDs = getReuseIDs(from: sections)
-    unregisterOldReuseIDs(oldReuseIDs: reuseIDs, newReuseIDs: newReuseIDs)
     registerNewReuseIDs(oldReuseIDs: reuseIDs, newReuseIDs: newReuseIDs)
-    reuseIDs = newReuseIDs
+    reuseIDs = reuseIDs.union(newReuseIDs)
   }
 
   private func getReuseIDs(from sections: [EpoxySection]?) -> Set<String> {
@@ -95,19 +92,6 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
     }
 
     return newReuseIDs
-  }
-
-  private func unregisterOldReuseIDs(oldReuseIDs: Set<String>, newReuseIDs: Set<String>) {
-    guard let epoxyInterface = epoxyInterface else {
-      assertionFailure("Trying to unregister reuse IDs before the EpoxyInterface was set.")
-      return
-    }
-
-    oldReuseIDs.forEach { reuseID in
-      if !newReuseIDs.contains(reuseID) {
-        epoxyInterface.unregister(reuseID: reuseID)
-      }
-    }
   }
 
   private func registerNewReuseIDs(oldReuseIDs: Set<String>, newReuseIDs: Set<String>) {

@@ -18,9 +18,6 @@ public protocol InternalEpoxyInterface: EpoxyInterface {
   /// Registers the given `reuseID`s for reusable cells
   func register(reuseID: String)
 
-  /// Unregisters the given `reuseID`s from the reusable cell pool
-  func unregister(reuseID: String)
-
   /// Reloads all data without diffing
   func reloadData()
 
@@ -31,6 +28,6 @@ public protocol InternalEpoxyInterface: EpoxyInterface {
   func configure(cell: Cell, with item: DataType.Item)
 
   /// Applies the given changeset to the view, allowing the view to animate changes
-  func apply(_ changeset: DataType.Changeset)
+  func apply(_ newData: DataType?, animated: Bool, changesetMaker: @escaping (DataType?) -> DataType.Changeset?)
   
 }
