@@ -19,7 +19,7 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
    - Parameters:
      - data: The data this view takes for configuration, specific to this particular epoxy item instance.
      - dataID: An optional ID to differentiate this row from other rows, used when diffing.
-     - reuseID: An optional ID to differentiate this row from other rows, used when diffing.
+     - alternateStyleID: An optional ID for an alternative style type to use for reuse of this view. Use this to differentiate between different styling configurations.
      - builder: A closure that builds and returns this view type.
      - configurer: A closure that configures this view type with the specified data type.
      - stateConfigurer: An optional closure that configures this view type for a specific state.
@@ -30,7 +30,7 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   public init(
     data: DataType,
     dataID: String? = nil,
-    reuseID: String? = nil,
+    alternateStyleID: String? = nil,
     builder: @escaping () -> ViewType = { ViewType() },
     configurer: @escaping (ViewType, DataType, Bool) -> Void,
     stateConfigurer: ((ViewType, DataType, EpoxyCellState) -> Void)? = nil,
@@ -39,7 +39,7 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   {
     self.data = data
     self.dataID = dataID
-    self.reuseID = "\(type(of: ViewType.self))_\(reuseID ?? ""))"
+    self.reuseID = "\(type(of: ViewType.self))_\(alternateStyleID ?? ""))"
     self.builder = builder
     self.configurer = configurer
     self.stateConfigurer = stateConfigurer
