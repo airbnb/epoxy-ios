@@ -164,6 +164,7 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
     loaderView.frame.size.height = height
     tableFooterView = loaderView
 
+    loaderView.stopAnimating()
     infiniteScrollingLoader = loaderView
     infiniteScrollingDelegate = delegate
   }
