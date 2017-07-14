@@ -52,9 +52,24 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>, UIC
     let section = data.sections[indexPath.section]
 
     if section.items.count < indexPath.row + 1 {
+      assertionFailure("Item is out of bounds.")
       return nil
     }
 
     return section.items[indexPath.row]
+  }
+
+  func epoxySection(at index: Int) -> InternalCollectionViewEpoxySection? {
+    guard let data = internalData else {
+      assertionFailure("Can't load epoxy item with nil data")
+      return nil
+    }
+
+    if data.sections.count < index + 1 {
+      assertionFailure("Section is out of bounds.")
+      return nil
+    }
+
+    return data.sections[index]
   }
 }

@@ -5,8 +5,4 @@ public protocol CollectionViewEpoxyItemDisplayDelegate: class {
   func collectionView(
     _ collectionView: CollectionView,
     willDisplay epoxyItem: EpoxyableModel)
-
-  func collectionView(
-    _ collectionView: CollectionView,
-    didEndDisplaying epoxyItem: EpoxyableModel)
 }

@@ -39,6 +39,11 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
   /// Ignores zooming delegate methods.
   public weak var scrollDelegate: UIScrollViewDelegate?
 
+  /// Delegate for handling forwarded UICollectionViewDelegateFlowLayout methods or custom UICollectionViewLayout delegate methods.
+  ///
+  /// See `CollectionView+UICollectionViewFlowLayoutDelegate.swift` for an example of forwarding UICollectionViewFlowLayoutDelegate methods but with dataIDs instead of indexPaths/section indexes
+  public weak var layoutDelegate: AnyObject?
+
   /// Delegate which indicates when a epoxy item will be displayed, typically used
   /// for logging.
   public weak var epoxyItemDisplayDelegate: CollectionViewEpoxyItemDisplayDelegate?
@@ -79,6 +84,16 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
     }
 
     updateView(with: newData, animated: animated, changesetMaker: changesetMaker)
+  }
+
+  /// Convert an index path to a dataID, only for use in collection view layout delegate methods
+  public func dataIDForItem(at indexPath: IndexPath) -> String? {
+    return epoxyDataSource.epoxyItem(at: indexPath)?.epoxyItem.dataID
+  }
+
+  /// Convert a section index to a dataID, only for use in collection view layout delegate methods
+  public func dataIDForSection(at index: Int) -> String? {
+    return epoxyDataSource.epoxySection(at: index)?.dataID
   }
 
   // MARK: Fileprivate
@@ -204,18 +219,6 @@ extension CollectionView: UICollectionViewDelegate {
       return
     }
     epoxyItemDisplayDelegate?.collectionView(self, willDisplay: item.epoxyItem)
-  }
-
-  public func collectionView(
-    _ collectionView: UICollectionView,
-    didEndDisplaying cell: UICollectionViewCell,
-    forItemAt indexPath: IndexPath)
-  {
-    guard let item = epoxyDataSource.epoxyItem(at: indexPath) else {
-      assertionFailure("Index path is out of bounds.")
-      return
-    }
-    epoxyItemDisplayDelegate?.collectionView(self, didEndDisplaying: item.epoxyItem)
   }
 
   public func collectionView(
