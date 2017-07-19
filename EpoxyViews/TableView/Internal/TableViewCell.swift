@@ -37,9 +37,16 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
     bottomConstraint.isActive = true
     self.view = view
 
+    updateHorizontalViewMarginsIfNeeded()
+
     if let dividerView = dividerView {
       contentView.bringSubview(toFront: dividerView)
     }
+  }
+
+  public override func layoutMarginsDidChange() {
+    super.layoutMarginsDidChange()
+    updateHorizontalViewMarginsIfNeeded()
   }
 
   // MARK: Internal
@@ -58,5 +65,20 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
     dividerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
     dividerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     self.dividerView = dividerView
+  }
+
+  // MARK: Private
+
+  private func updateHorizontalViewMarginsIfNeeded() {
+    guard let view = view,
+      view.layoutMargins.left != layoutMargins.left
+        || view.layoutMargins.right != layoutMargins.right else {
+          return
+    }
+    view.layoutMargins = UIEdgeInsets(
+      top: view.layoutMargins.top,
+      left: layoutMargins.left,
+      bottom: view.layoutMargins.bottom,
+      right: layoutMargins.right)
   }
 }

@@ -89,6 +89,7 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
   public func configure(cell: Cell, with item: DataType.Item) {
     configure(cell: cell, with: item, animated: false)
     cell.selectionStyle = selectionStyle
+    updateHorizontalMarginsIfNeeded(for: cell)
   }
 
   public func reloadItem(at indexPath: IndexPath, animated: Bool) {
@@ -167,6 +168,13 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
     loaderView.stopAnimating()
     infiniteScrollingLoader = loaderView
     infiniteScrollingDelegate = delegate
+  }
+
+  public override func layoutMarginsDidChange() {
+    super.layoutMarginsDidChange()
+    visibleCells.forEach { [weak self] cell in
+      self?.updateHorizontalMarginsIfNeeded(for: cell)
+    }
   }
 
   // MARK: Fileprivate
@@ -248,6 +256,18 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
     } else {
       cell.dividerView?.isHidden = true
     }
+  }
+
+  private func updateHorizontalMarginsIfNeeded(for cell: UITableViewCell) {
+    guard cell.layoutMargins.left != layoutMargins.left
+      || cell.layoutMargins.right != layoutMargins.right else {
+      return
+    }
+    cell.layoutMargins = UIEdgeInsets(
+      top: cell.layoutMargins.top,
+      left: layoutMargins.left,
+      bottom: cell.layoutMargins.bottom,
+      right: layoutMargins.right)
   }
 
 }
