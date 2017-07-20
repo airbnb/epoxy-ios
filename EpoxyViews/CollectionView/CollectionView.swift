@@ -278,6 +278,7 @@ extension CollectionView: UICollectionViewDelegate {
     }
     item.epoxyItem.configure(cell: cell, forState: .selected)
     item.epoxyItem.didSelect()
+    collectionView.deselectItem(at: indexPath, animated: true)
   }
 
   public func collectionView(
