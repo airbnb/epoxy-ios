@@ -1,7 +1,13 @@
 //  Created by Laura Skelton on 11/28/16.
 //  Copyright © 2016 Airbnb. All rights reserved.
 
+import DLSPrimitives
 import UIKit
+
+public enum TableViewCellSelectionStyle {
+  case none
+  case color(UIColor)
+}
 
 /// A TableView class that handles updates through its `setSections` method, and optionally animates diffs.
 public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
@@ -44,8 +50,8 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
   /// for logging.
   public weak var epoxyModelDisplayDelegate: TableViewEpoxyModelDisplayDelegate?
 
-  /// Selection style for the `UITableViewCell`s of `EpoxyModel`s that have `isSelectable == true`
-  public var selectionStyle: UITableViewCellSelectionStyle = .default
+  /// Selection color for the `UITableViewCell`s of `EpoxyModel`s that have `isSelectable == true`
+  public var selectionStyle = TableViewCellSelectionStyle.color(Colors.backgroundHighlightedOrSelected)
 
   /// Whether or not the final item in the list shows a bottom divider. Defaults to false.
   public var showsLastDivider: Bool = false
@@ -88,7 +94,14 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
 
   public func configure(cell: Cell, with item: DataType.Item) {
     configure(cell: cell, with: item, animated: false)
-    cell.selectionStyle = selectionStyle
+
+    switch selectionStyle {
+    case .none:
+      cell.selectionStyle = .none
+    case .color(let selectionColor):
+      cell.selectedBackgroundView?.backgroundColor = selectionColor
+    }
+    
     updateHorizontalMarginsIfNeeded(for: cell)
   }
 

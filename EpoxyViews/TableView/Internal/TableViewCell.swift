@@ -12,6 +12,7 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     backgroundColor = .clear
+    selectedBackgroundView = UIView(frame: .zero)
   }
 
   public required init?(coder aDecoder: NSCoder) {
