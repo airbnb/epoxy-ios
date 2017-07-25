@@ -59,13 +59,24 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
   /// Hides the bottom divider for the given dataIDs
   public func hideBottomDivider(for dataIDs: [String]) {
     dataIDsForHidingDividers = dataIDs
+
+    guard isTableViewLaidOut() else {
+      // We only want to update the dividers if the table view has completed it's original
+      // layout and loading, otherwise we can get unsatisfiable constraint errors in cells.
+      return
+    }
+
     indexPathsForVisibleRows?.forEach { indexPath in
-      guard let cell = cellForRow(at: indexPath) as? TableViewCell else {
+      guard let cell = cellForRow(at: indexPath) else {
+        return
+      }
+      guard let epoxyCell = cell as? TableViewCell else {
         assertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
         return
       }
+
       if let item = epoxyDataSource.epoxyModel(at: indexPath) {
-        self.updateDivider(for: cell, dividerType: item.dividerType, dataID: item.epoxyModel.dataID)
+        self.updateDivider(for: epoxyCell, dividerType: item.dividerType, dataID: item.epoxyModel.dataID)
       }
     }
   }
@@ -186,7 +197,7 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
   public override func layoutMarginsDidChange() {
     super.layoutMarginsDidChange()
 
-    guard frame.size.width > 0 && frame.size.height > 0 else {
+    guard isTableViewLaidOut() else {
       // Accessing a table view's visibleCells before the table view has a valid
       // size can cause unsatisfiable constraint errors in cells
       return
@@ -290,6 +301,9 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
       right: layoutMargins.right)
   }
 
+  private func isTableViewLaidOut() -> Bool {
+    return frame.size.width > 0 && frame.size.height > 0
+  }
 }
 
 // MARK: UITableViewDelegate
