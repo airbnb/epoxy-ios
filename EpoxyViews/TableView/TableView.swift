@@ -185,6 +185,13 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
 
   public override func layoutMarginsDidChange() {
     super.layoutMarginsDidChange()
+
+    guard frame.size.width > 0 && frame.size.height > 0 else {
+      // Accessing a table view's visibleCells before the table view has a valid
+      // size can cause unsatisfiable constraint errors in cells
+      return
+    }
+
     visibleCells.forEach { [weak self] cell in
       self?.updateHorizontalMarginsIfNeeded(for: cell)
     }
