@@ -453,22 +453,22 @@ extension TableView {
 
   @available (*, unavailable, message: "You shouldn't be registering cell classes on a TableView. The TableViewEpoxyDataSource handles this for you.")
   public override func register(_ cellClass: AnyClass?, forCellReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering cell classes on a TableView. The TableViewEpoxyDataSource handles this for you.")
+    super.register(cellClass, forCellReuseIdentifier: identifier)
   }
 
   @available (*, unavailable, message: "You shouldn't be registering cell nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
   public override func register(_ nib: UINib?, forCellReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering cell nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
+    super.register(nib, forCellReuseIdentifier: identifier)
   }
 
   @available (*, unavailable, message: "You shouldn't be header or footer nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
   public override func register(_ nib: UINib?, forHeaderFooterViewReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering header or footer nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
+    super.register(nib, forHeaderFooterViewReuseIdentifier: identifier)
   }
 
   @available (*, unavailable, message: "You shouldn't be registering header or footer classes on a TableView. The TableViewEpoxyDataSource handles this for you.")
   public override func register(_ aClass: AnyClass?, forHeaderFooterViewReuseIdentifier identifier: String) {
-    assert(false, "You shouldn't be registering header or footer classes on a TableView. The TableViewEpoxyDataSource handles this for you.")
+    super.register(aClass, forHeaderFooterViewReuseIdentifier: identifier)
   }
 
 }

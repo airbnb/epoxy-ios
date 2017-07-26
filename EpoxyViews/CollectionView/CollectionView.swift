@@ -343,22 +343,22 @@ extension CollectionView {
 
   @available (*, unavailable, message: "You shouldn't be registering cell classes on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
   public override func register(_ cellClass: AnyClass?, forCellWithReuseIdentifier identifier: String) {
-    assertionFailure("You shouldn't be registering cell classes on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
+    super.register(cellClass, forCellWithReuseIdentifier: identifier)
   }
 
   @available (*, unavailable, message: "You shouldn't be registering cell nibs on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
   public override func register(_ nib: UINib?, forCellWithReuseIdentifier identifier: String) {
-    assertionFailure("You shouldn't be registering cell nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
+    super.register(nib, forCellWithReuseIdentifier: identifier)
   }
 
   @available (*, unavailable, message: "You shouldn't be registering supplementary view nibs on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
   public override func register(_ nib: UINib?, forSupplementaryViewOfKind kind: String, withReuseIdentifier identifier: String) {
-    assertionFailure("You shouldn't be registering supplementary view nibs on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
+    super.register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: identifier)
   }
 
   @available (*, unavailable, message: "You shouldn't be registering supplementary view classes on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
   public override func register(_ viewClass: AnyClass?, forSupplementaryViewOfKind elementKind: String, withReuseIdentifier identifier: String) {
-    assertionFailure("You shouldn't be registering supplementary view classes on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
+    super.register(viewClass, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: identifier)
   }
 
 }
