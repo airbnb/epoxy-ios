@@ -12,6 +12,9 @@ public protocol EpoxyInterface: class {
   /// Updates the item at the given data ID with the new item and configures the cell if it's visible
   func updateItem(at dataID: String, with item: EpoxyableModel, animated: Bool)
 
+  /// Hides the bottom divider for the given dataIDs
+  func hideBottomDivider(for dataIDs: [String])
+
 }
 
 extension EpoxyInterface {

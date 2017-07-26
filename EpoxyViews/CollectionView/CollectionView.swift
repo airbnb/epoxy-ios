@@ -35,6 +35,11 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
     epoxyDataSource.updateItem(at: dataID, with: item, animated: animated)
   }
 
+  /// CollectionView does not currently support divider hiding.
+  public func hideBottomDivider(for dataIDs: [String]) {
+    // TODO: Implement divider hiding
+  }
+
   /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
   /// Ignores zooming delegate methods.
   public weak var scrollDelegate: UIScrollViewDelegate?

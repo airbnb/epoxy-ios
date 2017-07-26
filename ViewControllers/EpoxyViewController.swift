@@ -26,6 +26,11 @@ open class EpoxyViewController: UIViewController {
     return []
   }
 
+  /// Override this in your subclass to return the data IDs of any dividers you wish to hide.
+  open func hiddenDividerDataIDs() -> [String] {
+    return []
+  }
+
   /// Returns a standard `TableView` by default. Override this to configure another view type.
   open func makeEpoxyView() -> EpoxyView {
     let tableView = TableView.standardTableView
@@ -58,6 +63,7 @@ open class EpoxyViewController: UIViewController {
     if isViewLoaded {
       let sections = epoxySections()
       epoxyView.setSections(sections, animated: animated)
+      epoxyView.hideBottomDivider(for: hiddenDividerDataIDs())
     }
   }
 
