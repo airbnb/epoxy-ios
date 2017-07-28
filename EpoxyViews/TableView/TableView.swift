@@ -168,13 +168,17 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
     endUpdates()
 
     indexPathsForVisibleRows?.forEach { indexPath in
-      guard let cell = cellForRow(at: indexPath) as? TableViewCell else {
+      guard let cell = cellForRow(at: indexPath) else {
+        return
+      }
+      guard let epoxyCell = cell as? TableViewCell else {
         assertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
         return
       }
+
       if let item = epoxyDataSource.epoxyModel(at: indexPath) {
-        item.epoxyModel.setBehavior(cell: cell)
-        self.updateDivider(for: cell, dividerType: item.dividerType, dataID: item.epoxyModel.dataID)
+        item.epoxyModel.setBehavior(cell: epoxyCell)
+        self.updateDivider(for: epoxyCell, dividerType: item.dividerType, dataID: item.epoxyModel.dataID)
       }
     }
   }
