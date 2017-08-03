@@ -13,6 +13,8 @@ public protocol InternalEpoxyDataType {
   /// Updates the item at the given `dataID` (if found) with the given updated `EpoxyModel`.
   func updateItem(at dataID: String, with item: EpoxyableModel) -> IndexPath?
 
+  func indexPathForItem(at dataID: String) -> IndexPath?
+
 }
 
 /// Protocol for a diffable internal data type created from an array of `EpoxySection`s that 

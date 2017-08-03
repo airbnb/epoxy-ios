@@ -121,6 +121,9 @@ extension InternalCollectionViewEpoxyData {
     return indexPath
   }
 
+  public func indexPathForItem(at dataID: String) -> IndexPath? {
+    return itemIndexMap[dataID]
+  }
 }
 
 extension InternalCollectionViewEpoxyData: CustomStringConvertible {
