@@ -283,7 +283,14 @@ extension CollectionView: UICollectionViewDelegate {
     }
     item.epoxyItem.configure(cell: cell, forState: .selected)
     item.epoxyItem.didSelect()
+
+    // Update the cell state after deselection completes
+    CATransaction.begin()
+    CATransaction.setCompletionBlock({
+      item.epoxyItem.configure(cell: cell, forState: .normal)
+    })
     collectionView.deselectItem(at: indexPath, animated: true)
+    CATransaction.commit()
   }
 
   public func collectionView(

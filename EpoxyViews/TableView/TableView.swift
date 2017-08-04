@@ -1,6 +1,7 @@
 //  Created by Laura Skelton on 11/28/16.
 //  Copyright © 2016 Airbnb. All rights reserved.
 
+import CoreGraphics
 import DLSPrimitives
 import UIKit
 
@@ -389,7 +390,14 @@ extension TableView: UITableViewDelegate {
     }
     item.epoxyModel.configure(cell: cell, forState: .selected)
     item.epoxyModel.didSelect()
+
+    // Update the cell state after deselection completes
+    CATransaction.begin()
+    CATransaction.setCompletionBlock({
+      item.epoxyModel.configure(cell: cell, forState: .normal)
+    })
     tableView.deselectRow(at: indexPath, animated: true)
+    CATransaction.commit()
   }
 
   public func tableView(
