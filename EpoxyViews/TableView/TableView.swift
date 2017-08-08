@@ -393,8 +393,13 @@ extension TableView: UITableViewDelegate {
 
     // Update the cell state after deselection completes
     CATransaction.begin()
+    // Fetch the updated epoxy model
+    guard let updatedItem = epoxyDataSource.epoxyModel(at: indexPath) else {
+      assertionFailure("Index path is out of bounds")
+      return
+    }
     CATransaction.setCompletionBlock({
-      item.epoxyModel.configure(cell: cell, forState: .normal)
+      updatedItem.epoxyModel.configure(cell: cell, forState: .normal)
     })
     tableView.deselectRow(at: indexPath, animated: true)
     CATransaction.commit()

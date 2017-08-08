@@ -286,8 +286,13 @@ extension CollectionView: UICollectionViewDelegate {
 
     // Update the cell state after deselection completes
     CATransaction.begin()
+    // Fetch the updated epoxy item
+    guard let updatedItem = epoxyDataSource.epoxyItem(at: indexPath) else {
+      assertionFailure("Index path is out of bounds")
+      return
+    }
     CATransaction.setCompletionBlock({
-      item.epoxyItem.configure(cell: cell, forState: .normal)
+      updatedItem.epoxyItem.configure(cell: cell, forState: .normal)
     })
     collectionView.deselectItem(at: indexPath, animated: true)
     CATransaction.commit()
