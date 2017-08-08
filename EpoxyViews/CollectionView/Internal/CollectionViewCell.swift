@@ -31,8 +31,35 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
     view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
     view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
     view.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-    view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+    let bottomConstraint = view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+    bottomConstraint.priority = UILayoutPriorityDefaultHigh - 1 // Needed to allow cell to properly size itself. This should not be changed. See equivalent code in `TableViewCell`
+    bottomConstraint.isActive = true
     self.view = view
+  }
+
+  override public func preferredLayoutAttributesFitting(
+    _ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes
+  {
+    guard let collectionViewLayoutAttributes = layoutAttributes as? CollectionViewLayoutAttributes else {
+      return super.preferredLayoutAttributesFitting(layoutAttributes)
+    }
+
+    let horizontalFittingPriority = collectionViewLayoutAttributes.widthSizeMode == .dynamic
+      ? UILayoutPriorityDefaultHigh
+      : UILayoutPriorityRequired
+
+    let verticalFittingPriority = collectionViewLayoutAttributes.heightSizeMode == .dynamic
+      ? UILayoutPriorityDefaultHigh
+      : UILayoutPriorityRequired
+
+    let size = super.systemLayoutSizeFitting(
+      layoutAttributes.size,
+      withHorizontalFittingPriority: horizontalFittingPriority,
+      verticalFittingPriority: verticalFittingPriority)
+
+    layoutAttributes.size = size
+
+    return layoutAttributes
   }
 
 }
