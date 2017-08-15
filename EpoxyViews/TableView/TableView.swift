@@ -41,6 +41,16 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
     }
   }
 
+  public func view(for dataID: String) -> TableViewCell? {
+    if let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID),
+      let cell = cellForRow(at: indexPath) as? TableViewCell
+    {
+      return cell
+    }
+
+    return nil
+  }
+
   public func updateItem(
     at dataID: String,
     with item: EpoxyableModel,
