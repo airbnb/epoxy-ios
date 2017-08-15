@@ -88,6 +88,32 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
     }
   }
 
+  /// Block that handles the pull to refresh action
+  public var didTriggerPullToRefresh: ((UIRefreshControl) -> Void)? {
+    didSet {
+      pullToRefreshEnabled = didTriggerPullToRefresh != nil
+    }
+  }
+
+  /// Pull to refresh control
+  public lazy var pullToRefreshControl: UIRefreshControl = {
+    let refreshControl = UIRefreshControl()
+    refreshControl.addTarget(self, action: #selector(didTriggerPullToRefreshControl(sender:)), for: .valueChanged)
+    return refreshControl
+  }()
+
+  /// Whether or not pull to refresh is enabled
+  public var pullToRefreshEnabled: Bool = false {
+    didSet {
+      // TODO: Once we drop iOS 9, set UIScrollView's refreshControl directly
+      if pullToRefreshEnabled {
+        addSubview(pullToRefreshControl)
+      } else {
+        pullToRefreshControl.removeFromSuperview()
+      }
+    }
+  }
+
   /// Block that should return an initialized view of the type you'd like to use for this divider.
   public var rowDividerBuilder: (() -> UIView)?
 
@@ -226,7 +252,7 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
   fileprivate weak var infiniteScrollingDelegate: InfiniteScrollingDelegate?
   fileprivate var infiniteScrollingState: InfiniteScrollingState = .stopped
   fileprivate var infiniteScrollingLoader: Animatable?
-  
+
   fileprivate func updatedInfiniteScrollingState(in scrollView: UIScrollView) -> (InfiniteScrollingState, Bool) {
     let previousState = infiniteScrollingState
     let newState = previousState.next(in: scrollView)
@@ -314,6 +340,10 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
 
   private func isTableViewLaidOut() -> Bool {
     return frame.size.width > 0 && frame.size.height > 0
+  }
+
+  dynamic private func didTriggerPullToRefreshControl(sender: UIRefreshControl) {
+    didTriggerPullToRefresh?(sender)
   }
 }
 
