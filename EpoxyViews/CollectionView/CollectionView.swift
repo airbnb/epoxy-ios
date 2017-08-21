@@ -282,7 +282,7 @@ extension CollectionView: UICollectionViewDelegate {
         return
     }
     item.epoxyItem.configure(cell: cell, forState: .selected)
-    item.epoxyItem.didSelect()
+    item.epoxyItem.didSelect(cell)
 
     // Update the cell state after deselection completes
     CATransaction.begin()

@@ -41,16 +41,6 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
     }
   }
 
-  public func view(for dataID: String) -> TableViewCell? {
-    if let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID),
-      let cell = cellForRow(at: indexPath) as? TableViewCell
-    {
-      return cell
-    }
-
-    return nil
-  }
-
   public func updateItem(
     at dataID: String,
     with item: EpoxyableModel,
@@ -429,7 +419,7 @@ extension TableView: UITableViewDelegate {
       return
     }
     item.epoxyModel.configure(cell: cell, forState: .selected)
-    item.epoxyModel.didSelect()
+    item.epoxyModel.didSelect(cell)
 
     // Update the cell state after deselection completes
     CATransaction.begin()

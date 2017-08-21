@@ -12,6 +12,7 @@ public protocol TypedEpoxyableModel: EpoxyableModel {
   func configureView(_ view: View, animated: Bool)
   func configureView(_ view: View, forState state: EpoxyCellState)
   func setViewBehavior(_ view: View)
+  func didSelectView(_ view: View)
 }
 
 extension TypedEpoxyableModel {
@@ -33,7 +34,16 @@ extension TypedEpoxyableModel {
     setViewBehavior(view)
   }
 
+  public func didSelect(_ cell: EpoxyCell) {
+    guard let view = cell.view as? View else {
+      assertionFailure("The selected view is not the expected type.")
+      return
+    }
+    didSelectView(view)
+  }
+
   public func setViewBehavior(_ view: View) { }
+  public func didSelectView(_ view: View) { }
 
   public func configureView(_ view: View, forState state: EpoxyCellState) { }
 

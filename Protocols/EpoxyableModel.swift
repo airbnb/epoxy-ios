@@ -11,9 +11,9 @@ public protocol EpoxyableModel: Diffable {
   func configure(cell: EpoxyCell, animated: Bool)
   func configure(cell: EpoxyCell, forState state: EpoxyCellState)
   func setBehavior(cell: EpoxyCell)
+  func didSelect(_ cell: EpoxyCell)
 
   var isSelectable: Bool { get }
-  func didSelect()
 }
 
 extension EpoxyableModel {
@@ -38,7 +38,7 @@ extension EpoxyableModel {
 
   public var isSelectable: Bool { return false }
 
-  public func didSelect() { }
+  public func didSelect(_ cell: EpoxyCell) { }
 
   public func configure(cell: EpoxyCell, forState state: EpoxyCellState) { }
 

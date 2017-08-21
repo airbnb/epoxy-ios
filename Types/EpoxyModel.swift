@@ -35,7 +35,7 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     configurer: @escaping (ViewType, DataType, Bool) -> Void,
     stateConfigurer: ((ViewType, DataType, EpoxyCellState) -> Void)? = nil,
     behaviorSetter: ((ViewType, DataType, String?) -> Void)? = nil,
-    selectionHandler: ((DataType, String?) -> Void)? = nil)
+    selectionHandler: ((ViewType, DataType, String?) -> Void)? = nil)
   {
     self.data = data
     self.dataID = dataID
@@ -81,8 +81,8 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     behaviorSetter?(view, data, dataID)
   }
 
-  public func didSelect() {
-    selectionHandler?(data, dataID)
+  public func didSelectView(_ view: ViewType) {
+    selectionHandler?(view, data, dataID)
   }
 
   // MARK: Private
@@ -91,5 +91,5 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   private let configurer: (ViewType, DataType, Bool) -> Void
   private let stateConfigurer: ((ViewType, DataType, EpoxyCellState) -> Void)?
   private let behaviorSetter: ((ViewType, DataType, String?) -> Void)?
-  private let selectionHandler: ((DataType, String?) -> Void)?
+  private let selectionHandler: ((ViewType, DataType, String?) -> Void)?
 }
