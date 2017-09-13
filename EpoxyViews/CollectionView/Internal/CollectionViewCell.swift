@@ -23,7 +23,7 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
 
   /// Pass a view for this cell's reuseID that the cell will pin to the edges of its `contentView`.
   public func setViewIfNeeded(view: UIView) {
-    if self.view != nil {
+    guard self.view == nil else {
       return
     }
     view.translatesAutoresizingMaskIntoConstraints = false
@@ -31,9 +31,7 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
     view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
     view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
     view.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-    let bottomConstraint = view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-    bottomConstraint.priority = UILayoutPriorityDefaultHigh - 1 // Needed to allow cell to properly size itself. This should not be changed. See equivalent code in `TableViewCell`
-    bottomConstraint.isActive = true
+    view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     self.view = view
   }
 
