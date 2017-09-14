@@ -141,9 +141,9 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
 
     switch selectionStyle {
     case .none:
-      cell.selectionStyle = .none
+      cell.selectedBackgroundColor = nil
     case .color(let selectionColor):
-      cell.selectedBackgroundView?.backgroundColor = selectionColor
+      cell.selectedBackgroundColor = selectionColor
     }
     
     updateHorizontalMarginsIfNeeded(for: cell)

@@ -2,6 +2,7 @@
 //  Copyright © 2016 com.airbnb. All rights reserved.
 
 import UIKit
+import DLSPrimitives
 
 /// An internal cell class for use in a `TableView`. It handles displaying a `Divider` and
 /// wraps view classes passed to it.
@@ -11,8 +12,7 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
 
   override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
-    backgroundColor = .clear
-    selectedBackgroundView = UIView(frame: .zero)
+    setUpViews()
   }
 
   public required init?(coder aDecoder: NSCoder) {
@@ -21,13 +21,13 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
 
   // MARK: Public
 
+  public var selectedBackgroundColor: UIColor?
+
   public private(set) var view: UIView?
 
   /// Pass a view for this cell's reuseID that the cell will pin to the edges of its `contentView`.
   public func setViewIfNeeded(view: UIView) {
-    if self.view != nil {
-      return
-    }
+    if self.view != nil { return }
     view.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(view)
     view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
@@ -43,6 +43,16 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
     if let dividerView = dividerView {
       contentView.bringSubview(toFront: dividerView)
     }
+  }
+
+  public override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+    super.setHighlighted(highlighted, animated: animated)
+    updateVisualHighlightState(highlighted, animated: true)
+  }
+
+  public override func setSelected(_ selected: Bool, animated: Bool) {
+    super.setSelected(selected, animated: animated)
+    updateVisualHighlightState(selected, animated: animated)
   }
 
   public override func layoutMarginsDidChange() {
@@ -69,6 +79,40 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
   }
 
   // MARK: Private
+
+  private var normalViewBackgroundColor: UIColor?
+
+  private func setUpViews() {
+    backgroundColor = .clear
+    selectionStyle = .none
+  }
+
+  private func updateVisualHighlightState(_ isVisuallyHighlighted: Bool) {
+    if selectedBackgroundColor == nil { return }
+
+    /// This is a temporary solution to support DLSComponentLibrary views that have a background color.
+    /// Using the system animation sets the backgrounds of every subview to clear, which we don't want.
+    if isVisuallyHighlighted {
+      if (normalViewBackgroundColor == nil) {
+        normalViewBackgroundColor = view?.backgroundColor
+      }
+      view?.backgroundColor = selectedBackgroundColor
+    } else {
+      view?.backgroundColor = normalViewBackgroundColor
+    }
+  }
+
+  private func updateVisualHighlightState(_ isVisuallyHighlighted: Bool, animated: Bool) {
+    if animated {
+      UIView.animate(
+        withDuration: Motion.durationShort,
+        animations: {
+          self.updateVisualHighlightState(isVisuallyHighlighted)
+      })
+    } else {
+      updateVisualHighlightState(isVisuallyHighlighted)
+    }
+  }
 
   private func updateHorizontalViewMarginsIfNeeded() {
     guard let view = view,
