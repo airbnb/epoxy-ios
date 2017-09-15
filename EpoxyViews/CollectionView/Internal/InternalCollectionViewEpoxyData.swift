@@ -3,13 +3,14 @@
 
 import Foundation
 
-public final class InternalCollectionViewEpoxyData: DiffableInternalEpoxyDataType {
+public final class InternalCollectionViewEpoxyData: InternalEpoxyDataType {
 
-  public typealias Changeset = EpoxyChangeset
-  public typealias Item = InternalCollectionViewEpoxyItem
+  public typealias Item = EpoxyModelWrapper
+  public typealias ExternalSection = EpoxyCollectionViewSection
+  public typealias InternalSection = EpoxyCollectionViewSection
 
   init(
-    sections: [InternalCollectionViewEpoxySection],
+    sections: [EpoxyCollectionViewSection],
     sectionIndexMap: [String: Int],
     itemIndexMap: [String: IndexPath])
   {
@@ -18,7 +19,7 @@ public final class InternalCollectionViewEpoxyData: DiffableInternalEpoxyDataTyp
     self.itemIndexMap = itemIndexMap
   }
 
-  var sections: [InternalCollectionViewEpoxySection]
+  public fileprivate(set) var sections: [EpoxyCollectionViewSection]
 
   // MARK: Fileprivate
 
@@ -28,44 +29,18 @@ public final class InternalCollectionViewEpoxyData: DiffableInternalEpoxyDataTyp
 
 extension InternalCollectionViewEpoxyData {
 
-  public static func make(with sections: [EpoxySection]) -> InternalCollectionViewEpoxyData {
+  public static func make(with sections: [EpoxyCollectionViewSection]) -> InternalCollectionViewEpoxyData {
 
     var sectionIndexMap = [String: Int]()
     var itemIndexMap = [String: IndexPath]()
 
-    let sections: [InternalCollectionViewEpoxySection] = sections.enumerated().map { sectionIndex, section in
-
+    sections.enumerated().forEach { sectionIndex, section in
       sectionIndexMap[section.dataID] = sectionIndex
-
-      var itemIndex = 0
-
-      var items = [InternalCollectionViewEpoxyItem]()
-
-      if let existingSectionHeader = section.sectionHeader {
-        items.append(InternalCollectionViewEpoxyItem(
-          epoxyItem: existingSectionHeader))
-
-        if let dataID = existingSectionHeader.dataID {
-          itemIndexMap[dataID] = IndexPath(item: itemIndex, section: sectionIndex)
-        }
-
-        itemIndex += 1
-      }
-
-      section.items.forEach { item in
-        items.append(InternalCollectionViewEpoxyItem(
-          epoxyItem: item))
-
+      section.items.enumerated().forEach { itemIndex, item in
         if let dataID = item.dataID {
           itemIndexMap[dataID] = IndexPath(item: itemIndex, section: sectionIndex)
         }
-
-        itemIndex += 1
       }
-
-      return InternalCollectionViewEpoxySection(
-        dataID: section.dataID,
-        items: items)
     }
 
     return InternalCollectionViewEpoxyData(
@@ -113,10 +88,10 @@ extension InternalCollectionViewEpoxyData {
 
     let oldItem = sections[indexPath.section].items[indexPath.item]
 
-    assert(oldItem.epoxyItem.reuseID == item.reuseID, "Cannot update item with a different reuse ID.")
+    assert(oldItem.reuseID == item.reuseID, "Cannot update item with a different reuse ID.")
 
-    sections[indexPath.section].items[indexPath.item] = InternalCollectionViewEpoxyItem(
-      epoxyItem: item)
+    sections[indexPath.section].items[indexPath.item] = EpoxyModelWrapper(
+      epoxyModel: item)
 
     return indexPath
   }
@@ -129,64 +104,5 @@ extension InternalCollectionViewEpoxyData {
 extension InternalCollectionViewEpoxyData: CustomStringConvertible {
   public var description: String {
     return "Data: (Sections: [\(sections)]"
-  }
-}
-
-// MARK: InternalCollectionViewEpoxySection
-
-/// A section in the `InternalCollectionViewEpoxyData`.
-public struct InternalCollectionViewEpoxySection {
-
-  init(
-    dataID: String,
-    items: [InternalCollectionViewEpoxyItem])
-  {
-    self.dataID = dataID
-    self.items = items
-  }
-
-  let dataID: String
-  var items: [InternalCollectionViewEpoxyItem]
-}
-
-extension InternalCollectionViewEpoxySection: Diffable {
-  public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let otherDiffableSection = otherDiffableItem as? InternalCollectionViewEpoxySection else { return false }
-    return dataID == otherDiffableSection.dataID
-  }
-
-  public var diffIdentifier: String? {
-    return dataID
-  }
-}
-
-extension InternalCollectionViewEpoxySection: CustomStringConvertible {
-  public var description: String {
-    return "Section: (dataID: \(dataID), items: \(items.count))"
-  }
-}
-
-// MARK: InternalCollectionViewEpoxyItem
-
-/// An item in a `InternalCollectionViewEpoxySection`, representing either a row or a section header.
-public struct InternalCollectionViewEpoxyItem {
-
-  init(
-    epoxyItem: EpoxyableModel)
-  {
-    self.epoxyItem = epoxyItem
-  }
-
-  let epoxyItem: EpoxyableModel
-}
-
-extension InternalCollectionViewEpoxyItem: Diffable {
-  public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let otherDiffableEpoxyItem = otherDiffableItem as? InternalCollectionViewEpoxyItem else { return false }
-    return epoxyItem.isDiffableItemEqual(to: otherDiffableEpoxyItem.epoxyItem)
-  }
-
-  public var diffIdentifier: String? {
-    return epoxyItem.diffIdentifier
   }
 }

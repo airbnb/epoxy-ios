@@ -3,7 +3,7 @@
 
 import UIKit
 
-open class EpoxyCollectionViewController: EpoxyViewController {
+open class EpoxyCollectionViewController: UIViewController {
 
   // MARK: Lifecycle
 
@@ -18,18 +18,81 @@ open class EpoxyCollectionViewController: EpoxyViewController {
 
   // MARK: Open
 
+  open override func viewDidLoad() {
+    super.viewDidLoad()
+    setUpViews()
+    setUpConstraints()
+  }
+
+  open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+    setEpoxySectionsIfReady()
+  }
+
   /// Override this in your subclass to return your Epoxy sections
-  open override func epoxySections() -> [EpoxySection] {
+  open func epoxySections() -> [EpoxyCollectionViewSection] {
     return []
   }
 
-  /// Returns a `CollectionView` by default. Override this to configure another view type.
-  open override func makeEpoxyView() -> EpoxyView {
+  /// Returns a `CollectionView` by default. Override this to configure it differently.
+  open func makeCollectionView() -> CollectionView {
     return CollectionView(collectionViewLayout: collectionViewLayout)
+  }
+
+  // MARK: Public
+
+  public var contentOffset: CGPoint? {
+    return collectionView.contentOffset
+  }
+
+  public lazy var collectionView: CollectionView = {
+    assert(self.isViewLoaded, "Accessed tableView before view was loaded.")
+    return self.makeCollectionView()
+  }()
+
+  /// Updates the Epoxy view by calling the `epoxySections()` method. Optionally animated.
+  public func updateData(animated: Bool) {
+    if isViewLoaded {
+      let sections = epoxySections()
+      collectionView.setSections(sections, animated: animated)
+    }
   }
 
   // MARK: Private
 
   private let collectionViewLayout: UICollectionViewLayout
+
+  private func setUpViews() {
+    view.backgroundColor = .white
+    view.addSubview(collectionView)
+    collectionView.layoutDelegate = self
+    setEpoxySectionsIfReady()
+  }
+
+  private func setUpConstraints() {
+    collectionView.translatesAutoresizingMaskIntoConstraints = false
+    let constraints = [
+      collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+      collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+      collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+    ]
+    NSLayoutConstraint.activate(constraints)
+  }
+
+  private func updateLayoutMargins() {
+    collectionView.layoutMargins = UIEdgeInsets(
+      top: 0,
+      left: 24,
+      bottom: 0,
+      right: 24)
+  }
+
+  private func setEpoxySectionsIfReady() {
+    if traitCollection.horizontalSizeClass != .unspecified {
+      updateLayoutMargins()
+      updateData(animated: false)
+    }
+  }
 
 }

@@ -2,7 +2,6 @@
 //  Copyright © 2016 Airbnb. All rights reserved.
 
 import CoreGraphics
-import DLSPrimitives
 import UIKit
 
 public enum TableViewCellSelectionStyle {
@@ -11,7 +10,7 @@ public enum TableViewCellSelectionStyle {
 }
 
 /// A TableView class that handles updates through its `setSections` method, and optionally animates diffs.
-public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
+public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
 
   public typealias DataType = InternalTableViewEpoxyData
   public typealias Cell = TableViewCell
@@ -58,7 +57,7 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
   public weak var epoxyModelDisplayDelegate: TableViewEpoxyModelDisplayDelegate?
 
   /// Selection color for the `UITableViewCell`s of `EpoxyModel`s that have `isSelectable == true`
-  public var selectionStyle = TableViewCellSelectionStyle.color(Colors.backgroundHighlightedOrSelected)
+  public var selectionStyle = TableViewCellSelectionStyle.color(UIColor.lightGray)
 
   /// Whether or not the final item in the list shows a bottom divider. Defaults to false.
   public var showsLastDivider: Bool = false
@@ -83,7 +82,7 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
       }
 
       if let item = epoxyDataSource.epoxyModel(at: indexPath) {
-        self.updateDivider(for: epoxyCell, dividerType: item.dividerType, dataID: item.epoxyModel.dataID)
+        self.updateDivider(for: epoxyCell, dividerType: item.dividerType, dataID: item.dataID)
       }
     }
   }
@@ -130,10 +129,16 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
     return indexPathsForVisibleRows ?? []
   }
 
-  public func register(reuseID: String) {
+  public func register(cellReuseID: String) {
     super.register(
       TableViewCell.self,
-      forCellReuseIdentifier: reuseID)
+      forCellReuseIdentifier: cellReuseID)
+  }
+
+  public func register(supplementaryViewReuseID: String, forKind elementKind: String) {
+    super.register(
+      TableViewCell.self,
+      forCellReuseIdentifier: supplementaryViewReuseID)
   }
 
   public func configure(cell: Cell, with item: DataType.Item) {
@@ -159,7 +164,7 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
   public func apply(
     _ newData: DataType?,
     animated: Bool,
-    changesetMaker: @escaping (DataType?) -> DataType.Changeset?)
+    changesetMaker: @escaping (DataType?) -> EpoxyChangeset?)
   {
     guard animated,
       newData != nil,
@@ -210,8 +215,8 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
       }
 
       if let item = epoxyDataSource.epoxyModel(at: indexPath) {
-        item.epoxyModel.setBehavior(cell: epoxyCell)
-        self.updateDivider(for: epoxyCell, dividerType: item.dividerType, dataID: item.epoxyModel.dataID)
+        item.setBehavior(cell: epoxyCell)
+        self.updateDivider(for: epoxyCell, dividerType: item.dividerType, dataID: item.dataID)
       }
     }
   }
@@ -276,9 +281,9 @@ public class TableView: UITableView, EpoxyView, InternalEpoxyInterface {
   }
 
   private func configure(cell: Cell, with item: DataType.Item, animated: Bool) {
-    item.epoxyModel.configure(cell: cell, animated: animated)
-    item.epoxyModel.setBehavior(cell: cell)
-    updateDivider(for: cell, dividerType: item.dividerType, dataID: item.epoxyModel.dataID)
+    item.configure(cell: cell, animated: animated)
+    item.setBehavior(cell: cell)
+    updateDivider(for: cell, dividerType: item.dividerType, dataID: item.dataID)
   }
 
   private func updateDivider(for cell: TableViewCell, dividerType: EpoxyModelDividerType, dataID: String?) {
@@ -360,7 +365,7 @@ extension TableView: UITableViewDelegate {
       assertionFailure("Index path is out of bounds.")
       return
     }
-    epoxyModelDisplayDelegate?.tableView(self, willDisplay: item.epoxyModel)
+    epoxyModelDisplayDelegate?.tableView(self, willDisplay: item)
   }
 
   public func tableView(
@@ -371,7 +376,7 @@ extension TableView: UITableViewDelegate {
       assertionFailure("Index path is out of bounds")
       return false
     }
-    return item.epoxyModel.isSelectable
+    return item.isSelectable
   }
 
   public func tableView(
@@ -383,7 +388,7 @@ extension TableView: UITableViewDelegate {
       assertionFailure("Index path is out of bounds")
       return
     }
-    item.epoxyModel.configure(cell: cell, forState: .highlighted)
+    item.configure(cell: cell, forState: .highlighted)
   }
 
   public func tableView(
@@ -395,7 +400,7 @@ extension TableView: UITableViewDelegate {
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.epoxyModel.configure(cell: cell, forState: .normal)
+    item.configure(cell: cell, forState: .normal)
   }
 
   public func tableView(
@@ -406,7 +411,7 @@ extension TableView: UITableViewDelegate {
       assertionFailure("Index path is out of bounds")
       return nil
     }
-    return item.epoxyModel.isSelectable ? indexPath : nil
+    return item.isSelectable ? indexPath : nil
   }
 
   public func tableView(
@@ -418,21 +423,10 @@ extension TableView: UITableViewDelegate {
       assertionFailure("Index path is out of bounds")
       return
     }
-    item.epoxyModel.configure(cell: cell, forState: .selected)
-    item.epoxyModel.didSelect(cell)
+    item.configure(cell: cell, forState: .selected)
+    item.didSelect(cell)
 
-    // Update the cell state after deselection completes
-    CATransaction.begin()
-    // Fetch the updated epoxy model
-    guard let updatedItem = epoxyDataSource.epoxyModel(at: indexPath) else {
-      assertionFailure("Index path is out of bounds")
-      return
-    }
-    CATransaction.setCompletionBlock({
-      updatedItem.epoxyModel.configure(cell: cell, forState: .normal)
-    })
     tableView.deselectRow(at: indexPath, animated: true)
-    CATransaction.commit()
   }
 
   public func tableView(
@@ -444,7 +438,7 @@ extension TableView: UITableViewDelegate {
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.epoxyModel.configure(cell: cell, forState: .normal)
+    item.configure(cell: cell, forState: .normal)
   }
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {

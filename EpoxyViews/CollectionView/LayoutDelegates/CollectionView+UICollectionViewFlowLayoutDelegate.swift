@@ -25,12 +25,24 @@ public protocol EpoxyCollectionViewDelegateFlowLayout {
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     minimumInteritemSpacingForSectionWith sectionDataID: String) -> CGFloat
+
+ func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    referenceSizeForHeaderInSectionWith sectionDataID: String) -> CGSize
+
+  func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    referenceSizeForFooterInSectionWith sectionDataID: String) -> CGSize
 }
 
 fileprivate let defaultItemSize = CGSize(width: 50, height: 50)
 fileprivate let defaultSectionInset = UIEdgeInsets.zero
 fileprivate let defaultMinimumLineSpacingForSection: CGFloat = 10
 fileprivate let defaultMinimumInteritemSpacingForSection: CGFloat = 10
+fileprivate let defaultHeaderReferenceSize: CGSize = .zero
+fileprivate let defaultFooterReferenceSize: CGSize = .zero
 
 extension EpoxyCollectionViewDelegateFlowLayout {
   public func collectionView(
@@ -65,6 +77,23 @@ extension EpoxyCollectionViewDelegateFlowLayout {
   {
     return defaultMinimumInteritemSpacingForSection
   }
+
+  public func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    referenceSizeForHeaderInSectionWith sectionDataID: String) -> CGSize
+  {
+    return defaultHeaderReferenceSize
+  }
+
+  public func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    referenceSizeForFooterInSectionWith sectionDataID: String) -> CGSize
+  {
+    return defaultFooterReferenceSize
+  }
+
 }
 
 extension CollectionView: UICollectionViewDelegateFlowLayout {
@@ -161,5 +190,51 @@ extension CollectionView: UICollectionViewDelegateFlowLayout {
       collectionView,
       layout: collectionViewLayout,
       minimumInteritemSpacingForSectionWith: sectionID)
+  }
+
+  public func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    referenceSizeForHeaderInSection section: Int) -> CGSize
+  {
+    guard let flowLayoutDelegate = layoutDelegate as? EpoxyCollectionViewDelegateFlowLayout else {
+      if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout {
+        return flowLayout.headerReferenceSize
+      } else {
+        preconditionFailure("UICollectionViewDelegateFlowLayout method called with no UICollectionViewFlowLayout.")
+      }
+    }
+
+    guard let sectionID = dataIDForSection(at: section) else {
+      return defaultHeaderReferenceSize
+    }
+
+    return flowLayoutDelegate.collectionView(
+      collectionView,
+      layout: collectionViewLayout,
+      referenceSizeForHeaderInSectionWith: sectionID)
+  }
+
+  public func collectionView(
+    _ collectionView: UICollectionView,
+    layout collectionViewLayout: UICollectionViewLayout,
+    referenceSizeForFooterInSection section: Int) -> CGSize
+  {
+    guard let flowLayoutDelegate = layoutDelegate as? EpoxyCollectionViewDelegateFlowLayout else {
+      if let flowLayout = collectionViewLayout as? UICollectionViewFlowLayout {
+        return flowLayout.footerReferenceSize
+      } else {
+        preconditionFailure("UICollectionViewDelegateFlowLayout method called with no UICollectionViewFlowLayout.")
+      }
+    }
+
+    guard let sectionID = dataIDForSection(at: section) else {
+      return defaultFooterReferenceSize
+    }
+
+    return flowLayoutDelegate.collectionView(
+      collectionView,
+      layout: collectionViewLayout,
+      referenceSizeForFooterInSectionWith: sectionID)
   }
 }

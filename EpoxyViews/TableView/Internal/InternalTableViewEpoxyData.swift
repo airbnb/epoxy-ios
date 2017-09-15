@@ -7,10 +7,11 @@ import Foundation
 
 /// An internal data structure constructed from an array of `EpoxySection`s that is specific
 /// to display in a `UITableView` implementation.
-public final class InternalTableViewEpoxyData: DiffableInternalEpoxyDataType {
+public final class InternalTableViewEpoxyData: InternalEpoxyDataType {
 
-  public typealias Changeset = EpoxyChangeset
   public typealias Item = InternalTableViewEpoxyModel
+  public typealias ExternalSection = EpoxySection
+  public typealias InternalSection = InternalTableViewEpoxySection
 
   init(
     sections: [InternalTableViewEpoxySection],
@@ -22,7 +23,7 @@ public final class InternalTableViewEpoxyData: DiffableInternalEpoxyDataType {
     self.itemIndexMap = itemIndexMap
   }
 
-  var sections: [InternalTableViewEpoxySection]
+  public fileprivate(set) var sections: [InternalTableViewEpoxySection]
 
   // MARK: Fileprivate
 
@@ -158,8 +159,27 @@ public struct InternalTableViewEpoxySection {
     self.items = items
   }
 
-  let dataID: String
-  var items: [InternalTableViewEpoxyModel]
+  public let dataID: String
+  public fileprivate(set) var items: [InternalTableViewEpoxyModel]
+}
+
+extension InternalTableViewEpoxySection: EpoxyableSection {
+
+  public var itemModels: [EpoxyableModel] {
+    return items as [EpoxyableModel]
+  }
+
+  public func getCellReuseIDs() -> Set<String> {
+    var newCellReuseIDs = Set<String>()
+    items.forEach { item in
+      newCellReuseIDs.insert(item.reuseID)
+    }
+    return newCellReuseIDs
+  }
+
+  public func getSupplementaryViewReuseIDs() -> [String: Set<String>] {
+    return [:]
+  }
 }
 
 extension InternalTableViewEpoxySection: Diffable {
@@ -197,6 +217,37 @@ public struct InternalTableViewEpoxyModel {
 
   let epoxyModel: EpoxyableModel
   var dividerType: EpoxyModelDividerType
+}
+
+extension InternalTableViewEpoxyModel: EpoxyableModel {
+
+  public var reuseID: String {
+    return epoxyModel.reuseID
+  }
+
+  public var dataID: String? {
+    return epoxyModel.dataID
+  }
+
+  public var isSelectable: Bool {
+    return epoxyModel.isSelectable
+  }
+
+  public func configure(cell: EpoxyCell, animated: Bool) {
+    epoxyModel.configure(cell: cell, animated: animated)
+  }
+
+  public func setBehavior(cell: EpoxyCell) {
+    epoxyModel.setBehavior(cell: cell)
+  }
+
+  public func configure(cell: EpoxyCell, forState state: EpoxyCellState) {
+    epoxyModel.configure(cell: cell, forState: state)
+  }
+
+  public func didSelect(_ cell: EpoxyCell) {
+    epoxyModel.didSelect(cell)
+  }
 }
 
 extension InternalTableViewEpoxyModel: Diffable {

@@ -6,8 +6,10 @@ import UIKit
 /// A protocol for a view that can be powered by an array of `EpoxySection`s
 public protocol EpoxyInterface: class {
 
+  associatedtype Section: EpoxyableSection
+
   /// Sets the sections on the view
-  func setSections(_ sections: [EpoxySection]?, animated: Bool)
+  func setSections(_ sections: [Section]?, animated: Bool)
 
   /// Updates the item at the given data ID with the new item and configures the cell if it's visible
   func updateItem(at dataID: String, with item: EpoxyableModel, animated: Bool)
@@ -17,33 +19,11 @@ public protocol EpoxyInterface: class {
 
 }
 
-extension EpoxyInterface {
+extension EpoxyInterface where Section == EpoxySection {
 
   /// Sets the items on the view
   public func setItems(_ items: [EpoxyableModel], animated: Bool) {
     let section = EpoxySection(items: items)
     setSections([section], animated: animated)
   }
-}
-
-/// A protocol to allow us to lay out any EpoxyView on a page without knowing the specific class type.
-public protocol EpoxyView: EpoxyInterface {
-
-  var translatesAutoresizingMaskIntoConstraints: Bool { get set }
-  var layoutMargins: UIEdgeInsets { get set }
-  var topAnchor: NSLayoutYAxisAnchor { get }
-  var leadingAnchor: NSLayoutXAxisAnchor { get }
-  var bottomAnchor: NSLayoutYAxisAnchor { get }
-  var trailingAnchor: NSLayoutXAxisAnchor { get }
-  var contentOffset: CGPoint { get }
-  func addAsSubview(to view: UIView)
-  
-}
-
-extension UIView {
-
-  public func addAsSubview(to view: UIView) {
-    view.addSubview(self)
-  }
-
 }

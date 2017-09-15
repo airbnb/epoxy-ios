@@ -4,7 +4,11 @@
 import UIKit
 
 /// A `UICollectionView` class that handles updates through its `setSections` method, and optionally animates diffs.
-public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface {
+public class CollectionView: UICollectionView,
+  EpoxyInterface,
+  InternalEpoxyInterface,
+  UICollectionViewDelegate
+{
 
   public typealias DataType = InternalCollectionViewEpoxyData
   public typealias Cell = CollectionViewCell
@@ -23,7 +27,7 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
 
   // MARK: Public
 
-  public func setSections(_ sections: [EpoxySection]?, animated: Bool) {
+  public func setSections(_ sections: [EpoxyCollectionViewSection]?, animated: Bool) {
     epoxyDataSource.setSections(sections, animated: animated)
   }
 
@@ -37,7 +41,7 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
 
   /// CollectionView does not currently support divider hiding.
   public func hideBottomDivider(for dataIDs: [String]) {
-    // TODO: Implement divider hiding
+    // TODO: Refactor to support layout specific data in epoxy item models
   }
 
   /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
@@ -57,14 +61,25 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
     return indexPathsForVisibleItems
   }
 
-  public func register(reuseID: String) {
+  public func register(cellReuseID: String) {
     super.register(
       CollectionViewCell.self,
-      forCellWithReuseIdentifier: reuseID)
+      forCellWithReuseIdentifier: cellReuseID)
+  }
+
+  public func register(supplementaryViewReuseID: String, forKind elementKind: String) {
+    super.register(
+      CollectionViewReusableView.self,
+      forSupplementaryViewOfKind: elementKind,
+      withReuseIdentifier: supplementaryViewReuseID)
   }
 
   public func configure(cell: Cell, with item: DataType.Item) {
     configure(cell: cell, with: item, animated: false)
+  }
+
+  public func configure(supplementaryView: CollectionViewReusableView, with model: SupplementaryViewEpoxyableModel) {
+    model.configure(reusableView: supplementaryView)
   }
 
   public func reloadItem(at indexPath: IndexPath, animated: Bool) {
@@ -77,7 +92,7 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
   public func apply(
     _ newData: DataType?,
     animated: Bool,
-    changesetMaker: @escaping (DataType?) -> DataType.Changeset?)
+    changesetMaker: @escaping (DataType?) -> EpoxyChangeset?)
   {
     // queue new data, replace old queued data instead of additive
     guard !isUpdating else {
@@ -93,7 +108,7 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
 
   /// Convert an index path to a dataID, only for use in collection view layout delegate methods
   public func dataIDForItem(at indexPath: IndexPath) -> String? {
-    return epoxyDataSource.epoxyItem(at: indexPath)?.epoxyItem.dataID
+    return epoxyDataSource.epoxyItem(at: indexPath)?.dataID
   }
 
   /// Convert a section index to a dataID, only for use in collection view layout delegate methods
@@ -108,9 +123,9 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
   // MARK: Private
 
   private var queuedUpdate: (
-    newData: DataType?,
+    newData: InternalCollectionViewEpoxyData?,
     animated: Bool,
-    changesetMaker: (DataType?) -> DataType.Changeset?)?
+    changesetMaker: (InternalCollectionViewEpoxyData?) -> EpoxyChangeset?)?
 
   private var isUpdating = false
 
@@ -122,15 +137,15 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
     translatesAutoresizingMaskIntoConstraints = false
   }
 
-  private func configure(cell: Cell, with item: DataType.Item, animated: Bool) {
-    item.epoxyItem.configure(cell: cell, animated: animated)
-    item.epoxyItem.setBehavior(cell: cell)
+  private func configure(cell: Cell, with item: EpoxyableModel, animated: Bool) {
+    item.configure(cell: cell, animated: animated)
+    item.setBehavior(cell: cell) // TODO(ls): make these items actually epoxy items
   }
 
   private func updateView(
-    with data: DataType?,
+    with data: InternalCollectionViewEpoxyData?,
     animated: Bool,
-    changesetMaker: @escaping (DataType?) -> DataType.Changeset?)
+    changesetMaker: @escaping (InternalCollectionViewEpoxyData?) -> EpoxyChangeset?)
   {
     isUpdating = true
 
@@ -161,14 +176,14 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
   }
 
   private func animateUpdates(
-    data: DataType?,
-    changesetMaker: @escaping (DataType?) -> DataType.Changeset?)
+    data: InternalCollectionViewEpoxyData?,
+    changesetMaker: @escaping (InternalCollectionViewEpoxyData?) -> EpoxyChangeset?)
   {
     guard let changeset = changesetMaker(data) else { return }
 
     changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
       if let cell = self.cellForItem(at: fromIndexPath as IndexPath) as? CollectionViewCell,
-        let epoxyItem = self.epoxyDataSource.epoxyItem(at: toIndexPath)?.epoxyItem {
+        let epoxyItem = self.epoxyDataSource.epoxyItem(at: toIndexPath) {
         epoxyItem.configure(cell: cell, animated: true)
         epoxyItem.configure(cell: cell, forState: cell.state)
       }
@@ -198,7 +213,7 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
         return
       }
       if let item = epoxyDataSource.epoxyItem(at: indexPath) {
-        item.epoxyItem.setBehavior(cell: cell)
+        item.setBehavior(cell: cell)
       }
     }
   }
@@ -208,11 +223,7 @@ public class CollectionView: UICollectionView, EpoxyView, InternalEpoxyInterface
     isUpdating = false
   }
 
-}
-
-// MARK: UICollectionViewDelegate
-
-extension CollectionView: UICollectionViewDelegate {
+  // MARK: UICollectionViewDelegate
 
   public func collectionView(
     _ collectionView: UICollectionView,
@@ -223,7 +234,7 @@ extension CollectionView: UICollectionViewDelegate {
       assertionFailure("Index path is out of bounds.")
       return
     }
-    epoxyItemDisplayDelegate?.collectionView(self, willDisplay: item.epoxyItem)
+    epoxyItemDisplayDelegate?.collectionView(self, willDisplay: item)
   }
 
   public func collectionView(
@@ -234,7 +245,7 @@ extension CollectionView: UICollectionViewDelegate {
       assertionFailure("Index path is out of bounds")
       return false
     }
-    return item.epoxyItem.isSelectable
+    return item.isSelectable
   }
 
   public func collectionView(
@@ -246,7 +257,7 @@ extension CollectionView: UICollectionViewDelegate {
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.epoxyItem.configure(cell: cell, forState: .highlighted)
+    item.configure(cell: cell, forState: .highlighted)
   }
 
   public func collectionView(
@@ -258,7 +269,7 @@ extension CollectionView: UICollectionViewDelegate {
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.epoxyItem.configure(cell: cell, forState: .normal)
+    item.configure(cell: cell, forState: .normal)
   }
 
   public func collectionView(
@@ -269,7 +280,7 @@ extension CollectionView: UICollectionViewDelegate {
       assertionFailure("Index path is out of bounds")
       return false
     }
-    return item.epoxyItem.isSelectable
+    return item.isSelectable
   }
 
   public func collectionView(
@@ -281,21 +292,10 @@ extension CollectionView: UICollectionViewDelegate {
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.epoxyItem.configure(cell: cell, forState: .selected)
-    item.epoxyItem.didSelect(cell)
+    item.configure(cell: cell, forState: .selected)
+    item.didSelect(cell)
 
-    // Update the cell state after deselection completes
-    CATransaction.begin()
-    // Fetch the updated epoxy item
-    guard let updatedItem = epoxyDataSource.epoxyItem(at: indexPath) else {
-      assertionFailure("Index path is out of bounds")
-      return
-    }
-    CATransaction.setCompletionBlock({
-      updatedItem.epoxyItem.configure(cell: cell, forState: .normal)
-    })
     collectionView.deselectItem(at: indexPath, animated: true)
-    CATransaction.commit()
   }
 
   public func collectionView(
@@ -307,7 +307,7 @@ extension CollectionView: UICollectionViewDelegate {
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.epoxyItem.configure(cell: cell, forState: .normal)
+    item.configure(cell: cell, forState: .normal)
   }
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -352,11 +352,8 @@ extension CollectionView: UICollectionViewDelegate {
   public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     scrollDelegate?.scrollViewDidEndScrollingAnimation?(scrollView)
   }
-}
 
-// MARK: Unavailable Methods
-
-extension CollectionView {
+  // MARK: Unavailable Methods
 
   @available (*, unavailable, message: "You shouldn't be registering cell classes on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
   public override func register(_ cellClass: AnyClass?, forCellWithReuseIdentifier identifier: String) {

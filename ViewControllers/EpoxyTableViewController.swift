@@ -5,13 +5,12 @@ import UIKit
 import DLSPrimitives
 
 /// Configures an Epoxy view and handles adaptivity. Subclass this to set your content in `epoxySections()`.
-open class EpoxyViewController: UIViewController {
+open class EpoxyTableViewController: UIViewController {
 
   // MARK: Open
 
   open override func viewDidLoad() {
     super.viewDidLoad()
-    epoxyView = makeEpoxyView()
     setUpViews()
     setUpConstraints()
   }
@@ -31,8 +30,8 @@ open class EpoxyViewController: UIViewController {
     return []
   }
 
-  /// Returns a standard `TableView` by default. Override this to configure another view type.
-  open func makeEpoxyView() -> EpoxyView {
+  /// Returns a standard `TableView` by default. Override this to configure it differently.
+  open func makeTableView() -> TableView {
     let tableView = TableView.standardTableView
     tableView.rowDividerConfigurer = { [weak self] divider in
       guard let divider = divider as? EpoxyDivider else { return }
@@ -50,44 +49,45 @@ open class EpoxyViewController: UIViewController {
   // MARK: Public
 
   public var contentOffset: CGPoint? {
-    return epoxyView?.contentOffset
+    return tableView.contentOffset
   }
 
-  /// Returns the Epoxy view as an `EpoxyInterface`
-  public var epoxyInterface: EpoxyInterface? {
-    return epoxyView as EpoxyInterface?
-  }
+  public lazy var tableView: TableView = {
+    assert(self.isViewLoaded, "Accessed tableView before view was loaded.")
+    return self.makeTableView()
+  }()
 
   /// Updates the Epoxy view by calling the `epoxySections()` method. Optionally animated.
   public func updateData(animated: Bool) {
     if isViewLoaded {
       let sections = epoxySections()
-      epoxyView.setSections(sections, animated: animated)
-      epoxyView.hideBottomDivider(for: hiddenDividerDataIDs())
+      tableView.setSections(sections, animated: animated)
+      tableView.hideBottomDivider(for: hiddenDividerDataIDs())
     }
   }
 
   // MARK: Private
 
-  private var epoxyView: EpoxyView!
-
   private func setUpViews() {
     view.backgroundColor = .white
-    epoxyView.addAsSubview(to: view)
+    view.addSubview(tableView)
     setEpoxySectionsIfReady()
   }
 
   private func setUpConstraints() {
-    epoxyView.translatesAutoresizingMaskIntoConstraints = false
-    epoxyView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-    epoxyView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-    epoxyView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-    epoxyView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+    tableView.translatesAutoresizingMaskIntoConstraints = false
+    let constraints = [
+      tableView.topAnchor.constraint(equalTo: view.topAnchor),
+      tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+      tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+    ]
+    NSLayoutConstraint.activate(constraints)
   }
 
   private func updateLayoutMargins() {
     let padding = Sizes.horizontalPadding(for: traitCollection.horizontalSizeClass)
-    epoxyView.layoutMargins = UIEdgeInsets(
+    tableView.layoutMargins = UIEdgeInsets(
       top: 0,
       left: padding,
       bottom: 0,

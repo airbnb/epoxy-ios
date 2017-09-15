@@ -7,7 +7,7 @@ import Foundation
 public protocol InternalEpoxyInterface: EpoxyInterface {
 
   /// The associated internal data type that powers this type of `EpoxyInterface`
-  associatedtype DataType: DiffableInternalEpoxyDataType
+  associatedtype DataType: InternalEpoxyDataType
 
   /// The type of cell view that this type of `EpoxyInterface` contains
   associatedtype Cell: UIView
@@ -15,8 +15,11 @@ public protocol InternalEpoxyInterface: EpoxyInterface {
   /// The currently visible index paths
   var visibleIndexPaths: [IndexPath] { get }
 
-  /// Registers the given `reuseID`s for reusable cells
-  func register(reuseID: String)
+  /// Registers the given `cellReuseID`s for reusable cells
+  func register(cellReuseID: String)
+
+  /// Registers the given `supplementaryViewReuseID`s for reusable supplementary views of the given element kind
+  func register(supplementaryViewReuseID: String, forKind elementKind: String)
 
   /// Reloads all data without diffing
   func reloadData()
@@ -28,6 +31,6 @@ public protocol InternalEpoxyInterface: EpoxyInterface {
   func configure(cell: Cell, with item: DataType.Item)
 
   /// Applies the given changeset to the view, allowing the view to animate changes
-  func apply(_ newData: DataType?, animated: Bool, changesetMaker: @escaping (DataType?) -> DataType.Changeset?)
+  func apply(_ newData: DataType?, animated: Bool, changesetMaker: @escaping (DataType?) -> EpoxyChangeset?)
   
 }

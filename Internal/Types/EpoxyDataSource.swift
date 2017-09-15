@@ -16,15 +16,16 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
 
   weak var epoxyInterface: EpoxyInterfaceType? {
     didSet {
-      resetReuseIDs()
+      reregisterReuseIDs()
     }
   }
 
   private(set) var internalData: EpoxyInterfaceType.DataType?
 
-  func setSections(_ sections: [EpoxySection]?, animated: Bool) {
+  func setSections(_ sections: [EpoxyInterfaceType.DataType.ExternalSection]?, animated: Bool) {
     assert(Thread.isMainThread, "This method must be called on the main thread.")
-    registerReuseIDs(with: sections)
+    registerCellReuseIDs(with: sections)
+    registerSupplementaryViewReuseIDs(with: sections)
     var newInternalData: EpoxyInterfaceType.DataType? = nil
     if let sections = sections {
       newInternalData = EpoxyInterfaceType.DataType.make(with: sections)
@@ -56,7 +57,8 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
 
   // MARK: Private
 
-  private var reuseIDs = Set<String>()
+  private var cellReuseIDs = Set<String>()
+  private var supplementaryViewReuseIDs = [String: Set<String>]()
 
   private func applyData(newInternalData: EpoxyInterfaceType.DataType?, animated: Bool) {
     epoxyInterface?.apply(
@@ -71,40 +73,45 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
     }
   }
 
-  private func resetReuseIDs() {
-    registerNewReuseIDs(oldReuseIDs: [], newReuseIDs: reuseIDs)
-  }
-
-  private func registerReuseIDs(with sections: [EpoxySection]?) {
-    let newReuseIDs = getReuseIDs(from: sections)
-    registerNewReuseIDs(oldReuseIDs: reuseIDs, newReuseIDs: newReuseIDs)
-    reuseIDs = reuseIDs.union(newReuseIDs)
-  }
-
-  private func getReuseIDs(from sections: [EpoxySection]?) -> Set<String> {
-    var newReuseIDs = Set<String>()
-
-    sections?.forEach { section in
-      let items: [EpoxyableModel] = section.items + [section.sectionHeader].flatMap { $0 }
-      items.forEach { item in
-        newReuseIDs.insert(item.reuseID)
-      }
+  private func reregisterReuseIDs() {
+    registerNewCellReuseIDs(cellReuseIDs)
+    supplementaryViewReuseIDs.forEach { (elementKind, reuseIDs) in
+      registerNewSupplementaryViewReuseIDs(reuseIDs, forKind: elementKind)
     }
-
-    return newReuseIDs
   }
 
-  private func registerNewReuseIDs(oldReuseIDs: Set<String>, newReuseIDs: Set<String>) {
+  private func registerCellReuseIDs(with sections: [EpoxyInterfaceType.DataType.ExternalSection]?) {
+    let newCellReuseIDs = sections?.getCellReuseIDs() ?? []
+    registerNewCellReuseIDs(newCellReuseIDs.subtracting(cellReuseIDs))
+    cellReuseIDs = cellReuseIDs.union(newCellReuseIDs)
+  }
+
+  private func registerSupplementaryViewReuseIDs(with sections: [EpoxyInterfaceType.DataType.ExternalSection]?) {
+    let newSupplementaryViewReuseIDs = sections?.getSupplementaryViewReuseIDs() ?? [:]
+    newSupplementaryViewReuseIDs.forEach { (elementKind, newElementSupplementaryViewReuseIDs) in
+      let existingReuseIDs: Set<String> = supplementaryViewReuseIDs[elementKind] ?? []
+      registerNewSupplementaryViewReuseIDs(newElementSupplementaryViewReuseIDs.subtracting(existingReuseIDs), forKind: elementKind)
+      supplementaryViewReuseIDs[elementKind] = existingReuseIDs.union(newElementSupplementaryViewReuseIDs)
+    }
+  }
+
+  private func registerNewCellReuseIDs(_ newCellReuseIDs: Set<String>) {
     guard let epoxyInterface = epoxyInterface else {
-      assertionFailure("Trying to unregister reuse IDs before the EpoxyInterface was set.")
+      assertionFailure("Trying to register reuse IDs before the EpoxyInterface was set.")
       return
     }
-
-    newReuseIDs.forEach { reuseID in
-      if !oldReuseIDs.contains(reuseID) {
-        epoxyInterface.register(reuseID: reuseID)
-      }
+    newCellReuseIDs.forEach { cellReuseID in
+      epoxyInterface.register(cellReuseID: cellReuseID)
     }
   }
 
+  private func registerNewSupplementaryViewReuseIDs(_ newSupplementaryViewReuseIDs: Set<String>, forKind elementKind: String) {
+    guard let epoxyInterface = epoxyInterface else {
+      assertionFailure("Trying to register reuse IDs before the EpoxyInterface was set.")
+      return
+    }
+    newSupplementaryViewReuseIDs.forEach { supplementaryViewReuseID in
+      epoxyInterface.register(supplementaryViewReuseID: supplementaryViewReuseID, forKind: elementKind)
+    }
+  }
 }

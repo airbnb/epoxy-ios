@@ -30,12 +30,17 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
     if self.view != nil { return }
     view.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(view)
-    view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
-    view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-    view.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
+    let constraints = [
+      view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+      view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+      view.topAnchor.constraint(equalTo: contentView.topAnchor)
+    ]
+
     let bottomConstraint = view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
     bottomConstraint.priority = UILayoutPriorityDefaultHigh - 1
-    bottomConstraint.isActive = true
+
+    NSLayoutConstraint.activate(constraints + [bottomConstraint])
+
     self.view = view
 
     updateHorizontalViewMarginsIfNeeded()
