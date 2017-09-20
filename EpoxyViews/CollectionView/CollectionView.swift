@@ -57,6 +57,9 @@ public class CollectionView: UICollectionView,
   /// for logging.
   public weak var epoxyItemDisplayDelegate: CollectionViewEpoxyItemDisplayDelegate?
 
+  /// The delegate that builds transition layouts.
+  public weak var transitionLayoutDelegate: CollectionViewTransitionLayoutDelegate?
+
   public var visibleIndexPaths: [IndexPath] {
     return indexPathsForVisibleItems
   }
@@ -308,6 +311,17 @@ public class CollectionView: UICollectionView,
         return
     }
     item.configure(cell: cell, forState: .normal)
+  }
+
+  public func collectionView(
+    _ collectionView: UICollectionView,
+    transitionLayoutForOldLayout fromLayout: UICollectionViewLayout,
+    newLayout toLayout: UICollectionViewLayout) -> UICollectionViewTransitionLayout
+  {
+    guard let delegate = transitionLayoutDelegate else {
+      return UICollectionViewTransitionLayout(currentLayout: fromLayout, nextLayout: toLayout)
+    }
+    return delegate.collectionView(collectionView, transitionLayoutForOldLayout: fromLayout, newLayout:toLayout)
   }
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
