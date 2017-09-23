@@ -299,6 +299,7 @@ public class CollectionView: UICollectionView,
     item.didSelect(cell)
 
     collectionView.deselectItem(at: indexPath, animated: true)
+    item.configure(cell: cell, forState: .normal)
   }
 
   public func collectionView(

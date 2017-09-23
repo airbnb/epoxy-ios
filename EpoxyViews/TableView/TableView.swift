@@ -427,6 +427,7 @@ extension TableView: UITableViewDelegate {
     item.didSelect(cell)
 
     tableView.deselectRow(at: indexPath, animated: true)
+    item.configure(cell: cell, forState: .normal)
   }
 
   public func tableView(
