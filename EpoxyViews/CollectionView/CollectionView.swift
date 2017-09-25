@@ -31,6 +31,12 @@ public class CollectionView: UICollectionView,
     epoxyDataSource.setSections(sections, animated: animated)
   }
 
+  public func scrollToItem(at dataID: String, position: UICollectionViewScrollPosition = .centeredVertically, animated: Bool = false) {
+    if let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) {
+      scrollToItem(at: indexPath, at: position, animated: animated)
+    }
+  }
+
   public func updateItem(
     at dataID: String,
     with item: EpoxyableModel,
