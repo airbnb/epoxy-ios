@@ -5,7 +5,7 @@ import UIKit
 
 // MARK: - EpoxyDivider
 
-/// A divider for use in a TableView
+/// A divider for use in a TableView or CollectionView
 public class EpoxyDivider: UIView {
 
   // MARK: Lifecycle
