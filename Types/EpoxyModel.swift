@@ -32,8 +32,8 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     dataID: String? = nil,
     alternateStyleID: String? = nil,
     builder: @escaping () -> ViewType = { ViewType() },
-    configurer: @escaping (ViewType, DataType, Bool) -> Void,
-    stateConfigurer: ((ViewType, DataType, EpoxyCellState) -> Void)? = nil,
+    configurer: @escaping (ViewType, DataType, UITraitCollection, Bool) -> Void,
+    stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)? = nil,
     behaviorSetter: ((ViewType, DataType, String?) -> Void)? = nil,
     selectionHandler: ((ViewType, DataType, String?) -> Void)? = nil)
   {
@@ -69,12 +69,12 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     return builder()
   }
 
-  public func configureView(_ view: ViewType, animated: Bool) {
-    configurer(view, data, animated)
+  public func configureView(_ view: ViewType, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
+    configurer(view, data, traitCollection, animated)
   }
 
-  public func configureView(_ view: ViewType, forState state: EpoxyCellState) {
-    stateConfigurer?(view, data, state)
+  public func configureView(_ view: ViewType, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) {
+    stateConfigurer?(view, data, traitCollection, state)
   }
 
   public func setViewBehavior(_ view: ViewType) {
@@ -88,8 +88,8 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   // MARK: Private
 
   private let builder: () -> ViewType
-  private let configurer: (ViewType, DataType, Bool) -> Void
-  private let stateConfigurer: ((ViewType, DataType, EpoxyCellState) -> Void)?
+  private let configurer: (ViewType, DataType, UITraitCollection, Bool) -> Void
+  private let stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)?
   private let behaviorSetter: ((ViewType, DataType, String?) -> Void)?
   private let selectionHandler: ((ViewType, DataType, String?) -> Void)?
 }

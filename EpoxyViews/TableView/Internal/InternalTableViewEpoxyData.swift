@@ -233,16 +233,16 @@ extension InternalTableViewEpoxyModel: EpoxyableModel {
     return epoxyModel.isSelectable
   }
 
-  public func configure(cell: EpoxyCell, animated: Bool) {
-    epoxyModel.configure(cell: cell, animated: animated)
+  public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
+    epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
   }
 
   public func setBehavior(cell: EpoxyCell) {
     epoxyModel.setBehavior(cell: cell)
   }
 
-  public func configure(cell: EpoxyCell, forState state: EpoxyCellState) {
-    epoxyModel.configure(cell: cell, forState: state)
+  public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) {
+    epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, state: state)
   }
 
   public func didSelect(_ cell: EpoxyCell) {

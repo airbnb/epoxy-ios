@@ -147,7 +147,7 @@ public class CollectionView: UICollectionView,
   }
 
   private func configure(cell: Cell, with item: EpoxyableModel, animated: Bool) {
-    item.configure(cell: cell, animated: animated)
+    item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
     item.setBehavior(cell: cell) // TODO(ls): make these items actually epoxy items
   }
 
@@ -193,8 +193,8 @@ public class CollectionView: UICollectionView,
     changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
       if let cell = self.cellForItem(at: fromIndexPath as IndexPath) as? CollectionViewCell,
         let epoxyItem = self.epoxyDataSource.epoxyItem(at: toIndexPath) {
-        epoxyItem.configure(cell: cell, animated: true)
-        epoxyItem.configure(cell: cell, forState: cell.state)
+        epoxyItem.configure(cell: cell, forTraitCollection: traitCollection, animated: true)
+        epoxyItem.configure(cell: cell, forTraitCollection: traitCollection, state: cell.state)
       }
     }
 
@@ -266,7 +266,7 @@ public class CollectionView: UICollectionView,
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.configure(cell: cell, forState: .highlighted)
+    item.configure(cell: cell, forTraitCollection: traitCollection, state: .highlighted)
   }
 
   public func collectionView(
@@ -278,7 +278,7 @@ public class CollectionView: UICollectionView,
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.configure(cell: cell, forState: .normal)
+    item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
   }
 
   public func collectionView(
@@ -301,11 +301,11 @@ public class CollectionView: UICollectionView,
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.configure(cell: cell, forState: .selected)
+    item.configure(cell: cell, forTraitCollection: traitCollection, state: .selected)
     item.didSelect(cell)
 
     collectionView.deselectItem(at: indexPath, animated: true)
-    item.configure(cell: cell, forState: .normal)
+    item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
   }
 
   public func collectionView(
@@ -317,7 +317,7 @@ public class CollectionView: UICollectionView,
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.configure(cell: cell, forState: .normal)
+    item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
   }
 
   public func collectionView(

@@ -2,18 +2,19 @@
 //  Copyright © 2017 Airbnb. All rights reserved.
 
 import Foundation
+import UIKit
 
 /// The `EpoxyModel` contains the reference id for the model backing an item, the hash value of the item, as well as the reuse id for the item's type.
 public protocol EpoxyableModel: Diffable {
 
-  func configure(cell: EpoxyCell, animated: Bool)
+  func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, animated: Bool)
   func setBehavior(cell: EpoxyCell)
 
   // MARK: Optional
 
   var reuseID: String { get }
   var dataID: String? { get }
-  func configure(cell: EpoxyCell, forState state: EpoxyCellState)
+  func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState)
   func didSelect(_ cell: EpoxyCell)
 
   var isSelectable: Bool { get }
@@ -35,7 +36,7 @@ extension EpoxyableModel {
 
   public var isSelectable: Bool { return false }
 
-  public func configure(cell: EpoxyCell, forState state: EpoxyCellState) { }
+  public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) { }
 
   public func didSelect(_ cell: EpoxyCell) { }
 }

@@ -182,8 +182,8 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
       changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
         if let cell = cellForRow(at: fromIndexPath as IndexPath) as? TableViewCell,
           let epoxyModel = epoxyDataSource.epoxyModel(at: toIndexPath)?.epoxyModel {
-          epoxyModel.configure(cell: cell, animated: true)
-          epoxyModel.configure(cell: cell, forState: cell.state)
+          epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, animated: true)
+          epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, state: cell.state)
         }
       }
 
@@ -281,7 +281,7 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
   }
 
   private func configure(cell: Cell, with item: DataType.Item, animated: Bool) {
-    item.configure(cell: cell, animated: animated)
+    item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
     item.setBehavior(cell: cell)
     updateDivider(for: cell, dividerType: item.dividerType, dataID: item.dataID)
   }
@@ -388,7 +388,7 @@ extension TableView: UITableViewDelegate {
       assertionFailure("Index path is out of bounds")
       return
     }
-    item.configure(cell: cell, forState: .highlighted)
+    item.configure(cell: cell, forTraitCollection: traitCollection, state: .highlighted)
   }
 
   public func tableView(
@@ -400,7 +400,7 @@ extension TableView: UITableViewDelegate {
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.configure(cell: cell, forState: .normal)
+    item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
   }
 
   public func tableView(
@@ -423,11 +423,11 @@ extension TableView: UITableViewDelegate {
       assertionFailure("Index path is out of bounds")
       return
     }
-    item.configure(cell: cell, forState: .selected)
+    item.configure(cell: cell, forTraitCollection: traitCollection, state: .selected)
     item.didSelect(cell)
 
     tableView.deselectRow(at: indexPath, animated: true)
-    item.configure(cell: cell, forState: .normal)
+    item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
   }
 
   public func tableView(
@@ -439,7 +439,7 @@ extension TableView: UITableViewDelegate {
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.configure(cell: cell, forState: .normal)
+    item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
   }
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {

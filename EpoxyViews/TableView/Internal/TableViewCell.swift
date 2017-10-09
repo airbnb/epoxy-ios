@@ -131,10 +131,10 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
         || view.layoutMargins.right != layoutMargins.right else {
           return
     }
-    view.layoutMargins = UIEdgeInsets(
-      top: view.layoutMargins.top,
-      left: layoutMargins.left,
-      bottom: view.layoutMargins.bottom,
-      right: layoutMargins.right)
+//    view.layoutMargins = UIEdgeInsets(
+//      top: view.layoutMargins.top,
+//      left: layoutMargins.left,
+//      bottom: view.layoutMargins.bottom,
+//      right: layoutMargins.right)
   }
 }

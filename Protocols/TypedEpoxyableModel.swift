@@ -9,23 +9,23 @@ public protocol TypedEpoxyableModel: EpoxyableModel {
   associatedtype View: UIView
 
   func makeView() -> View
-  func configureView(_ view: View, animated: Bool)
-  func configureView(_ view: View, forState state: EpoxyCellState)
+  func configureView(_ view: View, forTraitCollection traitCollection: UITraitCollection, animated: Bool)
+  func configureView(_ view: View, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState)
   func setViewBehavior(_ view: View)
   func didSelectView(_ view: View)
 }
 
 extension TypedEpoxyableModel {
-  public func configure(cell: EpoxyCell, animated: Bool) {
+  public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
-    configureView(view, animated: animated)
+    configureView(view, forTraitCollection: traitCollection, animated: animated)
   }
 
-  public func configure(cell: EpoxyCell, forState state: EpoxyCellState) {
+  public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
-    configureView(view, forState: state)
+    configureView(view, forTraitCollection: traitCollection, state: state)
   }
 
   public func setBehavior(cell: EpoxyCell) {
@@ -45,6 +45,6 @@ extension TypedEpoxyableModel {
   public func setViewBehavior(_ view: View) { }
   public func didSelectView(_ view: View) { }
 
-  public func configureView(_ view: View, forState state: EpoxyCellState) { }
+  public func configureView(_ view: View, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) { }
 
 }
