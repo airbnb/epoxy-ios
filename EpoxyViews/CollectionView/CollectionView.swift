@@ -63,6 +63,9 @@ public class CollectionView: UICollectionView,
   /// for logging.
   public weak var epoxyItemDisplayDelegate: CollectionViewEpoxyItemDisplayDelegate?
 
+  /// Selection color for the `UICollectionViewCell`s of `EpoxyModel`s that have `isSelectable == true`
+  public var selectionStyle = CellSelectionStyle.none
+
   /// The delegate that builds transition layouts.
   public weak var transitionLayoutDelegate: CollectionViewTransitionLayoutDelegate?
 
@@ -147,6 +150,13 @@ public class CollectionView: UICollectionView,
   }
 
   private func configure(cell: Cell, with item: EpoxyableModel, animated: Bool) {
+      switch selectionStyle {
+      case .none:
+        cell.selectedBackgroundColor = nil
+      case .color(let selectionColor):
+        cell.selectedBackgroundColor = selectionColor
+      }
+
     item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
     item.setBehavior(cell: cell) // TODO(ls): make these items actually epoxy items
   }

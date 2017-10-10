@@ -21,6 +21,20 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
 
   public private(set) var view: UIView?
 
+  public var selectedBackgroundColor: UIColor?
+
+  override public var isSelected: Bool {
+    didSet {
+      updateVisualHighlightState(isSelected)
+    }
+  }
+
+  override public var isHighlighted: Bool {
+    didSet {
+      updateVisualHighlightState(isHighlighted)
+    }
+  }
+
   /// Pass a view for this cell's reuseID that the cell will pin to the edges of its `contentView`.
   public func setViewIfNeeded(view: UIView) {
     guard self.view == nil else {
@@ -66,6 +80,25 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
     layoutAttributes.size = size
 
     return layoutAttributes
+  }
+
+  // MARK: Private
+
+  private var normalViewBackgroundColor: UIColor?
+
+  private func updateVisualHighlightState(_ isVisuallyHighlighted: Bool) {
+    if selectedBackgroundColor == nil { return }
+
+    /// This is a temporary solution to support DLSComponentLibrary views that have a background color.
+    /// This only works if subviews have a clear background color.
+    if isVisuallyHighlighted {
+      if (normalViewBackgroundColor == nil) {
+        normalViewBackgroundColor = view?.backgroundColor
+      }
+      view?.backgroundColor = selectedBackgroundColor
+    } else {
+      view?.backgroundColor = normalViewBackgroundColor
+    }
   }
 
 }

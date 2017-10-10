@@ -4,11 +4,6 @@
 import CoreGraphics
 import UIKit
 
-public enum TableViewCellSelectionStyle {
-  case none
-  case color(UIColor)
-}
-
 /// A TableView class that handles updates through its `setSections` method, and optionally animates diffs.
 public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
 
@@ -57,7 +52,7 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
   public weak var epoxyModelDisplayDelegate: TableViewEpoxyModelDisplayDelegate?
 
   /// Selection color for the `UITableViewCell`s of `EpoxyModel`s that have `isSelectable == true`
-  public var selectionStyle = TableViewCellSelectionStyle.color(UIColor.lightGray)
+  public var selectionStyle = CellSelectionStyle.color(UIColor.lightGray)
 
   /// Whether or not the final item in the list shows a bottom divider. Defaults to false.
   public var showsLastDivider: Bool = false
