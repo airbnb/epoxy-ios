@@ -28,10 +28,18 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
     }
     view.translatesAutoresizingMaskIntoConstraints = false
     contentView.addSubview(view)
-    view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
-    view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-    view.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-    view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+
+    let constraints = [
+      view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+      view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+      view.topAnchor.constraint(equalTo: contentView.topAnchor)
+    ]
+
+    let bottomConstraint = view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+    bottomConstraint.priority = UILayoutPriorityDefaultHigh - 1
+
+    NSLayoutConstraint.activate(constraints + [bottomConstraint])
+
     self.view = view
   }
 
