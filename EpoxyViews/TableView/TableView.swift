@@ -145,8 +145,6 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
     case .color(let selectionColor):
       cell.selectedBackgroundColor = selectionColor
     }
-    
-    updateHorizontalMarginsIfNeeded(for: cell)
   }
 
   public func reloadItem(at indexPath: IndexPath, animated: Bool) {
@@ -231,20 +229,6 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
     infiniteScrollingDelegate = delegate
   }
 
-  public override func layoutMarginsDidChange() {
-    super.layoutMarginsDidChange()
-
-    guard isTableViewLaidOut() else {
-      // Accessing a table view's visibleCells before the table view has a valid
-      // size can cause unsatisfiable constraint errors in cells
-      return
-    }
-
-    visibleCells.forEach { [weak self] cell in
-      self?.updateHorizontalMarginsIfNeeded(for: cell)
-    }
-  }
-
   // MARK: Fileprivate
 
   fileprivate let epoxyDataSource: TableViewEpoxyDataSource
@@ -324,18 +308,6 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
     } else {
       cell.dividerView?.isHidden = true
     }
-  }
-
-  private func updateHorizontalMarginsIfNeeded(for cell: UITableViewCell) {
-    guard cell.layoutMargins.left != layoutMargins.left
-      || cell.layoutMargins.right != layoutMargins.right else {
-      return
-    }
-    cell.layoutMargins = UIEdgeInsets(
-      top: cell.layoutMargins.top,
-      left: layoutMargins.left,
-      bottom: cell.layoutMargins.bottom,
-      right: layoutMargins.right)
   }
 
   private func isTableViewLaidOut() -> Bool {

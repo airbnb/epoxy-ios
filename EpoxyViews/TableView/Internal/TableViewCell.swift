@@ -43,8 +43,6 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
 
     self.view = view
 
-    updateHorizontalViewMarginsIfNeeded()
-
     if let dividerView = dividerView {
       contentView.bringSubview(toFront: dividerView)
     }
@@ -58,11 +56,6 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
   public override func setSelected(_ selected: Bool, animated: Bool) {
     super.setSelected(selected, animated: animated)
     updateVisualHighlightState(selected, animated: animated)
-  }
-
-  public override func layoutMarginsDidChange() {
-    super.layoutMarginsDidChange()
-    updateHorizontalViewMarginsIfNeeded()
   }
 
   // MARK: Internal
@@ -123,18 +116,5 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
     } else {
       updateVisualHighlightState(isVisuallyHighlighted)
     }
-  }
-
-  private func updateHorizontalViewMarginsIfNeeded() {
-    guard let view = view,
-      view.layoutMargins.left != layoutMargins.left
-        || view.layoutMargins.right != layoutMargins.right else {
-          return
-    }
-//    view.layoutMargins = UIEdgeInsets(
-//      top: view.layoutMargins.top,
-//      left: layoutMargins.left,
-//      bottom: view.layoutMargins.bottom,
-//      right: layoutMargins.right)
   }
 }

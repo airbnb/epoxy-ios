@@ -2,7 +2,6 @@
 //  Copyright © 2017 Airbnb. All rights reserved.
 
 import UIKit
-import DLSPrimitives
 
 /// Configures an Epoxy view and handles adaptivity. Subclass this to set your content in `epoxySections()`.
 open class EpoxyTableViewController: UIViewController {
@@ -36,11 +35,11 @@ open class EpoxyTableViewController: UIViewController {
     tableView.rowDividerConfigurer = { [weak self] divider in
       guard let divider = divider as? EpoxyDivider else { return }
       if self?.traitCollection.horizontalSizeClass == .regular {
-        divider.leadingPadding = Sizes.horizontalPadding(for: .regular)
-        divider.trailingPadding = Sizes.horizontalPadding(for: .regular)
+        divider.leadingPadding = 24
+        divider.trailingPadding = 24
       } else {
-        divider.leadingPadding = Sizes.horizontalPadding(for: .compact)
-        divider.trailingPadding = Sizes.horizontalPadding(for: .compact)
+        divider.leadingPadding = 24
+        divider.trailingPadding = 24
       }
     }
     return tableView
@@ -85,18 +84,8 @@ open class EpoxyTableViewController: UIViewController {
     NSLayoutConstraint.activate(constraints)
   }
 
-  private func updateLayoutMargins() {
-    let padding = Sizes.horizontalPadding(for: traitCollection.horizontalSizeClass)
-    tableView.layoutMargins = UIEdgeInsets(
-      top: 0,
-      left: padding,
-      bottom: 0,
-      right: padding)
-  }
-
   private func setEpoxySectionsIfReady() {
     if traitCollection.horizontalSizeClass != .unspecified {
-      updateLayoutMargins()
       updateData(animated: false)
     }
   }

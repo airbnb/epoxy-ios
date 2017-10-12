@@ -80,17 +80,8 @@ open class EpoxyCollectionViewController: UIViewController {
     NSLayoutConstraint.activate(constraints)
   }
 
-  private func updateLayoutMargins() {
-    collectionView.layoutMargins = UIEdgeInsets(
-      top: 0,
-      left: 24,
-      bottom: 0,
-      right: 24)
-  }
-
   private func setEpoxySectionsIfReady() {
     if traitCollection.horizontalSizeClass != .unspecified {
-      updateLayoutMargins()
       updateData(animated: false)
     }
   }
