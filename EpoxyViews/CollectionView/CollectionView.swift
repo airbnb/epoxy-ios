@@ -68,6 +68,9 @@ public class CollectionView: UICollectionView,
 
   /// The delegate that builds transition layouts.
   public weak var transitionLayoutDelegate: CollectionViewTransitionLayoutDelegate?
+  
+  /// The delegate that handles items reordering
+  public weak var reorderingDelegate: CollectionViewEpoxyReorderingDelegate?
 
   public var visibleIndexPaths: [IndexPath] {
     return indexPathsForVisibleItems
@@ -144,6 +147,7 @@ public class CollectionView: UICollectionView,
   private func setUp() {
     delegate = self
     epoxyDataSource.epoxyInterface = self
+    epoxyDataSource.reorderingDelegate = self
     dataSource = epoxyDataSource
     backgroundColor = .clear
     translatesAutoresizingMaskIntoConstraints = false
@@ -406,4 +410,19 @@ public class CollectionView: UICollectionView,
     super.register(viewClass, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: identifier)
   }
 
+}
+
+extension CollectionView: CollectionViewDataSourceReorderingDelegate {
+  func dataSource(_ dataSource: CollectionViewEpoxyDataSource,
+    moveItemWithDataID dataID: String,
+    inSectionWithDataID fromSectionDataID: String,
+    toSectionWithDataID toSectionDataID: String,
+    beforeItemWithDataID beforeDataID: String?)
+  {
+    reorderingDelegate?.collectionView(
+      self, moveItemWithDataID: dataID,
+      inSectionWithDataID: fromSectionDataID,
+      toSectionWithDataID: toSectionDataID,
+      beforeDataID: beforeDataID)
+  }
 }

@@ -98,6 +98,10 @@ extension EpoxyModelWrapper: EpoxyableModel {
   public var isSelectable: Bool {
     return epoxyModel.isSelectable
   }
+  
+  public var isMovable: Bool {
+    return epoxyModel.isMovable
+  }
 
   public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
     epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)

@@ -57,6 +57,12 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     return selectionHandler != nil
   }
 
+  /**
+   This is a experimental property to allow interactive reordering of items within collection view,
+   it defaults to false, but you can configure it to be true to enable reordering
+   */
+  public var isMovable: Bool = false
+
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     if let other = otherDiffableItem as? EpoxyModel<ViewType, DataType> {
       return self.data == other.data

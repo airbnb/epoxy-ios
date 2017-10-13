@@ -18,6 +18,7 @@ public protocol EpoxyableModel: Diffable {
   func didSelect(_ cell: EpoxyCell)
 
   var isSelectable: Bool { get }
+  var isMovable: Bool { get }
 }
 
 // MARK: Default implementations
@@ -35,6 +36,8 @@ extension EpoxyableModel {
   public var selectionStyle: UITableViewCellSelectionStyle { return .default }
 
   public var isSelectable: Bool { return false }
+  
+  public var isMovable: Bool { return false }
 
   public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) { }
 

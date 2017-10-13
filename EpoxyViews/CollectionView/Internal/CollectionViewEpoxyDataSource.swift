@@ -3,6 +3,15 @@
 
 import UIKit
 
+protocol CollectionViewDataSourceReorderingDelegate: class {
+  func dataSource(
+    _ dataSource: CollectionViewEpoxyDataSource,
+    moveItemWithDataID dataID: String,
+    inSectionWithDataID fromSectionDataID: String,
+    toSectionWithDataID toSectionDataID: String,
+    beforeItemWithDataID beforeDataID: String?)
+}
+
 public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
   UICollectionViewDataSource
 {
@@ -75,8 +84,45 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     }
     return supplementaryView
   }
+  
+  public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+    guard let item = epoxyItem(at: indexPath) else { return false }
+    return item.isMovable
+  }
+  
+  public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+    guard let currentItem = epoxyItem(at: sourceIndexPath)?.dataID,
+      let currentSectionID = epoxySection(at: sourceIndexPath.section)?.dataID,
+      let destinationSection = epoxySection(at: destinationIndexPath.section)?.dataID
+    else {
+      return
+    }
+
+    let beforeIndexPath: IndexPath
+    if sourceIndexPath.section == destinationIndexPath.section && destinationIndexPath.item >= sourceIndexPath.item {
+      beforeIndexPath  = IndexPath(item: destinationIndexPath.item + 1, section: destinationIndexPath.section)
+    } else {
+      beforeIndexPath  = IndexPath(item: destinationIndexPath.item, section: destinationIndexPath.section)
+    }
+
+    // We do all this extra checking just so that it doesn't crash on debug/alpha/beta
+    var destinationBeforeDataID: String? = nil
+    if let data = internalData, data.sections[beforeIndexPath.section].items.count >= beforeIndexPath.item + 1 {
+      destinationBeforeDataID = epoxyItem(at: beforeIndexPath)?.dataID
+    }
+
+    reorderingDelegate?.dataSource(
+      self,
+      moveItemWithDataID: currentItem,
+      inSectionWithDataID: currentSectionID,
+      toSectionWithDataID: destinationSection,
+      beforeItemWithDataID: destinationBeforeDataID)
+  }
+  
 
   // MARK: Internal
+  
+  weak var reorderingDelegate: CollectionViewDataSourceReorderingDelegate?
 
   func epoxyItem(at indexPath: IndexPath) -> CollectionView.DataType.Item? {
     guard let data = internalData else {
