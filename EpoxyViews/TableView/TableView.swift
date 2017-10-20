@@ -314,7 +314,8 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
     return frame.size.width > 0 && frame.size.height > 0
   }
 
-  dynamic private func didTriggerPullToRefreshControl(sender: UIRefreshControl) {
+  @objc
+  private func didTriggerPullToRefreshControl(sender: UIRefreshControl) {
     didTriggerPullToRefresh?(sender)
   }
 }
