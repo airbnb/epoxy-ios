@@ -12,6 +12,7 @@ public class EpoxyDivider: UIView {
 
   public init() {
     super.init(frame: .zero)
+    contentMode = .redraw
     isOpaque = false
     translatesAutoresizingMaskIntoConstraints = false
   }
