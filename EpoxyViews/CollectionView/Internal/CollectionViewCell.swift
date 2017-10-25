@@ -47,6 +47,7 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
     view.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
     view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
     self.view = view
+    normalViewBackgroundColor = view.backgroundColor
   }
 
   override public func preferredLayoutAttributesFitting(
@@ -84,9 +85,6 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
     /// This is a temporary solution to support DLSComponentLibrary views that have a background color.
     /// This only works if subviews have a clear background color.
     if isVisuallyHighlighted {
-      if (normalViewBackgroundColor == nil) {
-        normalViewBackgroundColor = view?.backgroundColor
-      }
       view?.backgroundColor = selectedBackgroundColor
     } else {
       view?.backgroundColor = normalViewBackgroundColor

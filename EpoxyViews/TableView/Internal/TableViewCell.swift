@@ -46,6 +46,8 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
     if let dividerView = dividerView {
       contentView.bringSubview(toFront: dividerView)
     }
+
+    normalViewBackgroundColor = view.backgroundColor
   }
 
   public override func setHighlighted(_ highlighted: Bool, animated: Bool) {
@@ -97,9 +99,6 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
     /// This is a temporary solution to support DLSComponentLibrary views that have a background color.
     /// Using the system animation sets the backgrounds of every subview to clear, which we don't want.
     if isVisuallyHighlighted {
-      if (normalViewBackgroundColor == nil) {
-        normalViewBackgroundColor = view?.backgroundColor
-      }
       view?.backgroundColor = selectedBackgroundColor
     } else {
       view?.backgroundColor = normalViewBackgroundColor
