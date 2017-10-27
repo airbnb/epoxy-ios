@@ -51,6 +51,12 @@ open class EpoxyTableViewController: UIViewController {
     return tableView.contentOffset
   }
 
+  public func constrainTableViewBottom(to anchor: NSLayoutYAxisAnchor) {
+    bottomConstraint?.isActive = false
+    bottomConstraint = tableView.bottomAnchor.constraint(equalTo: anchor)
+    bottomConstraint?.isActive = true
+  }
+
   public lazy var tableView: TableView = {
     assert(self.isViewLoaded, "Accessed tableView before view was loaded.")
     return self.makeTableView()
@@ -67,6 +73,8 @@ open class EpoxyTableViewController: UIViewController {
 
   // MARK: Private
 
+  private var bottomConstraint: NSLayoutConstraint?
+
   private func setUpViews() {
     view.backgroundColor = .white
     view.addSubview(tableView)
@@ -78,10 +86,10 @@ open class EpoxyTableViewController: UIViewController {
     let constraints = [
       tableView.topAnchor.constraint(equalTo: view.topAnchor),
       tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-      tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
       tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
     ]
     NSLayoutConstraint.activate(constraints)
+    constrainTableViewBottom(to: view.bottomAnchor)
   }
 
   private func setEpoxySectionsIfReady() {
