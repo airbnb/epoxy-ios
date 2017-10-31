@@ -93,8 +93,13 @@ public class CollectionView: UICollectionView,
     configure(cell: cell, with: item, animated: false)
   }
 
-  public func configure(supplementaryView: CollectionViewReusableView, with model: SupplementaryViewEpoxyableModel) {
-    model.configure(reusableView: supplementaryView)
+  public func configure(
+    supplementaryView: CollectionViewReusableView,
+    with model: SupplementaryViewEpoxyableModel)
+  {
+    model.configure(
+      reusableView: supplementaryView,
+      forTraitCollection: traitCollection)
   }
 
   public func reloadItem(at indexPath: IndexPath, animated: Bool) {

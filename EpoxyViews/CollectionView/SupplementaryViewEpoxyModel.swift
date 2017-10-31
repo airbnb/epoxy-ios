@@ -16,7 +16,7 @@ public class SupplementaryViewEpoxyModel<ViewType, DataType>: TypedSupplementary
     dataID: String,
     alternateStyleID: String? = nil,
     builder: @escaping () -> ViewType,
-    configurer: @escaping (ViewType, DataType) -> Void)
+    configurer: @escaping (ViewType, DataType, UITraitCollection) -> Void)
   {
     self.elementKind = elementKind
     self.data = data
@@ -37,12 +37,15 @@ public class SupplementaryViewEpoxyModel<ViewType, DataType>: TypedSupplementary
     return builder()
   }
 
-  public func configureView(_ view: ViewType) {
-    configurer(view, data)
+  public func configureView(
+    _ view: ViewType,
+    forTraitCollection traitCollection: UITraitCollection)
+  {
+    configurer(view, data, traitCollection)
   }
 
   // MARK: Private
 
   private let builder: () -> ViewType
-  private let configurer: (ViewType, DataType) -> Void
+  private let configurer: (ViewType, DataType, UITraitCollection) -> Void
 }

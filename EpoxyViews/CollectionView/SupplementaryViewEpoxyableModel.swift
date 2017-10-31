@@ -11,7 +11,9 @@ public protocol SupplementaryViewEpoxyableModel {
   var reuseID: String { get }
   var dataID: String { get }
 
-  func configure(reusableView: CollectionViewReusableView)
+  func configure(
+    reusableView: CollectionViewReusableView,
+    forTraitCollection traitCollection: UITraitCollection)
 }
 
 /// This contains the view's data and methods for lazily creating views and applying the data to a view.
@@ -20,13 +22,16 @@ public protocol TypedSupplementaryViewEpoxyableModel: SupplementaryViewEpoxyable
   associatedtype View: UIView
 
   func makeView() -> View
-  func configureView(_ view: View)
+  func configureView(_ view: View, forTraitCollection traitCollection: UITraitCollection)
 }
 
 extension TypedSupplementaryViewEpoxyableModel {
-  public func configure(reusableView: CollectionViewReusableView) {
+  public func configure(
+    reusableView: CollectionViewReusableView,
+    forTraitCollection traitCollection: UITraitCollection)
+  {
     let view = reusableView.view as? View ?? makeView() // Kyle++
     reusableView.setViewIfNeeded(view: view)
-    configureView(view)
+    configureView(view, forTraitCollection: traitCollection)
   }
 }
