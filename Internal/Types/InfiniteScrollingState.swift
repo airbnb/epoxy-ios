@@ -3,6 +3,7 @@
 
 import UIKit
 
+
 enum InfiniteScrollingState {
   case loading
   case stopped
@@ -14,13 +15,18 @@ enum InfiniteScrollingState {
       return self
     case .triggered where !scrollView.isDragging:
       return .loading
-    case .stopped where scrollView.isDragging && scrollView.contentOffset.y > scrollView.bounds.size.height:
+    case .stopped where scrollView.isDragging && closeToBottom(scrollView: scrollView):
       return .triggered
-    case _ where scrollView.contentOffset.y < scrollView.bounds.size.height:
+    case _ where !closeToBottom(scrollView: scrollView):
       return .stopped
     default:
       return self
     }
   }
 
+  private func closeToBottom(scrollView: UIScrollView) -> Bool {
+    let threshold: CGFloat = scrollView.bounds.height
+    let distanceFromBottom = scrollView.contentSize.height - (scrollView.contentOffset.y + scrollView.bounds.height)
+    return distanceFromBottom <= threshold
+  }
 }
