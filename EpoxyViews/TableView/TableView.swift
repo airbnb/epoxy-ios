@@ -51,6 +51,16 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
   /// for logging.
   public weak var epoxyModelDisplayDelegate: TableViewEpoxyModelDisplayDelegate?
 
+  /// Data source for prefetching the contents of an offscreen epoxy items that are likely to come
+  /// on-screen soon.
+  public weak var epoxyModelPrefetchDataSource: TableViewEpoxyModelDataSourcePrefetching? {
+    didSet {
+      if #available(iOS 10, *) {
+        prefetchDataSource = (epoxyModelPrefetchDataSource != nil) ? self : nil
+      }
+    }
+  }
+
   /// Selection color for the `UITableViewCell`s of `EpoxyModel`s that have `isSelectable == true`
   public var selectionStyle = CellSelectionStyle.color(UIColor.lightGray)
 
@@ -460,6 +470,32 @@ extension TableView: UITableViewDelegate {
 
   public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
     scrollDelegate?.scrollViewDidEndScrollingAnimation?(scrollView)
+  }
+}
+
+// MARK: UITableViewDataSourcePrefetching
+
+extension TableView: UITableViewDataSourcePrefetching {
+  public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+    let models = indexPaths.flatMap(epoxyDataSource.epoxyModel(at:))
+      .map { $0.epoxyModel }
+
+    guard !models.isEmpty else {
+      return
+    }
+
+    epoxyModelPrefetchDataSource?.tableView(self, willPrefetch: models)
+  }
+
+  public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+    let models = indexPaths.flatMap(epoxyDataSource.epoxyModel(at:))
+      .map { $0.epoxyModel }
+    
+    guard !models.isEmpty else {
+      return
+    }
+
+    epoxyModelPrefetchDataSource?.tableView(self, cancelPrefetchingOf: models)
   }
 }
 
