@@ -57,18 +57,10 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
       return super.preferredLayoutAttributesFitting(layoutAttributes)
     }
 
-    let horizontalFittingPriority = collectionViewLayoutAttributes.widthSizeMode == .dynamic
-      ? UILayoutPriorityFittingSizeLevel
-      : UILayoutPriorityRequired
-
-    let verticalFittingPriority = collectionViewLayoutAttributes.heightSizeMode == .dynamic
-      ? UILayoutPriorityFittingSizeLevel
-      : UILayoutPriorityRequired
-
     let size = super.systemLayoutSizeFitting(
       layoutAttributes.size,
-      withHorizontalFittingPriority: horizontalFittingPriority,
-      verticalFittingPriority: verticalFittingPriority)
+      withHorizontalFittingPriority: collectionViewLayoutAttributes.widthSizeMode.fittingPriority,
+      verticalFittingPriority: collectionViewLayoutAttributes.heightSizeMode.fittingPriority)
 
     layoutAttributes.size = size
 

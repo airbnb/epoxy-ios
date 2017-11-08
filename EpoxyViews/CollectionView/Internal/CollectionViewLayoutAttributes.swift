@@ -7,6 +7,16 @@ import UIKit
 enum DimensionSizeMode {
   case `static`
   case dynamic
+
+  // The priority to use when calculating the fitting size for a collection view element
+  var fittingPriority: UILayoutPriority {
+    switch self {
+    case .static:
+      return UILayoutPriorityRequired
+    case .dynamic:
+      return UILayoutPriorityFittingSizeLevel
+    }
+  }
 }
 
 /// A protocol that provides additional sizing mode information for a `CollectionViewCell`, via the layout attributes passed in to `preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes)`

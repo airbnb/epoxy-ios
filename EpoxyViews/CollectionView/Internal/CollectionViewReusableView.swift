@@ -37,4 +37,21 @@ public final class CollectionViewReusableView: UICollectionReusableView {
     NSLayoutConstraint.activate(constraints)
     self.view = view
   }
+
+  override public func preferredLayoutAttributesFitting(
+    _ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes
+  {
+    guard let collectionViewLayoutAttributes = layoutAttributes as? CollectionViewLayoutAttributes else {
+      return super.preferredLayoutAttributesFitting(layoutAttributes)
+    }
+
+    let size = super.systemLayoutSizeFitting(
+      layoutAttributes.size,
+      withHorizontalFittingPriority: collectionViewLayoutAttributes.widthSizeMode.fittingPriority,
+      verticalFittingPriority: collectionViewLayoutAttributes.heightSizeMode.fittingPriority)
+
+    layoutAttributes.size = size
+
+    return layoutAttributes
+  }
 }
