@@ -199,7 +199,7 @@ public class CollectionView: UICollectionView,
     performBatchUpdates({
       self.animateUpdates(data: data, changesetMaker: changesetMaker)
     }, completion: { _ in
-      if let nextUpdate = self.queuedUpdate {
+      if let nextUpdate = self.queuedUpdate, self.window != nil {
         self.queuedUpdate = nil
         self.updateView(
           with: nextUpdate.newData,
