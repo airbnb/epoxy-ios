@@ -12,9 +12,9 @@ enum DimensionSizeMode {
   var fittingPriority: UILayoutPriority {
     switch self {
     case .static:
-      return UILayoutPriorityRequired
+      return .required
     case .dynamic:
-      return UILayoutPriorityFittingSizeLevel
+      return .fittingSizeLevel
     }
   }
 }

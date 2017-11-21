@@ -37,7 +37,7 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
     ]
 
     let bottomConstraint = view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
-    bottomConstraint.priority = UILayoutPriorityDefaultHigh - 1
+    bottomConstraint.priority = UILayoutPriority(rawValue: UILayoutPriority.defaultHigh.rawValue - 1)
 
     NSLayoutConstraint.activate(constraints + [bottomConstraint])
 
