@@ -83,12 +83,10 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
   private var normalViewBackgroundColor: UIColor?
 
   private func setUpViews() {
-    #if swift(>=3.2)
     if #available(iOS 11.0, *) {
       contentView.insetsLayoutMarginsFromSafeArea = false
       insetsLayoutMarginsFromSafeArea = false
     }
-    #endif
     backgroundColor = .clear
     selectionStyle = .none
   }
