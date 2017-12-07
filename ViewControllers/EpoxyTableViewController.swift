@@ -19,6 +19,10 @@ open class EpoxyTableViewController: UIViewController {
     setEpoxySectionsIfReady()
   }
 
+  open var shouldPinUnderStatusBar: Bool {
+    return false
+  }
+
   /// Override this in your subclass to return your Epoxy sections
   open func epoxySections() -> [EpoxySection] {
     return []
@@ -83,8 +87,16 @@ open class EpoxyTableViewController: UIViewController {
 
   private func setUpConstraints() {
     tableView.translatesAutoresizingMaskIntoConstraints = false
+    if shouldPinUnderStatusBar {
+      if #available(iOS 11.0, *) {
+        tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+      } else {
+        tableView.topAnchor.constraint(equalTo: view.topAnchor, constant: UIApplication.shared.statusBarFrame.size.height).isActive = true
+      }
+    } else {
+      tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+    }
     let constraints = [
-      tableView.topAnchor.constraint(equalTo: view.topAnchor),
       tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
       tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
     ]
