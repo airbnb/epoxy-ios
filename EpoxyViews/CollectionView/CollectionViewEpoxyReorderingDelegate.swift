@@ -11,4 +11,3 @@ public protocol CollectionViewEpoxyReorderingDelegate: class {
     toSectionWithDataID toSectionDataID: String,
     beforeDataID toBeforeDataID: String?)
 }
-
