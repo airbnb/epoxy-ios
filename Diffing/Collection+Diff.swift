@@ -348,7 +348,7 @@ extension Collection {
 
   /// Quickly generate a `Dictionary` from an `Array` (or other `CollectionType`), returning either a `(key, value)` tuple or `nil` for each `Array` element
   fileprivate func toDictionary<K, V>
-    (_ transform:(_ element: Self.Iterator.Element) -> (key: K, value: V)?) -> [K : V] {
+    (_ transform:(_ element: Self.Iterator.Element) -> (key: K, value: V)?) -> [K: V] {
     var dictionary = [K: V]()
     for element in self {
       if let (key, value) = transform(element) {
