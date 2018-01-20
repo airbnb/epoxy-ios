@@ -2,7 +2,6 @@
 //  Copyright © 2016 com.airbnb. All rights reserved.
 
 import UIKit
-import DLSPrimitives
 
 /// An internal cell class for use in a `TableView`. It handles displaying a `Divider` and
 /// wraps view classes passed to it.
