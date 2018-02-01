@@ -45,6 +45,7 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     self.stateConfigurer = stateConfigurer
     self.behaviorSetter = behaviorSetter
     self.selectionHandler = selectionHandler
+    isSelectable = selectionHandler != nil
   }
 
   // MARK: Public
@@ -53,9 +54,11 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   public let reuseID: String
   public let data: DataType
 
-  public var isSelectable: Bool {
-    return selectionHandler != nil
-  }
+  /**
+   Whether or not the view this model represents should be selectable.
+   Automatically set to true if you provide a `selectionHandler`
+   */
+  public var isSelectable: Bool
 
   /**
    This is a experimental property to allow interactive reordering of items within collection view,

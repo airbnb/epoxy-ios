@@ -17,7 +17,7 @@ public protocol EpoxyableModel: Diffable {
   func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState)
   func didSelect(_ cell: EpoxyCell)
 
-  var isSelectable: Bool { get }
+  var isSelectable: Bool { get set }
   var isMovable: Bool { get }
 }
 
@@ -35,7 +35,10 @@ extension EpoxyableModel {
 
   public var selectionStyle: UITableViewCellSelectionStyle { return .default }
 
-  public var isSelectable: Bool { return false }
+  public var isSelectable: Bool {
+    get { return false }
+    set { }
+  }
   
   public var isMovable: Bool { return false }
 
