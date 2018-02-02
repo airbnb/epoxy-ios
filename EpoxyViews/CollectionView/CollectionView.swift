@@ -61,6 +61,8 @@ public class CollectionView: UICollectionView,
 
   /// Delegate which indicates when a epoxy item will be displayed, typically used
   /// for logging.
+  /// If you'd like to add impression logging for your EpoxyableModels, check out
+  /// [the documentation](https://airbnb.quip.com/MdPEAcxPCoPr/Magical-Impression-Logging-iOS-How-to) on how to do this.
   public weak var epoxyItemDisplayDelegate: CollectionViewEpoxyItemDisplayDelegate?
 
   /// Selection color for the `UICollectionViewCell`s of `EpoxyModel`s that have `isSelectable == true`
