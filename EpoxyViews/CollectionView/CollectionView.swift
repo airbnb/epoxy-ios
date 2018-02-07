@@ -149,6 +149,10 @@ public class CollectionView: UICollectionView,
     loaderView: LoaderView)
     where LoaderView: UIView, LoaderView: Animatable
   {
+    if let existingLoader = infiniteScrollingLoader {
+      existingLoader.removeFromSuperview()
+    }
+
     let height = loaderView.compressedHeight(forWidth: bounds.width)
     loaderView.translatesAutoresizingMaskIntoConstraints = true
     loaderView.frame.size.height = height
@@ -178,7 +182,7 @@ public class CollectionView: UICollectionView,
 
   private var isUpdating = false
   private var infiniteScrollingLoader: (UIView & Animatable)?
-  private var infiniteScrollingDelegate: InfiniteScrollingDelegate?
+  private weak var infiniteScrollingDelegate: InfiniteScrollingDelegate?
   private var infiniteScrollingState: InfiniteScrollingState = .stopped
 
   private func setUp() {
