@@ -138,6 +138,33 @@ public class CollectionView: UICollectionView,
     return epoxyDataSource.epoxySection(at: index)?.dataID
   }
 
+  /// Adds an infinite scrolling loading view and sets up a delegate to receive scrolling callbacks.
+  /// Note that infinite scrolling is only supported on vertically scrolling CollectionViews.
+  ///
+  /// - Parameters:
+  ///   - delegate: infinite scrolling delegate to handle when more content should be loaded.
+  ///   - loaderView: the view to use as the loading spinner at the bottom of the scroll view.
+  public func addInfiniteScrolling<LoaderView>(
+    delegate: InfiniteScrollingDelegate,
+    loaderView: LoaderView)
+    where LoaderView: UIView, LoaderView: Animatable
+  {
+    let height = loaderView.compressedHeight(forWidth: bounds.width)
+    loaderView.translatesAutoresizingMaskIntoConstraints = true
+    loaderView.frame.size.height = height
+    contentInset.bottom += height
+
+    loaderView.stopAnimating()
+    infiniteScrollingLoader = loaderView
+    infiniteScrollingDelegate = delegate
+    addSubview(loaderView)
+    updateInfiniteLoaderPosition()
+  }
+
+  public override var contentSize: CGSize {
+    didSet { updateInfiniteLoaderPosition() }
+  }
+
   // MARK: Fileprivate
 
   fileprivate let epoxyDataSource: CollectionViewEpoxyDataSource
@@ -150,6 +177,9 @@ public class CollectionView: UICollectionView,
     changesetMaker: (InternalCollectionViewEpoxyData?) -> EpoxyChangeset?)?
 
   private var isUpdating = false
+  private var infiniteScrollingLoader: (UIView & Animatable)?
+  private var infiniteScrollingDelegate: InfiniteScrollingDelegate?
+  private var infiniteScrollingState: InfiniteScrollingState = .stopped
 
   private func setUp() {
     // There are rendering issues in iOS 10 when using self-sizing supplementary views
@@ -261,6 +291,21 @@ public class CollectionView: UICollectionView,
     isUpdating = false
   }
 
+  private func updatedInfiniteScrollingState(in scrollView: UIScrollView) -> (InfiniteScrollingState, Bool) {
+    let previousState = infiniteScrollingState
+    let newState = previousState.next(in: scrollView)
+    return (newState, previousState == .triggered && newState == .loading)
+  }
+
+  private func updateInfiniteLoaderPosition() {
+    guard let infiniteScrollingLoader = infiniteScrollingLoader else { return }
+    infiniteScrollingLoader.frame = CGRect(
+      x: 0,
+      y: contentSize.height,
+      width: contentSize.width,
+      height: infiniteScrollingLoader.bounds.height)
+  }
+
   // MARK: UICollectionViewDelegate
 
   public func collectionView(
@@ -362,6 +407,16 @@ public class CollectionView: UICollectionView,
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
     scrollDelegate?.scrollViewDidScroll?(scrollView)
+    let (newState, shouldTrigger) = updatedInfiniteScrollingState(in: scrollView)
+    infiniteScrollingState = newState
+    if shouldTrigger {
+      infiniteScrollingLoader?.startAnimating()
+      infiniteScrollingDelegate?.didScrollToInfiniteLoader { [weak self] in
+        self?.infiniteScrollingLoader?.stopAnimating()
+        self?.updateInfiniteLoaderPosition()
+        self?.infiniteScrollingState = .stopped
+      }
+    }
   }
 
   public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
