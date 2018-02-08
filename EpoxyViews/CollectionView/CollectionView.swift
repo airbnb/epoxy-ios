@@ -165,6 +165,15 @@ public class CollectionView: UICollectionView,
     updateInfiniteLoaderPosition()
   }
 
+  public func removeInfiniteScrolling() {
+    if let loader = infiniteScrollingLoader {
+      contentInset.bottom -= loader.bounds.height
+      loader.removeFromSuperview()
+      infiniteScrollingLoader = nil
+    }
+    infiniteScrollingDelegate = nil
+  }
+
   public override var contentSize: CGSize {
     didSet { updateInfiniteLoaderPosition() }
   }
