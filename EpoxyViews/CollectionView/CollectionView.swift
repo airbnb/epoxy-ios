@@ -330,7 +330,26 @@ public class CollectionView: UICollectionView,
       assertionFailure("Index path is out of bounds.")
       return
     }
-    epoxyItemDisplayDelegate?.collectionView(self, willDisplay: item)
+    epoxyItemDisplayDelegate?.collectionView(self, willDisplayEpoxyModel: item)
+  }
+
+  public func collectionView(
+    _ collectionView: UICollectionView,
+    willDisplaySupplementaryView view: UICollectionReusableView,
+    forElementKind elementKind: String,
+    at indexPath: IndexPath)
+  {
+    guard let section = epoxyDataSource.epoxySection(at: indexPath.section),
+      let elementSupplementaryModel = section.supplementaryModels?[elementKind]?[indexPath.item] else
+    {
+      assertionFailure(
+        "Supplementary epoxy models not found for the given element kind and index path.")
+      return
+    }
+
+    epoxyItemDisplayDelegate?.collectionView(
+      self,
+      willDisplaySupplementaryEpoxyModel: elementSupplementaryModel)
   }
 
   public func collectionView(
