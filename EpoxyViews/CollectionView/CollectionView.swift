@@ -149,8 +149,11 @@ public class CollectionView: UICollectionView,
     loaderView: LoaderView)
     where LoaderView: UIView, LoaderView: Animatable
   {
-    if let existingLoader = infiniteScrollingLoader {
-      existingLoader.removeFromSuperview()
+    // If infinite loading has already been added, just no-op.
+    // If you need to change the loading spinner, please call `removeInfiniteScrolling` before
+    // calling this method again.
+    if infiniteScrollingLoader != nil {
+      return
     }
 
     let height = loaderView.compressedHeight(forWidth: bounds.width)
@@ -163,6 +166,7 @@ public class CollectionView: UICollectionView,
     infiniteScrollingDelegate = delegate
     addSubview(loaderView)
     updateInfiniteLoaderPosition()
+    infiniteScrollingState = .stopped
   }
 
   public func removeInfiniteScrolling() {
@@ -172,6 +176,7 @@ public class CollectionView: UICollectionView,
       infiniteScrollingLoader = nil
     }
     infiniteScrollingDelegate = nil
+    infiniteScrollingState = .stopped
   }
 
   public override var contentSize: CGSize {
