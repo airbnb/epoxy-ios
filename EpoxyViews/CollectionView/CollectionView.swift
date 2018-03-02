@@ -201,10 +201,9 @@ public class CollectionView: UICollectionView,
 
   private func setUp() {
     // There are rendering issues in iOS 10 when using self-sizing supplementary views
-    // when prefetching is enabled. These issues have been resolved in iOS 11.
-    if #available(iOS 11.0, *) {
-      isPrefetchingEnabled = true
-    } else if #available(iOS 10.0, *) {
+    // when prefetching is enabled.
+    // There are also self sizing invalidation issues in iOS 10 and iOS 11 if prefetching is enabled.
+    if #available(iOS 10.0, *) {
       isPrefetchingEnabled = false
     }
 
