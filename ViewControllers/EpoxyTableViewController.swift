@@ -55,9 +55,9 @@ open class EpoxyTableViewController: UIViewController {
     return tableView.contentOffset
   }
 
-  public func constrainTableViewBottom(to anchor: NSLayoutYAxisAnchor) {
+  public func constrainTableViewBottom(to anchor: NSLayoutYAxisAnchor, constant c: CGFloat = 0) {
     bottomConstraint?.isActive = false
-    bottomConstraint = tableView.bottomAnchor.constraint(equalTo: anchor)
+    bottomConstraint = tableView.bottomAnchor.constraint(equalTo: anchor, constant: c)
     bottomConstraint?.isActive = true
   }
 
