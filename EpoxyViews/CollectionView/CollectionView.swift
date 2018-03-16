@@ -330,11 +330,14 @@ public class CollectionView: UICollectionView,
     willDisplay cell: UICollectionViewCell,
     forItemAt indexPath: IndexPath)
   {
-    guard let item = epoxyDataSource.epoxyItem(at: indexPath) else {
+    guard
+      let item = epoxyDataSource.epoxyItem(at: indexPath),
+      let section = epoxyDataSource.epoxySection(at: indexPath.section) else
+    {
       assertionFailure("Index path is out of bounds.")
       return
     }
-    epoxyItemDisplayDelegate?.collectionView(self, willDisplayEpoxyModel: item)
+    epoxyItemDisplayDelegate?.collectionView(self, willDisplayEpoxyModel: item, in: section)
   }
 
   public func collectionView(
@@ -343,7 +346,8 @@ public class CollectionView: UICollectionView,
     forElementKind elementKind: String,
     at indexPath: IndexPath)
   {
-    guard let section = epoxyDataSource.epoxySection(at: indexPath.section),
+    guard
+      let section = epoxyDataSource.epoxySection(at: indexPath.section),
       let elementSupplementaryModel = section.supplementaryModels?[elementKind]?[indexPath.item] else
     {
       assertionFailure(
@@ -353,7 +357,8 @@ public class CollectionView: UICollectionView,
 
     epoxyItemDisplayDelegate?.collectionView(
       self,
-      willDisplaySupplementaryEpoxyModel: elementSupplementaryModel)
+      willDisplaySupplementaryEpoxyModel: elementSupplementaryModel,
+      in: section)
   }
 
   public func collectionView(

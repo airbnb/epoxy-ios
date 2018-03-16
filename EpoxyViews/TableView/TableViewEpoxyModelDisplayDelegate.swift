@@ -4,5 +4,6 @@
 public protocol TableViewEpoxyModelDisplayDelegate: class {
   func tableView(
     _ tableView: TableView,
-    willDisplay epoxyModel: EpoxyableModel)
+    willDisplay epoxyModel: EpoxyableModel,
+    in section: EpoxyableSection)
 }

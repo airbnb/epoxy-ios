@@ -4,9 +4,11 @@
 public protocol CollectionViewEpoxyItemDisplayDelegate: class {
   func collectionView(
     _ collectionView: UICollectionView,
-    willDisplayEpoxyModel epoxyModel: EpoxyableModel)
+    willDisplayEpoxyModel epoxyModel: EpoxyableModel,
+    in section: EpoxyableSection)
 
   func collectionView(
     _ collectionView: UICollectionView,
-    willDisplaySupplementaryEpoxyModel epoxyModel: SupplementaryViewEpoxyableModel)
+    willDisplaySupplementaryEpoxyModel epoxyModel: SupplementaryViewEpoxyableModel,
+    in section: EpoxyableSection)
 }

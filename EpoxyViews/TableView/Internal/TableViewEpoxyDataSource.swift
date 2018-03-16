@@ -57,4 +57,18 @@ public class TableViewEpoxyDataSource: EpoxyDataSource<TableView>, UITableViewDa
 
     return section.items[indexPath.row]
   }
+
+  func epoxySection(at index: Int) -> InternalTableViewEpoxySection? {
+    guard let data = internalData else {
+      assertionFailure("Can't load epoxy item with nil data")
+      return nil
+    }
+
+    if data.sections.count < index + 1 {
+      assertionFailure("Section is out of bounds.")
+      return nil
+    }
+
+    return data.sections[index]
+  }
 }
