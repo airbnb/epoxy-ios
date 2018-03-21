@@ -74,7 +74,7 @@ extension EpoxyCollectionViewSection: EpoxyableSection {
 }
 
 /// The diffing algorithm complains at compile time without this concrete wrapper
-public struct EpoxyModelWrapper {
+public final class EpoxyModelWrapper {
 
   init(
     epoxyModel: EpoxyableModel)
@@ -92,7 +92,8 @@ extension EpoxyModelWrapper: EpoxyableModel {
   }
 
   public var dataID: String? {
-    return epoxyModel.dataID
+    get { return epoxyModel.dataID }
+    set { epoxyModel.dataID = newValue }
   }
 
   public var isSelectable: Bool {

@@ -5,7 +5,7 @@ import Foundation
 import UIKit
 
 /// The `EpoxyModel` contains the reference id for the model backing an item, the hash value of the item, as well as the reuse id for the item's type.
-public protocol EpoxyableModel: Diffable {
+public protocol EpoxyableModel: class, Diffable {
 
   func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, animated: Bool)
   func setBehavior(cell: EpoxyCell)
@@ -13,7 +13,7 @@ public protocol EpoxyableModel: Diffable {
   // MARK: Optional
 
   var reuseID: String { get }
-  var dataID: String? { get }
+  var dataID: String? { get set }
   func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState)
   func didSelect(_ cell: EpoxyCell)
 

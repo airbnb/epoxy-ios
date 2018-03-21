@@ -205,7 +205,7 @@ public enum EpoxyModelDividerType {
 // MARK: InternalTableViewEpoxyModel
 
 /// A model in a `InternalTableViewEpoxySection`, representing either a row or a section header.
-public struct InternalTableViewEpoxyModel {
+public final class InternalTableViewEpoxyModel {
 
   init(
     epoxyModel: EpoxyableModel,
@@ -226,7 +226,8 @@ extension InternalTableViewEpoxyModel: EpoxyableModel {
   }
 
   public var dataID: String? {
-    return epoxyModel.dataID
+    get { return epoxyModel.dataID }
+    set { epoxyModel.dataID = newValue }
   }
 
   public var isSelectable: Bool {

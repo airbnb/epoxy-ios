@@ -1,0 +1,86 @@
+//  Created by Laura Skelton on 3/21/18.
+//  Copyright © 2018 Airbnb. All rights reserved.
+
+open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
+  where
+  SectionDataIDType: StringRepresentable,
+  SectionDataIDType: Hashable
+{
+
+  // MARK: Lifecycle
+
+  public init() { }
+
+  public required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  // MARK: Open
+
+  open var dataID: String = ""
+
+  open func sectionController(forDataID dataID: SectionDataIDType) -> EpoxySectionControlling? {
+    return nil
+  }
+
+  // MARK: Public
+
+  public weak var delegate: EpoxyControllerDelegate? {
+    didSet { didSetDelegate() }
+  }
+
+  public var sectionDataIDs = [SectionDataIDType]() {
+    didSet { didUpdateSectionDataIDs() }
+  }
+
+  public func makeTableViewSections() -> [EpoxySection] {
+    return sectionDataIDs.flatMap { dataID in
+      return sectionController(forDataID: dataID)?.makeTableViewSection()
+    }
+  }
+
+  public func makeCollectionViewSections() -> [EpoxyCollectionViewSection] {
+    return sectionDataIDs.flatMap { dataID in
+      return sectionController(forDataID: dataID)?.makeCollectionViewSection()
+    }
+  }
+
+  public func allSectionControllers() -> [EpoxySectionControlling] {
+    return sectionDataIDs.flatMap { dataID in
+      return sectionController(forDataID: dataID)
+    }
+  }
+
+  public func rebuildSection(forDataID dataID: SectionDataIDType) {
+    sectionController(forDataID: dataID)?.rebuild()
+    delegate?.epoxyControllerDidUpdateData(self)
+  }
+
+  public func rebuild() {
+    sectionDataIDs.forEach { dataID in
+      rebuildSection(forDataID: dataID)
+    }
+    delegate?.epoxyControllerDidUpdateData(self)
+  }
+
+  // MARK: Private
+
+  private func didUpdateSectionDataIDs() {
+    updateDelegates()
+  }
+
+  private func didSetDelegate() {
+    updateDelegates()
+  }
+
+  private func updateDelegates() {
+    updateAllSectionControllerDelegates()
+    delegate?.epoxyControllerDidUpdateData(self)
+  }
+
+  private func updateAllSectionControllerDelegates() {
+    allSectionControllers().forEach { sectionController in
+      sectionController.delegate = delegate
+    }
+  }
+}

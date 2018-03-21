@@ -50,7 +50,7 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
 
   // MARK: Public
 
-  public let dataID: String?
+  public var dataID: String?
   public let reuseID: String
   public let data: DataType
 
