@@ -8,6 +8,10 @@ import Foundation
 /// Useful for avoiding unnecessarily recreating `EpoxyModel`s that have not changed
 public final class EpoxyModelCache {
 
+  // MARK: Lifecycle
+
+  public init() { }
+
   // MARK: Public
 
   public func cacheEpoxyModel(_ model: EpoxyableModel) {
