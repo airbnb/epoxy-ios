@@ -51,6 +51,26 @@ public class EpoxyDivider: UIView {
     }
   }
 
+  /// The top padding of the divider.
+  public var topPadding: CGFloat = 0 {
+    didSet {
+      if topPadding != oldValue {
+        setNeedsDisplay()
+        invalidateIntrinsicContentSize()
+      }
+    }
+  }
+
+  /// The bottom padding of the divider.
+  public var bottomPadding: CGFloat = 0 {
+    didSet {
+      if bottomPadding != oldValue {
+        setNeedsDisplay()
+        invalidateIntrinsicContentSize()
+      }
+    }
+  }
+
   /// The color of the divider.
   public var color: UIColor? {
     didSet {
@@ -61,7 +81,7 @@ public class EpoxyDivider: UIView {
   }
 
   public override var intrinsicContentSize: CGSize {
-    return CGSize(width: UIViewNoIntrinsicMetric, height: height)
+    return CGSize(width: UIViewNoIntrinsicMetric, height: height + topPadding + bottomPadding)
   }
 
   public override func draw(_ rect: CGRect) {
@@ -75,6 +95,8 @@ public class EpoxyDivider: UIView {
     var dividerRect = rect
     dividerRect.origin.x = leadingPadding
     dividerRect.size.width -= leadingPadding + trailingPadding
+    dividerRect.origin.y = topPadding
+    dividerRect.size.height = height
 
     context.setFillColor(color.cgColor)
     context.fill(dividerRect)
