@@ -23,6 +23,10 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
     return nil
   }
 
+  open func hiddenDividerDataIDs() -> [String] {
+    return allSectionControllers().flatMap { $0.hiddenDividerDataIDs() }
+  }
+
   // MARK: Public
 
   public weak var delegate: EpoxyControllerDelegate? {

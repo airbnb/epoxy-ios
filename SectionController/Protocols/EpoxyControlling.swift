@@ -7,4 +7,5 @@ public protocol EpoxyControlling: class {
   func rebuild()
   func makeTableViewSections() -> [EpoxySection]
   func makeCollectionViewSections() -> [EpoxyCollectionViewSection]
+  func hiddenDividerDataIDs() -> [String]
 }

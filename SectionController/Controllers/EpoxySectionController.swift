@@ -37,6 +37,10 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
       supplementaryModels: nil)
   }
 
+  open func hiddenDividerDataIDs() -> [String] {
+    return []
+  }
+
   // MARK: Public
 
   public weak var delegate: EpoxyControllerDelegate? {
