@@ -35,6 +35,31 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
     }
   }
 
+  public func selectItem(at dataID: String, animated: Bool) {
+    guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
+      assertionFailure("item not found")
+      return
+    }
+    selectRow(at: indexPath, animated: animated, scrollPosition: .none)
+    if let cell = cellForRow(at: indexPath) as? EpoxyCell,
+      let item = epoxyDataSource.epoxyModel(at: indexPath) {
+      item.configure(cell: cell, forTraitCollection: traitCollection, state: .selected)
+    }
+  }
+
+  public func deselectItem(at dataID: String, animated: Bool) {
+    guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
+      assertionFailure("item not found")
+      return
+    }
+    deselectRow(at: indexPath, animated: animated)
+
+    if let cell = cellForRow(at: indexPath) as? EpoxyCell,
+      let item = epoxyDataSource.epoxyModel(at: indexPath) {
+      item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+    }
+  }
+
   public func updateItem(
     at dataID: String,
     with item: EpoxyableModel,
@@ -62,6 +87,9 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
       }
     }
   }
+
+  /// Whether to deselect items immediately after they are selected.
+  public var autoDeselectItems: Bool = true
 
   /// Selection color for the `UITableViewCell`s of `EpoxyModel`s that have `isSelectable == true`
   public var selectionStyle = CellSelectionStyle.color(UIColor.lightGray)
@@ -409,8 +437,25 @@ extension TableView: UITableViewDelegate {
     item.configure(cell: cell, forTraitCollection: traitCollection, state: .selected)
     item.didSelect(cell)
 
-    tableView.deselectRow(at: indexPath, animated: true)
-    item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+    if autoDeselectItems {
+      if let dataID = item.dataID {
+        deselectItem(at: dataID, animated: true)
+      } else {
+        tableView.deselectRow(at: indexPath, animated: true)
+        item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+      }
+    }
+  }
+
+  public func tableView(
+    _ tableView: UITableView,
+    willDeselectRowAt indexPath: IndexPath) -> IndexPath?
+  {
+    guard let item = epoxyDataSource.epoxyModel(at: indexPath) else {
+      assertionFailure("Index path is out of bounds")
+      return nil
+    }
+    return item.isSelectable ? indexPath : nil
   }
 
   public func tableView(
@@ -422,6 +467,7 @@ extension TableView: UITableViewDelegate {
         assertionFailure("Index path is out of bounds")
         return
     }
+
     item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
   }
 

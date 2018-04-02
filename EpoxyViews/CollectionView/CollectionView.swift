@@ -45,6 +45,31 @@ public class CollectionView: UICollectionView,
     epoxyDataSource.updateItem(at: dataID, with: item, animated: animated)
   }
 
+  public func selectItem(at dataID: String, animated: Bool) {
+    guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
+      assertionFailure("item not found")
+      return
+    }
+    selectItem(at: indexPath, animated: animated, scrollPosition: [])
+
+    if let item = epoxyDataSource.epoxyItem(at: indexPath),
+      let cell = cellForItem(at: indexPath) as? EpoxyCell {
+      item.configure(cell: cell, forTraitCollection: traitCollection, state: .selected)
+    }
+  }
+
+  public func deselectItem(at dataID: String, animated: Bool) {
+    guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
+      assertionFailure("item not found")
+      return
+    }
+    deselectItem(at: indexPath, animated: animated)
+    if let item = epoxyDataSource.epoxyItem(at: indexPath),
+      let cell = cellForItem(at: indexPath) as? EpoxyCell {
+      item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+    }
+  }
+
   /// CollectionView does not currently support divider hiding.
   public func hideBottomDivider(for dataIDs: [String]) {
     // TODO: Refactor to support layout specific data in epoxy item models
@@ -67,6 +92,9 @@ public class CollectionView: UICollectionView,
 
   /// Selection color for the `UICollectionViewCell`s of `EpoxyModel`s that have `isSelectable == true`
   public var selectionStyle = CellSelectionStyle.none
+
+  /// Whether to deselect items immediately after they are selected.
+  public var autoDeselectItems: Bool = true
 
   /// The delegate that builds transition layouts.
   public weak var transitionLayoutDelegate: CollectionViewTransitionLayoutDelegate?
@@ -419,8 +447,25 @@ public class CollectionView: UICollectionView,
     item.configure(cell: cell, forTraitCollection: traitCollection, state: .selected)
     item.didSelect(cell)
 
-    collectionView.deselectItem(at: indexPath, animated: true)
-    item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+    if autoDeselectItems {
+      if let dataID = item.dataID {
+        deselectItem(at: dataID, animated: true)
+      } else {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+      }
+    }
+  }
+
+  public func collectionView(
+    _ collectionView: UICollectionView,
+    shouldDeselectItemAt indexPath: IndexPath) -> Bool
+  {
+    guard let item = epoxyDataSource.epoxyItem(at: indexPath) else {
+      assertionFailure("Index path is out of bounds")
+      return false
+    }
+    return item.isSelectable
   }
 
   public func collectionView(
