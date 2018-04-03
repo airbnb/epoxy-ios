@@ -11,10 +11,6 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
 
   public init() { }
 
-  public required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
   // MARK: Open
 
   open var dataID: String = ""
@@ -28,6 +24,10 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
   }
 
   // MARK: Public
+
+  public weak var navigator: EpoxyNavigable? {
+    didSet { updateAllSectionControllerNavigators() }
+  }
 
   public weak var delegate: EpoxyControllerDelegate? {
     didSet { didSetDelegate() }
@@ -85,6 +85,12 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
   private func updateAllSectionControllerDelegates() {
     allSectionControllers().forEach { sectionController in
       sectionController.delegate = delegate
+    }
+  }
+
+  private func updateAllSectionControllerNavigators() {
+    allSectionControllers().forEach { sectionController in
+      sectionController.navigator = navigator
     }
   }
 }

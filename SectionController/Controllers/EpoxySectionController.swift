@@ -9,10 +9,8 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
 
   // MARK: Lifecycle
 
-  public init() { }
-
-  public required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
+  public init(invalidatesRemovedModelsFromCache: Bool = true) {
+    self.invalidatesRemovedModelsFromCache = invalidatesRemovedModelsFromCache
   }
 
   // MARK: Open
@@ -42,6 +40,8 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   }
 
   // MARK: Public
+
+  public weak var navigator: EpoxyNavigable?
 
   public weak var delegate: EpoxyControllerDelegate? {
     didSet { delegate?.epoxyControllerDidUpdateData(self) }
@@ -78,9 +78,12 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   // MARK: Private
 
   private let modelCache = EpoxyModelCache()
+  private let invalidatesRemovedModelsFromCache: Bool
 
   private func didUpdateItemDataIDs(_ oldDataIDs: [ItemDataIDType]) {
-    removeOldCachedValues(oldDataIDs)
+    if invalidatesRemovedModelsFromCache {
+      removeOldCachedValues(oldDataIDs)
+    }
     delegate?.epoxyControllerDidUpdateData(self)
   }
 
