@@ -90,6 +90,16 @@ public class CollectionView: UICollectionView,
   /// [the documentation](https://airbnb.quip.com/MdPEAcxPCoPr/Magical-Impression-Logging-iOS-How-to) on how to do this.
   public weak var epoxyItemDisplayDelegate: CollectionViewEpoxyItemDisplayDelegate?
 
+  /// Data source for prefetching the contents of offscreen epoxy items that are likely to come on-
+  /// screen soon.
+  public weak var epoxyItemPrefetchDataSource: CollectionViewEpoxyItemDataSourcePrefetching? {
+    didSet {
+      if #available(iOS 10, *) {
+        prefetchDataSource = (epoxyItemPrefetchDataSource != nil) ? self : nil
+      }
+    }
+  }
+
   /// Selection color for the `UICollectionViewCell`s of `EpoxyModel`s that have `isSelectable == true`
   public var selectionStyle = CellSelectionStyle.none
 
@@ -567,6 +577,30 @@ public class CollectionView: UICollectionView,
   }
 
 }
+
+// MARK: UICollectionViewDataSourcePrefetching
+
+extension CollectionView: UICollectionViewDataSourcePrefetching {
+  public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+    let models = indexPaths.flatMap(epoxyDataSource.epoxyItem(at:))
+      .map { $0.epoxyModel }
+
+    guard !models.isEmpty else { return }
+
+    epoxyItemPrefetchDataSource?.collectionView(self, prefetch: models)
+  }
+
+  public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
+    let models = indexPaths.flatMap(epoxyDataSource.epoxyItem(at:))
+      .map { $0.epoxyModel }
+
+    guard !models.isEmpty else { return }
+
+    epoxyItemPrefetchDataSource?.collectionView(self, cancelPrefetchingOf: models)
+  }
+}
+
+// MARK: CollectionViewDataSourceReorderingDelegate
 
 extension CollectionView: CollectionViewDataSourceReorderingDelegate {
   func dataSource(_ dataSource: CollectionViewEpoxyDataSource,

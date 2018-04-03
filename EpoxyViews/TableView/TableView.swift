@@ -78,8 +78,8 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
   /// [the documentation](https://airbnb.quip.com/MdPEAcxPCoPr/Magical-Impression-Logging-iOS-How-to) on how to do this.
   public weak var epoxyModelDisplayDelegate: TableViewEpoxyModelDisplayDelegate?
 
-  /// Data source for prefetching the contents of an offscreen epoxy items that are likely to come
-  /// on-screen soon.
+  /// Data source for prefetching the contents of offscreen epoxy items that are likely to come on-
+  /// screen soon.
   public weak var epoxyModelPrefetchDataSource: TableViewEpoxyModelDataSourcePrefetching? {
     didSet {
       if #available(iOS 10, *) {
@@ -535,7 +535,7 @@ extension TableView: UITableViewDataSourcePrefetching {
       return
     }
 
-    epoxyModelPrefetchDataSource?.tableView(self, willPrefetch: models)
+    epoxyModelPrefetchDataSource?.tableView(self, prefetch: models)
   }
 
   public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
