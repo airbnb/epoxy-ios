@@ -60,6 +60,22 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
     }
   }
 
+  /// Sets a given dataID's view as the first responder. The view must be rendered
+  /// at the time this is called, so you should call `scrollToItem(at dataID: String)`
+  /// before calling this method if necessary. The view should also be set up to
+  /// properly react to `becomeFirstResponder()` being called on it.
+  ///
+  /// - Parameter dataID: The dataID related to the view you want to becomeFirstResponder
+  public func setItemAsFirstResponder(at dataID: String) {
+    guard
+      let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID),
+      let cell = cellForRow(at: indexPath) as? TableViewCell
+      else {
+        return
+    }
+    cell.view?.becomeFirstResponder()
+  }
+
   public func updateItem(
     at dataID: String,
     with item: EpoxyableModel,
