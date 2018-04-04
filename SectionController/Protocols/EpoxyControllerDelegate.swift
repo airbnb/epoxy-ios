@@ -2,5 +2,5 @@
 //  Copyright © 2018 Airbnb. All rights reserved.
 
 public protocol EpoxyControllerDelegate: class {
-  func epoxyControllerDidUpdateData(_ epoxyController: EpoxyControlling)
+  func epoxyControllerDidUpdateData(_ epoxyController: EpoxyControlling, animated: Bool)
 }

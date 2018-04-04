@@ -35,8 +35,13 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
       supplementaryModels: nil)
   }
 
-  open func hiddenDividerDataIDs() -> [String] {
+  open func hiddenDividers() -> [ItemDataIDType] {
     return []
+  }
+
+  /// You probably want to override hiddenDividers() instead
+  open func hiddenDividerDataIDs() -> [String] {
+    return hiddenDividers().map { $0.stringValue }
   }
 
   // MARK: Public
@@ -44,7 +49,7 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   public weak var navigator: EpoxyNavigable?
 
   public weak var delegate: EpoxyControllerDelegate? {
-    didSet { delegate?.epoxyControllerDidUpdateData(self) }
+    didSet { delegate?.epoxyControllerDidUpdateData(self, animated: true) }
   }
 
   public var itemDataIDs = [ItemDataIDType]() {
@@ -57,14 +62,14 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
     }
   }
 
-  public func rebuildItemModel(forDataID dataID: ItemDataIDType) {
+  public func rebuildItemModel(forDataID dataID: ItemDataIDType, animated: Bool = true) {
     modelCache.invalidateEpoxyModel(withDataID: dataID.stringValue)
-    delegate?.epoxyControllerDidUpdateData(self)
+    delegate?.epoxyControllerDidUpdateData(self, animated: animated)
   }
 
-  public func rebuild() {
+  public func rebuild(animated: Bool = true) {
     modelCache.invalidateAllEpoxyModels()
-    delegate?.epoxyControllerDidUpdateData(self)
+    delegate?.epoxyControllerDidUpdateData(self, animated: animated)
   }
 
   public func makeTableViewSections() -> [EpoxySection] {
@@ -84,7 +89,7 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
     if invalidatesRemovedModelsFromCache {
       removeOldCachedValues(oldDataIDs)
     }
-    delegate?.epoxyControllerDidUpdateData(self)
+    delegate?.epoxyControllerDidUpdateData(self, animated: true)
   }
 
   private func cachedItemModel(forDataID dataID: ItemDataIDType) -> EpoxyableModel? {
