@@ -118,7 +118,6 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
       toSectionWithDataID: destinationSection,
       beforeItemWithDataID: destinationBeforeDataID)
   }
-  
 
   // MARK: Internal
   

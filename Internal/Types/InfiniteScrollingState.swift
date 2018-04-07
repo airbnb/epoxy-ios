@@ -3,7 +3,6 @@
 
 import UIKit
 
-
 enum InfiniteScrollingState {
   case loading
   case stopped
