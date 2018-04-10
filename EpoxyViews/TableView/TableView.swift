@@ -5,7 +5,7 @@ import CoreGraphics
 import UIKit
 
 /// A TableView class that handles updates through its `setSections` method, and optionally animates diffs.
-public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
+public class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
 
   public typealias DataType = InternalTableViewEpoxyData
   public typealias Cell = TableViewCell
@@ -74,6 +74,11 @@ public class TableView: UITableView, EpoxyInterface, InternalEpoxyInterface {
         return
     }
     cell.view?.becomeFirstResponder()
+  }
+
+  public func recalculateCellHeights() {
+    beginUpdates()
+    endUpdates()
   }
 
   public func updateItem(

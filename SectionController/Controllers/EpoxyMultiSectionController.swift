@@ -29,6 +29,10 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
     didSet { updateAllSectionControllerNavigators() }
   }
 
+  public weak var interface: EpoxyInterface? {
+    didSet { updateAllSectionControllerInterfaces() }
+  }
+
   public weak var delegate: EpoxyControllerDelegate? {
     didSet { didSetDelegate() }
   }
@@ -91,6 +95,12 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
   private func updateAllSectionControllerNavigators() {
     allSectionControllers().forEach { sectionController in
       sectionController.navigator = navigator
+    }
+  }
+
+  private func updateAllSectionControllerInterfaces() {
+    allSectionControllers().forEach { sectionController in
+      sectionController.interface = interface
     }
   }
 }

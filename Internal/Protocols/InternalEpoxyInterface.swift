@@ -4,7 +4,7 @@
 import Foundation
 
 /// A protocol used internally for a view that can be powered by an array of`EpoxySection`s
-public protocol InternalEpoxyInterface: EpoxyInterface {
+public protocol InternalEpoxyInterface: TypedEpoxyInterface {
 
   /// The associated internal data type that powers this type of `EpoxyInterface`
   associatedtype DataType: InternalEpoxyDataType

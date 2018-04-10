@@ -6,13 +6,8 @@ import UIKit
 /// A protocol for a view that can be powered by an array of `EpoxySection`s
 public protocol EpoxyInterface: class {
 
-  associatedtype Section: EpoxyableSection
-
   /// Whether to deselect items immediately after they are selected.
   var autoDeselectItems: Bool { get set }
-
-  /// Sets the sections on the view
-  func setSections(_ sections: [Section]?, animated: Bool)
 
   /// Selects the item and invokes the item's stateConfigurer
   /// Does not invoke selectionHandler
@@ -27,9 +22,26 @@ public protocol EpoxyInterface: class {
   /// Hides the bottom divider for the given dataIDs
   func hideBottomDivider(for dataIDs: [String])
 
+  /// Scrolls to the item at the given dataID
+  func scrollToItem(at dataID: String)
+
+  /// Sets the item at the given dataID as the first responder
+  func setItemAsFirstResponder(at dataID: String)
+
+  /// Recalculates all cell heights in the epoxy interface
+  /// NOTE: This has only been implemented for TableView, not for CollectionView.
+  func recalculateCellHeights()
 }
 
-extension EpoxyInterface where Section == EpoxySection {
+/// A protocol for a view that can be powered by an array of `EpoxySection`s
+public protocol TypedEpoxyInterface: EpoxyInterface {
+  associatedtype Section: EpoxyableSection
+
+  /// Sets the sections on the view
+  func setSections(_ sections: [Section]?, animated: Bool)
+}
+
+extension TypedEpoxyInterface where Section == EpoxySection {
 
   /// Sets the items on the view
   public func setItems(_ items: [EpoxyableModel], animated: Bool) {

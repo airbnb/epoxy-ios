@@ -5,6 +5,7 @@ public protocol EpoxyControlling: class {
   var dataID: String { get set }
   weak var delegate: EpoxyControllerDelegate? { get set }
   weak var navigator: EpoxyNavigable? { get set }
+  weak var interface: EpoxyInterface? { get set }
   func rebuild(animated: Bool)
   func makeTableViewSections() -> [EpoxySection]
   func makeCollectionViewSections() -> [EpoxyCollectionViewSection]

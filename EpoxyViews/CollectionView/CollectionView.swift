@@ -5,7 +5,7 @@ import UIKit
 
 /// A `UICollectionView` class that handles updates through its `setSections` method, and optionally animates diffs.
 public class CollectionView: UICollectionView,
-  EpoxyInterface,
+  TypedEpoxyInterface,
   InternalEpoxyInterface,
   UICollectionViewDelegate
 {
@@ -31,10 +31,35 @@ public class CollectionView: UICollectionView,
     epoxyDataSource.setSections(sections, animated: animated)
   }
 
-  public func scrollToItem(at dataID: String, position: UICollectionViewScrollPosition = .centeredVertically, animated: Bool = false) {
+  public func scrollToItem(at dataID: String) {
+    scrollToItem(at: dataID, position: .centeredVertically, animated: false)
+  }
+
+  public func scrollToItem(at dataID: String, position: UICollectionViewScrollPosition, animated: Bool) {
     if let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) {
       scrollToItem(at: indexPath, at: position, animated: animated)
     }
+  }
+
+  /// Sets a given dataID's view as the first responder. The view must be rendered
+  /// at the time this is called, so you should call `scrollToItem(at dataID: String)`
+  /// before calling this method if necessary. The view should also be set up to
+  /// properly react to `becomeFirstResponder()` being called on it.
+  ///
+  /// - Parameter dataID: The dataID related to the view you want to becomeFirstResponder
+  public func setItemAsFirstResponder(at dataID: String) {
+    guard
+      let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID),
+      let cell = cellForItem(at: indexPath) as? CollectionViewCell
+      else {
+        assertionFailure("Tried to become first responder for a cell that was not visible.")
+        return
+    }
+    cell.view?.becomeFirstResponder()
+  }
+
+  public func recalculateCellHeights() {
+    collectionViewLayout.invalidateLayout()
   }
 
   public func updateItem(
