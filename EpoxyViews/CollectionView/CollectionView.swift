@@ -85,7 +85,6 @@ public class CollectionView: UICollectionView,
 
   public func deselectItem(at dataID: String, animated: Bool) {
     guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
-      assertionFailure("item not found")
       return
     }
     deselectItem(at: indexPath, animated: animated)
