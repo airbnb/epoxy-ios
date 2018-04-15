@@ -58,7 +58,7 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   }
 
   public func allItemModels() -> [EpoxyableModel] {
-    return itemDataIDs.flatMap { dataID in
+    return itemDataIDs.compactMap { dataID in
       cachedItemModel(forDataID: dataID)
     }
   }

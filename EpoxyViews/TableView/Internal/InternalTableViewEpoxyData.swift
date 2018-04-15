@@ -231,7 +231,8 @@ extension InternalTableViewEpoxyModel: EpoxyableModel {
   }
 
   public var isSelectable: Bool {
-    return epoxyModel.isSelectable
+    get { return epoxyModel.isSelectable }
+    set { epoxyModel.isSelectable = newValue }
   }
 
   public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {

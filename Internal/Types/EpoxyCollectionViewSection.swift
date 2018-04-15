@@ -97,7 +97,8 @@ extension EpoxyModelWrapper: EpoxyableModel {
   }
 
   public var isSelectable: Bool {
-    return epoxyModel.isSelectable
+    get { return epoxyModel.isSelectable }
+    set { epoxyModel.isSelectable = newValue }
   }
   
   public var isMovable: Bool {

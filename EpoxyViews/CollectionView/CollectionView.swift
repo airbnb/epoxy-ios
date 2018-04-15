@@ -610,7 +610,7 @@ public class CollectionView: UICollectionView,
 
 extension CollectionView: UICollectionViewDataSourcePrefetching {
   public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
-    let models = indexPaths.flatMap(epoxyDataSource.epoxyItem(at:))
+    let models = indexPaths.compactMap(epoxyDataSource.epoxyItem(at:))
       .map { $0.epoxyModel }
 
     guard !models.isEmpty else { return }
@@ -619,7 +619,7 @@ extension CollectionView: UICollectionViewDataSourcePrefetching {
   }
 
   public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
-    let models = indexPaths.flatMap(epoxyDataSource.epoxyItem(at:))
+    let models = indexPaths.compactMap(epoxyDataSource.epoxyItem(at:))
       .map { $0.epoxyModel }
 
     guard !models.isEmpty else { return }

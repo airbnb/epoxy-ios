@@ -548,7 +548,7 @@ extension TableView: UITableViewDelegate {
 
 extension TableView: UITableViewDataSourcePrefetching {
   public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-    let models = indexPaths.flatMap(epoxyDataSource.epoxyModel(at:))
+    let models = indexPaths.compactMap(epoxyDataSource.epoxyModel(at:))
       .map { $0.epoxyModel }
 
     guard !models.isEmpty else {
@@ -559,7 +559,7 @@ extension TableView: UITableViewDataSourcePrefetching {
   }
 
   public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
-    let models = indexPaths.flatMap(epoxyDataSource.epoxyModel(at:))
+    let models = indexPaths.compactMap(epoxyDataSource.epoxyModel(at:))
       .map { $0.epoxyModel }
     
     guard !models.isEmpty else {

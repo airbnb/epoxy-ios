@@ -152,7 +152,7 @@ public struct IndexSetChangeset {
   public let newIndices: [Int: Int?]
 }
 
-extension Collection where Self.Iterator.Element: Diffable, Self.Index == Int, Self.IndexDistance == Int {
+extension Collection where Self.Iterator.Element: Diffable, Self.Index == Int {
 
   /// Diffs between two collections (eg. `Array`s) of `Diffable` items, and returns an `IndexChangeset`
   /// representing the minimal set of changes to get from the other collection to this collection.
