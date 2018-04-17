@@ -9,6 +9,9 @@ public protocol EpoxyInterface: class {
   /// Whether to deselect items immediately after they are selected.
   var autoDeselectItems: Bool { get set }
 
+  /// The selection style of the cells
+  var selectionStyle: CellSelectionStyle { get set }
+
   /// Selects the item and invokes the item's stateConfigurer
   /// Does not invoke selectionHandler
   func selectItem(at dataID: String, animated: Bool)

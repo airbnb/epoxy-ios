@@ -68,7 +68,7 @@ open class EpoxyTableViewController: UIViewController {
 
   /// Updates the Epoxy view by calling the `epoxySections()` method. Optionally animated.
   public func updateData(animated: Bool) {
-    if isViewLoaded {
+    if isViewLoaded && traitCollection.horizontalSizeClass != .unspecified {
       let sections = epoxySections()
       tableView.setSections(sections, animated: animated)
       tableView.hideBottomDivider(for: hiddenDividerDataIDs())

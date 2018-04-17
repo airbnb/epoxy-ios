@@ -47,7 +47,7 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   // MARK: Public
 
   public weak var navigator: EpoxyNavigable?
-  public weak var interface: EpoxyInterface?
+  open weak var interface: EpoxyInterface?
 
   public weak var delegate: EpoxyControllerDelegate? {
     didSet { delegate?.epoxyControllerDidUpdateData(self, animated: true) }

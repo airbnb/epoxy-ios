@@ -52,7 +52,7 @@ open class EpoxyCollectionViewController: UIViewController {
 
   /// Updates the Epoxy view by calling the `epoxySections()` method. Optionally animated.
   public func updateData(animated: Bool) {
-    if isViewLoaded {
+    if isViewLoaded && traitCollection.horizontalSizeClass != .unspecified {
       let sections = epoxySections()
       collectionView.setSections(sections, animated: animated)
     }
