@@ -52,7 +52,7 @@ extension EpoxyableModel {
 extension EpoxyableModel {
 
   public var diffIdentifier: String? {
-    return dataID
+    return reuseID + (dataID ?? "")
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
