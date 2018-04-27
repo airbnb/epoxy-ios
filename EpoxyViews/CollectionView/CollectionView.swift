@@ -199,6 +199,14 @@ public class CollectionView: UICollectionView,
     return epoxyDataSource.epoxyItem(at: indexPath)?.dataID
   }
 
+  public func dataIDForItem(at point: CGPoint) -> String? {
+    guard
+      let indexPath = indexPathForItem(at: point),
+      let dataID = epoxyDataSource.epoxyItem(at: indexPath)?.dataID
+    else { return nil }
+    return dataID
+  }
+
   /// Convert a section index to a dataID, only for use in collection view layout delegate methods
   public func dataIDForSection(at index: Int) -> String? {
     return epoxyDataSource.epoxySection(at: index)?.dataID
