@@ -6,8 +6,6 @@ public protocol EpoxyControlling: class {
   /// must be marked `weak`
   var delegate: EpoxyControllerDelegate? { get set }
   /// must be marked `weak`
-  var navigator: EpoxyNavigable? { get set }
-  /// must be marked `weak`
   var interface: EpoxyInterface? { get set }
   func rebuild(animated: Bool)
   func makeTableViewSections() -> [EpoxySection]

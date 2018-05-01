@@ -46,7 +46,6 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
 
   // MARK: Public
 
-  public weak var navigator: EpoxyNavigable?
   open weak var interface: EpoxyInterface?
 
   public weak var delegate: EpoxyControllerDelegate? {

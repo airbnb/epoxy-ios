@@ -6,7 +6,7 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
   SectionDataIDType: StringRepresentable,
   SectionDataIDType: Hashable
 {
-
+  
   // MARK: Lifecycle
 
   public init() { }
@@ -24,10 +24,6 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
   }
 
   // MARK: Public
-
-  public weak var navigator: EpoxyNavigable? {
-    didSet { updateAllSectionControllerNavigators() }
-  }
 
   public weak var interface: EpoxyInterface? {
     didSet { updateAllSectionControllerInterfaces() }
@@ -89,12 +85,6 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
   private func updateAllSectionControllerDelegates() {
     allSectionControllers().forEach { sectionController in
       sectionController.delegate = delegate
-    }
-  }
-
-  private func updateAllSectionControllerNavigators() {
-    allSectionControllers().forEach { sectionController in
-      sectionController.navigator = navigator
     }
   }
 
