@@ -23,7 +23,8 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
      - builder: A closure that builds and returns this view type.
      - configurer: A closure that configures this view type with the specified data type.
      - stateConfigurer: An optional closure that configures this view type for a specific state.
-     - behaviorSetter: An optional closure that sets the view's behavior (such as interaction blocks or delegates).
+     - behaviorSetter: An optional closure that sets the view's behavior (such as interaction blocks or delegates). This block is called whenever a view is configured with an Epoxy model.
+     - selectionHandler: An optional closure that is called whenever the view is tapped.
 
    - Returns: An `EpoxyModel` instance that will create the specified view type with this data.
    */
