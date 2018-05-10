@@ -143,6 +143,16 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     return section.items[indexPath.row]
   }
 
+  func epoxyItemIfPresent(at indexPath: IndexPath) -> CollectionView.DataType.Item? {
+    guard let data = internalData,
+      indexPath.section < data.sections.count else { return nil }
+
+    let section = data.sections[indexPath.section]
+    guard indexPath.row < section.items.count else { return nil }
+
+    return section.items[indexPath.row]
+  }
+
   func epoxySection(at index: Int) -> EpoxyCollectionViewSection? {
     guard let data = internalData else {
       assertionFailure("Can't load epoxy item with nil data")
@@ -153,6 +163,13 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
       assertionFailure("Section is out of bounds.")
       return nil
     }
+
+    return data.sections[index]
+  }
+
+  func epoxySectionIfPresent(at index: Int) -> EpoxyCollectionViewSection? {
+    guard let data = internalData else { return nil }
+    guard index < data.sections.count else { return nil }
 
     return data.sections[index]
   }

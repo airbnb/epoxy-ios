@@ -140,6 +140,10 @@ public class CollectionView: UICollectionView,
     return indexPathsForVisibleItems
   }
 
+  public var viewsForVisibleItems: [UIView] {
+    return visibleCells.compactMap({ ($0 as? Cell)?.view })
+  }
+
   /// Whether or not to queue animated changes. This behavior could be unnecessary and be causing
   /// issues, so this flag is available for testing this behavior.
   public var shouldQueueUpdates: Bool = true
@@ -406,12 +410,36 @@ public class CollectionView: UICollectionView,
   {
     guard
       let item = epoxyDataSource.epoxyItem(at: indexPath),
-      let section = epoxyDataSource.epoxySection(at: indexPath.section) else
-    {
+      let section = epoxyDataSource.epoxySection(at: indexPath.section) else {
       assertionFailure("Index path is out of bounds.")
       return
     }
-    epoxyItemDisplayDelegate?.collectionView(self, willDisplayEpoxyModel: item, in: section)
+
+    guard let cell = cell as? Cell else {
+      assertionFailure("Cell does not match expected type CollectionView.Cell")
+      return
+    }
+
+    guard let view = cell.view else {
+      assertionFailure("Cell does not have an attached view")
+      return
+    }
+
+    epoxyItemDisplayDelegate?.collectionView(self, willDisplayEpoxyModel: item, with: view, in: section)
+  }
+
+  public func collectionView(
+    _ collectionView: UICollectionView,
+    didEndDisplaying cell: UICollectionViewCell,
+    forItemAt indexPath: IndexPath)
+  {
+    guard
+      let item = epoxyDataSource.epoxyItemIfPresent(at: indexPath),
+      let section = epoxyDataSource.epoxySectionIfPresent(at: indexPath.section),
+      let cell = cell as? Cell,
+      let view = cell.view else { return }
+
+    epoxyItemDisplayDelegate?.collectionView(self, didEndDisplayingEpoxyModel: item, with: view, in: section)
   }
 
   public func collectionView(
@@ -429,9 +457,16 @@ public class CollectionView: UICollectionView,
       return
     }
 
+    guard let view = view as? CollectionViewReusableView else {
+      assertionFailure(
+        "Supplementary view does not match expected type CollectionViewReusableView.")
+      return
+    }
+
     epoxyItemDisplayDelegate?.collectionView(
       self,
       willDisplaySupplementaryEpoxyModel: elementSupplementaryModel,
+      with: view,
       in: section)
   }
 
