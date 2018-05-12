@@ -100,9 +100,9 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
 
     let beforeIndexPath: IndexPath
     if sourceIndexPath.section == destinationIndexPath.section && destinationIndexPath.item >= sourceIndexPath.item {
-      beforeIndexPath  = IndexPath(item: destinationIndexPath.item + 1, section: destinationIndexPath.section)
+      beforeIndexPath = IndexPath(item: destinationIndexPath.item + 1, section: destinationIndexPath.section)
     } else {
-      beforeIndexPath  = IndexPath(item: destinationIndexPath.item, section: destinationIndexPath.section)
+      beforeIndexPath = IndexPath(item: destinationIndexPath.item, section: destinationIndexPath.section)
     }
 
     // We do all this extra checking just so that it doesn't crash on debug/alpha/beta
