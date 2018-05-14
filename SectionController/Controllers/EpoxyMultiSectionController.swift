@@ -6,7 +6,7 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
   SectionDataIDType: StringRepresentable,
   SectionDataIDType: Hashable
 {
-  
+
   // MARK: Lifecycle
 
   public init() { }

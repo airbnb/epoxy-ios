@@ -22,5 +22,5 @@ extension EpoxyCell {
     }
     return state
   }
-  
+
 }

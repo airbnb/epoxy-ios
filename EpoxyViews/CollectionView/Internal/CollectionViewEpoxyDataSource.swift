@@ -84,12 +84,12 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     }
     return supplementaryView
   }
-  
+
   public func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
     guard let item = epoxyItem(at: indexPath) else { return false }
     return item.isMovable
   }
-  
+
   public func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
     guard let currentItem = epoxyItem(at: sourceIndexPath)?.dataID,
       let currentSectionID = epoxySection(at: sourceIndexPath.section)?.dataID,
@@ -120,7 +120,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
   }
 
   // MARK: Internal
-  
+
   weak var reorderingDelegate: CollectionViewDataSourceReorderingDelegate?
 
   func epoxyItem(at indexPath: IndexPath) -> CollectionView.DataType.Item? {

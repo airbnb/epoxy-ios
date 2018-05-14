@@ -32,5 +32,5 @@ public protocol InternalEpoxyInterface: TypedEpoxyInterface {
 
   /// Applies the given changeset to the view, allowing the view to animate changes
   func apply(_ newData: DataType?, animated: Bool, changesetMaker: @escaping (DataType?) -> EpoxyChangeset?)
-  
+
 }

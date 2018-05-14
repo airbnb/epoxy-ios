@@ -11,7 +11,7 @@ open class EpoxyCollectionViewController: UIViewController {
     self.collectionViewLayout = collectionViewLayout
     super.init(nibName: nil, bundle: nil)
   }
-  
+
   public required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }

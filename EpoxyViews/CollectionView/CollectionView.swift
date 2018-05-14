@@ -132,7 +132,7 @@ public class CollectionView: UICollectionView,
 
   /// The delegate that builds transition layouts.
   public weak var transitionLayoutDelegate: CollectionViewTransitionLayoutDelegate?
-  
+
   /// The delegate that handles items reordering
   public weak var reorderingDelegate: CollectionViewEpoxyReorderingDelegate?
 
@@ -568,7 +568,7 @@ public class CollectionView: UICollectionView,
     guard let delegate = transitionLayoutDelegate else {
       return UICollectionViewTransitionLayout(currentLayout: fromLayout, nextLayout: toLayout)
     }
-    return delegate.collectionView(collectionView, transitionLayoutForOldLayout: fromLayout, newLayout:toLayout)
+    return delegate.collectionView(collectionView, transitionLayoutForOldLayout: fromLayout, newLayout: toLayout)
   }
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {

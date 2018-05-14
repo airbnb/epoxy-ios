@@ -39,7 +39,7 @@ extension EpoxyableModel {
     get { return false }
     set { }
   }
-  
+
   public var isMovable: Bool { return false }
 
   public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) { }

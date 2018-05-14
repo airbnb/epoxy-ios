@@ -560,7 +560,7 @@ extension TableView: UITableViewDataSourcePrefetching {
   public func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
     let models = indexPaths.compactMap(epoxyDataSource.epoxyModel(at:))
       .map { $0.epoxyModel }
-    
+
     guard !models.isEmpty else {
       return
     }
