@@ -5,7 +5,7 @@ import CoreGraphics
 import UIKit
 
 /// A TableView class that handles updates through its `setSections` method, and optionally animates diffs.
-public class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
+open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
 
   public typealias DataType = InternalTableViewEpoxyData
   public typealias Cell = TableViewCell
@@ -574,22 +574,22 @@ extension TableView: UITableViewDataSourcePrefetching {
 extension TableView {
 
   @available (*, unavailable, message: "You shouldn't be registering cell classes on a TableView. The TableViewEpoxyDataSource handles this for you.")
-  public override func register(_ cellClass: AnyClass?, forCellReuseIdentifier identifier: String) {
+  open override func register(_ cellClass: AnyClass?, forCellReuseIdentifier identifier: String) {
     super.register(cellClass, forCellReuseIdentifier: identifier)
   }
 
   @available (*, unavailable, message: "You shouldn't be registering cell nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
-  public override func register(_ nib: UINib?, forCellReuseIdentifier identifier: String) {
+  open override func register(_ nib: UINib?, forCellReuseIdentifier identifier: String) {
     super.register(nib, forCellReuseIdentifier: identifier)
   }
 
   @available (*, unavailable, message: "You shouldn't be header or footer nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
-  public override func register(_ nib: UINib?, forHeaderFooterViewReuseIdentifier identifier: String) {
+  open override func register(_ nib: UINib?, forHeaderFooterViewReuseIdentifier identifier: String) {
     super.register(nib, forHeaderFooterViewReuseIdentifier: identifier)
   }
 
   @available (*, unavailable, message: "You shouldn't be registering header or footer classes on a TableView. The TableViewEpoxyDataSource handles this for you.")
-  public override func register(_ aClass: AnyClass?, forHeaderFooterViewReuseIdentifier identifier: String) {
+  open override func register(_ aClass: AnyClass?, forHeaderFooterViewReuseIdentifier identifier: String) {
     super.register(aClass, forHeaderFooterViewReuseIdentifier: identifier)
   }
 
