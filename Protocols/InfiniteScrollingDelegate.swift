@@ -13,4 +13,14 @@ public protocol InfiniteScrollingDelegate: class {
       - completionHandler: Block to inform the delegate's owner to finish loading
   */
   func didScrollToInfiniteLoader(completionHandler: @escaping () -> Void)
+
+  /// Return `false` if you no longer need need infinite scrolling aka you've loaded all content
+  func shouldFireInfiniteScrolling() -> Bool
+}
+
+public extension InfiniteScrollingDelegate {
+
+  public func shouldFireInfiniteScrolling() -> Bool {
+    return true
+  }
 }

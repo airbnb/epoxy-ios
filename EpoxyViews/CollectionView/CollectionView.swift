@@ -575,7 +575,8 @@ public class CollectionView: UICollectionView,
     scrollDelegate?.scrollViewDidScroll?(scrollView)
     let (newState, shouldTrigger) = updatedInfiniteScrollingState(in: scrollView)
     infiniteScrollingState = newState
-    if shouldTrigger {
+    let delegateWantsInfiniteScrolling = infiniteScrollingDelegate?.shouldFireInfiniteScrolling() ?? true
+    if shouldTrigger && delegateWantsInfiniteScrolling {
       infiniteScrollingLoader?.startAnimating()
       infiniteScrollingDelegate?.didScrollToInfiniteLoader { [weak self] in
         self?.infiniteScrollingLoader?.stopAnimating()
