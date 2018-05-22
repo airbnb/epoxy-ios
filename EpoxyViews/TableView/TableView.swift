@@ -501,6 +501,8 @@ extension TableView: UITableViewDelegate {
         self?.infiniteScrollingLoader?.stopAnimating()
         self?.infiniteScrollingState = .stopped
       }
+    } else if !delegateWantsInfiniteScrolling {
+      infiniteScrollingState = .stopped
     }
   }
 
