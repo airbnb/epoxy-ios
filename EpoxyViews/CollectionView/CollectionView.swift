@@ -144,10 +144,6 @@ public class CollectionView: UICollectionView,
     return visibleCells.compactMap({ ($0 as? Cell)?.view })
   }
 
-  /// Whether or not to queue animated changes. This behavior could be unnecessary and be causing
-  /// issues, so this flag is available for testing this behavior.
-  public var shouldQueueUpdates: Bool = true
-
   public func register(cellReuseID: String) {
     super.register(
       CollectionViewCell.self,
@@ -186,8 +182,7 @@ public class CollectionView: UICollectionView,
     animated: Bool,
     changesetMaker: @escaping (DataType?) -> EpoxyChangeset?)
   {
-    // queue new data, replace old queued data instead of additive
-    guard !isUpdating || !shouldQueueUpdates else {
+    guard !isUpdating else {
       queuedUpdate = (
         newData: newData,
         animated: animated,
