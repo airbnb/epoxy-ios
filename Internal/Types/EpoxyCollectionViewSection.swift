@@ -62,7 +62,7 @@ extension EpoxyCollectionViewSection: EpoxyableSection {
 
   public func getSupplementaryViewReuseIDs() -> [String: Set<String>] {
     var newSupplementaryViewReuseIDs = [String: Set<String>]()
-    supplementaryModels?.forEach { (elementKind, elementSupplementaryModels) in
+    supplementaryModels?.forEach { elementKind, elementSupplementaryModels in
       var newElementSupplementaryViewReuseIDs = Set<String>()
       elementSupplementaryModels.forEach { elementSupplementaryModel in
         newElementSupplementaryViewReuseIDs.insert(elementSupplementaryModel.reuseID)

@@ -33,7 +33,7 @@ extension Array where Element: EpoxyableSection {
     var newReuseIDs = [String: Set<String>]()
     forEach { section in
       let sectionReuseIDs = section.getSupplementaryViewReuseIDs()
-      sectionReuseIDs.forEach { (elementKind, reuseIDs) in
+      sectionReuseIDs.forEach { elementKind, reuseIDs in
         let existingSet = newReuseIDs[elementKind] ?? Set<String>()
         newReuseIDs[elementKind] = existingSet.union(reuseIDs)
       }

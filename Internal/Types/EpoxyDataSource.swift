@@ -75,7 +75,7 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
 
   private func reregisterReuseIDs() {
     registerNewCellReuseIDs(cellReuseIDs)
-    supplementaryViewReuseIDs.forEach { (elementKind, reuseIDs) in
+    supplementaryViewReuseIDs.forEach { elementKind, reuseIDs in
       registerNewSupplementaryViewReuseIDs(reuseIDs, forKind: elementKind)
     }
   }
@@ -88,7 +88,7 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
 
   private func registerSupplementaryViewReuseIDs(with sections: [EpoxyInterfaceType.DataType.ExternalSection]?) {
     let newSupplementaryViewReuseIDs = sections?.getSupplementaryViewReuseIDs() ?? [:]
-    newSupplementaryViewReuseIDs.forEach { (elementKind, newElementSupplementaryViewReuseIDs) in
+    newSupplementaryViewReuseIDs.forEach { elementKind, newElementSupplementaryViewReuseIDs in
       let existingReuseIDs: Set<String> = supplementaryViewReuseIDs[elementKind] ?? []
       registerNewSupplementaryViewReuseIDs(newElementSupplementaryViewReuseIDs.subtracting(existingReuseIDs), forKind: elementKind)
       supplementaryViewReuseIDs[elementKind] = existingReuseIDs.union(newElementSupplementaryViewReuseIDs)

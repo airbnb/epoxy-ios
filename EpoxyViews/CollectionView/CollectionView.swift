@@ -352,11 +352,11 @@ public class CollectionView: UICollectionView,
     deleteSections(changeset.sectionChangeset.deletes as IndexSet)
     deleteItems(at: changeset.itemChangeset.deletes)
 
-    changeset.sectionChangeset.moves.forEach { (fromIndex, toIndex) in
+    changeset.sectionChangeset.moves.forEach { fromIndex, toIndex in
       moveSection(fromIndex, toSection: toIndex)
     }
 
-    changeset.itemChangeset.moves.forEach { (fromIndexPath, toIndexPath) in
+    changeset.itemChangeset.moves.forEach { fromIndexPath, toIndexPath in
       moveItem(at: fromIndexPath, to: toIndexPath)
     }
 

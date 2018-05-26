@@ -247,11 +247,11 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
       insertRows(at: changeset.itemChangeset.inserts, with: .fade)
       insertSections(changeset.sectionChangeset.inserts as IndexSet, with: .fade)
 
-      changeset.sectionChangeset.moves.forEach { (fromIndex, toIndex) in
+      changeset.sectionChangeset.moves.forEach { fromIndex, toIndex in
         moveSection(fromIndex, toSection: toIndex)
       }
 
-      changeset.itemChangeset.moves.forEach { (fromIndexPath, toIndexPath) in
+      changeset.itemChangeset.moves.forEach { fromIndexPath, toIndexPath in
         moveRow(at: fromIndexPath, to: toIndexPath)
       }
     }

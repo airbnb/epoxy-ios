@@ -262,7 +262,7 @@ extension Collection where Self.Iterator.Element: Diffable, Self.Index == Int {
     assert(otherCollection.count + inserts.count - deletes.count == self.count,
            "Failed sanity check for old array count with changes matching new array count.")
 
-    let newIndicesArray: [(Int, Int?)] = oldResultsArray.map { (index, record) in
+    let newIndicesArray: [(Int, Int?)] = oldResultsArray.map { index, record in
       return (index, record.correspondingIndex)
     }
 
