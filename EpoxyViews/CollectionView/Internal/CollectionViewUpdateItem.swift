@@ -3,7 +3,7 @@
 
 import UIKit
 
-/// A type safe way to model collection view batch updates
+/// A type safe way to represent collection view batch updates
 enum CollectionViewUpdate<SectionModel, ItemModel> {
 
   case sectionReload(sectionIndex: Int, newSection: SectionModel)
