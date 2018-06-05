@@ -37,12 +37,12 @@ public protocol EpoxyCollectionViewDelegateFlowLayout {
     referenceSizeForFooterInSectionWith sectionDataID: String) -> CGSize
 }
 
-fileprivate let defaultItemSize = CGSize(width: 50, height: 50)
-fileprivate let defaultSectionInset = UIEdgeInsets.zero
-fileprivate let defaultMinimumLineSpacingForSection: CGFloat = 10
-fileprivate let defaultMinimumInteritemSpacingForSection: CGFloat = 10
-fileprivate let defaultHeaderReferenceSize: CGSize = .zero
-fileprivate let defaultFooterReferenceSize: CGSize = .zero
+private let defaultItemSize = CGSize(width: 50, height: 50)
+private let defaultSectionInset = UIEdgeInsets.zero
+private let defaultMinimumLineSpacingForSection: CGFloat = 10
+private let defaultMinimumInteritemSpacingForSection: CGFloat = 10
+private let defaultHeaderReferenceSize: CGSize = .zero
+private let defaultFooterReferenceSize: CGSize = .zero
 
 extension EpoxyCollectionViewDelegateFlowLayout {
   public func collectionView(
