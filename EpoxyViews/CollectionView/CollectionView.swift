@@ -439,6 +439,19 @@ public class CollectionView: UICollectionView,
 
   public func collectionView(
     _ collectionView: UICollectionView,
+    didEndDisplayingSupplementaryView view: UICollectionReusableView,
+    forElementOfKind elementKind: String,
+    at indexPath: IndexPath)
+  {
+    guard
+      let section = epoxyDataSource.epoxySectionIfPresent(at: indexPath.section),
+      let item = section.supplementaryModels?[elementKind]?[indexPath.item] else { return }
+
+    epoxyItemDisplayDelegate?.collectionView(self, didEndDisplayingSupplementaryEpoxyModel: item, with: view, in: section)
+  }
+
+  public func collectionView(
+    _ collectionView: UICollectionView,
     willDisplaySupplementaryView view: UICollectionReusableView,
     forElementKind elementKind: String,
     at indexPath: IndexPath)

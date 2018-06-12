@@ -401,6 +401,18 @@ extension TableView: UITableViewDelegate {
 
   public func tableView(
     _ tableView: UITableView,
+    didEndDisplaying cell: UITableViewCell,
+    forRowAt indexPath: IndexPath)
+  {
+    guard
+      let item = epoxyDataSource.epoxyModel(at: indexPath),
+      let section = epoxyDataSource.epoxySection(at: indexPath.section) else { return }
+
+    epoxyModelDisplayDelegate?.tableView(self, willDisplay: item, in: section)
+  }
+
+  public func tableView(
+    _ tableView: UITableView,
     shouldHighlightRowAt indexPath: IndexPath) -> Bool
   {
     guard let item = epoxyDataSource.epoxyModel(at: indexPath) else {
