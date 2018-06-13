@@ -440,7 +440,6 @@ extension TableView: UITableViewDelegate {
   {
     guard let item = epoxyDataSource.epoxyModel(at: indexPath),
       let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
-        assertionFailure("Index path is out of bounds")
         return
     }
     item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
