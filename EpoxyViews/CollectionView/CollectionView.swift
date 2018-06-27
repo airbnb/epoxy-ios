@@ -289,7 +289,8 @@ public class CollectionView: UICollectionView,
   }
 
   private func configure(cell: Cell, with item: EpoxyableModel, animated: Bool) {
-      switch selectionStyle {
+    let cellSelectionStyle = item.selectionStyle ?? selectionStyle
+    switch cellSelectionStyle {
       case .none:
         cell.selectedBackgroundColor = nil
       case .color(let selectionColor):

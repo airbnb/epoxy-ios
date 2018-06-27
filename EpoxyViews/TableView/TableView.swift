@@ -199,7 +199,8 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   public func configure(cell: Cell, with item: DataType.Item) {
     configure(cell: cell, with: item, animated: false)
 
-    switch selectionStyle {
+    let cellSelectionStyle = item.selectionStyle ?? selectionStyle
+    switch cellSelectionStyle {
     case .none:
       cell.selectedBackgroundColor = nil
     case .color(let selectionColor):

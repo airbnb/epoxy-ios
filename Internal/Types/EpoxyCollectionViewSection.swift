@@ -96,6 +96,11 @@ extension EpoxyModelWrapper: EpoxyableModel {
     set { epoxyModel.dataID = newValue }
   }
 
+  public var selectionStyle: CellSelectionStyle? {
+    get { return epoxyModel.selectionStyle }
+    set { epoxyModel.selectionStyle = newValue }
+  }
+
   public var isSelectable: Bool {
     get { return epoxyModel.isSelectable }
     set { epoxyModel.isSelectable = newValue }

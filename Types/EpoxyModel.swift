@@ -62,6 +62,13 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   public var isSelectable: Bool
 
   /**
+   The selection style of the cell.
+   If nil, defaults to the `selectionStyle` set on the `TableView` or `CollectionView`.
+   Default value is `nil`
+   */
+  public var selectionStyle: CellSelectionStyle?
+
+  /**
    This is a experimental property to allow interactive reordering of items within collection view,
    it defaults to false, but you can configure it to be true to enable reordering
    */
