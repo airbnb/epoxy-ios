@@ -40,6 +40,7 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   {
     self.data = data
     self.dataID = dataID
+    self.alternateStyleID = alternateStyleID
     self.reuseID = "\(type(of: ViewType.self))_\(alternateStyleID ?? ""))"
     self.builder = builder
     self.configurer = configurer
@@ -104,9 +105,31 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
 
   // MARK: Private
 
+  private let alternateStyleID: String?
   private let builder: () -> ViewType
   private let configurer: (ViewType, DataType, UITraitCollection, Bool) -> Void
   private let stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)?
   private let behaviorSetter: ((ViewType, DataType, String?) -> Void)?
   private let selectionHandler: ((ViewType, DataType, String?) -> Void)?
+}
+
+// Builder extensions
+
+public extension EpoxyModel {
+
+  /// Create a builder from an EpoxyModel
+  ///
+  /// - Returns: a builder object set up with all the data from the original EpoxyModel
+  public func toBuilder() -> BaseEpoxyModelBuilder<ViewType, DataType> {
+    return BaseEpoxyModelBuilder<ViewType, DataType>(
+      data: data,
+      dataID: dataID ?? "")
+      .with(alternateStyleID: alternateStyleID)
+      .with(viewBuilder: builder)
+      .with(configurer: configurer)
+      .with(stateConfigurer: stateConfigurer)
+      .with(behaviorSetter: behaviorSetter)
+      .with(selectionHandler: selectionHandler)
+  }
+
 }
