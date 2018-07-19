@@ -46,7 +46,7 @@ open class EpoxyCollectionViewController: UIViewController {
   }
 
   public lazy var collectionView: CollectionView = {
-    assert(self.isViewLoaded, "Accessed tableView before view was loaded.")
+    assert(self.isViewLoaded, "Accessed collectionView before view was loaded.")
     return self.makeCollectionView()
   }()
 
