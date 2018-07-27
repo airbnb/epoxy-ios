@@ -20,6 +20,13 @@ public protocol EpoxyableModel: class, Diffable {
   var isSelectable: Bool { get set }
   var selectionStyle: CellSelectionStyle? { get set }
   var isMovable: Bool { get }
+
+  /// Creates view for this epoxy model. This should only be used to create a view outside of a
+  /// collection or table view.
+  ///
+  /// - Parameter traitCollection: The trait collection to create the view for
+  /// - Returns: The configured view for this epoxy model.
+  func configuredView(traitCollection: UITraitCollection) -> UIView
 }
 
 // MARK: Default implementations
@@ -47,6 +54,11 @@ extension EpoxyableModel {
   public var isMovable: Bool { return false }
 
   public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) { }
+
+  public func configuredView(traitCollection: UITraitCollection) -> UIView {
+    assertionFailure("Configured view not implemented for this Epoxyable model")
+    return UIView()
+  }
 
   public func didSelect(_ cell: EpoxyCell) { }
 }
