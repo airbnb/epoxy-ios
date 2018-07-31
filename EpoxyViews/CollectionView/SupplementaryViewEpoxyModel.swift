@@ -16,7 +16,8 @@ public class SupplementaryViewEpoxyModel<ViewType, DataType>: TypedSupplementary
     dataID: String,
     alternateStyleID: String? = nil,
     builder: @escaping () -> ViewType,
-    configurer: @escaping (ViewType, DataType, UITraitCollection) -> Void)
+    configurer: @escaping (ViewType, DataType, UITraitCollection) -> Void,
+    behaviorSetter: ((ViewType, DataType, String?) -> Void)? = nil)
   {
     self.elementKind = elementKind
     self.data = data
@@ -24,6 +25,7 @@ public class SupplementaryViewEpoxyModel<ViewType, DataType>: TypedSupplementary
     self.reuseID = "\(type(of: ViewType.self))_\(elementKind)_\(alternateStyleID ?? ""))"
     self.builder = builder
     self.configurer = configurer
+    self.behaviorSetter = behaviorSetter
   }
 
   // MARK: Public
@@ -44,8 +46,13 @@ public class SupplementaryViewEpoxyModel<ViewType, DataType>: TypedSupplementary
     configurer(view, data, traitCollection)
   }
 
+  public func setViewBehavior(_ view: ViewType) {
+    behaviorSetter?(view, data, dataID)
+  }
+
   // MARK: Private
 
   private let builder: () -> ViewType
   private let configurer: (ViewType, DataType, UITraitCollection) -> Void
+  private let behaviorSetter: ((ViewType, DataType, String?) -> Void)?
 }

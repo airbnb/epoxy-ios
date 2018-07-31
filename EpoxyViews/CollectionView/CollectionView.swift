@@ -165,9 +165,8 @@ public class CollectionView: UICollectionView,
     supplementaryView: CollectionViewReusableView,
     with model: SupplementaryViewEpoxyableModel)
   {
-    model.configure(
-      reusableView: supplementaryView,
-      forTraitCollection: traitCollection)
+    model.configure(reusableView: supplementaryView, forTraitCollection: traitCollection)
+    model.setBehavior(reusableView: supplementaryView)
   }
 
   public func reloadItem(at indexPath: IndexPath, animated: Bool) {

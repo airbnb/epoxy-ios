@@ -14,6 +14,8 @@ public protocol SupplementaryViewEpoxyableModel {
   func configure(
     reusableView: CollectionViewReusableView,
     forTraitCollection traitCollection: UITraitCollection)
+
+  func setBehavior(reusableView: CollectionViewReusableView)
 }
 
 /// This contains the view's data and methods for lazily creating views and applying the data to a view.
@@ -23,9 +25,11 @@ public protocol TypedSupplementaryViewEpoxyableModel: SupplementaryViewEpoxyable
 
   func makeView() -> View
   func configureView(_ view: View, forTraitCollection traitCollection: UITraitCollection)
+  func setViewBehavior(_ view: View)
 }
 
 extension TypedSupplementaryViewEpoxyableModel {
+
   public func configure(
     reusableView: CollectionViewReusableView,
     forTraitCollection traitCollection: UITraitCollection)
@@ -33,5 +37,11 @@ extension TypedSupplementaryViewEpoxyableModel {
     let view = reusableView.view as? View ?? makeView() // Kyle++
     reusableView.setViewIfNeeded(view: view)
     configureView(view, forTraitCollection: traitCollection)
+  }
+
+  public func setBehavior(reusableView: CollectionViewReusableView) {
+    let view = reusableView.view as? View ?? makeView() // Kyle++
+    reusableView.setViewIfNeeded(view: view)
+    setViewBehavior(view)
   }
 }
