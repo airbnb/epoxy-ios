@@ -173,4 +173,19 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
 
     return data.sections[index]
   }
+
+  func supplementaryModelIfPresent(
+    ofKind elementKind: String,
+    at indexPath: IndexPath) -> SupplementaryViewEpoxyableModel?
+  {
+    guard let data = internalData,
+      indexPath.section < data.sections.count else { return nil }
+
+    let section = data.sections[indexPath.section]
+
+    guard let models = section.supplementaryModels?[elementKind] else { return nil }
+    guard indexPath.item < models.count else { return nil }
+
+    return models[indexPath.item]
+  }
 }

@@ -36,7 +36,7 @@ public class CollectionView: UICollectionView,
   }
 
   public func scrollToItem(at dataID: String, position: UICollectionViewScrollPosition, animated: Bool) {
-    if let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) {
+    if let indexPath = indexPathForItem(at: dataID) {
       scrollToItem(at: indexPath, at: position, animated: animated)
     }
   }
@@ -49,7 +49,7 @@ public class CollectionView: UICollectionView,
   /// - Parameter dataID: The dataID related to the view you want to becomeFirstResponder
   public func setItemAsFirstResponder(at dataID: String) {
     guard
-      let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID),
+      let indexPath = indexPathForItem(at: dataID),
       let cell = cellForItem(at: indexPath) as? CollectionViewCell
       else {
         assertionFailure("Tried to become first responder for a cell that was not visible.")
@@ -71,7 +71,7 @@ public class CollectionView: UICollectionView,
   }
 
   public func selectItem(at dataID: String, animated: Bool) {
-    guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
+    guard let indexPath = indexPathForItem(at: dataID) else {
       assertionFailure("item not found")
       return
     }
@@ -84,7 +84,7 @@ public class CollectionView: UICollectionView,
   }
 
   public func deselectItem(at dataID: String, animated: Bool) {
-    guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
+    guard let indexPath = indexPathForItem(at: dataID) else {
       return
     }
     deselectItem(at: indexPath, animated: animated)
@@ -192,7 +192,12 @@ public class CollectionView: UICollectionView,
     updateView(with: newData, animated: animated, changesetMaker: changesetMaker)
   }
 
-  /// Convert an index path to a dataID, only for use in collection view layout delegate methods
+  /// Convert a dataID to an index path, only for use in collection view layout delegate methods.
+  public func indexPathForItem(at dataID: String) -> IndexPath? {
+    return epoxyDataSource.internalData?.indexPathForItem(at: dataID)
+  }
+
+  /// Convert an index path to a dataID, only for use in collection view layout delegate methods.
   public func dataIDForItem(at indexPath: IndexPath) -> String? {
     return epoxyDataSource.epoxyItem(at: indexPath)?.dataID
   }
@@ -205,7 +210,7 @@ public class CollectionView: UICollectionView,
     return dataID
   }
 
-  /// Convert a section index to a dataID, only for use in collection view layout delegate methods
+  /// Convert a section index to a dataID, only for use in collection view layout delegate methods.
   public func dataIDForSection(at index: Int) -> String? {
     return epoxyDataSource.epoxySection(at: index)?.dataID
   }
@@ -445,7 +450,10 @@ public class CollectionView: UICollectionView,
   {
     guard
       let section = epoxyDataSource.epoxySectionIfPresent(at: indexPath.section),
-      let item = section.supplementaryModels?[elementKind]?[indexPath.item] else { return }
+      let item = epoxyDataSource.supplementaryModelIfPresent(ofKind: elementKind, at: indexPath) else
+    {
+      return
+    }
 
     epoxyItemDisplayDelegate?.collectionView(self, didEndDisplayingSupplementaryEpoxyModel: item, with: view, in: section)
   }
@@ -458,7 +466,7 @@ public class CollectionView: UICollectionView,
   {
     guard
       let section = epoxyDataSource.epoxySection(at: indexPath.section),
-      let elementSupplementaryModel = section.supplementaryModels?[elementKind]?[indexPath.item] else
+      let model = epoxyDataSource.supplementaryModelIfPresent(ofKind: elementKind, at: indexPath) else
     {
       assertionFailure(
         "Supplementary epoxy models not found for the given element kind and index path.")
@@ -473,7 +481,7 @@ public class CollectionView: UICollectionView,
 
     epoxyItemDisplayDelegate?.collectionView(
       self,
-      willDisplaySupplementaryEpoxyModel: elementSupplementaryModel,
+      willDisplaySupplementaryEpoxyModel: model,
       with: view,
       in: section)
   }
