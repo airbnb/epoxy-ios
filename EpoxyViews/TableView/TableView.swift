@@ -290,6 +290,12 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     infiniteScrollingDelegate = delegate
   }
 
+  public func removeInfiniteScrolling() {
+    tableFooterView = nil
+    infiniteScrollingLoader = nil
+    infiniteScrollingDelegate = nil
+  }
+
   // MARK: Fileprivate
 
   fileprivate let epoxyDataSource: TableViewEpoxyDataSource
