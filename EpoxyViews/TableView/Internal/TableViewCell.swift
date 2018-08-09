@@ -105,7 +105,7 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
   private func updateVisualHighlightState(_ isVisuallyHighlighted: Bool, animated: Bool) {
     if animated {
       UIView.animate(
-        withDuration: Motion.durationShort,
+        withDuration: 0.2,
         animations: {
           self.updateVisualHighlightState(isVisuallyHighlighted)
       })

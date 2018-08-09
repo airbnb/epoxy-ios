@@ -39,8 +39,8 @@ open class EpoxyTableViewController: UIViewController {
     tableView.rowDividerConfigurer = { [weak self] divider in
       guard let divider = divider as? EpoxyDivider else { return }
       if self?.traitCollection.horizontalSizeClass == .regular {
-        divider.leadingPadding = 24
-        divider.trailingPadding = 24
+        divider.leadingPadding = 64
+        divider.trailingPadding = 64
       } else {
         divider.leadingPadding = 24
         divider.trailingPadding = 24

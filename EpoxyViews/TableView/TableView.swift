@@ -94,8 +94,6 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
 
   /// Delegate which indicates when an epoxy item will be displayed, typically used
   /// for logging.
-  /// If you'd like to add impression logging for your EpoxyableModels, check out
-  /// [the documentation](https://airbnb.quip.com/MdPEAcxPCoPr/Magical-Impression-Logging-iOS-How-to) on how to do this.
   public weak var epoxyModelDisplayDelegate: TableViewEpoxyModelDisplayDelegate?
 
   /// Data source for prefetching the contents of offscreen epoxy items that are likely to come on-

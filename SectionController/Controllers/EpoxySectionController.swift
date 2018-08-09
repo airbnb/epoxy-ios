@@ -3,7 +3,7 @@
 
 open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   where
-  ItemDataIDType: StringRepresentable,
+  ItemDataIDType: EpoxyStringRepresentable,
   ItemDataIDType: Hashable
 {
 
