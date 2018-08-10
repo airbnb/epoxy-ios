@@ -45,6 +45,7 @@ extension TypedEpoxyableModel {
   public func configuredView(traitCollection: UITraitCollection) -> UIView {
     let view = makeView()
     configureView(view, forTraitCollection: traitCollection, animated: false)
+    setViewBehavior(view)
     return view
   }
 
