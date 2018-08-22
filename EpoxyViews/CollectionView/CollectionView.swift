@@ -513,7 +513,6 @@ public class CollectionView: UICollectionView,
   {
     guard let item = epoxyDataSource.epoxyItem(at: indexPath),
       let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell else {
-        assertionFailure("Index path is out of bounds")
         return
     }
     item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
