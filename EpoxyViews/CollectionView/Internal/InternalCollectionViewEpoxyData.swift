@@ -37,9 +37,7 @@ extension InternalCollectionViewEpoxyData {
     sections.enumerated().forEach { sectionIndex, section in
       sectionIndexMap[section.dataID] = sectionIndex
       section.items.enumerated().forEach { itemIndex, item in
-        if let dataID = item.dataID {
-          itemIndexMap[dataID] = IndexPath(item: itemIndex, section: sectionIndex)
-        }
+        itemIndexMap[item.dataID] = IndexPath(item: itemIndex, section: sectionIndex)
       }
     }
 

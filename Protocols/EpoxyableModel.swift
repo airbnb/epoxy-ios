@@ -13,7 +13,7 @@ public protocol EpoxyableModel: class, Diffable {
   // MARK: Optional
 
   var reuseID: String { get }
-  var dataID: String? { get set }
+  var dataID: String { get }
   func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState)
   func didSelect(_ cell: EpoxyCell)
 
@@ -37,8 +37,8 @@ extension EpoxyableModel {
     return String(describing: type(of: self))
   }
 
-  public var dataID: String? {
-    return nil
+  public var dataID: String {
+    return UUID().uuidString
   }
 
   public var selectionStyle: CellSelectionStyle? {
@@ -68,7 +68,7 @@ extension EpoxyableModel {
 extension EpoxyableModel {
 
   public var diffIdentifier: String? {
-    return reuseID + (dataID ?? "")
+    return reuseID + dataID
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {

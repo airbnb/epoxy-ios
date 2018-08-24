@@ -56,9 +56,8 @@ extension InternalTableViewEpoxyData {
           epoxyModel: existingSectionHeader,
           dividerType: .sectionHeaderDivider))
 
-        if let dataID = existingSectionHeader.dataID {
-          itemIndexMap[dataID] = IndexPath(item: itemIndex, section: sectionIndex)
-        }
+        let dataID = existingSectionHeader.dataID
+        itemIndexMap[dataID] = IndexPath(item: itemIndex, section: sectionIndex)
 
         itemIndex += 1
       }
@@ -68,9 +67,7 @@ extension InternalTableViewEpoxyData {
           epoxyModel: model,
           dividerType: .rowDivider))
 
-        if let dataID = model.dataID {
-          itemIndexMap[dataID] = IndexPath(item: itemIndex, section: sectionIndex)
-        }
+        itemIndexMap[model.dataID] = IndexPath(item: itemIndex, section: sectionIndex)
 
         itemIndex += 1
       }
@@ -225,9 +222,8 @@ extension InternalTableViewEpoxyModel: EpoxyableModel {
     return epoxyModel.reuseID
   }
 
-  public var dataID: String? {
-    get { return epoxyModel.dataID }
-    set { epoxyModel.dataID = newValue }
+  public var dataID: String {
+    return epoxyModel.dataID
   }
 
   public var selectionStyle: CellSelectionStyle? {

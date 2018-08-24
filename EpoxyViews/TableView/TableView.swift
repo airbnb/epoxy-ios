@@ -474,12 +474,8 @@ extension TableView: UITableViewDelegate {
     item.didSelect(cell)
 
     if autoDeselectItems {
-      if let dataID = item.dataID {
-        deselectItem(at: dataID, animated: true)
-      } else {
-        tableView.deselectRow(at: indexPath, animated: true)
-        item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
-      }
+      deselectRow(at: indexPath, animated: true)
+      item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
     }
   }
 

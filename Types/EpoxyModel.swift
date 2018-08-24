@@ -30,13 +30,13 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
    */
   public init(
     data: DataType,
-    dataID: String? = nil,
+    dataID: String,
     alternateStyleID: String? = nil,
     builder: @escaping () -> ViewType = { ViewType() },
     configurer: @escaping (ViewType, DataType, UITraitCollection, Bool) -> Void,
     stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)? = nil,
-    behaviorSetter: ((ViewType, DataType, String?) -> Void)? = nil,
-    selectionHandler: ((ViewType, DataType, String?) -> Void)? = nil)
+    behaviorSetter: ((ViewType, DataType, String) -> Void)? = nil,
+    selectionHandler: ((ViewType, DataType, String) -> Void)? = nil)
   {
     self.data = data
     self.dataID = dataID
@@ -52,7 +52,7 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
 
   // MARK: Public
 
-  public var dataID: String?
+  public let dataID: String
   public let reuseID: String
   public let data: DataType
 
@@ -109,8 +109,8 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   private let builder: () -> ViewType
   private let configurer: (ViewType, DataType, UITraitCollection, Bool) -> Void
   private let stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)?
-  private let behaviorSetter: ((ViewType, DataType, String?) -> Void)?
-  private let selectionHandler: ((ViewType, DataType, String?) -> Void)?
+  private let behaviorSetter: ((ViewType, DataType, String) -> Void)?
+  private let selectionHandler: ((ViewType, DataType, String) -> Void)?
 }
 
 // Builder extensions
@@ -123,7 +123,7 @@ public extension EpoxyModel {
   public func toBuilder() -> BaseEpoxyModelBuilder<ViewType, DataType> {
     return BaseEpoxyModelBuilder<ViewType, DataType>(
       data: data,
-      dataID: dataID ?? "")
+      dataID: dataID)
       .with(alternateStyleID: alternateStyleID)
       .with(viewBuilder: builder)
       .with(configurer: configurer)

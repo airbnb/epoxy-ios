@@ -51,12 +51,12 @@ public final class BaseEpoxyModelBuilder<ViewType, DataType> where
     return self
   }
 
-  public func with(behaviorSetter: ((ViewType, DataType, String?) -> Void)?) -> BaseEpoxyModelBuilder {
+  public func with(behaviorSetter: ((ViewType, DataType, String) -> Void)?) -> BaseEpoxyModelBuilder {
     self.behaviorSetter = behaviorSetter
     return self
   }
 
-  public func with(selectionHandler: ((ViewType, DataType, String?) -> Void)?) -> BaseEpoxyModelBuilder {
+  public func with(selectionHandler: ((ViewType, DataType, String) -> Void)?) -> BaseEpoxyModelBuilder {
     self.selectionHandler = selectionHandler
     return self
   }
@@ -69,6 +69,6 @@ public final class BaseEpoxyModelBuilder<ViewType, DataType> where
   private var builder: () -> ViewType = { ViewType() }
   private var configurer: (ViewType, DataType, UITraitCollection, Bool) -> Void = { _, _, _, _ in }
   private var stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)? = nil
-  private var behaviorSetter: ((ViewType, DataType, String?) -> Void)? = nil
-  private var selectionHandler: ((ViewType, DataType, String?) -> Void)? = nil
+  private var behaviorSetter: ((ViewType, DataType, String) -> Void)? = nil
+  private var selectionHandler: ((ViewType, DataType, String) -> Void)? = nil
 }

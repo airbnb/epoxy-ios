@@ -100,7 +100,6 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
     guard let newItemModel = itemModel(forDataID: dataID) else {
       return nil
     }
-    newItemModel.dataID = dataID.stringValue
 
     modelCache.cacheEpoxyModel(newItemModel)
 

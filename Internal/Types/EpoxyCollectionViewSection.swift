@@ -91,9 +91,8 @@ extension EpoxyModelWrapper: EpoxyableModel {
     return epoxyModel.reuseID
   }
 
-  public var dataID: String? {
-    get { return epoxyModel.dataID }
-    set { epoxyModel.dataID = newValue }
+  public var dataID: String {
+    return epoxyModel.dataID
   }
 
   public var selectionStyle: CellSelectionStyle? {

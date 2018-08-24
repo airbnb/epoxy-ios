@@ -15,8 +15,7 @@ public final class EpoxyModelCache {
   // MARK: Public
 
   public func cacheEpoxyModel(_ model: EpoxyableModel) {
-    guard let dataID = model.dataID else { return }
-    cache.setObject(model as AnyObject, forKey: cacheKey(forDataID: dataID))
+    cache.setObject(model as AnyObject, forKey: cacheKey(forDataID: model.dataID))
   }
 
   public func epoxyModel(forDataID dataID: String) -> EpoxyableModel? {
