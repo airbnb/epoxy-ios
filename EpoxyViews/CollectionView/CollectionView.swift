@@ -134,6 +134,32 @@ public class CollectionView: UICollectionView,
   /// The delegate that handles items reordering
   public weak var reorderingDelegate: CollectionViewEpoxyReorderingDelegate?
 
+  /// Block that handles the pull to refresh action
+  public var didTriggerPullToRefresh: ((UIRefreshControl) -> Void)? {
+    didSet {
+      pullToRefreshEnabled = didTriggerPullToRefresh != nil
+    }
+  }
+
+  /// Pull to refresh control
+  public lazy var pullToRefreshControl: UIRefreshControl = {
+    let refreshControl = UIRefreshControl()
+    refreshControl.addTarget(self, action: #selector(didTriggerPullToRefreshControl(sender:)), for: .valueChanged)
+    return refreshControl
+  }()
+
+  /// Whether or not pull to refresh is enabled
+  public var pullToRefreshEnabled: Bool = false {
+    didSet {
+      // TODO: Once we drop iOS 9, set UIScrollView's refreshControl directly
+      if pullToRefreshEnabled {
+        addSubview(pullToRefreshControl)
+      } else {
+        pullToRefreshControl.removeFromSuperview()
+      }
+    }
+  }
+
   public var visibleIndexPaths: [IndexPath] {
     return indexPathsForVisibleItems
   }
@@ -397,6 +423,11 @@ public class CollectionView: UICollectionView,
       y: contentSize.height,
       width: contentSize.width,
       height: infiniteScrollingLoader.bounds.height)
+  }
+
+  @objc
+  private func didTriggerPullToRefreshControl(sender: UIRefreshControl) {
+    didTriggerPullToRefresh?(sender)
   }
 
   // MARK: UICollectionViewDelegate
