@@ -573,7 +573,12 @@ public class CollectionView: UICollectionView,
     item.didSelect(cell)
 
     if autoDeselectItems {
-      deselectItem(at: indexPath, animated: true)
+      // If collectionView modifications have been made, indexPath may no longer point to the correct
+      // item so we find the all currently selected items and deselect them.
+      // In practice this should always be a single item
+      if let selectedIndexPaths = collectionView.indexPathsForSelectedItems {
+        selectedIndexPaths.forEach { collectionView.deselectItem(at: $0, animated: true) }
+      }
       item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
     }
   }

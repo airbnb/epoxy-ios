@@ -474,7 +474,12 @@ extension TableView: UITableViewDelegate {
     item.didSelect(cell)
 
     if autoDeselectItems {
-      deselectRow(at: indexPath, animated: true)
+      // If tableView modifications have been made, indexPath may no longer point to the correct
+      // row so we find the all currently selected rows and deselect them.
+      // In practice this should always be a single row
+      if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
+        selectedIndexPaths.forEach { tableView.deselectRow(at: $0, animated: true) }
+      }
       item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
     }
   }
