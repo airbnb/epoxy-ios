@@ -327,6 +327,9 @@ public class CollectionView: UICollectionView,
 
     item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
     item.setBehavior(cell: cell) // TODO(ls): make these items actually epoxy items
+    if item.isSelectable {
+      cell.accessibilityTraits = cell.accessibilityTraits | UIAccessibilityTraitButton
+    }
   }
 
   private func updateView(

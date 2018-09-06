@@ -328,6 +328,9 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
     item.setBehavior(cell: cell)
     updateDivider(for: cell, dividerType: item.dividerType, dataID: item.dataID)
+    if item.isSelectable {
+      cell.accessibilityTraits = cell.accessibilityTraits | UIAccessibilityTraitButton
+    }
   }
 
   private func updateDivider(for cell: TableViewCell, dividerType: EpoxyModelDividerType, dataID: String?) {
