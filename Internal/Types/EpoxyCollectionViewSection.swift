@@ -109,19 +109,19 @@ extension EpoxyModelWrapper: EpoxyableModel {
     return epoxyModel.isMovable
   }
 
-  public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
+  public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
     epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
   }
 
-  public func setBehavior(cell: EpoxyCell) {
+  public func setBehavior(cell: EpoxyWrapperView) {
     epoxyModel.setBehavior(cell: cell)
   }
 
-  public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) {
+  public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) {
     epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, state: state)
   }
 
-  public func didSelect(_ cell: EpoxyCell) {
+  public func didSelect(_ cell: EpoxyWrapperView) {
     epoxyModel.didSelect(cell)
   }
 }

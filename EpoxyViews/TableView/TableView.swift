@@ -483,7 +483,7 @@ extension TableView: UITableViewDelegate {
       if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
         selectedIndexPaths.forEach { tableView.deselectRow(at: $0, animated: true) }
       }
-      item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+      _ = item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
     }
   }
 

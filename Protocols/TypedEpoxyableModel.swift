@@ -16,25 +16,25 @@ public protocol TypedEpoxyableModel: EpoxyableModel {
 }
 
 extension TypedEpoxyableModel {
-  public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
+  public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
     configureView(view, forTraitCollection: traitCollection, animated: animated)
   }
 
-  public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) {
+  public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
     configureView(view, forTraitCollection: traitCollection, state: state)
   }
 
-  public func setBehavior(cell: EpoxyCell) {
+  public func setBehavior(cell: EpoxyWrapperView) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
     setViewBehavior(view)
   }
 
-  public func didSelect(_ cell: EpoxyCell) {
+  public func didSelect(_ cell: EpoxyWrapperView) {
     guard let view = cell.view as? View else {
       assertionFailure("The selected view is not the expected type.")
       return

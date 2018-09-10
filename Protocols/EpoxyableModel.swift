@@ -7,15 +7,15 @@ import UIKit
 /// The `EpoxyModel` contains the reference id for the model backing an item, the hash value of the item, as well as the reuse id for the item's type.
 public protocol EpoxyableModel: class, Diffable {
 
-  func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, animated: Bool)
-  func setBehavior(cell: EpoxyCell)
+  func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, animated: Bool)
+  func setBehavior(cell: EpoxyWrapperView)
 
   // MARK: Optional
 
   var reuseID: String { get }
   var dataID: String { get }
-  func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState)
-  func didSelect(_ cell: EpoxyCell)
+  func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState)
+  func didSelect(_ cell: EpoxyWrapperView)
 
   var isSelectable: Bool { get set }
   var selectionStyle: CellSelectionStyle? { get set }
@@ -53,14 +53,14 @@ extension EpoxyableModel {
 
   public var isMovable: Bool { return false }
 
-  public func configure(cell: EpoxyCell, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) { }
+  public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) { }
 
   public func configuredView(traitCollection: UITraitCollection) -> UIView {
     assertionFailure("Configured view not implemented for this Epoxyable model")
     return UIView()
   }
 
-  public func didSelect(_ cell: EpoxyCell) { }
+  public func didSelect(_ cell: EpoxyWrapperView) { }
 }
 
 // MARK: Diffable

@@ -325,8 +325,8 @@ public class CollectionView: UICollectionView,
         cell.selectedBackgroundColor = selectionColor
       }
 
-    item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
-    item.setBehavior(cell: cell) // TODO(ls): make these items actually epoxy items
+    _ = item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
+    _ = item.setBehavior(cell: cell) // TODO(ls): make these items actually epoxy items
     if item.isSelectable {
       cell.accessibilityTraits = cell.accessibilityTraits | UIAccessibilityTraitButton
     }
@@ -582,7 +582,7 @@ public class CollectionView: UICollectionView,
       if let selectedIndexPaths = collectionView.indexPathsForSelectedItems {
         selectedIndexPaths.forEach { collectionView.deselectItem(at: $0, animated: true) }
       }
-      item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+      _ = item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
     }
   }
 
