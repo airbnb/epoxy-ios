@@ -40,14 +40,17 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
     guard self.view == nil else {
       return
     }
-    view.translatesAutoresizingMaskIntoConstraints = false
+
+    self.view = view
+    normalViewBackgroundColor = view.backgroundColor
+
     contentView.addSubview(view)
+
+    view.translatesAutoresizingMaskIntoConstraints = false
     view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
     view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
     view.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
     view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
-    self.view = view
-    normalViewBackgroundColor = view.backgroundColor
   }
 
   override public func preferredLayoutAttributesFitting(
@@ -57,10 +60,35 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
       return super.preferredLayoutAttributesFitting(layoutAttributes)
     }
 
+    let horizontalFittingPriority = collectionViewLayoutAttributes.widthSizeMode.fittingPriority
+    let verticalFittingPriority = collectionViewLayoutAttributes.heightSizeMode.fittingPriority
+
+    // In some cases, `contentView`'s required width and height constraints
+    // (created from its auto-resizing mask) will not have the correct constants before invoking
+    // `systemLayoutSizeFitting(...)`, causing the cell to size incorrectly. This seems to be a
+    // UIKit bug. TODO(BK) - Reference radar once made
+    // The issue seems most comment when the collection view's bounds change (on rotation).
+    // We correct for this updating `contentView.bounds`, which updates the constants used by the
+    // width and height constraints created by the `contentView`'s auto-resizing mask.
+
+    if
+      horizontalFittingPriority == .required &&
+      contentView.bounds.width != layoutAttributes.size.width
+    {
+      contentView.bounds.size.width = layoutAttributes.size.width
+    }
+
+    if
+      verticalFittingPriority == .required &&
+      contentView.bounds.height != layoutAttributes.size.height
+    {
+      contentView.bounds.size.height = layoutAttributes.size.height
+    }
+
     let size = super.systemLayoutSizeFitting(
       layoutAttributes.size,
-      withHorizontalFittingPriority: collectionViewLayoutAttributes.widthSizeMode.fittingPriority,
-      verticalFittingPriority: collectionViewLayoutAttributes.heightSizeMode.fittingPriority)
+      withHorizontalFittingPriority: horizontalFittingPriority,
+      verticalFittingPriority: verticalFittingPriority)
 
     layoutAttributes.size = size
 
