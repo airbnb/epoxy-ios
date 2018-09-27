@@ -112,3 +112,17 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
   }
 
 }
+
+// MARK: UIAccessibility
+
+extension CollectionViewCell {
+  public override var accessibilityElementsHidden: Bool {
+    get {
+      if let accessibilityCustomizable = view as? EpoxyAccessibilityCustomizable {
+        return accessibilityCustomizable.isHiddenFromVoiceOver
+      }
+      return super.accessibilityElementsHidden
+    }
+    set { super.accessibilityElementsHidden = newValue }
+  }
+}

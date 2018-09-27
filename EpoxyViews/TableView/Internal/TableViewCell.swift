@@ -114,3 +114,17 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
     }
   }
 }
+
+// MARK: UIAccessibility
+
+extension TableViewCell {
+  public override var accessibilityElementsHidden: Bool {
+    get {
+      if let accessibilityCustomizable = view as? EpoxyAccessibilityCustomizable {
+        return accessibilityCustomizable.isHiddenFromVoiceOver
+      }
+      return super.accessibilityElementsHidden
+    }
+    set { super.accessibilityElementsHidden = newValue }
+  }
+}
