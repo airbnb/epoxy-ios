@@ -100,9 +100,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   /// screen soon.
   public weak var epoxyModelPrefetchDataSource: TableViewEpoxyModelDataSourcePrefetching? {
     didSet {
-      if #available(iOS 10, *) {
-        prefetchDataSource = (epoxyModelPrefetchDataSource != nil) ? self : nil
-      }
+      prefetchDataSource = (epoxyModelPrefetchDataSource != nil) ? self : nil
     }
   }
 

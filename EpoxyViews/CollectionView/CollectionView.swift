@@ -116,9 +116,7 @@ public class CollectionView: UICollectionView,
   /// screen soon.
   public weak var epoxyItemPrefetchDataSource: CollectionViewEpoxyItemDataSourcePrefetching? {
     didSet {
-      if #available(iOS 10, *) {
-        prefetchDataSource = (epoxyItemPrefetchDataSource != nil) ? self : nil
-      }
+      prefetchDataSource = (epoxyItemPrefetchDataSource != nil) ? self : nil
     }
   }
 
@@ -304,9 +302,7 @@ public class CollectionView: UICollectionView,
     // There are rendering issues in iOS 10 when using self-sizing supplementary views
     // when prefetching is enabled.
     // There are also self sizing invalidation issues in iOS 10 and iOS 11 if prefetching is enabled.
-    if #available(iOS 10.0, *) {
-      isPrefetchingEnabled = false
-    }
+    isPrefetchingEnabled = false
 
     delegate = self
     epoxyDataSource.epoxyInterface = self
