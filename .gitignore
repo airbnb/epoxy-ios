@@ -1,0 +1,13 @@
+.DS_Store
+*.swp
+*~.nib
+
+*.xcodeproj/project.xcworkspace/
+xcuserdata
+*.xccheckout
+*.xcscmblueprint
+
+xcuserdata/
+*.xcuserstate
+
+Carthage/
