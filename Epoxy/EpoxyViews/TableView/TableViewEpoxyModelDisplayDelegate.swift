@@ -1,7 +1,7 @@
 //  Created by bryn_bodayle on 2/9/17.
 //  Copyright © 2017 Airbnb. All rights reserved.
 
-public protocol TableViewEpoxyModelDisplayDelegate: class {
+public protocol TableViewEpoxyModelDisplayDelegate: AnyObject {
   func tableView(
     _ tableView: TableView,
     willDisplay epoxyModel: EpoxyableModel,

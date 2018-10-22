@@ -3,7 +3,7 @@
 
 import UIKit
 
-public protocol CollectionViewTransitionLayoutDelegate: class {
+public protocol CollectionViewTransitionLayoutDelegate: AnyObject {
   func collectionView(
     _ collectionView: UICollectionView,
     transitionLayoutForOldLayout fromLayout: UICollectionViewLayout,

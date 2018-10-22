@@ -5,7 +5,7 @@ import Foundation
 import UIKit
 
 /// The `EpoxyModel` contains the reference id for the model backing an item, the hash value of the item, as well as the reuse id for the item's type.
-public protocol EpoxyableModel: class, Diffable {
+public protocol EpoxyableModel: AnyObject, Diffable {
 
   func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, animated: Bool)
   func setBehavior(cell: EpoxyWrapperView)
