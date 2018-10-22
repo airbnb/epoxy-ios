@@ -3,7 +3,7 @@
 
 import UIKit
 
-protocol CollectionViewDataSourceReorderingDelegate: class {
+protocol CollectionViewDataSourceReorderingDelegate: AnyObject {
   func dataSource(
     _ dataSource: CollectionViewEpoxyDataSource,
     moveItemWithDataID dataID: String,

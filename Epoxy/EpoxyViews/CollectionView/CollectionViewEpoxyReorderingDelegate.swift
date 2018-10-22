@@ -4,7 +4,7 @@
 import Foundation
 import UIKit
 
-public protocol CollectionViewEpoxyReorderingDelegate: class {
+public protocol CollectionViewEpoxyReorderingDelegate: AnyObject {
   func collectionView(
     _ collectionView: UICollectionView,
     moveItemWithDataID dataID: String,

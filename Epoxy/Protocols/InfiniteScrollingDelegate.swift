@@ -6,7 +6,7 @@ import Foundation
 // MARK: - InfiniteScrollingDelegate
 
 /// Protocol to handle loading of new content for infinite scrolling
-public protocol InfiniteScrollingDelegate: class {
+public protocol InfiniteScrollingDelegate: AnyObject {
   /** 
     Called when more content should be loaded.
     - parameters:

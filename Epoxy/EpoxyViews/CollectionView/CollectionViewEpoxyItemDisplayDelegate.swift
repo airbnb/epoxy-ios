@@ -3,7 +3,7 @@
 
 import UIKit
 
-public protocol CollectionViewEpoxyItemDisplayDelegate: class {
+public protocol CollectionViewEpoxyItemDisplayDelegate: AnyObject {
   func collectionView(
     _ collectionView: CollectionView,
     willDisplayEpoxyModel epoxyModel: EpoxyableModel,
