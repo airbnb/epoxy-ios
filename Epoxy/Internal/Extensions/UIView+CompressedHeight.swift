@@ -7,11 +7,11 @@ extension UIView {
 
   /// Returns the receiver's calculated height given a width
   public func compressedHeight(forWidth width: CGFloat) -> CGFloat {
-    let widthConstraint = widthAnchor.constraint(equalToConstant: width)
-    widthConstraint.isActive = true
-    let height = systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
-    widthConstraint.isActive = false
-    return height
+    let targetSize = CGSize(width: width, height: UILayoutFittingCompressedSize.height)
+    let size = systemLayoutSizeFitting(
+      targetSize,
+      withHorizontalFittingPriority: .required,
+      verticalFittingPriority: .fittingSizeLevel)
+    return size.height
   }
-
 }
