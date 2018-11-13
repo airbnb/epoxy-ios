@@ -35,6 +35,11 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
     }
   }
 
+  public override func prepareForReuse() {
+    super.prepareForReuse()
+    cachedViewStateProvider?(cachedViewState)
+  }
+
   /// Pass a view for this cell's reuseID that the cell will pin to the edges of its `contentView`.
   public func setViewIfNeeded(view: UIView) {
     guard self.view == nil else {
@@ -94,10 +99,11 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
 
     return layoutAttributes
   }
-
+  
   // MARK: Private
 
   private var normalViewBackgroundColor: UIColor?
+  var cachedViewStateProvider: ((RestorableState?) -> ())?
 
   private func updateVisualHighlightState(_ isVisuallyHighlighted: Bool) {
     if selectedBackgroundColor == nil { return }
@@ -111,6 +117,13 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
     }
   }
 
+}
+
+extension CollectionViewCell: CachedStateView {
+  public var cachedViewState: RestorableState? {
+    get { return (view as? CachedStateView)?.cachedViewState }
+    set { (view as? CachedStateView)?.cachedViewState = newValue }
+  }
 }
 
 // MARK: UIAccessibility
