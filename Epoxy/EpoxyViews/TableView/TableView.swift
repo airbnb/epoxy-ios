@@ -29,9 +29,9 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     epoxyDataSource.setSections(sections, animated: animated)
   }
 
-  public func scrollToItem(at dataID: String) {
+  public func scrollToItem(at dataID: String, animated: Bool = false) {
     if let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) {
-      scrollToRow(at: indexPath, at: .middle, animated: false)
+      scrollToRow(at: indexPath, at: .middle, animated: animated)
     }
   }
 
