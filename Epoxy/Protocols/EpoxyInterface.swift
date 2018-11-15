@@ -26,7 +26,7 @@ public protocol EpoxyInterface: AnyObject {
   func hideBottomDivider(for dataIDs: [String])
 
   /// Scrolls to the item at the given dataID
-  func scrollToItem(at dataID: String)
+  func scrollToItem(at dataID: String, animated: Bool)
 
   /// Sets the item at the given dataID as the first responder
   func setItemAsFirstResponder(at dataID: String)

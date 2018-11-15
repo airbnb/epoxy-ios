@@ -31,8 +31,8 @@ public class CollectionView: UICollectionView,
     epoxyDataSource.setSections(sections, animated: animated)
   }
 
-  public func scrollToItem(at dataID: String) {
-    scrollToItem(at: dataID, position: .centeredVertically, animated: false)
+  public func scrollToItem(at dataID: String, animated: Bool = false) {
+    scrollToItem(at: dataID, position: .centeredVertically, animated: animated)
   }
 
   public func scrollToItem(at dataID: String, position: UICollectionViewScrollPosition, animated: Bool) {
