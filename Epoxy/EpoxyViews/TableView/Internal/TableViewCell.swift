@@ -59,15 +59,9 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
     updateVisualHighlightState(selected, animated: animated)
   }
 
-  public override func prepareForReuse() {
-    super.prepareForReuse()
-    cachedViewStateProvider?(cachedViewState)
-  }
-
   // MARK: Internal
 
   private(set) var dividerView: UIView?
-  var cachedViewStateProvider: ((RestorableState?) -> ())?
 
   /// Pass a `ViewMaker` that generates a `Divider` for this cell's reuseID that the cell will pin to the bottom of its `contentView`.
   func makeDividerViewIfNeeded(with dividerViewMaker: () -> UIView) {
@@ -118,13 +112,6 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
     } else {
       updateVisualHighlightState(isVisuallyHighlighted)
     }
-  }
-}
-
-extension TableViewCell: CachedStateView {
-  public var cachedViewState: RestorableState? {
-    get { return (view as? CachedStateView)?.cachedViewState }
-    set { (view as? CachedStateView)?.cachedViewState = newValue }
   }
 }
 
