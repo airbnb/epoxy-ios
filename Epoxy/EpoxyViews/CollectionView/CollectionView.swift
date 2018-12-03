@@ -627,6 +627,8 @@ public class CollectionView: UICollectionView,
         self?.updateInfiniteLoaderPosition()
         self?.infiniteScrollingState = .stopped
       }
+    } else if !delegateWantsInfiniteScrolling {
+      infiniteScrollingState = .stopped
     }
   }
 
