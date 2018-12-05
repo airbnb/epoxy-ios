@@ -3,7 +3,7 @@
 
 import UIKit
 
-/// An internal cell class for use in a `CollectionView`.
+/// An internal collection reusable view class for use in a `CollectionView`.
 public final class CollectionViewReusableView: UICollectionReusableView {
 
   // MARK: Lifecycle
@@ -21,7 +21,7 @@ public final class CollectionViewReusableView: UICollectionReusableView {
 
   public private(set) var view: UIView?
 
-  /// Pass a view for this view's element kind and reuseID that the cell will pin to the edges of its `contentView`.
+  /// Pass a view for this view's element kind and reuseID that the view will pin to its edges.
   public func setViewIfNeeded(view: UIView) {
     if self.view != nil {
       return
@@ -41,14 +41,24 @@ public final class CollectionViewReusableView: UICollectionReusableView {
   override public func preferredLayoutAttributesFitting(
     _ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes
   {
-    guard let collectionViewLayoutAttributes = layoutAttributes as? CollectionViewLayoutAttributes else {
+    guard let fittingPrioritiesProvider = layoutAttributes as? LayoutAttributesFittingPrioritiesProvider else {
       return super.preferredLayoutAttributesFitting(layoutAttributes)
     }
 
-    let size = super.systemLayoutSizeFitting(
-      layoutAttributes.size,
-      withHorizontalFittingPriority: collectionViewLayoutAttributes.widthSizeMode.fittingPriority,
-      verticalFittingPriority: collectionViewLayoutAttributes.heightSizeMode.fittingPriority)
+    let horizontalFittingPriority = fittingPrioritiesProvider.horizontalFittingPriority
+    let verticalFittingPriority = fittingPrioritiesProvider.verticalFittingPriority
+
+    let size: CGSize
+    if horizontalFittingPriority != .required || verticalFittingPriority != .required {
+      // Self-sizing is required in at least one dimension.
+      size = super.systemLayoutSizeFitting(
+        layoutAttributes.size,
+        withHorizontalFittingPriority: horizontalFittingPriority,
+        verticalFittingPriority: verticalFittingPriority)
+    } else {
+      // No self-sizing is required; respect whatever size the layout determined.
+      size = layoutAttributes.size
+    }
 
     layoutAttributes.size = size
 

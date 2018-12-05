@@ -54,21 +54,22 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
   }
 
   override public func preferredLayoutAttributesFitting(
-    _ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes
+    _ layoutAttributes: UICollectionViewLayoutAttributes)
+    -> UICollectionViewLayoutAttributes
   {
-    guard let collectionViewLayoutAttributes = layoutAttributes as? CollectionViewLayoutAttributes else {
+    guard let fittingPrioritiesProvider = layoutAttributes as? LayoutAttributesFittingPrioritiesProvider else {
       return super.preferredLayoutAttributesFitting(layoutAttributes)
     }
 
-    let horizontalFittingPriority = collectionViewLayoutAttributes.widthSizeMode.fittingPriority
-    let verticalFittingPriority = collectionViewLayoutAttributes.heightSizeMode.fittingPriority
+    let horizontalFittingPriority = fittingPrioritiesProvider.horizontalFittingPriority
+    let verticalFittingPriority = fittingPrioritiesProvider.verticalFittingPriority
 
     // In some cases, `contentView`'s required width and height constraints
     // (created from its auto-resizing mask) will not have the correct constants before invoking
     // `systemLayoutSizeFitting(...)`, causing the cell to size incorrectly. This seems to be a
-    // UIKit bug. TODO(BK) - Reference radar once made
-    // The issue seems most comment when the collection view's bounds change (on rotation).
-    // We correct for this updating `contentView.bounds`, which updates the constants used by the
+    // UIKit bug. TODO(bryankeller) - Reference radar once made.
+    // The issue seems most common when the collection view's bounds change (on rotation).
+    // We correct for this by updating `contentView.bounds`, which updates the constants used by the
     // width and height constraints created by the `contentView`'s auto-resizing mask.
 
     if
@@ -85,10 +86,17 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
       contentView.bounds.size.height = layoutAttributes.size.height
     }
 
-    let size = super.systemLayoutSizeFitting(
-      layoutAttributes.size,
-      withHorizontalFittingPriority: horizontalFittingPriority,
-      verticalFittingPriority: verticalFittingPriority)
+    let size: CGSize
+    if horizontalFittingPriority != .required || verticalFittingPriority != .required {
+      // Self-sizing is required in at least one dimension.
+      size = super.systemLayoutSizeFitting(
+        layoutAttributes.size,
+        withHorizontalFittingPriority: horizontalFittingPriority,
+        verticalFittingPriority: verticalFittingPriority)
+    } else {
+      // No self-sizing is required; respect whatever size the layout determined.
+      size = layoutAttributes.size
+    }
 
     layoutAttributes.size = size
 
