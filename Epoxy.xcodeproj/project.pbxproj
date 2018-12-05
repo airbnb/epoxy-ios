@@ -31,7 +31,7 @@
 		C7E067872171117D005CB689 /* SupplementaryViewEpoxyableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E067482171117D005CB689 /* SupplementaryViewEpoxyableModel.swift */; };
 		C7E067882171117D005CB689 /* CollectionViewEpoxyReorderingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E067492171117D005CB689 /* CollectionViewEpoxyReorderingDelegate.swift */; };
 		C7E067892171117D005CB689 /* CollectionViewEpoxyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0674B2171117D005CB689 /* CollectionViewEpoxyDataSource.swift */; };
-		C7E0678A2171117D005CB689 /* CollectionViewLayoutAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0674C2171117D005CB689 /* CollectionViewLayoutAttributes.swift */; };
+		C7E0678A2171117D005CB689 /* LayoutAttributesFittingPrioritiesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0674C2171117D005CB689 /* LayoutAttributesFittingPrioritiesProvider.swift */; };
 		C7E0678B2171117D005CB689 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0674D2171117D005CB689 /* CollectionViewCell.swift */; };
 		C7E0678C2171117D005CB689 /* CollectionViewReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0674E2171117D005CB689 /* CollectionViewReusableView.swift */; };
 		C7E0678E2171117D005CB689 /* InternalCollectionViewEpoxyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E067502171117D005CB689 /* InternalCollectionViewEpoxyData.swift */; };
@@ -102,7 +102,7 @@
 		C7E067482171117D005CB689 /* SupplementaryViewEpoxyableModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SupplementaryViewEpoxyableModel.swift; sourceTree = "<group>"; };
 		C7E067492171117D005CB689 /* CollectionViewEpoxyReorderingDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewEpoxyReorderingDelegate.swift; sourceTree = "<group>"; };
 		C7E0674B2171117D005CB689 /* CollectionViewEpoxyDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewEpoxyDataSource.swift; sourceTree = "<group>"; };
-		C7E0674C2171117D005CB689 /* CollectionViewLayoutAttributes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewLayoutAttributes.swift; sourceTree = "<group>"; };
+		C7E0674C2171117D005CB689 /* LayoutAttributesFittingPrioritiesProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutAttributesFittingPrioritiesProvider.swift; sourceTree = "<group>"; };
 		C7E0674D2171117D005CB689 /* CollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		C7E0674E2171117D005CB689 /* CollectionViewReusableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewReusableView.swift; sourceTree = "<group>"; };
 		C7E067502171117D005CB689 /* InternalCollectionViewEpoxyData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InternalCollectionViewEpoxyData.swift; sourceTree = "<group>"; };
@@ -312,7 +312,6 @@
 			isa = PBXGroup;
 			children = (
 				C7E0674B2171117D005CB689 /* CollectionViewEpoxyDataSource.swift */,
-				C7E0674C2171117D005CB689 /* CollectionViewLayoutAttributes.swift */,
 				C7E0674D2171117D005CB689 /* CollectionViewCell.swift */,
 				C7E0674E2171117D005CB689 /* CollectionViewReusableView.swift */,
 				C7E067502171117D005CB689 /* InternalCollectionViewEpoxyData.swift */,
@@ -406,6 +405,7 @@
 				C7E067722171117D005CB689 /* InfiniteScrollingDelegate.swift */,
 				C7E067732171117D005CB689 /* Animatable.swift */,
 				C7E067742171117D005CB689 /* EpoxyInterface.swift */,
+				C7E0674C2171117D005CB689 /* LayoutAttributesFittingPrioritiesProvider.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -554,7 +554,7 @@
 				C7E067752171117D005CB689 /* InfiniteScrollingState.swift in Sources */,
 				C7E067952171117D005CB689 /* EpoxyControlling.swift in Sources */,
 				C7E067852171117D005CB689 /* CollectionView+UICollectionViewFlowLayoutDelegate.swift in Sources */,
-				C7E0678A2171117D005CB689 /* CollectionViewLayoutAttributes.swift in Sources */,
+				C7E0678A2171117D005CB689 /* LayoutAttributesFittingPrioritiesProvider.swift in Sources */,
 				C7E0678E2171117D005CB689 /* InternalCollectionViewEpoxyData.swift in Sources */,
 				C7E0677B2171117D005CB689 /* InternalEpoxyInterface.swift in Sources */,
 				C7E0677E2171117D005CB689 /* TableViewCell.swift in Sources */,
