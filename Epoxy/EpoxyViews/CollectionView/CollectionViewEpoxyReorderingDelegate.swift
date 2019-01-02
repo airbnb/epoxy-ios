@@ -10,5 +10,5 @@ public protocol CollectionViewEpoxyReorderingDelegate: AnyObject {
     moveItemWithDataID dataID: String,
     inSectionWithDataID fromSectionDataID: String,
     toSectionWithDataID toSectionDataID: String,
-    beforeDataID toBeforeDataID: String?)
+    withDestinationDataId destinationDataId: String)
 }
