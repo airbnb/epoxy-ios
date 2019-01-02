@@ -724,12 +724,12 @@ extension CollectionView: CollectionViewDataSourceReorderingDelegate {
     moveItemWithDataID dataID: String,
     inSectionWithDataID fromSectionDataID: String,
     toSectionWithDataID toSectionDataID: String,
-    beforeItemWithDataID beforeDataID: String?)
+    withDestinationDataId destinationDataId: String)
   {
     reorderingDelegate?.collectionView(
       self, moveItemWithDataID: dataID,
       inSectionWithDataID: fromSectionDataID,
       toSectionWithDataID: toSectionDataID,
-      beforeDataID: beforeDataID)
+      withDestinationDataId: destinationDataId)
   }
 }

@@ -9,7 +9,7 @@ protocol CollectionViewDataSourceReorderingDelegate: AnyObject {
     moveItemWithDataID dataID: String,
     inSectionWithDataID fromSectionDataID: String,
     toSectionWithDataID toSectionDataID: String,
-    beforeItemWithDataID beforeDataID: String?)
+    withDestinationDataId destinationDataId: String)
 }
 
 public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
@@ -98,25 +98,20 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
       return
     }
 
-    let beforeIndexPath: IndexPath
-    if sourceIndexPath.section == destinationIndexPath.section && destinationIndexPath.item >= sourceIndexPath.item {
-      beforeIndexPath = IndexPath(item: destinationIndexPath.item + 1, section: destinationIndexPath.section)
-    } else {
-      beforeIndexPath = IndexPath(item: destinationIndexPath.item, section: destinationIndexPath.section)
-    }
+    let beforeIndexPath = IndexPath(item: destinationIndexPath.item, section: destinationIndexPath.section)
 
     // We do all this extra checking just so that it doesn't crash on debug/alpha/beta
-    var destinationBeforeDataID: String? = nil
-    if let data = internalData, data.sections[beforeIndexPath.section].items.count >= beforeIndexPath.item + 1 {
-      destinationBeforeDataID = epoxyItem(at: beforeIndexPath)?.dataID
-    }
 
-    reorderingDelegate?.dataSource(
-      self,
-      moveItemWithDataID: currentItem,
-      inSectionWithDataID: currentSectionID,
-      toSectionWithDataID: destinationSection,
-      beforeItemWithDataID: destinationBeforeDataID)
+    if let data = internalData,
+      data.sections[beforeIndexPath.section].items.count >= beforeIndexPath.item + 1,
+      let destinationBeforeDataID = epoxyItem(at: beforeIndexPath)?.dataID {
+      reorderingDelegate?.dataSource(
+        self,
+        moveItemWithDataID: currentItem,
+        inSectionWithDataID: currentSectionID,
+        toSectionWithDataID: destinationSection,
+        withDestinationDataId: destinationBeforeDataID)
+    }
   }
 
   // MARK: Internal
