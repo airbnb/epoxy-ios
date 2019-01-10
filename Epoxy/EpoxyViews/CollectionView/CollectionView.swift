@@ -297,6 +297,7 @@ public class CollectionView: UICollectionView,
   private var infiniteScrollingLoader: (UIView & Animatable)?
   private weak var infiniteScrollingDelegate: InfiniteScrollingDelegate?
   private var infiniteScrollingState: InfiniteScrollingState = .stopped
+  private var viewStateCache = [String: RestorableState?]()
 
   private func setUp() {
     // There are rendering issues in iOS 10 when using self-sizing supplementary views
@@ -321,8 +322,15 @@ public class CollectionView: UICollectionView,
         cell.selectedBackgroundColor = selectionColor
       }
 
+    cell.cachedViewState = viewStateCache[item.dataID] ?? nil
+
+    cell.cachedViewStateProvider = { [weak self] state in
+      self?.viewStateCache[item.dataID] = state
+    }
+
     _ = item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
     _ = item.setBehavior(cell: cell) // TODO(ls): make these items actually epoxy items
+
     if item.isSelectable {
       cell.accessibilityTraits = cell.accessibilityTraits | UIAccessibilityTraitButton
     }

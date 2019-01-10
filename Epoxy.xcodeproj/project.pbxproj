@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		320FF2EA219A04A700E1B17C /* CachedStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320FF2E9219A04A700E1B17C /* CachedStateView.swift */; };
 		C7E0671B21711118005CB689 /* Epoxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7E0671121711118005CB689 /* Epoxy.framework */; };
 		C7E0672021711118005CB689 /* EpoxyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0671F21711118005CB689 /* EpoxyTests.swift */; };
 		C7E0672221711118005CB689 /* Epoxy.h in Headers */ = {isa = PBXBuildFile; fileRef = C7E0671421711118005CB689 /* Epoxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -75,6 +76,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		320FF2E9219A04A700E1B17C /* CachedStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CachedStateView.swift; sourceTree = "<group>"; };
 		C7E0671121711118005CB689 /* Epoxy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Epoxy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7E0671421711118005CB689 /* Epoxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Epoxy.h; sourceTree = "<group>"; };
 		C7E0671521711118005CB689 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 				C7E0676E2171117D005CB689 /* EpoxyAccessibilityCustomizable.swift */,
 				C7E0676F2171117D005CB689 /* EpoxyableModel.swift */,
 				C7E067702171117D005CB689 /* EpoxyCell.swift */,
+				320FF2E9219A04A700E1B17C /* CachedStateView.swift */,
 				C7E067712171117D005CB689 /* TypedEpoxyableModel.swift */,
 				C7E067722171117D005CB689 /* InfiniteScrollingDelegate.swift */,
 				C7E067732171117D005CB689 /* Animatable.swift */,
@@ -542,6 +545,7 @@
 				C7E067762171117D005CB689 /* EpoxyCollectionViewSection.swift in Sources */,
 				C7E067902171117D005CB689 /* CollectionViewTransitionLayoutDelegate.swift in Sources */,
 				C7E0679E2171117D005CB689 /* Collection+Diff.swift in Sources */,
+				320FF2EA219A04A700E1B17C /* CachedStateView.swift in Sources */,
 				C7E0679D2171117D005CB689 /* EpoxyTableViewController.swift in Sources */,
 				C7E067A42171117D005CB689 /* EpoxyableModel.swift in Sources */,
 				C7E067912171117D005CB689 /* CollectionViewEpoxyItemDisplayDelegate.swift in Sources */,
