@@ -309,6 +309,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   // MARK: Private
 
   private var dataIDsForHidingDividers = [String]()
+  private var ephemeralStateCache = [String: RestorableState?]()
 
   private func setUp() {
     delegate = self
@@ -328,6 +329,11 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     updateDivider(for: cell, dividerType: item.dividerType, dataID: item.dataID)
     if item.isSelectable {
       cell.accessibilityTraits = cell.accessibilityTraits | UIAccessibilityTraitButton
+    }
+
+    cell.cachedEphemeralState = ephemeralStateCache[item.dataID] ?? nil
+    cell.ephemeralViewCachedStateProvider = { [weak self] state in
+      self?.ephemeralStateCache[item.dataID] = state
     }
   }
 

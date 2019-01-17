@@ -104,6 +104,15 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
     return layoutAttributes
   }
 
+  public override func prepareForReuse() {
+    super.prepareForReuse()
+    ephemeralViewCachedStateProvider?(cachedEphemeralState)
+  }
+
+  // MARK: Internal
+
+  var ephemeralViewCachedStateProvider: ((RestorableState?) -> ())?
+
   // MARK: Private
 
   private var normalViewBackgroundColor: UIColor?
@@ -120,6 +129,15 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
     }
   }
 
+}
+
+// MARK: EphemeralViewState
+
+extension CollectionViewCell: EphemeralCachedStateView {
+  public var cachedEphemeralState: RestorableState? {
+    get { return (view as? EphemeralCachedStateView)?.cachedEphemeralState }
+    set { (view as? EphemeralCachedStateView)?.cachedEphemeralState = newValue }
+  }
 }
 
 // MARK: UIAccessibility
