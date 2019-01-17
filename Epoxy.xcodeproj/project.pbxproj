@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8179787121EFB8B0003871CD /* StateCachingProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8179787021EFB8B0003871CD /* StateCachingProtocols.swift */; };
 		C7E0671B21711118005CB689 /* Epoxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7E0671121711118005CB689 /* Epoxy.framework */; };
 		C7E0672021711118005CB689 /* EpoxyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0671F21711118005CB689 /* EpoxyTests.swift */; };
 		C7E0672221711118005CB689 /* Epoxy.h in Headers */ = {isa = PBXBuildFile; fileRef = C7E0671421711118005CB689 /* Epoxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -75,6 +76,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		8179787021EFB8B0003871CD /* StateCachingProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateCachingProtocols.swift; sourceTree = "<group>"; };
 		C7E0671121711118005CB689 /* Epoxy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Epoxy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7E0671421711118005CB689 /* Epoxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Epoxy.h; sourceTree = "<group>"; };
 		C7E0671521711118005CB689 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				C7E067732171117D005CB689 /* Animatable.swift */,
 				C7E067742171117D005CB689 /* EpoxyInterface.swift */,
 				C7E0674C2171117D005CB689 /* LayoutAttributesFittingPrioritiesProvider.swift */,
+				8179787021EFB8B0003871CD /* StateCachingProtocols.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -569,6 +572,7 @@
 				C7E067932171117D005CB689 /* EpoxySectionController.swift in Sources */,
 				C7E067A82171117D005CB689 /* Animatable.swift in Sources */,
 				C7E067772171117D005CB689 /* EpoxyDataSource.swift in Sources */,
+				8179787121EFB8B0003871CD /* StateCachingProtocols.swift in Sources */,
 				C7E067942171117D005CB689 /* EpoxyMultiSectionController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
