@@ -52,8 +52,19 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
     didSet { delegate?.epoxyControllerDidUpdateData(self, animated: true) }
   }
 
-  public var itemDataIDs = [ItemDataIDType]() {
-    didSet { didUpdateItemDataIDs(oldValue) }
+  public private(set) var itemDataIDs = [ItemDataIDType]()
+
+  public func setDataIDsAndUpdate(_ newDataIDs: [ItemDataIDType], animated: Bool = true) {
+    setDataIDs(newDataIDs)
+    delegate?.epoxyControllerDidUpdateData(self, animated: animated)
+  }
+
+  public func setDataIDs(_ newDataIDs: [ItemDataIDType]) {
+    let oldValue = itemDataIDs
+    itemDataIDs = newDataIDs
+    if invalidatesRemovedModelsFromCache {
+      removeOldCachedValues(oldValue)
+    }
   }
 
   public func allItemModels() -> [EpoxyableModel] {
@@ -67,12 +78,16 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
     delegate?.epoxyControllerDidUpdateData(self, animated: animated)
   }
 
-  public func rebuildItemModel(forDataIDs dataIDs: [ItemDataIDType], animated: Bool = true) {
+  public func rebuildItemModels(forDataIDs dataIDs: [ItemDataIDType], animated: Bool = true) {
     for dataID in dataIDs {
       modelCache.invalidateEpoxyModel(withDataID: dataID.epoxyStringValue)
     }
 
     delegate?.epoxyControllerDidUpdateData(self, animated: animated)
+  }
+
+  public func invalidateEpoxyModel(withDataID dataID: String) {
+    modelCache.invalidateEpoxyModel(withDataID: dataID.epoxyStringValue)
   }
 
   public func rebuild(animated: Bool = true) {
@@ -92,13 +107,6 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
 
   private let modelCache = EpoxyModelCache()
   private let invalidatesRemovedModelsFromCache: Bool
-
-  private func didUpdateItemDataIDs(_ oldDataIDs: [ItemDataIDType]) {
-    if invalidatesRemovedModelsFromCache {
-      removeOldCachedValues(oldDataIDs)
-    }
-    delegate?.epoxyControllerDidUpdateData(self, animated: true)
-  }
 
   private func cachedItemModel(forDataID dataID: ItemDataIDType) -> EpoxyableModel? {
     if let existingItemModel = modelCache.epoxyModel(forDataID: dataID.epoxyStringValue) {
