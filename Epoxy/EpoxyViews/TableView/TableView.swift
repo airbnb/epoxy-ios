@@ -30,8 +30,12 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   }
 
   public func scrollToItem(at dataID: String, animated: Bool = false) {
+    scrollToItem(at: dataID, scrollPosition: .middle, animated: animated)
+  }
+
+  public func scrollToItem(at dataID: String, scrollPosition: UITableView.ScrollPosition, animated: Bool) {
     if let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) {
-      scrollToRow(at: indexPath, at: .middle, animated: animated)
+      scrollToRow(at: indexPath, at: scrollPosition, animated: animated)
     }
   }
 
