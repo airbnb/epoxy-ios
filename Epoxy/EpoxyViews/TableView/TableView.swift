@@ -23,6 +23,27 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: Open
+
+  open override func traitCollectionDidChange(
+    _ previousTraitCollection: UITraitCollection?)
+  {
+    super.traitCollectionDidChange(previousTraitCollection)
+    if
+      previousTraitCollection?.preferredContentSizeCategory != .unspecified &&
+        previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory
+    {
+      // Dynamic type settings changed so we need to
+      // recalculate the heights of every cell.
+      // This is done on the next runloop to ensure
+      // every view's `traitCollectionDidChange` is called first,
+      // which will update the layout properties of those views.
+      DispatchQueue.main.async {
+        self.recalculateCellHeights()
+      }
+    }
+  }
+
   // MARK: Public
 
   public func setSections(_ sections: [EpoxySection]?, animated: Bool) {
