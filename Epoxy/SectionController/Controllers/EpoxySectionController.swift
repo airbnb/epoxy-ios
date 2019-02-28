@@ -90,6 +90,10 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
     modelCache.invalidateEpoxyModel(withDataID: dataID.epoxyStringValue)
   }
 
+  public func invalidateAllEpoxyModels() {
+    modelCache.invalidateAllEpoxyModels()
+  }
+
   public func rebuild(animated: Bool = true) {
     modelCache.invalidateAllEpoxyModels()
     delegate?.epoxyControllerDidUpdateData(self, animated: animated)
