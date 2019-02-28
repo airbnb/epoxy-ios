@@ -11,4 +11,5 @@ public protocol EpoxyControlling: AnyObject {
   func makeTableViewSections() -> [EpoxySection]
   func makeCollectionViewSections() -> [EpoxyCollectionViewSection]
   func hiddenDividerDataIDs() -> [String]
+  func invalidateAllEpoxyModels()
 }

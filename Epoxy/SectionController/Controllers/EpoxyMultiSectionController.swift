@@ -56,15 +56,19 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
   }
 
   public func rebuildSection(forDataID dataID: SectionDataIDType, animated: Bool) {
-    sectionController(forDataID: dataID)?.rebuild(animated: animated)
+    sectionController(forDataID: dataID)?.invalidateAllEpoxyModels()
     delegate?.epoxyControllerDidUpdateData(self, animated: animated)
   }
 
   public func rebuild(animated: Bool) {
-    sectionDataIDs.forEach { dataID in
-      rebuildSection(forDataID: dataID, animated: animated)
-    }
+    invalidateAllEpoxyModels()
     delegate?.epoxyControllerDidUpdateData(self, animated: animated)
+  }
+
+  public func invalidateAllEpoxyModels() {
+    allSectionControllers().forEach { sectionController in
+      sectionController.invalidateAllEpoxyModels()
+    }
   }
 
   // MARK: Private
