@@ -4,6 +4,7 @@
 import UIKit
 
 public enum CellSelectionStyle {
-  case none
+  // This case can't be labeled "none" as that is misinterpreted by the compiler as Optional.none when checking against .none in other files. https://forums.swift.org/t/optional-enum-with-case-none/19126
+  case noBackground
   case color(UIColor)
 }
