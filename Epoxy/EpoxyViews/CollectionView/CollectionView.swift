@@ -121,7 +121,7 @@ public class CollectionView: UICollectionView,
   }
 
   /// Selection color for the `UICollectionViewCell`s of `EpoxyModel`s that have `isSelectable == true`
-  public var selectionStyle = CellSelectionStyle.none
+  public var selectionStyle = CellSelectionStyle.noBackground
 
   /// Whether to deselect items immediately after they are selected.
   public var autoDeselectItems: Bool = true
