@@ -222,7 +222,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
 
     let cellSelectionStyle = item.selectionStyle ?? selectionStyle
     switch cellSelectionStyle {
-    case .none:
+    case .noBackground:
       cell.selectedBackgroundColor = nil
     case .color(let selectionColor):
       cell.selectedBackgroundColor = selectionColor
