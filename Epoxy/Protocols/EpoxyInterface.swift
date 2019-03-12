@@ -31,6 +31,9 @@ public protocol EpoxyInterface: AnyObject {
   /// Sets the item at the given dataID as the first responder
   func setItemAsFirstResponder(at dataID: String)
 
+  /// Moves the accessibility focus to the item at the given dataID
+  func moveAccessibilityFocusToItem(at dataID: String, notification: UIAccessibility.Notification)
+
   /// Recalculates all cell heights in the epoxy interface
   /// NOTE: This has only been implemented for TableView, not for CollectionView.
   func recalculateCellHeights()

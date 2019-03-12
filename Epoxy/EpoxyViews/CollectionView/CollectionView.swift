@@ -58,6 +58,20 @@ public class CollectionView: UICollectionView,
     cell.view?.becomeFirstResponder()
   }
 
+  public func moveAccessibilityFocusToItem(
+    at dataID: String,
+    notification: UIAccessibility.Notification = UIAccessibilityLayoutChangedNotification)
+  {
+    guard
+      let indexPath = indexPathForItem(at: dataID),
+      let cell = cellForItem(at: indexPath) as? CollectionViewCell
+      else {
+        assertionFailure("item not found")
+        return
+    }
+    UIAccessibilityPostNotification(notification, cell)
+  }
+
   public func recalculateCellHeights() {
     collectionViewLayout.invalidateLayout()
   }
