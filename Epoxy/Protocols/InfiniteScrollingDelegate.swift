@@ -20,7 +20,7 @@ public protocol InfiniteScrollingDelegate: AnyObject {
 
 public extension InfiniteScrollingDelegate {
 
-  public func shouldFireInfiniteScrolling() -> Bool {
+  func shouldFireInfiniteScrolling() -> Bool {
     return true
   }
 }

@@ -11,7 +11,7 @@ public enum EpoxySectionFindError: Error {
 public extension Sequence where Iterator.Element == EpoxySection {
 
   /// Find the EpoxyableModel and IndexPath for a given dataID
-  public func findItem(for dataID: String) throws -> (EpoxyableModel, IndexPath) {
+  func findItem(for dataID: String) throws -> (EpoxyableModel, IndexPath) {
 
     for (sectionIndex, section) in self.enumerated() {
       for (itemIndex, item) in section.items.enumerated() {
@@ -25,7 +25,7 @@ public extension Sequence where Iterator.Element == EpoxySection {
   }
 
   /// Find the EpoxySection and Index for a given section dataID
-  public func findSection(for dataID: String) throws -> (EpoxySection, Int) {
+  func findSection(for dataID: String) throws -> (EpoxySection, Int) {
 
     for (sectionIndex, section) in self.enumerated() {
       if section.dataID == dataID {
@@ -40,7 +40,7 @@ public extension Sequence where Iterator.Element == EpoxySection {
 public extension Sequence where Iterator.Element == EpoxyCollectionViewSection {
 
   /// Find the EpoxyableModel and IndexPath for a given dataID
-  public func findItem(for dataID: String) throws -> (EpoxyableModel, IndexPath) {
+  func findItem(for dataID: String) throws -> (EpoxyableModel, IndexPath) {
 
     for (sectionIndex, section) in self.enumerated() {
       for (itemIndex, item) in section.items.enumerated() {
@@ -54,7 +54,7 @@ public extension Sequence where Iterator.Element == EpoxyCollectionViewSection {
   }
 
   /// Find the EpoxyCollectionViewSection and Index for a given section dataID
-  public func findSection(for dataID: String) throws -> (EpoxyCollectionViewSection, Int) {
+  func findSection(for dataID: String) throws -> (EpoxyCollectionViewSection, Int) {
 
     for (sectionIndex, section) in self.enumerated() {
       if section.dataID == dataID {
