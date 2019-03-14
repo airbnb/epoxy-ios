@@ -120,7 +120,7 @@ public extension EpoxyModel {
   /// Create a builder from an EpoxyModel
   ///
   /// - Returns: a builder object set up with all the data from the original EpoxyModel
-  public func toBuilder() -> BaseEpoxyModelBuilder<ViewType, DataType> {
+  func toBuilder() -> BaseEpoxyModelBuilder<ViewType, DataType> {
     return BaseEpoxyModelBuilder<ViewType, DataType>(
       data: data,
       dataID: dataID)

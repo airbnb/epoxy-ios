@@ -11,7 +11,7 @@ public protocol EpoxyStringRepresentable {
 }
 
 public extension EpoxyStringRepresentable {
-  public init?(optionalEpoxyStringValue: String?) {
+  init?(optionalEpoxyStringValue: String?) {
     guard let someEpoxyStringValue = optionalEpoxyStringValue else { return nil }
     self.init(epoxyStringValue: someEpoxyStringValue)
   }
