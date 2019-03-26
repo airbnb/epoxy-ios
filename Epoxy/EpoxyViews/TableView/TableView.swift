@@ -459,7 +459,7 @@ extension TableView: UITableViewDelegate {
       let item = epoxyDataSource.epoxyModel(at: indexPath),
       let section = epoxyDataSource.epoxySection(at: indexPath.section) else { return }
 
-    epoxyModelDisplayDelegate?.tableView(self, willDisplay: item, in: section)
+    epoxyModelDisplayDelegate?.tableView(self, didEndDisplaying: item, in: section)
   }
 
   public func tableView(
