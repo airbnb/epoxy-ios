@@ -60,7 +60,7 @@ public class CollectionView: UICollectionView,
 
   public func moveAccessibilityFocusToItem(
     at dataID: String,
-    notification: UIAccessibility.Notification = UIAccessibility.Notification.layoutChanged)
+    notification: UIAccessibility.Notification = .layoutChanged)
   {
     guard
       let indexPath = indexPathForItem(at: dataID),
@@ -339,7 +339,7 @@ public class CollectionView: UICollectionView,
     _ = item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
     _ = item.setBehavior(cell: cell) // TODO(ls): make these items actually epoxy items
     if item.isSelectable {
-      cell.accessibilityTraits = [cell.accessibilityTraits, UIAccessibilityTraits.button]
+      cell.accessibilityTraits = [cell.accessibilityTraits, .button]
     }
 
     cell.cachedEphemeralState = ephemeralStateCache[item.dataID] ?? nil
