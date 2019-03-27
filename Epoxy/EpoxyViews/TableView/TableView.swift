@@ -102,7 +102,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
 
   public func moveAccessibilityFocusToItem(
     at dataID: String,
-    notification: UIAccessibility.Notification = UIAccessibility.Notification.layoutChanged)
+    notification: UIAccessibility.Notification = .layoutChanged)
   {
     guard
       let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID),
@@ -367,7 +367,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     item.setBehavior(cell: cell)
     updateDivider(for: cell, dividerType: item.dividerType, dataID: item.dataID)
     if item.isSelectable {
-      cell.accessibilityTraits = [cell.accessibilityTraits, UIAccessibilityTraits.button]
+      cell.accessibilityTraits = [cell.accessibilityTraits, .button]
     }
 
     cell.cachedEphemeralState = ephemeralStateCache[item.dataID] ?? nil
