@@ -9,7 +9,7 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
 
   // MARK: Lifecycle
 
-  override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+  override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
     super.init(style: style, reuseIdentifier: reuseIdentifier)
     setUpViews()
   }
@@ -43,7 +43,7 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
     self.view = view
 
     if let dividerView = dividerView {
-      contentView.bringSubview(toFront: dividerView)
+      contentView.bringSubviewToFront(dividerView)
     }
 
     normalViewBackgroundColor = view.backgroundColor
