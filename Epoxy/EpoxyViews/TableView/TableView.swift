@@ -102,7 +102,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
 
   public func moveAccessibilityFocusToItem(
     at dataID: String,
-    notification: UIAccessibility.Notification = UIAccessibilityLayoutChangedNotification)
+    notification: UIAccessibility.Notification = UIAccessibility.Notification.layoutChanged)
   {
     guard
       let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID),
@@ -111,7 +111,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
         assertionFailure("item not found")
         return
     }
-    UIAccessibilityPostNotification(notification, cell)
+    UIAccessibility.post(notification: notification, argument: cell)
   }
 
   public func recalculateCellHeights() {
@@ -354,7 +354,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     delegate = self
     epoxyDataSource.epoxyInterface = self
     dataSource = epoxyDataSource
-    rowHeight = UITableViewAutomaticDimension
+    rowHeight = UITableView.automaticDimension
     estimatedRowHeight = 44 // TODO(ls): Use better estimated height
     separatorStyle = .none
     backgroundColor = .clear
@@ -367,7 +367,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     item.setBehavior(cell: cell)
     updateDivider(for: cell, dividerType: item.dividerType, dataID: item.dataID)
     if item.isSelectable {
-      cell.accessibilityTraits = cell.accessibilityTraits | UIAccessibilityTraitButton
+      cell.accessibilityTraits = [cell.accessibilityTraits, UIAccessibilityTraits.button]
     }
 
     cell.cachedEphemeralState = ephemeralStateCache[item.dataID] ?? nil

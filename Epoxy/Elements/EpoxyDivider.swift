@@ -81,7 +81,7 @@ public class EpoxyDivider: UIView {
   }
 
   public override var intrinsicContentSize: CGSize {
-    return CGSize(width: UIViewNoIntrinsicMetric, height: height + topPadding + bottomPadding)
+    return CGSize(width: UIView.noIntrinsicMetric, height: height + topPadding + bottomPadding)
   }
 
   public override func draw(_ rect: CGRect) {

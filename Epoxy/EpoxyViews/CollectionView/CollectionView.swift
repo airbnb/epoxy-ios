@@ -35,7 +35,7 @@ public class CollectionView: UICollectionView,
     scrollToItem(at: dataID, position: .centeredVertically, animated: animated)
   }
 
-  public func scrollToItem(at dataID: String, position: UICollectionViewScrollPosition, animated: Bool) {
+  public func scrollToItem(at dataID: String, position: UICollectionView.ScrollPosition, animated: Bool) {
     if let indexPath = indexPathForItem(at: dataID) {
       scrollToItem(at: indexPath, at: position, animated: animated)
     }
@@ -60,7 +60,7 @@ public class CollectionView: UICollectionView,
 
   public func moveAccessibilityFocusToItem(
     at dataID: String,
-    notification: UIAccessibility.Notification = UIAccessibilityLayoutChangedNotification)
+    notification: UIAccessibility.Notification = UIAccessibility.Notification.layoutChanged)
   {
     guard
       let indexPath = indexPathForItem(at: dataID),
@@ -69,7 +69,7 @@ public class CollectionView: UICollectionView,
         assertionFailure("item not found")
         return
     }
-    UIAccessibilityPostNotification(notification, cell)
+    UIAccessibility.post(notification: notification, argument: cell)
   }
 
   public func recalculateCellHeights() {
@@ -339,7 +339,7 @@ public class CollectionView: UICollectionView,
     _ = item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
     _ = item.setBehavior(cell: cell) // TODO(ls): make these items actually epoxy items
     if item.isSelectable {
-      cell.accessibilityTraits = cell.accessibilityTraits | UIAccessibilityTraitButton
+      cell.accessibilityTraits = [cell.accessibilityTraits, UIAccessibilityTraits.button]
     }
 
     cell.cachedEphemeralState = ephemeralStateCache[item.dataID] ?? nil
