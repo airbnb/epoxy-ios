@@ -75,7 +75,6 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
 
   private func didUpdateSectionDataIDs() {
     updateDelegates()
-    updateAllSectionControllerInterfaces()
   }
 
   private func didSetDelegate() {
