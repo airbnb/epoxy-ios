@@ -143,6 +143,9 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     }
   }
 
+  /// Delegate for providing swipe actions configuration
+  public weak var epoxyModelSwipeActionDelegate: TableViewEpoxyModelSwipeActionDelegate?
+
   /// Whether to deselect items immediately after they are selected.
   public var autoDeselectItems: Bool = true
 
@@ -551,6 +554,51 @@ extension TableView: UITableViewDelegate {
     }
 
     item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+  }
+
+  @available(iOS 11.0, *)
+  public func tableView(
+    _ tableView: UITableView,
+    leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+  {
+    guard
+      let item = epoxyDataSource.epoxyModel(at: indexPath),
+      let section = epoxyDataSource.epoxySection(at: indexPath.section) else
+    { return nil }
+
+    return epoxyModelSwipeActionDelegate?.tableView(
+      self,
+      leadingSwipeActionsConfigurationForModel: item,
+      in: section)
+  }
+
+  @available(iOS 11.0, *)
+  public func tableView(
+    _ tableView: UITableView,
+    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration?
+  {
+    guard
+      let item = epoxyDataSource.epoxyModel(at: indexPath),
+      let section = epoxyDataSource.epoxySection(at: indexPath.section) else
+    { return nil }
+
+    return epoxyModelSwipeActionDelegate?.tableView(
+      self,
+      trailingSwipeActionsConfigurationForModel: item,
+      in: section)
+  }
+
+  public func tableView(
+    _ tableView: UITableView,
+    editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle
+  {
+    guard
+      let item = epoxyDataSource.epoxyModel(at: indexPath),
+      let section = epoxyDataSource.epoxySection(at: indexPath.section),
+      let delegate = epoxyModelSwipeActionDelegate else
+    { return .none }
+
+    return delegate.tableView(self, editingStyleForModel: item, in: section)
   }
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
