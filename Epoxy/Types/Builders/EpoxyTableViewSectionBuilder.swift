@@ -5,7 +5,7 @@
 /// efficiently over time.
 public final class EpoxyTableViewSectionBuilder {
 
-  init(dataID: String, items: [EpoxyableModel] = []) {
+  public init(dataID: String, items: [EpoxyableModel] = []) {
     self.dataID = dataID
     self.items = items
   }
