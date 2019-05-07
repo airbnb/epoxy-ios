@@ -4,22 +4,63 @@
 import Foundation
 import UIKit
 
-/// The `EpoxyModel` contains the reference id for the model backing an item, the hash value of the item, as well as the reuse id for the item's type.
+// MARK: - EpoxyUserInfoKey
+
+/// Used for keys in Epoxy's userInfo dictionaries. The recommended way to use this
+/// is define an extension on `EpoxyUserInfoKey` with defined `static var` values
+/// that you use in your `userInfo` dictionary on `EpoxyableModel`s
+public struct EpoxyUserInfoKey: RawRepresentable, Equatable, Hashable, Comparable {
+  public typealias RawValue = String
+
+  public init(rawValue: String) {
+    self.rawValue = rawValue
+  }
+
+  public var rawValue: String
+
+  public static func < (lhs: EpoxyUserInfoKey, rhs: EpoxyUserInfoKey) -> Bool {
+    return lhs.rawValue < rhs.rawValue
+  }
+}
+
+// MARK: - EpoxyableModel
+
+/// The `EpoxyModel` contains the reference id for the model backing an item,
+/// the hash value of the item, as well as the reuse id for the item's type.
 public protocol EpoxyableModel: AnyObject, Diffable {
 
+  /// configures the cell for presentation
   func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, animated: Bool)
+
+  /// set behaviors needs by the cell. Is called before presentation and when cells are reordered
   func setBehavior(cell: EpoxyWrapperView)
 
   // MARK: Optional
 
+  /// Default implementation generates a reuseID from the EpoxyableModel's class
   var reuseID: String { get }
+
+  /// Default implementation returns a random unique ID
   var dataID: String { get }
+
+  /// Default implementation does nothing
   func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState)
+
+  /// Default implementation does nothing
   func didSelect(_ cell: EpoxyWrapperView)
 
+  /// Default value is `false`
   var isSelectable: Bool { get set }
+
+  /// Default value is `nil`
   var selectionStyle: CellSelectionStyle? { get set }
+
+  /// Default value is `false`
   var isMovable: Bool { get }
+
+  /// This is used to store additional user-specific data similar to NSNotification's userInfo dictionary.
+  /// The default value is the empty dictionary
+  var userInfo: [EpoxyUserInfoKey: Any] { get }
 
   /// Creates view for this epoxy model. This should only be used to create a view outside of a
   /// collection or table view.
@@ -52,6 +93,8 @@ extension EpoxyableModel {
   }
 
   public var isMovable: Bool { return false }
+
+  public var userInfo: [EpoxyUserInfoKey: Any] { return [:] }
 
   public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) { }
 

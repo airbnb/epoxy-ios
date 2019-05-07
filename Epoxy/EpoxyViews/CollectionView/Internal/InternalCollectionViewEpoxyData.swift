@@ -97,6 +97,10 @@ extension InternalCollectionViewEpoxyData {
   public func indexPathForItem(at dataID: String) -> IndexPath? {
     return itemIndexMap[dataID]
   }
+
+  public func indexForSection(at dataID: String) -> Int? {
+    return sectionIndexMap[dataID]
+  }
 }
 
 extension InternalCollectionViewEpoxyData: CustomStringConvertible {

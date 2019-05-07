@@ -108,6 +108,22 @@ public class CollectionView: UICollectionView,
     }
   }
 
+  /// Returns the userInfo value for a given key from the section at the provided dataID
+  public func sectionUserInfoValue(at dataID: String, for key: EpoxyUserInfoKey) -> Any? {
+    guard let sectionIndex = epoxyDataSource.internalData?.indexForSection(at: dataID) else {
+      return nil
+    }
+    return epoxyDataSource.epoxySection(at: sectionIndex)?.userInfo[key]
+  }
+
+  /// Returns the userInfo value for a given key from the item at the provided dataID
+  public func itemUserInfoValue(at dataID: String, for key: EpoxyUserInfoKey) -> Any? {
+    guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
+      return nil
+    }
+    return epoxyDataSource.epoxyItem(at: indexPath)?.userInfo[key]
+  }
+
   /// CollectionView does not currently support divider hiding.
   public func hideBottomDivider(for dataIDs: [String]) {
     // TODO: Refactor to support layout specific data in epoxy item models

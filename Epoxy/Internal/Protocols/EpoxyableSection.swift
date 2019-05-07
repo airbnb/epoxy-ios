@@ -17,6 +17,8 @@ public protocol EpoxyableSection {
   /// Gets the supplementary view reuse IDs by kind from the given external sections
   func getSupplementaryViewReuseIDs() -> [String: Set<String>]
 
+  /// The userInfo dictionary for this section
+  var userInfo: [EpoxyUserInfoKey: Any] { get }
 }
 
 extension Array where Element: EpoxyableSection {

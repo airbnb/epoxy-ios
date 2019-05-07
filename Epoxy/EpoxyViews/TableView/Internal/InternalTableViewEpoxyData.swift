@@ -142,6 +142,10 @@ extension InternalTableViewEpoxyData {
   public func indexPathForItem(at dataID: String) -> IndexPath? {
     return itemIndexMap[dataID]
   }
+
+  public func indexForSection(at dataID: String) -> Int? {
+    return sectionIndexMap[dataID]
+  }
 }
 
 // MARK: InternalTableViewEpoxySection
@@ -176,6 +180,10 @@ extension InternalTableViewEpoxySection: EpoxyableSection {
   }
 
   public func getSupplementaryViewReuseIDs() -> [String: Set<String>] {
+    return [:]
+  }
+
+  public var userInfo: [EpoxyUserInfoKey : Any] {
     return [:]
   }
 }
@@ -235,6 +243,10 @@ extension InternalTableViewEpoxyModel: EpoxyableModel {
   public var isSelectable: Bool {
     get { return epoxyModel.isSelectable }
     set { epoxyModel.isSelectable = newValue }
+  }
+
+  public var userInfo: [EpoxyUserInfoKey : Any] {
+    return epoxyModel.userInfo
   }
 
   public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {

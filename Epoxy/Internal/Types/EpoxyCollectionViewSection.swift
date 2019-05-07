@@ -11,13 +11,15 @@ public struct EpoxyCollectionViewSection {
   public init(
     dataID: String = "",
     items: [EpoxyableModel],
-    supplementaryModels: [String: [SupplementaryViewEpoxyableModel]]? = nil)
+    supplementaryModels: [String: [SupplementaryViewEpoxyableModel]]? = nil,
+    userInfo: [EpoxyUserInfoKey: Any] = [:])
   {
     self.dataID = dataID
     self.supplementaryModels = supplementaryModels
     self.items = items.map { item in
       return EpoxyModelWrapper(epoxyModel: item)
     }
+    self.userInfo = userInfo
   }
 
   // MARK: Public
@@ -30,6 +32,9 @@ public struct EpoxyCollectionViewSection {
 
   /// Any additional layout data for the section
   public let supplementaryModels: [String: [SupplementaryViewEpoxyableModel]]?
+
+  /// Any additional user-specific data needed for this section
+  public let userInfo: [EpoxyUserInfoKey: Any]
 }
 
 // MARK: Diffable
@@ -108,6 +113,10 @@ extension EpoxyModelWrapper: EpoxyableModel {
 
   public var isMovable: Bool {
     return epoxyModel.isMovable
+  }
+
+  public var userInfo: [EpoxyUserInfoKey : Any] {
+    return epoxyModel.userInfo
   }
 
   public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
