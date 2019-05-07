@@ -11,11 +11,13 @@ public struct EpoxySection {
   public init(
     dataID: String,
     sectionHeader: EpoxyableModel?,
-    items: [EpoxyableModel])
+    items: [EpoxyableModel],
+    userInfo: [EpoxyUserInfoKey: Any] = [:])
   {
     self.dataID = dataID
     self.sectionHeader = sectionHeader
     self.items = items
+    self.userInfo = userInfo
   }
 
   public init(
@@ -45,6 +47,9 @@ public struct EpoxySection {
 
   /// The data for the items to be displayed in this section.
   public let items: [EpoxyableModel]
+
+  /// Dictionary used for holding user-specific data
+  public let userInfo: [EpoxyUserInfoKey: Any]
 }
 
 // MARK: Diffable

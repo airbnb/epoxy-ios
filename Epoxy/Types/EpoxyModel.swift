@@ -25,6 +25,7 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
      - stateConfigurer: An optional closure that configures this view type for a specific state.
      - behaviorSetter: An optional closure that sets the view's behavior (such as interaction blocks or delegates). This block is called whenever a view is configured with an Epoxy model.
      - selectionHandler: An optional closure that is called whenever the view is tapped.
+     - userInfo: An optional dictionary used for holding onto user-specific data
 
    - Returns: An `EpoxyModel` instance that will create the specified view type with this data.
    */
@@ -36,17 +37,19 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     configurer: @escaping (ViewType, DataType, UITraitCollection, Bool) -> Void,
     stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)? = nil,
     behaviorSetter: ((ViewType, DataType, String) -> Void)? = nil,
-    selectionHandler: ((ViewType, DataType, String) -> Void)? = nil)
+    selectionHandler: ((ViewType, DataType, String) -> Void)? = nil,
+    userInfo: [EpoxyUserInfoKey: Any] = [:])
   {
     self.data = data
     self.dataID = dataID
     self.alternateStyleID = alternateStyleID
-    self.reuseID = "\(type(of: ViewType.self))_\(alternateStyleID ?? ""))"
+    self.reuseID = "\(type(of: ViewType.self))_\(alternateStyleID ?? "")"
     self.builder = builder
     self.configurer = configurer
     self.stateConfigurer = stateConfigurer
     self.behaviorSetter = behaviorSetter
     self.selectionHandler = selectionHandler
+    self.userInfo = userInfo
     isSelectable = selectionHandler != nil
   }
 
@@ -55,6 +58,7 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   public let dataID: String
   public let reuseID: String
   public let data: DataType
+  public let userInfo: [EpoxyUserInfoKey : Any]
 
   /**
    Whether or not the view this model represents should be selectable.
@@ -130,6 +134,6 @@ public extension EpoxyModel {
       .with(stateConfigurer: stateConfigurer)
       .with(behaviorSetter: behaviorSetter)
       .with(selectionHandler: selectionHandler)
+      .with(userInfo: userInfo)
   }
-
 }

@@ -30,7 +30,8 @@ public final class BaseEpoxyModelBuilder<ViewType, DataType> where
       configurer: configurer,
       stateConfigurer: stateConfigurer,
       behaviorSetter: behaviorSetter,
-      selectionHandler: selectionHandler)
+      selectionHandler: selectionHandler,
+      userInfo: userInfo)
   }
 
   public func with(alternateStyleID: String?) -> BaseEpoxyModelBuilder {
@@ -63,6 +64,16 @@ public final class BaseEpoxyModelBuilder<ViewType, DataType> where
     return self
   }
 
+  public func with(userInfo: [EpoxyUserInfoKey: Any]) -> BaseEpoxyModelBuilder {
+    self.userInfo = userInfo
+    return self
+  }
+
+  public func withSetUserInfoValue(_ value: Any, for key: EpoxyUserInfoKey) -> BaseEpoxyModelBuilder {
+    userInfo[key] = value
+    return self
+  }
+
   // MARK: Private
 
   private var data: DataType
@@ -73,4 +84,5 @@ public final class BaseEpoxyModelBuilder<ViewType, DataType> where
   private var stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)? = nil
   private var behaviorSetter: ((ViewType, DataType, String) -> Void)? = nil
   private var selectionHandler: ((ViewType, DataType, String) -> Void)? = nil
+  private var userInfo: [EpoxyUserInfoKey: Any] = [:]
 }
