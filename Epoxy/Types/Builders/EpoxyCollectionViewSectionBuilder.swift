@@ -84,3 +84,15 @@ public final class EpoxyCollectionViewSectionBuilder {
   private var supplementaryModels: [String: [SupplementaryViewEpoxyableModel]]? = nil
   private var userInfo: [EpoxyUserInfoKey: Any] = [:]
 }
+
+// MARK: Subscript
+
+extension EpoxyCollectionViewSectionBuilder {
+  /// provides a subscript interface to set and get values from the userInfo
+  /// dictionary on a builder
+  /// example usage: `builder[EpoxyUserInfoKey.customKey] = customValue`
+  public subscript<T>(key: EpoxyUserInfoKey) -> T? {
+    get { return userInfo[key] as? T }
+    set { userInfo[key] = newValue }
+  }
+}

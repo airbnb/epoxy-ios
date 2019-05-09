@@ -86,3 +86,15 @@ public final class BaseEpoxyModelBuilder<ViewType, DataType> where
   private var selectionHandler: ((ViewType, DataType, String) -> Void)? = nil
   private var userInfo: [EpoxyUserInfoKey: Any] = [:]
 }
+
+// MARK: Subscript
+
+extension BaseEpoxyModelBuilder {
+  /// provides a subscript interface to set and get values from the userInfo
+  /// dictionary on a builder
+  /// example usage: `builder[EpoxyUserInfoKey.customKey] = customValue`
+  public subscript<T>(key: EpoxyUserInfoKey) -> T? {
+    get { return userInfo[key] as? T }
+    set { userInfo[key] = newValue }
+  }
+}
