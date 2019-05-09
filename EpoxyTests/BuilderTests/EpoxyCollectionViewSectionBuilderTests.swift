@@ -90,4 +90,13 @@ class EpoxyCollectionViewSectionBuilderTests: XCTestCase {
     XCTAssertEqual(otherSection.userInfo[newKey] as! Int, 7)
   }
 
+  func testSubscripts() {
+    let key = EpoxyUserInfoKey(rawValue: "subscript")
+    builder?[key] = 5
+    XCTAssertEqual(builder[key], 5)
+
+    let section = builder.build()
+    XCTAssertEqual(section.userInfo[key] as! Int, 5)
+  }
+
 }

@@ -44,4 +44,13 @@ class EpoxyModelBuilderTests: XCTestCase {
     XCTAssertNil(otherModel.userInfo[key])
     XCTAssertEqual(otherModel.userInfo[newKey] as! Int, 7)
   }
+
+  func testSubscripts() {
+    let key = EpoxyUserInfoKey(rawValue: "subscript")
+    builder?[key] = 5
+    XCTAssertEqual(builder[key], 5)
+
+    let model = builder.build()
+    XCTAssertEqual(model.userInfo[key] as! Int, 5)
+  }
 }
