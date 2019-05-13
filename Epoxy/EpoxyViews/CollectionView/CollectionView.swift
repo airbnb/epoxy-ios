@@ -4,7 +4,7 @@
 import UIKit
 
 /// A `UICollectionView` class that handles updates through its `setSections` method, and optionally animates diffs.
-public class CollectionView: UICollectionView,
+open class CollectionView: UICollectionView,
   TypedEpoxyInterface,
   InternalEpoxyInterface,
   UICollectionViewDelegate
@@ -109,19 +109,19 @@ public class CollectionView: UICollectionView,
   }
 
   /// Returns the userInfo value for a given key from the section at the provided dataID
-  public func sectionUserInfoValue(at dataID: String, for key: EpoxyUserInfoKey) -> Any? {
+  public func sectionUserInfoValue<T>(at dataID: String, for key: EpoxyUserInfoKey) -> T? {
     guard let sectionIndex = epoxyDataSource.internalData?.indexForSection(at: dataID) else {
       return nil
     }
-    return epoxyDataSource.epoxySection(at: sectionIndex)?.userInfo[key]
+    return epoxyDataSource.epoxySection(at: sectionIndex)?.userInfo[key] as? T
   }
 
   /// Returns the userInfo value for a given key from the item at the provided dataID
-  public func itemUserInfoValue(at dataID: String, for key: EpoxyUserInfoKey) -> Any? {
+  public func itemUserInfoValue<T>(at dataID: String, for key: EpoxyUserInfoKey) -> T? {
     guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
       return nil
     }
-    return epoxyDataSource.epoxyItem(at: indexPath)?.userInfo[key]
+    return epoxyDataSource.epoxyItem(at: indexPath)?.userInfo[key] as? T
   }
 
   /// CollectionView does not currently support divider hiding.
@@ -308,7 +308,7 @@ public class CollectionView: UICollectionView,
     infiniteScrollingState = .stopped
   }
 
-  public override var contentSize: CGSize {
+  open override var contentSize: CGSize {
     didSet { updateInfiniteLoaderPosition() }
   }
 
@@ -710,22 +710,22 @@ public class CollectionView: UICollectionView,
   // MARK: Unavailable Methods
 
   @available (*, unavailable, message: "You shouldn't be registering cell classes on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
-  public override func register(_ cellClass: AnyClass?, forCellWithReuseIdentifier identifier: String) {
+  final override public func register(_ cellClass: AnyClass?, forCellWithReuseIdentifier identifier: String) {
     super.register(cellClass, forCellWithReuseIdentifier: identifier)
   }
 
   @available (*, unavailable, message: "You shouldn't be registering cell nibs on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
-  public override func register(_ nib: UINib?, forCellWithReuseIdentifier identifier: String) {
+  final override public func register(_ nib: UINib?, forCellWithReuseIdentifier identifier: String) {
     super.register(nib, forCellWithReuseIdentifier: identifier)
   }
 
   @available (*, unavailable, message: "You shouldn't be registering supplementary view nibs on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
-  public override func register(_ nib: UINib?, forSupplementaryViewOfKind kind: String, withReuseIdentifier identifier: String) {
+  final override public func register(_ nib: UINib?, forSupplementaryViewOfKind kind: String, withReuseIdentifier identifier: String) {
     super.register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: identifier)
   }
 
   @available (*, unavailable, message: "You shouldn't be registering supplementary view classes on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
-  public override func register(_ viewClass: AnyClass?, forSupplementaryViewOfKind elementKind: String, withReuseIdentifier identifier: String) {
+  final override public func register(_ viewClass: AnyClass?, forSupplementaryViewOfKind elementKind: String, withReuseIdentifier identifier: String) {
     super.register(viewClass, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: identifier)
   }
 

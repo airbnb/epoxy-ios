@@ -128,19 +128,19 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   }
 
   /// Returns the userInfo value for a given key from the section at the provided dataID
-  public func sectionUserInfoValue(at dataID: String, for key: EpoxyUserInfoKey) -> Any? {
+  public func sectionUserInfoValue<T>(at dataID: String, for key: EpoxyUserInfoKey) -> T? {
     guard let sectionIndex = epoxyDataSource.internalData?.indexForSection(at: dataID) else {
       return nil
     }
-    return epoxyDataSource.epoxySection(at: sectionIndex)?.userInfo[key]
+    return epoxyDataSource.epoxySection(at: sectionIndex)?.userInfo[key] as? T
   }
 
   /// Returns the userInfo value for a given key from the model at the provided dataID
-  public func itemUserInfoValue(at dataID: String, for key: EpoxyUserInfoKey) -> Any? {
+  public func itemUserInfoValue<T>(at dataID: String, for key: EpoxyUserInfoKey) -> T? {
     guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
       return nil
     }
-    return epoxyDataSource.epoxyModel(at: indexPath)?.userInfo[key]
+    return epoxyDataSource.epoxyModel(at: indexPath)?.userInfo[key] as? T
   }
 
   /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
