@@ -68,4 +68,11 @@ extension EpoxySection {
     self.items = items
     self.userInfo = updatedUserInfo
   }
+
+  public init(sectionHeader: EpoxyableModel?, items: [EpoxyableModel]) {
+    self.init(
+      dataID: "",
+      sectionHeader: sectionHeader,
+      items: items)
+  }
 }

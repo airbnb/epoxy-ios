@@ -1,7 +1,7 @@
 // Created by Tyler Hedrick on 5/13/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-import Foundation
+import UIKit
 
 /// The diffing algorithm complains at compile time without this concrete wrapper
 public final class EpoxyModelWrapper {
