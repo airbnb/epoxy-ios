@@ -37,15 +37,9 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
     didSet { didUpdateSectionDataIDs() }
   }
 
-  public func makeTableViewSections() -> [EpoxySection] {
+  public func makeSections() -> [EpoxySection] {
     return sectionDataIDs.compactMap { dataID in
-      return sectionController(forDataID: dataID)?.makeTableViewSection()
-    }
-  }
-
-  public func makeCollectionViewSections() -> [EpoxyCollectionViewSection] {
-    return sectionDataIDs.compactMap { dataID in
-      return sectionController(forDataID: dataID)?.makeCollectionViewSection()
+      return sectionController(forDataID: dataID)?.makeSection()
     }
   }
 

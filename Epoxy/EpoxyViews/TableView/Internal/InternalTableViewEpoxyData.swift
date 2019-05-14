@@ -9,13 +9,8 @@ import UIKit
 /// An internal data structure constructed from an array of `EpoxySection`s that is specific
 /// to display in a `UITableView` implementation.
 public final class InternalTableViewEpoxyData: InternalEpoxyDataType {
-
-  public typealias Item = InternalTableViewEpoxyModel
-  public typealias ExternalSection = EpoxySection
-  public typealias InternalSection = InternalTableViewEpoxySection
-
   init(
-    sections: [InternalTableViewEpoxySection],
+    sections: [InternalEpoxySection],
     sectionIndexMap: [String: Int],
     itemIndexMap: [String: IndexPath])
   {
@@ -24,13 +19,12 @@ public final class InternalTableViewEpoxyData: InternalEpoxyDataType {
     self.itemIndexMap = itemIndexMap
   }
 
-  public fileprivate(set) var sections: [InternalTableViewEpoxySection]
+  public fileprivate(set) var sections: [InternalEpoxySection]
 
   // MARK: Fileprivate
 
   fileprivate var sectionIndexMap = [String: Int]()
   fileprivate var itemIndexMap = [String: IndexPath]()
-
 }
 
 extension InternalTableViewEpoxyData {
@@ -41,21 +35,21 @@ extension InternalTableViewEpoxyData {
     var itemIndexMap = [String: IndexPath]()
 
     let lastSectionIndex = sections.count - 1
-    let sections: [InternalTableViewEpoxySection] = sections.enumerated().map { sectionIndex, section in
+    let sections: [InternalEpoxySection] = sections.enumerated().map { sectionIndex, section in
 
       sectionIndexMap[section.dataID] = sectionIndex
 
       var itemIndex = 0
 
-      var items = [InternalTableViewEpoxyModel]()
+      var items = [EpoxyModelWrapper]()
 
       // Note: Default UITableView section headers are "sticky" at the top of the page.
       // We don't want this behavior, so we are implementing our section headers as cells
       // in the UITableView implementation.
-      if let existingSectionHeader = section.sectionHeader {
-        items.append(InternalTableViewEpoxyModel(
+      if let existingSectionHeader = section.tableViewSectionHeader {
+        items.append(EpoxyModelWrapper(
           epoxyModel: existingSectionHeader,
-          dividerType: .sectionHeaderDivider))
+          dividerType: existingSectionHeader.tableViewBottomDividerHidden ? .none : .sectionHeaderDivider))
 
         let dataID = existingSectionHeader.dataID
         itemIndexMap[dataID] = IndexPath(item: itemIndex, section: sectionIndex)
@@ -64,9 +58,9 @@ extension InternalTableViewEpoxyData {
       }
 
       section.items.forEach { model in
-        items.append(InternalTableViewEpoxyModel(
+        items.append(EpoxyModelWrapper(
           epoxyModel: model,
-          dividerType: .rowDivider))
+          dividerType: model.tableViewBottomDividerHidden ? .none : .rowDivider))
 
         itemIndexMap[model.dataID] = IndexPath(item: itemIndex, section: sectionIndex)
 
@@ -75,14 +69,15 @@ extension InternalTableViewEpoxyData {
 
       if sectionIndex == lastSectionIndex && !items.isEmpty {
         let lastModel = items.removeLast() // Remove last row divider
-        items.append(InternalTableViewEpoxyModel(
+        items.append(EpoxyModelWrapper(
           epoxyModel: lastModel.epoxyModel,
           dividerType: .none))
       }
 
-      return InternalTableViewEpoxySection(
+      return InternalEpoxySection(
         dataID: section.dataID,
-        items: items)
+        items: items,
+        userInfo: section.userInfo)
     }
 
     return InternalTableViewEpoxyData(
@@ -132,7 +127,7 @@ extension InternalTableViewEpoxyData {
 
     assert(oldItem.epoxyModel.reuseID == item.reuseID, "Cannot update model with a different reuse ID.")
 
-    sections[indexPath.section].items[indexPath.item] = InternalTableViewEpoxyModel(
+    sections[indexPath.section].items[indexPath.item] = EpoxyModelWrapper(
       epoxyModel: item,
       dividerType: oldItem.dividerType)
 
@@ -148,57 +143,6 @@ extension InternalTableViewEpoxyData {
   }
 }
 
-// MARK: InternalTableViewEpoxySection
-
-/// A section in the `InternalTableViewEpoxyData`.
-public struct InternalTableViewEpoxySection {
-
-  init(
-    dataID: String,
-    items: [InternalTableViewEpoxyModel])
-  {
-    self.dataID = dataID
-    self.items = items
-  }
-
-  public let dataID: String
-  public fileprivate(set) var items: [InternalTableViewEpoxyModel]
-}
-
-extension InternalTableViewEpoxySection: EpoxyableSection {
-
-  public var itemModels: [EpoxyableModel] {
-    return items as [EpoxyableModel]
-  }
-
-  public func getCellReuseIDs() -> Set<String> {
-    var newCellReuseIDs = Set<String>()
-    items.forEach { item in
-      newCellReuseIDs.insert(item.reuseID)
-    }
-    return newCellReuseIDs
-  }
-
-  public func getSupplementaryViewReuseIDs() -> [String: Set<String>] {
-    return [:]
-  }
-
-  public var userInfo: [EpoxyUserInfoKey : Any] {
-    return [:]
-  }
-}
-
-extension InternalTableViewEpoxySection: Diffable {
-  public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let otherDiffableSection = otherDiffableItem as? InternalTableViewEpoxySection else { return false }
-    return dataID == otherDiffableSection.dataID
-  }
-
-  public var diffIdentifier: String? {
-    return dataID
-  }
-}
-
 // MARK: EpoxyModelDividerType
 
 /// Tells the cell which divider type to use in a view pinned to the cell's bottom.
@@ -208,71 +152,20 @@ public enum EpoxyModelDividerType {
   case none
 }
 
-// MARK: InternalTableViewEpoxyModel
+extension EpoxyUserInfoKey.TableView.Row {
+  public static var dividerType: EpoxyUserInfoKey {
+    return EpoxyUserInfoKey(rawValue: "\(TableView.self)_\(#function)")
+  }
+}
 
-/// A model in a `InternalTableViewEpoxySection`, representing either a row or a section header.
-public final class InternalTableViewEpoxyModel {
-
-  init(
-    epoxyModel: EpoxyableModel,
-    dividerType: EpoxyModelDividerType)
-  {
-    self.epoxyModel = epoxyModel
+extension EpoxyModelWrapper {
+  convenience init(epoxyModel: EpoxyableModel, dividerType: EpoxyModelDividerType) {
+    self.init(epoxyModel: epoxyModel)
     self.dividerType = dividerType
   }
 
-  let epoxyModel: EpoxyableModel
-  var dividerType: EpoxyModelDividerType
-}
-
-extension InternalTableViewEpoxyModel: EpoxyableModel {
-
-  public var reuseID: String {
-    return epoxyModel.reuseID
-  }
-
-  public var dataID: String {
-    return epoxyModel.dataID
-  }
-
-  public var selectionStyle: CellSelectionStyle? {
-    get { return epoxyModel.selectionStyle }
-    set { epoxyModel.selectionStyle = newValue }
-  }
-
-  public var isSelectable: Bool {
-    get { return epoxyModel.isSelectable }
-    set { epoxyModel.isSelectable = newValue }
-  }
-
-  public var userInfo: [EpoxyUserInfoKey : Any] {
-    return epoxyModel.userInfo
-  }
-
-  public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
-    epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
-  }
-
-  public func setBehavior(cell: EpoxyWrapperView) {
-    epoxyModel.setBehavior(cell: cell)
-  }
-
-  public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) {
-    epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, state: state)
-  }
-
-  public func didSelect(_ cell: EpoxyWrapperView) {
-    epoxyModel.didSelect(cell)
-  }
-}
-
-extension InternalTableViewEpoxyModel: Diffable {
-  public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let otherDiffableEpoxyModel = otherDiffableItem as? InternalTableViewEpoxyModel else { return false }
-    return epoxyModel.isDiffableItemEqual(to: otherDiffableEpoxyModel.epoxyModel)
-  }
-
-  public var diffIdentifier: String? {
-    return epoxyModel.diffIdentifier
+  public var dividerType: EpoxyModelDividerType {
+    set { extraModelWrapperInfo[EpoxyUserInfoKey.TableView.Row.dividerType] = newValue }
+    get { return extraModelWrapperInfo[EpoxyUserInfoKey.TableView.Row.dividerType] as? EpoxyModelDividerType ?? .none }
   }
 }

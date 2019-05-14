@@ -64,9 +64,24 @@ extension EpoxySection: EpoxyableSection {
 
   public func getSupplementaryViewReuseIDs() -> [String: Set<String>] {
     var reuseIDs = Set<String>()
-    if let sectionHeader = sectionHeader {
+
+    var newSupplementaryViewReuseIDs = [String: Set<String>]()
+
+    // TableView only
+    if let sectionHeader = tableViewSectionHeader {
       reuseIDs.insert(sectionHeader.reuseID)
+      newSupplementaryViewReuseIDs[ElementKind.sectionHeader.rawValue] = reuseIDs
     }
-    return [ElementKind.sectionHeader.rawValue: reuseIDs]
+
+    // CollectionView only
+    collectionViewSupplementaryModels?.forEach { elementKind, elementSupplementaryModels in
+      var newElementSupplementaryViewReuseIDs = Set<String>()
+      elementSupplementaryModels.forEach { elementSupplementaryModel in
+        newElementSupplementaryViewReuseIDs.insert(elementSupplementaryModel.reuseID)
+      }
+      newSupplementaryViewReuseIDs[elementKind] = newElementSupplementaryViewReuseIDs
+    }
+
+    return newSupplementaryViewReuseIDs
   }
 }

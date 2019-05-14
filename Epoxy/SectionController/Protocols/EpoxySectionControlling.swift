@@ -2,6 +2,5 @@
 //  Copyright © 2018 Airbnb. All rights reserved.
 
 public protocol EpoxySectionControlling: EpoxyControlling {
-  func makeTableViewSection() -> EpoxySection
-  func makeCollectionViewSection() -> EpoxyCollectionViewSection
+  func makeSection() -> EpoxySection
 }

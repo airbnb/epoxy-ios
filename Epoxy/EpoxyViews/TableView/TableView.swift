@@ -250,7 +250,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
       forCellReuseIdentifier: supplementaryViewReuseID)
   }
 
-  public func configure(cell: Cell, with item: DataType.Item) {
+  public func configure(cell: Cell, with item: EpoxyModelWrapper) {
     configure(cell: cell, with: item, animated: false)
 
     let cellSelectionStyle = item.selectionStyle ?? selectionStyle
@@ -381,7 +381,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     cellLayoutMarginsFollowReadableWidth = false
   }
 
-  private func configure(cell: Cell, with item: DataType.Item, animated: Bool) {
+  private func configure(cell: Cell, with item: EpoxyModelWrapper, animated: Bool) {
     item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
     item.setBehavior(cell: cell)
     updateDivider(for: cell, dividerType: item.dividerType, dataID: item.dataID)

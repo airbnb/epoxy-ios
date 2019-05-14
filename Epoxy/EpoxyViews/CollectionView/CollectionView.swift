@@ -27,7 +27,7 @@ open class CollectionView: UICollectionView,
 
   // MARK: Public
 
-  public func setSections(_ sections: [EpoxyCollectionViewSection]?, animated: Bool) {
+  public func setSections(_ sections: [EpoxySection]?, animated: Bool) {
     epoxyDataSource.setSections(sections, animated: animated)
   }
 
@@ -209,7 +209,7 @@ open class CollectionView: UICollectionView,
       withReuseIdentifier: supplementaryViewReuseID)
   }
 
-  public func configure(cell: Cell, with item: DataType.Item) {
+  public func configure(cell: Cell, with item: EpoxyModelWrapper) {
     configure(cell: cell, with: item, animated: false)
   }
 
