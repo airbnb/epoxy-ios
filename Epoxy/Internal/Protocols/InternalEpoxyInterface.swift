@@ -29,7 +29,7 @@ public protocol InternalEpoxyInterface: TypedEpoxyInterface {
   func reloadItem(at indexPath: IndexPath, animated: Bool)
 
   /// Configures the given cell with the given item and sets its behavior
-  func configure(cell: Cell, with item: DataType.Item)
+  func configure(cell: Cell, with item: EpoxyModelWrapper)
 
   /// Applies the given changeset to the view, allowing the view to animate changes
   func apply(_ newData: DataType?, animated: Bool, changesetMaker: @escaping (DataType?) -> EpoxyChangeset?)

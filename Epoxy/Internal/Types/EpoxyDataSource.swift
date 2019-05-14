@@ -22,7 +22,7 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
 
   private(set) var internalData: EpoxyInterfaceType.DataType?
 
-  func setSections(_ sections: [EpoxyInterfaceType.DataType.ExternalSection]?, animated: Bool) {
+  func setSections(_ sections: [EpoxySection]?, animated: Bool) {
     assert(Thread.isMainThread, "This method must be called on the main thread.")
     registerCellReuseIDs(with: sections)
     registerSupplementaryViewReuseIDs(with: sections)
@@ -80,13 +80,13 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
     }
   }
 
-  private func registerCellReuseIDs(with sections: [EpoxyInterfaceType.DataType.ExternalSection]?) {
+  private func registerCellReuseIDs(with sections: [EpoxySection]?) {
     let newCellReuseIDs = sections?.getCellReuseIDs() ?? []
     registerNewCellReuseIDs(newCellReuseIDs.subtracting(cellReuseIDs))
     cellReuseIDs = cellReuseIDs.union(newCellReuseIDs)
   }
 
-  private func registerSupplementaryViewReuseIDs(with sections: [EpoxyInterfaceType.DataType.ExternalSection]?) {
+  private func registerSupplementaryViewReuseIDs(with sections: [EpoxySection]?) {
     let newSupplementaryViewReuseIDs = sections?.getSupplementaryViewReuseIDs() ?? [:]
     newSupplementaryViewReuseIDs.forEach { elementKind, newElementSupplementaryViewReuseIDs in
       let existingReuseIDs: Set<String> = supplementaryViewReuseIDs[elementKind] ?? []

@@ -10,30 +10,17 @@ public struct EpoxySection {
 
   public init(
     dataID: String,
-    sectionHeader: EpoxyableModel?,
     items: [EpoxyableModel],
     userInfo: [EpoxyUserInfoKey: Any] = [:])
   {
     self.dataID = dataID
-    self.sectionHeader = sectionHeader
     self.items = items
     self.userInfo = userInfo
-  }
-
-  public init(
-    sectionHeader: EpoxyableModel?,
-    items: [EpoxyableModel])
-  {
-    self.init(
-      dataID: "",
-      sectionHeader: sectionHeader,
-      items: items)
   }
 
   public init(items: [EpoxyableModel]) {
     self.init(
       dataID: "",
-      sectionHeader: nil,
       items: items)
   }
 
@@ -41,9 +28,6 @@ public struct EpoxySection {
 
   /// The reference id for the model backing this section.
   public let dataID: String
-
-  /// The data for the section header to be displayed in this section.
-  public let sectionHeader: EpoxyableModel?
 
   /// The data for the items to be displayed in this section.
   public let items: [EpoxyableModel]

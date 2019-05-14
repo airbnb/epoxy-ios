@@ -67,7 +67,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
       assertionFailure("Index of supplementary view is out of bounds.")
       return UICollectionReusableView()
     }
-    guard let elementSupplementaryModel = data.sections[indexPath.section].supplementaryModels?[kind]?[indexPath.item] else {
+    guard let elementSupplementaryModel = data.sections[indexPath.section].supplementaryModels[kind]?[indexPath.item] else {
       assertionFailure("Supplementary epoxy models not found for the given element kind and index path.")
       return UICollectionReusableView()
     }
@@ -118,7 +118,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
 
   weak var reorderingDelegate: CollectionViewDataSourceReorderingDelegate?
 
-  func epoxyItem(at indexPath: IndexPath) -> CollectionView.DataType.Item? {
+  func epoxyItem(at indexPath: IndexPath) -> EpoxyModelWrapper? {
     guard let data = internalData else {
       assertionFailure("Can't load epoxy item with nil data")
       return nil
@@ -138,7 +138,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     return section.items[indexPath.row]
   }
 
-  func epoxyItemIfPresent(at indexPath: IndexPath) -> CollectionView.DataType.Item? {
+  func epoxyItemIfPresent(at indexPath: IndexPath) -> EpoxyModelWrapper? {
     guard let data = internalData,
       indexPath.section < data.sections.count else { return nil }
 
@@ -148,7 +148,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     return section.items[indexPath.row]
   }
 
-  func epoxySection(at index: Int) -> EpoxyCollectionViewSection? {
+  func epoxySection(at index: Int) -> InternalEpoxySection? {
     guard let data = internalData else {
       assertionFailure("Can't load epoxy item with nil data")
       return nil
@@ -162,7 +162,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     return data.sections[index]
   }
 
-  func epoxySectionIfPresent(at index: Int) -> EpoxyCollectionViewSection? {
+  func epoxySectionIfPresent(at index: Int) -> InternalEpoxySection? {
     guard let data = internalData else { return nil }
     guard index < data.sections.count else { return nil }
 
@@ -178,7 +178,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
 
     let section = data.sections[indexPath.section]
 
-    guard let models = section.supplementaryModels?[elementKind] else { return nil }
+    guard let models = section.supplementaryModels[elementKind] else { return nil }
     guard indexPath.item < models.count else { return nil }
 
     return models[indexPath.item]

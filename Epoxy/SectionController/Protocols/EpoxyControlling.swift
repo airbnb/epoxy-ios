@@ -8,8 +8,7 @@ public protocol EpoxyControlling: AnyObject {
   /// must be marked `weak`
   var interface: EpoxyInterface? { get set }
   func rebuild(animated: Bool)
-  func makeTableViewSections() -> [EpoxySection]
-  func makeCollectionViewSections() -> [EpoxyCollectionViewSection]
+  func makeSections() -> [EpoxySection]
   func hiddenDividerDataIDs() -> [String]
   func invalidateAllEpoxyModels()
 }

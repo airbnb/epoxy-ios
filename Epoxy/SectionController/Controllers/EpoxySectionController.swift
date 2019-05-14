@@ -21,18 +21,10 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
     return nil
   }
 
-  open func makeTableViewSection() -> EpoxySection {
+  open func makeSection() -> EpoxySection {
     return EpoxySection(
       dataID: dataID,
-      sectionHeader: nil,
       items: allItemModels())
-  }
-
-  open func makeCollectionViewSection() -> EpoxyCollectionViewSection {
-    return EpoxyCollectionViewSection(
-      dataID: dataID,
-      items: allItemModels(),
-      supplementaryModels: nil)
   }
 
   open func hiddenDividers() -> [ItemDataIDType] {
@@ -99,12 +91,8 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
     delegate?.epoxyControllerDidUpdateData(self, animated: animated)
   }
 
-  public func makeTableViewSections() -> [EpoxySection] {
-    return [makeTableViewSection()]
-  }
-
-  public func makeCollectionViewSections() -> [EpoxyCollectionViewSection] {
-    return [makeCollectionViewSection()]
+  public func makeSections() -> [EpoxySection] {
+    return [makeSection()]
   }
 
   // MARK: Private

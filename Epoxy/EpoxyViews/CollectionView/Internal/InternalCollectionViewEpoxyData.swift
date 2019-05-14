@@ -4,13 +4,8 @@
 import Foundation
 
 public final class InternalCollectionViewEpoxyData: InternalEpoxyDataType {
-
-  public typealias Item = EpoxyModelWrapper
-  public typealias ExternalSection = EpoxyCollectionViewSection
-  public typealias InternalSection = EpoxyCollectionViewSection
-
   init(
-    sections: [EpoxyCollectionViewSection],
+    sections: [InternalEpoxySection],
     sectionIndexMap: [String: Int],
     itemIndexMap: [String: IndexPath])
   {
@@ -19,7 +14,7 @@ public final class InternalCollectionViewEpoxyData: InternalEpoxyDataType {
     self.itemIndexMap = itemIndexMap
   }
 
-  public fileprivate(set) var sections: [EpoxyCollectionViewSection]
+  public fileprivate(set) var sections: [InternalEpoxySection]
 
   // MARK: Fileprivate
 
@@ -29,20 +24,27 @@ public final class InternalCollectionViewEpoxyData: InternalEpoxyDataType {
 
 extension InternalCollectionViewEpoxyData {
 
-  public static func make(with sections: [EpoxyCollectionViewSection]) -> InternalCollectionViewEpoxyData {
+  public static func make(with sections: [EpoxySection]) -> InternalCollectionViewEpoxyData {
 
     var sectionIndexMap = [String: Int]()
     var itemIndexMap = [String: IndexPath]()
 
+    var convertedSections = [InternalEpoxySection]()
     sections.enumerated().forEach { sectionIndex, section in
       sectionIndexMap[section.dataID] = sectionIndex
+      var epoxyModelWrappers = [EpoxyModelWrapper]()
       section.items.enumerated().forEach { itemIndex, item in
         itemIndexMap[item.dataID] = IndexPath(item: itemIndex, section: sectionIndex)
+        epoxyModelWrappers.append(EpoxyModelWrapper(epoxyModel: item))
       }
+      convertedSections.append(InternalEpoxySection(
+        dataID: section.dataID,
+        items: epoxyModelWrappers,
+        userInfo: section.userInfo))
     }
 
     return InternalCollectionViewEpoxyData(
-      sections: sections,
+      sections: convertedSections,
       sectionIndexMap: sectionIndexMap,
       itemIndexMap: itemIndexMap)
   }

@@ -36,32 +36,3 @@ public extension Sequence where Iterator.Element == EpoxySection {
     throw EpoxySectionFindError.sectionNotFound
   }
 }
-
-public extension Sequence where Iterator.Element == EpoxyCollectionViewSection {
-
-  /// Find the EpoxyableModel and IndexPath for a given dataID
-  func findItem(for dataID: String) throws -> (EpoxyableModel, IndexPath) {
-
-    for (sectionIndex, section) in self.enumerated() {
-      for (itemIndex, item) in section.items.enumerated() {
-        if item.dataID == dataID {
-          return (item, IndexPath(item: itemIndex, section: sectionIndex))
-        }
-      }
-    }
-
-    throw EpoxySectionFindError.itemNotFound
-  }
-
-  /// Find the EpoxyCollectionViewSection and Index for a given section dataID
-  func findSection(for dataID: String) throws -> (EpoxyCollectionViewSection, Int) {
-
-    for (sectionIndex, section) in self.enumerated() {
-      if section.dataID == dataID {
-        return (section, sectionIndex)
-      }
-    }
-
-    throw EpoxySectionFindError.sectionNotFound
-  }
-}

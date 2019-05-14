@@ -39,7 +39,7 @@ public class TableViewEpoxyDataSource: EpoxyDataSource<TableView>, UITableViewDa
 
   // MARK: Internal
 
-  func epoxyModel(at indexPath: IndexPath) -> InternalTableViewEpoxyModel? {
+  func epoxyModel(at indexPath: IndexPath) -> EpoxyModelWrapper? {
     guard let data = internalData else {
       assertionFailure("Can't load epoxy item with nil data")
       return nil
@@ -58,7 +58,7 @@ public class TableViewEpoxyDataSource: EpoxyDataSource<TableView>, UITableViewDa
     return section.items[indexPath.row]
   }
 
-  func epoxySection(at index: Int) -> InternalTableViewEpoxySection? {
+  func epoxySection(at index: Int) -> InternalEpoxySection? {
     guard let data = internalData else {
       assertionFailure("Can't load epoxy item with nil data")
       return nil

@@ -4,9 +4,9 @@
 @testable import Epoxy
 import XCTest
 
-class EpoxyTableViewSectionBuilderTests: XCTestCase {
+class EpoxySectionBuilderTests: XCTestCase {
 
-  var builder: EpoxyTableViewSectionBuilder!
+  var builder: EpoxySectionBuilder!
   let model1: EpoxyableModel = EpoxyModel<UIView, String>(
     data: "",
     dataID: "model_1",
@@ -15,16 +15,28 @@ class EpoxyTableViewSectionBuilderTests: XCTestCase {
     data: "",
     dataID: "model_2",
     configurer: { _, _, _, _ in })
+  let supplementaryModel = SupplementaryViewEpoxyModel<UIView, String>(
+    elementKind: "test_kind",
+    data: "",
+    dataID: "supplementary_id",
+    builder: { return UIView(frame: .zero) },
+    configurer: { _, _, _ in })
 
   override func setUp() {
-    builder = EpoxyTableViewSectionBuilder(dataID: "section_id")
+    builder = EpoxySectionBuilder(dataID: "section_id")
   }
 
   func testBaseSection() {
     let section = builder.build()
     XCTAssertEqual(section.items.count, 0)
     XCTAssertEqual(section.dataID, "section_id")
-    XCTAssertNil(section.sectionHeader)
+    XCTAssertNil(section.tableViewSectionHeader)
+  }
+
+  func testTableViewSectionHeader() {
+    let section = builder.withTableView(sectionHeader: model2).build()
+    XCTAssertNotNil(section.tableViewSectionHeader)
+    XCTAssertEqual(section.tableViewSectionHeader!.dataID, "model_2")
   }
 
   func testSettingItems() {
@@ -82,6 +94,31 @@ class EpoxyTableViewSectionBuilderTests: XCTestCase {
 
     let section = builder.build()
     XCTAssertEqual(section.userInfo[key] as! Int, 5)
+  }
+
+  func testSettingSupplementaryModelsAsGroup() {
+    let section = builder.withCollectionView(supplementaryModels: ["models": [supplementaryModel]]).build()
+    XCTAssertEqual(section.collectionViewSupplementaryModels?["models"]?.first?.dataID, "supplementary_id")
+  }
+
+  func testAlternateInitTableViewSection() {
+    let section = EpoxySection(
+      dataID: "dataID",
+      sectionHeader: model1,
+      items: [model2])
+    XCTAssertEqual(section.dataID, "dataID")
+    XCTAssertEqual(section.tableViewSectionHeader?.dataID, "model_1")
+    XCTAssertEqual(section.items[0].dataID, "model_2")
+  }
+
+  func testAlternateInitCollectionViewSection() {
+    let section = EpoxySection(
+      dataID: "dataID",
+      items: [model1],
+      supplementaryModels: ["supplementary": [supplementaryModel]])
+    XCTAssertEqual(section.dataID, "dataID")
+    XCTAssertEqual(section.items.first?.dataID, "model_1")
+    XCTAssertEqual(section.collectionViewSupplementaryModels?["supplementary"]?.first?.dataID, "supplementary_id")
   }
 
 }
