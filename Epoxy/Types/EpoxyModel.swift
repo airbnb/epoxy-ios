@@ -38,6 +38,8 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)? = nil,
     behaviorSetter: ((ViewType, DataType, String) -> Void)? = nil,
     selectionHandler: ((ViewType, DataType, String) -> Void)? = nil,
+    willDisplay: ((ViewType, DataType, String) -> Void)? = nil,
+    didEndDisplaying: ((ViewType, DataType, String) -> Void)? = nil,
     userInfo: [EpoxyUserInfoKey: Any] = [:])
   {
     self.data = data
@@ -49,6 +51,8 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     self.stateConfigurer = stateConfigurer
     self.behaviorSetter = behaviorSetter
     self.selectionHandler = selectionHandler
+    self.willDisplay = willDisplay
+    self.didEndDisplaying = didEndDisplaying
     self.userInfo = userInfo
     isSelectable = selectionHandler != nil
   }
@@ -107,6 +111,14 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     selectionHandler?(view, data, dataID)
   }
 
+  public func viewWillDisplay(_ view: ViewType) {
+    willDisplay?(view, data, dataID)
+  }
+
+  public func viewDidEndDisplaying(_ view: ViewType) {
+    didEndDisplaying?(view, data, dataID)
+  }
+
   // MARK: Private
 
   private let alternateStyleID: String?
@@ -115,6 +127,8 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   private let stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)?
   private let behaviorSetter: ((ViewType, DataType, String) -> Void)?
   private let selectionHandler: ((ViewType, DataType, String) -> Void)?
+  private let willDisplay: ((ViewType, DataType, String) -> Void)?
+  private let didEndDisplaying: ((ViewType, DataType, String) -> Void)?
 }
 
 // Builder extensions

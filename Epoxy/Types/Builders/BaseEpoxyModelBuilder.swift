@@ -31,6 +31,8 @@ public final class BaseEpoxyModelBuilder<ViewType, DataType> where
       stateConfigurer: stateConfigurer,
       behaviorSetter: behaviorSetter,
       selectionHandler: selectionHandler,
+      willDisplay: willDisplay,
+      didEndDisplaying: didEndDisplaying,
       userInfo: userInfo)
   }
 
@@ -64,6 +66,16 @@ public final class BaseEpoxyModelBuilder<ViewType, DataType> where
     return self
   }
 
+  public func with(willDisplay: ((ViewType, DataType, String) -> Void)?) -> BaseEpoxyModelBuilder {
+    self.willDisplay = willDisplay
+    return self
+  }
+
+  public func with(didEndDisplaying: ((ViewType, DataType, String) -> Void)?) -> BaseEpoxyModelBuilder {
+    self.didEndDisplaying = didEndDisplaying
+    return self
+  }
+
   public func with(userInfo: [EpoxyUserInfoKey: Any]) -> BaseEpoxyModelBuilder {
     self.userInfo = userInfo
     return self
@@ -84,6 +96,8 @@ public final class BaseEpoxyModelBuilder<ViewType, DataType> where
   private var stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)? = nil
   private var behaviorSetter: ((ViewType, DataType, String) -> Void)? = nil
   private var selectionHandler: ((ViewType, DataType, String) -> Void)? = nil
+  private var willDisplay: ((ViewType, DataType, String) -> Void)? = nil
+  private var didEndDisplaying: ((ViewType, DataType, String) -> Void)? = nil
   private var userInfo: [EpoxyUserInfoKey: Any] = [:]
 }
 
