@@ -57,6 +57,14 @@ extension EpoxyModelWrapper: EpoxyableModel {
   public func didSelect(_ cell: EpoxyWrapperView) {
     epoxyModel.didSelect(cell)
   }
+
+  public func willDisplay(_ cell: EpoxyWrapperView) {
+    epoxyModel.willDisplay(cell)
+  }
+
+  public func didEndDisplaying(_ cell: EpoxyWrapperView) {
+    epoxyModel.didEndDisplaying(cell)
+  }
 }
 
 extension EpoxyModelWrapper: Diffable {

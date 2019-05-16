@@ -489,6 +489,7 @@ open class CollectionView: UICollectionView,
       return
     }
 
+    item.willDisplay(cell)
     epoxyItemDisplayDelegate?.collectionView(self, willDisplayEpoxyModel: item, with: view, in: section)
   }
 
@@ -503,6 +504,7 @@ open class CollectionView: UICollectionView,
       let cell = cell as? Cell,
       let view = cell.view else { return }
 
+    item.didEndDisplaying(cell)
     epoxyItemDisplayDelegate?.collectionView(self, didEndDisplayingEpoxyModel: item, with: view, in: section)
   }
 

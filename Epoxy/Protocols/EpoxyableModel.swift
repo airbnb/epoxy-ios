@@ -49,6 +49,12 @@ public protocol EpoxyableModel: AnyObject, Diffable {
   /// Default implementation does nothing
   func didSelect(_ cell: EpoxyWrapperView)
 
+  /// Default implementation does nothing
+  func willDisplay(_ cell: EpoxyWrapperView)
+
+  /// Default implementation does nothing
+  func didEndDisplaying(_ cell: EpoxyWrapperView)
+
   /// Default value is `false`
   var isSelectable: Bool { get set }
 
@@ -104,6 +110,10 @@ extension EpoxyableModel {
   }
 
   public func didSelect(_ cell: EpoxyWrapperView) { }
+
+  public func willDisplay(_ cell: EpoxyWrapperView) { }
+
+  public func didEndDisplaying(_ cell: EpoxyWrapperView) { }
 }
 
 // MARK: Diffable

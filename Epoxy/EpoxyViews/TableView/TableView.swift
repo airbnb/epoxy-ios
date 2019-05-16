@@ -461,11 +461,13 @@ extension TableView: UITableViewDelegate {
   {
     guard
       let item = epoxyDataSource.epoxyModel(at: indexPath),
-      let section = epoxyDataSource.epoxySection(at: indexPath.section) else
+      let section = epoxyDataSource.epoxySection(at: indexPath.section),
+      let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else
     {
       assertionFailure("Index path is out of bounds.")
       return
     }
+    item.willDisplay(cell)
     epoxyModelDisplayDelegate?.tableView(self, willDisplay: item, in: section)
   }
 
@@ -476,8 +478,10 @@ extension TableView: UITableViewDelegate {
   {
     guard
       let item = epoxyDataSource.epoxyModel(at: indexPath),
-      let section = epoxyDataSource.epoxySection(at: indexPath.section) else { return }
+      let section = epoxyDataSource.epoxySection(at: indexPath.section),
+      let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else { return }
 
+    item.didEndDisplaying(cell)
     epoxyModelDisplayDelegate?.tableView(self, didEndDisplaying: item, in: section)
   }
 
