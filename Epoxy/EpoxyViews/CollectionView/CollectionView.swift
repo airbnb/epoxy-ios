@@ -474,22 +474,14 @@ open class CollectionView: UICollectionView,
   {
     guard
       let item = epoxyDataSource.epoxyItem(at: indexPath),
-      let section = epoxyDataSource.epoxySection(at: indexPath.section) else {
-      assertionFailure("Index path is out of bounds.")
+      let section = epoxyDataSource.epoxySection(at: indexPath.section),
+      let cell = cell as? Cell,
+      let view = cell.view else
+    {
       return
     }
 
-    guard let cell = cell as? Cell else {
-      assertionFailure("Cell does not match expected type CollectionView.Cell")
-      return
-    }
-
-    guard let view = cell.view else {
-      assertionFailure("Cell does not have an attached view")
-      return
-    }
-
-    item.willDisplay(cell)
+    item.willDisplay()
     epoxyItemDisplayDelegate?.collectionView(self, willDisplayEpoxyModel: item, with: view, in: section)
   }
 
@@ -502,9 +494,12 @@ open class CollectionView: UICollectionView,
       let item = epoxyDataSource.epoxyItemIfPresent(at: indexPath),
       let section = epoxyDataSource.epoxySectionIfPresent(at: indexPath.section),
       let cell = cell as? Cell,
-      let view = cell.view else { return }
+      let view = cell.view else
+    {
+      return
+    }
 
-    item.didEndDisplaying(cell)
+    item.didEndDisplaying()
     epoxyItemDisplayDelegate?.collectionView(self, didEndDisplayingEpoxyModel: item, with: view, in: section)
   }
 

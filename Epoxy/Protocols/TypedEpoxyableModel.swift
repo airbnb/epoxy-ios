@@ -13,8 +13,6 @@ public protocol TypedEpoxyableModel: EpoxyableModel {
   func configureView(_ view: View, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState)
   func setViewBehavior(_ view: View)
   func didSelectView(_ view: View)
-  func viewWillDisplay(_ view: View)
-  func viewDidEndDisplaying(_ view: View)
 }
 
 extension TypedEpoxyableModel {
@@ -44,22 +42,6 @@ extension TypedEpoxyableModel {
     didSelectView(view)
   }
 
-  public func willDisplay(_ cell: EpoxyWrapperView) {
-    guard let view = cell.view as? View else {
-      assertionFailure("The displayed view is not the expected type.")
-      return
-    }
-    viewWillDisplay(view)
-  }
-
-  public func didEndDisplaying(_ cell: EpoxyWrapperView) {
-    guard let view = cell.view as? View else {
-      assertionFailure("The disappearing view is not the expected type.")
-      return
-    }
-    viewDidEndDisplaying(view)
-  }
-
   public func configuredView(traitCollection: UITraitCollection) -> UIView {
     let view = makeView()
     configureView(view, forTraitCollection: traitCollection, animated: false)
@@ -69,8 +51,6 @@ extension TypedEpoxyableModel {
 
   public func setViewBehavior(_ view: View) { }
   public func didSelectView(_ view: View) { }
-  public func viewWillDisplay(_ view: View) { }
-  public func viewDidEndDisplaying(_ view: View) { }
 
   public func configureView(_ view: View, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) { }
 
