@@ -58,12 +58,12 @@ extension EpoxyModelWrapper: EpoxyableModel {
     epoxyModel.didSelect(cell)
   }
 
-  public func willDisplay(_ cell: EpoxyWrapperView) {
-    epoxyModel.willDisplay(cell)
+  public func willDisplay() {
+    epoxyModel.willDisplay()
   }
 
-  public func didEndDisplaying(_ cell: EpoxyWrapperView) {
-    epoxyModel.didEndDisplaying(cell)
+  public func didEndDisplaying() {
+    epoxyModel.didEndDisplaying()
   }
 }
 
