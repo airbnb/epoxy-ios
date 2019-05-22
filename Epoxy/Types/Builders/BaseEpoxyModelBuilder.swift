@@ -66,12 +66,12 @@ public final class BaseEpoxyModelBuilder<ViewType, DataType> where
     return self
   }
 
-  public func with(willDisplay: ((DataType, String) -> Void)?) -> BaseEpoxyModelBuilder {
+  public func withWillDisplay(_ willDisplay: ((DataType, String) -> Void)?) -> BaseEpoxyModelBuilder {
     self.willDisplay = willDisplay
     return self
   }
 
-  public func with(didEndDisplaying: ((DataType, String) -> Void)?) -> BaseEpoxyModelBuilder {
+  public func withDidEndDisplaying(_ didEndDisplaying: ((DataType, String) -> Void)?) -> BaseEpoxyModelBuilder {
     self.didEndDisplaying = didEndDisplaying
     return self
   }
