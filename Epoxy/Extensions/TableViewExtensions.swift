@@ -5,13 +5,13 @@
 
 public extension EpoxyUserInfoKey {
   enum TableView {
-    enum Row {
+    public enum Row {
       public static var bottomDividerHidden: EpoxyUserInfoKey {
         return EpoxyUserInfoKey(rawValue: "\(TableView.self)_\(#function)")
       }
     }
 
-    enum Section {
+    public enum Section {
       public static var header: EpoxyUserInfoKey {
         return EpoxyUserInfoKey(rawValue: "\(TableView.self)_\(#function)")
       }
