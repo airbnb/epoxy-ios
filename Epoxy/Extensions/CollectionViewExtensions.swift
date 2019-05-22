@@ -5,7 +5,7 @@
 
 public extension EpoxyUserInfoKey {
   enum CollectionView {
-    enum Section {
+    public enum Section {
       public static var supplementaryModels: EpoxyUserInfoKey {
         return EpoxyUserInfoKey(rawValue: "\(CollectionView.self)_\(#function)")
       }
