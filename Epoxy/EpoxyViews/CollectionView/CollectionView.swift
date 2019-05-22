@@ -474,13 +474,14 @@ open class CollectionView: UICollectionView,
   {
     guard
       let item = epoxyDataSource.epoxyItem(at: indexPath),
-      let section = epoxyDataSource.epoxySection(at: indexPath.section) else
+      let section = epoxyDataSource.epoxySection(at: indexPath.section),
+      let cell = cell as? Cell else
     {
       return
     }
 
     item.willDisplay()
-    epoxyItemDisplayDelegate?.collectionView(self, willDisplayEpoxyModel: item, in: section)
+    epoxyItemDisplayDelegate?.collectionView(self, willDisplayEpoxyModel: item, with: cell.view, in: section)
   }
 
   public func collectionView(
@@ -490,13 +491,14 @@ open class CollectionView: UICollectionView,
   {
     guard
       let item = epoxyDataSource.epoxyItemIfPresent(at: indexPath),
-      let section = epoxyDataSource.epoxySectionIfPresent(at: indexPath.section) else
+      let section = epoxyDataSource.epoxySectionIfPresent(at: indexPath.section),
+      let cell = cell as? Cell else
     {
       return
     }
 
     item.didEndDisplaying()
-    epoxyItemDisplayDelegate?.collectionView(self, didEndDisplayingEpoxyModel: item, in: section)
+    epoxyItemDisplayDelegate?.collectionView(self, didEndDisplayingEpoxyModel: item, with: cell.view, in: section)
   }
 
   public func collectionView(
