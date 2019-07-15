@@ -111,6 +111,7 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
 
   // MARK: Internal
 
+  weak var accessibilityDelegate: CollectionViewCellAccessibilityDelegate?
   var ephemeralViewCachedStateProvider: ((RestorableState?) -> ())?
 
   // MARK: Private
@@ -151,5 +152,15 @@ extension CollectionViewCell {
       return super.accessibilityElementsHidden
     }
     set { super.accessibilityElementsHidden = newValue }
+  }
+
+  public override func accessibilityElementDidBecomeFocused() {
+    super.accessibilityElementDidBecomeFocused()
+    accessibilityDelegate?.collectionViewCellDidBecomeFocused(cell: self)
+  }
+
+  public override func accessibilityElementDidLoseFocus() {
+    super.accessibilityElementDidLoseFocus()
+    accessibilityDelegate?.collectionViewCellDidLoseFocus(cell: self)
   }
 }

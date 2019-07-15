@@ -114,6 +114,11 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     UIAccessibility.post(notification: notification, argument: cell)
   }
 
+  public func returnVOFocusToLastFocusedElement() {
+    guard let lastFocusedDataID = lastFocusedDataID else { return }
+    moveAccessibilityFocusToItem(at: lastFocusedDataID)
+  }
+
   public func recalculateCellHeights() {
     beginUpdates()
     endUpdates()
@@ -142,6 +147,9 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     }
     return epoxyDataSource.epoxyModel(at: indexPath)?.userInfo[key] as? T
   }
+
+  /// Delegate for handling accessibility events.
+  public weak var accessibilityDelegate: EpoxyAccessibilityDelegate?
 
   /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
   /// Ignores zooming delegate methods.
@@ -368,6 +376,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
 
   private var dataIDsForHidingDividers = [String]()
   private var ephemeralStateCache = [String: RestorableState?]()
+  private var lastFocusedDataID: String?
 
   private func setUp() {
     delegate = self
@@ -382,6 +391,8 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   }
 
   private func configure(cell: Cell, with item: EpoxyModelWrapper, animated: Bool) {
+    cell.accessibilityDelegate = self
+
     item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
     item.setBehavior(cell: cell)
     updateDivider(for: cell, dividerType: item.dividerType, dataID: item.dataID)
@@ -727,4 +738,55 @@ extension TableView {
     super.register(aClass, forHeaderFooterViewReuseIdentifier: identifier)
   }
 
+}
+
+// MARK: TableViewCellAccessibilityDelegate
+
+extension TableView: TableViewCellAccessibilityDelegate {
+  func tableViewCellDidBecomeFocused(cell: TableViewCell) {
+    guard
+      let model = epoxyableModelWrapperForCell(cell),
+      let section = epoxyableSectionForCell(cell)
+      else { return }
+    lastFocusedDataID = model.dataID
+
+    accessibilityDelegate?.epoxyCellDidBecomeFocused(
+      model: model,
+      view: cell.view,
+      section: section)
+  }
+
+  func tableViewCellDidLoseFocus(cell: TableViewCell) {
+    guard
+      let model = epoxyableModelWrapperForCell(cell),
+      let section = epoxyableSectionForCell(cell)
+      else { return }
+
+    accessibilityDelegate?.epoxyCellDidLoseFocus(
+      model: model,
+      view: cell.view,
+      section: section)
+  }
+
+  private func epoxyableModelWrapperForCell(_ cell: TableViewCell) -> EpoxyModelWrapper? {
+    guard
+      let indexPath = indexPath(for: cell),
+      let model = epoxyDataSource.epoxyModel(at: indexPath)
+      else {
+        assertionFailure("item not found")
+        return nil
+    }
+    return model
+  }
+
+  private func epoxyableSectionForCell(_ cell: TableViewCell) -> EpoxyableSection? {
+    guard
+      let indexPath = indexPath(for: cell),
+      let section = epoxyDataSource.epoxySection(at: indexPath.section)
+      else {
+        assertionFailure("item not found")
+        return nil
+    }
+    return section
+  }
 }
