@@ -66,6 +66,7 @@ public final class TableViewCell: UITableViewCell, EpoxyCell {
 
   // MARK: Internal
 
+  weak var accessibilityDelegate: TableViewCellAccessibilityDelegate?
   private(set) var dividerView: UIView?
   var ephemeralViewCachedStateProvider: ((RestorableState?) -> ())?
 
@@ -141,5 +142,15 @@ extension TableViewCell {
       return super.accessibilityElementsHidden
     }
     set { super.accessibilityElementsHidden = newValue }
+  }
+
+  public override func accessibilityElementDidBecomeFocused() {
+    super.accessibilityElementDidBecomeFocused()
+    accessibilityDelegate?.tableViewCellDidBecomeFocused(cell: self)
+  }
+
+  public override func accessibilityElementDidLoseFocus() {
+    super.accessibilityElementDidLoseFocus()
+    accessibilityDelegate?.tableViewCellDidLoseFocus(cell: self)
   }
 }

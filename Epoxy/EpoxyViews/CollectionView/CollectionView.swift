@@ -72,6 +72,11 @@ open class CollectionView: UICollectionView,
     UIAccessibility.post(notification: notification, argument: cell)
   }
 
+  public func returnVOFocusToLastFocusedElement() {
+    guard let lastFocusedDataID = lastFocusedDataID else { return }
+    moveAccessibilityFocusToItem(at: lastFocusedDataID)
+  }
+
   public func recalculateCellHeights() {
     collectionViewLayout.invalidateLayout()
   }
@@ -128,6 +133,9 @@ open class CollectionView: UICollectionView,
   public func hideBottomDivider(for dataIDs: [String]) {
     // TODO: Refactor to support layout specific data in epoxy item models
   }
+
+  /// Delegate for handling accessibility events.
+  public weak var accessibilityDelegate: EpoxyAccessibilityDelegate?
 
   /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
   /// Ignores zooming delegate methods.
@@ -328,6 +336,7 @@ open class CollectionView: UICollectionView,
   private weak var infiniteScrollingDelegate: InfiniteScrollingDelegate?
   private var infiniteScrollingState: InfiniteScrollingState = .stopped
   private var ephemeralStateCache = [String: RestorableState?]()
+  private var lastFocusedDataID: String?
 
   private func setUp() {
     // There are rendering issues in iOS 10 when using self-sizing supplementary views
@@ -346,11 +355,13 @@ open class CollectionView: UICollectionView,
   private func configure(cell: Cell, with item: EpoxyableModel, animated: Bool) {
     let cellSelectionStyle = item.selectionStyle ?? selectionStyle
     switch cellSelectionStyle {
-      case .noBackground:
-        cell.selectedBackgroundColor = nil
-      case .color(let selectionColor):
-        cell.selectedBackgroundColor = selectionColor
-      }
+    case .noBackground:
+      cell.selectedBackgroundColor = nil
+    case .color(let selectionColor):
+      cell.selectedBackgroundColor = selectionColor
+    }
+
+    cell.accessibilityDelegate = self
 
     _ = item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
     _ = item.setBehavior(cell: cell) // TODO(ls): make these items actually epoxy items
@@ -762,5 +773,56 @@ extension CollectionView: CollectionViewDataSourceReorderingDelegate {
       inSectionWithDataID: fromSectionDataID,
       toSectionWithDataID: toSectionDataID,
       withDestinationDataId: destinationDataId)
+  }
+}
+
+// MARK: CollectionViewCellAccessibilityDelegate
+
+extension CollectionView: CollectionViewCellAccessibilityDelegate {
+  func collectionViewCellDidBecomeFocused(cell: CollectionViewCell) {
+    guard
+      let model = epoxyableModelWrapperForCell(cell),
+      let section = epoxyableSectionForCell(cell)
+      else { return }
+    lastFocusedDataID = model.dataID
+
+    accessibilityDelegate?.epoxyCellDidBecomeFocused(
+      model: model,
+      view: cell.view,
+      section: section)
+  }
+
+  func collectionViewCellDidLoseFocus(cell: CollectionViewCell) {
+    guard
+      let model = epoxyableModelWrapperForCell(cell),
+      let section = epoxyableSectionForCell(cell)
+      else { return }
+
+    accessibilityDelegate?.epoxyCellDidLoseFocus(
+      model: model,
+      view: cell.view,
+      section: section)
+  }
+
+  private func epoxyableModelWrapperForCell(_ cell: CollectionViewCell) -> EpoxyModelWrapper? {
+    guard
+      let indexPath = indexPath(for: cell),
+      let model = epoxyDataSource.epoxyItem(at: indexPath)
+      else {
+        assertionFailure("item not found")
+        return nil
+    }
+    return model
+  }
+
+  private func epoxyableSectionForCell(_ cell: CollectionViewCell) -> EpoxyableSection? {
+    guard
+      let indexPath = indexPath(for: cell),
+      let section = epoxyDataSource.epoxySection(at: indexPath.section)
+      else {
+        assertionFailure("item not found")
+        return nil
+    }
+    return section
   }
 }
