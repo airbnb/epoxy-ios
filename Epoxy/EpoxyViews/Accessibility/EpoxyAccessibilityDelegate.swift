@@ -1,7 +1,7 @@
 // Created by nick_miller on 7/15/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-import Foundation
+import UIKit
 
 public protocol EpoxyAccessibilityDelegate: class {
   func epoxyCellDidBecomeFocused(
