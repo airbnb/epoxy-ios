@@ -35,7 +35,7 @@ public protocol EpoxyInterface: AnyObject {
   func moveAccessibilityFocusToItem(at dataID: String, notification: UIAccessibility.Notification)
 
   /// Returns the accessibility focus to the last foucused element
-  func returnVOFocusToLastFocusedElement()
+  func moveAccessibilityFocusToLastFocusedElement()
 
   /// Recalculates all cell heights in the epoxy interface
   /// NOTE: This has only been implemented for TableView, not for CollectionView.
