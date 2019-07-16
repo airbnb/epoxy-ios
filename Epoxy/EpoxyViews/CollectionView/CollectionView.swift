@@ -72,7 +72,7 @@ open class CollectionView: UICollectionView,
     UIAccessibility.post(notification: notification, argument: cell)
   }
 
-  public func returnVOFocusToLastFocusedElement() {
+  public func moveAccessibilityFocusToLastFocusedElement() {
     guard let lastFocusedDataID = lastFocusedDataID else { return }
     moveAccessibilityFocusToItem(at: lastFocusedDataID)
   }
@@ -135,7 +135,7 @@ open class CollectionView: UICollectionView,
   }
 
   /// Delegate for handling accessibility events.
-  public weak var accessibilityDelegate: EpoxyAccessibilityDelegate?
+  public weak var accessibilityDelegate: CollectionViewAccessibilityDelegate?
 
   /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
   /// Ignores zooming delegate methods.
@@ -786,10 +786,11 @@ extension CollectionView: CollectionViewCellAccessibilityDelegate {
       else { return }
     lastFocusedDataID = model.dataID
 
-    accessibilityDelegate?.epoxyCellDidBecomeFocused(
-      model: model,
-      view: cell.view,
-      section: section)
+    accessibilityDelegate?.collectionView(
+      self,
+      epoxyModelDidBecomeFocused: model,
+      with: cell.view,
+      in: section)
   }
 
   func collectionViewCellDidLoseFocus(cell: CollectionViewCell) {
@@ -798,10 +799,11 @@ extension CollectionView: CollectionViewCellAccessibilityDelegate {
       let section = epoxyableSectionForCell(cell)
       else { return }
 
-    accessibilityDelegate?.epoxyCellDidLoseFocus(
-      model: model,
-      view: cell.view,
-      section: section)
+    accessibilityDelegate?.collectionView(
+      self,
+      epoxyModelDidLoseFocus: model,
+      with: cell.view,
+      in: section)
   }
 
   private func epoxyableModelWrapperForCell(_ cell: CollectionViewCell) -> EpoxyModelWrapper? {

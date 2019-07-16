@@ -114,7 +114,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     UIAccessibility.post(notification: notification, argument: cell)
   }
 
-  public func returnVOFocusToLastFocusedElement() {
+  public func moveAccessibilityFocusToLastFocusedElement() {
     guard let lastFocusedDataID = lastFocusedDataID else { return }
     moveAccessibilityFocusToItem(at: lastFocusedDataID)
   }
@@ -149,7 +149,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   }
 
   /// Delegate for handling accessibility events.
-  public weak var accessibilityDelegate: EpoxyAccessibilityDelegate?
+  public weak var accessibilityDelegate: TableViewAccessibilityDelegate?
 
   /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
   /// Ignores zooming delegate methods.
@@ -750,10 +750,11 @@ extension TableView: TableViewCellAccessibilityDelegate {
       else { return }
     lastFocusedDataID = model.dataID
 
-    accessibilityDelegate?.epoxyCellDidBecomeFocused(
-      model: model,
-      view: cell.view,
-      section: section)
+    accessibilityDelegate?.tableView(
+      self,
+      epoxyModelDidBecomeFocused: model,
+      with: cell.view,
+      in: section)
   }
 
   func tableViewCellDidLoseFocus(cell: TableViewCell) {
@@ -762,10 +763,11 @@ extension TableView: TableViewCellAccessibilityDelegate {
       let section = epoxyableSectionForCell(cell)
       else { return }
 
-    accessibilityDelegate?.epoxyCellDidLoseFocus(
-      model: model,
-      view: cell.view,
-      section: section)
+    accessibilityDelegate?.tableView(
+      self,
+      epoxyModelDidLoseFocus: model,
+      with: cell.view,
+      in: section)
   }
 
   private func epoxyableModelWrapperForCell(_ cell: TableViewCell) -> EpoxyModelWrapper? {
