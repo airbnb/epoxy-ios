@@ -12,6 +12,10 @@ public final class EpoxyModelCache {
 
   public init() { }
 
+  deinit {
+    invalidateAllEpoxyModels()
+  }
+
   // MARK: Public
 
   public func cacheEpoxyModel(_ model: EpoxyableModel) {
