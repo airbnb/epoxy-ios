@@ -246,6 +246,39 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     return indexPathsForVisibleRows ?? []
   }
 
+  public var visibleEpoxyMetadata: VisibleEpoxyMetadata {
+    let visibleIndexPaths = self.visibleIndexPaths
+    var sectionMetadata = [VisibleEpoxySectionMetadata]()
+    let visibleSections = Set<Int>(visibleIndexPaths.map({ $0.section }))
+
+    for section in visibleSections {
+      let sectionIndexPaths = visibleIndexPaths.filter({ $0.section == section })
+      let modelMetadata: [VisibleEpoxyModelMetadata] = sectionIndexPaths.compactMap { [weak self] indexPath in
+        guard let cellFrame = self?.rectForRow(at: indexPath) else { return nil }
+        guard let epoxyModelWrapper = self?.epoxyDataSource.epoxyModel(at: indexPath) else {
+          assertionFailure("model not found")
+          return nil
+        }
+        return VisibleEpoxyModelMetadata(
+          model: epoxyModelWrapper,
+          frame: cellFrame)
+      }
+
+      guard let epoxyableSection = epoxyDataSource.epoxySection(at: section) else {
+        assertionFailure("section not found")
+        break
+      }
+      let newSectionMetadata = VisibleEpoxySectionMetadata(
+        section: epoxyableSection,
+        modelMetadata: modelMetadata)
+      sectionMetadata.append(newSectionMetadata)
+    }
+
+    return VisibleEpoxyMetadata(
+      sectionMetadata: sectionMetadata,
+      containerView: self)
+  }
+
   public func register(cellReuseID: String) {
     super.register(
       TableViewCell.self,
