@@ -204,6 +204,41 @@ open class CollectionView: UICollectionView,
     return visibleCells.compactMap({ ($0 as? Cell)?.view })
   }
 
+  public var visibleEpoxyMetadata: VisibleEpoxyMetadata {
+    // UICollectionView's indexPathsForVisibleItems is unsorted per Apple's documentation
+    // https://developer.apple.com/documentation/uikit/uicollectionview/1618020-indexpathsforvisibleitems
+    let visibleIndexPaths = self.visibleIndexPaths.sorted()
+    var sectionMetadata = [VisibleEpoxySectionMetadata]()
+    let visibleSections = Set<Int>(visibleIndexPaths.map({ $0.section }))
+
+    for section in visibleSections {
+      let sectionIndexPaths = visibleIndexPaths.filter({ $0.section == section })
+      let modelMetadata: [VisibleEpoxyModelMetadata] = sectionIndexPaths.compactMap { [weak self] indexPath in
+        guard let cellFrame = self?.cellForItem(at: indexPath)?.frame else { return nil }
+        guard let epoxyItemWrapper = self?.epoxyDataSource.epoxyItem(at: indexPath) else {
+          assertionFailure("model not found")
+          return nil
+        }
+        return VisibleEpoxyModelMetadata(
+          model: epoxyItemWrapper,
+          frame: cellFrame)
+      }
+
+      guard let epoxyableSection = epoxyDataSource.epoxySection(at: section) else {
+        assertionFailure("section not found")
+        break
+      }
+      let newSectionMetadata = VisibleEpoxySectionMetadata(
+        section: epoxyableSection,
+        modelMetadata: modelMetadata)
+      sectionMetadata.append(newSectionMetadata)
+    }
+
+    return VisibleEpoxyMetadata(
+      sectionMetadata: sectionMetadata,
+      containerView: self)
+  }
+
   public func register(cellReuseID: String) {
     super.register(
       CollectionViewCell.self,

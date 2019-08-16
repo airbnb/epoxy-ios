@@ -12,6 +12,9 @@ public protocol EpoxyInterface: AnyObject {
   /// The selection style of the cells
   var selectionStyle: CellSelectionStyle { get set }
 
+  /// The metadata for the visible portions of Epoxy
+  var visibleEpoxyMetadata: VisibleEpoxyMetadata { get }
+
   /// Selects the item and invokes the item's stateConfigurer
   /// Does not invoke selectionHandler
   func selectItem(at dataID: String, animated: Bool)
