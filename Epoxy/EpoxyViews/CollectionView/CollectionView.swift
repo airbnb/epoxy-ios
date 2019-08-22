@@ -214,14 +214,14 @@ open class CollectionView: UICollectionView,
     for section in visibleSections {
       let sectionIndexPaths = visibleIndexPaths.filter({ $0.section == section })
       let modelMetadata: [VisibleEpoxyModelMetadata] = sectionIndexPaths.compactMap { [weak self] indexPath in
-        guard let cellFrame = self?.cellForItem(at: indexPath)?.frame else { return nil }
+        guard let cell = self?.cellForItem(at: indexPath) as? CollectionViewCell else { return nil }
         guard let epoxyItemWrapper = self?.epoxyDataSource.epoxyItem(at: indexPath) else {
           assertionFailure("model not found")
           return nil
         }
         return VisibleEpoxyModelMetadata(
           model: epoxyItemWrapper,
-          frame: cellFrame)
+          view: cell.view)
       }
 
       guard let epoxyableSection = epoxyDataSource.epoxySection(at: section) else {
