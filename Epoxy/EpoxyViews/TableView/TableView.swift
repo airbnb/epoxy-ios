@@ -254,14 +254,14 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     for section in visibleSections {
       let sectionIndexPaths = visibleIndexPaths.filter({ $0.section == section })
       let modelMetadata: [VisibleEpoxyModelMetadata] = sectionIndexPaths.compactMap { [weak self] indexPath in
-        guard let cellFrame = self?.rectForRow(at: indexPath) else { return nil }
+        guard let cell = self?.cellForRow(at: indexPath) as? TableViewCell else { return nil }
         guard let epoxyModelWrapper = self?.epoxyDataSource.epoxyModel(at: indexPath) else {
           assertionFailure("model not found")
           return nil
         }
         return VisibleEpoxyModelMetadata(
           model: epoxyModelWrapper,
-          frame: cellFrame)
+          view: cell.view)
       }
 
       guard let epoxyableSection = epoxyDataSource.epoxySection(at: section) else {

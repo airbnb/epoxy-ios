@@ -5,5 +5,5 @@ import UIKit
 
 public struct VisibleEpoxyModelMetadata {
   public let model: EpoxyableModel
-  public let frame: CGRect
+  public private(set) weak var view: UIView?
 }
