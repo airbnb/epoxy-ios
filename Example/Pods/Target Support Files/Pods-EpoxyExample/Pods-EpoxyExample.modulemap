@@ -1,0 +1,6 @@
+module Pods_EpoxyExample {
+  umbrella header "Pods-EpoxyExample-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -1,0 +1,16 @@
+PODS:
+  - Epoxy (0.2.1)
+
+DEPENDENCIES:
+  - Epoxy (from `../`)
+
+EXTERNAL SOURCES:
+  Epoxy:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Epoxy: cd38ca61b502237c3dd3841cd046ff586748dc36
+
+PODFILE CHECKSUM: fea29649ff956ceda2bae6e589280d9049a62ec6
+
+COCOAPODS: 1.7.5
