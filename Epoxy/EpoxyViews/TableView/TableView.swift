@@ -550,6 +550,7 @@ extension TableView: UITableViewDelegate {
       return
     }
     item.configure(cell: cell, forTraitCollection: traitCollection, state: .highlighted)
+    (cell.view as? Highlightable)?.didHighlight(true)
   }
 
   public func tableView(
@@ -561,6 +562,7 @@ extension TableView: UITableViewDelegate {
         return
     }
     item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+    (cell.view as? Highlightable)?.didHighlight(false)
   }
 
   public func tableView(
@@ -585,6 +587,7 @@ extension TableView: UITableViewDelegate {
     }
     item.configure(cell: cell, forTraitCollection: traitCollection, state: .selected)
     item.didSelect(cell)
+    (cell.view as? Selectable)?.didSelect()
 
     if autoDeselectItems {
       // If tableView modifications have been made, indexPath may no longer point to the correct

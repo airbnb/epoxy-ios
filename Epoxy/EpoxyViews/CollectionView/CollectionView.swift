@@ -612,6 +612,7 @@ open class CollectionView: UICollectionView,
         return
     }
     item.configure(cell: cell, forTraitCollection: traitCollection, state: .highlighted)
+    (cell.view as? Highlightable)?.didHighlight(true)
   }
 
   public func collectionView(
@@ -623,6 +624,7 @@ open class CollectionView: UICollectionView,
         return
     }
     item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+    (cell.view as? Highlightable)?.didHighlight(false)
   }
 
   public func collectionView(
@@ -647,6 +649,7 @@ open class CollectionView: UICollectionView,
     }
     item.configure(cell: cell, forTraitCollection: traitCollection, state: .selected)
     item.didSelect(cell)
+    (cell.view as? Selectable)?.didSelect()
 
     if autoDeselectItems {
       // If collectionView modifications have been made, indexPath may no longer point to the correct
