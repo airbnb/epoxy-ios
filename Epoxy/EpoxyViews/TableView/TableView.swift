@@ -67,8 +67,11 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     }
     selectRow(at: indexPath, animated: animated, scrollPosition: .none)
     if let cell = cellForRow(at: indexPath) as? EpoxyCell,
-      let item = epoxyDataSource.epoxyModel(at: indexPath) {
-      item.configure(cell: cell, forTraitCollection: traitCollection, state: .selected)
+      let item = epoxyDataSource.epoxyModel(at: indexPath)
+    {
+      item.configure(
+        cell: cell,
+        with: EpoxyViewMetadata(traitCollection: traitCollection, state: .selected, animated: animated))
     }
   }
 
@@ -79,8 +82,11 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     deselectRow(at: indexPath, animated: animated)
 
     if let cell = cellForRow(at: indexPath) as? EpoxyCell,
-      let item = epoxyDataSource.epoxyModel(at: indexPath) {
-      item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+      let item = epoxyDataSource.epoxyModel(at: indexPath)
+    {
+      item.configure(
+        cell: cell,
+        with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: animated))
     }
   }
 
@@ -330,9 +336,14 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     if let changeset = changesetMaker(newData) {
       changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
         if let cell = cellForRow(at: fromIndexPath as IndexPath) as? TableViewCell,
-          let epoxyModel = epoxyDataSource.epoxyModel(at: toIndexPath)?.epoxyModel {
-          epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, animated: true)
-          epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, state: cell.state)
+          let epoxyModel = epoxyDataSource.epoxyModel(at: toIndexPath)?.epoxyModel
+        {
+          let metadata = EpoxyViewMetadata(
+            traitCollection: traitCollection,
+            state: cell.state,
+            animated: true)
+          epoxyModel.configure(cell: cell, with: metadata)
+          epoxyModel.configureStateChange(in: cell, with: metadata)
         }
       }
 
@@ -364,7 +375,9 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
       }
 
       if let item = epoxyDataSource.epoxyModel(at: indexPath) {
-        item.setBehavior(cell: epoxyCell)
+        item.setBehavior(
+          cell: epoxyCell,
+          with: EpoxyViewMetadata(traitCollection: traitCollection, state: epoxyCell.state, animated: animated))
         self.updateDivider(for: epoxyCell, dividerType: item.dividerType, dataID: item.dataID)
       }
     }
@@ -426,8 +439,12 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   private func configure(cell: Cell, with item: EpoxyModelWrapper, animated: Bool) {
     cell.accessibilityDelegate = self
 
-    item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
-    item.setBehavior(cell: cell)
+    let metadata = EpoxyViewMetadata(
+      traitCollection: traitCollection,
+      state: cell.state,
+      animated: animated)
+    item.configure(cell: cell, with: metadata)
+    item.setBehavior(cell: cell, with: metadata)
     updateDivider(for: cell, dividerType: item.dividerType, dataID: item.dataID)
     if item.isSelectable {
       cell.accessibilityTraits = [cell.accessibilityTraits, .button]
@@ -549,7 +566,9 @@ extension TableView: UITableViewDelegate {
       assertionFailure("Index path is out of bounds")
       return
     }
-    item.configure(cell: cell, forTraitCollection: traitCollection, state: .highlighted)
+    item.configure(
+      cell: cell,
+      with: EpoxyViewMetadata(traitCollection: traitCollection, state: .highlighted, animated: true))
     (cell.view as? Highlightable)?.didHighlight(true)
   }
 
@@ -561,7 +580,9 @@ extension TableView: UITableViewDelegate {
       let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
         return
     }
-    item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+    item.configure(
+      cell: cell,
+      with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: true))
     (cell.view as? Highlightable)?.didHighlight(false)
   }
 
@@ -585,8 +606,12 @@ extension TableView: UITableViewDelegate {
       assertionFailure("Index path is out of bounds")
       return
     }
-    item.configure(cell: cell, forTraitCollection: traitCollection, state: .selected)
-    item.didSelect(cell)
+    let metadata = EpoxyViewMetadata(
+      traitCollection: traitCollection,
+      state: .selected,
+      animated: true)
+    item.configure(cell: cell, with: metadata)
+    item.didSelect(cell, with: metadata)
     (cell.view as? Selectable)?.didSelect()
 
     if autoDeselectItems {
@@ -596,7 +621,9 @@ extension TableView: UITableViewDelegate {
       if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
         selectedIndexPaths.forEach { tableView.deselectRow(at: $0, animated: true) }
       }
-      _ = item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+      _ = item.configure(
+        cell: cell,
+        with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: true))
     }
   }
 
@@ -620,7 +647,9 @@ extension TableView: UITableViewDelegate {
         return
     }
 
-    item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+    item.configure(
+      cell: cell,
+      with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: true))
   }
 
   @available(iOS 11.0, *)

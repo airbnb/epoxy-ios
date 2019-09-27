@@ -23,7 +23,7 @@ public extension EpoxyUserInfoKey {
 
 extension BaseEpoxyModelBuilder {
   public func withTableView(bottomDividerHidden: Bool) -> BaseEpoxyModelBuilder {
-    return withSetUserInfoValue(
+    return setUserInfoValue(
       bottomDividerHidden,
       for: EpoxyUserInfoKey.TableView.Row.bottomDividerHidden)
   }

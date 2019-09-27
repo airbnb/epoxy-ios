@@ -42,20 +42,20 @@ extension EpoxyModelWrapper: EpoxyableModel {
     return epoxyModel.userInfo
   }
 
-  public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
-    epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
+  public func configure(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+    epoxyModel.configure(cell: cell, with: metadata)
   }
 
-  public func setBehavior(cell: EpoxyWrapperView) {
-    epoxyModel.setBehavior(cell: cell)
+  public func setBehavior(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+    epoxyModel.setBehavior(cell: cell, with: metadata)
   }
 
-  public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) {
-    epoxyModel.configure(cell: cell, forTraitCollection: traitCollection, state: state)
+  public func configureStateChange(in cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+    epoxyModel.configure(cell: cell, with: metadata)
   }
 
-  public func didSelect(_ cell: EpoxyWrapperView) {
-    epoxyModel.didSelect(cell)
+  public func didSelect(_ cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+    epoxyModel.didSelect(cell, with: metadata)
   }
 
   public func willDisplay() {

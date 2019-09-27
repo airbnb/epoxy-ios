@@ -30,10 +30,10 @@ public struct EpoxyUserInfoKey: RawRepresentable, Equatable, Hashable, Comparabl
 public protocol EpoxyableModel: AnyObject, Diffable {
 
   /// configures the cell for presentation
-  func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, animated: Bool)
+  func configure(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata)
 
   /// set behaviors needs by the cell. Is called before presentation and when cells are reordered
-  func setBehavior(cell: EpoxyWrapperView)
+  func setBehavior(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata)
 
   // MARK: Optional
 
@@ -44,10 +44,10 @@ public protocol EpoxyableModel: AnyObject, Diffable {
   var dataID: String { get }
 
   /// Default implementation does nothing
-  func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState)
+  func configureStateChange(in cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata)
 
   /// Default implementation does nothing
-  func didSelect(_ cell: EpoxyWrapperView)
+  func didSelect(_ cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata)
 
   /// Default implementation does nothing
   func willDisplay()
@@ -102,14 +102,14 @@ extension EpoxyableModel {
 
   public var userInfo: [EpoxyUserInfoKey: Any] { return [:] }
 
-  public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) { }
+  public func configureStateChange(in cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) { }
 
   public func configuredView(traitCollection: UITraitCollection) -> UIView {
     assertionFailure("Configured view not implemented for this Epoxyable model")
     return UIView()
   }
 
-  public func didSelect(_ cell: EpoxyWrapperView) { }
+  public func didSelect(_ cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) { }
 
   public func willDisplay() { }
 

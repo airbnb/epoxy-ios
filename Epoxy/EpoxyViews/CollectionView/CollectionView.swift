@@ -98,7 +98,9 @@ open class CollectionView: UICollectionView,
 
     if let item = epoxyDataSource.epoxyItem(at: indexPath),
       let cell = cellForItem(at: indexPath) as? EpoxyCell {
-      item.configure(cell: cell, forTraitCollection: traitCollection, state: .selected)
+      item.configure(
+        cell: cell,
+        with: EpoxyViewMetadata(traitCollection: traitCollection, state: .selected, animated: animated))
     }
   }
 
@@ -109,7 +111,9 @@ open class CollectionView: UICollectionView,
     deselectItem(at: indexPath, animated: animated)
     if let item = epoxyDataSource.epoxyItem(at: indexPath),
       let cell = cellForItem(at: indexPath) as? EpoxyCell {
-      item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+      item.configure(
+        cell: cell,
+        with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: animated))
     }
   }
 
@@ -398,8 +402,12 @@ open class CollectionView: UICollectionView,
 
     cell.accessibilityDelegate = self
 
-    _ = item.configure(cell: cell, forTraitCollection: traitCollection, animated: animated)
-    _ = item.setBehavior(cell: cell) // TODO(ls): make these items actually epoxy items
+    let metadata = EpoxyViewMetadata(
+      traitCollection: traitCollection,
+      state: cell.state,
+      animated: animated)
+    _ = item.configure(cell: cell, with: metadata)
+    _ = item.setBehavior(cell: cell, with: metadata) // TODO(ls): make these items actually epoxy items
     if item.isSelectable {
       cell.accessibilityTraits = [cell.accessibilityTraits, .button]
     }
@@ -452,8 +460,9 @@ open class CollectionView: UICollectionView,
     changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
       if let cell = self.cellForItem(at: fromIndexPath as IndexPath) as? CollectionViewCell,
         let epoxyItem = self.epoxyDataSource.epoxyItem(at: toIndexPath) {
-        epoxyItem.configure(cell: cell, forTraitCollection: traitCollection, animated: true)
-        epoxyItem.configure(cell: cell, forTraitCollection: traitCollection, state: cell.state)
+        let metadata = EpoxyViewMetadata(traitCollection: traitCollection, state: cell.state, animated: true)
+        epoxyItem.configure(cell: cell, with: metadata)
+        epoxyItem.configureStateChange(in: cell, with: metadata)
       }
     }
 
@@ -481,7 +490,9 @@ open class CollectionView: UICollectionView,
         return
       }
       if let item = epoxyDataSource.epoxyItem(at: indexPath) {
-        item.setBehavior(cell: cell)
+        item.setBehavior(
+          cell: cell,
+          with: EpoxyViewMetadata(traitCollection: traitCollection, state: cell.state, animated: false))
       }
     }
   }
@@ -611,7 +622,9 @@ open class CollectionView: UICollectionView,
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.configure(cell: cell, forTraitCollection: traitCollection, state: .highlighted)
+    item.configure(
+      cell: cell,
+      with: EpoxyViewMetadata(traitCollection: traitCollection, state: .highlighted, animated: true))
     (cell.view as? Highlightable)?.didHighlight(true)
   }
 
@@ -623,7 +636,9 @@ open class CollectionView: UICollectionView,
       let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell else {
         return
     }
-    item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+    item.configure(
+      cell: cell,
+      with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: true))
     (cell.view as? Highlightable)?.didHighlight(false)
   }
 
@@ -647,8 +662,12 @@ open class CollectionView: UICollectionView,
         assertionFailure("Index path is out of bounds")
         return
     }
-    item.configure(cell: cell, forTraitCollection: traitCollection, state: .selected)
-    item.didSelect(cell)
+    let metadata = EpoxyViewMetadata(
+      traitCollection: traitCollection,
+      state: .selected,
+      animated: true)
+    item.configure(cell: cell, with: metadata)
+    item.didSelect(cell, with: metadata)
     (cell.view as? Selectable)?.didSelect()
 
     if autoDeselectItems {
@@ -658,7 +677,9 @@ open class CollectionView: UICollectionView,
       if let selectedIndexPaths = collectionView.indexPathsForSelectedItems {
         selectedIndexPaths.forEach { collectionView.deselectItem(at: $0, animated: true) }
       }
-      _ = item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+      _ = item.configure(
+        cell: cell,
+        with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: true))
     }
   }
 
@@ -681,7 +702,9 @@ open class CollectionView: UICollectionView,
       let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell else {
         return
     }
-    item.configure(cell: cell, forTraitCollection: traitCollection, state: .normal)
+    item.configure(
+      cell: cell,
+      with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: true))
   }
 
   public func collectionView(
