@@ -34,10 +34,10 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     dataID: String,
     alternateStyleID: String? = nil,
     builder: @escaping () -> ViewType = { ViewType() },
-    configurer: @escaping (ViewType, DataType, UITraitCollection, Bool) -> Void,
-    stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)? = nil,
-    behaviorSetter: ((ViewType, DataType, String) -> Void)? = nil,
-    selectionHandler: ((ViewType, DataType, String) -> Void)? = nil,
+    configurer: @escaping (EpoxyContext<ViewType, DataType>) -> Void,
+    stateConfigurer: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
+    behaviorSetter: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
+    selectionHandler: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
     willDisplay: ((DataType, String) -> Void)? = nil,
     didEndDisplaying: ((DataType, String) -> Void)? = nil,
     userInfo: [EpoxyUserInfoKey: Any] = [:])
@@ -95,20 +95,20 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     return builder()
   }
 
-  public func configureView(_ view: ViewType, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
-    configurer(view, data, traitCollection, animated)
+  public func configureView(_ view: ViewType, with metadata: EpoxyViewMetadata) {
+    configurer(context(for: view, with: metadata))
   }
 
-  public func configureView(_ view: ViewType, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) {
-    stateConfigurer?(view, data, traitCollection, state)
+  public func configureViewForStateChange(_ view: ViewType, with metadata: EpoxyViewMetadata) {
+    stateConfigurer?(context(for: view, with: metadata))
   }
 
-  public func setViewBehavior(_ view: ViewType) {
-    behaviorSetter?(view, data, dataID)
+  public func setViewBehavior(_ view: ViewType, with metadata: EpoxyViewMetadata) {
+    behaviorSetter?(context(for: view, with: metadata))
   }
 
-  public func didSelectView(_ view: ViewType) {
-    selectionHandler?(view, data, dataID)
+  public func didSelectView(_ view: ViewType, with metadata: EpoxyViewMetadata) {
+    selectionHandler?(context(for: view, with: metadata))
   }
 
   public func willDisplay() {
@@ -123,12 +123,22 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
 
   private let alternateStyleID: String?
   private let builder: () -> ViewType
-  private let configurer: (ViewType, DataType, UITraitCollection, Bool) -> Void
-  private let stateConfigurer: ((ViewType, DataType, UITraitCollection, EpoxyCellState) -> Void)?
-  private let behaviorSetter: ((ViewType, DataType, String) -> Void)?
-  private let selectionHandler: ((ViewType, DataType, String) -> Void)?
+  private let configurer: (EpoxyContext<ViewType, DataType>) -> Void
+  private let stateConfigurer: ((EpoxyContext<ViewType, DataType>) -> Void)?
+  private let behaviorSetter: ((EpoxyContext<ViewType, DataType>) -> Void)?
+  private let selectionHandler: ((EpoxyContext<ViewType, DataType>) -> Void)?
   private let willDisplayHandler: ((DataType, String) -> Void)?
   private let didEndDisplayingHandler: ((DataType, String) -> Void)?
+
+  private func context(for view: ViewType, with metadata: EpoxyViewMetadata) -> EpoxyContext<ViewType, DataType> {
+    return EpoxyContext<ViewType, DataType>(
+      view: view,
+      data: data,
+      dataID: dataID,
+      traitCollection: metadata.traitCollection,
+      cellState: metadata.state,
+      animated: metadata.animated)
+  }
 }
 
 // Builder extensions
@@ -142,14 +152,14 @@ public extension EpoxyModel {
     return BaseEpoxyModelBuilder<ViewType, DataType>(
       data: data,
       dataID: dataID)
-      .with(alternateStyleID: alternateStyleID)
-      .with(viewBuilder: builder)
-      .with(configurer: configurer)
-      .with(stateConfigurer: stateConfigurer)
-      .with(behaviorSetter: behaviorSetter)
-      .with(selectionHandler: selectionHandler)
-      .withWillDisplay(willDisplayHandler)
-      .withDidEndDisplaying(didEndDisplayingHandler)
-      .with(userInfo: userInfo)
+      .alternateStyleID(alternateStyleID)
+      .makeView(builder)
+      .configureView(configurer)
+      .setBehaviors(behaviorSetter)
+      .didSelect(selectionHandler)
+      .didChangeState(stateConfigurer)
+      .willDisplay(willDisplayHandler)
+      .didEndDisplaying(didEndDisplayingHandler)
+      .userInfo(userInfo)
   }
 }

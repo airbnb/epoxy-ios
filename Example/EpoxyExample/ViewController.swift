@@ -30,12 +30,12 @@ class HighlightAndSelectionViewController: EpoxyTableViewController {
     return BaseEpoxyModelBuilder<Row, String>(
       data: text,
       dataID: dataID)
-      .with(configurer: { (row, text, _, _) in
-        row.text = text
-      })
-      .with(selectionHandler: { (_, _, dataID) in
-        print("DataID selected \(dataID) (selection handler)")
-      })
+      .configureView { context in
+        context.view.text = text
+      }
+      .didSelect { context in
+        print("DataID selected \(context.dataID) (selection handler)")
+      }
       .build()
   }
 

@@ -32,6 +32,7 @@ public final class Row: UIView {
   private let label = UILabel(frame: .zero)
 
   private func setUpViews() {
+    label.textColor = .black
     label.translatesAutoresizingMaskIntoConstraints = false
     addSubview(label)
   }

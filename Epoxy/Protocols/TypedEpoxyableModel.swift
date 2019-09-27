@@ -9,49 +9,53 @@ public protocol TypedEpoxyableModel: EpoxyableModel {
   associatedtype View: UIView
 
   func makeView() -> View
-  func configureView(_ view: View, forTraitCollection traitCollection: UITraitCollection, animated: Bool)
-  func configureView(_ view: View, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState)
-  func setViewBehavior(_ view: View)
-  func didSelectView(_ view: View)
+  func configureView(_ view: View, with metadata: EpoxyViewMetadata)
+  func configureViewForStateChange(_ view: View, with metadata: EpoxyViewMetadata)
+  func setViewBehavior(_ view: View, with metadata: EpoxyViewMetadata)
+  func didSelectView(_ view: View, with metadata: EpoxyViewMetadata)
 }
 
 extension TypedEpoxyableModel {
-  public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, animated: Bool) {
+  public func configure(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
-    configureView(view, forTraitCollection: traitCollection, animated: animated)
+    configureView(view, with: metadata)
   }
 
-  public func configure(cell: EpoxyWrapperView, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) {
+  public func configureSateChange(in cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
-    configureView(view, forTraitCollection: traitCollection, state: state)
+    configureViewForStateChange(view, with: metadata)
   }
 
-  public func setBehavior(cell: EpoxyWrapperView) {
+  public func setBehavior(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
-    setViewBehavior(view)
+    setViewBehavior(view, with: metadata)
   }
 
-  public func didSelect(_ cell: EpoxyWrapperView) {
+  public func didSelect(_ cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
     guard let view = cell.view as? View else {
       assertionFailure("The selected view is not the expected type.")
       return
     }
-    didSelectView(view)
+    didSelectView(view, with: metadata)
   }
 
   public func configuredView(traitCollection: UITraitCollection) -> UIView {
     let view = makeView()
-    configureView(view, forTraitCollection: traitCollection, animated: false)
-    setViewBehavior(view)
+    let metadata = EpoxyViewMetadata(
+      traitCollection: traitCollection,
+      state: .normal,
+      animated: false)
+    configureView(view, with: metadata)
+    setViewBehavior(view, with: metadata)
     return view
   }
 
-  public func setViewBehavior(_ view: View) { }
-  public func didSelectView(_ view: View) { }
+  public func setViewBehavior(_ view: View, with metadata: EpoxyViewMetadata) { }
+  public func didSelectView(_ view: View, with metadata: EpoxyViewMetadata) { }
 
-  public func configureView(_ view: View, forTraitCollection traitCollection: UITraitCollection, state: EpoxyCellState) { }
+  public func configureViewForStateChange(_ view: View, with metadata: EpoxyViewMetadata) { }
 
 }
