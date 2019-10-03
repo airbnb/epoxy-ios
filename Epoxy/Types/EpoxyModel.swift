@@ -1,6 +1,5 @@
 //  Created by Laura Skelton on 3/14/17.
 //  Copyright © 2017 Airbnb. All rights reserved.
-
 import UIKit
 
 /// A flexible `EpoxyModel` class for configuring views of a specific type with data of a specific type, 
@@ -12,10 +11,8 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   DataType: Equatable
 {
   // MARK: Lifecycle
-
   /**
    Initializes an `EpoxyModel` that creates and configures a specific type of view for display in a `EpoxyInterface`.
-
    - Parameters:
      - data: The data this view takes for configuration, specific to this particular epoxy item instance.
      - dataID: An optional ID to differentiate this row from other rows, used when diffing.
@@ -26,18 +23,17 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
      - behaviorSetter: An optional closure that sets the view's behavior (such as interaction blocks or delegates). This block is called whenever a view is configured with an Epoxy model.
      - selectionHandler: An optional closure that is called whenever the view is tapped.
      - userInfo: An optional dictionary used for holding onto user-specific data
-
    - Returns: An `EpoxyModel` instance that will create the specified view type with this data.
    */
   public init(
     data: DataType,
     dataID: String,
     alternateStyleID: String? = nil,
-    builder: @escaping () -> ViewType = { ViewType() },
-    configurer: @escaping (EpoxyContext<ViewType, DataType>) -> Void,
-    stateConfigurer: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
-    behaviorSetter: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
-    selectionHandler: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
+    makeView: @escaping () -> ViewType = { ViewType() },
+    configureView: @escaping (EpoxyContext<ViewType, DataType>) -> Void,
+    didChangeState: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
+    setBehaviors: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
+    didSelect: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
     willDisplay: ((DataType, String) -> Void)? = nil,
     didEndDisplaying: ((DataType, String) -> Void)? = nil,
     userInfo: [EpoxyUserInfoKey: Any] = [:])
@@ -46,19 +42,18 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     self.dataID = dataID
     self.alternateStyleID = alternateStyleID
     self.reuseID = "\(type(of: ViewType.self))_\(alternateStyleID ?? "")"
-    self.builder = builder
-    self.configurer = configurer
-    self.stateConfigurer = stateConfigurer
-    self.behaviorSetter = behaviorSetter
-    self.selectionHandler = selectionHandler
+    self.makeViewBlock = makeView
+    self.configureView = configureView
+    self.didChangeState = didChangeState
+    self.setBehaviors = setBehaviors
+    self.didSelect = didSelect
     self.willDisplayHandler = willDisplay
     self.didEndDisplayingHandler = didEndDisplaying
     self.userInfo = userInfo
-    isSelectable = selectionHandler != nil
+    isSelectable = didSelect != nil
   }
 
   // MARK: Public
-
   public let dataID: String
   public let reuseID: String
   public let data: DataType
@@ -92,23 +87,23 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   }
 
   public func makeView() -> ViewType {
-    return builder()
+    return makeViewBlock()
   }
 
   public func configureView(_ view: ViewType, with metadata: EpoxyViewMetadata) {
-    configurer(context(for: view, with: metadata))
+    configureView(context(for: view, with: metadata))
   }
 
   public func configureViewForStateChange(_ view: ViewType, with metadata: EpoxyViewMetadata) {
-    stateConfigurer?(context(for: view, with: metadata))
+    didChangeState?(context(for: view, with: metadata))
   }
 
   public func setViewBehavior(_ view: ViewType, with metadata: EpoxyViewMetadata) {
-    behaviorSetter?(context(for: view, with: metadata))
+    setBehaviors?(context(for: view, with: metadata))
   }
 
   public func didSelectView(_ view: ViewType, with metadata: EpoxyViewMetadata) {
-    selectionHandler?(context(for: view, with: metadata))
+    didSelect?(context(for: view, with: metadata))
   }
 
   public func willDisplay() {
@@ -120,13 +115,12 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
   }
 
   // MARK: Private
-
   private let alternateStyleID: String?
-  private let builder: () -> ViewType
-  private let configurer: (EpoxyContext<ViewType, DataType>) -> Void
-  private let stateConfigurer: ((EpoxyContext<ViewType, DataType>) -> Void)?
-  private let behaviorSetter: ((EpoxyContext<ViewType, DataType>) -> Void)?
-  private let selectionHandler: ((EpoxyContext<ViewType, DataType>) -> Void)?
+  private let makeViewBlock: () -> ViewType
+  private let configureView: (EpoxyContext<ViewType, DataType>) -> Void
+  private let didChangeState: ((EpoxyContext<ViewType, DataType>) -> Void)?
+  private let setBehaviors: ((EpoxyContext<ViewType, DataType>) -> Void)?
+  private let didSelect: ((EpoxyContext<ViewType, DataType>) -> Void)?
   private let willDisplayHandler: ((DataType, String) -> Void)?
   private let didEndDisplayingHandler: ((DataType, String) -> Void)?
 
@@ -142,7 +136,6 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
 }
 
 // Builder extensions
-
 public extension EpoxyModel {
 
   /// Create a builder from an EpoxyModel
@@ -153,11 +146,11 @@ public extension EpoxyModel {
       data: data,
       dataID: dataID)
       .alternateStyleID(alternateStyleID)
-      .makeView(builder)
-      .configureView(configurer)
-      .setBehaviors(behaviorSetter)
-      .didSelect(selectionHandler)
-      .didChangeState(stateConfigurer)
+      .makeView(makeViewBlock)
+      .configureView(configureView)
+      .setBehaviors(setBehaviors)
+      .didSelect(didSelect)
+      .didChangeState(didChangeState)
       .willDisplay(willDisplayHandler)
       .didEndDisplaying(didEndDisplayingHandler)
       .userInfo(userInfo)
