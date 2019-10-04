@@ -51,7 +51,7 @@ extension EpoxyModelWrapper: EpoxyableModel {
   }
 
   public func configureStateChange(in cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
-    epoxyModel.configure(cell: cell, with: metadata)
+    epoxyModel.configureStateChange(in: cell, with: metadata)
   }
 
   public func didSelect(_ cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
