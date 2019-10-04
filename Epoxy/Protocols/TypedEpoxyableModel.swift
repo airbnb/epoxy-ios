@@ -22,7 +22,7 @@ extension TypedEpoxyableModel {
     configureView(view, with: metadata)
   }
 
-  public func configureSateChange(in cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+  public func configureStateChange(in cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)
     configureViewForStateChange(view, with: metadata)
