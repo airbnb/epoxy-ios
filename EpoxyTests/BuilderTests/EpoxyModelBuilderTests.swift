@@ -22,25 +22,25 @@ class EpoxyModelBuilderTests: XCTestCase {
   }
 
   func testAlternateStyleId() {
-    let model = builder.with(alternateStyleID: "style_id").build()
+    let model = builder.alternateStyleID("style_id").build()
     XCTAssertEqual(model.reuseID, "\(type(of: UIView.self))_style_id")
   }
 
   func testUserInfoFullSet() {
     let key = EpoxyUserInfoKey.init(rawValue: "test_full_dict")
     let userInfo = [key: 5]
-    let model = builder.with(userInfo: userInfo).build()
+    let model = builder.userInfo(userInfo).build()
     XCTAssertEqual(model.userInfo[key] as! Int, 5)
   }
 
   func testSettingIndividualValuesOnUserInfo() {
     let key = EpoxyUserInfoKey.init(rawValue: "test_setting_values")
-    let model = builder.withSetUserInfoValue(6, for: key).build()
+    let model = builder.setUserInfoValue(6, for: key).build()
     XCTAssertEqual(model.userInfo[key] as! Int, 6)
 
     let newKey = EpoxyUserInfoKey.init(rawValue: "test_full_dict")
     let userInfo = [newKey: 7]
-    let otherModel = builder.with(userInfo: userInfo).build()
+    let otherModel = builder.userInfo(userInfo).build()
     XCTAssertNil(otherModel.userInfo[key])
     XCTAssertEqual(otherModel.userInfo[newKey] as! Int, 7)
   }

@@ -69,8 +69,8 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     if let cell = cellForRow(at: indexPath) as? EpoxyCell,
       let item = epoxyDataSource.epoxyModel(at: indexPath)
     {
-      item.configure(
-        cell: cell,
+      item.configureStateChange(
+        in: cell,
         with: EpoxyViewMetadata(traitCollection: traitCollection, state: .selected, animated: animated))
     }
   }
@@ -84,8 +84,8 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     if let cell = cellForRow(at: indexPath) as? EpoxyCell,
       let item = epoxyDataSource.epoxyModel(at: indexPath)
     {
-      item.configure(
-        cell: cell,
+      item.configureStateChange(
+        in: cell,
         with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: animated))
     }
   }
@@ -566,8 +566,8 @@ extension TableView: UITableViewDelegate {
       assertionFailure("Index path is out of bounds")
       return
     }
-    item.configure(
-      cell: cell,
+    item.configureStateChange(
+      in: cell,
       with: EpoxyViewMetadata(traitCollection: traitCollection, state: .highlighted, animated: true))
     (cell.view as? Highlightable)?.didHighlight(true)
   }
@@ -580,8 +580,8 @@ extension TableView: UITableViewDelegate {
       let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
         return
     }
-    item.configure(
-      cell: cell,
+    item.configureStateChange(
+      in: cell,
       with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: true))
     (cell.view as? Highlightable)?.didHighlight(false)
   }
@@ -610,7 +610,7 @@ extension TableView: UITableViewDelegate {
       traitCollection: traitCollection,
       state: .selected,
       animated: true)
-    item.configure(cell: cell, with: metadata)
+    item.configureStateChange(in: cell, with: metadata)
     item.didSelect(cell, with: metadata)
     (cell.view as? Selectable)?.didSelect()
 
@@ -621,8 +621,8 @@ extension TableView: UITableViewDelegate {
       if let selectedIndexPaths = tableView.indexPathsForSelectedRows {
         selectedIndexPaths.forEach { tableView.deselectRow(at: $0, animated: true) }
       }
-      _ = item.configure(
-        cell: cell,
+      _ = item.configureStateChange(
+        in: cell,
         with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: true))
     }
   }
@@ -647,8 +647,8 @@ extension TableView: UITableViewDelegate {
         return
     }
 
-    item.configure(
-      cell: cell,
+    item.configureStateChange(
+      in: cell,
       with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: true))
   }
 

@@ -20,20 +20,20 @@ class CollectionViewTests: XCTestCase {
     collectionView.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
 
     let model = BaseEpoxyModelBuilder(data: "", dataID: "dataID")
-      .with(configurer: { view, _, _, _ in
-        view.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-      })
-      .with(selectionHandler: { [weak self] _, _, _ in
-        self?.didSelectBlockCalled = true
-      })
-      .withWillDisplay { [weak self] _, _ in
-        self?.willDisplayBlockCalled = true
-      }
-      .withDidEndDisplaying { [weak self] _, _ in
-        self?.didEndDisplayingBlockCalled = true
-      }
-      .build()
+      .configureView { context in
+        context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true
+    }
+    .didSelect { [weak self] _ in
+      self?.didSelectBlockCalled = true
+    }
+    .willDisplay { [weak self] _, _ in
+      self?.willDisplayBlockCalled = true
+    }
+    .didEndDisplaying { [weak self] _, _ in
+      self?.didEndDisplayingBlockCalled = true
+    }
+    .build()
 
     collectionView.setSections([EpoxySection(items: [model])], animated: false)
     collectionView.collectionViewLayout.invalidateLayout()

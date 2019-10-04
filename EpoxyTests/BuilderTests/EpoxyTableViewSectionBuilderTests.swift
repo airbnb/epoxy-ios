@@ -10,11 +10,11 @@ class EpoxySectionBuilderTests: XCTestCase {
   let model1: EpoxyableModel = EpoxyModel<UIView, String>(
     data: "",
     dataID: "model_1",
-    configurer: { _, _, _, _ in })
+    configureView: { _ in })
   let model2: EpoxyableModel = EpoxyModel<UIView, String>(
     data: "",
     dataID: "model_2",
-    configurer: { _, _, _, _ in })
+    configureView: { _ in })
   let supplementaryModel = SupplementaryViewEpoxyModel<UIView, String>(
     elementKind: "test_kind",
     data: "",
