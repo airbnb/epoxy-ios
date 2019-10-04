@@ -17,16 +17,16 @@ class TableViewTests: XCTestCase {
     tableView = TableView()
 
     let model = BaseEpoxyModelBuilder(data: "", dataID: "dataID")
-      .with(selectionHandler: { [weak self] _, _, _ in
+      .didSelect { [weak self] _ in
         self?.didSelectBlockCalled = true
-      })
-      .withWillDisplay { [weak self] _, _ in
-        self?.willDisplayBlockCalled = true
-      }
-      .withDidEndDisplaying { [weak self] _, _ in
-        self?.didEndDisplayingBlockCalled = true
-      }
-      .build()
+    }
+    .willDisplay { [weak self] _, _ in
+      self?.willDisplayBlockCalled = true
+    }
+    .didEndDisplaying { [weak self] _, _ in
+      self?.didEndDisplayingBlockCalled = true
+    }
+    .build()
 
     tableView.setSections([EpoxySection(items: [model])], animated: false)
   }
