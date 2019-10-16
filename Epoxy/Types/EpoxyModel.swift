@@ -27,8 +27,8 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
    */
   public init(
     data: DataType,
-    dataID: String,
-    alternateStyleID: String? = nil,
+    dataID: EpoxyStringRepresentable,
+    alternateStyleID: EpoxyStringRepresentable? = nil,
     makeView: @escaping () -> ViewType = { ViewType() },
     configureView: @escaping (EpoxyContext<ViewType, DataType>) -> Void,
     didChangeState: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
@@ -39,9 +39,9 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
     userInfo: [EpoxyUserInfoKey: Any] = [:])
   {
     self.data = data
-    self.dataID = dataID
-    self.alternateStyleID = alternateStyleID
-    self.reuseID = "\(type(of: ViewType.self))_\(alternateStyleID ?? "")"
+    self.dataID = dataID.epoxyStringValue
+    self.alternateStyleID = alternateStyleID.map { $0.epoxyStringValue }
+    self.reuseID = "\(type(of: ViewType.self))_\(self.alternateStyleID ?? "")"
     self.makeViewBlock = makeView
     self.configureView = configureView
     self.didChangeState = didChangeState

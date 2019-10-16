@@ -11,9 +11,9 @@ public final class BaseEpoxyModelBuilder<ViewType, DataType> where
   DataType: Equatable
 {
 
-  public init(data: DataType, dataID: String) {
+  public init(data: DataType, dataID: EpoxyStringRepresentable) {
     self.data = data
-    self.dataID = dataID
+    self.dataID = dataID.epoxyStringValue
   }
 
   // MARK: Public

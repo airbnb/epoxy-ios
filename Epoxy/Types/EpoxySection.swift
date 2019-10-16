@@ -9,11 +9,11 @@ public struct EpoxySection {
   // MARK: Lifecycle
 
   public init(
-    dataID: String,
+    dataID: EpoxyStringRepresentable,
     items: [EpoxyableModel],
     userInfo: [EpoxyUserInfoKey: Any] = [:])
   {
-    self.dataID = dataID
+    self.dataID = dataID.epoxyStringValue
     self.items = items
     self.userInfo = userInfo
   }
