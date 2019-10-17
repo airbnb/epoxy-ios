@@ -213,7 +213,7 @@ open class CollectionView: UICollectionView,
     // https://developer.apple.com/documentation/uikit/uicollectionview/1618020-indexpathsforvisibleitems
     let visibleIndexPaths = self.visibleIndexPaths.sorted()
     var sectionMetadata = [VisibleEpoxySectionMetadata]()
-    let visibleSections = Set<Int>(visibleIndexPaths.map({ $0.section }))
+    let visibleSections = Set<Int>(visibleIndexPaths.map({ $0.section })).sorted()
 
     for section in visibleSections {
       let sectionIndexPaths = visibleIndexPaths.filter({ $0.section == section })
