@@ -10,7 +10,7 @@ public class EpoxyDivider: UIView {
 
   // MARK: Lifecycle
 
-  public init(epoxyLogger: EpoxyLogging) {
+  public init(epoxyLogger: EpoxyLogging = DefaultEpoxyLogger()) {
     self.epoxyLogger = epoxyLogger
     super.init(frame: .zero)
     contentMode = .redraw
