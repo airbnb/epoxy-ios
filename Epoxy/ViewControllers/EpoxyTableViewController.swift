@@ -6,6 +6,17 @@ import UIKit
 /// Configures an Epoxy view and handles adaptivity. Subclass this to set your content in `epoxySections()`.
 open class EpoxyTableViewController: UIViewController {
 
+  // MARK: Lifecycle
+
+  public init(epoxyLogger: EpoxyLogging = DefaultEpoxyLogger()) {
+    self.epoxyLogger = epoxyLogger
+    super.init(nibName: nil, bundle: nil)
+  }
+
+  public required init?(coder aDecoder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
   // MARK: Open
 
   open override func viewDidLoad() {
@@ -35,16 +46,17 @@ open class EpoxyTableViewController: UIViewController {
 
   /// Returns a standard `TableView` by default. Override this to configure it differently.
   open func makeTableView() -> TableView {
-    let tableView = TableView()
+    let tableView = TableView(epoxyLogger: epoxyLogger)
 
+    let epoxyLogger = self.epoxyLogger
     tableView.rowDividerBuilder = {
-      let divider = EpoxyDivider()
+      let divider = EpoxyDivider(epoxyLogger: epoxyLogger)
       divider.color = UIColor.lightGray
       divider.height = 1
       return divider
     }
     tableView.sectionHeaderDividerBuilder = {
-      let divider = EpoxyDivider()
+      let divider = EpoxyDivider(epoxyLogger: epoxyLogger)
       divider.color = UIColor.clear
       divider.height = 0
       return divider
@@ -77,7 +89,7 @@ open class EpoxyTableViewController: UIViewController {
   }
 
   public lazy var tableView: TableView = {
-    assert(self.isViewLoaded, "Accessed tableView before view was loaded.")
+    epoxyLogger.epoxyAssert(self.isViewLoaded, "Accessed tableView before view was loaded.")
     return self.makeTableView()
   }()
 
@@ -91,6 +103,8 @@ open class EpoxyTableViewController: UIViewController {
   }
 
   // MARK: Private
+
+  private let epoxyLogger: EpoxyLogging
 
   private var bottomConstraint: NSLayoutConstraint?
 

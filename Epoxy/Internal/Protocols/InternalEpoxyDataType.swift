@@ -7,7 +7,10 @@ import Foundation
 /// particular type of `EpoxyInterface`
 public protocol InternalEpoxyDataType {
   /// Generates the internal epoxy sections for the specific `EpoxyInterface` type from a general array of `ExternalSection`s
-  static func make(with sections: [EpoxySection]) -> Self
+  static func make(
+    with sections: [EpoxySection],
+    epoxyLogger: EpoxyLogging)
+    -> Self
 
   /// Updates the item at the given `dataID` (if found) with the given updated `EpoxyModel`.
   func updateItem(at dataID: String, with item: EpoxyableModel) -> IndexPath?

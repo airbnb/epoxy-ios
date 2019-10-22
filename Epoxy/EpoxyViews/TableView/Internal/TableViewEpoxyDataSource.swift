@@ -21,7 +21,7 @@ public class TableViewEpoxyDataSource: EpoxyDataSource<TableView>, UITableViewDa
 
   public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     guard let item = epoxyModel(at: indexPath) else {
-      assertionFailure("Index path is out of bounds.")
+      epoxyLogger.epoxyAssertionFailure("Index path is out of bounds.")
       return UITableViewCell(style: .default, reuseIdentifier: "")
     }
 
@@ -32,7 +32,7 @@ public class TableViewEpoxyDataSource: EpoxyDataSource<TableView>, UITableViewDa
     if let cell = cell as? TableViewCell {
       epoxyInterface?.configure(cell: cell, with: item)
     } else {
-      assertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
+      epoxyLogger.epoxyAssertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
     }
     return cell
   }
@@ -41,7 +41,7 @@ public class TableViewEpoxyDataSource: EpoxyDataSource<TableView>, UITableViewDa
 
   func epoxyModel(at indexPath: IndexPath) -> EpoxyModelWrapper? {
     guard let data = internalData else {
-      assertionFailure("Can't load epoxy item with nil data")
+      epoxyLogger.epoxyAssertionFailure("Can't load epoxy item with nil data")
       return nil
     }
 
@@ -60,12 +60,12 @@ public class TableViewEpoxyDataSource: EpoxyDataSource<TableView>, UITableViewDa
 
   func epoxySection(at index: Int) -> InternalEpoxySection? {
     guard let data = internalData else {
-      assertionFailure("Can't load epoxy item with nil data")
+      epoxyLogger.epoxyAssertionFailure("Can't load epoxy item with nil data")
       return nil
     }
 
     if data.sections.count < index + 1 {
-      assertionFailure("Section is out of bounds.")
+      epoxyLogger.epoxyAssertionFailure("Section is out of bounds.")
       return nil
     }
 

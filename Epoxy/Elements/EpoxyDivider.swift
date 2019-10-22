@@ -10,7 +10,8 @@ public class EpoxyDivider: UIView {
 
   // MARK: Lifecycle
 
-  public init() {
+  public init(epoxyLogger: EpoxyLogging) {
+    self.epoxyLogger = epoxyLogger
     super.init(frame: .zero)
     contentMode = .redraw
     isOpaque = false
@@ -86,7 +87,7 @@ public class EpoxyDivider: UIView {
 
   public override func draw(_ rect: CGRect) {
     guard let color = color else {
-      assert(false, "You shouldn't be using a divider without a color")
+      epoxyLogger.epoxyAssert(false, "You shouldn't be using a divider without a color")
       return
     }
 
@@ -101,4 +102,8 @@ public class EpoxyDivider: UIView {
     context.setFillColor(color.cgColor)
     context.fill(dividerRect)
   }
+
+  // MARK: Private
+
+  private let epoxyLogger: EpoxyLogging
 }
