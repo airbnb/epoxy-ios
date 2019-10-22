@@ -7,11 +7,13 @@ public final class InternalCollectionViewEpoxyData: InternalEpoxyDataType {
   init(
     sections: [InternalEpoxySection],
     sectionIndexMap: [String: Int],
-    itemIndexMap: [String: IndexPath])
+    itemIndexMap: [String: IndexPath],
+    epoxyLogger: EpoxyLogging)
   {
     self.sections = sections
     self.sectionIndexMap = sectionIndexMap
     self.itemIndexMap = itemIndexMap
+    self.epoxyLogger = epoxyLogger
   }
 
   public fileprivate(set) var sections: [InternalEpoxySection]
@@ -20,12 +22,16 @@ public final class InternalCollectionViewEpoxyData: InternalEpoxyDataType {
 
   fileprivate var sectionIndexMap = [String: Int]()
   fileprivate var itemIndexMap = [String: IndexPath]()
+  fileprivate let epoxyLogger: EpoxyLogging
 }
 
 extension InternalCollectionViewEpoxyData {
 
-  public static func make(with sections: [EpoxySection]) -> InternalCollectionViewEpoxyData {
-
+  public static func make(
+    with sections: [EpoxySection],
+    epoxyLogger: EpoxyLogging)
+    -> InternalCollectionViewEpoxyData
+  {
     var sectionIndexMap = [String: Int]()
     var itemIndexMap = [String: IndexPath]()
 
@@ -46,7 +52,8 @@ extension InternalCollectionViewEpoxyData {
     return InternalCollectionViewEpoxyData(
       sections: convertedSections,
       sectionIndexMap: sectionIndexMap,
-      itemIndexMap: itemIndexMap)
+      itemIndexMap: itemIndexMap,
+      epoxyLogger: epoxyLogger)
   }
 
   public func makeChangeset(from
@@ -82,13 +89,13 @@ extension InternalCollectionViewEpoxyData {
 
   public func updateItem(at dataID: String, with item: EpoxyableModel) -> IndexPath? {
     guard let indexPath = itemIndexMap[dataID] else {
-      assert(false, "No item with that dataID exists")
+      epoxyLogger.epoxyAssert(false, "No item with that dataID exists")
       return nil
     }
 
     let oldItem = sections[indexPath.section].items[indexPath.item]
 
-    assert(oldItem.reuseID == item.reuseID, "Cannot update item with a different reuse ID.")
+    epoxyLogger.epoxyAssert(oldItem.reuseID == item.reuseID, "Cannot update item with a different reuse ID.")
 
     sections[indexPath.section].items[indexPath.item] = EpoxyModelWrapper(
       epoxyModel: item)

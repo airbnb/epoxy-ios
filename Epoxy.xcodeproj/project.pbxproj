@@ -21,6 +21,7 @@
 		25C6ED6322862AC600186F01 /* TableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25C6ED6222862AC600186F01 /* TableViewExtensions.swift */; };
 		25C6ED652286473C00186F01 /* CollectionViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25C6ED642286473C00186F01 /* CollectionViewExtensions.swift */; };
 		4CE67E8B225F190800BF0654 /* TableViewEpoxyModelSwipeActionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CE67E8A225F190800BF0654 /* TableViewEpoxyModelSwipeActionDelegate.swift */; };
+		7D0593AE235FAC44001DD05C /* EpoxyLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D0593AD235FAC44001DD05C /* EpoxyLogging.swift */; };
 		7D678B4622DE43E600C85E64 /* CollectionViewAccessibilityDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D678B4522DE43E600C85E64 /* CollectionViewAccessibilityDelegate.swift */; };
 		7D80DE1822DCF79D00928570 /* CollectionViewCellAccessibilityDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D80DE1722DCF79D00928570 /* CollectionViewCellAccessibilityDelegate.swift */; };
 		7D80DE1A22DCFE6C00928570 /* TableViewCellAccessibilityDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D80DE1922DCFE6C00928570 /* TableViewCellAccessibilityDelegate.swift */; };
@@ -109,6 +110,7 @@
 		25C6ED6222862AC600186F01 /* TableViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewExtensions.swift; sourceTree = "<group>"; };
 		25C6ED642286473C00186F01 /* CollectionViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewExtensions.swift; sourceTree = "<group>"; };
 		4CE67E8A225F190800BF0654 /* TableViewEpoxyModelSwipeActionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewEpoxyModelSwipeActionDelegate.swift; sourceTree = "<group>"; };
+		7D0593AD235FAC44001DD05C /* EpoxyLogging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpoxyLogging.swift; sourceTree = "<group>"; };
 		7D678B4522DE43E600C85E64 /* CollectionViewAccessibilityDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewAccessibilityDelegate.swift; sourceTree = "<group>"; };
 		7D80DE1722DCF79D00928570 /* CollectionViewCellAccessibilityDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCellAccessibilityDelegate.swift; sourceTree = "<group>"; };
 		7D80DE1922DCFE6C00928570 /* TableViewCellAccessibilityDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCellAccessibilityDelegate.swift; sourceTree = "<group>"; };
@@ -212,6 +214,14 @@
 			path = BuilderTests;
 			sourceTree = "<group>";
 		};
+		7D0593AC235FAC2F001DD05C /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				7D0593AD235FAC44001DD05C /* EpoxyLogging.swift */,
+			);
+			path = Logging;
+			sourceTree = "<group>";
+		};
 		7DCDDC0F2306191B006D210E /* Visibility */ = {
 			isa = PBXGroup;
 			children = (
@@ -250,6 +260,7 @@
 				C7E067382171117D005CB689 /* EpoxyViews */,
 				C7E067362171117D005CB689 /* Extensions */,
 				C7E0672B2171117D005CB689 /* Internal */,
+				7D0593AC235FAC2F001DD05C /* Logging */,
 				C7E0676C2171117D005CB689 /* Protocols */,
 				C7E067542171117D005CB689 /* SectionController */,
 				C7E0675E2171117D005CB689 /* Types */,
@@ -633,6 +644,7 @@
 				C7E067902171117D005CB689 /* CollectionViewTransitionLayoutDelegate.swift in Sources */,
 				C7E0679E2171117D005CB689 /* Collection+Diff.swift in Sources */,
 				C7E0679D2171117D005CB689 /* EpoxyTableViewController.swift in Sources */,
+				7D0593AE235FAC44001DD05C /* EpoxyLogging.swift in Sources */,
 				258EB5E52347BB6A005C410E /* EpoxyContext.swift in Sources */,
 				C7E067A42171117D005CB689 /* EpoxyableModel.swift in Sources */,
 				C7E067912171117D005CB689 /* CollectionViewEpoxyItemDisplayDelegate.swift in Sources */,

@@ -7,8 +7,12 @@ open class EpoxyCollectionViewController: UIViewController {
 
   // MARK: Lifecycle
 
-  public init(collectionViewLayout: UICollectionViewLayout) {
+  public init(
+    collectionViewLayout: UICollectionViewLayout,
+    epoxyLogger: EpoxyLogging = DefaultEpoxyLogger())
+  {
     self.collectionViewLayout = collectionViewLayout
+    self.epoxyLogger = epoxyLogger
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -36,7 +40,7 @@ open class EpoxyCollectionViewController: UIViewController {
 
   /// Returns a `CollectionView` by default. Override this to configure it differently.
   open func makeCollectionView() -> CollectionView {
-    return CollectionView(collectionViewLayout: collectionViewLayout)
+    return CollectionView(collectionViewLayout: collectionViewLayout, epoxyLogger: epoxyLogger)
   }
 
   // MARK: Public
@@ -46,7 +50,7 @@ open class EpoxyCollectionViewController: UIViewController {
   }
 
   public lazy var collectionView: CollectionView = {
-    assert(self.isViewLoaded, "Accessed collectionView before view was loaded.")
+    epoxyLogger.epoxyAssert(self.isViewLoaded, "Accessed collectionView before view was loaded.")
     return self.makeCollectionView()
   }()
 
@@ -61,6 +65,7 @@ open class EpoxyCollectionViewController: UIViewController {
   // MARK: Private
 
   private let collectionViewLayout: UICollectionViewLayout
+  private let epoxyLogger: EpoxyLogging
 
   private func setUpViews() {
     view.backgroundColor = .white

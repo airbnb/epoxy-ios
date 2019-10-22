@@ -8,11 +8,14 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
 
   // MARK: Lifecycle
 
-  override init() {
+  init(epoxyLogger: EpoxyLogging) {
+    self.epoxyLogger = epoxyLogger
     super.init()
   }
 
   // MARK: Internal
+
+  let epoxyLogger: EpoxyLogging
 
   weak var epoxyInterface: EpoxyInterfaceType? {
     didSet {
@@ -23,12 +26,12 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
   private(set) var internalData: EpoxyInterfaceType.DataType?
 
   func setSections(_ sections: [EpoxySection]?, animated: Bool) {
-    assert(Thread.isMainThread, "This method must be called on the main thread.")
+    epoxyLogger.epoxyAssert(Thread.isMainThread, "This method must be called on the main thread.")
     registerCellReuseIDs(with: sections)
     registerSupplementaryViewReuseIDs(with: sections)
     var newInternalData: EpoxyInterfaceType.DataType? = nil
     if let sections = sections {
-      newInternalData = EpoxyInterfaceType.DataType.make(with: sections)
+      newInternalData = EpoxyInterfaceType.DataType.make(with: sections, epoxyLogger: epoxyLogger)
     }
 
     applyData(newInternalData: newInternalData, animated: animated)
@@ -40,15 +43,15 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
     animated: Bool)
   {
     guard let internalData = internalData else {
-      assertionFailure("Update item was called when the data was nil.")
+      epoxyLogger.epoxyAssertionFailure("Update item was called when the data was nil.")
       return
     }
     guard let epoxyInterface = epoxyInterface else {
-      assertionFailure("Update item was called before the EpoxyInterface was set.")
+      epoxyLogger.epoxyAssertionFailure("Update item was called before the EpoxyInterface was set.")
       return
     }
     guard let indexPath = internalData.updateItem(at: dataID, with: item) else {
-      assertionFailure("Update item was called with an index path that does not exist in the data.")
+      epoxyLogger.epoxyAssertionFailure("Update item was called with an index path that does not exist in the data.")
       return
     }
 
@@ -97,7 +100,7 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
 
   private func registerNewCellReuseIDs(_ newCellReuseIDs: Set<String>) {
     guard let epoxyInterface = epoxyInterface else {
-      assertionFailure("Trying to register reuse IDs before the EpoxyInterface was set.")
+      epoxyLogger.epoxyAssertionFailure("Trying to register reuse IDs before the EpoxyInterface was set.")
       return
     }
     newCellReuseIDs.forEach { cellReuseID in
@@ -107,7 +110,7 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
 
   private func registerNewSupplementaryViewReuseIDs(_ newSupplementaryViewReuseIDs: Set<String>, forKind elementKind: String) {
     guard let epoxyInterface = epoxyInterface else {
-      assertionFailure("Trying to register reuse IDs before the EpoxyInterface was set.")
+      epoxyLogger.epoxyAssertionFailure("Trying to register reuse IDs before the EpoxyInterface was set.")
       return
     }
     newSupplementaryViewReuseIDs.forEach { supplementaryViewReuseID in

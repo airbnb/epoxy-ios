@@ -13,8 +13,9 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   // MARK: Lifecycle
 
   /// Initializes the TableView
-  public init() {
-    self.epoxyDataSource = TableViewEpoxyDataSource()
+  public init(epoxyLogger: EpoxyLogging = DefaultEpoxyLogger()) {
+    self.epoxyLogger = epoxyLogger
+    self.epoxyDataSource = TableViewEpoxyDataSource(epoxyLogger: epoxyLogger)
     super.init(frame: .zero, style: .plain)
     setUp()
   }
@@ -62,7 +63,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
 
   public func selectItem(at dataID: String, animated: Bool) {
     guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
-      assertionFailure("item not found")
+      epoxyLogger.epoxyAssertionFailure("item not found")
       return
     }
     selectRow(at: indexPath, animated: animated, scrollPosition: .none)
@@ -114,7 +115,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
       let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID),
       let cell = cellForRow(at: indexPath) as? TableViewCell
       else {
-        assertionFailure("item not found")
+        epoxyLogger.epoxyAssertionFailure("item not found")
         return
     }
     UIAccessibility.post(notification: notification, argument: cell)
@@ -200,7 +201,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
         return
       }
       guard let epoxyCell = cell as? TableViewCell else {
-        assertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
+        epoxyLogger.epoxyAssertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
         return
       }
 
@@ -262,7 +263,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
       let modelMetadata: [VisibleEpoxyModelMetadata] = sectionIndexPaths.compactMap { [weak self] indexPath in
         guard let cell = self?.cellForRow(at: indexPath) as? TableViewCell else { return nil }
         guard let epoxyModelWrapper = self?.epoxyDataSource.epoxyModel(at: indexPath) else {
-          assertionFailure("model not found")
+          epoxyLogger.epoxyAssertionFailure("model not found")
           return nil
         }
         return VisibleEpoxyModelMetadata(
@@ -271,7 +272,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
       }
 
       guard let epoxyableSection = epoxyDataSource.epoxySection(at: section) else {
-        assertionFailure("section not found")
+        epoxyLogger.epoxyAssertionFailure("section not found")
         break
       }
       let newSectionMetadata = VisibleEpoxySectionMetadata(
@@ -370,7 +371,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
         return
       }
       guard let epoxyCell = cell as? TableViewCell else {
-        assertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
+        epoxyLogger.epoxyAssertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
         return
       }
 
@@ -419,6 +420,8 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   }
 
   // MARK: Private
+
+  private let epoxyLogger: EpoxyLogging
 
   private var dataIDsForHidingDividers = [String]()
   private var ephemeralStateCache = [String: RestorableState?]()
@@ -551,7 +554,7 @@ extension TableView: UITableViewDelegate {
     shouldHighlightRowAt indexPath: IndexPath) -> Bool
   {
     guard let item = epoxyDataSource.epoxyModel(at: indexPath) else {
-      assertionFailure("Index path is out of bounds")
+      epoxyLogger.epoxyAssertionFailure("Index path is out of bounds")
       return false
     }
     return item.isSelectable
@@ -563,7 +566,7 @@ extension TableView: UITableViewDelegate {
   {
     guard let item = epoxyDataSource.epoxyModel(at: indexPath),
       let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
-      assertionFailure("Index path is out of bounds")
+      epoxyLogger.epoxyAssertionFailure("Index path is out of bounds")
       return
     }
     item.configureStateChange(
@@ -591,7 +594,7 @@ extension TableView: UITableViewDelegate {
     willSelectRowAt indexPath: IndexPath) -> IndexPath?
   {
     guard let item = epoxyDataSource.epoxyModel(at: indexPath) else {
-      assertionFailure("Index path is out of bounds")
+      epoxyLogger.epoxyAssertionFailure("Index path is out of bounds")
       return nil
     }
     return item.isSelectable ? indexPath : nil
@@ -603,7 +606,7 @@ extension TableView: UITableViewDelegate {
   {
     guard let item = epoxyDataSource.epoxyModel(at: indexPath),
       let cell = tableView.cellForRow(at: indexPath) as? TableViewCell else {
-      assertionFailure("Index path is out of bounds")
+      epoxyLogger.epoxyAssertionFailure("Index path is out of bounds")
       return
     }
     let metadata = EpoxyViewMetadata(
@@ -632,7 +635,7 @@ extension TableView: UITableViewDelegate {
     willDeselectRowAt indexPath: IndexPath) -> IndexPath?
   {
     guard let item = epoxyDataSource.epoxyModel(at: indexPath) else {
-      assertionFailure("Index path is out of bounds")
+      epoxyLogger.epoxyAssertionFailure("Index path is out of bounds")
       return nil
     }
     return item.isSelectable ? indexPath : nil
@@ -840,7 +843,7 @@ extension TableView: TableViewCellAccessibilityDelegate {
       let indexPath = indexPath(for: cell),
       let model = epoxyDataSource.epoxyModel(at: indexPath)
       else {
-        assertionFailure("item not found")
+        epoxyLogger.epoxyAssertionFailure("item not found")
         return nil
     }
     return model
@@ -851,7 +854,7 @@ extension TableView: TableViewCellAccessibilityDelegate {
       let indexPath = indexPath(for: cell),
       let section = epoxyDataSource.epoxySection(at: indexPath.section)
       else {
-        assertionFailure("item not found")
+        epoxyLogger.epoxyAssertionFailure("item not found")
         return nil
     }
     return section

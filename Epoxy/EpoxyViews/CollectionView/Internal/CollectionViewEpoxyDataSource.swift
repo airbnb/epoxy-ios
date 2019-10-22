@@ -38,7 +38,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
   {
     guard let item = epoxyItem(at: indexPath) else {
-      assertionFailure("Index path is out of bounds.")
+      epoxyLogger.epoxyAssertionFailure("Index path is out of bounds.")
       return UICollectionViewCell(frame: .zero)
     }
 
@@ -49,7 +49,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     if let cell = cell as? CollectionViewCell {
       epoxyInterface?.configure(cell: cell, with: item)
     } else {
-      assertionFailure("Only CollectionViewCell and subclasses are allowed in a CollectionView.")
+      epoxyLogger.epoxyAssertionFailure("Only CollectionViewCell and subclasses are allowed in a CollectionView.")
     }
     return cell
   }
@@ -60,15 +60,15 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     at indexPath: IndexPath) -> UICollectionReusableView
   {
     guard let data = internalData else {
-      assertionFailure("Can't load epoxy item with nil data")
+      epoxyLogger.epoxyAssertionFailure("Can't load epoxy item with nil data")
       return UICollectionReusableView()
     }
     guard indexPath.section < data.sections.count else {
-      assertionFailure("Index of supplementary view is out of bounds.")
+      epoxyLogger.epoxyAssertionFailure("Index of supplementary view is out of bounds.")
       return UICollectionReusableView()
     }
     guard let elementSupplementaryModel = data.sections[indexPath.section].supplementaryModels[kind]?[indexPath.item] else {
-      assertionFailure("Supplementary epoxy models not found for the given element kind and index path.")
+      epoxyLogger.epoxyAssertionFailure("Supplementary epoxy models not found for the given element kind and index path.")
       return UICollectionReusableView()
     }
 
@@ -80,7 +80,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     if let supplementaryView = supplementaryView as? CollectionViewReusableView {
       epoxyInterface?.configure(supplementaryView: supplementaryView, with: elementSupplementaryModel)
     } else {
-      assertionFailure("Only CollectionViewReusableView and subclasses are allowed in a CollectionView.")
+      epoxyLogger.epoxyAssertionFailure("Only CollectionViewReusableView and subclasses are allowed in a CollectionView.")
     }
     return supplementaryView
   }
@@ -120,7 +120,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
 
   func epoxyItem(at indexPath: IndexPath) -> EpoxyModelWrapper? {
     guard let data = internalData else {
-      assertionFailure("Can't load epoxy item with nil data")
+      epoxyLogger.epoxyAssertionFailure("Can't load epoxy item with nil data")
       return nil
     }
 
@@ -131,7 +131,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     let section = data.sections[indexPath.section]
 
     if section.items.count < indexPath.row + 1 {
-      assertionFailure("Item is out of bounds.")
+      epoxyLogger.epoxyAssertionFailure("Item is out of bounds.")
       return nil
     }
 
@@ -150,12 +150,12 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
 
   func epoxySection(at index: Int) -> InternalEpoxySection? {
     guard let data = internalData else {
-      assertionFailure("Can't load epoxy item with nil data")
+      epoxyLogger.epoxyAssertionFailure("Can't load epoxy item with nil data")
       return nil
     }
 
     if data.sections.count < index + 1 {
-      assertionFailure("Section is out of bounds.")
+      epoxyLogger.epoxyAssertionFailure("Section is out of bounds.")
       return nil
     }
 

@@ -15,8 +15,12 @@ open class CollectionView: UICollectionView,
 
   // MARK: Lifecycle
 
-  public init(collectionViewLayout: UICollectionViewLayout) {
-    self.epoxyDataSource = CollectionViewEpoxyDataSource()
+  public init(
+    collectionViewLayout: UICollectionViewLayout,
+    epoxyLogger: EpoxyLogging = DefaultEpoxyLogger())
+  {
+    self.epoxyLogger = epoxyLogger
+    self.epoxyDataSource = CollectionViewEpoxyDataSource(epoxyLogger: epoxyLogger)
     super.init(frame: .zero, collectionViewLayout: collectionViewLayout)
     setUp()
   }
@@ -52,7 +56,7 @@ open class CollectionView: UICollectionView,
       let indexPath = indexPathForItem(at: dataID),
       let cell = cellForItem(at: indexPath) as? CollectionViewCell
       else {
-        assertionFailure("Tried to become first responder for a cell that was not visible.")
+        epoxyLogger.epoxyAssertionFailure("Tried to become first responder for a cell that was not visible.")
         return
     }
     cell.view?.becomeFirstResponder()
@@ -66,7 +70,7 @@ open class CollectionView: UICollectionView,
       let indexPath = indexPathForItem(at: dataID),
       let cell = cellForItem(at: indexPath) as? CollectionViewCell
       else {
-        assertionFailure("item not found")
+        epoxyLogger.epoxyAssertionFailure("item not found")
         return
     }
     UIAccessibility.post(notification: notification, argument: cell)
@@ -91,7 +95,7 @@ open class CollectionView: UICollectionView,
 
   public func selectItem(at dataID: String, animated: Bool) {
     guard let indexPath = indexPathForItem(at: dataID) else {
-      assertionFailure("item not found")
+      epoxyLogger.epoxyAssertionFailure("item not found")
       return
     }
     selectItem(at: indexPath, animated: animated, scrollPosition: [])
@@ -220,7 +224,7 @@ open class CollectionView: UICollectionView,
       let modelMetadata: [VisibleEpoxyModelMetadata] = sectionIndexPaths.compactMap { [weak self] indexPath in
         guard let cell = self?.cellForItem(at: indexPath) as? CollectionViewCell else { return nil }
         guard let epoxyItemWrapper = self?.epoxyDataSource.epoxyItem(at: indexPath) else {
-          assertionFailure("model not found")
+          epoxyLogger.epoxyAssertionFailure("model not found")
           return nil
         }
         return VisibleEpoxyModelMetadata(
@@ -229,7 +233,7 @@ open class CollectionView: UICollectionView,
       }
 
       guard let epoxyableSection = epoxyDataSource.epoxySection(at: section) else {
-        assertionFailure("section not found")
+        epoxyLogger.epoxyAssertionFailure("section not found")
         break
       }
       let newSectionMetadata = VisibleEpoxySectionMetadata(
@@ -365,6 +369,8 @@ open class CollectionView: UICollectionView,
 
   // MARK: Private
 
+  private let epoxyLogger: EpoxyLogging
+
   private var queuedUpdate: (
     newData: InternalCollectionViewEpoxyData?,
     animated: Bool,
@@ -486,7 +492,7 @@ open class CollectionView: UICollectionView,
   private func resetBehaviors() {
     indexPathsForVisibleItems.forEach { indexPath in
       guard let cell = cellForItem(at: indexPath) as? CollectionViewCell else {
-        assertionFailure("Only CollectionViewCell and subclasses are allowed in a CollectionView.")
+        epoxyLogger.epoxyAssertionFailure("Only CollectionViewCell and subclasses are allowed in a CollectionView.")
         return
       }
       if let item = epoxyDataSource.epoxyItem(at: indexPath) {
@@ -584,13 +590,13 @@ open class CollectionView: UICollectionView,
       let section = epoxyDataSource.epoxySection(at: indexPath.section),
       let model = epoxyDataSource.supplementaryModelIfPresent(ofKind: elementKind, at: indexPath) else
     {
-      assertionFailure(
+      epoxyLogger.epoxyAssertionFailure(
         "Supplementary epoxy models not found for the given element kind and index path.")
       return
     }
 
     guard let view = view as? CollectionViewReusableView else {
-      assertionFailure(
+      epoxyLogger.epoxyAssertionFailure(
         "Supplementary view does not match expected type CollectionViewReusableView.")
       return
     }
@@ -607,7 +613,7 @@ open class CollectionView: UICollectionView,
     shouldHighlightItemAt indexPath: IndexPath) -> Bool
   {
     guard let item = epoxyDataSource.epoxyItem(at: indexPath) else {
-      assertionFailure("Index path is out of bounds")
+      epoxyLogger.epoxyAssertionFailure("Index path is out of bounds")
       return false
     }
     return item.isSelectable
@@ -619,7 +625,7 @@ open class CollectionView: UICollectionView,
   {
     guard let item = epoxyDataSource.epoxyItem(at: indexPath),
       let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell else {
-        assertionFailure("Index path is out of bounds")
+        epoxyLogger.epoxyAssertionFailure("Index path is out of bounds")
         return
     }
     item.configureStateChange(
@@ -647,7 +653,7 @@ open class CollectionView: UICollectionView,
     shouldSelectItemAt indexPath: IndexPath) -> Bool
   {
     guard let item = epoxyDataSource.epoxyItem(at: indexPath) else {
-      assertionFailure("Index path is out of bounds")
+      epoxyLogger.epoxyAssertionFailure("Index path is out of bounds")
       return false
     }
     return item.isSelectable
@@ -659,7 +665,7 @@ open class CollectionView: UICollectionView,
   {
     guard let item = epoxyDataSource.epoxyItem(at: indexPath),
       let cell = collectionView.cellForItem(at: indexPath) as? CollectionViewCell else {
-        assertionFailure("Index path is out of bounds")
+        epoxyLogger.epoxyAssertionFailure("Index path is out of bounds")
         return
     }
     let metadata = EpoxyViewMetadata(
@@ -688,7 +694,7 @@ open class CollectionView: UICollectionView,
     shouldDeselectItemAt indexPath: IndexPath) -> Bool
   {
     guard let item = epoxyDataSource.epoxyItem(at: indexPath) else {
-      assertionFailure("Index path is out of bounds")
+      epoxyLogger.epoxyAssertionFailure("Index path is out of bounds")
       return false
     }
     return item.isSelectable
@@ -872,7 +878,7 @@ extension CollectionView: CollectionViewCellAccessibilityDelegate {
       let indexPath = indexPath(for: cell),
       let model = epoxyDataSource.epoxyItem(at: indexPath)
       else {
-        assertionFailure("item not found")
+        epoxyLogger.epoxyAssertionFailure("item not found")
         return nil
     }
     return model
@@ -883,7 +889,7 @@ extension CollectionView: CollectionViewCellAccessibilityDelegate {
       let indexPath = indexPath(for: cell),
       let section = epoxyDataSource.epoxySection(at: indexPath.section)
       else {
-        assertionFailure("item not found")
+        epoxyLogger.epoxyAssertionFailure("item not found")
         return nil
     }
     return section
