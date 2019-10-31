@@ -177,6 +177,9 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   /// Delegate for providing swipe actions configuration
   public weak var epoxyModelSwipeActionDelegate: TableViewEpoxyModelSwipeActionDelegate?
 
+  /// Delegate to support rearranging rows
+  public weak var epoxyModelReorderingDelegate: TableViewEpoxyReorderingDelegate?
+
   /// Whether to deselect items immediately after they are selected.
   public var autoDeselectItems: Bool = true
 
@@ -430,6 +433,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   private func setUp() {
     delegate = self
     epoxyDataSource.epoxyInterface = self
+    epoxyDataSource.reorderingDelegate = self
     dataSource = epoxyDataSource
     rowHeight = UITableView.automaticDimension
     estimatedRowHeight = 44 // TODO(ls): Use better estimated height
@@ -655,6 +659,22 @@ extension TableView: UITableViewDelegate {
       with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: true))
   }
 
+  public func tableView(
+    _ tableView: UITableView,
+    shouldIndentWhileEditingRowAt indexPath: IndexPath) -> Bool
+  {
+    guard
+      let dataID = epoxyDataSource.epoxyModel(at: indexPath)?.dataID,
+      let sectionDataID = epoxyDataSource.epoxySection(at: indexPath.section)?.dataID,
+      let reorderingDelegate = epoxyModelReorderingDelegate else
+    { return false }
+
+    return reorderingDelegate.tableView(
+      self,
+      shouldIndentWhileEditingRowWithDataID: dataID,
+      inSection: sectionDataID)
+  }
+
   @available(iOS 11.0, *)
   public func tableView(
     _ tableView: UITableView,
@@ -779,6 +799,40 @@ extension TableView: UITableViewDataSourcePrefetching {
     }
 
     epoxyModelPrefetchDataSource?.tableView(self, cancelPrefetchingOf: models)
+  }
+}
+
+// MARK: TableViewDataSourceReorderingDelegate
+
+extension TableView: TableViewDataSourceReorderingDelegate {
+
+  func dataSource(
+    _ dataSource: UITableViewDataSource,
+    canMoveRowWithDataID dataID: String,
+    inSection sectionDataID: String) -> Bool
+  {
+    guard let reorderingDelegate = epoxyModelReorderingDelegate else
+    { return false }
+
+    return reorderingDelegate.tableView(
+      self,
+      canMoveRowWithDataID: dataID,
+      inSection: sectionDataID)
+  }
+
+  func dataSource(
+    _ dataSource: UITableViewDataSource,
+    moveRowWithDataID dataID: String,
+    inSectionWithDataID fromSectionDataID: String,
+    toSectionWithDataID toSectionDataID: String,
+    withDestinationDataID destinationDataID: String)
+  {
+    epoxyModelReorderingDelegate?.tableView(
+      self,
+      moveRowWithDataID: dataID,
+      inSectionWithDataID: fromSectionDataID,
+      toSectionWithDataID: toSectionDataID,
+      withDestinationDataID: destinationDataID)
   }
 }
 

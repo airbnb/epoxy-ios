@@ -37,7 +37,50 @@ public class TableViewEpoxyDataSource: EpoxyDataSource<TableView>, UITableViewDa
     return cell
   }
 
+  public func tableView(
+    _ tableView: UITableView,
+    canMoveRowAt indexPath: IndexPath) -> Bool
+  {
+    guard
+      let reorderingDelegate = reorderingDelegate,
+      let (dataID, sectionDataID) = dataIDs(at: indexPath) else
+    { return false }
+
+    return reorderingDelegate.dataSource(
+      self,
+      canMoveRowWithDataID: dataID,
+      inSection: sectionDataID)
+  }
+
+  public func tableView(
+    _ tableView: UITableView,
+    moveRowAt sourceIndexPath: IndexPath,
+    to destinationIndexPath: IndexPath)
+  {
+    guard
+      let (fromDataID, fromSectionDataID) = dataIDs(at: sourceIndexPath),
+      let toSectionDataID = epoxySection(at: destinationIndexPath.section)?.dataID else
+    { return }
+
+    let beforeIndexPath = IndexPath(
+      row: destinationIndexPath.row,
+      section: destinationIndexPath.section)
+
+    if let data = internalData,
+      data.sections[beforeIndexPath.section].items.count >= beforeIndexPath.row + 1,
+      let toDataID = epoxyModel(at: beforeIndexPath)?.dataID {
+      reorderingDelegate?.dataSource(
+        self,
+        moveRowWithDataID: fromDataID,
+        inSectionWithDataID: fromSectionDataID,
+        toSectionWithDataID: toSectionDataID,
+        withDestinationDataID: toDataID)
+    }
+  }
+
   // MARK: Internal
+
+  weak var reorderingDelegate: TableViewDataSourceReorderingDelegate?
 
   func epoxyModel(at indexPath: IndexPath) -> EpoxyModelWrapper? {
     guard let data = internalData else {
@@ -70,5 +113,16 @@ public class TableViewEpoxyDataSource: EpoxyDataSource<TableView>, UITableViewDa
     }
 
     return data.sections[index]
+  }
+
+  // MARK: Private
+
+  /// Returns dataID and sectionDataID as a tuple at the given index path
+  private func dataIDs(at indexPath: IndexPath) -> (String, String)? {
+    guard
+      let dataID = epoxyModel(at: indexPath)?.dataID,
+      let sectionDataID = epoxySection(at: indexPath.section)?.dataID else
+    { return nil }
+    return (dataID, sectionDataID)
   }
 }
