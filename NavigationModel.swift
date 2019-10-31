@@ -20,16 +20,16 @@ public struct NavigationModel {
   /// `nil`, and removed when `nil`.
   ///
   /// Whenever `added.get` is non-`nil` following a previous `nil` value, or is initially non-`nil`,
-  /// the `UIViewController` is created from the non-`nil` `Param` and added to the navigation
+  /// the `UIViewController` is created from the non-`nil` `Params` and added to the navigation
   /// stack.
   ///
   /// When this model's `UIViewController` is popped from the navigation stack (e.g. from a dismiss
   /// edge swipe), `added` is `set` to `nil`. If `added` was previously non-`nil` and becomes `nil`,
   /// this model's `UIViewController` is removed from the navigation stack.
   ///
-  /// If the previous model's `Param` is non-`nil` and unequal to this model's non-`nil` `Params`,
+  /// If the previous model's `Params` is non-`nil` and unequal to this model's non-`nil` `Params`,
   /// the previous `UIViewController` is replaced with a new `UIViewController` constructed from the
-  /// current `added` `Param`.
+  /// current `added` `Params`.
   ///
   /// - Parameter added: Whether this element is added to the navigation stack.
   /// - Parameter dataID: The identifier that distinguishes this element from others in the stack.
@@ -48,7 +48,7 @@ public struct NavigationModel {
   /// `nil`, and removed when `nil`.
   ///
   /// Whenever `added.get` is non-`nil` following a previous `nil` value, or is initially non-`nil`,
-  /// the `UIViewController` is created from the non-`nil` `Param` and added to the navigation
+  /// the `UIViewController` is created from the non-`nil` `Params` and added to the navigation
   /// stack.
   ///
   /// When this model's `UIViewController` is popped from the navigation stack (e.g. from a dismiss
@@ -57,7 +57,7 @@ public struct NavigationModel {
   ///
   /// If the previous model's `Params` is non-`nil` and _referentially_ unequal to this model's non-
   /// `nil` `added` `Params`, the previous `UIViewController` is replaced with a new
-  /// `UIViewController` constructed from the current `added` `Param`.
+  /// `UIViewController` constructed from the current `added` `Params`.
   ///
   /// - Parameter added: Whether this element is added to the navigation stack.
   /// - Parameter dataID: The identifier that distinguishes this element from others in the stack.
@@ -71,8 +71,9 @@ public struct NavigationModel {
     self.init(added: added, dataID: dataID, isEqual: ===, makeViewController: makeViewController)
   }
 
-  /// Constructs a navigation stack element driven by a `Bond` to a `Bool`, with its view controller
-  /// added to the navigation stack when the `Bond`'s value is `true`, and removed when `false`.
+  /// Constructs a navigation stack element driven by a `Bond` to a `Bool`, with its
+  /// `UIViewController` created and added to the navigation stack when the `Bond`'s value is
+  /// `true`, and removed when `false`.
   ///
   /// Whenever `added.get` is `true` following a previous `false` value, or is initially `true`, the
   ///  `UIViewController` is created and added to the navigation stack.
@@ -92,15 +93,15 @@ public struct NavigationModel {
   {
     self.dataID = dataID
 
-    _makeViewController = { added.value ? makeViewController : nil }
+    let value = added.value
+
+    _makeViewController = { value ? makeViewController : nil }
 
     _didRemove = {
       // Only set if needed, since sets are typically more expensive than gets.
       guard added.value else { return }
       added.value = false
     }
-
-    let value = added.value
 
     _isDiffableItemEqual = { otherModel in
       guard let otherModel = otherModel as? NavigationModel else { return false }
@@ -119,8 +120,10 @@ public struct NavigationModel {
   {
     self.dataID = dataID
 
+    let value = added.value
+
     _makeViewController = {
-      added.value.map { value in
+      value.map { value in
         { makeViewController(value) }
       }
     }
@@ -130,8 +133,6 @@ public struct NavigationModel {
       guard added.value != nil else { return }
       added.value = nil
     }
-
-    let value = added.value
 
     _isDiffableItemEqual = { otherModel in
       guard let otherModel = otherModel as? NavigationModel else { return false }
