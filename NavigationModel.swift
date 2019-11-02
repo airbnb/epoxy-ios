@@ -258,6 +258,21 @@ extension NavigationModel: Diffable {
   }
 }
 
+// MARK: - Disambiguation
+
+extension NavigationModel {
+  public init<Params>(
+    added: Bond<Params?>,
+    dataID: String,
+    makeViewController: @escaping (Params) -> UIViewController) where
+    Params: Equatable,
+    Params: AnyObject
+  {
+    // Default to `Equatable` equality if `Params` is `AnyObject` and `Equatable`.
+    self.init(added: added, dataID: dataID, isEqual: ==, makeViewController: makeViewController)
+  }
+}
+
 // MARK: - Helpers
 
 /// A function that casts the provided value to the given type.
