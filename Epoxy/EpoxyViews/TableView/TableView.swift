@@ -534,6 +534,7 @@ extension TableView: UITableViewDelegate {
       return
     }
     item.willDisplay()
+    ((cell as? Cell)?.view as? DisplayResponder)?.didDisplay(true)
     epoxyModelDisplayDelegate?.tableView(self, willDisplay: item, in: section)
   }
 
@@ -550,6 +551,7 @@ extension TableView: UITableViewDelegate {
     }
 
     item.didEndDisplaying()
+    ((cell as? Cell)?.view as? DisplayResponder)?.didDisplay(false)
     epoxyModelDisplayDelegate?.tableView(self, didEndDisplaying: item, in: section)
   }
 

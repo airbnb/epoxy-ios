@@ -68,6 +68,12 @@ extension Row: Highlightable {
   }
 }
 
+extension Row: DisplayResponder {
+  public func didDisplay(_ isDisplayed: Bool) {
+    print("Is displayed? \(isDisplayed)")
+  }
+}
+
 extension Row {
   func shrink() {
     UIView.animate(withDuration: 0.15) {
