@@ -36,8 +36,8 @@ final class NavigationQueue {
       return
     }
 
-    let next = nextFrom(models: models, previous: current)
-    current = applyNext(next, from: current, animated: animated, to: interface)
+    let next = nextFrom(models, previous: current)
+    applyNext(next, from: current, animated: animated, to: interface)
   }
 
   /// Handles the given portion of the view controller stack being popped.
@@ -85,7 +85,9 @@ final class NavigationQueue {
 
   /// Returns the next navigation stack and changes that results from applying the given models to
   /// the provided previous stack.
-  private func nextFrom(models: [NavigationModel], previous: NavigationStack?)
+  private func nextFrom(
+    _ models: [NavigationModel],
+    previous: NavigationStack?)
     -> (stack: NavigationStack, changes: NavigationStack.AppliedChanges)
   {
     guard var next = previous else {
@@ -102,19 +104,22 @@ final class NavigationQueue {
     from previous: NavigationStack?,
     animated: Bool,
     to interface: NavigationInterface)
-    -> NavigationStack
   {
     interface.setStack(next.stack.addedViewControllers, animated: animated)
 
     // We want to make sure not to capture any removed view controllers.
     let notify = { [changes = next.changes, next = next.stack.addedTop, prev = previous?.addedTop?.model] in
-      changes.removals.forEach { $0.handleDidRemove() }
+      changes.removals.forEach { change in
+        change.remove()
+        change.handleDidRemove()
+      }
       changes.additions.forEach { $0.model.handleDidAdd($0.viewController) }
       NavigationStack.Added.handleTopChange(from: prev, to: next)
     }
 
     if let coordinator = interface.transitionCoordinator {
       isTransitioning = true
+      current = next.stack
 
       coordinator.animate(
         alongsideTransition: nil,
@@ -128,10 +133,9 @@ final class NavigationQueue {
     } else {
       isTransitioning = true
       notify()
+      current = next.stack
       stopTransition(interface: interface, animated: animated)
     }
-
-    return next.stack
   }
 
   /// Whether the given interface is actively transitioning.
@@ -194,7 +198,10 @@ final class NavigationQueue {
       removals.append(model)
     }
 
-    removals.forEach { $0.handleDidRemove() }
+    removals.forEach { removed in
+      removed.remove()
+      removed.handleDidRemove()
+    }
 
     NavigationStack.Added.handleTopChange(from: current.addedTop?.model, to: next.addedTop)
 
@@ -212,7 +219,7 @@ private struct NavigationStack {
 
   init(models: [NavigationModel]) {
     self.models = models
-    viewControllers = models.map { $0.makeViewController?() }
+    viewControllers = models.map { $0.makeViewController() }
   }
 
   // MARK: Internal
@@ -224,7 +231,7 @@ private struct NavigationStack {
   var viewControllers: [UIViewController?]
 
   /// The view controllers that are added to this stack. Indexes do not match `models`, as some
-  /// models may not be visible.
+  /// models may not have been able to create a view controller.
   var addedViewControllers: [UIViewController] {
     return viewControllers.compactMap { $0 }
   }
@@ -278,15 +285,17 @@ private struct NavigationStack {
     var newViewControllers = viewControllers
     let changeset = newModels.makeChangeset(from: models)
     var changes = AppliedChanges(removals: [], additions: [])
+    var makeFailures = Set<Int>()
 
     for (from, to) in changeset.updates {
       let toModel = newModels[to]
-      let toViewController = toModel.makeViewController?()
+      let toViewController = toModel.makeViewController()
       newViewControllers[from] = toViewController
 
       switch (from: viewControllers[from], to: toViewController) {
       case (from: .some, to: nil):
         changes.removals.append(models[from])
+        makeFailures.insert(to)
       case (from: nil, to: let toViewController?):
         changes.additions.append(.init(model: toModel, viewController: toViewController))
       case (from: nil, to: nil), (from: .some, to: .some):
@@ -301,15 +310,33 @@ private struct NavigationStack {
 
     for index in changeset.inserts {
       let model = newModels[index]
-      let viewController = model.makeViewController?()
+      let viewController = model.makeViewController()
       newViewControllers.insert(viewController, at: index)
       if let viewController = viewController {
         changes.additions.append(.init(model: model, viewController: viewController))
+      } else {
+        makeFailures.insert(index)
       }
     }
 
     for (from, to) in changeset.moves {
       newViewControllers[to] = viewControllers[from]
+    }
+
+    // If there's `nil` view controllers after reconciliation (where `makeViewController` previously
+    // returned `nil`) that didn't show up as an update or insert, try to make them again, since
+    // `makeViewController` could now be returning a non-`nil` value.
+    for
+      viewController in newViewControllers.enumerated() where
+      viewController.element == nil && !makeFailures.contains(viewController.offset)
+    {
+      let index = viewController.offset
+      let model = newModels[index]
+      let viewController = model.makeViewController()
+      if let viewController = viewController {
+        newViewControllers[index] = viewController
+        changes.additions.append(.init(model: model, viewController: viewController))
+      }
     }
 
     models = newModels

@@ -1,7 +1,6 @@
 // Created by eric_horacek on 10/23/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-import BondCoreUI
 import Epoxy
 import UIKit
 
@@ -15,132 +14,90 @@ public struct NavigationModel {
 
   // MARK: Lifecycle
 
-  /// Constructs a navigation stack element driven by a `Bond` to its `Params?`, with its
-  /// `UIViewController` created and added to the navigation stack when the `added` `Bond` is non-
-  /// `nil`, and removed when `nil`.
+  /// Constructs a navigation stack element identified by its `dataID`, able to create a
+  /// `UIViewController` from `Params` to be added to a navigation stack.
   ///
-  /// Whenever `added.get` is non-`nil` following a previous `nil` value, or is initially non-`nil`,
-  /// the `UIViewController` is created from the non-`nil` `Params` and added to the navigation
-  /// stack.
+  /// Its `UIViewController` is constructed from `Params` and added to the navigation stack when
+  /// this `NavigationModel` is set on a `DeclarativeNavigationController` via
+  /// `setStack(_:animated:)` if:
+  /// - A previous `NavigationModel` with the same `dataID` is not already added, or
+  /// - A `NavigationModel` that has previously been added to the navigation stack with the same
+  ///   `dataID` had `Params` that are not equal to this model's `Params`.
   ///
-  /// When this model's `UIViewController` is popped from the navigation stack (e.g. from a dismiss
-  /// edge swipe), `added` is `set` to `nil`. If `added` was previously non-`nil` and becomes `nil`,
-  /// this model's `UIViewController` is removed from the navigation stack.
-  ///
-  /// If the previous model's `Params` is non-`nil` and unequal to this model's non-`nil` `Params`,
-  /// the previous `UIViewController` is replaced with a new `UIViewController` constructed from the
-  /// current `added` `Params`.
-  ///
-  /// - Parameter added: Whether this element is added to the navigation stack.
-  /// - Parameter dataID: The identifier that distinguishes this element from others in the stack.
-  /// - Parameter makeViewController: A closure that's called with `Params` to construct the
+  /// - Parameters:
+  ///   - params: The parameters this are used to construct the view controller to add to the stack.
+  ///   - dataID: The identifier that distinguishes this element from others in the stack.
+  ///   - makeViewController: A closure that's called with `Params` to construct the
   ///   `UIViewController` to be added to the navigation stack.
+  ///   - remove: A closure that is called to update the state backing this navigation stack element
+  ///     when its view controller is removed from the navigation stack. Not called if this
+  ///     view controller is replaced by a new view controller with different `Params` and the same
+  ///     data ID.
   public init<Params: Equatable>(
-    added: Bond<Params?>,
+    params: Params,
     dataID: String,
-    makeViewController: @escaping (Params) -> UIViewController)
+    makeViewController: @escaping (Params) -> UIViewController?,
+    remove: @escaping () -> Void)
   {
-    self.init(added: added, dataID: dataID, isEqual: ==, makeViewController: makeViewController)
+    self.dataID = dataID
+    value = params as Any
+    _makeViewController = { makeViewController(params) }
+    _remove = remove
+    _isValueEqual = { otherModel in
+      guard let otherValue = otherModel.value as? Params else { return false }
+      return otherValue == params
+    }
   }
 
-  /// Constructs a navigation stack element driven by a `Bond` to its `Params?`, with its
-  /// `UIViewController` created and added to the navigation stack when the `added` `Bond` is non-
-  /// `nil`, and removed when `nil`.
+  /// Constructs a navigation stack element identified by its `dataID`, able to create a
+  /// `UIViewController` to be added to a navigation stack.
   ///
-  /// Whenever `added.get` is non-`nil` following a previous `nil` value, or is initially non-`nil`,
-  /// the `UIViewController` is created from the non-`nil` `Params` and added to the navigation
+  /// Its `UIViewController` is constructed added to the navigation stack when this
+  /// `NavigationModel` is set on a `DeclarativeNavigationController` via `setStack(_:animated:)`
+  /// if a previous `NavigationModel` with the same `dataID` is not already added to the navigation
   /// stack.
   ///
-  /// When this model's `UIViewController` is popped from the navigation stack (e.g. from a dismiss
-  /// edge swipe), `added` is `set` to `nil`. If `added` was previously non-`nil` and becomes `nil`,
-  /// this model's `UIViewController` is removed from the navigation stack.
-  ///
-  /// If the previous model's `Params` is non-`nil` and _referentially_ unequal to this model's non-
-  /// `nil` `added` `Params`, the previous `UIViewController` is replaced with a new
-  /// `UIViewController` constructed from the current `added` `Params`.
-  ///
-  /// - Parameter added: Whether this element is added to the navigation stack.
-  /// - Parameter dataID: The identifier that distinguishes this element from others in the stack.
-  /// - Parameter makeViewController: A closure that's called with `Params` to construct the
-  ///   `UIViewController` to be added to the navigation stack.
-  public init<Params: AnyObject>(
-    added: Bond<Params?>,
-    dataID: String,
-    makeViewController: @escaping (Params) -> UIViewController)
-  {
-    self.init(added: added, dataID: dataID, isEqual: ===, makeViewController: makeViewController)
-  }
-
-  /// Constructs a navigation stack element driven by a `Bond` to a `Bool`, with its
-  /// `UIViewController` created and added to the navigation stack when the `Bond`'s value is
-  /// `true`, and removed when `false`.
-  ///
-  /// Whenever `added.get` is `true` following a previous `false` value, or is initially `true`, the
-  ///  `UIViewController` is created and added to the navigation stack.
-  ///
-  /// When this model's `UIViewController` is popped from the navigation stack (e.g. from a dismiss
-  /// edge swipe), `added` is `set` to `false`. If `added` was previously `true` and becomes
-  /// `false`, this model's `UIViewController` is removed from the navigation stack.
-  ///
-  /// - Parameter added: Whether this element is added to the navigation stack.
-  /// - Parameter dataID: The identifier that distinguishes this element from others in the stack.
-  /// - Parameter makeViewController: A closure that's called to construct the `UIViewController` to
-  ///   be added to the navigation stack.
+  /// - Parameters:
+  ///   - dataID: The identifier that distinguishes this element from others in the stack.
+  ///   - makeViewController: A closure that's called with to construct the `UIViewController` to be
+  ///     added to the navigation stack.
+  ///   - remove: A closure that is called to update the state backing this navigation stack element
+  ///     when its view controller is removed from the navigation stack.
   public init(
-    added: Bond<Bool>,
     dataID: String,
-    makeViewController: @escaping () -> UIViewController)
+    makeViewController: @escaping () -> UIViewController?,
+    remove: @escaping () -> Void)
   {
     self.dataID = dataID
-
-    let value = added.value
-
-    _makeViewController = { value ? makeViewController : nil }
-
-    _didRemove = {
-      // Only set if needed, since sets are typically more expensive than gets.
-      guard added.value else { return }
-      added.value = false
-    }
-
-    _isDiffableItemEqual = { otherModel in
-      guard let otherModel = otherModel as? NavigationModel else { return false }
-      guard let otherValue = otherModel._value as? Bool else { return false }
-      return otherValue == value
-    }
-
-    _value = value
+    value = ()
+    _makeViewController = makeViewController
+    _remove = remove
+    _isValueEqual = { $0.value is Void }
   }
 
-  private init<Value>(
-    added: Bond<Value?>,
+  /// Constructs a root navigation stack element identified by its `dataID`, able to create a
+  /// `UIViewController` to be added to a navigation stack.
+  ///
+  /// Its `UIViewController` is constructed added to the navigation stack when this
+  /// `NavigationModel` is set on a `DeclarativeNavigationController` via `setStack(_:animated:)`
+  /// if a previous `NavigationModel` with the same `dataID` is not already added to the navigation
+  /// stack.
+  ///
+  /// - Note: Unlike `init(dataID:makeViewController:remove:)`, there is no `remove` closure for a
+  ///   `NavigationModel` constructed with this method. It's invalid to remove a root view
+  ///   controller from a navigation stack; it can only be replaced. As such, this method should
+  ///   only be used when modeling a navigation model that's the first element of a stack.
+  ///
+  /// - Parameters:
+  ///   - dataID: The identifier that distinguishes this element from others in the stack.
+  ///   - makeViewController: A closure that's called with to construct the `UIViewController` to be
+  ///     added to the navigation stack.
+  public static func root(
     dataID: String,
-    isEqual: @escaping (Value?, Value?) -> Bool,
-    makeViewController: @escaping (Value) -> UIViewController)
+    makeViewController: @escaping () -> UIViewController?)
+    -> NavigationModel
   {
-    self.dataID = dataID
-
-    let value = added.value
-
-    _makeViewController = {
-      value.map { value in
-        { makeViewController(value) }
-      }
-    }
-
-    _didRemove = {
-      // Only set if needed, since sets are typically more expensive than gets.
-      guard added.value != nil else { return }
-      added.value = nil
-    }
-
-    _isDiffableItemEqual = { otherModel in
-      guard let otherModel = otherModel as? NavigationModel else { return false }
-      guard let otherValue = dynamicCast(otherModel._value, to: Value?.self) else { return false }
-      return isEqual(otherValue, value)
-    }
-
-    _value = value as Any
+    .init(dataID: dataID, makeViewController: makeViewController, remove: {})
   }
 
   // MARK: Public
@@ -189,7 +146,7 @@ public struct NavigationModel {
   public func didRemove(_ didRemove: @escaping (() -> Void)) -> NavigationModel {
     var copy = self
     copy._didRemove = { [oldDidRemove = self._didRemove] in
-      oldDidRemove()
+      oldDidRemove?()
       didRemove()
     }
     return copy
@@ -202,7 +159,7 @@ public struct NavigationModel {
 
   /// Vends a closure that can be invoked to construct the view controller for this model if the
   /// `shown` value indicates shown, else `nil` if the `shown` value is dismissed.
-  var makeViewController: (() -> UIViewController)? {
+  func makeViewController() -> UIViewController? {
     return _makeViewController()
   }
 
@@ -227,57 +184,38 @@ public struct NavigationModel {
   /// Informs consumers of this model that its view controller has been removed from the navigation
   /// stack.
   func handleDidRemove() {
-    _didRemove()
+    _didRemove?()
+  }
+
+  /// Updates the underlying state backing this model to remove it.
+  func remove() {
+    _remove()
   }
 
   // MARK: Private
 
-  private let _makeViewController: () -> (() -> UIViewController)?
+  private let _makeViewController: () -> UIViewController?
+  private let _remove: () -> Void
   private var _didShow: ((UIViewController) -> Void)?
   private var _didHide: (() -> Void)?
   private var _didAdd: ((UIViewController) -> Void)?
-  private var _didRemove: () -> Void
+  private var _didRemove: (() -> Void)?
 
-  /// Whether the given model is equal to this model.
-  private var _isDiffableItemEqual: (Diffable) -> Bool
+  /// Whether the given model's value is equal to this model's value.
+  private var _isValueEqual: (NavigationModel) -> Bool
 
-  /// The value of this model's `Bond` at the time of its creation.
-  private var _value: Any
+  /// The value of this model at the time of its creation.
+  private var value: Any
 
 }
 
 // MARK: Diffable
 
 extension NavigationModel: Diffable {
-  public var diffIdentifier: String? {
-    return dataID
-  }
+  public var diffIdentifier: String? { dataID }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    return _isDiffableItemEqual(otherDiffableItem)
+    guard let otherDiffableItem = otherDiffableItem as? NavigationModel else { return false }
+    return _isValueEqual(otherDiffableItem)
   }
-}
-
-// MARK: - Disambiguation
-
-extension NavigationModel {
-  public init<Params>(
-    added: Bond<Params?>,
-    dataID: String,
-    makeViewController: @escaping (Params) -> UIViewController) where
-    Params: Equatable,
-    Params: AnyObject
-  {
-    // Default to `Equatable` equality if `Params` is `AnyObject` and `Equatable`.
-    self.init(added: added, dataID: dataID, isEqual: ==, makeViewController: makeViewController)
-  }
-}
-
-// MARK: - Helpers
-
-/// A function that casts the provided value to the given type.
-///
-/// Solves [this](https://forums.swift.org/t/casting-from-any-to-optional/21883) issue.
-private func dynamicCast<T>(_ value: Any, to _: T.Type) -> T? {
-  return value as? T
 }
