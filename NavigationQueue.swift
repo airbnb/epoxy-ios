@@ -159,7 +159,7 @@ final class NavigationQueue {
 
     coordinator.animate(
       alongsideTransition: nil,
-      completion: { [weak self, weak interface] context in
+      completion: { [weak self, weak interface] _ in
         guard let interface = interface else { return }
         self?.stopTransition(interface: interface, animated: animated)
       })
