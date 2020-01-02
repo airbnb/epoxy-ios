@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		21A321B723AAD5AB008AB36C /* DisplayResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A321B623AAD5AB008AB36C /* DisplayResponder.swift */; };
+		21A321B923AAD5E5008AB36C /* TableViewEpoxyReorderingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A321B823AAD5E5008AB36C /* TableViewEpoxyReorderingDelegate.swift */; };
+		21A321BB23AAD62E008AB36C /* TableViewDataSourceReorderingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21A321BA23AAD62E008AB36C /* TableViewDataSourceReorderingDelegate.swift */; };
 		25419A512294AB2400E82C27 /* TableViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25419A502294AB2400E82C27 /* TableViewTests.swift */; };
 		25419A532294AFC300E82C27 /* CollectionViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25419A522294AFC300E82C27 /* CollectionViewTests.swift */; };
 		254464292280D6BA0061C014 /* EpoxySectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 254464282280D6BA0061C014 /* EpoxySectionBuilder.swift */; };
@@ -96,6 +99,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		21A321B623AAD5AB008AB36C /* DisplayResponder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DisplayResponder.swift; sourceTree = "<group>"; };
+		21A321B823AAD5E5008AB36C /* TableViewEpoxyReorderingDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TableViewEpoxyReorderingDelegate.swift; path = Epoxy/EpoxyViews/TableView/TableViewEpoxyReorderingDelegate.swift; sourceTree = SOURCE_ROOT; };
+		21A321BA23AAD62E008AB36C /* TableViewDataSourceReorderingDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewDataSourceReorderingDelegate.swift; sourceTree = "<group>"; };
 		25419A502294AB2400E82C27 /* TableViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewTests.swift; sourceTree = "<group>"; };
 		25419A522294AFC300E82C27 /* CollectionViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewTests.swift; sourceTree = "<group>"; };
 		254464282280D6BA0061C014 /* EpoxySectionBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpoxySectionBuilder.swift; sourceTree = "<group>"; };
@@ -348,6 +354,7 @@
 				C7E0673F2171117D005CB689 /* TableViewEpoxyModelDisplayDelegate.swift */,
 				C7E067402171117D005CB689 /* TableViewEpoxyModelDataSourcePrefetching.swift */,
 				4CE67E8A225F190800BF0654 /* TableViewEpoxyModelSwipeActionDelegate.swift */,
+				21A321B823AAD5E5008AB36C /* TableViewEpoxyReorderingDelegate.swift */,
 			);
 			path = TableView;
 			sourceTree = "<group>";
@@ -356,6 +363,7 @@
 			isa = PBXGroup;
 			children = (
 				C7E0673D2171117D005CB689 /* InternalTableViewEpoxyData.swift */,
+				21A321BA23AAD62E008AB36C /* TableViewDataSourceReorderingDelegate.swift */,
 				C7E0673C2171117D005CB689 /* TableViewCell.swift */,
 				C7E0673B2171117D005CB689 /* TableViewEpoxyDataSource.swift */,
 				7D80DE1922DCFE6C00928570 /* TableViewCellAccessibilityDelegate.swift */,
@@ -490,6 +498,7 @@
 			isa = PBXGroup;
 			children = (
 				258EB5E72347BB87005C410E /* Highlightable.swift */,
+				21A321B623AAD5AB008AB36C /* DisplayResponder.swift */,
 				258EB5E82347BB87005C410E /* Selectable.swift */,
 				C7E067732171117D005CB689 /* Animatable.swift */,
 				C7E0676F2171117D005CB689 /* EpoxyableModel.swift */,
@@ -627,6 +636,7 @@
 				25C6ED6322862AC600186F01 /* TableViewExtensions.swift in Sources */,
 				C7E067982171117D005CB689 /* EpoxyCellState.swift in Sources */,
 				C7E0677D2171117D005CB689 /* TableViewEpoxyDataSource.swift in Sources */,
+				21A321BB23AAD62E008AB36C /* TableViewDataSourceReorderingDelegate.swift in Sources */,
 				25B0A94D228A1D1F00D61BC4 /* EpoxyModelWrapper.swift in Sources */,
 				C7E067A52171117D005CB689 /* EpoxyCell.swift in Sources */,
 				C7E067962171117D005CB689 /* EpoxySectionControlling.swift in Sources */,
@@ -636,6 +646,7 @@
 				C7E0678F2171117D005CB689 /* CollectionViewEpoxyItemDataSourcePrefetching.swift in Sources */,
 				C7E0678B2171117D005CB689 /* CollectionViewCell.swift in Sources */,
 				C7E0679B2171117D005CB689 /* EpoxySection.swift in Sources */,
+				21A321B923AAD5E5008AB36C /* TableViewEpoxyReorderingDelegate.swift in Sources */,
 				C7E067892171117D005CB689 /* CollectionViewEpoxyDataSource.swift in Sources */,
 				C7E0678C2171117D005CB689 /* CollectionViewReusableView.swift in Sources */,
 				C7E0677F2171117D005CB689 /* InternalTableViewEpoxyData.swift in Sources */,
@@ -685,6 +696,7 @@
 				8179787121EFB8B0003871CD /* StateCachingProtocols.swift in Sources */,
 				C7E067942171117D005CB689 /* EpoxyMultiSectionController.swift in Sources */,
 				7DCDDC112306192D006D210E /* VisibleEpoxySectionMetadata.swift in Sources */,
+				21A321B723AAD5AB008AB36C /* DisplayResponder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -102,6 +102,34 @@ open class EpoxyTableViewController: UIViewController {
     }
   }
 
+  /// Refreshes the data source by calling `epoxySections()` but does not trigger a UI update.
+  /// Should only be used in special situations which require a specific order of operations
+  /// to work properly, in most cases you should use `updateData` instead.
+  ///
+  /// Here's an example of implementing `tableView(tableView: performDropWith:)`
+  /// when you use a UITableViewDropDelegate to reorder rows:
+  ///
+  /// 1) Move the row manually:
+  ///
+  ///   tableView.moveRow(
+  ///     at: sourceIndexPath,
+  ///     to: destinationIndexPath)
+  ///
+  /// 2) Move the row in your data source, then call refreshDataWithoutUpdating()
+  ///    (in this example, stagedSortingItems is the data source):
+  ///
+  ///   let element = stagedSortingItems.remove(at: sourceIndexPath.row)
+  ///   stagedSortingItems.insert(element, at: destinationIndexPath.row)
+  ///   refreshDataWithoutUpdating()
+  ///
+  /// 3) Animate the row into place:
+  ///
+  ///   coordinator.drop(firstItem.dragItem, toRowAt: destinationIndexPath)
+  ///
+  public func refreshDataWithoutUpdating() {
+    tableView.modifySectionsWithoutUpdating(epoxySections())
+  }
+
   // MARK: Private
 
   private let epoxyLogger: EpoxyLogging

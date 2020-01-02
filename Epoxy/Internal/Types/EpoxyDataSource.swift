@@ -37,6 +37,35 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
     applyData(newInternalData: newInternalData, animated: animated)
   }
 
+  /// Refreshes the internalData but does not trigger a UI update.
+  /// Should only be used in special situations which require a specific order of operations
+  /// to work properly, in most cases you should use `setSections` instead.
+  ///
+  /// Here's an example of implementing `tableView(tableView: performDropWith:)`
+  /// when you use a UITableViewDropDelegate to reorder rows:
+  ///
+  /// 1) Move the row manually:
+  ///
+  ///   tableView.moveRow(
+  ///     at: sourceIndexPath,
+  ///     to: destinationIndexPath)
+  ///
+  /// 2) Move the row in your data source, then call refreshDataWithoutUpdating()
+  ///    (in this example, stagedSortingItems is the data source):
+  ///
+  ///   let updatedSections = <Modified sections array with item moved to new location>
+  ///   myDataSource.modifySectionsWithoutUpdating(updatedSections)
+  ///
+  /// 3) Animate the row into place:
+  ///
+  ///   coordinator.drop(firstItem.dragItem, toRowAt: destinationIndexPath)
+  ///
+  func modifySectionsWithoutUpdating(_ sections: [EpoxySection]?) {
+    internalData = sections.map {
+      EpoxyInterfaceType.DataType.make(with: $0, epoxyLogger: epoxyLogger)
+    }
+  }
+
   func updateItem(
     at dataID: String,
     with item: EpoxyableModel,

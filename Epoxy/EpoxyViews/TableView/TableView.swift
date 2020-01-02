@@ -51,6 +51,35 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     epoxyDataSource.setSections(sections, animated: animated)
   }
 
+  /// Refreshes the data source by calling modifySectionsWithoutUpdating() but does not trigger a UI update.
+  /// Should only be used in special situations which require a specific order of operations
+  /// to work properly, in most cases you should use `setSections` instead.
+  ///
+  /// Here's an example of implementing `tableView(tableView: performDropWith:)`
+  /// when you use a UITableViewDropDelegate to reorder rows:
+  ///
+  /// 1) Move the row manually:
+  ///
+  ///   tableView.moveRow(
+  ///     at: sourceIndexPath,
+  ///     to: destinationIndexPath)
+  ///
+  /// 2) Move the row in your data source, then call refreshDataWithoutUpdating()
+  ///    (in this example, stagedSortingItems is the data source):
+  ///
+  ///   let updatedSections = <Modified sections array with item moved to new location>
+  ///   tableView.modifySectionsWithoutUpdating(updatedSections)
+  ///   refreshDataWithoutUpdating()
+  ///
+  /// 3) Animate the row into place:
+  ///
+  ///   coordinator.drop(firstItem.dragItem, toRowAt: destinationIndexPath)
+  ///
+
+  public func modifySectionsWithoutUpdating(_ sections: [EpoxySection]?) {
+    epoxyDataSource.modifySectionsWithoutUpdating(sections)
+  }
+
   public func scrollToItem(at dataID: String, animated: Bool = false) {
     scrollToItem(at: dataID, scrollPosition: .middle, animated: animated)
   }
