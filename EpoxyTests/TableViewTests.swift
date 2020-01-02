@@ -60,4 +60,26 @@ class TableViewTests: XCTestCase {
     XCTAssertTrue(didSelectBlockCalled)
   }
 
+  func test_modifySectionsWithoutUpdating_doesNotCallApply() {
+    var calledApply = false
+
+    class MyTableView: TableView {
+      var applyWasCalled: (() -> Void)?
+
+      override public func apply(
+        _ newData: DataType?,
+        animated: Bool,
+        changesetMaker: @escaping (DataType?) -> EpoxyChangeset?)
+      {
+        applyWasCalled?()
+      }
+    }
+
+    let myTableView = MyTableView()
+    myTableView.applyWasCalled = { calledApply = true }
+    let model = BaseEpoxyModelBuilder(data: "", dataID: "dataID").build()
+    myTableView.modifySectionsWithoutUpdating([EpoxySection(items: [model])])
+    XCTAssertFalse(calledApply)
+  }
+
 }
