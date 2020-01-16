@@ -706,6 +706,20 @@ extension TableView: UITableViewDelegate {
       inSection: sectionDataID)
   }
 
+  public func tableView(
+    _ tableView: UITableView,
+    targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
+    toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath
+  {
+    guard let reorderingDelegate = epoxyModelReorderingDelegate else {
+      return proposedDestinationIndexPath
+    }
+    return reorderingDelegate.tableView(
+      self,
+      targetIndexPathForMoveFromRowAt: sourceIndexPath,
+      toProposedIndexPath: proposedDestinationIndexPath)
+  }
+
   @available(iOS 11.0, *)
   public func tableView(
     _ tableView: UITableView,
