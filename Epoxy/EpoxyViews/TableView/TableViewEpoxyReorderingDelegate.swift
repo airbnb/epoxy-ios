@@ -22,4 +22,19 @@ public protocol TableViewEpoxyReorderingDelegate: AnyObject {
     inSectionWithDataID fromSectionDataID: String,
     toSectionWithDataID toSectionDataID: String,
     withDestinationDataID destinationDataID: String)
+
+  func tableView(
+    _ tableView: UITableView,
+    targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
+    toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath
+}
+
+public extension TableViewEpoxyReorderingDelegate {
+  func tableView(
+    _ tableView: UITableView,
+    targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
+    toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath
+  {
+    return proposedDestinationIndexPath
+  }
 }
