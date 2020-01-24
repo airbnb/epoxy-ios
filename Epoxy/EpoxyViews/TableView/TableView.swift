@@ -354,50 +354,82 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     animated: Bool,
     changesetMaker: @escaping (DataType?) -> EpoxyChangeset?)
   {
+    if isUpdating {
+      queuedUpdate = (
+        newData: newData,
+        animated: animated,
+        changesetMaker: changesetMaker)
+      return
+    }
+
+    updateView(with: newData, animated: animated, changesetMaker: changesetMaker)
+  }
+
+  private func updateView(
+    with data: InternalTableViewEpoxyData?,
+    animated: Bool,
+    changesetMaker: @escaping (InternalTableViewEpoxyData?) -> EpoxyChangeset?)
+  {
+    isUpdating = true
+
     guard animated,
-      newData != nil,
+      data != nil,
       let sectionCount = dataSource?.numberOfSections?(in: self),
       sectionCount > 0
       else {
-        _ = changesetMaker(newData)
+        _ = changesetMaker(data)
         reloadData()
+        completeUpdates()
         return
     }
 
-    beginUpdates()
-
-    if let changeset = changesetMaker(newData) {
-      changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
-        if let cell = cellForRow(at: fromIndexPath as IndexPath) as? TableViewCell,
-          let epoxyModel = epoxyDataSource.epoxyModel(at: toIndexPath)?.epoxyModel
-        {
-          let metadata = EpoxyViewMetadata(
-            traitCollection: traitCollection,
-            state: cell.state,
-            animated: true)
-          epoxyModel.configure(cell: cell, with: metadata)
-          epoxyModel.configureStateChange(in: cell, with: metadata)
-        }
+    performBatchUpdates({
+      self.animateUpdates(data: data, changesetMaker: changesetMaker)
+    }, completion: { _ in
+      if let nextUpdate = self.queuedUpdate, self.window != nil {
+        self.queuedUpdate = nil
+        self.updateView(
+          with: nextUpdate.newData,
+          animated: nextUpdate.animated,
+          changesetMaker: nextUpdate.changesetMaker)
+      } else {
+        self.completeUpdates()
       }
+    })
+  }
 
-      // TODO(ls): Make animations configurable
-      deleteRows(at: changeset.itemChangeset.deletes as [IndexPath], with: .fade)
-      deleteSections(changeset.sectionChangeset.deletes as IndexSet, with: .fade)
+  private func animateUpdates(
+    data: InternalTableViewEpoxyData?,
+    changesetMaker: @escaping (InternalTableViewEpoxyData?) -> EpoxyChangeset?)
+  {
+    guard let changeset = changesetMaker(data) else { return }
 
-      insertRows(at: changeset.itemChangeset.inserts, with: .fade)
-      insertSections(changeset.sectionChangeset.inserts as IndexSet, with: .fade)
-
-      changeset.sectionChangeset.moves.forEach { fromIndex, toIndex in
-        moveSection(fromIndex, toSection: toIndex)
-      }
-
-      changeset.itemChangeset.moves.forEach { fromIndexPath, toIndexPath in
-        moveRow(at: fromIndexPath, to: toIndexPath)
+    changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
+      if let cell = cellForRow(at: fromIndexPath as IndexPath) as? TableViewCell,
+        let epoxyItem = epoxyDataSource.epoxyModel(at: toIndexPath) {
+        let metadata = EpoxyViewMetadata(traitCollection: traitCollection, state: cell.state, animated: true)
+        epoxyItem.configure(cell: cell, with: metadata)
+        epoxyItem.configureStateChange(in: cell, with: metadata)
       }
     }
 
-    endUpdates()
+    // TODO(ls): Make animations configurable
+    deleteRows(at: changeset.itemChangeset.deletes as [IndexPath], with: .fade)
+    deleteSections(changeset.sectionChangeset.deletes as IndexSet, with: .fade)
 
+    changeset.sectionChangeset.moves.forEach { fromIndex, toIndex in
+      moveSection(fromIndex, toSection: toIndex)
+    }
+
+    changeset.itemChangeset.moves.forEach { fromIndexPath, toIndexPath in
+      moveRow(at: fromIndexPath, to: toIndexPath)
+    }
+
+    insertRows(at: changeset.itemChangeset.inserts, with: .fade)
+    insertSections(changeset.sectionChangeset.inserts as IndexSet, with: .fade)
+  }
+
+  private func resetBehaviors() {
     indexPathsForVisibleRows?.forEach { indexPath in
       guard let cell = cellForRow(at: indexPath) else {
         return
@@ -410,10 +442,15 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
       if let item = epoxyDataSource.epoxyModel(at: indexPath) {
         item.setBehavior(
           cell: epoxyCell,
-          with: EpoxyViewMetadata(traitCollection: traitCollection, state: epoxyCell.state, animated: animated))
+          with: EpoxyViewMetadata(traitCollection: traitCollection, state: epoxyCell.state, animated: false))
         self.updateDivider(for: epoxyCell, dividerType: item.dividerType, dataID: item.dataID)
       }
     }
+  }
+
+  private func completeUpdates() {
+    resetBehaviors()
+    isUpdating = false
   }
 
   public func addInfiniteScrolling<LoaderView>(
@@ -453,6 +490,12 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
 
   // MARK: Private
 
+  private var queuedUpdate: (
+    newData: InternalTableViewEpoxyData?,
+    animated: Bool,
+    changesetMaker: (InternalTableViewEpoxyData?) -> EpoxyChangeset?)?
+
+  private var isUpdating = false
   private let epoxyLogger: EpoxyLogging
 
   private var dataIDsForHidingDividers = [String]()
