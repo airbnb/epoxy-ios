@@ -9,17 +9,17 @@ public final class Row: UIView {
   init() {
     super.init(frame: .zero)
     translatesAutoresizingMaskIntoConstraints = false
-    layoutMargins = UIEdgeInsets(
-      top: 16,
-      left: 24,
-      bottom: 16,
-      right: 24)
     setUpViews()
     setUpConstraints()
   }
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+  public var titleText: String? {
+    set { titleLabel.text = newValue }
+    get { return titleLabel.text }
   }
 
   public var text: String? {
@@ -29,25 +29,42 @@ public final class Row: UIView {
 
   // MARK: Private
 
+  private let titleLabel = UILabel(frame: .zero)
   private let label = UILabel(frame: .zero)
+  private let stackView = UIStackView(frame: .zero)
 
   private func setUpViews() {
+    titleLabel.textColor = .black
+    titleLabel.font = .boldSystemFont(ofSize: 20)
+    titleLabel.translatesAutoresizingMaskIntoConstraints = false
     label.textColor = .black
+    label.numberOfLines = 0
     label.translatesAutoresizingMaskIntoConstraints = false
-    addSubview(label)
+    stackView.spacing = 8
+    stackView.axis = .vertical
+    stackView.alignment = .leading
+    stackView.isLayoutMarginsRelativeArrangement = true
+    stackView.layoutMargins = UIEdgeInsets(
+      top: 16,
+      left: 24,
+      bottom: 16,
+      right: 24)
+    stackView.translatesAutoresizingMaskIntoConstraints = false
+    stackView.addArrangedSubview(titleLabel)
+    stackView.addArrangedSubview(label)
+    addSubview(stackView)
   }
 
   private func setUpConstraints() {
-    label.leadingAnchor.constraint(
-      equalTo: layoutMarginsGuide.leadingAnchor).isActive = true
-    label.trailingAnchor.constraint(
-      equalTo: layoutMarginsGuide.trailingAnchor).isActive = true
-    label.topAnchor.constraint(
-      equalTo: layoutMarginsGuide.topAnchor).isActive = true
-    label.bottomAnchor.constraint(
-      equalTo: layoutMarginsGuide.bottomAnchor).isActive = true
+    stackView.leadingAnchor.constraint(
+      equalTo: self.leadingAnchor).isActive = true
+    stackView.trailingAnchor.constraint(
+      equalTo: self.trailingAnchor).isActive = true
+    stackView.topAnchor.constraint(
+      equalTo: self.topAnchor).isActive = true
+    stackView.bottomAnchor.constraint(
+      equalTo: self.bottomAnchor).isActive = true
   }
-
 }
 
 extension Row: Selectable {
