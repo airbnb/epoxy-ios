@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		25627B93232ABF0F00D7327A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25627B92232ABF0E00D7327A /* AppDelegate.swift */; };
-		25627B95232ABF0F00D7327A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25627B94232ABF0F00D7327A /* ViewController.swift */; };
+		25627B95232ABF0F00D7327A /* HighlightAndSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25627B94232ABF0F00D7327A /* HighlightAndSelectionViewController.swift */; };
 		25627B9A232ABF1000D7327A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 25627B99232ABF1000D7327A /* Assets.xcassets */; };
 		25627B9D232ABF1100D7327A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25627B9B232ABF1100D7327A /* LaunchScreen.storyboard */; };
 		25627BA8232ABF1100D7327A /* EpoxyExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25627BA7232ABF1100D7327A /* EpoxyExampleTests.swift */; };
 		25627BB3232AC18100D7327A /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25627BB2232AC18100D7327A /* Row.swift */; };
 		A7DC0375FB4E65ACCAB5B346 /* libPods-EpoxyExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44C71F760308770E3AF68BC7 /* libPods-EpoxyExample.a */; };
+		BA93B6D623DA671700D98D8F /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA93B6D523DA671700D98D8F /* TestData.swift */; };
+		BACF3E8C23DBB8DC0001CCD1 /* ShuffeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACF3E8B23DBB8DC0001CCD1 /* ShuffeViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,7 +32,7 @@
 		1F8B3FD247D3EB84D4EFDDBA /* Pods-EpoxyExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpoxyExample.release.xcconfig"; path = "Target Support Files/Pods-EpoxyExample/Pods-EpoxyExample.release.xcconfig"; sourceTree = "<group>"; };
 		25627B8F232ABF0E00D7327A /* EpoxyExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EpoxyExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25627B92232ABF0E00D7327A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		25627B94232ABF0F00D7327A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		25627B94232ABF0F00D7327A /* HighlightAndSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightAndSelectionViewController.swift; sourceTree = "<group>"; };
 		25627B99232ABF1000D7327A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		25627B9C232ABF1100D7327A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		25627B9E232ABF1100D7327A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -40,6 +42,8 @@
 		25627BB2232AC18100D7327A /* Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Row.swift; sourceTree = "<group>"; };
 		44C71F760308770E3AF68BC7 /* libPods-EpoxyExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EpoxyExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		85E52AD4FC3ACEF0B14126FD /* Pods-EpoxyExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpoxyExample.debug.xcconfig"; path = "Target Support Files/Pods-EpoxyExample/Pods-EpoxyExample.debug.xcconfig"; sourceTree = "<group>"; };
+		BA93B6D523DA671700D98D8F /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
+		BACF3E8B23DBB8DC0001CCD1 /* ShuffeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuffeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,9 +108,11 @@
 				25627B9E232ABF1100D7327A /* Info.plist */,
 				25627B92232ABF0E00D7327A /* AppDelegate.swift */,
 				25627BB2232AC18100D7327A /* Row.swift */,
-				25627B94232ABF0F00D7327A /* ViewController.swift */,
+				25627B94232ABF0F00D7327A /* HighlightAndSelectionViewController.swift */,
 				25627B99232ABF1000D7327A /* Assets.xcassets */,
 				25627B9B232ABF1100D7327A /* LaunchScreen.storyboard */,
+				BA93B6D523DA671700D98D8F /* TestData.swift */,
+				BACF3E8B23DBB8DC0001CCD1 /* ShuffeViewController.swift */,
 			);
 			path = EpoxyExample;
 			sourceTree = "<group>";
@@ -246,9 +252,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				25627B95232ABF0F00D7327A /* ViewController.swift in Sources */,
+				25627B95232ABF0F00D7327A /* HighlightAndSelectionViewController.swift in Sources */,
 				25627BB3232AC18100D7327A /* Row.swift in Sources */,
+				BACF3E8C23DBB8DC0001CCD1 /* ShuffeViewController.swift in Sources */,
 				25627B93232ABF0F00D7327A /* AppDelegate.swift in Sources */,
+				BA93B6D623DA671700D98D8F /* TestData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
