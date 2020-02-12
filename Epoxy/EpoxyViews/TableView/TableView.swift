@@ -45,6 +45,24 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
     }
   }
 
+  open override func layoutSubviews() {
+    super.layoutSubviews()
+
+    // `bounds` is already updated when `layoutSubviews` is called,
+    // so we have to keep track of the previous size ourselves.
+    let previousSize = mostRecentSize
+    mostRecentSize = bounds.size
+
+    // If the size of this Table View changes (i.e. because of iPadOS Split Screen),
+    // recalculate anything that could depend on the previous size.
+    if previousSize != bounds.size {
+      // Do this on the next Run Loop to ensure all of the cells have received the update first.
+      DispatchQueue.main.async {
+        self.recalculateCellHeights()
+      }
+    }
+  }
+
   // MARK: Public
 
   public func setSections(_ sections: [EpoxySection]?, animated: Bool) {
@@ -501,6 +519,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   private var dataIDsForHidingDividers = [String]()
   private var ephemeralStateCache = [String: RestorableState?]()
   private var lastFocusedDataID: String?
+  private var mostRecentSize: CGSize?
 
   private func setUp() {
     delegate = self

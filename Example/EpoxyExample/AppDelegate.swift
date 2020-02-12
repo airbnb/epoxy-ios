@@ -16,7 +16,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let tabBarController = UITabBarController()
     tabBarController.setViewControllers([
       HighlightAndSelectionViewController(),
-      ShuffleViewController()
+      ShuffleViewController(),
+      CustomSelfSizingContentViewController(),
     ], animated: false)
 
     window = UIWindow(frame: UIScreen.main.bounds)
