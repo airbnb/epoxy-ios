@@ -160,7 +160,7 @@ public struct NavigationModel {
   /// Vends a closure that can be invoked to construct the view controller for this model if the
   /// `shown` value indicates shown, else `nil` if the `shown` value is dismissed.
   func makeViewController() -> UIViewController? {
-    return _makeViewController()
+    _makeViewController()
   }
 
   /// Informs consumers of this model that its view controller has become visible at the top of a

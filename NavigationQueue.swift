@@ -233,7 +233,7 @@ private struct NavigationStack {
   /// The view controllers that are added to this stack. Indexes do not match `models`, as some
   /// models may not have been able to create a view controller.
   var addedViewControllers: [UIViewController] {
-    return viewControllers.compactMap { $0 }
+    viewControllers.compactMap { $0 }
   }
 
   /// A model that has been added to the navigation stack and its corresponding view controller.
@@ -260,7 +260,7 @@ private struct NavigationStack {
 
   /// Returns the added models and their corresponding view controllers in this stack.
   var added: [Added] {
-    return zip(models, viewControllers).compactMap { modelAndViewController in
+    zip(models, viewControllers).compactMap { modelAndViewController in
       modelAndViewController.1.map { viewController in
         Added(model: modelAndViewController.0, viewController: viewController)
       }
@@ -270,7 +270,7 @@ private struct NavigationStack {
   /// Returns the topmost added model and its corresponding view controller of this stack, else
   /// `nil` if there is none.
   var addedTop: Added? {
-    return added.last
+    added.last
   }
 
   /// The additions and removals resulting from applying a new set of models to this stack.
