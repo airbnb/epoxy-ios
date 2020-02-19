@@ -1,5 +1,5 @@
 PODS:
-  - Epoxy (0.18.4)
+  - Epoxy (0.18.5)
 
 DEPENDENCIES:
   - Epoxy (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  Epoxy: 939f35bf4e644ef82a1884224eeaf2c0bf037243
+  Epoxy: 00550cc681adb8e63ea6292650e9fe2adc2da930
 
 PODFILE CHECKSUM: fea29649ff956ceda2bae6e589280d9049a62ec6
 
