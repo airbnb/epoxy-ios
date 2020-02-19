@@ -46,33 +46,93 @@ public final class BaseEpoxyModelBuilder<ViewType, DataType> where
     return self
   }
 
+  /**
+   NOTE: The with(...) functions which take closures and return Void apply additively if you call them multiple times.
+   This is intended to allow for layering additional logic on top of a model produced somewhere else.
+   */
+
   public func configureView(_ configureView: @escaping (EpoxyContext<ViewType, DataType>) -> Void) -> BaseEpoxyModelBuilder {
-    self.configureView = configureView
+    let oldConfigureView = self.configureView
+    self.configureView = { context in
+      oldConfigureView(context)
+      configureView(context)
+    }
+
     return self
   }
 
   public func setBehaviors(_ behaviorSetter: ((EpoxyContext<ViewType, DataType>) -> Void)?) -> BaseEpoxyModelBuilder {
-    self.behaviorSetter = behaviorSetter
+    guard let newBehaviorSetter = behaviorSetter else { return self }
+
+    if let oldBehaviorSetter = self.behaviorSetter {
+      self.behaviorSetter = { context in
+        oldBehaviorSetter(context)
+        newBehaviorSetter(context)
+      }
+    } else {
+      self.behaviorSetter = newBehaviorSetter
+    }
+
     return self
   }
 
   public func didSelect(_ didSelect: ((EpoxyContext<ViewType, DataType>) -> Void)?) -> BaseEpoxyModelBuilder {
-    self.didSelect = didSelect
+    guard let newDidSelect = didSelect else { return self }
+
+    if let oldDidSelect = self.didSelect {
+      self.didSelect = { context in
+        oldDidSelect(context)
+        newDidSelect(context)
+      }
+    } else {
+      self.didSelect = newDidSelect
+    }
+
     return self
   }
 
   public func didChangeState(_ didChangeState: ((EpoxyContext<ViewType, DataType>) -> Void)?) -> BaseEpoxyModelBuilder {
-    self.didChangeState = didChangeState
+    guard let newDidChangeState = didChangeState else { return self }
+
+    if let oldDidChangeState = self.didChangeState {
+      self.didChangeState = { context in
+        oldDidChangeState(context)
+        newDidChangeState(context)
+      }
+    } else {
+      self.didChangeState = newDidChangeState
+    }
+
     return self
   }
 
   public func willDisplay(_ willDisplay: ((DataType, String) -> Void)?) -> BaseEpoxyModelBuilder {
-    self.willDisplay = willDisplay
+    guard let newWillDisplay = willDisplay else { return self }
+
+    if let oldWillDisplay = self.willDisplay {
+      self.willDisplay = { data, string in
+        oldWillDisplay(data, string)
+        newWillDisplay(data, string)
+      }
+    } else {
+      self.willDisplay = newWillDisplay
+    }
+
     return self
   }
 
   public func didEndDisplaying(_ didEndDisplaying: ((DataType, String) -> Void)?) -> BaseEpoxyModelBuilder {
-    self.didEndDisplaying = didEndDisplaying
+    guard let newDidEndDisplaying = didEndDisplaying else { return self }
+
+    if let oldDidEndDisplaying = self.didEndDisplaying {
+      self.didEndDisplaying = { data, string in
+        oldDidEndDisplaying(data, string)
+        newDidEndDisplaying(data, string)
+      }
+    } else {
+      self.didEndDisplaying = newDidEndDisplaying
+    }
+
     return self
   }
 

@@ -27,6 +27,11 @@ public final class Row: UIView {
     get { return label.text }
   }
 
+  public var textColor: UIColor {
+    set { label.textColor = newValue }
+    get { return label.textColor }
+  }
+
   // MARK: Private
 
   private let titleLabel = UILabel(frame: .zero)
