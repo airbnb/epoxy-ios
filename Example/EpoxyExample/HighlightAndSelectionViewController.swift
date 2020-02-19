@@ -27,8 +27,14 @@ class HighlightAndSelectionViewController: EpoxyTableViewController {
           data: text,
           dataID: dataID)
           .configureView { context in
+            print("First configuration")
             context.view.titleText = "Row \(dataID)"
             context.view.text = text
+            context.view.textColor = .red
+          }
+          .configureView{ context in
+            print("Second configuration")
+            context.view.textColor = .black
           }
           .didSelect { context in
             print("DataID selected \(context.dataID) (selection handler)")
