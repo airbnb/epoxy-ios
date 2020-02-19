@@ -60,7 +60,7 @@ open class CollectionView: UICollectionView,
 
     // If the size of this Collection View View changes (i.e. because of iPadOS Split Screen),
     // recalculate anything that could depend on the previous size.
-    if let previousSize = previousSize, previousSize != bounds.size {
+    if previousSize != bounds.size {
       // Do this on the next Run Loop to ensure all of the cells have received the update first.
       DispatchQueue.main.async {
         self.recalculateCellHeights()
