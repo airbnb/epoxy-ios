@@ -20,7 +20,9 @@ open class CollectionView: UICollectionView,
     epoxyLogger: EpoxyLogging = DefaultEpoxyLogger())
   {
     self.epoxyLogger = epoxyLogger
-    self.epoxyDataSource = CollectionViewEpoxyDataSource(epoxyLogger: epoxyLogger)
+    self.epoxyDataSource = CollectionViewEpoxyDataSource(
+      epoxyLogger: epoxyLogger,
+      usesBatchUpdatesForAllReloads: GlobalEpoxyConfig.shared.usesBatchUpdatesForAllCVReloads)
     super.init(frame: .zero, collectionViewLayout: collectionViewLayout)
     setUp()
   }
@@ -323,7 +325,7 @@ open class CollectionView: UICollectionView,
     animated: Bool,
     changesetMaker: @escaping (DataType?) -> EpoxyChangeset?)
   {
-    guard !isUpdating else {
+    guard GlobalEpoxyConfig.shared.disablesCVBatchUpdateQueuing || !isUpdating else {
       queuedUpdate = (
         newData: newData,
         animated: animated,
@@ -471,33 +473,48 @@ open class CollectionView: UICollectionView,
   {
     isUpdating = true
 
-    guard animated,
-      data != nil,
-      let sectionCount = dataSource?.numberOfSections?(in: self),
-      sectionCount > 0
-      else {
+    let performUpdates = {
+      self.performBatchUpdates({
+        self.performUpdates(data: data, changesetMaker: changesetMaker)
+      }, completion: { _ in
+        if let nextUpdate = self.queuedUpdate, self.window != nil {
+          self.queuedUpdate = nil
+          self.updateView(
+            with: nextUpdate.newData,
+            animated: nextUpdate.animated,
+            changesetMaker: nextUpdate.changesetMaker)
+        } else {
+          self.completeUpdates()
+        }
+      })
+    }
+
+    if GlobalEpoxyConfig.shared.usesBatchUpdatesForAllCVReloads {
+      if animated {
+        performUpdates()
+      } else {
+        UIView.performWithoutAnimation {
+          performUpdates()
+        }
+      }
+    } else {
+      guard animated,
+        data != nil,
+        let sectionCount = dataSource?.numberOfSections?(in: self),
+        sectionCount > 0
+      else
+      {
         _ = changesetMaker(data)
         reloadData()
         completeUpdates()
         return
-    }
-
-    performBatchUpdates({
-      self.animateUpdates(data: data, changesetMaker: changesetMaker)
-    }, completion: { _ in
-      if let nextUpdate = self.queuedUpdate, self.window != nil {
-        self.queuedUpdate = nil
-        self.updateView(
-          with: nextUpdate.newData,
-          animated: nextUpdate.animated,
-          changesetMaker: nextUpdate.changesetMaker)
-      } else {
-        self.completeUpdates()
       }
-    })
+
+      performUpdates()
+    }
   }
 
-  private func animateUpdates(
+  private func performUpdates(
     data: InternalCollectionViewEpoxyData?,
     changesetMaker: @escaping (InternalCollectionViewEpoxyData?) -> EpoxyChangeset?)
   {
