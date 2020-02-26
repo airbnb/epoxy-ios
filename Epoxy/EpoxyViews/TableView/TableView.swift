@@ -15,7 +15,9 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
   /// Initializes the TableView
   public init(epoxyLogger: EpoxyLogging = DefaultEpoxyLogger()) {
     self.epoxyLogger = epoxyLogger
-    self.epoxyDataSource = TableViewEpoxyDataSource(epoxyLogger: epoxyLogger)
+    self.epoxyDataSource = TableViewEpoxyDataSource(
+      epoxyLogger: epoxyLogger,
+      usesBatchUpdatesForAllReloads: false)
     super.init(frame: .zero, style: .plain)
     setUp()
   }

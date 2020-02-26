@@ -8,8 +8,9 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
 
   // MARK: Lifecycle
 
-  init(epoxyLogger: EpoxyLogging) {
+  init(epoxyLogger: EpoxyLogging, usesBatchUpdatesForAllReloads: Bool) {
     self.epoxyLogger = epoxyLogger
+    self.usesBatchUpdatesForAllReloads = usesBatchUpdatesForAllReloads
     super.init()
   }
 
@@ -29,9 +30,11 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
     epoxyLogger.epoxyAssert(Thread.isMainThread, "This method must be called on the main thread.")
     registerCellReuseIDs(with: sections)
     registerSupplementaryViewReuseIDs(with: sections)
-    var newInternalData: EpoxyInterfaceType.DataType? = nil
+    let newInternalData: EpoxyInterfaceType.DataType?
     if let sections = sections {
       newInternalData = EpoxyInterfaceType.DataType.make(with: sections, epoxyLogger: epoxyLogger)
+    } else {
+      newInternalData = nil
     }
 
     applyData(newInternalData: newInternalData, animated: animated)
@@ -91,18 +94,25 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
 
   private var cellReuseIDs = Set<String>()
   private var supplementaryViewReuseIDs = [String: Set<String>]()
+  private var usesBatchUpdatesForAllReloads: Bool
 
   private func applyData(newInternalData: EpoxyInterfaceType.DataType?, animated: Bool) {
     epoxyInterface?.apply(
       newInternalData,
-      animated: animated) { [unowned self] newData in
+      animated: animated,
+      changesetMaker: { [unowned self] newData in
         let oldInternalData = self.internalData
         self.internalData = newData
-        guard let oldData = oldInternalData else {
-          return nil
+        if self.usesBatchUpdatesForAllReloads {
+          let emptyData = EpoxyInterfaceType.DataType.make(with: [], epoxyLogger: self.epoxyLogger)
+          let newData = newData ?? emptyData
+          let oldData = oldInternalData ?? emptyData
+          return newData.makeChangeset(from: oldData)
+        } else {
+          guard let oldData = oldInternalData else { return nil }
+          return newData?.makeChangeset(from: oldData)
         }
-        return newData?.makeChangeset(from: oldData)
-    }
+      })
   }
 
   private func reregisterReuseIDs() {
