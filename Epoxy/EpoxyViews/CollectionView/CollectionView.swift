@@ -52,24 +52,6 @@ open class CollectionView: UICollectionView,
     }
   }
 
-  open override func layoutSubviews() {
-    super.layoutSubviews()
-
-    // `bounds` is already updated when `layoutSubviews` is called,
-    // so we have to keep track of the previous size ourselves.
-    let previousSize = mostRecentSize
-    mostRecentSize = bounds.size
-
-    // If the size of this Collection View View changes (i.e. because of iPadOS Split Screen),
-    // recalculate anything that could depend on the previous size.
-    if let previousSize = previousSize, previousSize != bounds.size {
-      // Do this on the next Run Loop to ensure all of the cells have received the update first.
-      DispatchQueue.main.async {
-        self.recalculateCellHeights()
-      }
-    }
-  }
-
   // MARK: Public
 
   public func setSections(_ sections: [EpoxySection]?, animated: Bool) {
@@ -423,7 +405,6 @@ open class CollectionView: UICollectionView,
   private var infiniteScrollingState: InfiniteScrollingState = .stopped
   private var ephemeralStateCache = [String: RestorableState?]()
   private var lastFocusedDataID: String?
-  private var mostRecentSize: CGSize?
 
   private func setUp() {
     // There are rendering issues in iOS 10 when using self-sizing supplementary views
