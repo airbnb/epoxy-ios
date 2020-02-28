@@ -185,18 +185,7 @@ final class NavigationQueue {
     -> NavigationStack
   {
     var next = current
-    var removals = [NavigationModel]()
-
-    for element in popped {
-      guard let index = next.viewControllers.firstIndex(where: { $0 === element }) else {
-        assertionFailure("\(element) not in \(next.viewControllers), this is programmer error.")
-        continue
-      }
-
-      let model = next.models[index]
-      next.viewControllers[index] = nil
-      removals.append(model)
-    }
+    let removals = next.applyPopped(popped)
 
     removals.forEach { removed in
       removed.remove()
@@ -225,10 +214,10 @@ private struct NavigationStack {
   // MARK: Internal
 
   /// The models within this navigation stack.
-  var models: [NavigationModel]
+  private(set) var models: [NavigationModel]
 
   /// The view controllers within this navigation stack, with indexes matching `models`.
-  var viewControllers: [UIViewController?]
+  private(set) var viewControllers: [UIViewController?]
 
   /// The view controllers that are added to this stack. Indexes do not match `models`, as some
   /// models may not have been able to create a view controller.
@@ -342,5 +331,20 @@ private struct NavigationStack {
     models = newModels
     viewControllers = newViewControllers
     return changes
+  }
+
+  /// Updates the internal state to handle the provided view controllers being popped from the
+  /// stack, returning the models that were removed.
+  mutating func applyPopped(_ popped: [UIViewController]) -> [NavigationModel] {
+    var removals = [NavigationModel]()
+    for element in popped {
+      guard let index = viewControllers.firstIndex(where: { $0 === element }) else {
+        assertionFailure("\(element) not in \(viewControllers), this is programmer error.")
+        continue
+      }
+      viewControllers.remove(at: index)
+      removals.append(models.remove(at: index))
+    }
+    return removals
   }
 }
