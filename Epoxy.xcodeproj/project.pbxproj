@@ -33,6 +33,7 @@
 		7DCDDC112306192D006D210E /* VisibleEpoxySectionMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCDDC102306192D006D210E /* VisibleEpoxySectionMetadata.swift */; };
 		7DCDDC1323061939006D210E /* VisibleEpoxyModelMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DCDDC1223061939006D210E /* VisibleEpoxyModelMetaData.swift */; };
 		8179787121EFB8B0003871CD /* StateCachingProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8179787021EFB8B0003871CD /* StateCachingProtocols.swift */; };
+		93CB4E0E2422E4E7003B9CD3 /* GlobalEpoxyConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CB4E0D2422E4E7003B9CD3 /* GlobalEpoxyConfig.swift */; };
 		C7E0671B21711118005CB689 /* Epoxy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7E0671121711118005CB689 /* Epoxy.framework */; };
 		C7E0672221711118005CB689 /* Epoxy.h in Headers */ = {isa = PBXBuildFile; fileRef = C7E0671421711118005CB689 /* Epoxy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C7E067752171117D005CB689 /* InfiniteScrollingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0672D2171117D005CB689 /* InfiniteScrollingState.swift */; };
@@ -125,6 +126,7 @@
 		7DCDDC102306192D006D210E /* VisibleEpoxySectionMetadata.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibleEpoxySectionMetadata.swift; sourceTree = "<group>"; };
 		7DCDDC1223061939006D210E /* VisibleEpoxyModelMetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisibleEpoxyModelMetaData.swift; sourceTree = "<group>"; };
 		8179787021EFB8B0003871CD /* StateCachingProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateCachingProtocols.swift; sourceTree = "<group>"; };
+		93CB4E0D2422E4E7003B9CD3 /* GlobalEpoxyConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalEpoxyConfig.swift; sourceTree = "<group>"; };
 		C7E0671121711118005CB689 /* Epoxy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Epoxy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7E0671421711118005CB689 /* Epoxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Epoxy.h; sourceTree = "<group>"; };
 		C7E0671521711118005CB689 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -461,6 +463,7 @@
 				C7E0675F2171117D005CB689 /* EpoxyCellState.swift */,
 				C7E067602171117D005CB689 /* EpoxyModel.swift */,
 				C7E067622171117D005CB689 /* EpoxySection.swift */,
+				93CB4E0D2422E4E7003B9CD3 /* GlobalEpoxyConfig.swift */,
 				7DCDDC0F2306191B006D210E /* Visibility */,
 				254464272280D68F0061C014 /* Builders */,
 			);
@@ -666,6 +669,7 @@
 				258EB5E62347BB6A005C410E /* EpoxyViewMetadata.swift in Sources */,
 				C7E067822171117D005CB689 /* TableViewEpoxyModelDataSourcePrefetching.swift in Sources */,
 				C7E067A22171117D005CB689 /* EpoxyStringRepresentable.swift in Sources */,
+				93CB4E0E2422E4E7003B9CD3 /* GlobalEpoxyConfig.swift in Sources */,
 				C7E067A12171117D005CB689 /* EpoxyDivider.swift in Sources */,
 				C7E067752171117D005CB689 /* InfiniteScrollingState.swift in Sources */,
 				7DCDDC1323061939006D210E /* VisibleEpoxyModelMetaData.swift in Sources */,
