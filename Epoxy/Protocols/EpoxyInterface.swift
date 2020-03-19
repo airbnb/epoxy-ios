@@ -4,7 +4,7 @@
 import UIKit
 
 /// A protocol for a view that can be powered by an array of `EpoxySection`s
-public protocol EpoxyInterface: AnyObject {
+public protocol EpoxyInterface: AnyObject, UITraitEnvironment {
 
   /// Whether to deselect items immediately after they are selected.
   var autoDeselectItems: Bool { get set }
