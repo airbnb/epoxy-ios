@@ -73,7 +73,7 @@ extension EpoxyModelWrapper: Diffable {
     return epoxyModel.isDiffableItemEqual(to: otherDiffableEpoxyItem.epoxyModel)
   }
 
-  public var diffIdentifier: String? {
+  public var diffIdentifier: AnyHashable? {
     return epoxyModel.diffIdentifier
   }
 }

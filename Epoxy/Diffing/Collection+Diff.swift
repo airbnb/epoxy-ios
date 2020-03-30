@@ -162,7 +162,7 @@ extension Collection where Self.Iterator.Element: Diffable, Self.Index == Int {
   public func makeChangeset(from
     otherCollection: Self) -> IndexChangeset
   {
-    var entries = [String: Entry]()
+    var entries = [AnyHashable: Entry]()
 
     var newResultsArray = [Int: Record]()
     for i in startIndex..<endIndex {

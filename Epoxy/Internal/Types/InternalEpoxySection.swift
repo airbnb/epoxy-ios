@@ -21,7 +21,7 @@ public final class InternalEpoxySection {
 }
 
 extension InternalEpoxySection: Diffable {
-  public var diffIdentifier: String? {
+  public var diffIdentifier: AnyHashable? {
     return dataID
   }
 
