@@ -35,7 +35,7 @@ public struct NavigationModel {
   ///     data ID.
   public init<Params: Equatable>(
     params: Params,
-    dataID: String,
+    dataID: AnyHashable,
     makeViewController: @escaping (Params) -> UIViewController?,
     remove: @escaping () -> Void)
   {
@@ -64,7 +64,7 @@ public struct NavigationModel {
   ///   - remove: A closure that is called to update the state backing this navigation stack element
   ///     when its view controller is removed from the navigation stack.
   public init(
-    dataID: String,
+    dataID: AnyHashable,
     makeViewController: @escaping () -> UIViewController?,
     remove: @escaping () -> Void)
   {
@@ -93,7 +93,7 @@ public struct NavigationModel {
   ///   - makeViewController: A closure that's called with to construct the `UIViewController` to be
   ///     added to the navigation stack.
   public static func root(
-    dataID: String,
+    dataID: AnyHashable,
     makeViewController: @escaping () -> UIViewController?)
     -> NavigationModel
   {
@@ -155,7 +155,7 @@ public struct NavigationModel {
   // MARK: Internal
 
   /// The identifier of this stack element that distinguishes it from other stack elements.
-  let dataID: String
+  let dataID: AnyHashable
 
   /// Vends a closure that can be invoked to construct the view controller for this model if the
   /// `shown` value indicates shown, else `nil` if the `shown` value is dismissed.
@@ -212,7 +212,7 @@ public struct NavigationModel {
 // MARK: Diffable
 
 extension NavigationModel: Diffable {
-  public var diffIdentifier: String? { dataID }
+  public var diffIdentifier: AnyHashable? { dataID }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let otherDiffableItem = otherDiffableItem as? NavigationModel else { return false }
