@@ -44,7 +44,7 @@ extension EpoxySection: Diffable {
     return dataID == otherDiffableSection.dataID
   }
 
-  public var diffIdentifier: String? {
+  public var diffIdentifier: AnyHashable? {
     return dataID
   }
 }

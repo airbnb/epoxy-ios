@@ -120,7 +120,7 @@ extension EpoxyableModel {
 
 extension EpoxyableModel {
 
-  public var diffIdentifier: String? {
+  public var diffIdentifier: AnyHashable? {
     return reuseID + dataID
   }
 

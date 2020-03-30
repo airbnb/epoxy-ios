@@ -13,5 +13,5 @@ public protocol Diffable {
   func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool
 
   /// The identifier to use when checking identity while diffing.
-  var diffIdentifier: String? { get }
+  var diffIdentifier: AnyHashable? { get }
 }
