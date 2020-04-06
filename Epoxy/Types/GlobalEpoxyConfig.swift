@@ -28,8 +28,5 @@ public final class GlobalEpoxyConfig {
   // UIKit engineers have suggested that we should never call `reloadData` ourselves, and instead,
   // use batch updates for all data changes.
   public var usesBatchUpdatesForAllCVReloads = false
-
-  // Disables all animations by always setting `animated: Bool` flags to `false`
-  // This should only be used for testing.
-  public var _disableAnimations = false
+  
 }
