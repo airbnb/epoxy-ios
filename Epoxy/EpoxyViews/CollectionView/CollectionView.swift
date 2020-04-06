@@ -59,12 +59,12 @@ open class CollectionView: UICollectionView,
   }
 
   public func scrollToItem(at dataID: String, animated: Bool = false) {
-    scrollToItem(at: dataID, position: .centeredVertically, animated: animated && _animationsEnabled)
+    scrollToItem(at: dataID, position: .centeredVertically, animated: animated)
   }
 
   public func scrollToItem(at dataID: String, position: UICollectionView.ScrollPosition, animated: Bool) {
     if let indexPath = indexPathForItem(at: dataID) {
-      scrollToItem(at: indexPath, at: position, animated: animated && _animationsEnabled)
+      scrollToItem(at: indexPath, at: position, animated: animated)
     }
   }
 
@@ -121,13 +121,13 @@ open class CollectionView: UICollectionView,
       epoxyLogger.epoxyAssertionFailure("item not found")
       return
     }
-    selectItem(at: indexPath, animated: animated && _animationsEnabled, scrollPosition: [])
+    selectItem(at: indexPath, animated: animated, scrollPosition: [])
 
     if let item = epoxyDataSource.epoxyItem(at: indexPath),
       let cell = cellForItem(at: indexPath) as? EpoxyCell {
       item.configureStateChange(
         in: cell,
-        with: EpoxyViewMetadata(traitCollection: traitCollection, state: .selected, animated: animated && _animationsEnabled))
+        with: EpoxyViewMetadata(traitCollection: traitCollection, state: .selected, animated: animated))
     }
   }
 
@@ -135,12 +135,12 @@ open class CollectionView: UICollectionView,
     guard let indexPath = indexPathForItem(at: dataID) else {
       return
     }
-    deselectItem(at: indexPath, animated: animated && _animationsEnabled)
+    deselectItem(at: indexPath, animated: animated)
     if let item = epoxyDataSource.epoxyItem(at: indexPath),
       let cell = cellForItem(at: indexPath) as? EpoxyCell {
       item.configureStateChange(
         in: cell,
-        with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: animated && _animationsEnabled))
+        with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: animated))
     }
   }
 
@@ -310,12 +310,12 @@ open class CollectionView: UICollectionView,
     guard GlobalEpoxyConfig.shared.disablesCVBatchUpdateQueuing || !isUpdating else {
       queuedUpdate = (
         newData: newData,
-        animated: animated && _animationsEnabled,
+        animated: animated,
         changesetMaker: changesetMaker)
       return
     }
 
-    updateView(with: newData, animated: animated && _animationsEnabled, changesetMaker: changesetMaker)
+    updateView(with: newData, animated: animated, changesetMaker: changesetMaker)
   }
 
   /// Convert a dataID to an index path, only for use in collection view layout delegate methods.
@@ -400,7 +400,6 @@ open class CollectionView: UICollectionView,
     changesetMaker: (InternalCollectionViewEpoxyData?) -> EpoxyChangeset?)?
 
   private var isUpdating = false
-  private var _animationsEnabled: Bool { !GlobalEpoxyConfig.shared._disableAnimations }
   private var infiniteScrollingLoader: (UIView & Animatable)?
   private weak var infiniteScrollingDelegate: InfiniteScrollingDelegate?
   private var infiniteScrollingState: InfiniteScrollingState = .stopped
@@ -435,7 +434,7 @@ open class CollectionView: UICollectionView,
     let metadata = EpoxyViewMetadata(
       traitCollection: traitCollection,
       state: cell.state,
-      animated: animated && _animationsEnabled)
+      animated: animated)
     _ = item.configure(cell: cell, with: metadata)
     _ = item.setBehavior(cell: cell, with: metadata) // TODO(ls): make these items actually epoxy items
     if item.isSelectable {
