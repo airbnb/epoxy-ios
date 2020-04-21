@@ -11,5 +11,7 @@ public protocol BottomBarsProviding {
   /// empty array if there should be none.
   ///
   /// - SeeAlso: BarModel
+  /// - SeeAlso: AlertBar
+  /// - SeeAlso: BottomBarInstaller
   var bottomBars: [BarModeling] { get }
 }

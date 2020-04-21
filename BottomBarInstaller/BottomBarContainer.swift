@@ -4,8 +4,8 @@
 import UIKit
 
 /// A view that:
-/// - Contains a zero or more bottom bars and updates its layout margins relative to the safe area
-///   insets.
+/// - Contains a zero or more bars and updates their layout margins relative to the original safe
+///   area insets of its view controller.
 /// - Updates the additional bottom safe area insets of its weak view controller reference to be
 ///   inset by the height of the bar stack.
 public final class BottomBarContainer: BarStackView, FixedBarView, BarContainer {
@@ -76,7 +76,7 @@ public final class BottomBarContainer: BarStackView, FixedBarView, BarContainer 
 
   /// An additional bottom offset that can be applied to this bar stack's position.
   ///
-  /// Typically used to offset for the keyboard.
+  /// Typically used to offset the bar stack to avoid the keyboard.
   public var bottomOffset: CGFloat = 0 {
     didSet {
       guard bottomOffset != oldValue else { return }

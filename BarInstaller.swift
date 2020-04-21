@@ -70,7 +70,7 @@ public final class BarInstaller<Container: BarContainer> {
     setModels(models, animated: animated, in: view)
   }
 
-  /// Installs the bars into the associated view controller.
+  /// Installs the bar stack into the associated view controller.
   ///
   /// Should be called once the view controller loads its view. If this installer has no bar model,
   /// no view will be added. A view will only be added once a non-nil bar model is set after
@@ -86,7 +86,7 @@ public final class BarInstaller<Container: BarContainer> {
     setModels(models, animated: false, in: view)
   }
 
-  /// Removes the the bars from the associated view controller.
+  /// Removes the bar stack from the associated view controller.
   public func uninstall() {
     uninstallContainer()
     installed = false

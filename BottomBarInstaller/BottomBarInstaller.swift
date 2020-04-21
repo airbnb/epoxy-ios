@@ -9,14 +9,20 @@ import UIKit
 /// The bar stack is constrained to the bottom of the view controller's view.
 ///
 /// The view controller's safe area inset bottom is automatically inset by the height of the bar
-/// stack, ensuring that any scrollable content is inset by the height of the bar.
+/// stack, ensuring that any scrollable content is inset by the height of the bars.
 public final class BottomBarInstaller: NSObject {
 
   // MARK: Lifecycle
 
-  public init(viewController: UIViewController, avoidsKeyboard: Bool = false) {
+  public init(
+    viewController: UIViewController,
+    avoidsKeyboard: Bool = false,
+    models: [BarModeling] = [])
+  {
     self.viewController = viewController
     keyboardPositionWatcher.enabled = avoidsKeyboard
+    super.init()
+    setModels(models, animated: false)
   }
 
   // MARK: Public
@@ -51,7 +57,7 @@ public final class BottomBarInstaller: NSObject {
     installer.setModels(models, animated: animated)
   }
 
-  /// Installs the bar stack into its associated view controller.
+  /// Installs the bar stack into the associated view controller.
   ///
   /// Should be called once the view controller loads its view. If this installer has no bar models,
   /// no view will be added. A view will only be added once a non-`nil` bar model is set after
@@ -61,7 +67,7 @@ public final class BottomBarInstaller: NSObject {
     watchKeyboardPosition(true)
   }
 
-  /// Removes the bar stack from its associated view controller.
+  /// Removes the bar stack from the associated view controller.
   public func uninstall() {
     installer.uninstall()
     watchKeyboardPosition(false)
@@ -70,7 +76,7 @@ public final class BottomBarInstaller: NSObject {
   // MARK: Private
 
   /// The view controller that will have its `additionalSafeAreaInsets` updated to accommodate for
-  /// the bar view.
+  /// the bar stack.
   private weak var viewController: UIViewController?
 
   private let keyboardPositionWatcher = KeyboardPositionWatcher()

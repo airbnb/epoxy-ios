@@ -28,6 +28,7 @@ public struct BarModel<ViewType: UIView> where ViewType: ContentConfigurableView
 
   public typealias BehaviorSetter = (_ view: ViewType, _ content: ViewType.Content) -> Void
   public typealias WillDisplay = (_ view: ViewType) -> Void
+  public typealias DidDisplay = (_ view: ViewType) -> Void
 
   /// An optional ID for an alternative style type to use for reuse of this view. Use this to
   /// differentiate between different styling configurations.
@@ -39,7 +40,8 @@ public struct BarModel<ViewType: UIView> where ViewType: ContentConfigurableView
 
   /// An optional closure that sets the view's behavior (such as interaction blocks or delegates).
   /// Called whenever a view is configured with a bar model.
-  public func behaviorSetter(_ behaviorSetter: @escaping BehaviorSetter) -> BarModel<ViewType> {
+  public func behaviorSetter(_ behaviorSetter: BehaviorSetter?) -> BarModel<ViewType> {
+    guard let behaviorSetter = behaviorSetter else { return self }
     var copy = self
     copy._behaviorSetter = { [previous = copy._behaviorSetter] view, content in
       previous?(view, content)
@@ -49,11 +51,23 @@ public struct BarModel<ViewType: UIView> where ViewType: ContentConfigurableView
   }
 
   /// An optional closure that's called whenever the view is about to display.
-  public func willDisplay(_ willDisplay: @escaping WillDisplay) -> BarModel<ViewType> {
+  public func willDisplay(_ willDisplay: WillDisplay?) -> BarModel<ViewType> {
+    guard let willDisplay = willDisplay else { return self }
     var copy = self
     copy._willDisplay = { [previous = copy._willDisplay] content in
       previous?(content)
       willDisplay(content)
+    }
+    return copy
+  }
+
+  /// An optional closure that's called after the view has been displayed.
+  public func didDisplay(_ didDisplay: DidDisplay?) -> BarModel<ViewType> {
+    guard let didDisplay = didDisplay else { return self }
+    var copy = self
+    copy._didDisplay = { [previous = copy._didDisplay] content in
+      previous?(content)
+      didDisplay(content)
     }
     return copy
   }
@@ -95,6 +109,7 @@ public struct BarModel<ViewType: UIView> where ViewType: ContentConfigurableView
   private var _alternateStyleID: String?
   private var _behaviorSetter: BehaviorSetter?
   private var _willDisplay: WillDisplay?
+  private var _didDisplay: DidDisplay?
   private var coordinatorType: AnyClass = DefaultBarCoordinator<Self>.self
   private var _makeCoordinator: (_ update: @escaping (_ animated: Bool) -> Void) -> Coordinator = {
     AnyBarCoordinator(DefaultBarCoordinator(update: $0))
@@ -102,6 +117,14 @@ public struct BarModel<ViewType: UIView> where ViewType: ContentConfigurableView
 
   private func configure(_ view: ViewType, animated: Bool) {
     view.setContent(content, animated: animated)
+  }
+
+  private func castOrAssert(_ view: UIView) -> ViewType? {
+    guard let typedView = view as? ViewType else {
+      assertionFailure("\(view) is not of the expected type \(ViewType.self)")
+      return nil
+    }
+    return typedView
   }
 
 }
@@ -123,18 +146,12 @@ extension BarModel: InternalBarModeling {
   }
 
   func configureContent(_ view: UIView, animated: Bool) {
-    guard let typedView = view as? ViewType else {
-      assertionFailure("\(view) is not of the expected type \(ViewType.self)")
-      return
-    }
+    guard let typedView = castOrAssert(view) else { return }
     configure(typedView, animated: animated)
   }
 
   func configureBehavior(_ view: UIView) {
-    guard let typedView = view as? ViewType else {
-      assertionFailure("\(view) is not of the expected type \(ViewType.self)")
-      return
-    }
+    guard let typedView = castOrAssert(view) else { return }
     _behaviorSetter?(typedView, content)
   }
 
@@ -149,11 +166,13 @@ extension BarModel: InternalBarModeling {
   }
 
   func willDisplay(_ view: UIView) {
-    guard let typedView = view as? ViewType else {
-      assertionFailure("\(view) is not of the expected type \(ViewType.self)")
-      return
-    }
+    guard let typedView = castOrAssert(view) else { return }
     _willDisplay?(typedView)
+  }
+
+  func didDisplay(_ view: UIView) {
+    guard let typedView = castOrAssert(view) else { return }
+    _didDisplay?(typedView)
   }
 }
 
