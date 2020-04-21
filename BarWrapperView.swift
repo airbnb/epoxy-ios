@@ -146,9 +146,13 @@ final class BarWrapperView: UIView {
           with: self,
           duration: 0.3,
           options: .transitionCrossDissolve,
-          animations: animations)
+          animations: animations,
+          completion: { _ in
+            model.didDisplay(view)
+          })
       } else {
         animations()
+        model.didDisplay(view)
       }
     }
   }

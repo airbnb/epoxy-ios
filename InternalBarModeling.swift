@@ -27,6 +27,9 @@ protocol InternalBarModeling: Diffable {
 
   /// Should inform consumers that this bar model will be displayed.
   func willDisplay(_ view: UIView)
+
+  /// Should inform consumers that this bar model has been displayed.
+  func didDisplay(_ view: UIView)
 }
 
 // MARK: - InternalBarCoordinating
