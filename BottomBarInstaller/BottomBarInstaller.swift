@@ -17,12 +17,12 @@ public final class BottomBarInstaller: NSObject {
   public init(
     viewController: UIViewController,
     avoidsKeyboard: Bool = false,
-    models: [BarModeling] = [])
+    bars: [BarModeling] = [])
   {
     self.viewController = viewController
     keyboardPositionWatcher.enabled = avoidsKeyboard
     super.init()
-    setModels(models, animated: false)
+    setBars(bars, animated: false)
   }
 
   // MARK: Public
@@ -31,18 +31,6 @@ public final class BottomBarInstaller: NSObject {
   ///
   /// Non-`nil` while installed, `nil` otherwise.
   public var container: BottomBarContainer? { installer.container }
-
-  /// Updates the bar to the given bar model.
-  ///
-  /// If the model correponds to the same view as was previously set, the view will be reused and
-  /// updated with the new content, optionally animated.
-  ///
-  /// If the model corresponds to a new view, the bar view will be replaced, optionally animated.
-  ///
-  /// If the model is `nil`, the bar will be removed, if there was one.
-  public func setModel(_ model: BarModeling?, animated: Bool) {
-    installer.setModels([model].compactMap { $0 }, animated: animated)
-  }
 
   /// Updates the bar stack to the given bar models, ordered from top to bottom.
   ///
@@ -53,8 +41,8 @@ public final class BottomBarInstaller: NSObject {
   /// animated.
   ///
   /// If any model is no longer present, its corresponding view will be removed.
-  public func setModels(_ models: [BarModeling], animated: Bool) {
-    installer.setModels(models, animated: animated)
+  public func setBars(_ bars: [BarModeling], animated: Bool) {
+    installer.setBars(bars, animated: animated)
   }
 
   /// Installs the bar stack into the associated view controller.

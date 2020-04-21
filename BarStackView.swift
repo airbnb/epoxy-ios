@@ -60,7 +60,7 @@ public class BarStackView: UIStackView {
   }
 
   /// All bars in this stack, ordered from top to bottom.
-  public var bars: [UIView] {
+  public var barViews: [UIView] {
     wrappers.compactMap { $0.view }
   }
 
