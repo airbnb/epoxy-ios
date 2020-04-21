@@ -49,9 +49,6 @@ public final class BarInstaller<Container: BarContainer> {
   /// Non-nil while installed, nil otherwise.
   public private(set) var container: Container?
 
-  /// The current bar models.
-  public private(set) var models: [BarModeling] = []
-
   /// Updates the bars to the given models, ordered from top to bottom.
   ///
   /// If any model correponds to the same view as was previously set, the view will be reused and
@@ -61,13 +58,14 @@ public final class BarInstaller<Container: BarContainer> {
   /// optionally animated.
   ///
   /// If any model is no longer present, its corresponding view will be removed.
-  public func setModels(_ models: [BarModeling], animated: Bool) {
+  public func setBars(_ bars: [BarModeling], animated: Bool) {
+    self.bars = bars
+
     guard installed, let view = viewController?.viewIfLoaded else {
-      self.models = models
       return
     }
 
-    setModels(models, animated: animated, in: view)
+    setBars(bars, animated: animated, in: view)
   }
 
   /// Installs the bar stack into the associated view controller.
@@ -83,7 +81,7 @@ public final class BarInstaller<Container: BarContainer> {
       return
     }
 
-    setModels(models, animated: false, in: view)
+    setBars(bars, animated: false, in: view)
   }
 
   /// Removes the bar stack from the associated view controller.
@@ -108,6 +106,9 @@ public final class BarInstaller<Container: BarContainer> {
   /// A closure that's called after a coordinator has been created.
   private let didUpdateCoordinator: ((AnyBarCoordinating) -> Void)?
 
+  /// The bar models that will be set on the container once its visible.
+  private var bars: [BarModeling] = []
+
   /// The view controller that will have its `additionalSafeAreaInsets` updated to accommodate for
   /// the bar view.
   private weak var viewController: UIViewController?
@@ -119,8 +120,8 @@ public final class BarInstaller<Container: BarContainer> {
   private var storage = [BarCoordinatorPropertyKey: StoredCoordinatorProperty]()
 
   /// Updates the models to the given collection, installing the container if needed.
-  private func setModels(_ models: [BarModeling], animated: Bool, in view: UIView) {
-    self.models = models
+  private func setBars(_ models: [BarModeling], animated: Bool, in view: UIView) {
+    bars = models
 
     guard let container = container else {
       installContainer(in: view, with: models, animated: animated)
