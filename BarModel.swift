@@ -32,7 +32,7 @@ public struct BarModel<ViewType: UIView> where ViewType: ContentConfigurableView
 
   /// An optional ID for an alternative style type to use for reuse of this view. Use this to
   /// differentiate between different styling configurations.
-  public func alternateStyleID(_ alternateStyleID: String?) -> BarModel<ViewType> {
+  public func alternateStyleID(_ alternateStyleID: AnyHashable?) -> BarModel<ViewType> {
     var copy = self
     copy._alternateStyleID = alternateStyleID
     return copy
@@ -106,7 +106,7 @@ public struct BarModel<ViewType: UIView> where ViewType: ContentConfigurableView
   private var content: ViewType.Content
   private var style: ViewType.Style
   private var _makeView = ViewType.make
-  private var _alternateStyleID: String?
+  private var _alternateStyleID: AnyHashable?
   private var _behaviorSetter: BehaviorSetter?
   private var _willDisplay: WillDisplay?
   private var _didDisplay: DidDisplay?
