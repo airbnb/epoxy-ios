@@ -21,8 +21,11 @@ public final class BottomBarInstaller: NSObject {
   {
     self.viewController = viewController
     keyboardPositionWatcher.enabled = avoidsKeyboard
+    installer = .init(viewController: viewController, willDisplayBar: { bar in
+      (bar as? LegacyBottomBarView)?.prepareForInstallation()
+    })
     super.init()
-    setBars(bars, animated: false)
+    installer.setBars(bars, animated: false)
   }
 
   // MARK: Public
@@ -34,7 +37,7 @@ public final class BottomBarInstaller: NSObject {
 
   /// Updates the bar stack to the given bar models, ordered from top to bottom.
   ///
-  /// If any model correponds to the same view as was previously set, the view will be reused and
+  /// If any model corresponds to the same view as was previously set, the view will be reused and
   /// updated with the new content, optionally animated.
   ///
   /// If any model corresponds to a new view, a new view will be created and inserted, optionally
@@ -63,18 +66,12 @@ public final class BottomBarInstaller: NSObject {
 
   // MARK: Private
 
+  private let keyboardPositionWatcher = KeyboardPositionWatcher()
+  private let installer: BarInstaller<BottomBarContainer>
+
   /// The view controller that will have its `additionalSafeAreaInsets` updated to accommodate for
   /// the bar stack.
   private weak var viewController: UIViewController?
-
-  private let keyboardPositionWatcher = KeyboardPositionWatcher()
-  private var keyboardPosition: CGFloat? = nil
-
-  private lazy var installer = BarInstaller<BottomBarContainer>(
-    viewController: viewController,
-    willDisplayBar: { bar in
-      (bar as? LegacyBottomBarView)?.prepareForInstallation()
-    })
 
   /// The distance that the keyboard overlaps with `viewController.view` from its bottom edge.
   var keyboardOverlap: CGFloat = 0 {
