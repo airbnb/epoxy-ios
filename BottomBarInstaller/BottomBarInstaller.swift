@@ -121,7 +121,7 @@ public protocol LegacyBottomBarView {
   var bottomMarginConstraints: [NSLayoutConstraint] { get }
 }
 
-private extension LegacyBottomBarView {
+extension LegacyBottomBarView {
   func prepareForInstallation() {
     NSLayoutConstraint.deactivate(bottomSafeAreaConstraints)
     NSLayoutConstraint.activate(bottomMarginConstraints)
