@@ -154,34 +154,25 @@ public class BarStackView: UIStackView {
     animated: Bool)
     -> (added: [BarWrapperView], removed: [BarWrapperView])
   {
-    let oldModels = self.models
     let newModels = models.map { $0.barModel }
-    let changeset = newModels.makeChangeset(from: oldModels)
+    let changeset = newModels.makeChangeset(from: self.models)
+    // We always update all models as they could have new behavior setters even with equal content.
+    self.models = newModels
 
     var removed = [BarWrapperView]()
     var added = [BarWrapperView]()
 
-    for (from, to) in changeset.updates {
-      self.models[from] = newModels[to]
-    }
-
     for index in changeset.deletes.reversed() {
-      self.models.remove(at: index)
       let wrapper = wrappers.remove(at: index)
       removed.append(wrapper)
     }
 
     for index in changeset.inserts {
-      self.models.insert(newModels[index], at: index)
-      let wrapper = makeWrapper(newModels[index])
+      let wrapper = makeWrapper(self.models[index])
       wrappers.insert(wrapper, at: index)
       // Add one since we always have the `LayoutContainer` to keep the size sensible.
       insertArrangedSubview(wrapper, at: index + 1)
       added.append(wrapper)
-    }
-
-    for (from, to) in changeset.moves {
-      self.models[to] = oldModels[from]
     }
 
     // We set the model on every wrapper even if they have equal diffable content. This ensures that
