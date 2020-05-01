@@ -16,6 +16,10 @@ protocol NavigationInterface: AnyObject {
 
   /// Sets the current stack of view controllers, optionally animated.
   func setStack(_ stack: [UIViewController], animated: Bool)
+
+  /// Wraps a pushed `UINavigationController` within a container view controller so that it can be
+  /// pushed without an exception being thrown by UIKit.
+  func wrapNavigation(_ navigationController: UINavigationController) -> UIViewController
 }
 
 // MARK: - NavigationQueue
@@ -36,7 +40,7 @@ final class NavigationQueue {
       return
     }
 
-    let next = nextFrom(models, previous: current)
+    let next = nextFrom(models, previous: current, interface: interface)
     applyNext(next, from: current, animated: animated, to: interface)
   }
 
@@ -87,14 +91,15 @@ final class NavigationQueue {
   /// the provided previous stack.
   private func nextFrom(
     _ models: [NavigationModel],
-    previous: NavigationStack?)
+    previous: NavigationStack?,
+    interface: NavigationInterface)
     -> (stack: NavigationStack, changes: NavigationStack.AppliedChanges)
   {
     guard var next = previous else {
-      let stack = NavigationStack(models: models)
+      let stack = NavigationStack(models: models, wrapNavigation: interface.wrapNavigation)
       return (stack: stack, changes: .init(removals: [], additions: stack.added))
     }
-    let changes = next.applyModels(models)
+    let changes = next.applyModels(models, wrapNavigation: interface.wrapNavigation)
     return (stack: next, changes: changes)
   }
 
@@ -105,7 +110,7 @@ final class NavigationQueue {
     animated: Bool,
     to interface: NavigationInterface)
   {
-    interface.setStack(next.stack.addedViewControllers, animated: animated)
+    interface.setStack(next.stack.viewControllerStack, animated: animated)
 
     // We want to make sure not to capture any removed view controllers.
     let notify = { [changes = next.changes, next = next.stack.addedTop, prev = previous?.addedTop?.model] in
@@ -113,7 +118,7 @@ final class NavigationQueue {
         change.remove()
         change.handleDidRemove()
       }
-      changes.additions.forEach { $0.model.handleDidAdd($0.viewController) }
+      changes.additions.forEach { $0.model.handleDidAdd($0.viewController.made) }
       NavigationStack.Added.handleTopChange(from: prev, to: next)
     }
 
@@ -206,9 +211,9 @@ private struct NavigationStack {
 
   // MARK: Lifecycle
 
-  init(models: [NavigationModel]) {
+  init(models: [NavigationModel], wrapNavigation: (UINavigationController) -> UIViewController) {
     self.models = models
-    viewControllers = models.map { $0.makeViewController() }
+    viewControllers = models.map { ViewController(model: $0, wrapNavigation: wrapNavigation) }
   }
 
   // MARK: Internal
@@ -217,34 +222,12 @@ private struct NavigationStack {
   private(set) var models: [NavigationModel]
 
   /// The view controllers within this navigation stack, with indexes matching `models`.
-  private(set) var viewControllers: [UIViewController?]
+  private(set) var viewControllers: [ViewController?]
 
-  /// The view controllers that are added to this stack. Indexes do not match `models`, as some
-  /// models may not have been able to create a view controller.
-  var addedViewControllers: [UIViewController] {
-    viewControllers.compactMap { $0 }
-  }
-
-  /// A model that has been added to the navigation stack and its corresponding view controller.
-  struct Added {
-    var model: NavigationModel
-    var viewController: UIViewController
-
-    static func handleTopChange(from previous: NavigationModel?, to next: Added?) {
-      switch (previous: previous, next: next) {
-      case (.some(let previous), .some(let next)):
-        if previous.dataID != next.model.dataID {
-          previous.handleDidHide()
-          next.model.handleDidShow(next.viewController)
-        }
-      case (nil, .some(let next)):
-        next.model.handleDidShow(next.viewController)
-      case (.some(let previous), nil):
-        previous.handleDidHide()
-      case (nil, nil):
-        break
-      }
-    }
+  /// The view controllers that are pushed in the corresponding navigation controller. Indexes do
+  /// not match `models`, as some models may not have been able to create a view controller.
+  var viewControllerStack: [UIViewController] {
+    viewControllers.compactMap { $0?.stackable }
   }
 
   /// Returns the added models and their corresponding view controllers in this stack.
@@ -270,7 +253,11 @@ private struct NavigationStack {
 
   /// Applies the given models to this navigation stack, returning the navigation models that were
   /// removed and added from the stack.
-  mutating func applyModels(_ newModels: [NavigationModel]) -> AppliedChanges {
+  mutating func applyModels(
+    _ newModels: [NavigationModel],
+    wrapNavigation: (UINavigationController) -> UIViewController)
+    -> AppliedChanges
+  {
     var newViewControllers = viewControllers
     let changeset = newModels.makeChangeset(from: models)
     var changes = AppliedChanges(removals: [], additions: [])
@@ -278,7 +265,7 @@ private struct NavigationStack {
 
     for (from, to) in changeset.updates {
       let toModel = newModels[to]
-      let toViewController = toModel.makeViewController()
+      let toViewController = ViewController(model: toModel, wrapNavigation: wrapNavigation)
       newViewControllers[from] = toViewController
 
       switch (from: viewControllers[from], to: toViewController) {
@@ -299,7 +286,7 @@ private struct NavigationStack {
 
     for index in changeset.inserts {
       let model = newModels[index]
-      let viewController = model.makeViewController()
+      let viewController = ViewController(model: model, wrapNavigation: wrapNavigation)
       newViewControllers.insert(viewController, at: index)
       if let viewController = viewController {
         changes.additions.append(.init(model: model, viewController: viewController))
@@ -321,8 +308,7 @@ private struct NavigationStack {
     {
       let index = viewController.offset
       let model = newModels[index]
-      let viewController = model.makeViewController()
-      if let viewController = viewController {
+      if let viewController = ViewController(model: model, wrapNavigation: wrapNavigation) {
         newViewControllers[index] = viewController
         changes.additions.append(.init(model: model, viewController: viewController))
       }
@@ -333,12 +319,14 @@ private struct NavigationStack {
     return changes
   }
 
+  // MARK: Private
+
   /// Updates the internal state to handle the provided view controllers being popped from the
   /// stack, returning the models that were removed.
   mutating func applyPopped(_ popped: [UIViewController]) -> [NavigationModel] {
     var removals = [NavigationModel]()
     for element in popped {
-      guard let index = viewControllers.firstIndex(where: { $0 === element }) else {
+      guard let index = viewControllers.firstIndex(where: { $0?.stackable === element }) else {
         assertionFailure("\(element) not in \(viewControllers), this is programmer error.")
         continue
       }
@@ -346,5 +334,74 @@ private struct NavigationStack {
       removals.append(models.remove(at: index))
     }
     return removals
+  }
+}
+
+// MARK: - NavigationStack.Added
+
+extension NavigationStack {
+  /// A model that has been added to the navigation stack and its corresponding view controller.
+  struct Added {
+    var model: NavigationModel
+    var viewController: ViewController
+
+    static func handleTopChange(from previous: NavigationModel?, to next: Added?) {
+      switch (previous: previous, next: next) {
+      case (.some(let previous), .some(let next)):
+        if previous.dataID != next.model.dataID {
+          previous.handleDidHide()
+          next.model.handleDidShow(next.viewController.made)
+        }
+      case (nil, .some(let next)):
+        next.model.handleDidShow(next.viewController.made)
+      case (.some(let previous), nil):
+        previous.handleDidHide()
+      case (nil, nil):
+        break
+      }
+    }
+  }
+}
+
+// MARK: - NavigationStack.ViewController
+
+extension NavigationStack {
+  /// A view controller that can be pushed within a `NavigationStack`.
+  enum ViewController {
+    /// A normal view controller that can be pushed within a navigation stack without issue.
+    case normal(UIViewController)
+    /// A nested navigation controller that must be wrapped within a container view controller to be
+    /// pushed within a navigation stack to prevent UIKit from throwing an exception.
+    case wrapped(UINavigationController, wrapper: UIViewController)
+
+    // MARK: Lifecycle
+
+    init?(model: NavigationModel, wrapNavigation: (UINavigationController) -> UIViewController) {
+      guard let viewController = model.makeViewController() else { return nil }
+
+      if let viewController = viewController as? UINavigationController {
+        self = .wrapped(viewController, wrapper: wrapNavigation(viewController))
+      } else {
+        self = .normal(viewController)
+      }
+    }
+
+    // MARK: Internal
+
+    /// The view controller that was made by the navigation model
+    var made: UIViewController {
+      switch self {
+      case .normal(let viewController): return viewController
+      case .wrapped(let wrapped, wrapper: _): return wrapped
+      }
+    }
+
+    /// The view controller that can be pushed into the nav stack.
+    var stackable: UIViewController {
+      switch self {
+      case .normal(let viewController): return viewController
+      case .wrapped(_, wrapper: let wrapper): return wrapper
+      }
+    }
   }
 }

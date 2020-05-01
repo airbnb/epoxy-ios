@@ -16,7 +16,12 @@ open class DeclarativeNavigationController: UINavigationController {
 
   // MARK: Lifecycle
 
-  public init() {
+  /// - Parameter wrapNavigation: A closure that's called to wrap the given pushed navigation
+  ///   controller into a wrapper container view controller to prevent the UIKit exception
+  ///   thrown when a navigation controller is pushed within another navigation controller. Nesting
+  ///   navigation controllers enables nesting sub-flows with a overarching flow.
+  public init(wrapNavigation: @escaping (_ nested: UINavigationController) -> UIViewController) {
+    self.wrapNavigation = wrapNavigation
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -24,7 +29,7 @@ open class DeclarativeNavigationController: UINavigationController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  // MARK: UIViewController overrides
+  // MARK: UINavigationController
 
   @available (*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
   public final override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
@@ -69,6 +74,7 @@ open class DeclarativeNavigationController: UINavigationController {
   // MARK: Private
 
   private let queue = NavigationQueue()
+  private let wrapNavigation: (UINavigationController) -> UIViewController
 
 }
 
@@ -78,5 +84,9 @@ extension DeclarativeNavigationController: NavigationInterface {
   func setStack(_ stack: [UIViewController], animated: Bool) {
     // We don't call `self` since we've made it unavailable to consumers.
     super.setViewControllers(stack, animated: animated)
+  }
+
+  func wrapNavigation(_ navigationController: UINavigationController) -> UIViewController {
+    wrapNavigation(navigationController)
   }
 }
