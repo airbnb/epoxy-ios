@@ -7,9 +7,15 @@ import UIKit
 
 // MARK: - BarModel
 
-/// A model that provides the content of a bar (e.g. a toolbar).
+/// A model that provides the content of a bar (e.g. a toolbar or a nav bar).
 ///
 /// Conceptually similar to Epoxy models.
+///
+/// - SeeAlso: `BottomBarInstaller`
+/// - SeeAlso: `TopBarInstaller`
+///
+/// # Additional resources
+/// - [Bar Installers Docs](***REMOVED***/projects/coreui/docs/navigation/bar_installers)
 public struct BarModel<ViewType: UIView> where ViewType: ContentConfigurableView,
   ViewType: StyledView,
   ViewType.Content: Equatable
