@@ -62,8 +62,8 @@ open class DeclarativeNavigationController: UINavigationController {
   /// subsequent presentation following the completion of the transition.
   ///
   /// Conceptually similar to `setSections(_:animated:)` for Epoxy models.
-  public func setStack(_ stack: [NavigationModel], animated: Bool) {
-    queue.enqueue(stack, animated: animated, from: self)
+  public func setStack(_ stack: [NavigationModel?], animated: Bool) {
+    queue.enqueue(stack.compactMap { $0 }, animated: animated, from: self)
   }
 
   // MARK: Private

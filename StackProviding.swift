@@ -10,5 +10,5 @@
 public protocol StackProviding {
   /// The stack of navigation models that represent to the view controllers that are present in the
   /// navigation controller's stack.
-  var stack: [NavigationModel] { get }
+  var stack: [NavigationModel?] { get }
 }
