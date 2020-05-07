@@ -71,14 +71,18 @@ public class BarStackView: UIStackView {
 
     updateWrapperZOrder()
 
-    // Hide each of the added views so that we can animate them in.
-    added.forEach { $0.isHidden = true }
+    // Only hide/shown views if animated as hiding/showing `UIStackView` subviews can sometimes
+    // result in animations even if performed outside of an animation transaction.
+    if animated {
+      // Hide each of the added views so that we can animate them in.
+      added.forEach { $0.isHidden = true }
 
-    // Layout the new subviews prior to animating/transforming so their first layout pass isn't
-    // animated and so they have valid frames that we can use to transform.
-    layoutIfNeeded()
+      // Layout the new subviews prior to animating/transforming so their first layout pass isn't
+      // animated and so they have valid frames that we can use to transform.
+      layoutIfNeeded()
 
-    transformAddedWrappers()
+      transformAddedWrappers()
+    }
 
     let animations = {
       removed.forEach { $0.isHidden = true }
@@ -108,7 +112,8 @@ public class BarStackView: UIStackView {
         animations: animations,
         completion: { _ in completion() })
     } else {
-      animations()
+      // Don't perform any animations (e.g. transforming, hiding/showing) if non-animated since we
+      // didn't perform the animation setup.
       completion()
     }
   }
