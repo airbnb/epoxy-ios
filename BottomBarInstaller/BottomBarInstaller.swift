@@ -43,6 +43,15 @@ public final class BottomBarInstaller: NSObject {
   /// Non-`nil` while installed, `nil` otherwise.
   public var container: BottomBarContainer? { installer.container }
 
+  /// Whether this installer's bar stack should be offset to avoid the keyboard as it is shown and
+  /// hidden.
+  ///
+  /// Defaults to `false`.
+  public var avoidsKeyboard: Bool {
+    get { keyboardPositionWatcher.enabled }
+    set { keyboardPositionWatcher.enabled = newValue }
+  }
+
   /// Updates the bar stack to the given bar models, ordered from top to bottom.
   ///
   /// If any model corresponds to the same view as was previously set, the view will be reused and
