@@ -3,28 +3,6 @@
 
 import UIKit
 
-// MARK: - BarContainer
-
-/// A container of bar views that insets its view controller's safe area insets.
-public protocol BarContainer: BarStackView {
-  /// Creates this container with a closure that's invoked when a bar is about to be displayed.
-  init(
-    willDisplayBar: ((_ bar: UIView) -> Void)?,
-    didUpdateCoordinator: ((AnyBarCoordinating) -> Void)?)
-
-  var coordinators: [AnyBarCoordinating] { get }
-
-  /// The view controller that will have its `additionalSafeAreaInsets` updated to accommodate for
-  /// the bar view.
-  var viewController: UIViewController? { get set }
-
-  /// Adds this container to the given superview.
-  func add(to superview: UIView)
-
-  /// Removes this container from its current superview.
-  func remove()
-}
-
 // MARK: - BarInstaller
 
 /// An installer that's capable of installing a stack of fixed bars within a view controller.

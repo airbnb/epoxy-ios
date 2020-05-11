@@ -38,7 +38,9 @@ public final class BottomBarContainer: BarStackView, FixedBarView, BarContainer 
 
     // If offset from the bottom, use the original layout margins rather than the safe area margins,
     // as the safe area no longer overlaps the bar.
-    layoutMargins.bottom = (bottomOffset > 0) ? 0 : viewController?.originalSafeAreaInsetBottom ?? 0
+    let margin = (bottomOffset > 0) ? 0 : viewController?.originalSafeAreaInsetBottom ?? 0
+    updateScrollViewInset(allScrollViews, at: .bottom, margin: margin)
+    layoutMargins.bottom = margin
   }
 
   public override func didMoveToSuperview() {
@@ -55,6 +57,13 @@ public final class BottomBarContainer: BarStackView, FixedBarView, BarContainer 
   }
 
   // MARK: Public
+
+  public var insetBehavior: BarContainerInsetBehavior = .barHeightSafeArea {
+    didSet {
+      guard insetBehavior != oldValue else { return }
+      setNeedsLayout()
+    }
+  }
 
   public weak var viewController: UIViewController? {
     didSet {
@@ -136,6 +145,7 @@ public final class BottomBarContainer: BarStackView, FixedBarView, BarContainer 
 
   private var additionalSafeAreaInsetsBottom: CGFloat {
     guard let viewController = viewController else { return 0 }
+    guard case .barHeightSafeArea = insetBehavior else { return 0 }
 
     // Using the frame.minY here causes us to compute an temporarily invalid safe area inset bottom
     // during animated transitions which causes jumps in the scroll offset as it settles after the
