@@ -8,7 +8,7 @@ import UIKit
 ///   area insets of its view controller.
 /// - Updates the additional bottom safe area insets of its weak view controller reference to be
 ///   inset by the height of the bar stack.
-public final class BottomBarContainer: BarStackView, FixedBarView, BarContainer {
+public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarContainer {
 
   // MARK: Lifecycle
 
@@ -39,7 +39,7 @@ public final class BottomBarContainer: BarStackView, FixedBarView, BarContainer 
     // If offset from the bottom, use the original layout margins rather than the safe area margins,
     // as the safe area no longer overlaps the bar.
     let margin = (bottomOffset > 0) ? 0 : viewController?.originalSafeAreaInsetBottom ?? 0
-    updateScrollViewInset(allScrollViews, at: .bottom, margin: margin)
+    updateScrollViewInset(allScrollViews, margin: margin)
     layoutMargins.bottom = margin
   }
 
@@ -59,10 +59,7 @@ public final class BottomBarContainer: BarStackView, FixedBarView, BarContainer 
   // MARK: Public
 
   public var insetBehavior: BarContainerInsetBehavior = .barHeightSafeArea {
-    didSet {
-      guard insetBehavior != oldValue else { return }
-      setNeedsLayout()
-    }
+    didSet { updateInsetBehavior(from: oldValue) }
   }
 
   public weak var viewController: UIViewController? {
@@ -114,6 +111,11 @@ public final class BottomBarContainer: BarStackView, FixedBarView, BarContainer 
     removeFromSuperview()
     bottomConstraint = nil
   }
+
+  // MARK: Internal
+
+  let position = BarContainerPosition.bottom
+  var needsScrollViewInsetReset = false
 
   // MARK: Private
 

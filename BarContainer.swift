@@ -50,6 +50,17 @@ public enum BarContainerInsetBehavior: Equatable {
   case none
 }
 
+// MARK: InternalBarContainer
+
+/// The internal behavior of a `BarContainer`.
+protocol InternalBarContainer: BarContainer {
+  /// The position of this bar container within its view controller's view.
+  var position: BarContainerPosition { get }
+
+  /// Whether the scroll view insets should be removed on the next content inset update.
+  var needsScrollViewInsetReset: Bool { get set }
+}
+
 // MARK: - BarContainerPosition
 
 /// The positions that a bar container can be placed at.
@@ -73,26 +84,42 @@ enum BarContainerPosition {
   }
 }
 
-// MARK: - BarContainer
+// MARK: - InternalBarContainer
 
-extension BarContainer {
+extension InternalBarContainer {
   /// All immediate scroll view subviews of this bar container's view controller.
   var allScrollViews: [UIScrollView] {
     guard let viewController = viewController else { return [] }
     return viewController.view.subviews.compactMap { $0 as? UIScrollView }
   }
 
+  /// Handles the inset behavior being updated from a previous value.
+  ///
+  /// Updates `shouldResetScrollInsets` based on the old inset behavior.
+  func updateInsetBehavior(from oldValue: BarContainerInsetBehavior) {
+    guard insetBehavior != oldValue else { return }
+
+    needsScrollViewInsetReset = (oldValue == .barHeightContentInset)
+
+    // Trigger the insets to be applied in `layoutSubviews`.
+    setNeedsLayout()
+  }
+
   // Adjusts the content inset of the given scroll views based on the `insetBehavior`.
-  func updateScrollViewInset(
-    _ scrollViews: [UIScrollView],
-    at position: BarContainerPosition,
-    margin: CGFloat)
-  {
-    guard case .barHeightContentInset = insetBehavior else { return }
+  func updateScrollViewInset(_ scrollViews: [UIScrollView], margin: CGFloat) {
+    guard insetBehavior == .barHeightContentInset || needsScrollViewInsetReset else { return }
 
     for scrollView in scrollViews {
       // Only inset scroll views at the same edge at this bar container.
       guard position.edge(frame) == position.edge(scrollView.frame) else { continue }
+
+      if needsScrollViewInsetReset {
+        // Reset insets to 0 if needed to allow them to be customized again without being clobbered.
+        scrollView.contentInset[keyPath: position.inset] = 0
+        scrollView.horizontalScrollIndicatorInsets[keyPath: position.inset] = 0
+        scrollView.verticalScrollIndicatorInsets[keyPath: position.inset] = 0
+        continue
+      }
 
       /// The adjustment that's already applied to the content inset via the safe area.
       let adjustment = scrollView.adjustedContentInset[keyPath: position.inset]
@@ -110,6 +137,11 @@ extension BarContainer {
       scrollView.contentInset[keyPath: position.inset] = contentInset
       scrollView.horizontalScrollIndicatorInsets[keyPath: position.inset] = scrollInset
       scrollView.verticalScrollIndicatorInsets[keyPath: position.inset] = scrollInset
+    }
+
+    // Now that we've reset the insets, make sure we don't do it again next time.
+    if needsScrollViewInsetReset {
+      needsScrollViewInsetReset = false
     }
   }
 }
