@@ -71,15 +71,25 @@ public class BarStackView: UIStackView {
 
     updateWrapperZOrder()
 
+    // No animations are required if both added and removed are empty. Animations between existing
+    // bar's wapper views's content is handled by `BarWrapperView.setModel` in `updateModels(…)`.
+    if added.isEmpty, removed.isEmpty {
+      return
+    }
+
     // Only hide/shown views if animated as hiding/showing `UIStackView` subviews can sometimes
     // result in animations even if performed outside of an animation transaction.
     if animated {
       // Hide each of the added views so that we can animate them in.
       added.forEach { $0.isHidden = true }
 
-      // Layout the new subviews prior to animating/transforming so their first layout pass isn't
-      // animated and so they have valid frames that we can use to transform.
-      layoutIfNeeded()
+      // Layout the new bar subviews prior to animating/transforming so their first layout pass
+      // isn't animated and so they have valid frames that we can use to transform.
+      //
+      // Furthermore, we perform this layout on our superview since a (non-`layoutIfNeeded`) layout
+      // in this subview can trigger the superview to layout if it has a dirty layout (via
+      // `UIView.layoutBelowIfNeeded`), and we don't want that layout to be animated either.
+      superview?.layoutIfNeeded()
 
       transformAddedWrappers()
     }
