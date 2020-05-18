@@ -59,7 +59,7 @@ public struct NavigationModel {
   ///
   /// - Parameters:
   ///   - dataID: The identifier that distinguishes this element from others in the stack.
-  ///   - makeViewController: A closure that's called with to construct the `UIViewController` to be
+  ///   - makeViewController: A closure that's called to construct the `UIViewController` to be
   ///     added to the navigation stack.
   ///   - remove: A closure that is called to update the state backing this navigation stack element
   ///     when its view controller is removed from the navigation stack.
