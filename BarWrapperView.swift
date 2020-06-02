@@ -32,7 +32,8 @@ final class BarWrapperView: UIView {
     shouldGroupAccessibilityChildren = true
   }
 
-  public required init(coder aDecoder: NSCoder) {
+  @available(*, unavailable)
+  required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 

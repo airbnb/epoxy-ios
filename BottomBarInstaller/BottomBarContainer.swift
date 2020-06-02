@@ -25,10 +25,6 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
     constrainSubviews()
   }
 
-  public required init(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
   // MARK: UIView
 
   public override func layoutSubviews() {
