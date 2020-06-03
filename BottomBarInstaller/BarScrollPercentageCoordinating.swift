@@ -9,7 +9,7 @@ import UIKit
 /// A bar coordinator that can receive content offset percentage updates from a scroll view.
 public protocol BarScrollPercentageCoordinating: AnyObject {
   /// The fractional percentage that the scroll view underneath the bar(s) has scrolled.
-  var scrollPercentage: CGFloat { get set }
+  var scrollPercentage: CGPoint { get set }
 }
 
 // MARK: - BarScrollPercentageConfigurable
@@ -17,7 +17,7 @@ public protocol BarScrollPercentageCoordinating: AnyObject {
 /// The interface that all bar views or installers with content offset percentages expose.
 public protocol BarScrollPercentageConfigurable: AnyObject {
   /// The fractional percentage that the scroll view underneath the bar(s) has scrolled.
-  var scrollPercentage: CGFloat { get set }
+  var scrollPercentage: CGPoint { get set }
 }
 
 // MARK: - BottomBarInstaller
@@ -25,7 +25,7 @@ public protocol BarScrollPercentageConfigurable: AnyObject {
 // MARK: BarScrollPercentageConfigurable
 
 extension BottomBarInstaller: BarScrollPercentageConfigurable {
-  public var scrollPercentage: CGFloat {
+  public var scrollPercentage: CGPoint {
     get { self[.scrollPercentage] }
     set { self[.scrollPercentage] = newValue }
   }
@@ -35,8 +35,12 @@ extension BottomBarInstaller: BarScrollPercentageConfigurable {
 
 extension BottomBarInstaller: UIScrollViewDelegate {
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-    let contentOffset = scrollView.contentOffset.y + scrollView.adjustedContentInset.top
-    scrollPercentage = contentOffset / scrollView.contentSize.height
+    let contentOffset = CGPoint(
+      x: scrollView.contentOffset.x + scrollView.adjustedContentInset.left,
+      y: scrollView.contentOffset.y + scrollView.adjustedContentInset.top)
+    scrollPercentage = CGPoint(
+      x: contentOffset.x / scrollView.contentSize.width,
+      y: contentOffset.y / scrollView.contentSize.height)
   }
 }
 
@@ -66,7 +70,7 @@ public class ScrollPercentageBarCoordinator<ViewType>: BarCoordinating,
     }
   }
 
-  public var scrollPercentage: CGFloat = 0 {
+  public var scrollPercentage: CGPoint = .zero {
     didSet { updateScrollPercentage() }
   }
 
@@ -86,7 +90,7 @@ public class ScrollPercentageBarCoordinator<ViewType>: BarCoordinating,
 private extension BarCoordinatorProperty {
   /// A property storing the fractional percentage that the scroll view underneath the bar(s) has
   /// scrolled.
-  static var scrollPercentage: BarCoordinatorProperty<CGFloat> {
-    .init(keyPath: \BarScrollPercentageCoordinating.scrollPercentage, default: 0)
+  static var scrollPercentage: BarCoordinatorProperty<CGPoint> {
+    .init(keyPath: \BarScrollPercentageCoordinating.scrollPercentage, default: .zero)
   }
 }
