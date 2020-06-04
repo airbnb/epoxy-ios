@@ -45,6 +45,17 @@ public struct BarCoordinatorProperty<Property> {
 /// A type that can propagate properties to its coordinators.
 public protocol BarCoordinatorPropertyConfigurable {
   subscript<Property>(property: BarCoordinatorProperty<Property>) -> Property { get set }
+
+  /// Registers an observer to monitor changes to a bar coordinator property.
+  ///
+  /// - Parameters:
+  ///   - property: The bar coordinator property to monitor.
+  ///   - observer: A function that's invoked with the current value and whenever the value changes.
+  /// - Returns: A token which must be retained to keep the observation active.
+  func observe<Property>(
+    _ property: BarCoordinatorProperty<Property>,
+    observer: @escaping (Property) -> Void)
+    -> AnyObject
 }
 
 // MARK: - BarCoordinatorPropertyKey
