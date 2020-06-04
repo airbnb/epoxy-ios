@@ -124,6 +124,14 @@ extension BottomBarInstaller: BarCoordinatorPropertyConfigurable {
     get { installer[property] }
     set { installer[property] = newValue }
   }
+
+  public func observe<Property>(
+    _ property: BarCoordinatorProperty<Property>,
+    observer: @escaping (Property) -> Void)
+    -> AnyObject
+  {
+    installer.observe(property, observer: observer)
+  }
 }
 
 // MARK: - LegacyBottomBarView

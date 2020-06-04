@@ -87,6 +87,9 @@ public final class BarInstaller<Container: BarContainer> {
   /// The bar models that will be set on the container once its visible.
   private var bars: [BarModeling] = []
 
+  /// Closures that are called whenever the bar coordinator property changes.
+  private var observers = [BarCoordinatorPropertyKey: [UUID: (Any) -> Void]]()
+
   /// The view controller that will have its `additionalSafeAreaInsets` updated to accommodate for
   /// the bar view.
   private weak var viewController: UIViewController?
@@ -145,6 +148,32 @@ extension BarInstaller: BarCoordinatorPropertyConfigurable {
     set {
       storage[property.key] = .init(value: newValue, updateCoordinator: property.update)
       container?.coordinators.forEach { property.update($0, newValue) }
+      observers[property.key]?.values.forEach { observer in observer(newValue) }
     }
   }
+
+  public func observe<Property>(
+    _ property: BarCoordinatorProperty<Property>,
+    observer: @escaping (Property) -> Void)
+    -> AnyObject
+  {
+    let uuid = UUID()
+    observers[property.key, default: [:]][uuid] = { observer($0 as! Property) }
+    observer(storage[property.key]?.value as? Property ?? property.default())
+    return Token { [weak self] in
+      self?.observers[property.key]?[uuid] = nil
+    }
+  }
+}
+
+// MARK: - Token
+
+private final class Token {
+  init(dispose: @escaping () -> Void) {
+    self.dispose = dispose
+  }
+  deinit {
+    dispose()
+  }
+  private let dispose: () -> Void
 }
