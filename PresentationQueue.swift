@@ -107,7 +107,9 @@ final class PresentationQueue {
     let dismissible = presentable.present(.init(
       presenting: presenter,
       animated: animated,
-      hooks: hooksForDisplay(model, presentable: presentable, animated: animated, from: presenter)))
+      hooks: .init(didPresent: model.handleDidPresent, didDismiss: { [weak self] in
+        self?.handleDidDismiss(model)
+      })))
 
     // If for some reason the presentation failed (e.g. not in a window), make sure not to errantly
     // set current to a value.
@@ -119,31 +121,33 @@ final class PresentationQueue {
     }
   }
 
-  private func hooksForDisplay(
-    _ model: PresentationModel,
-    presentable: PresentationModel.Presentable,
-    animated: Bool,
-    from presenter: ModalTransitioning)
-    -> ModalTransitions.Hooks
-  {
-    .init(
-      didPresent: model.handleDidPresent,
-      didDismiss: { [weak self] in
-        // Only update current to dismissed and update the state if it is still at current and
-        // presented. This only occurs when a dismissal occurs outside of an `enqueue(...)`
-        guard
-          let self = self,
-          let current = self.current,
-          current.model.dataID == model.dataID,
-          current.model.isValueEqual(to: model),
-          case .presented = current.state else
-        {
-          return
-        }
-        self.current?.state = .dismissed
-        model.dismiss()
-        model.handleDidDismiss()
-      })
+  private func handleDidDismiss(_ model: PresentationModel) {
+    // Only update current to dismissed and update the state if it is still at current and
+    // presented. This only occurs when a dismissal occurs outside of an `enqueue(...)`
+    guard
+      let current = current,
+      current.model.dataID == model.dataID,
+      current.model.isValueEqual(to: model),
+      case .presented = current.state else
+    {
+      return
+    }
+
+    self.current?.state = .dismissed
+
+    // If the a next model is identical to the dismissed model, clear it out since it was just
+    // dismissed and we don't want to present it again when we apply next.
+    switch next {
+    case .pending(let nextModel?):
+      if current.model.dataID == nextModel.dataID, current.model.isValueEqual(to: nextModel) {
+        next = .none
+      }
+    case .none, .pending(nil):
+      break
+    }
+
+    model.dismiss()
+    model.handleDidDismiss()
   }
 
   /// Whether the given presenter is actively transitioning.
