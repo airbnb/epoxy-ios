@@ -59,7 +59,7 @@ final class NavigationQueue {
 
     guard let coordinator = interface.transitionCoordinator else {
       isTransitioning = true
-      self.current = applyPopped(popped, from: current)
+      (self.current, next) = applyPopped(popped, from: current, next: next)
       stopTransition(interface: interface, animated: animated)
       return
     }
@@ -70,7 +70,7 @@ final class NavigationQueue {
       completion: { [weak self, weak interface] context in
         guard let self = self, let interface = interface else { return }
         if !context.isCancelled {
-          self.current = self.applyPopped(popped, from: current)
+          (self.current, self.next) = self.applyPopped(popped, from: current, next: self.next)
         }
         self.stopTransition(interface: interface, animated: animated)
       })
@@ -186,20 +186,29 @@ final class NavigationQueue {
   /// the given view controllers being popped.
   private func applyPopped(
     _ popped: [UIViewController],
-    from current: NavigationStack)
-    -> NavigationStack
+    from current: NavigationStack,
+    next: [NavigationModel]?)
+    -> (current: NavigationStack, next: [NavigationModel]?)
   {
-    var next = current
-    let removals = next.applyPopped(popped)
+    var updatedCurrent = current
+    let removals = updatedCurrent.applyPopped(popped)
 
     removals.forEach { removed in
       removed.remove()
       removed.handleDidRemove()
     }
 
-    NavigationStack.Added.handleTopChange(from: current.addedTop?.model, to: next.addedTop)
+    NavigationStack.Added.handleTopChange(from: current.addedTop?.model, to: updatedCurrent.addedTop)
 
-    return next
+    // If there's a next model that's identical to the removed model, filter it out since it was just
+    // removed and we don't want to add it back when we apply next.
+    let updatedNext = next?.filter { model in
+      !removals.contains { removal in
+        removal.dataID == model.dataID && removal.isDiffableItemEqual(to: removal)
+      }
+    }
+
+    return (current: updatedCurrent, next: updatedNext)
   }
 
 }
