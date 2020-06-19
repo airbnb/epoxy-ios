@@ -87,6 +87,23 @@ enum BarContainerPosition {
 // MARK: - InternalBarContainer
 
 extension InternalBarContainer {
+
+  // MARK: Internal
+
+  /// The constraints necessary to ensure that the bar stacks in this view shouldn't overflow into
+  /// the opposite stack or extend past the screen edge.
+  func overflowConstraints(in view: UIView) -> [NSLayoutConstraint] {
+    var constraints = [screenEdgeConstraint(in: view)]
+
+    // It's the responsibility of the last added bar to also constrain its opposite bar to itself.
+    if let other = otherBarContainer(in: view) {
+      constraints.append(other.constraintToOpposite(self))
+      constraints.append(constraintToOpposite(other))
+    }
+
+    return constraints
+  }
+
   /// All immediate scroll view subviews of this bar container's view controller.
   var allScrollViews: [UIScrollView] {
     guard let viewController = viewController else { return [] }
@@ -148,5 +165,51 @@ extension InternalBarContainer {
     if needsScrollViewInsetReset {
       needsScrollViewInsetReset = false
     }
+  }
+
+  /// Asserts that the view controller this bar container was added to is in a valid state.
+  func verifyViewController() {
+    guard let viewController = viewController else { return }
+
+    assert(
+      viewController.isViewLoaded,
+      "The view controller's view should be loaded when it has a bar container added")
+
+    // Bar pinning won't work within a scroll view, e.g. with `UITableViewController`.
+    assert(
+      !(viewController.view is UIScrollView),
+      "The view controller's view must not be a scroll view. Nest any scroll views in a container.")
+  }
+
+  // MARK: Private
+
+  private func screenEdgeConstraint(in view: UIView) -> NSLayoutConstraint {
+    switch position {
+    case .top:
+      return bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor)
+    case .bottom:
+      return topAnchor.constraint(greaterThanOrEqualTo: view.topAnchor)
+    }
+  }
+
+  private func constraintToOpposite(_ opposite: BarContainer) -> NSLayoutConstraint {
+    switch position {
+    case .top:
+      return bottomAnchor.constraint(lessThanOrEqualTo: opposite.topAnchor)
+    case .bottom:
+      return topAnchor.constraint(greaterThanOrEqualTo: opposite.bottomAnchor)
+    }
+  }
+
+  private func otherBarContainer(in view: UIView) -> InternalBarContainer? {
+    let others = view.subviews.compactMap { subview in
+      subview == self ? nil : subview as? InternalBarContainer
+    }
+
+    assert(
+      others.count < 2,
+      "Found two or more bar containers in \(viewController as Any): \(others + [self]). This is programmer error.")
+
+    return others.first
   }
 }
