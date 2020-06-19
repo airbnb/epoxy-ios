@@ -202,12 +202,22 @@ final class BarWrapperView: UIView {
       case .bottomToTop:
         view.constrainToSuperview(anchors: [.leading, .top, .trailing])
         let constraint = view.bottomAnchor.constraint(equalTo: bottomAnchor)
-        constraint.priority = .defaultLow
+        // Ensure that when compressed the bar slides underneath the previous bar or the edge of the
+        // screen rather than compressing its content which can result in weird layouts.
+        //
+        // We add one to `defaultLow` to allow for content to use this as its compression resistance
+        // priority to be compressed.
+        constraint.priority = UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue + 1)
         constraint.isActive = true
       case .topToBottom:
         view.constrainToSuperview(anchors: [.leading, .bottom, .trailing])
         let constraint = view.topAnchor.constraint(equalTo: topAnchor)
-        constraint.priority = .defaultLow
+        // Ensure that when compressed the bar slides underneath the previous bar or the edge of the
+        // screen rather than compressing its content which can result in weird layouts.
+        //
+        // We add one to `defaultLow` to allow for content to use this as its compression resistance
+        // priority to be compressed.
+        constraint.priority = UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue + 1)
         constraint.isActive = true
       }
     }

@@ -59,21 +59,7 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
   }
 
   public weak var viewController: UIViewController? {
-    didSet {
-      guard let viewController = viewController else { return }
-
-      assert(
-        viewController.isViewLoaded,
-        "The view controller's view should be loaded when it has a bottom bar container added")
-
-      // Bar pinning won't work within a scroll view, e.g. with UITableViewController.
-      assert(
-        !(viewController.view is UIScrollView),
-        """
-        The view controller's view must not be a scroll view. Nest any scroll views within a
-        container view.
-        """)
-    }
+    didSet { verifyViewController() }
   }
 
   /// An additional bottom offset that can be applied to this bar stack's position.
@@ -95,11 +81,17 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
     let bottom = bottomAnchor.constraint(equalTo: superview.bottomAnchor)
     bottomConstraint = bottom
 
+    let fitHeight = heightAnchor.constraint(equalToConstant: 0)
+    fitHeight.priority = UILayoutPriority(rawValue: UILayoutPriority.fittingSizeLevel.rawValue + 1)
+
+    let overflow = overflowConstraints(in: superview)
+
     NSLayoutConstraint.activate([
       leadingAnchor.constraint(equalTo: superview.leadingAnchor),
       trailingAnchor.constraint(equalTo: superview.trailingAnchor),
       bottom,
-    ])
+      fitHeight,
+    ] + overflow)
   }
 
   /// Removes this container from its superview.
