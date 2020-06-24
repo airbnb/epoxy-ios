@@ -243,21 +243,14 @@ public class BarStackView: UIStackView {
   private func transformAddedWrappers() {
     switch zOrder {
     case .bottomToTop:
-      // The offset at which the next stacked wrapper should be placed with a key of the view that
-      // they're placed beneath.
-      var offsets = [UIView: CGFloat]()
-
       for (index, wrapper) in wrappers.enumerated() where wrapper.isHidden {
-        let barHeight = wrapper.view?.frame.height ?? 0
-        if let nextVisibleWrapper = wrappers[index...].first(where: { !$0.isHidden }) {
-          var offset = offsets[nextVisibleWrapper, default: 0]
-          offset += barHeight
-          wrapper.transform = .init(translationX: 0, y: offset)
-          offsets[nextVisibleWrapper] = offset
-        } else {
-          let offset = offsets[self, default: bounds.height]
-          wrapper.transform = .init(translationX: 0, y: offset)
-          offsets[self, default: 0] += barHeight
+        let nextVisible = wrappers[index...].first { !$0.isHidden }
+        let previousVisible = wrappers[...index].last { !$0.isHidden }
+
+        // If there's no visible bars on either side of this bar, transform it down by the stack
+        // height so that it "slides up" into view when appearing.
+        if nextVisible == nil, previousVisible == nil {
+          wrapper.transform = .init(translationX: 0, y: bounds.height)
         }
       }
     case .topToBottom:
