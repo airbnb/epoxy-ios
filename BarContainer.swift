@@ -123,6 +123,8 @@ extension InternalBarContainer {
   }
 
   // Adjusts the content inset of the given scroll views based on the `insetBehavior`.
+  //
+  // Should be called whenever the frame (bounds.size/center) or safe area of this bar changes.
   func updateScrollViewInset(_ scrollViews: [UIScrollView], margin: CGFloat) {
     guard insetBehavior == .barHeightContentInset || needsScrollViewInsetReset else { return }
 

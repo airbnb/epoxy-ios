@@ -27,16 +27,20 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
 
   // MARK: UIView
 
+  public override var center: CGPoint {
+    didSet {
+      guard center != oldValue else { return }
+      // Trigger the insets to be applied in `layoutSubviews`.
+      //
+      // Calling `updateInsets` directly can cause layout loops. We want the insets to be applied
+      // and the end of the runloop.
+      setNeedsLayout()
+    }
+  }
+
   public override func layoutSubviews() {
     super.layoutSubviews()
-
-    viewController?.additionalSafeAreaInsets.bottom = additionalSafeAreaInsetsBottom
-
-    // If offset from the bottom, use the original layout margins rather than the safe area margins,
-    // as the safe area no longer overlaps the bar.
-    let margin = (bottomOffset > 0) ? 0 : viewController?.originalSafeAreaInsetBottom ?? 0
-    updateScrollViewInset(allScrollViews, margin: margin)
-    layoutMargins.bottom = margin
+    updateInsets()
   }
 
   public override func didMoveToSuperview() {
@@ -107,7 +111,7 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
 
   // MARK: Private
 
-  /// A zero-size hidden view that's constrained to the superview's safe area insets top, since
+  /// A zero-size hidden view that's constrained to the superview's safe area insets bottom, since
   /// overriding `safeAreaInsetsDidChange` to observe changes to the view controller's safe area
   /// insets can miss changes that affect its safe area insets but not this view's. Whenever this
   /// view is repositioned, we'll get a `layoutSubviews`, where we perform the needed side-effects.
@@ -141,6 +145,18 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
     // during animated transitions which causes jumps in the scroll offset as it settles after the
     // animation transaction.
     return max(bottomOffset + frame.height - viewController.originalSafeAreaInsetBottom, 0)
+  }
+
+  /// Updates the view controller insets (either safe area or scroll view content inset) in response
+  /// to the safe area, center, or bounds changing.
+  private func updateInsets() {
+    viewController?.additionalSafeAreaInsets.bottom = additionalSafeAreaInsetsBottom
+
+    // If offset from the bottom, use the original layout margins rather than the safe area margins,
+    // as the safe area no longer overlaps the bar.
+    let margin = (bottomOffset > 0) ? 0 : viewController?.originalSafeAreaInsetBottom ?? 0
+    updateScrollViewInset(allScrollViews, margin: margin)
+    layoutMargins.bottom = margin
   }
 }
 
