@@ -10,7 +10,7 @@ import UIKit
 /// whenever a change occurrs, rather than managed imperatively by pushing and popping individual
 /// view controllers.
 ///
-/// Conceptually similar to `TableView` and `CollectionView` in Epoxy, with `NavigationModel`
+/// Conceptually similar to `DeprecatedTableView` and `CollectionView` in Epoxy, with `NavigationModel`
 /// equivalent to `EpoxyableModel`.
 open class DeclarativeNavigationController: UINavigationController {
 
