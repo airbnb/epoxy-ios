@@ -159,9 +159,9 @@ public enum EpoxyModelDividerType {
   case none
 }
 
-extension EpoxyUserInfoKey.TableView.Row {
+extension EpoxyUserInfoKey.DeprecatedTableView.Row {
   public static var dividerType: EpoxyUserInfoKey {
-    return EpoxyUserInfoKey(rawValue: "\(TableView.self)_\(#function)")
+    return EpoxyUserInfoKey(rawValue: "\(DeprecatedTableView.self)_\(#function)")
   }
 }
 
@@ -172,7 +172,7 @@ extension EpoxyModelWrapper {
   }
 
   public var dividerType: EpoxyModelDividerType {
-    set { extraModelWrapperInfo[EpoxyUserInfoKey.TableView.Row.dividerType] = newValue }
-    get { return extraModelWrapperInfo[EpoxyUserInfoKey.TableView.Row.dividerType] as? EpoxyModelDividerType ?? .none }
+    set { extraModelWrapperInfo[EpoxyUserInfoKey.DeprecatedTableView.Row.dividerType] = newValue }
+    get { return extraModelWrapperInfo[EpoxyUserInfoKey.DeprecatedTableView.Row.dividerType] as? EpoxyModelDividerType ?? .none }
   }
 }

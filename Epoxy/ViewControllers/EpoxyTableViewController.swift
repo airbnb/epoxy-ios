@@ -44,9 +44,9 @@ open class EpoxyTableViewController: UIViewController {
     return []
   }
 
-  /// Returns a standard `TableView` by default. Override this to configure it differently.
-  open func makeTableView() -> TableView {
-    let tableView = TableView(epoxyLogger: epoxyLogger)
+  /// Returns a standard `DeprecatedTableView` by default. Override this to configure it differently.
+  open func makeTableView() -> DeprecatedTableView {
+    let tableView = DeprecatedTableView(epoxyLogger: epoxyLogger)
 
     let epoxyLogger = self.epoxyLogger
     tableView.rowDividerBuilder = {
@@ -88,7 +88,7 @@ open class EpoxyTableViewController: UIViewController {
     bottomConstraint?.isActive = true
   }
 
-  public lazy var tableView: TableView = {
+  public lazy var tableView: DeprecatedTableView = {
     epoxyLogger.epoxyAssert(self.isViewLoaded, "Accessed tableView before view was loaded.")
     return self.makeTableView()
   }()

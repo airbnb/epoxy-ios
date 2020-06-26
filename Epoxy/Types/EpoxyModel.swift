@@ -67,7 +67,7 @@ public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
 
   /**
    The selection style of the cell.
-   If nil, defaults to the `selectionStyle` set on the `TableView` or `CollectionView`.
+   If nil, defaults to the `selectionStyle` set on the `DeprecatedTableView` or `CollectionView`.
    Default value is `nil`
    */
   public var selectionStyle: CellSelectionStyle?

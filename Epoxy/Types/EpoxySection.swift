@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// The `EpoxySection` contains the section data for a type of list, such as a TableView.
+/// The `EpoxySection` contains the section data for a type of list, such as a DeprecatedTableView.
 public struct EpoxySection {
 
   // MARK: Lifecycle

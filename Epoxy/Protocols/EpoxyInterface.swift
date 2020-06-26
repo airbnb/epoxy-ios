@@ -41,7 +41,6 @@ public protocol EpoxyInterface: AnyObject, UITraitEnvironment {
   func moveAccessibilityFocusToLastFocusedElement()
 
   /// Recalculates all cell heights in the epoxy interface
-  /// NOTE: This has only been implemented for TableView, not for CollectionView.
   func recalculateCellHeights()
 }
 

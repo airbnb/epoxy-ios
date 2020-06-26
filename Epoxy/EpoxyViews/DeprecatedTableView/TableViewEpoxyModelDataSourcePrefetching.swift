@@ -3,10 +3,10 @@
 
 public protocol TableViewEpoxyModelDataSourcePrefetching: AnyObject {
   func tableView(
-    _ tableView: TableView,
+    _ tableView: DeprecatedTableView,
     prefetch epoxyItems: [EpoxyableModel])
 
   func tableView(
-    _ tableView: TableView,
+    _ tableView: DeprecatedTableView,
     cancelPrefetchingOf epoxyItems: [EpoxyableModel])
 }
