@@ -103,6 +103,14 @@ public struct IndexPathChangeset {
 
   /// The moved `IndexPath`s needed to get from the old array to the new array.
   public let moves: [(IndexPath, IndexPath)]
+
+  /// Whether there are any inserts, deletes, moves, or updates in this changeset
+  public var isEmpty: Bool {
+    return  inserts.isEmpty &&
+            deletes.isEmpty &&
+            updates.isEmpty &&
+            moves.isEmpty
+  }
 }
 
 public func +(left: IndexPathChangeset, right: IndexPathChangeset) -> IndexPathChangeset {
@@ -150,6 +158,14 @@ public struct IndexSetChangeset {
 
   /// A record for each old array item of what its index (if any) is in the new array.
   public let newIndices: [Int: Int?]
+
+  /// Whether there are any inserts, deletes, moves, or updates in this changeset
+  public var isEmpty: Bool {
+    return  inserts.count == 0 &&
+            deletes.count == 0 &&
+            updates.isEmpty &&
+            moves.isEmpty
+  }
 }
 
 extension Collection where Self.Iterator.Element: Diffable, Self.Index == Int {
