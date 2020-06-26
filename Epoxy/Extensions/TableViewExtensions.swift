@@ -4,16 +4,16 @@
 // MARK: EpoxyUserInfoKey
 
 public extension EpoxyUserInfoKey {
-  enum TableView {
+  enum DeprecatedTableView {
     public enum Row {
       public static var bottomDividerHidden: EpoxyUserInfoKey {
-        return EpoxyUserInfoKey(rawValue: "\(TableView.self)_\(#function)")
+        return EpoxyUserInfoKey(rawValue: "\(DeprecatedTableView.self)_\(#function)")
       }
     }
 
     public enum Section {
       public static var header: EpoxyUserInfoKey {
-        return EpoxyUserInfoKey(rawValue: "\(TableView.self)_\(#function)")
+        return EpoxyUserInfoKey(rawValue: "\(DeprecatedTableView.self)_\(#function)")
       }
     }
   }
@@ -25,14 +25,14 @@ extension BaseEpoxyModelBuilder {
   public func withTableView(bottomDividerHidden: Bool) -> BaseEpoxyModelBuilder {
     return setUserInfoValue(
       bottomDividerHidden,
-      for: EpoxyUserInfoKey.TableView.Row.bottomDividerHidden)
+      for: EpoxyUserInfoKey.DeprecatedTableView.Row.bottomDividerHidden)
   }
 }
 
 extension EpoxyableModel {
-  /// Only supported in TableView
+  /// Only supported in DeprecatedTableView
   public var tableViewBottomDividerHidden: Bool {
-    return (userInfo[EpoxyUserInfoKey.TableView.Row.bottomDividerHidden] as? Bool) ?? false
+    return (userInfo[EpoxyUserInfoKey.DeprecatedTableView.Row.bottomDividerHidden] as? Bool) ?? false
   }
 }
 
@@ -42,13 +42,13 @@ extension EpoxySectionBuilder {
   public func withTableView(sectionHeader: EpoxyableModel) -> EpoxySectionBuilder {
     return withSetUserInfoValue(
       sectionHeader,
-      for: EpoxyUserInfoKey.TableView.Section.header)
+      for: EpoxyUserInfoKey.DeprecatedTableView.Section.header)
   }
 }
 
 extension EpoxySection {
   public var tableViewSectionHeader: EpoxyableModel? {
-    return userInfo[EpoxyUserInfoKey.TableView.Section.header] as? EpoxyableModel
+    return userInfo[EpoxyUserInfoKey.DeprecatedTableView.Section.header] as? EpoxyableModel
   }
 }
 
@@ -61,7 +61,7 @@ extension EpoxySection {
   {
     var updatedUserInfo = userInfo
     if let sectionHeader = sectionHeader {
-      updatedUserInfo[EpoxyUserInfoKey.TableView.Section.header] = sectionHeader
+      updatedUserInfo[EpoxyUserInfoKey.DeprecatedTableView.Section.header] = sectionHeader
     }
 
     self.dataID = dataID

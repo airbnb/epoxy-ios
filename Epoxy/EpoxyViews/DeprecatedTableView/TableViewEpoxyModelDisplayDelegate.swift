@@ -3,12 +3,12 @@
 
 public protocol TableViewEpoxyModelDisplayDelegate: AnyObject {
   func tableView(
-    _ tableView: TableView,
+    _ tableView: DeprecatedTableView,
     willDisplay epoxyModel: EpoxyableModel,
     in section: EpoxyableSection)
 
   func tableView(
-    _ tableView: TableView,
+    _ tableView: DeprecatedTableView,
     didEndDisplaying epoxyModel: EpoxyableModel,
     in section: EpoxyableSection)
 }

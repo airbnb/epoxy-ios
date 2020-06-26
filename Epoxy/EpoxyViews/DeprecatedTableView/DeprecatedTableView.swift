@@ -5,14 +5,15 @@ import CoreGraphics
 import UIKit
 
 /// A TableView class that handles updates through its `setSections` method, and optionally animates diffs.
-open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
+/// DEPRECATED: Use `CollectionView` instead
+open class DeprecatedTableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
 
   public typealias DataType = InternalTableViewEpoxyData
   public typealias Cell = TableViewCell
 
   // MARK: Lifecycle
 
-  /// Initializes the TableView
+  /// Initializes the DeprecatedTableView
   public init(epoxyLogger: EpoxyLogging = DefaultEpoxyLogger()) {
     self.epoxyLogger = epoxyLogger
     self.epoxyDataSource = TableViewEpoxyDataSource(
@@ -235,7 +236,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
         return
       }
       guard let epoxyCell = cell as? TableViewCell else {
-        epoxyLogger.epoxyAssertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
+        epoxyLogger.epoxyAssertionFailure("Only TableViewCell and subclasses are allowed in a DeprecatedTableView.")
         return
       }
 
@@ -405,7 +406,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
         return
       }
       guard let epoxyCell = cell as? TableViewCell else {
-        epoxyLogger.epoxyAssertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
+        epoxyLogger.epoxyAssertionFailure("Only TableViewCell and subclasses are allowed in a DeprecatedTableView.")
         return
       }
 
@@ -551,7 +552,7 @@ open class TableView: UITableView, TypedEpoxyInterface, InternalEpoxyInterface {
 
 // MARK: UITableViewDelegate
 
-extension TableView: UITableViewDelegate {
+extension DeprecatedTableView: UITableViewDelegate {
 
   public func tableView(
     _ tableView: UITableView,
@@ -825,7 +826,7 @@ extension TableView: UITableViewDelegate {
 
 // MARK: UITableViewDataSourcePrefetching
 
-extension TableView: UITableViewDataSourcePrefetching {
+extension DeprecatedTableView: UITableViewDataSourcePrefetching {
   public func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
     let models = indexPaths.compactMap(epoxyDataSource.epoxyModel(at:))
       .map { $0.epoxyModel }
@@ -851,7 +852,7 @@ extension TableView: UITableViewDataSourcePrefetching {
 
 // MARK: TableViewDataSourceReorderingDelegate
 
-extension TableView: TableViewDataSourceReorderingDelegate {
+extension DeprecatedTableView: TableViewDataSourceReorderingDelegate {
 
   func dataSource(
     _ dataSource: UITableViewDataSource,
@@ -885,24 +886,24 @@ extension TableView: TableViewDataSourceReorderingDelegate {
 
 // MARK: Unavailable Methods
 
-extension TableView {
+extension DeprecatedTableView {
 
-  @available (*, unavailable, message: "You shouldn't be registering cell classes on a TableView. The TableViewEpoxyDataSource handles this for you.")
+  @available (*, unavailable, message: "You shouldn't be registering cell classes on a DeprecatedTableView. The TableViewEpoxyDataSource handles this for you.")
   open override func register(_ cellClass: AnyClass?, forCellReuseIdentifier identifier: String) {
     super.register(cellClass, forCellReuseIdentifier: identifier)
   }
 
-  @available (*, unavailable, message: "You shouldn't be registering cell nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
+  @available (*, unavailable, message: "You shouldn't be registering cell nibs on a DeprecatedTableView. The TableViewEpoxyDataSource handles this for you.")
   open override func register(_ nib: UINib?, forCellReuseIdentifier identifier: String) {
     super.register(nib, forCellReuseIdentifier: identifier)
   }
 
-  @available (*, unavailable, message: "You shouldn't be header or footer nibs on a TableView. The TableViewEpoxyDataSource handles this for you.")
+  @available (*, unavailable, message: "You shouldn't be header or footer nibs on a DeprecatedTableView. The TableViewEpoxyDataSource handles this for you.")
   open override func register(_ nib: UINib?, forHeaderFooterViewReuseIdentifier identifier: String) {
     super.register(nib, forHeaderFooterViewReuseIdentifier: identifier)
   }
 
-  @available (*, unavailable, message: "You shouldn't be registering header or footer classes on a TableView. The TableViewEpoxyDataSource handles this for you.")
+  @available (*, unavailable, message: "You shouldn't be registering header or footer classes on a DeprecatedTableView. The TableViewEpoxyDataSource handles this for you.")
   open override func register(_ aClass: AnyClass?, forHeaderFooterViewReuseIdentifier identifier: String) {
     super.register(aClass, forHeaderFooterViewReuseIdentifier: identifier)
   }
@@ -911,7 +912,7 @@ extension TableView {
 
 // MARK: TableViewCellAccessibilityDelegate
 
-extension TableView: TableViewCellAccessibilityDelegate {
+extension DeprecatedTableView: TableViewCellAccessibilityDelegate {
   func tableViewCellDidBecomeFocused(cell: TableViewCell) {
     guard
       let model = epoxyableModelWrapperForCell(cell),

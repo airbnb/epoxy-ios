@@ -5,13 +5,13 @@ import UIKit
 
 public protocol TableViewAccessibilityDelegate: class {
   func tableView(
-    _ tableView: TableView,
+    _ tableView: DeprecatedTableView,
     epoxyModelDidBecomeFocused model: EpoxyableModel,
     with view: UIView?,
     in section: EpoxyableSection)
 
   func tableView(
-    _ tableView: TableView,
+    _ tableView: DeprecatedTableView,
     epoxyModelDidLoseFocus model: EpoxyableModel,
     with view: UIView?,
     in section: EpoxyableSection)

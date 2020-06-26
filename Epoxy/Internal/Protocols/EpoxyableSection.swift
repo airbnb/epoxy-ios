@@ -67,7 +67,7 @@ extension EpoxySection: EpoxyableSection {
 
     var newSupplementaryViewReuseIDs = [String: Set<String>]()
 
-    // TableView only
+    // DeprecatedTableView only
     if let sectionHeader = tableViewSectionHeader {
       reuseIDs.insert(sectionHeader.reuseID)
       newSupplementaryViewReuseIDs[ElementKind.sectionHeader.rawValue] = reuseIDs

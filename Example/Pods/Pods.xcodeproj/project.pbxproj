@@ -57,7 +57,7 @@
 		91F2B8628381E9682B7DD04D8F01E07C /* CollectionViewEpoxyItemDataSourcePrefetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A83F918023A85E91C5E4BF24F15814A /* CollectionViewEpoxyItemDataSourcePrefetching.swift */; };
 		9327C6B49B69E3317C56350D19A4FDA7 /* EpoxyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062762B871700E68195077E6A0366E19 /* EpoxyModel.swift */; };
 		95582B1099588A7C20BDEEEFB5D120E1 /* TableViewEpoxyModelDataSourcePrefetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBF5A453282E451E90FC8E090E94E69 /* TableViewEpoxyModelDataSourcePrefetching.swift */; };
-		98C6522ED01DEFE12DE8648203DD42F8 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA099FBE4DBA9CCDDB2FA625040CD21 /* TableView.swift */; };
+		98C6522ED01DEFE12DE8648203DD42F8 /* DeprecatedTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA099FBE4DBA9CCDDB2FA625040CD21 /* DeprecatedTableView.swift */; };
 		A1A2EC0DF953F738B5FDD6E20CF05B3D /* CollectionView+UICollectionViewFlowLayoutDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D33677859ED44BA95E83A0D515A9375 /* CollectionView+UICollectionViewFlowLayoutDelegate.swift */; };
 		A40448F9A2777FBB3CE96FE4D743159B /* LayoutAttributesFittingPrioritiesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB31DDCCDCD957DBA696F653F7BAE474 /* LayoutAttributesFittingPrioritiesProvider.swift */; };
 		A7634E1129B97552D39D53BCC419E2DC /* EpoxyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D7D80B0CAAE50A65F74E924753D08E /* EpoxyCell.swift */; };
@@ -186,7 +186,7 @@
 		E396518B2BF71A88D6F26A3CA624C560 /* StateCachingProtocols.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StateCachingProtocols.swift; sourceTree = "<group>"; };
 		E80D8E769D76DB010D182941BC3FFBAE /* TableViewEpoxyDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewEpoxyDataSource.swift; sourceTree = "<group>"; };
 		EB31DDCCDCD957DBA696F653F7BAE474 /* LayoutAttributesFittingPrioritiesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LayoutAttributesFittingPrioritiesProvider.swift; sourceTree = "<group>"; };
-		ECA099FBE4DBA9CCDDB2FA625040CD21 /* TableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
+		ECA099FBE4DBA9CCDDB2FA625040CD21 /* DeprecatedTableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeprecatedTableView.swift; sourceTree = "<group>"; };
 		EF21DAAEA7FA59F34E8B2FC31594F1E7 /* Epoxy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Epoxy.h; path = Epoxy/Epoxy.h; sourceTree = "<group>"; };
 		F69D81231DEE7323A52D2631AA487FCA /* Epoxy.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Epoxy.modulemap; sourceTree = "<group>"; };
 		F7513BDEC18A39BC564B65D0DFE9B142 /* EpoxySection+Find.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "EpoxySection+Find.swift"; sourceTree = "<group>"; };
@@ -485,7 +485,7 @@
 			isa = PBXGroup;
 			children = (
 				E06F46F934BB9C18A3E1516890130470 /* CollectionView */,
-				E983167B3F999B385B591E2E4E2EA8FB /* TableView */,
+				E983167B3F999B385B591E2E4E2EA8FB /* DeprecatedTableView */,
 				9E2D4C914A232C68B6BE36C0C4D455DC /* Types */,
 			);
 			name = EpoxyViews;
@@ -571,10 +571,10 @@
 			path = Epoxy/Protocols;
 			sourceTree = "<group>";
 		};
-		E983167B3F999B385B591E2E4E2EA8FB /* TableView */ = {
+		E983167B3F999B385B591E2E4E2EA8FB /* DeprecatedTableView */ = {
 			isa = PBXGroup;
 			children = (
-				ECA099FBE4DBA9CCDDB2FA625040CD21 /* TableView.swift */,
+				ECA099FBE4DBA9CCDDB2FA625040CD21 /* DeprecatedTableView.swift */,
 				9B4DD6DC14564E3CA981EFB531E87250 /* TableViewAccessibilityDelegate.swift */,
 				2CBF5A453282E451E90FC8E090E94E69 /* TableViewEpoxyModelDataSourcePrefetching.swift */,
 				C711604D4CDD4C2B04E1A128B2260B3D /* TableViewEpoxyModelDisplayDelegate.swift */,
@@ -582,8 +582,8 @@
 				7F19DF100046AB597DDE2CB875603018 /* TableViewEpoxyReorderingDelegate.swift */,
 				2321A76A6A35D0AD22DBC3F8725EAC27 /* Internal */,
 			);
-			name = TableView;
-			path = TableView;
+			name = DeprecatedTableView;
+			path = DeprecatedTableView;
 			sourceTree = "<group>";
 		};
 		FFB1B0639CBA8D1FE2EFED50E95DFECB /* Controllers */ = {
@@ -774,7 +774,7 @@
 				37D2F124EA914E010FFF21A03AA1205B /* StateCachingProtocols.swift in Sources */,
 				46B34DE97F365C0A6C19BC2DC57F1608 /* SupplementaryViewEpoxyableModel.swift in Sources */,
 				262A496B1CD0849565F7093DE9D478A5 /* SupplementaryViewEpoxyModel.swift in Sources */,
-				98C6522ED01DEFE12DE8648203DD42F8 /* TableView.swift in Sources */,
+				98C6522ED01DEFE12DE8648203DD42F8 /* DeprecatedTableView.swift in Sources */,
 				11DDBBC10B002CF9105F19712158B046 /* TableViewAccessibilityDelegate.swift in Sources */,
 				2553995DF413E4720A807CC6E8B5B5E5 /* TableViewCell.swift in Sources */,
 				AAED3CBD8326CE81CAF3F8C722991F24 /* TableViewCellAccessibilityDelegate.swift in Sources */,

@@ -3,7 +3,7 @@
 
 import UIKit
 
-public class TableViewEpoxyDataSource: EpoxyDataSource<TableView>, UITableViewDataSource {
+public class TableViewEpoxyDataSource: EpoxyDataSource<DeprecatedTableView>, UITableViewDataSource {
 
   // MARK: Public
 
@@ -32,7 +32,7 @@ public class TableViewEpoxyDataSource: EpoxyDataSource<TableView>, UITableViewDa
     if let cell = cell as? TableViewCell {
       epoxyInterface?.configure(cell: cell, with: item)
     } else {
-      epoxyLogger.epoxyAssertionFailure("Only TableViewCell and subclasses are allowed in a TableView.")
+      epoxyLogger.epoxyAssertionFailure("Only TableViewCell and subclasses are allowed in a DeprecatedTableView.")
     }
     return cell
   }

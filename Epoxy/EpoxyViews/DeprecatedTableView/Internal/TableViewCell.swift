@@ -3,7 +3,7 @@
 
 import UIKit
 
-/// An internal cell class for use in a `TableView`. It handles displaying a `Divider` and
+/// An internal cell class for use in a `DeprecatedTableView`. It handles displaying a `Divider` and
 /// wraps view classes passed to it.
 public final class TableViewCell: UITableViewCell, EpoxyCell {
 

@@ -6,7 +6,7 @@ import XCTest
 
 class TableViewTests: XCTestCase {
 
-  var tableView: TableView!
+  var tableView: DeprecatedTableView!
 
   // state flags
   var willDisplayBlockCalled: Bool = false
@@ -14,7 +14,7 @@ class TableViewTests: XCTestCase {
   var didSelectBlockCalled: Bool = false
 
   override func setUp() {
-    tableView = TableView()
+    tableView = DeprecatedTableView()
 
     let model = BaseEpoxyModelBuilder(data: "", dataID: "dataID")
       .didSelect { [weak self] _ in
@@ -63,7 +63,7 @@ class TableViewTests: XCTestCase {
   func test_modifySectionsWithoutUpdating_doesNotCallApply() {
     var calledApply = false
 
-    class MyTableView: TableView {
+    class MyTableView: DeprecatedTableView {
       var applyWasCalled: (() -> Void)?
 
       override public func apply(
