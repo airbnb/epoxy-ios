@@ -20,8 +20,8 @@ public struct EpoxyChangeset {
   /// A set of the minimum changes to get from one set of items to another, aggregated across all sections.
   public let itemChangeset: IndexPathChangeset
 
-  /// Whether there are any inserts, deletes, moves, or updates in this changeset
+  /// Whether there are any inserts, deletes, moves, or updates in this changeset.
   public var isEmpty: Bool {
-    return sectionChangeset.isEmpty && itemChangeset.isEmpty
+    sectionChangeset.isEmpty && itemChangeset.isEmpty
   }
 }
