@@ -22,6 +22,9 @@ public class BarStackView: UIStackView {
     translatesAutoresizingMaskIntoConstraints = false
     layoutMargins = .zero
     insetsLayoutMarginsFromSafeArea = false
+    // Ensure that each bar is focused one after another rather than jumping to the content below if
+    // it extends beneath the bar stack.
+    shouldGroupAccessibilityChildren = true
     axis = .vertical
     // We need to have at least one arranged subview at all times otherwise this stack view sizes
     // subviews weirdly (e.g. massive width values).
