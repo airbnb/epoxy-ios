@@ -28,7 +28,7 @@ final class BarWrapperView: UIView {
     insetsLayoutMarginsFromSafeArea = false
     // Ensure that the view original safe area insets can inset the content of a bar.
     preservesSuperviewLayoutMargins = true
-    // Ensure that the toolbar container's children are focused together.
+    // Ensure that the bar container's children are focused together.
     shouldGroupAccessibilityChildren = true
   }
 
