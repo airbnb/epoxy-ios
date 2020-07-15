@@ -50,6 +50,119 @@ open class DeprecatedTableView: UITableView, TypedEpoxyInterface, InternalEpoxyI
 
   // MARK: Public
 
+  /// Delegate for handling accessibility events.
+  public weak var accessibilityDelegate: TableViewAccessibilityDelegate?
+
+  /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
+  /// Ignores zooming delegate methods.
+  public weak var scrollDelegate: UIScrollViewDelegate?
+
+  /// Delegate which indicates when an epoxy item will be displayed, typically used
+  /// for logging.
+  public weak var epoxyModelDisplayDelegate: TableViewEpoxyModelDisplayDelegate?
+
+  /// Data source for prefetching the contents of offscreen epoxy items that are likely to come on-
+  /// screen soon.
+  public weak var epoxyModelPrefetchDataSource: TableViewEpoxyModelDataSourcePrefetching? {
+    didSet {
+      prefetchDataSource = (epoxyModelPrefetchDataSource != nil) ? self : nil
+    }
+  }
+
+  /// Delegate for providing swipe actions configuration
+  public weak var epoxyModelSwipeActionDelegate: TableViewEpoxyModelSwipeActionDelegate?
+
+  /// Delegate to support rearranging rows
+  public weak var epoxyModelReorderingDelegate: TableViewEpoxyReorderingDelegate?
+
+  /// Whether to deselect items immediately after they are selected.
+  public var autoDeselectItems: Bool = true
+
+  /// Selection color for the `UITableViewCell`s of `EpoxyModel`s that have `isSelectable == true`
+  public var selectionStyle = CellSelectionStyle.color(UIColor.lightGray)
+
+  /// Whether or not the final item in the list shows a bottom divider. Defaults to false.
+  public var showsLastDivider: Bool = false
+
+  /// Block that handles the pull to refresh action
+  public var didTriggerPullToRefresh: ((UIRefreshControl) -> Void)? {
+    didSet {
+      pullToRefreshEnabled = didTriggerPullToRefresh != nil
+    }
+  }
+
+  /// Whether or not pull to refresh is enabled
+  public var pullToRefreshEnabled: Bool = false {
+    didSet {
+      // TODO: Once we drop iOS 9, set UIScrollView's refreshControl directly
+      if pullToRefreshEnabled {
+        addSubview(pullToRefreshControl)
+      } else {
+        pullToRefreshControl.removeFromSuperview()
+      }
+    }
+  }
+
+  /// Block that should return an initialized view of the type you'd like to use for this divider.
+  public var rowDividerBuilder: (() -> UIView)?
+
+  /// Block that configures the divider.
+  public var rowDividerConfigurer: ((UIView) -> Void)?
+
+  /// Block that should return an initialized view of the type you'd like to use for this divider.
+  public var sectionHeaderDividerBuilder: (() -> UIView)?
+
+  /// Block that configures this divider.
+  public var sectionHeaderDividerConfigurer: ((UIView) -> Void)?
+
+  /// Flag that when true, any calls to apply() with animated == false will execute a reloadData() on self
+  /// When false, begin/end update blocks will be used with animations disabled
+  public var nonAnimatedUpdatesReloadData = true
+
+  /// Pull to refresh control
+  public lazy var pullToRefreshControl: UIRefreshControl = {
+    let refreshControl = UIRefreshControl()
+    refreshControl.addTarget(self, action: #selector(didTriggerPullToRefreshControl(sender:)), for: .valueChanged)
+    return refreshControl
+  }()
+
+  public var visibleIndexPaths: [IndexPath] {
+    return indexPathsForVisibleRows ?? []
+  }
+
+  public var visibleEpoxyMetadata: VisibleEpoxyMetadata {
+    let visibleIndexPaths = self.visibleIndexPaths
+    var sectionMetadata = [VisibleEpoxySectionMetadata]()
+    let visibleSections = Set<Int>(visibleIndexPaths.map({ $0.section }))
+
+    for section in visibleSections {
+      let sectionIndexPaths = visibleIndexPaths.filter({ $0.section == section })
+      let modelMetadata: [VisibleEpoxyModelMetadata] = sectionIndexPaths.compactMap { [weak self] indexPath in
+        guard let cell = self?.cellForRow(at: indexPath) as? TableViewCell else { return nil }
+        guard let epoxyModelWrapper = self?.epoxyDataSource.epoxyModel(at: indexPath) else {
+          epoxyLogger.epoxyAssertionFailure("model not found")
+          return nil
+        }
+        return VisibleEpoxyModelMetadata(
+          model: epoxyModelWrapper,
+          view: cell.view)
+      }
+
+      guard let epoxyableSection = epoxyDataSource.epoxySection(at: section) else {
+        epoxyLogger.epoxyAssertionFailure("section not found")
+        break
+      }
+      let newSectionMetadata = VisibleEpoxySectionMetadata(
+        section: epoxyableSection,
+        modelMetadata: modelMetadata)
+      sectionMetadata.append(newSectionMetadata)
+    }
+
+    return VisibleEpoxyMetadata(
+      sectionMetadata: sectionMetadata,
+      containerView: self)
+  }
+
   public func setSections(_ sections: [EpoxySection]?, animated: Bool) {
     epoxyDataSource.setSections(sections, animated: animated)
   }
@@ -187,40 +300,6 @@ open class DeprecatedTableView: UITableView, TypedEpoxyInterface, InternalEpoxyI
     return epoxyDataSource.epoxyModel(at: indexPath)?.userInfo[key] as? T
   }
 
-  /// Delegate for handling accessibility events.
-  public weak var accessibilityDelegate: TableViewAccessibilityDelegate?
-
-  /// Delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
-  /// Ignores zooming delegate methods.
-  public weak var scrollDelegate: UIScrollViewDelegate?
-
-  /// Delegate which indicates when an epoxy item will be displayed, typically used
-  /// for logging.
-  public weak var epoxyModelDisplayDelegate: TableViewEpoxyModelDisplayDelegate?
-
-  /// Data source for prefetching the contents of offscreen epoxy items that are likely to come on-
-  /// screen soon.
-  public weak var epoxyModelPrefetchDataSource: TableViewEpoxyModelDataSourcePrefetching? {
-    didSet {
-      prefetchDataSource = (epoxyModelPrefetchDataSource != nil) ? self : nil
-    }
-  }
-
-  /// Delegate for providing swipe actions configuration
-  public weak var epoxyModelSwipeActionDelegate: TableViewEpoxyModelSwipeActionDelegate?
-
-  /// Delegate to support rearranging rows
-  public weak var epoxyModelReorderingDelegate: TableViewEpoxyReorderingDelegate?
-
-  /// Whether to deselect items immediately after they are selected.
-  public var autoDeselectItems: Bool = true
-
-  /// Selection color for the `UITableViewCell`s of `EpoxyModel`s that have `isSelectable == true`
-  public var selectionStyle = CellSelectionStyle.color(UIColor.lightGray)
-
-  /// Whether or not the final item in the list shows a bottom divider. Defaults to false.
-  public var showsLastDivider: Bool = false
-
   /// Hides the bottom divider for the given dataIDs
   public func hideBottomDivider(for dataIDs: [String]) {
     dataIDsForHidingDividers = dataIDs
@@ -244,81 +323,6 @@ open class DeprecatedTableView: UITableView, TypedEpoxyInterface, InternalEpoxyI
         self.updateDivider(for: epoxyCell, dividerType: item.dividerType, dataID: item.dataID)
       }
     }
-  }
-
-  /// Block that handles the pull to refresh action
-  public var didTriggerPullToRefresh: ((UIRefreshControl) -> Void)? {
-    didSet {
-      pullToRefreshEnabled = didTriggerPullToRefresh != nil
-    }
-  }
-
-  /// Pull to refresh control
-  public lazy var pullToRefreshControl: UIRefreshControl = {
-    let refreshControl = UIRefreshControl()
-    refreshControl.addTarget(self, action: #selector(didTriggerPullToRefreshControl(sender:)), for: .valueChanged)
-    return refreshControl
-  }()
-
-  /// Whether or not pull to refresh is enabled
-  public var pullToRefreshEnabled: Bool = false {
-    didSet {
-      // TODO: Once we drop iOS 9, set UIScrollView's refreshControl directly
-      if pullToRefreshEnabled {
-        addSubview(pullToRefreshControl)
-      } else {
-        pullToRefreshControl.removeFromSuperview()
-      }
-    }
-  }
-
-  /// Block that should return an initialized view of the type you'd like to use for this divider.
-  public var rowDividerBuilder: (() -> UIView)?
-
-  /// Block that configures the divider.
-  public var rowDividerConfigurer: ((UIView) -> Void)?
-
-  /// Block that should return an initialized view of the type you'd like to use for this divider.
-  public var sectionHeaderDividerBuilder: (() -> UIView)?
-
-  /// Block that configures this divider.
-  public var sectionHeaderDividerConfigurer: ((UIView) -> Void)?
-
-  public var visibleIndexPaths: [IndexPath] {
-    return indexPathsForVisibleRows ?? []
-  }
-
-  public var visibleEpoxyMetadata: VisibleEpoxyMetadata {
-    let visibleIndexPaths = self.visibleIndexPaths
-    var sectionMetadata = [VisibleEpoxySectionMetadata]()
-    let visibleSections = Set<Int>(visibleIndexPaths.map({ $0.section }))
-
-    for section in visibleSections {
-      let sectionIndexPaths = visibleIndexPaths.filter({ $0.section == section })
-      let modelMetadata: [VisibleEpoxyModelMetadata] = sectionIndexPaths.compactMap { [weak self] indexPath in
-        guard let cell = self?.cellForRow(at: indexPath) as? TableViewCell else { return nil }
-        guard let epoxyModelWrapper = self?.epoxyDataSource.epoxyModel(at: indexPath) else {
-          epoxyLogger.epoxyAssertionFailure("model not found")
-          return nil
-        }
-        return VisibleEpoxyModelMetadata(
-          model: epoxyModelWrapper,
-          view: cell.view)
-      }
-
-      guard let epoxyableSection = epoxyDataSource.epoxySection(at: section) else {
-        epoxyLogger.epoxyAssertionFailure("section not found")
-        break
-      }
-      let newSectionMetadata = VisibleEpoxySectionMetadata(
-        section: epoxyableSection,
-        modelMetadata: modelMetadata)
-      sectionMetadata.append(newSectionMetadata)
-    }
-
-    return VisibleEpoxyMetadata(
-      sectionMetadata: sectionMetadata,
-      containerView: self)
   }
 
   public func register(cellReuseID: String) {
@@ -357,7 +361,8 @@ open class DeprecatedTableView: UITableView, TypedEpoxyInterface, InternalEpoxyI
     animated: Bool,
     changesetMaker: @escaping (DataType?) -> EpoxyChangeset?)
   {
-    guard animated,
+    let forceReloadNonAnimatedUpdate = !animated && nonAnimatedUpdatesReloadData
+    guard !forceReloadNonAnimatedUpdate,
       newData != nil,
       let sectionCount = dataSource?.numberOfSections?(in: self),
       sectionCount > 0
@@ -368,37 +373,48 @@ open class DeprecatedTableView: UITableView, TypedEpoxyInterface, InternalEpoxyI
     }
 
     if let changeset = changesetMaker(newData), !changeset.isEmpty {
-      beginUpdates()
+      let changes = {
+        self.beginUpdates()
 
-      changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
-        if let cell = cellForRow(at: fromIndexPath as IndexPath) as? TableViewCell,
-          let epoxyModel = epoxyDataSource.epoxyModel(at: toIndexPath)?.epoxyModel
-        {
-          let metadata = EpoxyViewMetadata(
-            traitCollection: traitCollection,
-            state: cell.state,
-            animated: true)
-          epoxyModel.configure(cell: cell, with: metadata)
-          epoxyModel.configureStateChange(in: cell, with: metadata)
+        changeset.itemChangeset.updates.forEach { fromIndexPath, toIndexPath in
+          if let cell = self.cellForRow(at: fromIndexPath as IndexPath) as? TableViewCell,
+            let epoxyModel = self.epoxyDataSource.epoxyModel(at: toIndexPath)?.epoxyModel
+          {
+            let metadata = EpoxyViewMetadata(
+              traitCollection: self.traitCollection,
+              state: cell.state,
+              animated: true)
+            epoxyModel.configure(cell: cell, with: metadata)
+            epoxyModel.configureStateChange(in: cell, with: metadata)
+          }
+        }
+
+        // TODO(ls): Make animations configurable
+        self.deleteRows(at: changeset.itemChangeset.deletes as [IndexPath], with: .fade)
+        self.deleteSections(changeset.sectionChangeset.deletes as IndexSet, with: .fade)
+
+        self.insertRows(at: changeset.itemChangeset.inserts, with: .fade)
+        self.insertSections(changeset.sectionChangeset.inserts as IndexSet, with: .fade)
+
+        changeset.sectionChangeset.moves.forEach { fromIndex, toIndex in
+          self.moveSection(fromIndex, toSection: toIndex)
+        }
+
+        changeset.itemChangeset.moves.forEach { fromIndexPath, toIndexPath in
+          self.moveRow(at: fromIndexPath, to: toIndexPath)
+        }
+
+        self.endUpdates()
+      }
+
+      if animated {
+        changes()
+      }
+      else {
+        UIView.performWithoutAnimation {
+          changes()
         }
       }
-
-      // TODO(ls): Make animations configurable
-      deleteRows(at: changeset.itemChangeset.deletes as [IndexPath], with: .fade)
-      deleteSections(changeset.sectionChangeset.deletes as IndexSet, with: .fade)
-
-      insertRows(at: changeset.itemChangeset.inserts, with: .fade)
-      insertSections(changeset.sectionChangeset.inserts as IndexSet, with: .fade)
-
-      changeset.sectionChangeset.moves.forEach { fromIndex, toIndex in
-        moveSection(fromIndex, toSection: toIndex)
-      }
-
-      changeset.itemChangeset.moves.forEach { fromIndexPath, toIndexPath in
-        moveRow(at: fromIndexPath, to: toIndexPath)
-      }
-
-      endUpdates()
     }
 
     indexPathsForVisibleRows?.forEach { indexPath in
