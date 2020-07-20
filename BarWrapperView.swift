@@ -51,8 +51,16 @@ final class BarWrapperView: UIView {
       margins = view.layoutMargins
       originalViewLayoutMargins = margins
     }
-    view.layoutMargins.bottom = max(layoutMargins.bottom, margins.bottom)
-    view.layoutMargins.top = max(layoutMargins.top, margins.top)
+
+    let layoutBehavior = (view as? SafeAreaLayoutMarginsBarView)?.preferredSafeAreaLayoutMarginsBehavior ?? .max
+    switch layoutBehavior {
+    case .max:
+      view.layoutMargins.top = max(layoutMargins.top, margins.top)
+      view.layoutMargins.bottom = max(layoutMargins.bottom, margins.bottom)
+    case .sum:
+      view.layoutMargins.top = layoutMargins.top + margins.top
+      view.layoutMargins.bottom = layoutMargins.bottom + margins.bottom
+    }
   }
 
   public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
