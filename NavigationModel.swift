@@ -52,7 +52,7 @@ public struct NavigationModel {
   /// Constructs a navigation stack element identified by its `dataID`, able to create a
   /// `UIViewController` to be added to a navigation stack.
   ///
-  /// Its `UIViewController` is constructed added to the navigation stack when this
+  /// Its `UIViewController` is constructed and added to the navigation stack when this
   /// `NavigationModel` is set on a `DeclarativeNavigationController` via `setStack(_:animated:)`
   /// if a previous `NavigationModel` with the same `dataID` is not already added to the navigation
   /// stack.
