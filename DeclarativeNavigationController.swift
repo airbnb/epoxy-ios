@@ -7,7 +7,7 @@ import UIKit
 /// `NavigationModel`s that models its navigation stack.
 ///
 /// The representation of the entire the navigation stack should be set at once via `setStack(...)`
-/// whenever a change occurrs, rather than managed imperatively by pushing and popping individual
+/// whenever a change occurs, rather than managed imperatively by pushing and popping individual
 /// view controllers.
 ///
 /// Conceptually similar to `DeprecatedTableView` and `CollectionView` in Epoxy, with `NavigationModel`
