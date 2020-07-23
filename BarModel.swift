@@ -135,6 +135,15 @@ public struct BarModel<ViewType: UIView> where ViewType: ContentConfigurableView
 
 }
 
+extension BarModel where ViewType: BehaviorsConfigurableView {
+  /// Replaces the behaviors for the view with the given behaviors.
+  public func behaviors(_ behaviors: ViewType.Behaviors) -> Self {
+    behaviorSetter { view, _ in
+      view.setBehaviors(behaviors)
+    }
+  }
+}
+
 // MARK: BarModeling
 
 extension BarModel: BarModeling {
