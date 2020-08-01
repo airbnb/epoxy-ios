@@ -131,9 +131,9 @@ final class BarWrapperView: UIView {
 
     guard let model = originalModel.barModel(for: coordinator).internalBarModel as? InternalBarModeling else {
       assertionFailure("""
-        Unable to extract an InternalBarModeling from \(originalModel), nesting BarModeling models
-        deeper than two layers is not supported
-        """)
+      Unable to extract an InternalBarModeling from \(originalModel), nesting BarModeling models
+      deeper than two layers is not supported
+      """)
       return
     }
 
