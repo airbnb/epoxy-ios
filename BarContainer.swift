@@ -152,7 +152,7 @@ extension InternalBarContainer {
       /// Calculate the scroll inset by subtracting out the adjustment that's already applied to
       /// the scroll inset via the safe area.
       let scrollInset: CGFloat
-      if #available(iOS 13.0, *), scrollView.automaticallyAdjustsScrollIndicatorInsets {
+      if scrollView.automaticallyAdjustsScrollIndicatorInsets {
         scrollInset = max(inset - safeAreaInsets[keyPath: position.inset], 0)
       } else {
         scrollInset = inset
