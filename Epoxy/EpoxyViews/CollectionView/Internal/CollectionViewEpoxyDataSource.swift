@@ -131,7 +131,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     let section = data.sections[indexPath.section]
 
     if section.items.count < indexPath.row + 1 {
-      epoxyLogger.epoxyAssertionFailure("Item is out of bounds.")
+      epoxyLogger.epoxyAssertionFailure("Item is out of bounds. Make sure your EpoxySections and EpoxyModels all have unique dataIDs")
       return nil
     }
 
@@ -155,7 +155,7 @@ public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,
     }
 
     if data.sections.count < index + 1 {
-      epoxyLogger.epoxyAssertionFailure("Section is out of bounds.")
+      epoxyLogger.epoxyAssertionFailure("Section is out of bounds. Make sure your EpoxySections and EpoxyModels all have unique dataIDs")
       return nil
     }
 
