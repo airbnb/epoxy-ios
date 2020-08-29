@@ -30,17 +30,7 @@ open class DeclarativeNavigationController: UINavigationController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  // MARK: UINavigationController
-
-  @available (*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
-  public final override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
-    assertionFailure("Manual management of view controllers is not allowed, use `setStack(...)`")
-  }
-
-  @available (*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
-  public final override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-    assertionFailure("Manual management of view controllers is not allowed, use `setStack(...)`")
-  }
+  // MARK: Open
 
   @discardableResult
   open override func popViewController(animated: Bool) -> UIViewController? {
@@ -57,6 +47,18 @@ open class DeclarativeNavigationController: UINavigationController {
   }
 
   // MARK: Public
+
+  // MARK: UINavigationController
+
+  @available (*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
+  public final override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
+    assertionFailure("Manual management of view controllers is not allowed, use `setStack(...)`")
+  }
+
+  @available (*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
+  public final override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+    assertionFailure("Manual management of view controllers is not allowed, use `setStack(...)`")
+  }
 
   /// Updates the navigation stack to the provided array of navigation models, optionally animating
   /// the transition.

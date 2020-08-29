@@ -75,6 +75,8 @@ public struct NavigationModel {
     _isValueEqual = { $0.value is Void }
   }
 
+  // MARK: Public
+
   /// Constructs a root navigation stack element identified by its `dataID`, able to create a
   /// `UIViewController` to be added to a navigation stack.
   ///
@@ -99,8 +101,6 @@ public struct NavigationModel {
   {
     .init(dataID: dataID, makeViewController: makeViewController, remove: {})
   }
-
-  // MARK: Public
 
   /// Calls the given closure when this model's view controller becomes visible at the top of a
   /// navigation stack that it has been added to.
