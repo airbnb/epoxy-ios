@@ -9,6 +9,14 @@ import UIKit
 /// A data structure that maintains a FIFO 2-queue of presentations.
 final class PresentationQueue {
 
+  // MARK: Public
+
+  /// The next presentation in this queue.
+  public enum Next {
+    case none
+    case pending(PresentationModel?)
+  }
+
   // MARK: Internal
 
   /// Enqueues the given presentation in this queue, performing it immediately if a transition is
@@ -25,16 +33,6 @@ final class PresentationQueue {
 
   // MARK: Private
 
-  /// The current presentation on the queue, or `nil` if there is no current.
-  private var current: Presentation?
-
-  /// The next presentation if an transition is currently in progress, to be performed once the
-  /// current transition completes.
-  private var next = Next.none
-
-  /// Whether a presentation or dismissal transition is in progress.
-  private var isTransitioning = false
-
   /// The current presentation of this queue.
   private struct Presentation {
     var model: PresentationModel
@@ -47,11 +45,15 @@ final class PresentationQueue {
     }
   }
 
-  /// The next presentation in this queue.
-  public enum Next {
-    case none
-    case pending(PresentationModel?)
-  }
+  /// The current presentation on the queue, or `nil` if there is no current.
+  private var current: Presentation?
+
+  /// The next presentation if an transition is currently in progress, to be performed once the
+  /// current transition completes.
+  private var next = Next.none
+
+  /// Whether a presentation or dismissal transition is in progress.
+  private var isTransitioning = false
 
   /// Applies the given changes to the presenter, returning the resulting queue state.
   private func apply(
@@ -191,6 +193,7 @@ final class PresentationQueue {
       enqueue(next, animated: animated, from: presenter)
     }
   }
+
 }
 
 // MARK: - PresentationQueue.Changes
@@ -199,6 +202,7 @@ extension PresentationQueue {
   /// The changes that need to occur to reconcile the current presentation with a pending
   /// presentation.
   private enum Changes {
+
     /// There are no changes required.
     case none
     /// The current presentation needs to be dismissed, optionally followed by another presentation
@@ -260,5 +264,6 @@ extension PresentationQueue {
         return .present(model)
       }
     }
+
   }
 }

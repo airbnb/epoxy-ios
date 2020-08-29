@@ -239,10 +239,6 @@ extension PresentationModel {
 
     // MARK: Public
 
-    /// A closure that's invoked to perform the presentation from the provided context, returning a
-    /// `Dismissible` that can be used to dismiss the presentation.
-    public var present: (Context) -> Dismissible
-
     /// The context that's provided to perform a presentation.
     public struct Context {
       /// The view controller that the presentation is performed on.
@@ -254,6 +250,11 @@ extension PresentationModel {
       /// The hooks that should be called as the presentation progresses.
       public var hooks: ModalTransitions.Hooks
     }
+
+    /// A closure that's invoked to perform the presentation from the provided context, returning a
+    /// `Dismissible` that can be used to dismiss the presentation.
+    public var present: (Context) -> Dismissible
+
   }
 }
 
