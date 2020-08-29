@@ -55,6 +55,7 @@ public struct CoordinatedBarModel {
   private let _makeCoordinator: (_ update: @escaping (_ animated: Bool) -> Void) -> AnyBarCoordinating
   private let _canReuseCoordinator: (_ coordinator: AnyBarCoordinating) -> Bool
   private let _barModel: (_ coordinator: AnyBarCoordinating) -> BarModeling?
+
 }
 
 // MARK: BarModeling

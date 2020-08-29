@@ -28,6 +28,12 @@ public final class InputAccessoryBarStackView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: Public
+
+  public let barStack = BarStackView(zOrder: .bottomToTop, willDisplayBar: { bar in
+    (bar as? LegacyBottomBarView)?.prepareForInstallation()
+  })
+
   // MARK: UIView
 
   public override var intrinsicContentSize: CGSize {
@@ -44,15 +50,9 @@ public final class InputAccessoryBarStackView: UIView {
     updateBarStackLayoutMarginsBottom()
   }
 
-  // MARK: Public
-
   public func setBars(_ bars: [BarModeling], animated: Bool) {
     barStack.setModels(bars, animated: animated)
   }
-
-  public let barStack = BarStackView(zOrder: .bottomToTop, willDisplayBar: { bar in
-    (bar as? LegacyBottomBarView)?.prepareForInstallation()
-  })
 
   // MARK: Private
 

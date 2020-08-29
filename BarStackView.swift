@@ -36,17 +36,15 @@ public class BarStackView: UIStackView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  // MARK: UIView
-
-  public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    guard let view = super.hitTest(point, with: event) else { return nil }
-
-    // This view shouldn't ever receive touches, but since it can contain interactive elements we
-    // need to ignore them via a hit test, not `isUserInteractionEnabled`.
-    return view === self ? nil : view
-  }
-
   // MARK: Public
+
+  /// The order that the bars are in on the Z axis.
+  public enum ZOrder {
+    /// The top bar is the highest in the Z stack. Used when pinned to the top of the screen.
+    case topToBottom
+    /// The bottom bar is the highest in the Z stack. Used when pinned to the bottom of the screen.
+    case bottomToTop
+  }
 
   /// The view of the bar in the primary position within this stack.
   public var primaryBar: UIView? {
@@ -66,6 +64,16 @@ public class BarStackView: UIStackView {
   /// All bars in this stack, ordered from top to bottom.
   public var barViews: [UIView] {
     wrappers.compactMap { $0.view }
+  }
+
+  // MARK: UIView
+
+  public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    guard let view = super.hitTest(point, with: event) else { return nil }
+
+    // This view shouldn't ever receive touches, but since it can contain interactive elements we
+    // need to ignore them via a hit test, not `isUserInteractionEnabled`.
+    return view === self ? nil : view
   }
 
   /// Updates the contents of this stack to the stack modeled by the given model array, inserting,
@@ -130,14 +138,6 @@ public class BarStackView: UIStackView {
       // didn't perform the animation setup.
       completion()
     }
-  }
-
-  /// The order that the bars are in on the Z axis.
-  public enum ZOrder {
-    /// The top bar is the highest in the Z stack. Used when pinned to the top of the screen.
-    case topToBottom
-    /// The bottom bar is the highest in the Z stack. Used when pinned to the bottom of the screen.
-    case bottomToTop
   }
 
   // MARK: Private

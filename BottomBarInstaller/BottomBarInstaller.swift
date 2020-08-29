@@ -81,14 +81,7 @@ public final class BottomBarInstaller: NSObject {
     watchKeyboardPosition(false)
   }
 
-  // MARK: Private
-
-  private let keyboardPositionWatcher = KeyboardPositionWatcher()
-  private let installer: BarInstaller<BottomBarContainer>
-
-  /// The view controller that will have its `additionalSafeAreaInsets` updated to accommodate for
-  /// the bar stack.
-  private weak var viewController: UIViewController?
+  // MARK: Internal
 
   /// The distance that the keyboard overlaps with `viewController.view` from its bottom edge.
   var keyboardOverlap: CGFloat = 0 {
@@ -97,6 +90,15 @@ public final class BottomBarInstaller: NSObject {
       container?.bottomOffset = keyboardOverlap
     }
   }
+
+  // MARK: Private
+
+  private let keyboardPositionWatcher = KeyboardPositionWatcher()
+  private let installer: BarInstaller<BottomBarContainer>
+
+  /// The view controller that will have its `additionalSafeAreaInsets` updated to accommodate for
+  /// the bar stack.
+  private weak var viewController: UIViewController?
 
   private func watchKeyboardPosition(_ enable: Bool) {
     guard keyboardPositionWatcher.enabled else { return }

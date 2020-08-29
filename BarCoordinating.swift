@@ -67,6 +67,7 @@ final class AnyBarCoordinator<BarModel: BarModeling>: BarCoordinating {
   // MARK: Private
 
   private let _barModel: (_ barModel: BarModel) -> BarModeling
+
 }
 
 // MARK: - DefaultBarCoordinator
@@ -83,4 +84,5 @@ final class DefaultBarCoordinator<BarModel: BarModeling>: BarCoordinating {
   // MARK: Internal
 
   func barModel(for model: BarModel) -> BarModeling { model }
+
 }

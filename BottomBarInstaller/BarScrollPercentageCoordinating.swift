@@ -56,6 +56,7 @@ public class ScrollPercentageBarCoordinator<ViewType>: BarCoordinating,
   ViewType: StyledView,
   ViewType.Content: Equatable
 {
+
   // MARK: Lifecycle
 
   public init(updateBarModel: @escaping (_ animated: Bool) -> Void) {}
@@ -64,14 +65,14 @@ public class ScrollPercentageBarCoordinator<ViewType>: BarCoordinating,
 
   public typealias Model = BarModel<ViewType>
 
+  public var scrollPercentage: CGPoint = .zero {
+    didSet { updateScrollPercentage() }
+  }
+
   public func barModel(for model: BarModel<ViewType>) -> BarModeling {
     model.willDisplay { [weak self] view in
       self?.view = view
     }
-  }
-
-  public var scrollPercentage: CGPoint = .zero {
-    didSet { updateScrollPercentage() }
   }
 
   // MARK: Private
@@ -83,6 +84,7 @@ public class ScrollPercentageBarCoordinator<ViewType>: BarCoordinating,
   private func updateScrollPercentage() {
     view?.scrollPercentage = scrollPercentage
   }
+
 }
 
 // MARK: - BarCoordinatorProperty

@@ -25,6 +25,8 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
     constrainSubviews()
   }
 
+  // MARK: Public
+
   // MARK: UIView
 
   public override var center: CGPoint {
@@ -37,26 +39,6 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
       setNeedsLayout()
     }
   }
-
-  public override func layoutSubviews() {
-    super.layoutSubviews()
-    updateInsets()
-  }
-
-  public override func didMoveToSuperview() {
-    super.didMoveToSuperview()
-
-    if let anchor = superview?.safeAreaLayoutGuide.bottomAnchor {
-      superviewSafeAreaSentinel.bottomAnchor.constraint(equalTo: anchor).isActive = true
-    }
-
-    if superview == nil {
-      // Undo any safe area insets on our way out.
-      viewController?.additionalSafeAreaInsets.bottom = 0
-    }
-  }
-
-  // MARK: Public
 
   public var insetBehavior: BarContainerInsetBehavior = .barHeightSafeArea {
     didSet { updateInsetBehavior(from: oldValue) }
@@ -75,6 +57,24 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
       bottomConstraint?.constant = -bottomOffset
       // Ensure that the bottom offset is applied within the current animation transaction.
       viewController?.view.layoutIfNeeded()
+    }
+  }
+
+  public override func layoutSubviews() {
+    super.layoutSubviews()
+    updateInsets()
+  }
+
+  public override func didMoveToSuperview() {
+    super.didMoveToSuperview()
+
+    if let anchor = superview?.safeAreaLayoutGuide.bottomAnchor {
+      superviewSafeAreaSentinel.bottomAnchor.constraint(equalTo: anchor).isActive = true
+    }
+
+    if superview == nil {
+      // Undo any safe area insets on our way out.
+      viewController?.additionalSafeAreaInsets.bottom = 0
     }
   }
 
@@ -125,6 +125,16 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
   /// The bottom constraint of this bar stack.
   private var bottomConstraint: NSLayoutConstraint?
 
+  private var additionalSafeAreaInsetsBottom: CGFloat {
+    guard let viewController = viewController else { return 0 }
+    guard case .barHeightSafeArea = insetBehavior else { return 0 }
+
+    // Using the frame.minY here causes us to compute an temporarily invalid safe area inset bottom
+    // during animated transitions which causes jumps in the scroll offset as it settles after the
+    // animation transaction.
+    return max(bottomOffset + frame.height - viewController.originalSafeAreaInsetBottom, 0)
+  }
+
   private func addSubviews() {
     addSubview(superviewSafeAreaSentinel)
   }
@@ -135,16 +145,6 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
       superviewSafeAreaSentinel.widthAnchor.constraint(equalToConstant: 0),
       superviewSafeAreaSentinel.heightAnchor.constraint(equalToConstant: 0),
     ])
-  }
-
-  private var additionalSafeAreaInsetsBottom: CGFloat {
-    guard let viewController = viewController else { return 0 }
-    guard case .barHeightSafeArea = insetBehavior else { return 0 }
-
-    // Using the frame.minY here causes us to compute an temporarily invalid safe area inset bottom
-    // during animated transitions which causes jumps in the scroll offset as it settles after the
-    // animation transaction.
-    return max(bottomOffset + frame.height - viewController.originalSafeAreaInsetBottom, 0)
   }
 
   /// Updates the view controller insets (either safe area or scroll view content inset) in response
@@ -158,6 +158,7 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
     updateScrollViewInset(allScrollViews, margin: margin)
     layoutMargins.bottom = margin
   }
+
 }
 
 // MARK: - UIViewController

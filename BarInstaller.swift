@@ -136,6 +136,7 @@ public final class BarInstaller<Container: BarContainer> {
     container.remove()
     self.container = nil
   }
+
 }
 
 // MARK: BarCoordinatorPropertyConfigurable
@@ -169,11 +170,18 @@ extension BarInstaller: BarCoordinatorPropertyConfigurable {
 // MARK: - Token
 
 private final class Token {
+
+  // MARK: Lifecycle
+
   init(dispose: @escaping () -> Void) {
     self.dispose = dispose
   }
   deinit {
     dispose()
   }
+
+  // MARK: Private
+
   private let dispose: () -> Void
+
 }
