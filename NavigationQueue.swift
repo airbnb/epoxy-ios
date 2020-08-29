@@ -227,6 +227,12 @@ private struct NavigationStack {
 
   // MARK: Internal
 
+  /// The additions and removals resulting from applying a new set of models to this stack.
+  struct AppliedChanges {
+    var removals: [NavigationModel]
+    var additions: [Added]
+  }
+
   /// The models within this navigation stack.
   private(set) var models: [NavigationModel]
 
@@ -252,12 +258,6 @@ private struct NavigationStack {
   /// `nil` if there is none.
   var addedTop: Added? {
     added.last
-  }
-
-  /// The additions and removals resulting from applying a new set of models to this stack.
-  struct AppliedChanges {
-    var removals: [NavigationModel]
-    var additions: [Added]
   }
 
   /// Applies the given models to this navigation stack, returning the navigation models that were
@@ -328,8 +328,6 @@ private struct NavigationStack {
     return changes
   }
 
-  // MARK: Private
-
   /// Updates the internal state to handle the provided view controllers being popped from the
   /// stack, returning the models that were removed.
   mutating func applyPopped(_ popped: [UIViewController]) -> [NavigationModel] {
@@ -344,6 +342,7 @@ private struct NavigationStack {
     }
     return removals
   }
+
 }
 
 // MARK: - NavigationStack.Added
@@ -377,6 +376,7 @@ extension NavigationStack {
 extension NavigationStack {
   /// A view controller that can be pushed within a `NavigationStack`.
   enum ViewController {
+
     /// A normal view controller that can be pushed within a navigation stack without issue.
     case normal(UIViewController)
     /// A nested navigation controller that must be wrapped within a container view controller to be
@@ -412,5 +412,6 @@ extension NavigationStack {
       case .wrapped(_, wrapper: let wrapper): return wrapper
       }
     }
+
   }
 }
