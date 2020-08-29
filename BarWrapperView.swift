@@ -37,6 +37,36 @@ final class BarWrapperView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: Public
+
+  /// The current bar coordinator.
+  public var coordinator: AnyBarCoordinating? {
+    _coordinator?.backing
+  }
+
+  public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    guard let view = super.hitTest(point, with: event) else { return nil }
+
+    // This view should never receive touches, but since it can contain interactive elements we
+    // need to ignore them via a hit test, not `isUserInteractionEnabled`.
+    return view === self ? nil : view
+  }
+
+  public override func layoutMarginsDidChange() {
+    super.layoutMarginsDidChange()
+    setNeedsLayout()
+  }
+
+  // MARK: Internal
+
+  /// The current bar model.
+  var model: BarModeling?
+
+  /// The current bar view.
+  private(set) var view: UIView? {
+    didSet { updateView(from: oldValue) }
+  }
+
   // MARK: UIView
 
   override func layoutSubviews() {
@@ -61,34 +91,6 @@ final class BarWrapperView: UIView {
       view.layoutMargins.top = layoutMargins.top + margins.top
       view.layoutMargins.bottom = layoutMargins.bottom + margins.bottom
     }
-  }
-
-  public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    guard let view = super.hitTest(point, with: event) else { return nil }
-
-    // This view should never receive touches, but since it can contain interactive elements we
-    // need to ignore them via a hit test, not `isUserInteractionEnabled`.
-    return view === self ? nil : view
-  }
-
-  public override func layoutMarginsDidChange() {
-    super.layoutMarginsDidChange()
-    setNeedsLayout()
-  }
-
-  // MARK: Internal
-
-  /// The current bar model.
-  var model: BarModeling?
-
-  /// The current bar coordinator.
-  public var coordinator: AnyBarCoordinating? {
-    _coordinator?.backing
-  }
-
-  /// The current bar view.
-  private(set) var view: UIView? {
-    didSet { updateView(from: oldValue) }
   }
 
   /// Updates the bar model the given bar model.
