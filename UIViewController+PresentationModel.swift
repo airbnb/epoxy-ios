@@ -1,7 +1,7 @@
 // Created by eric_horacek on 10/12/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-import UIKit
+import ObjectiveC
 
 // MARK: - ModalTransitioning
 
