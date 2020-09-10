@@ -1,7 +1,6 @@
 // Created by noah_martin on 5/20/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
-import Foundation
 import UIKit
 
 extension BarInstaller {
