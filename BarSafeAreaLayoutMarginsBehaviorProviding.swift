@@ -1,7 +1,6 @@
 // Created by Benjamin Scazzero on 7/17/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
-import Foundation
 import UIKit
 
 /// Describes how the view's original layout margins and safe area should interact.

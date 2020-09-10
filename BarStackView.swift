@@ -2,6 +2,7 @@
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
 import ConstellationElementsCoreUI
+import Epoxy
 import UIKit
 
 /// A stack of arbitrary bar views, typically fixed to either the top or bottom of a view

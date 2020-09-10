@@ -1,7 +1,6 @@
 // Created by eric_horacek on 8/20/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-import ConstellationCoreUI
 import UIKit
 
 /// Installs a stack of bar views into a view controller.
