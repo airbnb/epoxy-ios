@@ -1,6 +1,7 @@
 // Created by eric_horacek on 8/20/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
+import MagicMoveCoreUI
 import UIKit
 
 /// A view that:
@@ -104,6 +105,18 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
     bottomConstraint = nil
   }
 
+  public override func setModels(_ models: [BarModeling], animated: Bool) {
+    super.setModels(models, animated: animated)
+
+    if models.isEmpty {
+      sharedElementTransitionIdentifiers = [:]
+    } else {
+      sharedElementTransitionIdentifiers = [
+        SharedElementIdentifiers.Navigation.footer: .edgeTranslation(.maxYEdge),
+      ]
+    }
+  }
+
   // MARK: Internal
 
   let position = BarContainerPosition.bottom
@@ -157,6 +170,22 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
     let margin = (bottomOffset > 0) ? 0 : viewController?.originalSafeAreaInsetBottom ?? 0
     updateScrollViewInset(allScrollViews, margin: margin)
     layoutMargins.bottom = margin
+  }
+
+}
+
+// MARK: MagicMoveTransitioning
+
+extension BottomBarContainer: MagicMoveTransitioning {
+
+  public var transitionElements: [MagicMoveIdentifier: MagicMoveView] {
+    var elements = [MagicMoveIdentifier: MagicMoveView]()
+
+    for (index, (model, view)) in zip(models, barViews).enumerated() {
+      elements[model.diffIdentifier ?? AnyHashable(index)] = .view(view, animation: .edgeTranslation(.maxYEdge))
+    }
+
+    return elements
   }
 
 }
