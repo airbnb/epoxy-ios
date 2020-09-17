@@ -141,6 +141,11 @@ public class BarStackView: UIStackView {
     }
   }
 
+  // MARK: Internal
+
+  /// The current bar models ordered from top to bottom.
+  private(set) var models = [AnyBarModel]()
+
   // MARK: Private
 
   // The direction that the bars are Z stacked in.
@@ -154,9 +159,6 @@ public class BarStackView: UIStackView {
 
   /// The current bar wrappers ordered from top to bottom.
   private var wrappers = [BarWrapperView]()
-
-  /// The current bar models ordered from top to bottom.
-  private var models = [AnyBarModel]()
 
   private var primaryWrapper: BarWrapperView? {
     switch zOrder {
