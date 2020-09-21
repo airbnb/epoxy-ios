@@ -109,7 +109,15 @@ public final class BarInstaller<Container: BarContainer> {
       return
     }
 
-    container.setModels(models, animated: animated)
+    // When the BarContainer is actively participating in a Magic Move transition,
+    // we should wait until the transition is over before we update its bars.
+    if let transitionCoordinator = container.magicMoveTransitionCoordinator {
+      transitionCoordinator.addCompletion {
+        container.setModels(models, animated: animated)
+      }
+    } else {
+      container.setModels(models, animated: animated)
+    }
   }
 
   private func installContainer(in view: UIView, with models: [BarModeling], animated: Bool) {
