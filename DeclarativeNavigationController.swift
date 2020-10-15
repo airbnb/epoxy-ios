@@ -46,6 +46,11 @@ open class DeclarativeNavigationController: UINavigationController {
     return popped
   }
 
+  /// A method that can be overridden to react to the navigation stack being updated.
+  open func didSetViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
+    // Available to be overridden by subclasses.
+  }
+
   // MARK: Public
 
   // MARK: UINavigationController
@@ -87,6 +92,8 @@ extension DeclarativeNavigationController: NavigationInterface {
   func setStack(_ stack: [UIViewController], animated: Bool) {
     // We don't call `self` since we've made it unavailable to consumers.
     super.setViewControllers(stack, animated: animated)
+
+    didSetViewControllers(stack, animated: animated)
   }
 
   func wrapNavigation(_ navigationController: UINavigationController) -> UIViewController {
