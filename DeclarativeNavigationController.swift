@@ -12,6 +12,9 @@ import UIKit
 ///
 /// Conceptually similar to `DeprecatedTableView` and `CollectionView` in Epoxy, with `NavigationModel`
 /// equivalent to `EpoxyableModel`.
+///
+/// # Additional resources
+/// - [Navigation Models Docs](***REMOVED***/projects/coreui/docs/navigation/navigation_models)
 open class DeclarativeNavigationController: UINavigationController {
 
   // MARK: Lifecycle
