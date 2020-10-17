@@ -10,6 +10,9 @@ import UIKit
 /// Should be recreated and set on a `DeclarativeNavigationController` on every state change.
 ///
 /// Conceptually similar to Epoxy models.
+///
+/// # Additional resources
+/// - [Navigation Models Docs](***REMOVED***/projects/coreui/docs/navigation/navigation_models)
 public struct NavigationModel {
 
   // MARK: Lifecycle
