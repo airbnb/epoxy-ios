@@ -6,9 +6,7 @@ import UIKit
 /// A protocol that provides additional sizing mode information for a `CollectionViewCell`,
 /// via the layout attributes passed in to
 /// `preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes)`.
-public protocol LayoutAttributesFittingPrioritiesProvider {
-
+public protocol LayoutAttributesFittingPrioritiesProvider: UICollectionViewLayoutAttributes {
   var horizontalFittingPriority: UILayoutPriority { get }
   var verticalFittingPriority: UILayoutPriority { get }
-
 }
