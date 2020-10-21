@@ -52,6 +52,14 @@ open class CollectionView: UICollectionView,
     }
   }
 
+  public override func didMoveToWindow() {
+    super.didMoveToWindow()
+
+    if window == nil {
+      scrollAnimator.cancelScrollToItem()
+    }
+  }
+
   // MARK: Public
 
   public func setSections(_ sections: [EpoxySection]?, animated: Bool) {
@@ -62,8 +70,12 @@ open class CollectionView: UICollectionView,
     scrollToItem(at: dataID, position: .centeredVertically, animated: animated)
   }
 
-  public func scrollToItem(at dataID: String, position: UICollectionView.ScrollPosition, animated: Bool) {
-    if let indexPath = indexPathForItem(at: dataID) {
+  public func scrollToItem(at dataID: String, position: ScrollPosition, animated: Bool) {
+    guard let indexPath = indexPathForItem(at: dataID) else { return }
+
+    if GlobalEpoxyConfig.shared.usesAccurateAnimatedScrollToItem && animated {
+      scrollAnimator.accuratelyScrollToItem(at: indexPath, position: position)
+    } else {
       scrollToItem(at: indexPath, at: position, animated: animated)
     }
   }
@@ -405,6 +417,10 @@ open class CollectionView: UICollectionView,
   private var infiniteScrollingState: InfiniteScrollingState = .stopped
   private var ephemeralStateCache = [String: RestorableState?]()
   private var lastFocusedDataID: String?
+
+  private lazy var scrollAnimator = CollectionViewScrollAnimator(
+    collectionView: self,
+    epoxyLogger: epoxyLogger)
 
   private func setUp() {
     // There are rendering issues in iOS 10 when using self-sizing supplementary views
@@ -779,6 +795,13 @@ open class CollectionView: UICollectionView,
     } else if !delegateWantsInfiniteScrolling {
       infiniteScrollingState = .stopped
     }
+
+    // Allow the programmatic scroll-to-item to be interrupted / cancelled if the user tries to
+    // scroll.
+    let isUserInitiatedScrolling = scrollView.isDragging && scrollView.isTracking
+    if isUserInitiatedScrolling {
+      scrollAnimator.cancelScrollToItem()
+    }
   }
 
   public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -801,7 +824,13 @@ open class CollectionView: UICollectionView,
   }
 
   public func scrollViewShouldScrollToTop(_ scrollView: UIScrollView) -> Bool {
-    return scrollDelegate?.scrollViewShouldScrollToTop?(scrollView) ?? true
+    let shouldScrollToTop = scrollDelegate?.scrollViewShouldScrollToTop?(scrollView) ?? true
+
+    if shouldScrollToTop {
+      scrollAnimator.cancelScrollToItem()
+    }
+
+    return shouldScrollToTop
   }
 
   public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {

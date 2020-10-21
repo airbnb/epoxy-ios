@@ -28,5 +28,10 @@ public final class GlobalEpoxyConfig {
   // UIKit engineers have suggested that we should never call `reloadData` ourselves, and instead,
   // use batch updates for all data changes.
   public var usesBatchUpdatesForAllCVReloads = false
+
+  // Collection view does not accurately scroll to items if they're self-sized, due to it using
+  // estimated heights to calculate the final offset. Setting this to true will cause collection
+  // Epoxy to drive the animation using a custom scroll-to-item system which is more accurate.
+  public var usesAccurateAnimatedScrollToItem = false
   
 }
