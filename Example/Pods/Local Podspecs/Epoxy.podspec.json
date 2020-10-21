@@ -1,13 +1,13 @@
 {
   "name": "Epoxy",
-  "version": "0.19.0",
+  "version": "0.21.0",
   "license": "Apache License, Version 2.0",
   "summary": "Declarative framework for UITableView and UICollectionView",
   "homepage": "https://github.com/airbnb/epoxy-ios",
   "authors": "Airbnb",
   "source": {
     "git": "https://github.com/airbnb/epoxy-ios",
-    "tag": "0.19.0"
+    "tag": "0.21.0"
   },
   "source_files": "Epoxy/**/*.{swift,h}",
   "public_header_files": "Epoxy/*.h",

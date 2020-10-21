@@ -7,85 +7,86 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		00D243FB35C4100B2BE715ADB98DC114 /* VisibleEpoxyModelMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376A154EF6B2FC825B8319C77100276D /* VisibleEpoxyModelMetaData.swift */; };
-		0B45EEFBF36AE3433352F65BE046C836 /* EpoxySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23BE85E26972479025A61025BD372C81 /* EpoxySection.swift */; };
-		0C3ACDB155B643DB573ABEEF01EB28D5 /* EpoxyInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0546059CB5F7FF4AEF83D401A374299 /* EpoxyInterface.swift */; };
-		0CAE90B60D5BF0340E4BAB63D6FBDA04 /* EpoxyAccessibilityCustomizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B66F3B7F7D031F9AE641C1E34AE090 /* EpoxyAccessibilityCustomizable.swift */; };
-		0EA06E0D48212FC5D664436E04070EB5 /* CollectionViewCellAccessibilityDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4BA3EF59E04B92B4542E3B763B4F94D9 /* CollectionViewCellAccessibilityDelegate.swift */; };
-		11DDBBC10B002CF9105F19712158B046 /* TableViewAccessibilityDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B4DD6DC14564E3CA981EFB531E87250 /* TableViewAccessibilityDelegate.swift */; };
-		1352F3C6065059ECD185CCA28BE5E015 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 210B0D55C9ACA6734B29E5641F4F7068 /* CollectionViewCell.swift */; };
-		17053ABB1EA75FACB8C2D9ECE8768BD0 /* CollectionViewReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D0705BE6CE7C8EDD17EA95746F70C42 /* CollectionViewReusableView.swift */; };
-		1A21ABAD3729B02699DD7329482BD495 /* VisibleEpoxyMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85A27224ED5379D4B9FC124D51E98B1 /* VisibleEpoxyMetadata.swift */; };
-		1D6DC1921BF50FC30F19907EE399CFED /* CollectionViewTransitionLayoutDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 289A65CFCA9D847A3F71E9D2EB9F9621 /* CollectionViewTransitionLayoutDelegate.swift */; };
-		2553995DF413E4720A807CC6E8B5B5E5 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0DFF58B84801331C8F2D6E874FCE1C7 /* TableViewCell.swift */; };
-		259A52BD6C6DF2A4677226598D170A7D /* Collection+Diff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32674F06B9EF94D24F64CFDFDC246524 /* Collection+Diff.swift */; };
-		262A496B1CD0849565F7093DE9D478A5 /* SupplementaryViewEpoxyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A7FCE392DB50B44DD59361B57C298D6 /* SupplementaryViewEpoxyModel.swift */; };
-		2B6B62B85A08A0E7391614A0D48AC300 /* InternalEpoxyInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E267E5903AA0F945A68CA3E5A49245E /* InternalEpoxyInterface.swift */; };
-		322BD521F744B34876886174A184DB36 /* EpoxyCellState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 349106C9578B9B903FB63D3CA75F06B3 /* EpoxyCellState.swift */; };
-		35D05D1C131B258D51F07C14BFA51410 /* TableViewEpoxyModelDisplayDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C711604D4CDD4C2B04E1A128B2260B3D /* TableViewEpoxyModelDisplayDelegate.swift */; };
-		36F1A5C2BF26DD688EE2A63A92A59152 /* EpoxySectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C85C0531FE2716B53DBFE66FA0411392 /* EpoxySectionController.swift */; };
-		379692B1770319475B673B1166CD24C8 /* EpoxyableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6613095C6F1AFA8DBC13F7F258BC98 /* EpoxyableModel.swift */; };
-		37D2F124EA914E010FFF21A03AA1205B /* StateCachingProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = E396518B2BF71A88D6F26A3CA624C560 /* StateCachingProtocols.swift */; };
-		3B6DA0CB0CDD3BACBF35F700400F5445 /* EpoxyControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 687C66AE19159963701F9B19DE5DA297 /* EpoxyControlling.swift */; };
-		3B8B830960FFA8267016E9EA30C7AF05 /* EpoxyStringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4C4CEB67C8F5A354E6DFA963E924211 /* EpoxyStringRepresentable.swift */; };
-		3D4E0B943D39EDDB355071631F4DC499 /* EpoxySectionControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36D735FCE4552BC1F129916C7ECF6414 /* EpoxySectionControlling.swift */; };
-		3E8E070153DCC819043680F8BDFD2B13 /* EpoxyableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B644BED8FB1C964E8F1337F8731F785B /* EpoxyableSection.swift */; };
-		3F90FD6860E014B20507F18DC2B04C90 /* TableViewEpoxyReorderingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F19DF100046AB597DDE2CB875603018 /* TableViewEpoxyReorderingDelegate.swift */; };
-		46B34DE97F365C0A6C19BC2DC57F1608 /* SupplementaryViewEpoxyableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B416E493B01220089D6C31DDFAD4AAA4 /* SupplementaryViewEpoxyableModel.swift */; };
-		47F411A86D507EF5E86704DCE0B50E37 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 299686A933963774F51DBCC084340C10 /* CollectionView.swift */; };
-		4851B5F2B3022F98960F56280404CAEE /* TableViewDataSourceReorderingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54EF34F6EC7D1454F05867CDE74B3572 /* TableViewDataSourceReorderingDelegate.swift */; };
-		498A2107C33628A29C753D5702019539 /* Epoxy-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 73112920D581B5F98C75C8150783E779 /* Epoxy-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		4B4166BDA42C6B77658D2729A3BAB160 /* TableViewEpoxyModelSwipeActionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C010D3AE67243F8ADDEACBDFBF23889E /* TableViewEpoxyModelSwipeActionDelegate.swift */; };
-		4CD894848D1D1B8FF3221BE1D099B95C /* Animatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A70023B7709F786CCCBEB16DEC1C11B /* Animatable.swift */; };
-		58A8535BC4E22ECB67E82BA6A08E5B58 /* EpoxyChangeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A9A660D171CDFD40F985654FFDA5897 /* EpoxyChangeset.swift */; };
-		5A66E338E27BA9FD550B07884A1D0C08 /* CollectionViewEpoxyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACBCA08330F2F3D8386F7DD52FE8CA14 /* CollectionViewEpoxyDataSource.swift */; };
-		6006C92F737872B6735B09C358FFC4F1 /* EpoxyLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67348078F0FB09A81F5C8417739CB33E /* EpoxyLogging.swift */; };
-		693ED9BC6FAE7CC08D6125B814A50BAF /* EpoxySectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B4F5A0A7CEA7B3D54D03E54E4A2919E /* EpoxySectionBuilder.swift */; };
-		6980E49E76B5FA11DC3D004CDFD49BDA /* CollectionViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = C034A9772AE0C03739E8F61D72CCAD59 /* CollectionViewExtensions.swift */; };
-		69B26CD2C041A1CB535C7FB1E84A3B7A /* DisplayResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = F999E95A3F20DDA36E9F7A72B4EA2A14 /* DisplayResponder.swift */; };
-		6DB371B3A023C09C1AA678A05EA7A853 /* CollectionViewEpoxyReorderingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92087CBDCD1F9A16D6745F342EA8C83D /* CollectionViewEpoxyReorderingDelegate.swift */; };
-		6DC0A3DE0743185BBBFE17580FDB5849 /* EpoxyControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7BF6C69C473962C4F6481F3FC8E75A6 /* EpoxyControllerDelegate.swift */; };
-		6EAC05783C0549BD6B218CB695D9DA9F /* InfiniteScrollingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FDE02AE344A0098C96B26A5A3EA66B /* InfiniteScrollingState.swift */; };
-		744F4A52C07B2670C7A8DCAFBF9F451C /* InternalCollectionViewEpoxyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF7F8F7E899185D0B0183A7A0ADC3156 /* InternalCollectionViewEpoxyData.swift */; };
-		75422645E2856AE154319977A867143E /* VisibleEpoxySectionMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1B5A2FF542D376676EB41F36B0D30F3E /* VisibleEpoxySectionMetadata.swift */; };
-		77F9E4B02DF3CF0C58290A414ABB5941 /* EpoxyDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDACF4FD11F5EDED80CA7CB02453B28C /* EpoxyDivider.swift */; };
-		7F3314FD32E4EE9583A68B512C3FC8C3 /* EpoxyModelCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68FBDD7B971722B7BB32C2A8F13D65F3 /* EpoxyModelCache.swift */; };
-		7F63BC615130F054574ADB74061D63A1 /* InternalTableViewEpoxyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAC00AB9C2069AB229CE23EC5AC8E2BB /* InternalTableViewEpoxyData.swift */; };
-		83F486FFE2E9BBCF8FD05C16D996CB50 /* CollectionViewEpoxyItemDisplayDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 242CF361880286BD43C5608A6A985A40 /* CollectionViewEpoxyItemDisplayDelegate.swift */; };
-		8EE1C4AF48CACB86AFCBC91D5AD9BEFB /* EpoxyContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0196248C77251410EBCF173606ADAE53 /* EpoxyContext.swift */; };
-		8F8144990B8EF0BA079DDB0929260BDF /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77051DCED6C14701817B731E1F35BB00 /* Selectable.swift */; };
-		91F2B8628381E9682B7DD04D8F01E07C /* CollectionViewEpoxyItemDataSourcePrefetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A83F918023A85E91C5E4BF24F15814A /* CollectionViewEpoxyItemDataSourcePrefetching.swift */; };
-		9327C6B49B69E3317C56350D19A4FDA7 /* EpoxyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 062762B871700E68195077E6A0366E19 /* EpoxyModel.swift */; };
-		95582B1099588A7C20BDEEEFB5D120E1 /* TableViewEpoxyModelDataSourcePrefetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CBF5A453282E451E90FC8E090E94E69 /* TableViewEpoxyModelDataSourcePrefetching.swift */; };
-		98C6522ED01DEFE12DE8648203DD42F8 /* DeprecatedTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECA099FBE4DBA9CCDDB2FA625040CD21 /* DeprecatedTableView.swift */; };
-		A1A2EC0DF953F738B5FDD6E20CF05B3D /* CollectionView+UICollectionViewFlowLayoutDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D33677859ED44BA95E83A0D515A9375 /* CollectionView+UICollectionViewFlowLayoutDelegate.swift */; };
-		A40448F9A2777FBB3CE96FE4D743159B /* LayoutAttributesFittingPrioritiesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB31DDCCDCD957DBA696F653F7BAE474 /* LayoutAttributesFittingPrioritiesProvider.swift */; };
-		A7634E1129B97552D39D53BCC419E2DC /* EpoxyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7D7D80B0CAAE50A65F74E924753D08E /* EpoxyCell.swift */; };
-		AA33EB7D4E5638C1D4922D8B4903E6EE /* EpoxyMultiSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456D7A2251F3D2AAEC83F6D83B567B52 /* EpoxyMultiSectionController.swift */; };
-		AAED3CBD8326CE81CAF3F8C722991F24 /* TableViewCellAccessibilityDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 36CD1E1E8331C2306CA1043FE7319B7C /* TableViewCellAccessibilityDelegate.swift */; };
-		B3DB958597FF8EBE68F9DB68DBF55D5C /* UIView+CompressedHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2B2E6FAA62898D37357D8BB041FB7B /* UIView+CompressedHeight.swift */; };
-		B749AC044C8DC20F188D33A753FC14E0 /* EpoxyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0564FB1A49DFB168951E30082054552 /* EpoxyDataSource.swift */; };
-		BB1B30CFFE9480976F7A641D63A4FF40 /* InternalEpoxySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77DD342DF454D52028D4CD58EE8B4E1 /* InternalEpoxySection.swift */; };
-		BB9710BEC17072ECFEFAD73DEA9B514A /* EpoxyModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B9D38A4D0BA82816CF9BCA36D67B4F9 /* EpoxyModelWrapper.swift */; };
+		0105CE37265DFF148FC90F8E003721BC /* TableViewDataSourceReorderingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08152BFF4A006E1E02A140C4A0168722 /* TableViewDataSourceReorderingDelegate.swift */; };
+		04297F4E5EDE0262127171B4E64A1052 /* CollectionViewTransitionLayoutDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC7AE3CC2936652515C1390E96906F42 /* CollectionViewTransitionLayoutDelegate.swift */; };
+		05CFF0090E0757F98D6F3310BBCDF1B5 /* CellSelectionStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48E652BBF80C82B2B938AFCEFE4D6A41 /* CellSelectionStyle.swift */; };
+		083338F4F0C1EDBB22121706CEC6F144 /* TableViewEpoxyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 410DBBC262766106FC82A0EB656F022A /* TableViewEpoxyDataSource.swift */; };
+		0B201B2704738F8DB5CA6C81C406C3F0 /* TableViewEpoxyModelDisplayDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4CFA78C25F27157626CB40D30DBBAAA8 /* TableViewEpoxyModelDisplayDelegate.swift */; };
+		0B846ADE0CCB38D05FD761D3FF69DADE /* TableViewEpoxyModelSwipeActionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43D2D321800DAB1D93FA59F7DED4C7F /* TableViewEpoxyModelSwipeActionDelegate.swift */; };
+		0BBDF179E677E920E8942689F9EDBC77 /* EpoxyTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 748DA96FE2CCF680D5580FEC33E8A528 /* EpoxyTableViewController.swift */; };
+		0E1181C2BBFC586D40EFD2E9CB526A34 /* EpoxyLogging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4790F00D30DC7CC869B6E5FCB133FC24 /* EpoxyLogging.swift */; };
+		12899D0F40D506628D0EE39BEA109E10 /* EpoxyStringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5051F62A4ED2DFBC877FFF55436E03E /* EpoxyStringRepresentable.swift */; };
+		17B5D913B413EE85A5D1F9B1218AF98B /* EpoxySectionBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED2731BA17454D6C901F6EAAE71AB586 /* EpoxySectionBuilder.swift */; };
+		19D4B1AF60AECC7A829B0EBBF6F33948 /* Epoxy-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 05C88C5AD49E92B089960B96D4764AF7 /* Epoxy-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		1C1C79CB511403EC13141D084027F641 /* InternalEpoxyDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5802EE7CF0760B65938C2CE37BCDAF /* InternalEpoxyDataType.swift */; };
+		23045ADA28C9C1AB38AE5AEF032DEAFD /* TableViewEpoxyReorderingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38D843F85299718A2DA8A583272AB3DA /* TableViewEpoxyReorderingDelegate.swift */; };
+		23244A9BC13D8D66942BA1B76E74418D /* EpoxyViewMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D4E9DEDD7D8BD67B306F077A76DF774 /* EpoxyViewMetadata.swift */; };
+		23F28FC618A9BB3142A73619BF825195 /* CollectionViewCellAccessibilityDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48926E6D8F83418932A2AC4F45D5C036 /* CollectionViewCellAccessibilityDelegate.swift */; };
+		352E2A1042F874B3BA7BAEB61D48D94E /* EpoxyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F4B6677F7E6D9934B6F867897A01802 /* EpoxyCollectionViewController.swift */; };
+		4893BB5648CFC79EADA32AC07487B80C /* EpoxyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82DCF571D2CC88DEA53310F682620A4D /* EpoxyCell.swift */; };
+		4AA5E25C7FBB34A45CEF147089A8FA92 /* GlobalEpoxyConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A469C6461D93C8790479A2464B97C986 /* GlobalEpoxyConfig.swift */; };
+		4AB90BFEE412DC4D60A8F1474818DFEE /* VisibleEpoxySectionMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50297C200FD74764F6A4CE1D4EC6F64 /* VisibleEpoxySectionMetadata.swift */; };
+		4F47AAA593124A43A4D4A4026895F458 /* Animatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79F50B81F64A6716D0BA06235329F727 /* Animatable.swift */; };
+		52348C4447A446069F1D3516FA4DDA52 /* InternalCollectionViewEpoxyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79069E268187175A3C913A85433EC343 /* InternalCollectionViewEpoxyData.swift */; };
+		57EF8D70596C9C5F91C9F81567122C39 /* EpoxyModelCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C9A2210ECDBB5DD4182F0675CC3FE9A /* EpoxyModelCache.swift */; };
+		580ED8CB1BA8520AD2E2D22DF7AFADB4 /* EpoxyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD605538E42C14B7EE594249D2094677 /* EpoxyDataSource.swift */; };
+		5923DCFDB0FBBD480B0FFE66AAA138C2 /* EpoxyInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37E5AD6E9EE195C2432BACA2D42BF872 /* EpoxyInterface.swift */; };
+		5F503968303BDB9FCB104DBB6CC554A2 /* InternalTableViewEpoxyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6905658CF09D97C91A5B1F7B5B748898 /* InternalTableViewEpoxyData.swift */; };
+		61E065FF5A33181F8F93C98826274929 /* SupplementaryViewEpoxyableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C486479D51C11B5921549EE7C19844CC /* SupplementaryViewEpoxyableModel.swift */; };
+		659978F98B21F1F596A531D2EAAAC0E8 /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46D6DB99D4D7E0AC42ADBFF15B18845C /* CollectionViewCell.swift */; };
+		6920448132FD1F754D33024209053751 /* TableViewCellAccessibilityDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E130796F8B546EF3D9311AB31B227EB /* TableViewCellAccessibilityDelegate.swift */; };
+		6E17763C941DC5AE905E0B3356D31959 /* TableViewEpoxyModelDataSourcePrefetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4AFBE226064DEA76D03F32A11BA1EB /* TableViewEpoxyModelDataSourcePrefetching.swift */; };
+		6FA7DCFDE37D896DA5806753E189881C /* Collection+Diff.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A37E13FF99BA5DD11CB73F7291F16B9 /* Collection+Diff.swift */; };
+		767E815EE9D826D1B1F67CC2083F7164 /* EpoxySectionControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54F97F7C50369DC8B95874D4B71328B5 /* EpoxySectionControlling.swift */; };
+		7A715BBB0BC08C173FE67B5457F548DF /* EpoxyableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DC62A25F0FD0F28F1DBF31912E1B6ED /* EpoxyableModel.swift */; };
+		7D2A2AD48BC9ADFEB91D28E7980C51B7 /* Epoxy.h in Headers */ = {isa = PBXBuildFile; fileRef = BB473649600476BC3867EDF26DA3FEA5 /* Epoxy.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		81F4A9BFDE2A7AF74804C5E1EF899090 /* TypedEpoxyableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4241A372C7F71119D78ABD3F98BA9CB0 /* TypedEpoxyableModel.swift */; };
+		8772C8DF8D1334046FCAC736C4111111 /* CollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A91117DADE278FCD518634965432CF /* CollectionView.swift */; };
+		8958104DF2924BF58ACB9968DBB0BC90 /* EpoxyContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1B79D4A01C91928625701349493FFB5 /* EpoxyContext.swift */; };
+		89E418BFDB6342E74189E31223C7507F /* InfiniteScrollingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D47A57EC3A21126405D9DC63328A36F /* InfiniteScrollingState.swift */; };
+		8B5225F520EF8A9CBB3712C9AC579C87 /* Highlightable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 562EF1F825708EE2BE087735F9B8DB03 /* Highlightable.swift */; };
+		8C3ACC9588C00EB2712C0FA29AC8F9EA /* CollectionViewEpoxyItemDataSourcePrefetching.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE416CE7483A4B9D5AC9684C598BAE3B /* CollectionViewEpoxyItemDataSourcePrefetching.swift */; };
+		8D65C28ED8063E9C8DF1AAA507FDFADD /* InternalEpoxySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229658DEB66A4168F45D2CB407B7389F /* InternalEpoxySection.swift */; };
+		8DF08B52BA5F02D3EA8FB4F250E48B73 /* CollectionViewEpoxyReorderingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 473CA5D98A9F2CC5C99829FBEE35F67E /* CollectionViewEpoxyReorderingDelegate.swift */; };
+		9150DE8E950CFF52060A392C28C23F9B /* CollectionViewReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C82454D872CDECF31A61BB9BE3850E66 /* CollectionViewReusableView.swift */; };
+		9255DAD5B7698AC767342CE5D1B94A98 /* CollectionViewScrollAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 028EF803159B2D7D45D1550C0998A1C5 /* CollectionViewScrollAnimator.swift */; };
+		959465FEB2EBA2433E45422CEB9DC388 /* InternalEpoxyInterface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67A5D275DA7D7CC23B9C4867787D6894 /* InternalEpoxyInterface.swift */; };
+		9C5EBCE39BF678C9B750404E8CA766A2 /* VisibleEpoxyModelMetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CFF28F068F50BCFFF3B502F5E34392A /* VisibleEpoxyModelMetaData.swift */; };
+		A770100F92834E5841B20ABEC23EBF17 /* VisibleEpoxyMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F3C9501D60CB5F520B881FA935E426B /* VisibleEpoxyMetadata.swift */; };
+		A89AC86DD79F19466E5E6881B87B6B69 /* DeprecatedTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE8810D31A4A12184ABE9AA502BA1069 /* DeprecatedTableView.swift */; };
+		A8D4638EB6C98FEC40CB7CFD92F12DC1 /* CollectionViewAccessibilityDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3820210E3FB3EF42C7A195CC925B2C1 /* CollectionViewAccessibilityDelegate.swift */; };
+		AA991FDB14A08487083AF15B7C5AD51D /* EpoxyAccessibilityCustomizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F046253BFFD8495C0470ACAEBE4B301B /* EpoxyAccessibilityCustomizable.swift */; };
+		AF2F0AF39BEEB558D0BE361133D28323 /* Selectable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFFEC4BDA5C3C343532BFBC42F691159 /* Selectable.swift */; };
+		B0EB1364EEAAC6D0B8A063CC92000F7D /* TableViewAccessibilityDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C606AE1A8710F80B281F600315570C45 /* TableViewAccessibilityDelegate.swift */; };
+		B62960D080A65F3E795FC1F9ED055B12 /* EpoxyControlling.swift in Sources */ = {isa = PBXBuildFile; fileRef = F608FDA69E969F6CC2D334CC00BC8953 /* EpoxyControlling.swift */; };
+		B7095813F0EBD8CDB35CAF3D752704FD /* StateCachingProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A55FEF2D3387627B7A3038CE18E88A /* StateCachingProtocols.swift */; };
+		B7A72BE7F9317652AA895D616BCD16A6 /* TableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744985BBEE445E3E61D781828C800E93 /* TableViewExtensions.swift */; };
+		BAD7DE3CECDB0B17B937C0378B823C19 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AE24717FBD61EA3445926C89EAACC33 /* TableViewCell.swift */; };
+		C00108DB91958CC4E1BF3499FEF941BF /* InfiniteScrollingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10B4B4D9668CAEF73E496623AE6E7B55 /* InfiniteScrollingDelegate.swift */; };
 		C01A60D5B6869A031B5431C295239CCC /* Pods-EpoxyExample-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 236209AB8B3BB6047312291BFAA333FD /* Pods-EpoxyExample-umbrella.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		C07B4BA3A0D187680439C05A525E9010 /* GlobalEpoxyConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554623AC5D9730DC439BC4E84F8AD504 /* GlobalEpoxyConfig.swift */; };
-		C07F4057489B0D9E5682C70593921FBF /* TableViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E300B2F723ED98CB60F44B7E80A77BF8 /* TableViewExtensions.swift */; };
-		C612E59ED538D1DDFAF6A4B1DDAA2E9C /* TableViewEpoxyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E80D8E769D76DB010D182941BC3FFBAE /* TableViewEpoxyDataSource.swift */; };
-		C81180765C4A9182C6B426097A9E61BC /* InternalEpoxyDataType.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD07780CC5CA268F3CF7239EF0F80512 /* InternalEpoxyDataType.swift */; };
-		CB59A1D8F9DE79D7A5DD4AE1942B9135 /* Epoxy.h in Headers */ = {isa = PBXBuildFile; fileRef = EF21DAAEA7FA59F34E8B2FC31594F1E7 /* Epoxy.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		DA2397FB5A523148491D60EBD98AF466 /* Highlightable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D938E1A6C31736707ACE4AF1A9D2AB6A /* Highlightable.swift */; };
-		DB7ED71069C8DA80F0D5A1BF72449473 /* InfiniteScrollingDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19FB7C060AE9DC1159CA077C629515EC /* InfiniteScrollingDelegate.swift */; };
-		E39EE871AFCE6F9F7E466FEA82474E54 /* EpoxyViewMetadata.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B9E70AF1E801FCA4052176F23DF8CB4 /* EpoxyViewMetadata.swift */; };
-		E8DF7D6E61BC69675499C4726F41BEC5 /* EpoxyTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E243880C2171642EC0383238C623D2 /* EpoxyTableViewController.swift */; };
-		EC969961171412C0278149A7A09B2231 /* BaseEpoxyModelBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33BA48013E7404B67513535B6A432960 /* BaseEpoxyModelBuilder.swift */; };
-		ED7DEF308E75A6476A93BAF9598C6FAA /* Epoxy-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D719033809CBC127EBA83CA5677E6937 /* Epoxy-dummy.m */; };
-		EE106E5C8CC4FF951F492056D2F6F06C /* TypedEpoxyableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56754A8A61730A1DFA68AD79647BA8EE /* TypedEpoxyableModel.swift */; };
+		C02FBF9A292B277A1B70B87661805F5E /* EpoxyDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4E567CCA169F16F8C21869F65BECCB /* EpoxyDivider.swift */; };
+		C11EBC8227484083BF8FB134E2EF298B /* Epoxy-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 731A090D1FEA4ACE1B14958E1A17189F /* Epoxy-dummy.m */; };
+		C21DF4E8EE0AE690ADE8F285FAA78672 /* DisplayResponder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92ADA2493AB5ABF80C59BB5317F3D6E7 /* DisplayResponder.swift */; };
+		C521EA2E0E9E90C53B740FC83CC3A788 /* BaseEpoxyModelBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E84D98BAC965ADB2D2AA64974146BFA /* BaseEpoxyModelBuilder.swift */; };
+		CC44F2C200A0B95E578CFAADDCB98E6E /* EpoxyMultiSectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D775641DB1FFA36A218E45E6394F13F /* EpoxyMultiSectionController.swift */; };
+		D358C542644165FEBCDBF21C61A52363 /* EpoxyCellState.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4A132DB76E18709AABAFCCD57A69944 /* EpoxyCellState.swift */; };
+		DE20DEB0E183FC184CD37909EBE653D6 /* SupplementaryViewEpoxyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B90C0F2FECAA657E4F30620471070CF2 /* SupplementaryViewEpoxyModel.swift */; };
+		DFC9B0A030CBFBAB3F6E6B9F938B68F6 /* EpoxySectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4DAF1F1194071FEED3C98F3AC67E66 /* EpoxySectionController.swift */; };
+		E03865DD20D4CEBD32D3046C3BC4B64A /* EpoxySection+Find.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EAF2AD73CFDE879B268AA41505D8E7 /* EpoxySection+Find.swift */; };
+		E156598E8318DB9DAD4D1384C4E7643B /* EpoxyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 452EDBA02EF43EB3DD16FD93EE6706CB /* EpoxyModel.swift */; };
+		E360D17274BA4CE484A00F26FBD74D4D /* CollectionViewEpoxyItemDisplayDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE6CEEE5D7E046AD7145BCEC4D769E0 /* CollectionViewEpoxyItemDisplayDelegate.swift */; };
+		E58E3CB6AB20BA0390DA9B4D5439D706 /* CollectionViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E36BDF033CF9208BF93A830FF71BDAC /* CollectionViewExtensions.swift */; };
+		E8C275A09600C04AF2A2C14FDC47B6D7 /* EpoxySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 66405E87BA61D128CB93AC2740B03A0A /* EpoxySection.swift */; };
+		E8E1A865A376CE1E3B6222669AB389FD /* LayoutAttributesFittingPrioritiesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4759A6EA8AD84C878C7912C57E84E816 /* LayoutAttributesFittingPrioritiesProvider.swift */; };
+		EE31E9C68AE82FBBAD315D4DE9DA6A76 /* EpoxyableSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E866D7867DB006A9FAFBBF1EBD2576FA /* EpoxyableSection.swift */; };
 		EEFD5B66FBF39D55E5F1F41473190715 /* Pods-EpoxyExample-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 68B09BC50778491D3FA40104FA26614D /* Pods-EpoxyExample-dummy.m */; };
-		EFDB43AFEFD1A53966DEDCCC631B359C /* Diffable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0310596BCB691DE30FB1B7E1FD478FE0 /* Diffable.swift */; };
-		F22A62CE340D99C0CAE05BC9391E6645 /* EpoxyCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E393250CDA3BCC5EBC9409FA9DAAFB93 /* EpoxyCollectionViewController.swift */; };
-		F57997EFFF8F2AC71BA12C6FD0596510 /* CollectionViewAccessibilityDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23A49158C0C53E9057090D9C7E25EC26 /* CollectionViewAccessibilityDelegate.swift */; };
-		F5834551B2E8D6EA0E8DD0314A047A1B /* CellSelectionStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEE3E082C39FAFBEE3298BD05C035F8 /* CellSelectionStyle.swift */; };
-		FE7491CA31A8AAB04B948917108C485B /* EpoxySection+Find.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7513BDEC18A39BC564B65D0DFE9B142 /* EpoxySection+Find.swift */; };
+		EF3A816477992EAE1EAB293035F02663 /* EpoxyControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94064740A2BA13FE0B4754AC83DF02AB /* EpoxyControllerDelegate.swift */; };
+		EF93E05C246BB795C8241DEC92C7C6C8 /* EpoxyModelWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC751C37BA2B612741CA175056C68800 /* EpoxyModelWrapper.swift */; };
+		F27AA23945A69E100745773F23610E92 /* EpoxyChangeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 611D6F1D3D44092DEAB8C833C3FBED3E /* EpoxyChangeset.swift */; };
+		F309D860C45A71689E620C9604E2DF01 /* Diffable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2264D812EF8B59237E77F5BC87B6505 /* Diffable.swift */; };
+		F4C4E295DA4766B1899667FA6F4DA559 /* UIView+CompressedHeight.swift in Sources */ = {isa = PBXBuildFile; fileRef = 318568FD0BC6469D686E15835D8879AC /* UIView+CompressedHeight.swift */; };
+		F706CFF3152F3FBEBEE7A40D508F1D4D /* CollectionViewEpoxyDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E2723136DCB250ACB5D459330E018BF /* CollectionViewEpoxyDataSource.swift */; };
+		FCA9CB3D754869DE8228107B12E965AD /* CollectionView+UICollectionViewFlowLayoutDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC93768E967E9EBD1D638F5F1940CB9B /* CollectionView+UICollectionViewFlowLayoutDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,100 +100,101 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0196248C77251410EBCF173606ADAE53 /* EpoxyContext.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyContext.swift; sourceTree = "<group>"; };
-		0310596BCB691DE30FB1B7E1FD478FE0 /* Diffable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Diffable.swift; sourceTree = "<group>"; };
-		062762B871700E68195077E6A0366E19 /* EpoxyModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyModel.swift; sourceTree = "<group>"; };
-		0A7FCE392DB50B44DD59361B57C298D6 /* SupplementaryViewEpoxyModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SupplementaryViewEpoxyModel.swift; sourceTree = "<group>"; };
-		19FB7C060AE9DC1159CA077C629515EC /* InfiniteScrollingDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InfiniteScrollingDelegate.swift; sourceTree = "<group>"; };
-		1B4F5A0A7CEA7B3D54D03E54E4A2919E /* EpoxySectionBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxySectionBuilder.swift; sourceTree = "<group>"; };
-		1B5A2FF542D376676EB41F36B0D30F3E /* VisibleEpoxySectionMetadata.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VisibleEpoxySectionMetadata.swift; sourceTree = "<group>"; };
-		1D0705BE6CE7C8EDD17EA95746F70C42 /* CollectionViewReusableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewReusableView.swift; sourceTree = "<group>"; };
-		1EEE3E082C39FAFBEE3298BD05C035F8 /* CellSelectionStyle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CellSelectionStyle.swift; sourceTree = "<group>"; };
-		210B0D55C9ACA6734B29E5641F4F7068 /* CollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		028EF803159B2D7D45D1550C0998A1C5 /* CollectionViewScrollAnimator.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewScrollAnimator.swift; sourceTree = "<group>"; };
+		05C88C5AD49E92B089960B96D4764AF7 /* Epoxy-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Epoxy-umbrella.h"; sourceTree = "<group>"; };
+		08152BFF4A006E1E02A140C4A0168722 /* TableViewDataSourceReorderingDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewDataSourceReorderingDelegate.swift; sourceTree = "<group>"; };
+		0D4E9DEDD7D8BD67B306F077A76DF774 /* EpoxyViewMetadata.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyViewMetadata.swift; sourceTree = "<group>"; };
+		0F14C4DA94099BCD56AF5F5C2E5EFE7F /* Epoxy.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Epoxy.xcconfig; sourceTree = "<group>"; };
+		10B4B4D9668CAEF73E496623AE6E7B55 /* InfiniteScrollingDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InfiniteScrollingDelegate.swift; sourceTree = "<group>"; };
+		1E130796F8B546EF3D9311AB31B227EB /* TableViewCellAccessibilityDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewCellAccessibilityDelegate.swift; sourceTree = "<group>"; };
+		1E2723136DCB250ACB5D459330E018BF /* CollectionViewEpoxyDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewEpoxyDataSource.swift; sourceTree = "<group>"; };
+		1F3C9501D60CB5F520B881FA935E426B /* VisibleEpoxyMetadata.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VisibleEpoxyMetadata.swift; sourceTree = "<group>"; };
+		229658DEB66A4168F45D2CB407B7389F /* InternalEpoxySection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InternalEpoxySection.swift; sourceTree = "<group>"; };
 		236209AB8B3BB6047312291BFAA333FD /* Pods-EpoxyExample-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-EpoxyExample-umbrella.h"; sourceTree = "<group>"; };
-		23A49158C0C53E9057090D9C7E25EC26 /* CollectionViewAccessibilityDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewAccessibilityDelegate.swift; sourceTree = "<group>"; };
-		23BE85E26972479025A61025BD372C81 /* EpoxySection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxySection.swift; sourceTree = "<group>"; };
-		242CF361880286BD43C5608A6A985A40 /* CollectionViewEpoxyItemDisplayDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewEpoxyItemDisplayDelegate.swift; sourceTree = "<group>"; };
-		289A65CFCA9D847A3F71E9D2EB9F9621 /* CollectionViewTransitionLayoutDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewTransitionLayoutDelegate.swift; sourceTree = "<group>"; };
-		299686A933963774F51DBCC084340C10 /* CollectionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
 		29E4EC1467AC893E586EA02F68A517BF /* libEpoxy.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = libEpoxy.a; path = libEpoxy.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		2CBF5A453282E451E90FC8E090E94E69 /* TableViewEpoxyModelDataSourcePrefetching.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewEpoxyModelDataSourcePrefetching.swift; sourceTree = "<group>"; };
-		32674F06B9EF94D24F64CFDFDC246524 /* Collection+Diff.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Collection+Diff.swift"; sourceTree = "<group>"; };
-		33BA48013E7404B67513535B6A432960 /* BaseEpoxyModelBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BaseEpoxyModelBuilder.swift; sourceTree = "<group>"; };
-		349106C9578B9B903FB63D3CA75F06B3 /* EpoxyCellState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyCellState.swift; sourceTree = "<group>"; };
-		36CD1E1E8331C2306CA1043FE7319B7C /* TableViewCellAccessibilityDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewCellAccessibilityDelegate.swift; sourceTree = "<group>"; };
-		36D735FCE4552BC1F129916C7ECF6414 /* EpoxySectionControlling.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxySectionControlling.swift; sourceTree = "<group>"; };
-		376A154EF6B2FC825B8319C77100276D /* VisibleEpoxyModelMetaData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VisibleEpoxyModelMetaData.swift; sourceTree = "<group>"; };
-		3A83F918023A85E91C5E4BF24F15814A /* CollectionViewEpoxyItemDataSourcePrefetching.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewEpoxyItemDataSourcePrefetching.swift; sourceTree = "<group>"; };
-		3B9D38A4D0BA82816CF9BCA36D67B4F9 /* EpoxyModelWrapper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyModelWrapper.swift; sourceTree = "<group>"; };
-		437EE9C04828142EF2A9A29C2E260DCE /* Epoxy.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Epoxy.release.xcconfig; sourceTree = "<group>"; };
-		456D7A2251F3D2AAEC83F6D83B567B52 /* EpoxyMultiSectionController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyMultiSectionController.swift; sourceTree = "<group>"; };
-		4BA3EF59E04B92B4542E3B763B4F94D9 /* CollectionViewCellAccessibilityDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewCellAccessibilityDelegate.swift; sourceTree = "<group>"; };
-		54EF34F6EC7D1454F05867CDE74B3572 /* TableViewDataSourceReorderingDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewDataSourceReorderingDelegate.swift; sourceTree = "<group>"; };
-		554623AC5D9730DC439BC4E84F8AD504 /* GlobalEpoxyConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GlobalEpoxyConfig.swift; sourceTree = "<group>"; };
-		56754A8A61730A1DFA68AD79647BA8EE /* TypedEpoxyableModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TypedEpoxyableModel.swift; sourceTree = "<group>"; };
-		57E243880C2171642EC0383238C623D2 /* EpoxyTableViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyTableViewController.swift; sourceTree = "<group>"; };
-		5A70023B7709F786CCCBEB16DEC1C11B /* Animatable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Animatable.swift; sourceTree = "<group>"; };
-		5B9A8C718717DC6174A9CFDE037C5872 /* Epoxy-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Epoxy-prefix.pch"; sourceTree = "<group>"; };
-		5D2B2E6FAA62898D37357D8BB041FB7B /* UIView+CompressedHeight.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIView+CompressedHeight.swift"; sourceTree = "<group>"; };
-		67348078F0FB09A81F5C8417739CB33E /* EpoxyLogging.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyLogging.swift; sourceTree = "<group>"; };
-		687C66AE19159963701F9B19DE5DA297 /* EpoxyControlling.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyControlling.swift; sourceTree = "<group>"; };
+		2DC62A25F0FD0F28F1DBF31912E1B6ED /* EpoxyableModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyableModel.swift; sourceTree = "<group>"; };
+		2F5802EE7CF0760B65938C2CE37BCDAF /* InternalEpoxyDataType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InternalEpoxyDataType.swift; sourceTree = "<group>"; };
+		318568FD0BC6469D686E15835D8879AC /* UIView+CompressedHeight.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "UIView+CompressedHeight.swift"; sourceTree = "<group>"; };
+		33A91117DADE278FCD518634965432CF /* CollectionView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionView.swift; sourceTree = "<group>"; };
+		37E5AD6E9EE195C2432BACA2D42BF872 /* EpoxyInterface.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyInterface.swift; sourceTree = "<group>"; };
+		38D843F85299718A2DA8A583272AB3DA /* TableViewEpoxyReorderingDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewEpoxyReorderingDelegate.swift; sourceTree = "<group>"; };
+		39A55FEF2D3387627B7A3038CE18E88A /* StateCachingProtocols.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StateCachingProtocols.swift; sourceTree = "<group>"; };
+		3CE6CEEE5D7E046AD7145BCEC4D769E0 /* CollectionViewEpoxyItemDisplayDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewEpoxyItemDisplayDelegate.swift; sourceTree = "<group>"; };
+		410DBBC262766106FC82A0EB656F022A /* TableViewEpoxyDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewEpoxyDataSource.swift; sourceTree = "<group>"; };
+		4241A372C7F71119D78ABD3F98BA9CB0 /* TypedEpoxyableModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TypedEpoxyableModel.swift; sourceTree = "<group>"; };
+		452EDBA02EF43EB3DD16FD93EE6706CB /* EpoxyModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyModel.swift; sourceTree = "<group>"; };
+		46D6DB99D4D7E0AC42ADBFF15B18845C /* CollectionViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
+		473CA5D98A9F2CC5C99829FBEE35F67E /* CollectionViewEpoxyReorderingDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewEpoxyReorderingDelegate.swift; sourceTree = "<group>"; };
+		4759A6EA8AD84C878C7912C57E84E816 /* LayoutAttributesFittingPrioritiesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LayoutAttributesFittingPrioritiesProvider.swift; sourceTree = "<group>"; };
+		4790F00D30DC7CC869B6E5FCB133FC24 /* EpoxyLogging.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyLogging.swift; sourceTree = "<group>"; };
+		48926E6D8F83418932A2AC4F45D5C036 /* CollectionViewCellAccessibilityDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewCellAccessibilityDelegate.swift; sourceTree = "<group>"; };
+		48E652BBF80C82B2B938AFCEFE4D6A41 /* CellSelectionStyle.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CellSelectionStyle.swift; sourceTree = "<group>"; };
+		4A4DAF1F1194071FEED3C98F3AC67E66 /* EpoxySectionController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxySectionController.swift; sourceTree = "<group>"; };
+		4AE24717FBD61EA3445926C89EAACC33 /* TableViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
+		4C9A2210ECDBB5DD4182F0675CC3FE9A /* EpoxyModelCache.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyModelCache.swift; sourceTree = "<group>"; };
+		4CFA78C25F27157626CB40D30DBBAAA8 /* TableViewEpoxyModelDisplayDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewEpoxyModelDisplayDelegate.swift; sourceTree = "<group>"; };
+		4D775641DB1FFA36A218E45E6394F13F /* EpoxyMultiSectionController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyMultiSectionController.swift; sourceTree = "<group>"; };
+		54F97F7C50369DC8B95874D4B71328B5 /* EpoxySectionControlling.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxySectionControlling.swift; sourceTree = "<group>"; };
+		562EF1F825708EE2BE087735F9B8DB03 /* Highlightable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Highlightable.swift; sourceTree = "<group>"; };
+		5A4AFBE226064DEA76D03F32A11BA1EB /* TableViewEpoxyModelDataSourcePrefetching.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewEpoxyModelDataSourcePrefetching.swift; sourceTree = "<group>"; };
+		5CFF28F068F50BCFFF3B502F5E34392A /* VisibleEpoxyModelMetaData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VisibleEpoxyModelMetaData.swift; sourceTree = "<group>"; };
+		611D6F1D3D44092DEAB8C833C3FBED3E /* EpoxyChangeset.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyChangeset.swift; sourceTree = "<group>"; };
+		639E48191F53ADDB0C099EC4A6BFB584 /* Epoxy-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Epoxy-prefix.pch"; sourceTree = "<group>"; };
+		66405E87BA61D128CB93AC2740B03A0A /* EpoxySection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxySection.swift; sourceTree = "<group>"; };
+		67A5D275DA7D7CC23B9C4867787D6894 /* InternalEpoxyInterface.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InternalEpoxyInterface.swift; sourceTree = "<group>"; };
 		68B09BC50778491D3FA40104FA26614D /* Pods-EpoxyExample-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-EpoxyExample-dummy.m"; sourceTree = "<group>"; };
-		68FBDD7B971722B7BB32C2A8F13D65F3 /* EpoxyModelCache.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyModelCache.swift; sourceTree = "<group>"; };
-		6B6613095C6F1AFA8DBC13F7F258BC98 /* EpoxyableModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyableModel.swift; sourceTree = "<group>"; };
-		71B66F3B7F7D031F9AE641C1E34AE090 /* EpoxyAccessibilityCustomizable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyAccessibilityCustomizable.swift; sourceTree = "<group>"; };
-		73112920D581B5F98C75C8150783E779 /* Epoxy-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Epoxy-umbrella.h"; sourceTree = "<group>"; };
-		77051DCED6C14701817B731E1F35BB00 /* Selectable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
-		7A9A660D171CDFD40F985654FFDA5897 /* EpoxyChangeset.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyChangeset.swift; sourceTree = "<group>"; };
-		7F19DF100046AB597DDE2CB875603018 /* TableViewEpoxyReorderingDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewEpoxyReorderingDelegate.swift; sourceTree = "<group>"; };
+		6905658CF09D97C91A5B1F7B5B748898 /* InternalTableViewEpoxyData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InternalTableViewEpoxyData.swift; sourceTree = "<group>"; };
+		69EAF2AD73CFDE879B268AA41505D8E7 /* EpoxySection+Find.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "EpoxySection+Find.swift"; sourceTree = "<group>"; };
+		6A37E13FF99BA5DD11CB73F7291F16B9 /* Collection+Diff.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "Collection+Diff.swift"; sourceTree = "<group>"; };
+		6D308A2BFAC49CA2EB74E527F5670FF0 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
+		731A090D1FEA4ACE1B14958E1A17189F /* Epoxy-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Epoxy-dummy.m"; sourceTree = "<group>"; };
+		744985BBEE445E3E61D781828C800E93 /* TableViewExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewExtensions.swift; sourceTree = "<group>"; };
+		748DA96FE2CCF680D5580FEC33E8A528 /* EpoxyTableViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyTableViewController.swift; sourceTree = "<group>"; };
+		79069E268187175A3C913A85433EC343 /* InternalCollectionViewEpoxyData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InternalCollectionViewEpoxyData.swift; sourceTree = "<group>"; };
+		79F50B81F64A6716D0BA06235329F727 /* Animatable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Animatable.swift; sourceTree = "<group>"; };
+		7A8B7722941D6A4CFAFA2EE856C3F94B /* pull_request_template.md */ = {isa = PBXFileReference; includeInIndex = 1; name = pull_request_template.md; path = docs/pull_request_template.md; sourceTree = "<group>"; };
+		7E36BDF033CF9208BF93A830FF71BDAC /* CollectionViewExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewExtensions.swift; sourceTree = "<group>"; };
+		7F4B6677F7E6D9934B6F867897A01802 /* EpoxyCollectionViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyCollectionViewController.swift; sourceTree = "<group>"; };
+		82DCF571D2CC88DEA53310F682620A4D /* EpoxyCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyCell.swift; sourceTree = "<group>"; };
 		83134280A8B26D381A58D9389B46CF26 /* Pods-EpoxyExample-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-EpoxyExample-acknowledgements.plist"; sourceTree = "<group>"; };
-		8B9E70AF1E801FCA4052176F23DF8CB4 /* EpoxyViewMetadata.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyViewMetadata.swift; sourceTree = "<group>"; };
-		92087CBDCD1F9A16D6745F342EA8C83D /* CollectionViewEpoxyReorderingDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewEpoxyReorderingDelegate.swift; sourceTree = "<group>"; };
-		9B4DD6DC14564E3CA981EFB531E87250 /* TableViewAccessibilityDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewAccessibilityDelegate.swift; sourceTree = "<group>"; };
+		8E84D98BAC965ADB2D2AA64974146BFA /* BaseEpoxyModelBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = BaseEpoxyModelBuilder.swift; sourceTree = "<group>"; };
+		92ADA2493AB5ABF80C59BB5317F3D6E7 /* DisplayResponder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DisplayResponder.swift; sourceTree = "<group>"; };
+		94064740A2BA13FE0B4754AC83DF02AB /* EpoxyControllerDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyControllerDelegate.swift; sourceTree = "<group>"; };
 		9B7E6C0A0BB36C7B86C04171E489D4B7 /* libPods-EpoxyExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; name = "libPods-EpoxyExample.a"; path = "libPods-EpoxyExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9D33677859ED44BA95E83A0D515A9375 /* CollectionView+UICollectionViewFlowLayoutDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CollectionView+UICollectionViewFlowLayoutDelegate.swift"; sourceTree = "<group>"; };
+		9D47A57EC3A21126405D9DC63328A36F /* InfiniteScrollingState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InfiniteScrollingState.swift; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		9E267E5903AA0F945A68CA3E5A49245E /* InternalEpoxyInterface.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InternalEpoxyInterface.swift; sourceTree = "<group>"; };
-		A0564FB1A49DFB168951E30082054552 /* EpoxyDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyDataSource.swift; sourceTree = "<group>"; };
+		9E80AACFA68809C7FE59F42B3849BF32 /* Epoxy.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = Epoxy.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A0D2F96C60EA4C4FAB48CCEAA5E21759 /* Pods-EpoxyExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-EpoxyExample.debug.xcconfig"; sourceTree = "<group>"; };
-		A4C4CEB67C8F5A354E6DFA963E924211 /* EpoxyStringRepresentable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyStringRepresentable.swift; sourceTree = "<group>"; };
-		A7BF6C69C473962C4F6481F3FC8E75A6 /* EpoxyControllerDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyControllerDelegate.swift; sourceTree = "<group>"; };
-		A7FDE02AE344A0098C96B26A5A3EA66B /* InfiniteScrollingState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InfiniteScrollingState.swift; sourceTree = "<group>"; };
-		ACBCA08330F2F3D8386F7DD52FE8CA14 /* CollectionViewEpoxyDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewEpoxyDataSource.swift; sourceTree = "<group>"; };
-		AF7F8F7E899185D0B0183A7A0ADC3156 /* InternalCollectionViewEpoxyData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InternalCollectionViewEpoxyData.swift; sourceTree = "<group>"; };
-		B416E493B01220089D6C31DDFAD4AAA4 /* SupplementaryViewEpoxyableModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SupplementaryViewEpoxyableModel.swift; sourceTree = "<group>"; };
-		B644BED8FB1C964E8F1337F8731F785B /* EpoxyableSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyableSection.swift; sourceTree = "<group>"; };
-		B7D7D80B0CAAE50A65F74E924753D08E /* EpoxyCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyCell.swift; sourceTree = "<group>"; };
-		B85A27224ED5379D4B9FC124D51E98B1 /* VisibleEpoxyMetadata.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VisibleEpoxyMetadata.swift; sourceTree = "<group>"; };
+		A1D76315B37CE506101C4CE244C9F330 /* Epoxy.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Epoxy.modulemap; sourceTree = "<group>"; };
+		A469C6461D93C8790479A2464B97C986 /* GlobalEpoxyConfig.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GlobalEpoxyConfig.swift; sourceTree = "<group>"; };
+		AD4E567CCA169F16F8C21869F65BECCB /* EpoxyDivider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyDivider.swift; sourceTree = "<group>"; };
+		B90C0F2FECAA657E4F30620471070CF2 /* SupplementaryViewEpoxyModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SupplementaryViewEpoxyModel.swift; sourceTree = "<group>"; };
+		BB473649600476BC3867EDF26DA3FEA5 /* Epoxy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Epoxy.h; path = Epoxy/Epoxy.h; sourceTree = "<group>"; };
 		BB4DE9D5FE24E049C94B26372CC4DFC0 /* Pods-EpoxyExample-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-EpoxyExample-acknowledgements.markdown"; sourceTree = "<group>"; };
-		BC3AB0331E6018D3DB205FDA83B61D98 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
-		BD07780CC5CA268F3CF7239EF0F80512 /* InternalEpoxyDataType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InternalEpoxyDataType.swift; sourceTree = "<group>"; };
-		C010D3AE67243F8ADDEACBDFBF23889E /* TableViewEpoxyModelSwipeActionDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewEpoxyModelSwipeActionDelegate.swift; sourceTree = "<group>"; };
-		C034A9772AE0C03739E8F61D72CCAD59 /* CollectionViewExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewExtensions.swift; sourceTree = "<group>"; };
-		C0546059CB5F7FF4AEF83D401A374299 /* EpoxyInterface.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyInterface.swift; sourceTree = "<group>"; };
+		BC7AE3CC2936652515C1390E96906F42 /* CollectionViewTransitionLayoutDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewTransitionLayoutDelegate.swift; sourceTree = "<group>"; };
+		BE8810D31A4A12184ABE9AA502BA1069 /* DeprecatedTableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeprecatedTableView.swift; sourceTree = "<group>"; };
 		C2EB05EC7D66A99DE1E09807096D4616 /* Pods-EpoxyExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-EpoxyExample.release.xcconfig"; sourceTree = "<group>"; };
-		C711604D4CDD4C2B04E1A128B2260B3D /* TableViewEpoxyModelDisplayDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewEpoxyModelDisplayDelegate.swift; sourceTree = "<group>"; };
-		C77DD342DF454D52028D4CD58EE8B4E1 /* InternalEpoxySection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InternalEpoxySection.swift; sourceTree = "<group>"; };
-		C85C0531FE2716B53DBFE66FA0411392 /* EpoxySectionController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxySectionController.swift; sourceTree = "<group>"; };
-		CAC00AB9C2069AB229CE23EC5AC8E2BB /* InternalTableViewEpoxyData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = InternalTableViewEpoxyData.swift; sourceTree = "<group>"; };
-		CF38DC5C3CEE24C7C422C6F8670DE8F6 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; path = README.md; sourceTree = "<group>"; };
-		D0DFF58B84801331C8F2D6E874FCE1C7 /* TableViewCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
-		D719033809CBC127EBA83CA5677E6937 /* Epoxy-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Epoxy-dummy.m"; sourceTree = "<group>"; };
-		D827F80992AF1CF7C7474EEC4CF8D89E /* Epoxy.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; path = Epoxy.podspec; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		D938E1A6C31736707ACE4AF1A9D2AB6A /* Highlightable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Highlightable.swift; sourceTree = "<group>"; };
-		DDACF4FD11F5EDED80CA7CB02453B28C /* EpoxyDivider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyDivider.swift; sourceTree = "<group>"; };
-		E300B2F723ED98CB60F44B7E80A77BF8 /* TableViewExtensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewExtensions.swift; sourceTree = "<group>"; };
-		E393250CDA3BCC5EBC9409FA9DAAFB93 /* EpoxyCollectionViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyCollectionViewController.swift; sourceTree = "<group>"; };
-		E396518B2BF71A88D6F26A3CA624C560 /* StateCachingProtocols.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StateCachingProtocols.swift; sourceTree = "<group>"; };
-		E80D8E769D76DB010D182941BC3FFBAE /* TableViewEpoxyDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewEpoxyDataSource.swift; sourceTree = "<group>"; };
-		EB31DDCCDCD957DBA696F653F7BAE474 /* LayoutAttributesFittingPrioritiesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = LayoutAttributesFittingPrioritiesProvider.swift; sourceTree = "<group>"; };
-		ECA099FBE4DBA9CCDDB2FA625040CD21 /* DeprecatedTableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DeprecatedTableView.swift; sourceTree = "<group>"; };
-		EF21DAAEA7FA59F34E8B2FC31594F1E7 /* Epoxy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Epoxy.h; path = Epoxy/Epoxy.h; sourceTree = "<group>"; };
-		F69D81231DEE7323A52D2631AA487FCA /* Epoxy.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Epoxy.modulemap; sourceTree = "<group>"; };
-		F7513BDEC18A39BC564B65D0DFE9B142 /* EpoxySection+Find.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "EpoxySection+Find.swift"; sourceTree = "<group>"; };
+		C486479D51C11B5921549EE7C19844CC /* SupplementaryViewEpoxyableModel.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SupplementaryViewEpoxyableModel.swift; sourceTree = "<group>"; };
+		C606AE1A8710F80B281F600315570C45 /* TableViewAccessibilityDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewAccessibilityDelegate.swift; sourceTree = "<group>"; };
+		C82454D872CDECF31A61BB9BE3850E66 /* CollectionViewReusableView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewReusableView.swift; sourceTree = "<group>"; };
+		CBEBE7FBE9EE1403EABDCF0BE7E2F706 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; path = LICENSE; sourceTree = "<group>"; };
+		CC93768E967E9EBD1D638F5F1940CB9B /* CollectionView+UICollectionViewFlowLayoutDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "CollectionView+UICollectionViewFlowLayoutDelegate.swift"; sourceTree = "<group>"; };
+		D3820210E3FB3EF42C7A195CC925B2C1 /* CollectionViewAccessibilityDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewAccessibilityDelegate.swift; sourceTree = "<group>"; };
+		DE416CE7483A4B9D5AC9684C598BAE3B /* CollectionViewEpoxyItemDataSourcePrefetching.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CollectionViewEpoxyItemDataSourcePrefetching.swift; sourceTree = "<group>"; };
+		E1B79D4A01C91928625701349493FFB5 /* EpoxyContext.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyContext.swift; sourceTree = "<group>"; };
+		E4A132DB76E18709AABAFCCD57A69944 /* EpoxyCellState.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyCellState.swift; sourceTree = "<group>"; };
+		E50297C200FD74764F6A4CE1D4EC6F64 /* VisibleEpoxySectionMetadata.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = VisibleEpoxySectionMetadata.swift; sourceTree = "<group>"; };
+		E5051F62A4ED2DFBC877FFF55436E03E /* EpoxyStringRepresentable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyStringRepresentable.swift; sourceTree = "<group>"; };
+		E866D7867DB006A9FAFBBF1EBD2576FA /* EpoxyableSection.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyableSection.swift; sourceTree = "<group>"; };
+		EC751C37BA2B612741CA175056C68800 /* EpoxyModelWrapper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyModelWrapper.swift; sourceTree = "<group>"; };
+		ED2731BA17454D6C901F6EAAE71AB586 /* EpoxySectionBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxySectionBuilder.swift; sourceTree = "<group>"; };
+		EFFEC4BDA5C3C343532BFBC42F691159 /* Selectable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Selectable.swift; sourceTree = "<group>"; };
+		F046253BFFD8495C0470ACAEBE4B301B /* EpoxyAccessibilityCustomizable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyAccessibilityCustomizable.swift; sourceTree = "<group>"; };
+		F2264D812EF8B59237E77F5BC87B6505 /* Diffable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = Diffable.swift; sourceTree = "<group>"; };
+		F43D2D321800DAB1D93FA59F7DED4C7F /* TableViewEpoxyModelSwipeActionDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = TableViewEpoxyModelSwipeActionDelegate.swift; sourceTree = "<group>"; };
+		F608FDA69E969F6CC2D334CC00BC8953 /* EpoxyControlling.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyControlling.swift; sourceTree = "<group>"; };
 		F835329652C07002836C3BB5BCD09390 /* Pods-EpoxyExample.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "Pods-EpoxyExample.modulemap"; sourceTree = "<group>"; };
-		F999E95A3F20DDA36E9F7A72B4EA2A14 /* DisplayResponder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DisplayResponder.swift; sourceTree = "<group>"; };
-		FFB3E9789E9790657ACEBB8E8142BB17 /* Epoxy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Epoxy.debug.xcconfig; sourceTree = "<group>"; };
+		FD605538E42C14B7EE594249D2094677 /* EpoxyDataSource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EpoxyDataSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -203,7 +205,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		6E69C5096F9EB88AADCA080E2BB16CDF /* Frameworks */ = {
+		3F35746AF827C7AD06DD861ECF6CC4DF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -213,137 +215,125 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		002A03BD8DCA8FC793D1A6923DC2CB42 /* EpoxyModelCache */ = {
+		02AC26C7A34D2CF909DA002AC03DFEBB /* Internal */ = {
 			isa = PBXGroup;
 			children = (
-				68FBDD7B971722B7BB32C2A8F13D65F3 /* EpoxyModelCache.swift */,
-			);
-			name = EpoxyModelCache;
-			path = EpoxyModelCache;
-			sourceTree = "<group>";
-		};
-		026CA759AF14C75D0D8D227BF365DF8F /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				F69D81231DEE7323A52D2631AA487FCA /* Epoxy.modulemap */,
-				D719033809CBC127EBA83CA5677E6937 /* Epoxy-dummy.m */,
-				5B9A8C718717DC6174A9CFDE037C5872 /* Epoxy-prefix.pch */,
-				73112920D581B5F98C75C8150783E779 /* Epoxy-umbrella.h */,
-				FFB3E9789E9790657ACEBB8E8142BB17 /* Epoxy.debug.xcconfig */,
-				437EE9C04828142EF2A9A29C2E260DCE /* Epoxy.release.xcconfig */,
-			);
-			name = "Support Files";
-			path = "Example/Pods/Target Support Files/Epoxy";
-			sourceTree = "<group>";
-		};
-		089A4E68E6841DCEF6FF1192F5F37446 /* Epoxy */ = {
-			isa = PBXGroup;
-			children = (
-				EF21DAAEA7FA59F34E8B2FC31594F1E7 /* Epoxy.h */,
-				50FD87B812BAA825BE15BF779BDD6E58 /* Diffing */,
-				82460CEA507456B1FBA3BB2605138A16 /* Elements */,
-				D463F459436AF7A46A1B0C10B8EDB1D8 /* EpoxyViews */,
-				45B481ECBD5CF2710DA2483344E3DB83 /* Extensions */,
-				2EFF7F45A9244C7DB851E2BF0BB1097A /* Internal */,
-				16B0AF01DA1B27138B4D06F936E4DB94 /* Logging */,
-				6B7BDB27DB533B87CFC284AAD261F020 /* Pod */,
-				E3468561F39C396B494CB8C226345136 /* Protocols */,
-				5DCA9F705A22636FA5B011A93469C7FA /* SectionController */,
-				026CA759AF14C75D0D8D227BF365DF8F /* Support Files */,
-				3D569F1D91B536FDFD4714290FEB0081 /* Types */,
-				B9841BBCE9EB13100CAF5501B2A6B912 /* ViewControllers */,
-			);
-			name = Epoxy;
-			path = ../..;
-			sourceTree = "<group>";
-		};
-		16B0AF01DA1B27138B4D06F936E4DB94 /* Logging */ = {
-			isa = PBXGroup;
-			children = (
-				67348078F0FB09A81F5C8417739CB33E /* EpoxyLogging.swift */,
-			);
-			name = Logging;
-			path = Epoxy/Logging;
-			sourceTree = "<group>";
-		};
-		2321A76A6A35D0AD22DBC3F8725EAC27 /* Internal */ = {
-			isa = PBXGroup;
-			children = (
-				CAC00AB9C2069AB229CE23EC5AC8E2BB /* InternalTableViewEpoxyData.swift */,
-				D0DFF58B84801331C8F2D6E874FCE1C7 /* TableViewCell.swift */,
-				36CD1E1E8331C2306CA1043FE7319B7C /* TableViewCellAccessibilityDelegate.swift */,
-				54EF34F6EC7D1454F05867CDE74B3572 /* TableViewDataSourceReorderingDelegate.swift */,
-				E80D8E769D76DB010D182941BC3FFBAE /* TableViewEpoxyDataSource.swift */,
+				6905658CF09D97C91A5B1F7B5B748898 /* InternalTableViewEpoxyData.swift */,
+				4AE24717FBD61EA3445926C89EAACC33 /* TableViewCell.swift */,
+				1E130796F8B546EF3D9311AB31B227EB /* TableViewCellAccessibilityDelegate.swift */,
+				08152BFF4A006E1E02A140C4A0168722 /* TableViewDataSourceReorderingDelegate.swift */,
+				410DBBC262766106FC82A0EB656F022A /* TableViewEpoxyDataSource.swift */,
 			);
 			name = Internal;
 			path = Internal;
 			sourceTree = "<group>";
 		};
-		2EFF7F45A9244C7DB851E2BF0BB1097A /* Internal */ = {
+		066C0A295CD573A968ED4C44DDD70E8B /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				D95E621A65C8FBA965FC550F39D12EDF /* Extensions */,
-				C1686315F04BB4005B2F53352FE7842C /* Protocols */,
-				35B96165650DA848530E36C634A56AFD /* Types */,
-			);
-			name = Internal;
-			path = Epoxy/Internal;
-			sourceTree = "<group>";
-		};
-		2F098E040C4A8166678D6BF5C77F85D1 /* Protocols */ = {
-			isa = PBXGroup;
-			children = (
-				A7BF6C69C473962C4F6481F3FC8E75A6 /* EpoxyControllerDelegate.swift */,
-				687C66AE19159963701F9B19DE5DA297 /* EpoxyControlling.swift */,
-				36D735FCE4552BC1F129916C7ECF6414 /* EpoxySectionControlling.swift */,
-			);
-			name = Protocols;
-			path = Protocols;
-			sourceTree = "<group>";
-		};
-		35B96165650DA848530E36C634A56AFD /* Types */ = {
-			isa = PBXGroup;
-			children = (
-				A0564FB1A49DFB168951E30082054552 /* EpoxyDataSource.swift */,
-				3B9D38A4D0BA82816CF9BCA36D67B4F9 /* EpoxyModelWrapper.swift */,
-				A7FDE02AE344A0098C96B26A5A3EA66B /* InfiniteScrollingState.swift */,
-				C77DD342DF454D52028D4CD58EE8B4E1 /* InternalEpoxySection.swift */,
-			);
-			name = Types;
-			path = Types;
-			sourceTree = "<group>";
-		};
-		3D569F1D91B536FDFD4714290FEB0081 /* Types */ = {
-			isa = PBXGroup;
-			children = (
-				349106C9578B9B903FB63D3CA75F06B3 /* EpoxyCellState.swift */,
-				0196248C77251410EBCF173606ADAE53 /* EpoxyContext.swift */,
-				062762B871700E68195077E6A0366E19 /* EpoxyModel.swift */,
-				23BE85E26972479025A61025BD372C81 /* EpoxySection.swift */,
-				8B9E70AF1E801FCA4052176F23DF8CB4 /* EpoxyViewMetadata.swift */,
-				554623AC5D9730DC439BC4E84F8AD504 /* GlobalEpoxyConfig.swift */,
-				52353277937C9CCB1CFC755A0DA80625 /* Builders */,
-				D698BC833A937F912FD3FEF41DB5C41A /* Visibility */,
-			);
-			name = Types;
-			path = Epoxy/Types;
-			sourceTree = "<group>";
-		};
-		45B481ECBD5CF2710DA2483344E3DB83 /* Extensions */ = {
-			isa = PBXGroup;
-			children = (
-				C034A9772AE0C03739E8F61D72CCAD59 /* CollectionViewExtensions.swift */,
-				F7513BDEC18A39BC564B65D0DFE9B142 /* EpoxySection+Find.swift */,
-				E300B2F723ED98CB60F44B7E80A77BF8 /* TableViewExtensions.swift */,
+				7E36BDF033CF9208BF93A830FF71BDAC /* CollectionViewExtensions.swift */,
+				69EAF2AD73CFDE879B268AA41505D8E7 /* EpoxySection+Find.swift */,
+				744985BBEE445E3E61D781828C800E93 /* TableViewExtensions.swift */,
 			);
 			name = Extensions;
 			path = Epoxy/Extensions;
 			sourceTree = "<group>";
 		};
+		0713E0652A8764E38579C69F7B260882 /* EpoxyViews */ = {
+			isa = PBXGroup;
+			children = (
+				E7380DD1FCD006E61CAB9ADD3BC0BBA5 /* CollectionView */,
+				F8D2CF7C945B915044248378F1A8243B /* DeprecatedTableView */,
+				9660C62781D82F5C58FEA6687DFE8654 /* Types */,
+			);
+			name = EpoxyViews;
+			path = Epoxy/EpoxyViews;
+			sourceTree = "<group>";
+		};
+		0D489985859E9ACD9F8C1FD6DF63E14E /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				4790F00D30DC7CC869B6E5FCB133FC24 /* EpoxyLogging.swift */,
+			);
+			name = Logging;
+			path = Epoxy/Logging;
+			sourceTree = "<group>";
+		};
+		19DC1D5F780173E44BCBD960DABB3A5C /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				4D775641DB1FFA36A218E45E6394F13F /* EpoxyMultiSectionController.swift */,
+				4A4DAF1F1194071FEED3C98F3AC67E66 /* EpoxySectionController.swift */,
+			);
+			name = Controllers;
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		1E153071A5675D93F03485914C60860A /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				9E80AACFA68809C7FE59F42B3849BF32 /* Epoxy.podspec */,
+				CBEBE7FBE9EE1403EABDCF0BE7E2F706 /* LICENSE */,
+				7A8B7722941D6A4CFAFA2EE856C3F94B /* pull_request_template.md */,
+				6D308A2BFAC49CA2EB74E527F5670FF0 /* README.md */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
+		256E703A4CFFA0D67DCB9914D31710C7 /* Visibility */ = {
+			isa = PBXGroup;
+			children = (
+				1F3C9501D60CB5F520B881FA935E426B /* VisibleEpoxyMetadata.swift */,
+				5CFF28F068F50BCFFF3B502F5E34392A /* VisibleEpoxyModelMetaData.swift */,
+				E50297C200FD74764F6A4CE1D4EC6F64 /* VisibleEpoxySectionMetadata.swift */,
+			);
+			name = Visibility;
+			path = Visibility;
+			sourceTree = "<group>";
+		};
+		320B019BF9543928A4EBAF2C473B9DD8 /* Elements */ = {
+			isa = PBXGroup;
+			children = (
+				AD4E567CCA169F16F8C21869F65BECCB /* EpoxyDivider.swift */,
+			);
+			name = Elements;
+			path = Epoxy/Elements;
+			sourceTree = "<group>";
+		};
+		40D1DA438BF02CD1D002F6A02BFE8E92 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				79F50B81F64A6716D0BA06235329F727 /* Animatable.swift */,
+				92ADA2493AB5ABF80C59BB5317F3D6E7 /* DisplayResponder.swift */,
+				2DC62A25F0FD0F28F1DBF31912E1B6ED /* EpoxyableModel.swift */,
+				F046253BFFD8495C0470ACAEBE4B301B /* EpoxyAccessibilityCustomizable.swift */,
+				82DCF571D2CC88DEA53310F682620A4D /* EpoxyCell.swift */,
+				37E5AD6E9EE195C2432BACA2D42BF872 /* EpoxyInterface.swift */,
+				E5051F62A4ED2DFBC877FFF55436E03E /* EpoxyStringRepresentable.swift */,
+				562EF1F825708EE2BE087735F9B8DB03 /* Highlightable.swift */,
+				10B4B4D9668CAEF73E496623AE6E7B55 /* InfiniteScrollingDelegate.swift */,
+				4759A6EA8AD84C878C7912C57E84E816 /* LayoutAttributesFittingPrioritiesProvider.swift */,
+				EFFEC4BDA5C3C343532BFBC42F691159 /* Selectable.swift */,
+				39A55FEF2D3387627B7A3038CE18E88A /* StateCachingProtocols.swift */,
+				4241A372C7F71119D78ABD3F98BA9CB0 /* TypedEpoxyableModel.swift */,
+			);
+			name = Protocols;
+			path = Epoxy/Protocols;
+			sourceTree = "<group>";
+		};
+		425F5AC894D693C62942D07FB992995D /* EpoxyModelCache */ = {
+			isa = PBXGroup;
+			children = (
+				4C9A2210ECDBB5DD4182F0675CC3FE9A /* EpoxyModelCache.swift */,
+			);
+			name = EpoxyModelCache;
+			path = EpoxyModelCache;
+			sourceTree = "<group>";
+		};
 		4C13D5A0686BF8F45B4EA0A46C0DC560 /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
-				089A4E68E6841DCEF6FF1192F5F37446 /* Epoxy */,
+				E875BDE67CD7A33927F0D69FBBFC212F /* Epoxy */,
 			);
 			name = "Development Pods";
 			sourceTree = "<group>";
@@ -356,55 +346,43 @@
 			name = "Targets Support Files";
 			sourceTree = "<group>";
 		};
-		50FD87B812BAA825BE15BF779BDD6E58 /* Diffing */ = {
+		506083986EAC3ECF37E08B52B77B0CDD /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				32674F06B9EF94D24F64CFDFDC246524 /* Collection+Diff.swift */,
-				0310596BCB691DE30FB1B7E1FD478FE0 /* Diffable.swift */,
-				7A9A660D171CDFD40F985654FFDA5897 /* EpoxyChangeset.swift */,
+				E866D7867DB006A9FAFBBF1EBD2576FA /* EpoxyableSection.swift */,
+				2F5802EE7CF0760B65938C2CE37BCDAF /* InternalEpoxyDataType.swift */,
+				67A5D275DA7D7CC23B9C4867787D6894 /* InternalEpoxyInterface.swift */,
 			);
-			name = Diffing;
-			path = Epoxy/Diffing;
+			name = Protocols;
+			path = Protocols;
 			sourceTree = "<group>";
 		};
-		52353277937C9CCB1CFC755A0DA80625 /* Builders */ = {
+		6708325159B08C7B62F7001604A8AC1A /* Types */ = {
 			isa = PBXGroup;
 			children = (
-				33BA48013E7404B67513535B6A432960 /* BaseEpoxyModelBuilder.swift */,
-				1B4F5A0A7CEA7B3D54D03E54E4A2919E /* EpoxySectionBuilder.swift */,
+				E4A132DB76E18709AABAFCCD57A69944 /* EpoxyCellState.swift */,
+				E1B79D4A01C91928625701349493FFB5 /* EpoxyContext.swift */,
+				452EDBA02EF43EB3DD16FD93EE6706CB /* EpoxyModel.swift */,
+				66405E87BA61D128CB93AC2740B03A0A /* EpoxySection.swift */,
+				0D4E9DEDD7D8BD67B306F077A76DF774 /* EpoxyViewMetadata.swift */,
+				A469C6461D93C8790479A2464B97C986 /* GlobalEpoxyConfig.swift */,
+				F04D76915CDDB842BF2198DC61D0CC88 /* Builders */,
+				256E703A4CFFA0D67DCB9914D31710C7 /* Visibility */,
 			);
-			name = Builders;
-			path = Builders;
+			name = Types;
+			path = Epoxy/Types;
 			sourceTree = "<group>";
 		};
-		5DCA9F705A22636FA5B011A93469C7FA /* SectionController */ = {
+		6CCEE548F29925DB4B932C464AC6A71B /* Types */ = {
 			isa = PBXGroup;
 			children = (
-				FFB1B0639CBA8D1FE2EFED50E95DFECB /* Controllers */,
-				002A03BD8DCA8FC793D1A6923DC2CB42 /* EpoxyModelCache */,
-				2F098E040C4A8166678D6BF5C77F85D1 /* Protocols */,
+				FD605538E42C14B7EE594249D2094677 /* EpoxyDataSource.swift */,
+				EC751C37BA2B612741CA175056C68800 /* EpoxyModelWrapper.swift */,
+				9D47A57EC3A21126405D9DC63328A36F /* InfiniteScrollingState.swift */,
+				229658DEB66A4168F45D2CB407B7389F /* InternalEpoxySection.swift */,
 			);
-			name = SectionController;
-			path = Epoxy/SectionController;
-			sourceTree = "<group>";
-		};
-		65BA6CF5D94A502B7A5AF925D962936A /* LayoutDelegates */ = {
-			isa = PBXGroup;
-			children = (
-				9D33677859ED44BA95E83A0D515A9375 /* CollectionView+UICollectionViewFlowLayoutDelegate.swift */,
-			);
-			name = LayoutDelegates;
-			path = LayoutDelegates;
-			sourceTree = "<group>";
-		};
-		6B7BDB27DB533B87CFC284AAD261F020 /* Pod */ = {
-			isa = PBXGroup;
-			children = (
-				D827F80992AF1CF7C7474EEC4CF8D89E /* Epoxy.podspec */,
-				BC3AB0331E6018D3DB205FDA83B61D98 /* LICENSE */,
-				CF38DC5C3CEE24C7C422C6F8670DE8F6 /* README.md */,
-			);
-			name = Pod;
+			name = Types;
+			path = Types;
 			sourceTree = "<group>";
 		};
 		795857EEB23F1C7FDF4C83C789DA0EFF /* Pods-EpoxyExample */ = {
@@ -422,13 +400,41 @@
 			path = "Target Support Files/Pods-EpoxyExample";
 			sourceTree = "<group>";
 		};
-		82460CEA507456B1FBA3BB2605138A16 /* Elements */ = {
+		7B41056EA065FE5294D5736EC29B5021 /* Internal */ = {
 			isa = PBXGroup;
 			children = (
-				DDACF4FD11F5EDED80CA7CB02453B28C /* EpoxyDivider.swift */,
+				46D6DB99D4D7E0AC42ADBFF15B18845C /* CollectionViewCell.swift */,
+				48926E6D8F83418932A2AC4F45D5C036 /* CollectionViewCellAccessibilityDelegate.swift */,
+				1E2723136DCB250ACB5D459330E018BF /* CollectionViewEpoxyDataSource.swift */,
+				C82454D872CDECF31A61BB9BE3850E66 /* CollectionViewReusableView.swift */,
+				79069E268187175A3C913A85433EC343 /* InternalCollectionViewEpoxyData.swift */,
 			);
-			name = Elements;
-			path = Epoxy/Elements;
+			name = Internal;
+			path = Internal;
+			sourceTree = "<group>";
+		};
+		8381168372864BA9C4B0138F89CDE112 /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				A1D76315B37CE506101C4CE244C9F330 /* Epoxy.modulemap */,
+				0F14C4DA94099BCD56AF5F5C2E5EFE7F /* Epoxy.xcconfig */,
+				731A090D1FEA4ACE1B14958E1A17189F /* Epoxy-dummy.m */,
+				639E48191F53ADDB0C099EC4A6BFB584 /* Epoxy-prefix.pch */,
+				05C88C5AD49E92B089960B96D4764AF7 /* Epoxy-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "Example/Pods/Target Support Files/Epoxy";
+			sourceTree = "<group>";
+		};
+		86368630BA1A0C0B3C175E19C7B1A2F5 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				94064740A2BA13FE0B4754AC83DF02AB /* EpoxyControllerDelegate.swift */,
+				F608FDA69E969F6CC2D334CC00BC8953 /* EpoxyControlling.swift */,
+				54F97F7C50369DC8B95874D4B71328B5 /* EpoxySectionControlling.swift */,
+			);
+			name = Protocols;
+			path = Protocols;
 			sourceTree = "<group>";
 		};
 		9095FB2A1424F2FC948FFA7F57421E7B /* Products */ = {
@@ -440,34 +446,55 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9E2D4C914A232C68B6BE36C0C4D455DC /* Types */ = {
+		9443CA482E03F9567FF8FA40FC97820F /* Internal */ = {
 			isa = PBXGroup;
 			children = (
-				1EEE3E082C39FAFBEE3298BD05C035F8 /* CellSelectionStyle.swift */,
+				FA7CA74F991CBCB99662CF8951C4EA59 /* Extensions */,
+				506083986EAC3ECF37E08B52B77B0CDD /* Protocols */,
+				6CCEE548F29925DB4B932C464AC6A71B /* Types */,
+			);
+			name = Internal;
+			path = Epoxy/Internal;
+			sourceTree = "<group>";
+		};
+		9660C62781D82F5C58FEA6687DFE8654 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				48E652BBF80C82B2B938AFCEFE4D6A41 /* CellSelectionStyle.swift */,
 			);
 			name = Types;
 			path = Types;
 			sourceTree = "<group>";
 		};
-		B9841BBCE9EB13100CAF5501B2A6B912 /* ViewControllers */ = {
+		BBCEC6DBA858EDD35DAB8C4137CD8DE5 /* LayoutDelegates */ = {
 			isa = PBXGroup;
 			children = (
-				E393250CDA3BCC5EBC9409FA9DAAFB93 /* EpoxyCollectionViewController.swift */,
-				57E243880C2171642EC0383238C623D2 /* EpoxyTableViewController.swift */,
+				CC93768E967E9EBD1D638F5F1940CB9B /* CollectionView+UICollectionViewFlowLayoutDelegate.swift */,
 			);
-			name = ViewControllers;
-			path = Epoxy/ViewControllers;
+			name = LayoutDelegates;
+			path = LayoutDelegates;
 			sourceTree = "<group>";
 		};
-		C1686315F04BB4005B2F53352FE7842C /* Protocols */ = {
+		C089E0BF00BE749D2E9CC6054872838D /* SectionController */ = {
 			isa = PBXGroup;
 			children = (
-				B644BED8FB1C964E8F1337F8731F785B /* EpoxyableSection.swift */,
-				BD07780CC5CA268F3CF7239EF0F80512 /* InternalEpoxyDataType.swift */,
-				9E267E5903AA0F945A68CA3E5A49245E /* InternalEpoxyInterface.swift */,
+				19DC1D5F780173E44BCBD960DABB3A5C /* Controllers */,
+				425F5AC894D693C62942D07FB992995D /* EpoxyModelCache */,
+				86368630BA1A0C0B3C175E19C7B1A2F5 /* Protocols */,
 			);
-			name = Protocols;
-			path = Protocols;
+			name = SectionController;
+			path = Epoxy/SectionController;
+			sourceTree = "<group>";
+		};
+		C0FBD5F40FDA7A377286D518DDE48999 /* Diffing */ = {
+			isa = PBXGroup;
+			children = (
+				6A37E13FF99BA5DD11CB73F7291F16B9 /* Collection+Diff.swift */,
+				F2264D812EF8B59237E77F5BC87B6505 /* Diffable.swift */,
+				611D6F1D3D44092DEAB8C833C3FBED3E /* EpoxyChangeset.swift */,
+			);
+			name = Diffing;
+			path = Epoxy/Diffing;
 			sourceTree = "<group>";
 		};
 		CF1408CF629C7361332E53B88F7BD30C = {
@@ -481,28 +508,6 @@
 			);
 			sourceTree = "<group>";
 		};
-		D463F459436AF7A46A1B0C10B8EDB1D8 /* EpoxyViews */ = {
-			isa = PBXGroup;
-			children = (
-				E06F46F934BB9C18A3E1516890130470 /* CollectionView */,
-				E983167B3F999B385B591E2E4E2EA8FB /* DeprecatedTableView */,
-				9E2D4C914A232C68B6BE36C0C4D455DC /* Types */,
-			);
-			name = EpoxyViews;
-			path = Epoxy/EpoxyViews;
-			sourceTree = "<group>";
-		};
-		D698BC833A937F912FD3FEF41DB5C41A /* Visibility */ = {
-			isa = PBXGroup;
-			children = (
-				B85A27224ED5379D4B9FC124D51E98B1 /* VisibleEpoxyMetadata.swift */,
-				376A154EF6B2FC825B8319C77100276D /* VisibleEpoxyModelMetaData.swift */,
-				1B5A2FF542D376676EB41F36B0D30F3E /* VisibleEpoxySectionMetadata.swift */,
-			);
-			name = Visibility;
-			path = Visibility;
-			sourceTree = "<group>";
-		};
 		D89477F20FB1DE18A04690586D7808C4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -510,104 +515,93 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		D95E621A65C8FBA965FC550F39D12EDF /* Extensions */ = {
+		E489BE90A2D0BA1DDEBC12B786CB9382 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				5D2B2E6FAA62898D37357D8BB041FB7B /* UIView+CompressedHeight.swift */,
+				7F4B6677F7E6D9934B6F867897A01802 /* EpoxyCollectionViewController.swift */,
+				748DA96FE2CCF680D5580FEC33E8A528 /* EpoxyTableViewController.swift */,
 			);
-			name = Extensions;
-			path = Extensions;
+			name = ViewControllers;
+			path = Epoxy/ViewControllers;
 			sourceTree = "<group>";
 		};
-		DC1FD415862B0A5E80EB6C95D4FE0518 /* Internal */ = {
+		E7380DD1FCD006E61CAB9ADD3BC0BBA5 /* CollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				210B0D55C9ACA6734B29E5641F4F7068 /* CollectionViewCell.swift */,
-				4BA3EF59E04B92B4542E3B763B4F94D9 /* CollectionViewCellAccessibilityDelegate.swift */,
-				ACBCA08330F2F3D8386F7DD52FE8CA14 /* CollectionViewEpoxyDataSource.swift */,
-				1D0705BE6CE7C8EDD17EA95746F70C42 /* CollectionViewReusableView.swift */,
-				AF7F8F7E899185D0B0183A7A0ADC3156 /* InternalCollectionViewEpoxyData.swift */,
-			);
-			name = Internal;
-			path = Internal;
-			sourceTree = "<group>";
-		};
-		E06F46F934BB9C18A3E1516890130470 /* CollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				299686A933963774F51DBCC084340C10 /* CollectionView.swift */,
-				23A49158C0C53E9057090D9C7E25EC26 /* CollectionViewAccessibilityDelegate.swift */,
-				3A83F918023A85E91C5E4BF24F15814A /* CollectionViewEpoxyItemDataSourcePrefetching.swift */,
-				242CF361880286BD43C5608A6A985A40 /* CollectionViewEpoxyItemDisplayDelegate.swift */,
-				92087CBDCD1F9A16D6745F342EA8C83D /* CollectionViewEpoxyReorderingDelegate.swift */,
-				289A65CFCA9D847A3F71E9D2EB9F9621 /* CollectionViewTransitionLayoutDelegate.swift */,
-				B416E493B01220089D6C31DDFAD4AAA4 /* SupplementaryViewEpoxyableModel.swift */,
-				0A7FCE392DB50B44DD59361B57C298D6 /* SupplementaryViewEpoxyModel.swift */,
-				DC1FD415862B0A5E80EB6C95D4FE0518 /* Internal */,
-				65BA6CF5D94A502B7A5AF925D962936A /* LayoutDelegates */,
+				33A91117DADE278FCD518634965432CF /* CollectionView.swift */,
+				D3820210E3FB3EF42C7A195CC925B2C1 /* CollectionViewAccessibilityDelegate.swift */,
+				DE416CE7483A4B9D5AC9684C598BAE3B /* CollectionViewEpoxyItemDataSourcePrefetching.swift */,
+				3CE6CEEE5D7E046AD7145BCEC4D769E0 /* CollectionViewEpoxyItemDisplayDelegate.swift */,
+				473CA5D98A9F2CC5C99829FBEE35F67E /* CollectionViewEpoxyReorderingDelegate.swift */,
+				028EF803159B2D7D45D1550C0998A1C5 /* CollectionViewScrollAnimator.swift */,
+				BC7AE3CC2936652515C1390E96906F42 /* CollectionViewTransitionLayoutDelegate.swift */,
+				C486479D51C11B5921549EE7C19844CC /* SupplementaryViewEpoxyableModel.swift */,
+				B90C0F2FECAA657E4F30620471070CF2 /* SupplementaryViewEpoxyModel.swift */,
+				7B41056EA065FE5294D5736EC29B5021 /* Internal */,
+				BBCEC6DBA858EDD35DAB8C4137CD8DE5 /* LayoutDelegates */,
 			);
 			name = CollectionView;
 			path = CollectionView;
 			sourceTree = "<group>";
 		};
-		E3468561F39C396B494CB8C226345136 /* Protocols */ = {
+		E875BDE67CD7A33927F0D69FBBFC212F /* Epoxy */ = {
 			isa = PBXGroup;
 			children = (
-				5A70023B7709F786CCCBEB16DEC1C11B /* Animatable.swift */,
-				F999E95A3F20DDA36E9F7A72B4EA2A14 /* DisplayResponder.swift */,
-				6B6613095C6F1AFA8DBC13F7F258BC98 /* EpoxyableModel.swift */,
-				71B66F3B7F7D031F9AE641C1E34AE090 /* EpoxyAccessibilityCustomizable.swift */,
-				B7D7D80B0CAAE50A65F74E924753D08E /* EpoxyCell.swift */,
-				C0546059CB5F7FF4AEF83D401A374299 /* EpoxyInterface.swift */,
-				A4C4CEB67C8F5A354E6DFA963E924211 /* EpoxyStringRepresentable.swift */,
-				D938E1A6C31736707ACE4AF1A9D2AB6A /* Highlightable.swift */,
-				19FB7C060AE9DC1159CA077C629515EC /* InfiniteScrollingDelegate.swift */,
-				EB31DDCCDCD957DBA696F653F7BAE474 /* LayoutAttributesFittingPrioritiesProvider.swift */,
-				77051DCED6C14701817B731E1F35BB00 /* Selectable.swift */,
-				E396518B2BF71A88D6F26A3CA624C560 /* StateCachingProtocols.swift */,
-				56754A8A61730A1DFA68AD79647BA8EE /* TypedEpoxyableModel.swift */,
+				BB473649600476BC3867EDF26DA3FEA5 /* Epoxy.h */,
+				C0FBD5F40FDA7A377286D518DDE48999 /* Diffing */,
+				320B019BF9543928A4EBAF2C473B9DD8 /* Elements */,
+				0713E0652A8764E38579C69F7B260882 /* EpoxyViews */,
+				066C0A295CD573A968ED4C44DDD70E8B /* Extensions */,
+				9443CA482E03F9567FF8FA40FC97820F /* Internal */,
+				0D489985859E9ACD9F8C1FD6DF63E14E /* Logging */,
+				1E153071A5675D93F03485914C60860A /* Pod */,
+				40D1DA438BF02CD1D002F6A02BFE8E92 /* Protocols */,
+				C089E0BF00BE749D2E9CC6054872838D /* SectionController */,
+				8381168372864BA9C4B0138F89CDE112 /* Support Files */,
+				6708325159B08C7B62F7001604A8AC1A /* Types */,
+				E489BE90A2D0BA1DDEBC12B786CB9382 /* ViewControllers */,
 			);
-			name = Protocols;
-			path = Epoxy/Protocols;
+			name = Epoxy;
+			path = ../..;
 			sourceTree = "<group>";
 		};
-		E983167B3F999B385B591E2E4E2EA8FB /* DeprecatedTableView */ = {
+		F04D76915CDDB842BF2198DC61D0CC88 /* Builders */ = {
 			isa = PBXGroup;
 			children = (
-				ECA099FBE4DBA9CCDDB2FA625040CD21 /* DeprecatedTableView.swift */,
-				9B4DD6DC14564E3CA981EFB531E87250 /* TableViewAccessibilityDelegate.swift */,
-				2CBF5A453282E451E90FC8E090E94E69 /* TableViewEpoxyModelDataSourcePrefetching.swift */,
-				C711604D4CDD4C2B04E1A128B2260B3D /* TableViewEpoxyModelDisplayDelegate.swift */,
-				C010D3AE67243F8ADDEACBDFBF23889E /* TableViewEpoxyModelSwipeActionDelegate.swift */,
-				7F19DF100046AB597DDE2CB875603018 /* TableViewEpoxyReorderingDelegate.swift */,
-				2321A76A6A35D0AD22DBC3F8725EAC27 /* Internal */,
+				8E84D98BAC965ADB2D2AA64974146BFA /* BaseEpoxyModelBuilder.swift */,
+				ED2731BA17454D6C901F6EAAE71AB586 /* EpoxySectionBuilder.swift */,
+			);
+			name = Builders;
+			path = Builders;
+			sourceTree = "<group>";
+		};
+		F8D2CF7C945B915044248378F1A8243B /* DeprecatedTableView */ = {
+			isa = PBXGroup;
+			children = (
+				BE8810D31A4A12184ABE9AA502BA1069 /* DeprecatedTableView.swift */,
+				C606AE1A8710F80B281F600315570C45 /* TableViewAccessibilityDelegate.swift */,
+				5A4AFBE226064DEA76D03F32A11BA1EB /* TableViewEpoxyModelDataSourcePrefetching.swift */,
+				4CFA78C25F27157626CB40D30DBBAAA8 /* TableViewEpoxyModelDisplayDelegate.swift */,
+				F43D2D321800DAB1D93FA59F7DED4C7F /* TableViewEpoxyModelSwipeActionDelegate.swift */,
+				38D843F85299718A2DA8A583272AB3DA /* TableViewEpoxyReorderingDelegate.swift */,
+				02AC26C7A34D2CF909DA002AC03DFEBB /* Internal */,
 			);
 			name = DeprecatedTableView;
 			path = DeprecatedTableView;
 			sourceTree = "<group>";
 		};
-		FFB1B0639CBA8D1FE2EFED50E95DFECB /* Controllers */ = {
+		FA7CA74F991CBCB99662CF8951C4EA59 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				456D7A2251F3D2AAEC83F6D83B567B52 /* EpoxyMultiSectionController.swift */,
-				C85C0531FE2716B53DBFE66FA0411392 /* EpoxySectionController.swift */,
+				318568FD0BC6469D686E15835D8879AC /* UIView+CompressedHeight.swift */,
 			);
-			name = Controllers;
-			path = Controllers;
+			name = Extensions;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		3B14F1C23BB13B6580A60B0AB66D57D9 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				498A2107C33628A29C753D5702019539 /* Epoxy-umbrella.h in Headers */,
-				CB59A1D8F9DE79D7A5DD4AE1942B9135 /* Epoxy.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		47D28B4AA7F7598448D5FD2E583085AB /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -616,17 +610,26 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9A36476C2018E5AFF5450F4EE0BD8BDD /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				19D4B1AF60AECC7A829B0EBBF6F33948 /* Epoxy-umbrella.h in Headers */,
+				7D2A2AD48BC9ADFEB91D28E7980C51B7 /* Epoxy.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
 		7DD08D45D4D84134108AB2F2C98F479C /* Epoxy */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 7DDDF7926BB22C29B25D30719597C63F /* Build configuration list for PBXNativeTarget "Epoxy" */;
+			buildConfigurationList = 3E6BBADB212100292279E01EFD5BCF89 /* Build configuration list for PBXNativeTarget "Epoxy" */;
 			buildPhases = (
-				3B14F1C23BB13B6580A60B0AB66D57D9 /* Headers */,
-				4C2D5E5E19B0FC61E05341E3729F5E42 /* Sources */,
-				6E69C5096F9EB88AADCA080E2BB16CDF /* Frameworks */,
-				598E1FD9852D6B8CB2E7652D24E2D49A /* Copy generated compatibility header */,
+				9A36476C2018E5AFF5450F4EE0BD8BDD /* Headers */,
+				A87B72BCBFD29BF1F10DE2F553D240CC /* Sources */,
+				3F35746AF827C7AD06DD861ECF6CC4DF /* Frameworks */,
+				D2B66C0D806AC924890989542D93C103 /* Copy generated compatibility header */,
 			);
 			buildRules = (
 			);
@@ -684,7 +687,7 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		598E1FD9852D6B8CB2E7652D24E2D49A /* Copy generated compatibility header */ = {
+		D2B66C0D806AC924890989542D93C103 /* Copy generated compatibility header */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -711,85 +714,86 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		4C2D5E5E19B0FC61E05341E3729F5E42 /* Sources */ = {
+		A87B72BCBFD29BF1F10DE2F553D240CC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CD894848D1D1B8FF3221BE1D099B95C /* Animatable.swift in Sources */,
-				EC969961171412C0278149A7A09B2231 /* BaseEpoxyModelBuilder.swift in Sources */,
-				F5834551B2E8D6EA0E8DD0314A047A1B /* CellSelectionStyle.swift in Sources */,
-				259A52BD6C6DF2A4677226598D170A7D /* Collection+Diff.swift in Sources */,
-				A1A2EC0DF953F738B5FDD6E20CF05B3D /* CollectionView+UICollectionViewFlowLayoutDelegate.swift in Sources */,
-				47F411A86D507EF5E86704DCE0B50E37 /* CollectionView.swift in Sources */,
-				F57997EFFF8F2AC71BA12C6FD0596510 /* CollectionViewAccessibilityDelegate.swift in Sources */,
-				1352F3C6065059ECD185CCA28BE5E015 /* CollectionViewCell.swift in Sources */,
-				0EA06E0D48212FC5D664436E04070EB5 /* CollectionViewCellAccessibilityDelegate.swift in Sources */,
-				5A66E338E27BA9FD550B07884A1D0C08 /* CollectionViewEpoxyDataSource.swift in Sources */,
-				91F2B8628381E9682B7DD04D8F01E07C /* CollectionViewEpoxyItemDataSourcePrefetching.swift in Sources */,
-				83F486FFE2E9BBCF8FD05C16D996CB50 /* CollectionViewEpoxyItemDisplayDelegate.swift in Sources */,
-				6DB371B3A023C09C1AA678A05EA7A853 /* CollectionViewEpoxyReorderingDelegate.swift in Sources */,
-				6980E49E76B5FA11DC3D004CDFD49BDA /* CollectionViewExtensions.swift in Sources */,
-				17053ABB1EA75FACB8C2D9ECE8768BD0 /* CollectionViewReusableView.swift in Sources */,
-				1D6DC1921BF50FC30F19907EE399CFED /* CollectionViewTransitionLayoutDelegate.swift in Sources */,
-				EFDB43AFEFD1A53966DEDCCC631B359C /* Diffable.swift in Sources */,
-				69B26CD2C041A1CB535C7FB1E84A3B7A /* DisplayResponder.swift in Sources */,
-				ED7DEF308E75A6476A93BAF9598C6FAA /* Epoxy-dummy.m in Sources */,
-				379692B1770319475B673B1166CD24C8 /* EpoxyableModel.swift in Sources */,
-				3E8E070153DCC819043680F8BDFD2B13 /* EpoxyableSection.swift in Sources */,
-				0CAE90B60D5BF0340E4BAB63D6FBDA04 /* EpoxyAccessibilityCustomizable.swift in Sources */,
-				A7634E1129B97552D39D53BCC419E2DC /* EpoxyCell.swift in Sources */,
-				322BD521F744B34876886174A184DB36 /* EpoxyCellState.swift in Sources */,
-				58A8535BC4E22ECB67E82BA6A08E5B58 /* EpoxyChangeset.swift in Sources */,
-				F22A62CE340D99C0CAE05BC9391E6645 /* EpoxyCollectionViewController.swift in Sources */,
-				8EE1C4AF48CACB86AFCBC91D5AD9BEFB /* EpoxyContext.swift in Sources */,
-				6DC0A3DE0743185BBBFE17580FDB5849 /* EpoxyControllerDelegate.swift in Sources */,
-				3B6DA0CB0CDD3BACBF35F700400F5445 /* EpoxyControlling.swift in Sources */,
-				B749AC044C8DC20F188D33A753FC14E0 /* EpoxyDataSource.swift in Sources */,
-				77F9E4B02DF3CF0C58290A414ABB5941 /* EpoxyDivider.swift in Sources */,
-				0C3ACDB155B643DB573ABEEF01EB28D5 /* EpoxyInterface.swift in Sources */,
-				6006C92F737872B6735B09C358FFC4F1 /* EpoxyLogging.swift in Sources */,
-				9327C6B49B69E3317C56350D19A4FDA7 /* EpoxyModel.swift in Sources */,
-				7F3314FD32E4EE9583A68B512C3FC8C3 /* EpoxyModelCache.swift in Sources */,
-				BB9710BEC17072ECFEFAD73DEA9B514A /* EpoxyModelWrapper.swift in Sources */,
-				AA33EB7D4E5638C1D4922D8B4903E6EE /* EpoxyMultiSectionController.swift in Sources */,
-				FE7491CA31A8AAB04B948917108C485B /* EpoxySection+Find.swift in Sources */,
-				0B45EEFBF36AE3433352F65BE046C836 /* EpoxySection.swift in Sources */,
-				693ED9BC6FAE7CC08D6125B814A50BAF /* EpoxySectionBuilder.swift in Sources */,
-				36F1A5C2BF26DD688EE2A63A92A59152 /* EpoxySectionController.swift in Sources */,
-				3D4E0B943D39EDDB355071631F4DC499 /* EpoxySectionControlling.swift in Sources */,
-				3B8B830960FFA8267016E9EA30C7AF05 /* EpoxyStringRepresentable.swift in Sources */,
-				E8DF7D6E61BC69675499C4726F41BEC5 /* EpoxyTableViewController.swift in Sources */,
-				E39EE871AFCE6F9F7E466FEA82474E54 /* EpoxyViewMetadata.swift in Sources */,
-				C07B4BA3A0D187680439C05A525E9010 /* GlobalEpoxyConfig.swift in Sources */,
-				DA2397FB5A523148491D60EBD98AF466 /* Highlightable.swift in Sources */,
-				DB7ED71069C8DA80F0D5A1BF72449473 /* InfiniteScrollingDelegate.swift in Sources */,
-				6EAC05783C0549BD6B218CB695D9DA9F /* InfiniteScrollingState.swift in Sources */,
-				744F4A52C07B2670C7A8DCAFBF9F451C /* InternalCollectionViewEpoxyData.swift in Sources */,
-				C81180765C4A9182C6B426097A9E61BC /* InternalEpoxyDataType.swift in Sources */,
-				2B6B62B85A08A0E7391614A0D48AC300 /* InternalEpoxyInterface.swift in Sources */,
-				BB1B30CFFE9480976F7A641D63A4FF40 /* InternalEpoxySection.swift in Sources */,
-				7F63BC615130F054574ADB74061D63A1 /* InternalTableViewEpoxyData.swift in Sources */,
-				A40448F9A2777FBB3CE96FE4D743159B /* LayoutAttributesFittingPrioritiesProvider.swift in Sources */,
-				8F8144990B8EF0BA079DDB0929260BDF /* Selectable.swift in Sources */,
-				37D2F124EA914E010FFF21A03AA1205B /* StateCachingProtocols.swift in Sources */,
-				46B34DE97F365C0A6C19BC2DC57F1608 /* SupplementaryViewEpoxyableModel.swift in Sources */,
-				262A496B1CD0849565F7093DE9D478A5 /* SupplementaryViewEpoxyModel.swift in Sources */,
-				98C6522ED01DEFE12DE8648203DD42F8 /* DeprecatedTableView.swift in Sources */,
-				11DDBBC10B002CF9105F19712158B046 /* TableViewAccessibilityDelegate.swift in Sources */,
-				2553995DF413E4720A807CC6E8B5B5E5 /* TableViewCell.swift in Sources */,
-				AAED3CBD8326CE81CAF3F8C722991F24 /* TableViewCellAccessibilityDelegate.swift in Sources */,
-				4851B5F2B3022F98960F56280404CAEE /* TableViewDataSourceReorderingDelegate.swift in Sources */,
-				C612E59ED538D1DDFAF6A4B1DDAA2E9C /* TableViewEpoxyDataSource.swift in Sources */,
-				95582B1099588A7C20BDEEEFB5D120E1 /* TableViewEpoxyModelDataSourcePrefetching.swift in Sources */,
-				35D05D1C131B258D51F07C14BFA51410 /* TableViewEpoxyModelDisplayDelegate.swift in Sources */,
-				4B4166BDA42C6B77658D2729A3BAB160 /* TableViewEpoxyModelSwipeActionDelegate.swift in Sources */,
-				3F90FD6860E014B20507F18DC2B04C90 /* TableViewEpoxyReorderingDelegate.swift in Sources */,
-				C07F4057489B0D9E5682C70593921FBF /* TableViewExtensions.swift in Sources */,
-				EE106E5C8CC4FF951F492056D2F6F06C /* TypedEpoxyableModel.swift in Sources */,
-				B3DB958597FF8EBE68F9DB68DBF55D5C /* UIView+CompressedHeight.swift in Sources */,
-				1A21ABAD3729B02699DD7329482BD495 /* VisibleEpoxyMetadata.swift in Sources */,
-				00D243FB35C4100B2BE715ADB98DC114 /* VisibleEpoxyModelMetaData.swift in Sources */,
-				75422645E2856AE154319977A867143E /* VisibleEpoxySectionMetadata.swift in Sources */,
+				4F47AAA593124A43A4D4A4026895F458 /* Animatable.swift in Sources */,
+				C521EA2E0E9E90C53B740FC83CC3A788 /* BaseEpoxyModelBuilder.swift in Sources */,
+				05CFF0090E0757F98D6F3310BBCDF1B5 /* CellSelectionStyle.swift in Sources */,
+				6FA7DCFDE37D896DA5806753E189881C /* Collection+Diff.swift in Sources */,
+				FCA9CB3D754869DE8228107B12E965AD /* CollectionView+UICollectionViewFlowLayoutDelegate.swift in Sources */,
+				8772C8DF8D1334046FCAC736C4111111 /* CollectionView.swift in Sources */,
+				A8D4638EB6C98FEC40CB7CFD92F12DC1 /* CollectionViewAccessibilityDelegate.swift in Sources */,
+				659978F98B21F1F596A531D2EAAAC0E8 /* CollectionViewCell.swift in Sources */,
+				23F28FC618A9BB3142A73619BF825195 /* CollectionViewCellAccessibilityDelegate.swift in Sources */,
+				F706CFF3152F3FBEBEE7A40D508F1D4D /* CollectionViewEpoxyDataSource.swift in Sources */,
+				8C3ACC9588C00EB2712C0FA29AC8F9EA /* CollectionViewEpoxyItemDataSourcePrefetching.swift in Sources */,
+				E360D17274BA4CE484A00F26FBD74D4D /* CollectionViewEpoxyItemDisplayDelegate.swift in Sources */,
+				8DF08B52BA5F02D3EA8FB4F250E48B73 /* CollectionViewEpoxyReorderingDelegate.swift in Sources */,
+				E58E3CB6AB20BA0390DA9B4D5439D706 /* CollectionViewExtensions.swift in Sources */,
+				9150DE8E950CFF52060A392C28C23F9B /* CollectionViewReusableView.swift in Sources */,
+				9255DAD5B7698AC767342CE5D1B94A98 /* CollectionViewScrollAnimator.swift in Sources */,
+				04297F4E5EDE0262127171B4E64A1052 /* CollectionViewTransitionLayoutDelegate.swift in Sources */,
+				A89AC86DD79F19466E5E6881B87B6B69 /* DeprecatedTableView.swift in Sources */,
+				F309D860C45A71689E620C9604E2DF01 /* Diffable.swift in Sources */,
+				C21DF4E8EE0AE690ADE8F285FAA78672 /* DisplayResponder.swift in Sources */,
+				C11EBC8227484083BF8FB134E2EF298B /* Epoxy-dummy.m in Sources */,
+				7A715BBB0BC08C173FE67B5457F548DF /* EpoxyableModel.swift in Sources */,
+				EE31E9C68AE82FBBAD315D4DE9DA6A76 /* EpoxyableSection.swift in Sources */,
+				AA991FDB14A08487083AF15B7C5AD51D /* EpoxyAccessibilityCustomizable.swift in Sources */,
+				4893BB5648CFC79EADA32AC07487B80C /* EpoxyCell.swift in Sources */,
+				D358C542644165FEBCDBF21C61A52363 /* EpoxyCellState.swift in Sources */,
+				F27AA23945A69E100745773F23610E92 /* EpoxyChangeset.swift in Sources */,
+				352E2A1042F874B3BA7BAEB61D48D94E /* EpoxyCollectionViewController.swift in Sources */,
+				8958104DF2924BF58ACB9968DBB0BC90 /* EpoxyContext.swift in Sources */,
+				EF3A816477992EAE1EAB293035F02663 /* EpoxyControllerDelegate.swift in Sources */,
+				B62960D080A65F3E795FC1F9ED055B12 /* EpoxyControlling.swift in Sources */,
+				580ED8CB1BA8520AD2E2D22DF7AFADB4 /* EpoxyDataSource.swift in Sources */,
+				C02FBF9A292B277A1B70B87661805F5E /* EpoxyDivider.swift in Sources */,
+				5923DCFDB0FBBD480B0FFE66AAA138C2 /* EpoxyInterface.swift in Sources */,
+				0E1181C2BBFC586D40EFD2E9CB526A34 /* EpoxyLogging.swift in Sources */,
+				E156598E8318DB9DAD4D1384C4E7643B /* EpoxyModel.swift in Sources */,
+				57EF8D70596C9C5F91C9F81567122C39 /* EpoxyModelCache.swift in Sources */,
+				EF93E05C246BB795C8241DEC92C7C6C8 /* EpoxyModelWrapper.swift in Sources */,
+				CC44F2C200A0B95E578CFAADDCB98E6E /* EpoxyMultiSectionController.swift in Sources */,
+				E03865DD20D4CEBD32D3046C3BC4B64A /* EpoxySection+Find.swift in Sources */,
+				E8C275A09600C04AF2A2C14FDC47B6D7 /* EpoxySection.swift in Sources */,
+				17B5D913B413EE85A5D1F9B1218AF98B /* EpoxySectionBuilder.swift in Sources */,
+				DFC9B0A030CBFBAB3F6E6B9F938B68F6 /* EpoxySectionController.swift in Sources */,
+				767E815EE9D826D1B1F67CC2083F7164 /* EpoxySectionControlling.swift in Sources */,
+				12899D0F40D506628D0EE39BEA109E10 /* EpoxyStringRepresentable.swift in Sources */,
+				0BBDF179E677E920E8942689F9EDBC77 /* EpoxyTableViewController.swift in Sources */,
+				23244A9BC13D8D66942BA1B76E74418D /* EpoxyViewMetadata.swift in Sources */,
+				4AA5E25C7FBB34A45CEF147089A8FA92 /* GlobalEpoxyConfig.swift in Sources */,
+				8B5225F520EF8A9CBB3712C9AC579C87 /* Highlightable.swift in Sources */,
+				C00108DB91958CC4E1BF3499FEF941BF /* InfiniteScrollingDelegate.swift in Sources */,
+				89E418BFDB6342E74189E31223C7507F /* InfiniteScrollingState.swift in Sources */,
+				52348C4447A446069F1D3516FA4DDA52 /* InternalCollectionViewEpoxyData.swift in Sources */,
+				1C1C79CB511403EC13141D084027F641 /* InternalEpoxyDataType.swift in Sources */,
+				959465FEB2EBA2433E45422CEB9DC388 /* InternalEpoxyInterface.swift in Sources */,
+				8D65C28ED8063E9C8DF1AAA507FDFADD /* InternalEpoxySection.swift in Sources */,
+				5F503968303BDB9FCB104DBB6CC554A2 /* InternalTableViewEpoxyData.swift in Sources */,
+				E8E1A865A376CE1E3B6222669AB389FD /* LayoutAttributesFittingPrioritiesProvider.swift in Sources */,
+				AF2F0AF39BEEB558D0BE361133D28323 /* Selectable.swift in Sources */,
+				B7095813F0EBD8CDB35CAF3D752704FD /* StateCachingProtocols.swift in Sources */,
+				61E065FF5A33181F8F93C98826274929 /* SupplementaryViewEpoxyableModel.swift in Sources */,
+				DE20DEB0E183FC184CD37909EBE653D6 /* SupplementaryViewEpoxyModel.swift in Sources */,
+				B0EB1364EEAAC6D0B8A063CC92000F7D /* TableViewAccessibilityDelegate.swift in Sources */,
+				BAD7DE3CECDB0B17B937C0378B823C19 /* TableViewCell.swift in Sources */,
+				6920448132FD1F754D33024209053751 /* TableViewCellAccessibilityDelegate.swift in Sources */,
+				0105CE37265DFF148FC90F8E003721BC /* TableViewDataSourceReorderingDelegate.swift in Sources */,
+				083338F4F0C1EDBB22121706CEC6F144 /* TableViewEpoxyDataSource.swift in Sources */,
+				6E17763C941DC5AE905E0B3356D31959 /* TableViewEpoxyModelDataSourcePrefetching.swift in Sources */,
+				0B201B2704738F8DB5CA6C81C406C3F0 /* TableViewEpoxyModelDisplayDelegate.swift in Sources */,
+				0B846ADE0CCB38D05FD761D3FF69DADE /* TableViewEpoxyModelSwipeActionDelegate.swift in Sources */,
+				23045ADA28C9C1AB38AE5AEF032DEAFD /* TableViewEpoxyReorderingDelegate.swift in Sources */,
+				B7A72BE7F9317652AA895D616BCD16A6 /* TableViewExtensions.swift in Sources */,
+				81F4A9BFDE2A7AF74804C5E1EF899090 /* TypedEpoxyableModel.swift in Sources */,
+				F4C4E295DA4766B1899667FA6F4DA559 /* UIView+CompressedHeight.swift in Sources */,
+				A770100F92834E5841B20ABEC23EBF17 /* VisibleEpoxyMetadata.swift in Sources */,
+				9C5EBCE39BF678C9B750404E8CA766A2 /* VisibleEpoxyModelMetaData.swift in Sources */,
+				4AB90BFEE412DC4D60A8F1474818DFEE /* VisibleEpoxySectionMetadata.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -873,9 +877,9 @@
 			};
 			name = Release;
 		};
-		45D241AF85CE489B83A5F3C2665A7025 /* Debug */ = {
+		376E0C5E58F1F9C52557C37B6B0EF4EE /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FFB3E9789E9790657ACEBB8E8142BB17 /* Epoxy.debug.xcconfig */;
+			baseConfigurationReference = 0F14C4DA94099BCD56AF5F5C2E5EFE7F /* Epoxy.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -896,8 +900,9 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
-			name = Debug;
+			name = Release;
 		};
 		56816104905916D88A847293BF9FEE7D /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -923,9 +928,9 @@
 			};
 			name = Release;
 		};
-		86DF1A926FE336959CED2CC3FD5C41B7 /* Release */ = {
+		69117F523A42169DD392B21894CBA518 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 437EE9C04828142EF2A9A29C2E260DCE /* Epoxy.release.xcconfig */;
+			baseConfigurationReference = 0F14C4DA94099BCD56AF5F5C2E5EFE7F /* Epoxy.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_OBJC_WEAK = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
@@ -946,9 +951,8 @@
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 			};
-			name = Release;
+			name = Debug;
 		};
 		BCCC3140BB21F72C063FC7A751C06857 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -1049,20 +1053,20 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		3E6BBADB212100292279E01EFD5BCF89 /* Build configuration list for PBXNativeTarget "Epoxy" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				69117F523A42169DD392B21894CBA518 /* Debug */,
+				376E0C5E58F1F9C52557C37B6B0EF4EE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		4821239608C13582E20E6DA73FD5F1F9 /* Build configuration list for PBXProject "Pods" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DD8F832993327D1DD8046C3CBCBD97CD /* Debug */,
 				257497152829C177993B5EC99C1D227A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		7DDDF7926BB22C29B25D30719597C63F /* Build configuration list for PBXNativeTarget "Epoxy" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				45D241AF85CE489B83A5F3C2665A7025 /* Debug */,
-				86DF1A926FE336959CED2CC3FD5C41B7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
