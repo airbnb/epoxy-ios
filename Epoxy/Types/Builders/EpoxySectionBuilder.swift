@@ -5,7 +5,7 @@
 /// efficiently over time.
 public final class EpoxySectionBuilder {
 
-  public init(dataID: String, items: [EpoxyableModel] = []) {
+  public init(dataID: AnyHashable, items: [EpoxyableModel] = []) {
     self.dataID = dataID
     self.items = items
   }
@@ -59,7 +59,7 @@ public final class EpoxySectionBuilder {
 
   // MARK: Private
 
-  private let dataID: String
+  private let dataID: AnyHashable
   private var items: [EpoxyableModel]
   private var userInfo: [EpoxyUserInfoKey: Any] = [:]
 }
