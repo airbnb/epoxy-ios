@@ -118,7 +118,7 @@ public class TableViewEpoxyDataSource: EpoxyDataSource<DeprecatedTableView>, UIT
   // MARK: Private
 
   /// Returns dataID and sectionDataID as a tuple at the given index path
-  private func dataIDs(at indexPath: IndexPath) -> (String, String)? {
+  private func dataIDs(at indexPath: IndexPath) -> (String, AnyHashable)? {
     guard
       let dataID = epoxyModel(at: indexPath)?.dataID,
       let sectionDataID = epoxySection(at: indexPath.section)?.dataID else

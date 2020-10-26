@@ -25,7 +25,7 @@ public extension Sequence where Iterator.Element == EpoxySection {
   }
 
   /// Find the EpoxySection and Index for a given section dataID
-  func findSection(for dataID: String) throws -> (EpoxySection, Int) {
+  func findSection(for dataID: AnyHashable) throws -> (EpoxySection, Int) {
 
     for (sectionIndex, section) in self.enumerated() {
       if section.dataID == dataID {

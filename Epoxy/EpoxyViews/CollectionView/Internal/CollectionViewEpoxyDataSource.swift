@@ -7,8 +7,8 @@ protocol CollectionViewDataSourceReorderingDelegate: AnyObject {
   func dataSource(
     _ dataSource: CollectionViewEpoxyDataSource,
     moveItemWithDataID dataID: String,
-    inSectionWithDataID fromSectionDataID: String,
-    toSectionWithDataID toSectionDataID: String,
+    inSectionWithDataID fromSectionDataID: AnyHashable,
+    toSectionWithDataID toSectionDataID: AnyHashable,
     withDestinationDataId destinationDataId: String)
 }
 

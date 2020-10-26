@@ -70,7 +70,7 @@ public class EpoxyDataSource<EpoxyInterfaceType: InternalEpoxyInterface>: NSObje
   }
 
   func updateItem(
-    at dataID: String,
+    at dataID: AnyHashable,
     with item: EpoxyableModel,
     animated: Bool)
   {

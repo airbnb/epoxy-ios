@@ -6,8 +6,8 @@ import Foundation
 public final class InternalCollectionViewEpoxyData: InternalEpoxyDataType {
   init(
     sections: [InternalEpoxySection],
-    sectionIndexMap: [String: Int],
-    itemIndexMap: [String: IndexPath],
+    sectionIndexMap: [AnyHashable: Int],
+    itemIndexMap: [AnyHashable: IndexPath],
     epoxyLogger: EpoxyLogging)
   {
     self.sections = sections
@@ -20,8 +20,8 @@ public final class InternalCollectionViewEpoxyData: InternalEpoxyDataType {
 
   // MARK: Fileprivate
 
-  fileprivate var sectionIndexMap = [String: Int]()
-  fileprivate var itemIndexMap = [String: IndexPath]()
+  fileprivate var sectionIndexMap = [AnyHashable: Int]()
+  fileprivate var itemIndexMap = [AnyHashable: IndexPath]()
   fileprivate let epoxyLogger: EpoxyLogging
 }
 
@@ -32,8 +32,8 @@ extension InternalCollectionViewEpoxyData {
     epoxyLogger: EpoxyLogging)
     -> InternalCollectionViewEpoxyData
   {
-    var sectionIndexMap = [String: Int]()
-    var itemIndexMap = [String: IndexPath]()
+    var sectionIndexMap = [AnyHashable: Int]()
+    var itemIndexMap = [AnyHashable: IndexPath]()
 
     var convertedSections = [InternalEpoxySection]()
     sections.enumerated().forEach { sectionIndex, section in
@@ -87,7 +87,7 @@ extension InternalCollectionViewEpoxyData {
       itemChangeset: itemChangeset)
   }
 
-  public func updateItem(at dataID: String, with item: EpoxyableModel) -> IndexPath? {
+  public func updateItem(at dataID: AnyHashable, with item: EpoxyableModel) -> IndexPath? {
     guard let indexPath = itemIndexMap[dataID] else {
       epoxyLogger.epoxyAssert(false, "No item with that dataID exists")
       return nil
@@ -103,11 +103,11 @@ extension InternalCollectionViewEpoxyData {
     return indexPath
   }
 
-  public func indexPathForItem(at dataID: String) -> IndexPath? {
+  public func indexPathForItem(at dataID: AnyHashable) -> IndexPath? {
     return itemIndexMap[dataID]
   }
 
-  public func indexForSection(at dataID: String) -> Int? {
+  public func indexForSection(at dataID: AnyHashable) -> Int? {
     return sectionIndexMap[dataID]
   }
 }

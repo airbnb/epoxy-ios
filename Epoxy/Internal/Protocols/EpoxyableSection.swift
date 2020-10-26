@@ -6,7 +6,7 @@ import Foundation
 public protocol EpoxyableSection {
 
   /// The dataID of this section
-  var dataID: String { get }
+  var dataID: AnyHashable { get }
 
   /// The array of items to display in this section
   var itemModels: [EpoxyableModel] { get }

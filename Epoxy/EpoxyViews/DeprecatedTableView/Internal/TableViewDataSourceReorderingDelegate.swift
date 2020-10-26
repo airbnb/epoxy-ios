@@ -8,12 +8,12 @@ protocol TableViewDataSourceReorderingDelegate: AnyObject {
   func dataSource(
     _ dataSource: UITableViewDataSource,
     canMoveRowWithDataID dataID: String,
-    inSection sectionDataID: String) -> Bool
+    inSection sectionDataID: AnyHashable) -> Bool
 
   func dataSource(
     _ dataSource: UITableViewDataSource,
     moveRowWithDataID dataID: String,
-    inSectionWithDataID fromSectionDataID: String,
-    toSectionWithDataID toSectionDataID: String,
+    inSectionWithDataID fromSectionDataID: AnyHashable,
+    toSectionWithDataID toSectionDataID: AnyHashable,
     withDestinationDataID destinationDataID: String)
 }
