@@ -6,7 +6,7 @@ import Foundation
 /// Manages a set of EpoxyModelWrappers for use inside of internal data sources
 public final class InternalEpoxySection {
   init(
-    dataID: String,
+    dataID: AnyHashable,
     items: [EpoxyModelWrapper],
     userInfo: [EpoxyUserInfoKey: Any])
   {
@@ -15,7 +15,7 @@ public final class InternalEpoxySection {
     self.userInfo = userInfo
   }
 
-  public let dataID: String
+  public let dataID: AnyHashable
   public var userInfo: [EpoxyUserInfoKey: Any]
   var items: [EpoxyModelWrapper]
 }

@@ -8,7 +8,7 @@ public protocol CollectionViewEpoxyReorderingDelegate: AnyObject {
   func collectionView(
     _ collectionView: UICollectionView,
     moveItemWithDataID dataID: String,
-    inSectionWithDataID fromSectionDataID: String,
-    toSectionWithDataID toSectionDataID: String,
+    inSectionWithDataID fromSectionDataID: AnyHashable,
+    toSectionWithDataID toSectionDataID: AnyHashable,
     withDestinationDataId destinationDataId: String)
 }

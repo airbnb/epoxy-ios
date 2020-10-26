@@ -9,18 +9,18 @@ public protocol TableViewEpoxyReorderingDelegate: AnyObject {
   func tableView(
     _ tableView: UITableView,
     shouldIndentWhileEditingRowWithDataID dataID: String,
-    inSection sectionDataID: String) -> Bool
+    inSection sectionDataID: AnyHashable) -> Bool
 
   func tableView(
     _ tableView: UITableView,
     canMoveRowWithDataID dataID: String,
-    inSection sectionDataID: String) -> Bool
+    inSection sectionDataID: AnyHashable) -> Bool
 
   func tableView(
     _ tableView: UITableView,
     moveRowWithDataID dataID: String,
-    inSectionWithDataID fromSectionDataID: String,
-    toSectionWithDataID toSectionDataID: String,
+    inSectionWithDataID fromSectionDataID: AnyHashable,
+    toSectionWithDataID toSectionDataID: AnyHashable,
     withDestinationDataID destinationDataID: String)
 
   func tableView(

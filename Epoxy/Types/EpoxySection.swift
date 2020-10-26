@@ -18,6 +18,16 @@ public struct EpoxySection {
     self.userInfo = userInfo
   }
 
+  public init(
+    dataID: AnyHashable,
+    items: [EpoxyableModel],
+    userInfo: [EpoxyUserInfoKey: Any] = [:])
+  {
+    self.dataID = dataID
+    self.items = items
+    self.userInfo = userInfo
+  }
+
   public init(items: [EpoxyableModel]) {
     self.init(
       dataID: "",
@@ -27,7 +37,7 @@ public struct EpoxySection {
   // MARK: Public
 
   /// The reference id for the model backing this section.
-  public let dataID: String
+  public let dataID: AnyHashable
 
   /// The data for the items to be displayed in this section.
   public let items: [EpoxyableModel]

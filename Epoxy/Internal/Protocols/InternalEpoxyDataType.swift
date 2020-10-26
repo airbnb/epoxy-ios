@@ -13,9 +13,9 @@ public protocol InternalEpoxyDataType {
     -> Self
 
   /// Updates the item at the given `dataID` (if found) with the given updated `EpoxyModel`.
-  func updateItem(at dataID: String, with item: EpoxyableModel) -> IndexPath?
+  func updateItem(at dataID: AnyHashable, with item: EpoxyableModel) -> IndexPath?
 
-  func indexPathForItem(at dataID: String) -> IndexPath?
+  func indexPathForItem(at dataID: AnyHashable) -> IndexPath?
 
   /// Makes a changeset between this epoxy data and another epoxy data
   func makeChangeset(from otherData: Self) -> EpoxyChangeset

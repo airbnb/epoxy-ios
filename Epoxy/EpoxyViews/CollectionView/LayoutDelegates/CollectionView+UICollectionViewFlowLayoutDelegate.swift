@@ -9,32 +9,32 @@ public protocol EpoxyCollectionViewDelegateFlowLayout {
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemWith dataID: String,
-    inSectionWith sectionDataID: String) -> CGSize
+    inSectionWith sectionDataID: AnyHashable) -> CGSize
 
   func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    insetForSectionWith sectionDataID: String) -> UIEdgeInsets
+    insetForSectionWith sectionDataID: AnyHashable) -> UIEdgeInsets
 
   func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    minimumLineSpacingForSectionWith sectionDataID: String) -> CGFloat
+    minimumLineSpacingForSectionWith sectionDataID: AnyHashable) -> CGFloat
 
   func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    minimumInteritemSpacingForSectionWith sectionDataID: String) -> CGFloat
+    minimumInteritemSpacingForSectionWith sectionDataID: AnyHashable) -> CGFloat
 
  func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    referenceSizeForHeaderInSectionWith sectionDataID: String) -> CGSize
+    referenceSizeForHeaderInSectionWith sectionDataID: AnyHashable) -> CGSize
 
   func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    referenceSizeForFooterInSectionWith sectionDataID: String) -> CGSize
+    referenceSizeForFooterInSectionWith sectionDataID: AnyHashable) -> CGSize
 }
 
 private let defaultItemSize = CGSize(width: 50, height: 50)
@@ -49,7 +49,7 @@ extension EpoxyCollectionViewDelegateFlowLayout {
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemWith dataID: String,
-    inSectionWith sectionDataID: String) -> CGSize
+    inSectionWith sectionDataID: AnyHashable) -> CGSize
   {
     return defaultItemSize
   }
@@ -57,7 +57,7 @@ extension EpoxyCollectionViewDelegateFlowLayout {
   public func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    insetForSectionWith sectionDataID: String) -> UIEdgeInsets
+    insetForSectionWith sectionDataID: AnyHashable) -> UIEdgeInsets
   {
     return defaultSectionInset
   }
@@ -65,7 +65,7 @@ extension EpoxyCollectionViewDelegateFlowLayout {
   public func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    minimumLineSpacingForSectionWith sectionDataID: String) -> CGFloat
+    minimumLineSpacingForSectionWith sectionDataID: AnyHashable) -> CGFloat
   {
     return defaultMinimumLineSpacingForSection
   }
@@ -73,7 +73,7 @@ extension EpoxyCollectionViewDelegateFlowLayout {
   public func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    minimumInteritemSpacingForSectionWith sectionDataID: String) -> CGFloat
+    minimumInteritemSpacingForSectionWith sectionDataID: AnyHashable) -> CGFloat
   {
     return defaultMinimumInteritemSpacingForSection
   }
@@ -81,7 +81,7 @@ extension EpoxyCollectionViewDelegateFlowLayout {
   public func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    referenceSizeForHeaderInSectionWith sectionDataID: String) -> CGSize
+    referenceSizeForHeaderInSectionWith sectionDataID: AnyHashable) -> CGSize
   {
     return defaultHeaderReferenceSize
   }
@@ -89,7 +89,7 @@ extension EpoxyCollectionViewDelegateFlowLayout {
   public func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    referenceSizeForFooterInSectionWith sectionDataID: String) -> CGSize
+    referenceSizeForFooterInSectionWith sectionDataID: AnyHashable) -> CGSize
   {
     return defaultFooterReferenceSize
   }

@@ -66,11 +66,11 @@ open class CollectionView: UICollectionView,
     epoxyDataSource.setSections(sections, animated: animated)
   }
 
-  public func scrollToItem(at dataID: String, animated: Bool = false) {
+  public func scrollToItem(at dataID: AnyHashable, animated: Bool = false) {
     scrollToItem(at: dataID, position: .centeredVertically, animated: animated)
   }
 
-  public func scrollToItem(at dataID: String, position: ScrollPosition, animated: Bool) {
+  public func scrollToItem(at dataID: AnyHashable, position: ScrollPosition, animated: Bool) {
     guard let indexPath = indexPathForItem(at: dataID) else { return }
 
     if GlobalEpoxyConfig.shared.usesAccurateAnimatedScrollToItem && animated {
@@ -86,7 +86,7 @@ open class CollectionView: UICollectionView,
   /// properly react to `becomeFirstResponder()` being called on it.
   ///
   /// - Parameter dataID: The dataID related to the view you want to becomeFirstResponder
-  public func setItemAsFirstResponder(at dataID: String) {
+  public func setItemAsFirstResponder(at dataID: AnyHashable) {
     guard
       let indexPath = indexPathForItem(at: dataID),
       let cell = cellForItem(at: indexPath) as? CollectionViewCell
@@ -98,7 +98,7 @@ open class CollectionView: UICollectionView,
   }
 
   public func moveAccessibilityFocusToItem(
-    at dataID: String,
+    at dataID: AnyHashable,
     notification: UIAccessibility.Notification = .layoutChanged)
   {
     guard
@@ -121,14 +121,14 @@ open class CollectionView: UICollectionView,
   }
 
   public func updateItem(
-    at dataID: String,
+    at dataID: AnyHashable,
     with item: EpoxyableModel,
     animated: Bool)
   {
     epoxyDataSource.updateItem(at: dataID, with: item, animated: animated)
   }
 
-  public func selectItem(at dataID: String, animated: Bool) {
+  public func selectItem(at dataID: AnyHashable, animated: Bool) {
     guard let indexPath = indexPathForItem(at: dataID) else {
       epoxyLogger.epoxyAssertionFailure("item not found")
       return
@@ -143,7 +143,7 @@ open class CollectionView: UICollectionView,
     }
   }
 
-  public func deselectItem(at dataID: String, animated: Bool) {
+  public func deselectItem(at dataID: AnyHashable, animated: Bool) {
     guard let indexPath = indexPathForItem(at: dataID) else {
       return
     }
@@ -157,7 +157,7 @@ open class CollectionView: UICollectionView,
   }
 
   /// Returns the userInfo value for a given key from the section at the provided dataID
-  public func sectionUserInfoValue<T>(at dataID: String, for key: EpoxyUserInfoKey) -> T? {
+  public func sectionUserInfoValue<T>(at dataID: AnyHashable, for key: EpoxyUserInfoKey) -> T? {
     guard let sectionIndex = epoxyDataSource.internalData?.indexForSection(at: dataID) else {
       return nil
     }
@@ -165,7 +165,7 @@ open class CollectionView: UICollectionView,
   }
 
   /// Returns the userInfo value for a given key from the item at the provided dataID
-  public func itemUserInfoValue<T>(at dataID: String, for key: EpoxyUserInfoKey) -> T? {
+  public func itemUserInfoValue<T>(at dataID: AnyHashable, for key: EpoxyUserInfoKey) -> T? {
     guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
       return nil
     }
@@ -173,7 +173,7 @@ open class CollectionView: UICollectionView,
   }
 
   /// CollectionView does not currently support divider hiding.
-  public func hideBottomDivider(for dataIDs: [String]) {
+  public func hideBottomDivider(for dataIDs: [AnyHashable]) {
     // TODO: Refactor to support layout specific data in epoxy item models
   }
 
@@ -331,7 +331,7 @@ open class CollectionView: UICollectionView,
   }
 
   /// Convert a dataID to an index path, only for use in collection view layout delegate methods.
-  public func indexPathForItem(at dataID: String) -> IndexPath? {
+  public func indexPathForItem(at dataID: AnyHashable) -> IndexPath? {
     return epoxyDataSource.internalData?.indexPathForItem(at: dataID)
   }
 
@@ -349,7 +349,7 @@ open class CollectionView: UICollectionView,
   }
 
   /// Convert a section index to a dataID, only for use in collection view layout delegate methods.
-  public func dataIDForSection(at index: Int) -> String? {
+  public func dataIDForSection(at index: Int) -> AnyHashable? {
     return epoxyDataSource.epoxySection(at: index)?.dataID
   }
 
@@ -415,8 +415,8 @@ open class CollectionView: UICollectionView,
   private var infiniteScrollingLoader: (UIView & Animatable)?
   private weak var infiniteScrollingDelegate: InfiniteScrollingDelegate?
   private var infiniteScrollingState: InfiniteScrollingState = .stopped
-  private var ephemeralStateCache = [String: RestorableState?]()
-  private var lastFocusedDataID: String?
+  private var ephemeralStateCache = [AnyHashable: RestorableState?]()
+  private var lastFocusedDataID: AnyHashable?
 
   private lazy var scrollAnimator = CollectionViewScrollAnimator(
     collectionView: self,
@@ -739,7 +739,7 @@ open class CollectionView: UICollectionView,
       if let selectedIndexPaths = collectionView.indexPathsForSelectedItems {
         selectedIndexPaths.forEach { collectionView.deselectItem(at: $0, animated: true) }
       }
-      _ = item.configureStateChange(
+      item.configureStateChange(
         in: cell,
         with: EpoxyViewMetadata(traitCollection: traitCollection, state: .normal, animated: true))
     }
@@ -900,8 +900,8 @@ extension CollectionView: UICollectionViewDataSourcePrefetching {
 extension CollectionView: CollectionViewDataSourceReorderingDelegate {
   func dataSource(_ dataSource: CollectionViewEpoxyDataSource,
     moveItemWithDataID dataID: String,
-    inSectionWithDataID fromSectionDataID: String,
-    toSectionWithDataID toSectionDataID: String,
+    inSectionWithDataID fromSectionDataID: AnyHashable,
+    toSectionWithDataID toSectionDataID: AnyHashable,
     withDestinationDataId destinationDataId: String)
   {
     reorderingDelegate?.collectionView(

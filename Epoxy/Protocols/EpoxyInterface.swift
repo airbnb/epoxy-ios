@@ -17,25 +17,25 @@ public protocol EpoxyInterface: AnyObject, UITraitEnvironment {
 
   /// Selects the item and invokes the item's stateConfigurer
   /// Does not invoke selectionHandler
-  func selectItem(at dataID: String, animated: Bool)
+  func selectItem(at dataID: AnyHashable, animated: Bool)
 
   /// Deselects the item and invokes the item's stateConfigurer
-  func deselectItem(at dataID: String, animated: Bool)
+  func deselectItem(at dataID: AnyHashable, animated: Bool)
 
   /// Updates the item at the given data ID with the new item and configures the cell if it's visible
-  func updateItem(at dataID: String, with item: EpoxyableModel, animated: Bool)
+  func updateItem(at dataID: AnyHashable, with item: EpoxyableModel, animated: Bool)
 
   /// Hides the bottom divider for the given dataIDs
-  func hideBottomDivider(for dataIDs: [String])
+  func hideBottomDivider(for dataIDs: [AnyHashable])
 
   /// Scrolls to the item at the given dataID
-  func scrollToItem(at dataID: String, animated: Bool)
+  func scrollToItem(at dataID: AnyHashable, animated: Bool)
 
   /// Sets the item at the given dataID as the first responder
-  func setItemAsFirstResponder(at dataID: String)
+  func setItemAsFirstResponder(at dataID: AnyHashable)
 
   /// Moves the accessibility focus to the item at the given dataID
-  func moveAccessibilityFocusToItem(at dataID: String, notification: UIAccessibility.Notification)
+  func moveAccessibilityFocusToItem(at dataID: AnyHashable, notification: UIAccessibility.Notification)
 
   /// Returns the accessibility focus to the last foucused element
   func moveAccessibilityFocusToLastFocusedElement()
