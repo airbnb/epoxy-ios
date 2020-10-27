@@ -82,6 +82,10 @@ final class CollectionViewScrollAnimator {
       at: scrollToItemContext.targetIndexPath,
       at: scrollToItemContext.targetScrollPosition,
       animated: false)
+
+    if let collectionView = collectionView {
+      collectionView.delegate?.scrollViewDidEndScrollingAnimation?(collectionView)
+    }
   }
 
   @objc
@@ -179,19 +183,28 @@ final class CollectionViewScrollAnimator {
   }
 
   private func scrollAxis(for collectionView: UICollectionView) -> ScrollAxis? {
-    if
-      collectionView.contentSize.height > collectionView.bounds.height,
-      collectionView.contentSize.width <= collectionView.bounds.width
-    {
-      return .vertical
-    } else if
-      collectionView.contentSize.width > collectionView.bounds.width,
-      collectionView.contentSize.height <= collectionView.bounds.height
-    {
-      return .horizontal
-    } else {
+    let availableWidth = collectionView.bounds.width -
+      collectionView.adjustedContentInset.left -
+      collectionView.adjustedContentInset.right
+    let availableHeight = collectionView.bounds.height -
+      collectionView.adjustedContentInset.top -
+      collectionView.adjustedContentInset.bottom
+    let scrollsHorizontally = collectionView.contentSize.width > availableWidth
+    let scrollsVertically = collectionView.contentSize.height > availableHeight
+
+    switch (scrollsHorizontally: scrollsHorizontally, scrollsVertically: scrollsVertically) {
+    case (scrollsHorizontally: true, scrollsVertically: true):
       epoxyLogger.epoxyAssertionFailure(
         "Programmatic scrolling is only supported for single-axis collection views.")
+      return nil
+
+    case (scrollsHorizontally: false, scrollsVertically: true):
+      return .vertical
+
+    case (scrollsHorizontally: true, scrollsVertically: false):
+      return .horizontal
+
+    case (scrollsHorizontally: false, scrollsVertically: false):
       return nil
     }
   }
@@ -243,7 +256,10 @@ final class CollectionViewScrollAnimator {
     collectionView: UICollectionView)
     -> UICollectionView.ScrollPosition?
   {
-    let scrollAxis = self.scrollAxis(for: collectionView)
+    guard let scrollAxis = self.scrollAxis(for: collectionView) else {
+      return nil
+    }
+
     let positionRelativeToVisibleBounds = self.positionRelativeToVisibleBounds(
       forTargetItemIndexPath: targetIndexPath,
       collectionView: collectionView)
