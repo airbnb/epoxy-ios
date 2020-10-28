@@ -114,9 +114,9 @@ final class CollectionViewScrollAnimator {
       for: scrollAxis,
       collectionView: collectionView)
 
-    // After 5 seconds, the scrolling reaches is maximum speed.
+    // After 3 seconds, the scrolling reaches is maximum speed.
     let secondsSinceAnimationStart = CACurrentMediaTime() - scrollToItemContext.animationStartTime
-    let offset = maximumPerAnimationTickOffset * CGFloat(min(secondsSinceAnimationStart / 5, 1))
+    let offset = maximumPerAnimationTickOffset * CGFloat(min(secondsSinceAnimationStart / 3, 1))
 
     // Apply this scroll animation "tick's" offset adjustment. This is what actually causes the
     // scroll position to change, giving the illusion of smooth scrolling as this happens 60+ times
@@ -214,10 +214,13 @@ final class CollectionViewScrollAnimator {
     collectionView: UICollectionView)
     -> CGFloat
   {
+    let offset: CGFloat
     switch scrollAxis {
-    case .vertical: return collectionView.bounds.height
-    case .horizontal: return collectionView.bounds.width
+    case .vertical: offset = collectionView.bounds.height
+    case .horizontal: offset = collectionView.bounds.width
     }
+
+    return offset * 1.5
   }
 
   // Returns the position (before, after, visible) of an item relative to the current viewport.
