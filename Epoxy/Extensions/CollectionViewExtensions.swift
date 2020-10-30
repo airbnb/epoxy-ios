@@ -31,7 +31,7 @@ extension EpoxySection {
 
 extension EpoxySection {
   public init(
-    dataID: String = "",
+    dataID: AnyHashable = "",
     items: [EpoxyableModel],
     supplementaryModels: [String: [SupplementaryViewEpoxyableModel]]? = nil,
     userInfo: [EpoxyUserInfoKey: Any] = [:])

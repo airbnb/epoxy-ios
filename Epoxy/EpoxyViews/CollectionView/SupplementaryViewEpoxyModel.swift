@@ -3,8 +3,20 @@
 
 import UIKit
 
-public class SupplementaryViewEpoxyModel<ViewType, DataType>: TypedSupplementaryViewEpoxyableModel where
-  ViewType: UIView
+// MARK: - _SupplementaryViewEpoxyModel
+
+/// A temporary typealias of a `_SupplementaryViewEpoxyModel` with a String `dataID` to ease
+/// migration to `AnyHashable` `dataID`s.
+public typealias SupplementaryViewEpoxyModel<ViewType: UIView, DataType> = _SupplementaryViewEpoxyModel<
+  ViewType,
+  DataType,
+  String>
+
+// MARK: - _SupplementaryViewEpoxyModel
+
+public class _SupplementaryViewEpoxyModel<ViewType, DataType, DataID>: TypedSupplementaryViewEpoxyableModel where
+  ViewType: UIView,
+  DataID: Hashable
 {
   public typealias View = ViewType
 
@@ -13,11 +25,11 @@ public class SupplementaryViewEpoxyModel<ViewType, DataType>: TypedSupplementary
   public init(
     elementKind: String,
     data: DataType,
-    dataID: String,
+    dataID: DataID,
     alternateStyleID: String? = nil,
     builder: @escaping () -> ViewType,
     configurer: @escaping (ViewType, DataType, UITraitCollection) -> Void,
-    behaviorSetter: ((ViewType, DataType, String?) -> Void)? = nil)
+    behaviorSetter: ((ViewType, DataType, DataID?) -> Void)? = nil)
   {
     self.elementKind = elementKind
     self.data = data
@@ -31,7 +43,7 @@ public class SupplementaryViewEpoxyModel<ViewType, DataType>: TypedSupplementary
   // MARK: Public
 
   public let elementKind: String
-  public let dataID: String
+  public let dataID: DataID
   public let reuseID: String
   public let data: DataType
 
@@ -54,5 +66,5 @@ public class SupplementaryViewEpoxyModel<ViewType, DataType>: TypedSupplementary
 
   private let builder: () -> ViewType
   private let configurer: (ViewType, DataType, UITraitCollection) -> Void
-  private let behaviorSetter: ((ViewType, DataType, String?) -> Void)?
+  private let behaviorSetter: ((ViewType, DataType, DataID?) -> Void)?
 }

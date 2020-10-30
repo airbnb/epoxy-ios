@@ -45,7 +45,7 @@ class ShuffleViewController: EpoxyTableViewController {
       .filter { _ in Int.random(in: 0..<3) % 3 != 0 }
       .map { dataID -> EpoxyableModel in
         let text = kTestTexts[dataID]
-        return BaseEpoxyModelBuilder<Row, String>(
+        return _BaseEpoxyModelBuilder<Row, String, Int>(
           data: text,
           dataID: dataID)
           .configureView { context in

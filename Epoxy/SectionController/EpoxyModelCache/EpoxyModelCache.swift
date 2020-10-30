@@ -15,15 +15,15 @@ public final class EpoxyModelCache {
   // MARK: Public
 
   public func cacheEpoxyModel(_ model: EpoxyableModel) {
-    cache.setObject(model as AnyObject, forKey: cacheKey(forDataID: model.dataID))
+    cache.setObject(model as AnyObject, forKey: Key(id: model.dataID))
   }
 
-  public func epoxyModel(forDataID dataID: String) -> EpoxyableModel? {
-    return cache.object(forKey: cacheKey(forDataID: dataID)) as? EpoxyableModel
+  public func epoxyModel(forDataID dataID: AnyHashable) -> EpoxyableModel? {
+    return cache.object(forKey: Key(id: dataID)) as? EpoxyableModel
   }
 
-  public func invalidateEpoxyModel(withDataID dataID: String) {
-    cache.removeObject(forKey: cacheKey(forDataID: dataID))
+  public func invalidateEpoxyModel(withDataID dataID: AnyHashable) {
+    cache.removeObject(forKey: Key(id: dataID))
   }
 
   public func invalidateAllEpoxyModels() {
@@ -32,9 +32,21 @@ public final class EpoxyModelCache {
 
   // MARK: Private
 
-  private let cache = NSCache<NSString, AnyObject>()
+  private final class Key: Hashable {
+    init(id: AnyHashable) {
+      self.id = id
+    }
 
-  private func cacheKey(forDataID dataID: String) -> NSString {
-    return NSString(string: dataID)
+    static func == (lhs: EpoxyModelCache.Key, rhs: EpoxyModelCache.Key) -> Bool {
+      lhs.id == rhs.id
+    }
+
+    func hash(into hasher: inout Hasher) {
+      id.hash(into: &hasher)
+    }
+
+    var id: AnyHashable
   }
+
+  private let cache = NSCache<Key, AnyObject>()
 }

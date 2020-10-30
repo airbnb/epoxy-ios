@@ -6,10 +6,10 @@ import UIKit
 protocol CollectionViewDataSourceReorderingDelegate: AnyObject {
   func dataSource(
     _ dataSource: CollectionViewEpoxyDataSource,
-    moveItemWithDataID dataID: String,
+    moveItemWithDataID dataID: AnyHashable,
     inSectionWithDataID fromSectionDataID: AnyHashable,
     toSectionWithDataID toSectionDataID: AnyHashable,
-    withDestinationDataId destinationDataId: String)
+    withDestinationDataId destinationDataId: AnyHashable)
 }
 
 public class CollectionViewEpoxyDataSource: EpoxyDataSource<CollectionView>,

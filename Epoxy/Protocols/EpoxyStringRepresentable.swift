@@ -17,19 +17,6 @@ public extension EpoxyStringRepresentable {
   }
 }
 
-// MARK: - String
-
-extension String: EpoxyStringRepresentable {
-
-  public var epoxyStringValue: String {
-    return self
-  }
-
-  public init?(epoxyStringValue: String) {
-    self.init(epoxyStringValue)
-  }
-}
-
 // MARK: - RawRepresentable
 
 extension RawRepresentable where RawValue == String {
@@ -40,18 +27,5 @@ extension RawRepresentable where RawValue == String {
 
   public init?(epoxyStringValue: String) {
     self.init(rawValue: epoxyStringValue)
-  }
-}
-
-// MARK: - Int
-
-extension Int: EpoxyStringRepresentable {
-
-  public var epoxyStringValue: String {
-    return String(self)
-  }
-
-  public init?(epoxyStringValue: String) {
-    self.init(epoxyStringValue)
   }
 }

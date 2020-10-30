@@ -3,7 +3,6 @@
 
 open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
   where
-  SectionDataIDType: EpoxyStringRepresentable,
   SectionDataIDType: Hashable
 {
 
@@ -19,7 +18,7 @@ open class EpoxyMultiSectionController<SectionDataIDType>: EpoxyControlling
     return nil
   }
 
-  open func hiddenDividerDataIDs() -> [String] {
+  open func hiddenDividerDataIDs() -> [AnyHashable] {
     return allSectionControllers().flatMap { $0.hiddenDividerDataIDs() }
   }
 

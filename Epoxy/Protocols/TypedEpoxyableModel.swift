@@ -7,7 +7,9 @@ import UIKit
 public protocol TypedEpoxyableModel: EpoxyableModel {
 
   associatedtype View: UIView
+  associatedtype DataID: Hashable
 
+  var dataID: DataID { get }
   func makeView() -> View
   func configureView(_ view: View, with metadata: EpoxyViewMetadata)
   func configureViewForStateChange(_ view: View, with metadata: EpoxyViewMetadata)
@@ -16,6 +18,20 @@ public protocol TypedEpoxyableModel: EpoxyableModel {
 }
 
 extension TypedEpoxyableModel {
+  public var dataID: AnyHashable {
+    // We need the explicit type annotation to ensure the compiler doesn't stack overflow here.
+    let id: DataID = dataID
+
+    // If the data ID is double-boxed as an AnyHashable<AnyHashable<…>>, we need to unbox it to
+    // ensure it would be equal to a single-boxed value. This is a Swift standard lib bug
+    // https://bugs.swift.org/browse/SR-13794.
+    let casted = id as AnyHashable
+    if let base = casted.base as? AnyHashable {
+      return base
+    }
+    return casted
+  }
+
   public func configure(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
     let view = cell.view as? View ?? makeView() // Kyle++
     cell.setViewIfNeeded(view: view)

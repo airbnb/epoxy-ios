@@ -3,7 +3,6 @@
 
 open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   where
-  ItemDataIDType: EpoxyStringRepresentable,
   ItemDataIDType: Hashable
 {
 
@@ -32,8 +31,8 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   }
 
   /// You probably want to override hiddenDividers() instead
-  open func hiddenDividerDataIDs() -> [String] {
-    return hiddenDividers().map { $0.epoxyStringValue }
+  open func hiddenDividerDataIDs() -> [AnyHashable] {
+    hiddenDividers().compactMap(convertDataID)
   }
 
   // MARK: Public
@@ -66,20 +65,20 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   }
 
   public func rebuildItemModel(forDataID dataID: ItemDataIDType, animated: Bool = true) {
-    modelCache.invalidateEpoxyModel(withDataID: dataID.epoxyStringValue)
+    modelCache.invalidateEpoxyModel(withDataID: convertDataID(dataID))
     delegate?.epoxyControllerDidUpdateData(self, animated: animated)
   }
 
   public func rebuildItemModels(forDataIDs dataIDs: [ItemDataIDType], animated: Bool = true) {
     for dataID in dataIDs {
-      modelCache.invalidateEpoxyModel(withDataID: dataID.epoxyStringValue)
+      modelCache.invalidateEpoxyModel(withDataID: convertDataID(dataID))
     }
 
     delegate?.epoxyControllerDidUpdateData(self, animated: animated)
   }
 
   public func invalidateEpoxyModel(withDataID dataID: String) {
-    modelCache.invalidateEpoxyModel(withDataID: dataID.epoxyStringValue)
+    modelCache.invalidateEpoxyModel(withDataID: dataID)
   }
 
   public func invalidateAllEpoxyModels() {
@@ -100,8 +99,14 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   private let modelCache = EpoxyModelCache()
   private let invalidatesRemovedModelsFromCache: Bool
 
+  private func convertDataID(_ dataID: ItemDataIDType) -> AnyHashable {
+    // If the dividers are EpoxyStringRepresentable, use the string values in since that's what
+    // consumers are expecting.
+    (dataID as? EpoxyStringRepresentable)?.epoxyStringValue ?? (dataID as AnyHashable)
+  }
+
   private func cachedItemModel(forDataID dataID: ItemDataIDType) -> EpoxyableModel? {
-    if let existingItemModel = modelCache.epoxyModel(forDataID: dataID.epoxyStringValue) {
+    if let existingItemModel = modelCache.epoxyModel(forDataID: convertDataID(dataID)) {
       return existingItemModel
     }
 
@@ -117,7 +122,7 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   private func removeOldCachedValues(_ oldDataIDs: [ItemDataIDType]) {
     oldDataIDs.forEach { itemDataID in
       if !itemDataIDs.contains(itemDataID) {
-        modelCache.invalidateEpoxyModel(withDataID: itemDataID.epoxyStringValue)
+        modelCache.invalidateEpoxyModel(withDataID: convertDataID(itemDataID))
       }
     }
   }

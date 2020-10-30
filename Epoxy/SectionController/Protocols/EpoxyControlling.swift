@@ -9,6 +9,6 @@ public protocol EpoxyControlling: AnyObject {
   var interface: EpoxyInterface? { get set }
   func rebuild(animated: Bool)
   func makeSections() -> [EpoxySection]
-  func hiddenDividerDataIDs() -> [String]
+  func hiddenDividerDataIDs() -> [AnyHashable]
   func invalidateAllEpoxyModels()
 }

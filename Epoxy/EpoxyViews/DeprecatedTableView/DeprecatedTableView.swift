@@ -237,7 +237,7 @@ open class DeprecatedTableView: UITableView, TypedEpoxyInterface, InternalEpoxyI
   }
 
   /// Sets a given dataID's view as the first responder. The view must be rendered
-  /// at the time this is called, so you should call `scrollToItem(at dataID: String)`
+  /// at the time this is called, so you should call `scrollToItem(at dataID: AnyHashable)`
   /// before calling this method if necessary. The view should also be set up to
   /// properly react to `becomeFirstResponder()` being called on it.
   ///
@@ -285,7 +285,7 @@ open class DeprecatedTableView: UITableView, TypedEpoxyInterface, InternalEpoxyI
   }
 
   /// Returns the userInfo value for a given key from the section at the provided dataID
-  public func sectionUserInfoValue<T>(at dataID: String, for key: EpoxyUserInfoKey) -> T? {
+  public func sectionUserInfoValue<T>(at dataID: AnyHashable, for key: EpoxyUserInfoKey) -> T? {
     guard let sectionIndex = epoxyDataSource.internalData?.indexForSection(at: dataID) else {
       return nil
     }
@@ -293,7 +293,7 @@ open class DeprecatedTableView: UITableView, TypedEpoxyInterface, InternalEpoxyI
   }
 
   /// Returns the userInfo value for a given key from the model at the provided dataID
-  public func itemUserInfoValue<T>(at dataID: String, for key: EpoxyUserInfoKey) -> T? {
+  public func itemUserInfoValue<T>(at dataID: AnyHashable, for key: EpoxyUserInfoKey) -> T? {
     guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
       return nil
     }
@@ -511,7 +511,11 @@ open class DeprecatedTableView: UITableView, TypedEpoxyInterface, InternalEpoxyI
     }
   }
 
-  private func updateDivider(for cell: TableViewCell, dividerType: EpoxyModelDividerType, dataID: String?) {
+  private func updateDivider(
+    for cell: TableViewCell,
+    dividerType: EpoxyModelDividerType,
+    dataID: AnyHashable?)
+  {
     if let dataID = dataID,
       dataIDsForHidingDividers.contains(dataID)
     {
@@ -872,7 +876,7 @@ extension DeprecatedTableView: TableViewDataSourceReorderingDelegate {
 
   func dataSource(
     _ dataSource: UITableViewDataSource,
-    canMoveRowWithDataID dataID: String,
+    canMoveRowWithDataID dataID: AnyHashable,
     inSection sectionDataID: AnyHashable) -> Bool
   {
     guard let reorderingDelegate = epoxyModelReorderingDelegate else
@@ -886,10 +890,10 @@ extension DeprecatedTableView: TableViewDataSourceReorderingDelegate {
 
   func dataSource(
     _ dataSource: UITableViewDataSource,
-    moveRowWithDataID dataID: String,
+    moveRowWithDataID dataID: AnyHashable,
     inSectionWithDataID fromSectionDataID: AnyHashable,
     toSectionWithDataID toSectionDataID: AnyHashable,
-    withDestinationDataID destinationDataID: String)
+    withDestinationDataID destinationDataID: AnyHashable)
   {
     epoxyModelReorderingDelegate?.tableView(
       self,

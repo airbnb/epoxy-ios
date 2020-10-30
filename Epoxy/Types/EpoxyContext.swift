@@ -6,11 +6,11 @@ import UIKit
 /// An object used to pass context to blocks on EpoxyableModels
 /// This object contains everything you need for a given block
 /// removing the need to have multiple parameters for each block
-public class EpoxyContext<ViewType: UIView, DataType: Equatable> {
+public class EpoxyContext<ViewType: UIView, DataType: Equatable, DataID: Hashable> {
   init(
     view: ViewType,
     data: DataType,
-    dataID: String,
+    dataID: DataID,
     traitCollection: UITraitCollection,
     cellState: EpoxyCellState,
     animated: Bool)
@@ -25,7 +25,7 @@ public class EpoxyContext<ViewType: UIView, DataType: Equatable> {
 
   public let view: ViewType
   public let data: DataType
-  public let dataID: String
+  public let dataID: DataID
   public let traitCollection: UITraitCollection
   public let cellState: EpoxyCellState
   public let animated: Bool
