@@ -40,7 +40,7 @@ open class EpoxyTableViewController: UIViewController {
   }
 
   /// Override this in your subclass to return the data IDs of any dividers you wish to hide.
-  open func hiddenDividerDataIDs() -> [String] {
+  open func hiddenDividerDataIDs() -> [AnyHashable] {
     return []
   }
 

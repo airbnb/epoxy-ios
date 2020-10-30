@@ -23,7 +23,7 @@ class HighlightAndSelectionViewController: EpoxyTableViewController {
     let items = (0..<10)
       .map { dataID -> EpoxyableModel in
         let text = kTestTexts[dataID]
-        return BaseEpoxyModelBuilder<Row, String>(
+        return _BaseEpoxyModelBuilder<Row, String, Int>(
           data: text,
           dataID: dataID)
           .configureView { context in

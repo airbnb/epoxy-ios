@@ -11,7 +11,7 @@ public enum EpoxySectionFindError: Error {
 public extension Sequence where Iterator.Element == EpoxySection {
 
   /// Find the EpoxyableModel and IndexPath for a given dataID
-  func findItem(for dataID: String) throws -> (EpoxyableModel, IndexPath) {
+  func findItem(for dataID: AnyHashable) throws -> (EpoxyableModel, IndexPath) {
 
     for (sectionIndex, section) in self.enumerated() {
       for (itemIndex, item) in section.items.enumerated() {

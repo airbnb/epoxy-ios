@@ -7,13 +7,13 @@ import UIKit
 protocol TableViewDataSourceReorderingDelegate: AnyObject {
   func dataSource(
     _ dataSource: UITableViewDataSource,
-    canMoveRowWithDataID dataID: String,
+    canMoveRowWithDataID dataID: AnyHashable,
     inSection sectionDataID: AnyHashable) -> Bool
 
   func dataSource(
     _ dataSource: UITableViewDataSource,
-    moveRowWithDataID dataID: String,
+    moveRowWithDataID dataID: AnyHashable,
     inSectionWithDataID fromSectionDataID: AnyHashable,
     toSectionWithDataID toSectionDataID: AnyHashable,
-    withDestinationDataID destinationDataID: String)
+    withDestinationDataID destinationDataID: AnyHashable)
 }

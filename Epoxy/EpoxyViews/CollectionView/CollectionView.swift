@@ -81,7 +81,7 @@ open class CollectionView: UICollectionView,
   }
 
   /// Sets a given dataID's view as the first responder. The view must be rendered
-  /// at the time this is called, so you should call `scrollToItem(at dataID: String)`
+  /// at the time this is called, so you should call `scrollToItem(at dataID: AnyHashable)`
   /// before calling this method if necessary. The view should also be set up to
   /// properly react to `becomeFirstResponder()` being called on it.
   ///
@@ -336,11 +336,11 @@ open class CollectionView: UICollectionView,
   }
 
   /// Convert an index path to a dataID, only for use in collection view layout delegate methods.
-  public func dataIDForItem(at indexPath: IndexPath) -> String? {
+  public func dataIDForItem(at indexPath: IndexPath) -> AnyHashable? {
     return epoxyDataSource.epoxyItem(at: indexPath)?.dataID
   }
 
-  public func dataIDForItem(at point: CGPoint) -> String? {
+  public func dataIDForItem(at point: CGPoint) -> AnyHashable? {
     guard
       let indexPath = indexPathForItem(at: point),
       let dataID = epoxyDataSource.epoxyItem(at: indexPath)?.dataID
@@ -899,10 +899,10 @@ extension CollectionView: UICollectionViewDataSourcePrefetching {
 
 extension CollectionView: CollectionViewDataSourceReorderingDelegate {
   func dataSource(_ dataSource: CollectionViewEpoxyDataSource,
-    moveItemWithDataID dataID: String,
+    moveItemWithDataID dataID: AnyHashable,
     inSectionWithDataID fromSectionDataID: AnyHashable,
     toSectionWithDataID toSectionDataID: AnyHashable,
-    withDestinationDataId destinationDataId: String)
+    withDestinationDataId destinationDataId: AnyHashable)
   {
     reorderingDelegate?.collectionView(
       self, moveItemWithDataID: dataID,

@@ -40,8 +40,8 @@ public protocol EpoxyableModel: AnyObject, Diffable {
   /// Default implementation generates a reuseID from the EpoxyableModel's class
   var reuseID: String { get }
 
-  /// Default implementation returns a random unique ID
-  var dataID: String { get }
+  /// The ID that uniquely identifies this model across instances.
+  var dataID: AnyHashable { get }
 
   /// Default implementation does nothing
   func configureStateChange(in cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata)
@@ -84,10 +84,6 @@ extension EpoxyableModel {
     return String(describing: type(of: self))
   }
 
-  public var dataID: String {
-    return UUID().uuidString
-  }
-
   public var selectionStyle: CellSelectionStyle? {
     get { return nil }
     set { }
@@ -121,10 +117,17 @@ extension EpoxyableModel {
 extension EpoxyableModel {
 
   public var diffIdentifier: AnyHashable? {
-    return reuseID + dataID
+    DiffIdentifier(reuseID: reuseID, dataID: dataID)
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     return false
   }
+}
+
+// MARK: - DiffIdentifier
+
+private struct DiffIdentifier: Hashable {
+  var reuseID: String
+  var dataID: AnyHashable
 }

@@ -8,7 +8,7 @@ public protocol EpoxyCollectionViewDelegateFlowLayout {
   func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    sizeForItemWith dataID: String,
+    sizeForItemWith dataID: AnyHashable,
     inSectionWith sectionDataID: AnyHashable) -> CGSize
 
   func collectionView(
@@ -48,7 +48,7 @@ extension EpoxyCollectionViewDelegateFlowLayout {
   public func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
-    sizeForItemWith dataID: String,
+    sizeForItemWith dataID: AnyHashable,
     inSectionWith sectionDataID: AnyHashable) -> CGSize
   {
     return defaultItemSize

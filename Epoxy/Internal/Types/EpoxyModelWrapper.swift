@@ -20,7 +20,7 @@ extension EpoxyModelWrapper: EpoxyableModel {
     return epoxyModel.reuseID
   }
 
-  public var dataID: String {
+  public var dataID: AnyHashable {
     return epoxyModel.dataID
   }
 
