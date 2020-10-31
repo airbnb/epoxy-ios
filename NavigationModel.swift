@@ -4,6 +4,8 @@
 import Epoxy
 import UIKit
 
+// MARK: - NavigationModel
+
 /// A model of an element within a navigation stack that provides source of truth for whether its
 /// `UIViewController` should be added to a corresponding `DeclarativeNavigationController`
 ///
