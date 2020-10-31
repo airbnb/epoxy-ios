@@ -3,6 +3,8 @@
 
 import UIKit
 
+// MARK: - DeclarativeNavigationController
+
 /// A navigation controller that manages its visible view controllers declaratively via an array of
 /// `NavigationModel`s that models its navigation stack.
 ///
