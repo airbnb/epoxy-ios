@@ -3,6 +3,8 @@
 
 import UIKit
 
+// MARK: - BottomBarInstaller
+
 /// Installs a stack of bar views into a view controller.
 ///
 /// The bar stack is constrained to the bottom of the view controller's view.

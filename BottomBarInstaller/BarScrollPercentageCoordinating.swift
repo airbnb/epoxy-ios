@@ -20,9 +20,7 @@ public protocol BarScrollPercentageConfigurable: AnyObject {
   var scrollPercentage: CGPoint { get set }
 }
 
-// MARK: - BottomBarInstaller
-
-// MARK: BarScrollPercentageConfigurable
+// MARK: - BottomBarInstaller + BarScrollPercentageConfigurable
 
 extension BottomBarInstaller: BarScrollPercentageConfigurable {
   public var scrollPercentage: CGPoint {
@@ -31,7 +29,7 @@ extension BottomBarInstaller: BarScrollPercentageConfigurable {
   }
 }
 
-// MARK: UIScrollViewDelegate
+// MARK: - BottomBarInstaller + UIScrollViewDelegate
 
 extension BottomBarInstaller: UIScrollViewDelegate {
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {

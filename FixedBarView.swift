@@ -3,6 +3,8 @@
 
 import UIKit
 
+// MARK: - FixedBarView
+
 /// Views that conform to this protocol are treated as "fixed" bars.
 /// This includes navigation bars, toolbars, and tab bars.
 public protocol FixedBarView {

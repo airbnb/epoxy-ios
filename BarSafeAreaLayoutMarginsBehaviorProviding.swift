@@ -3,10 +3,14 @@
 
 import UIKit
 
+// MARK: - SafeAreaLayoutMarginsBarView
+
 /// Describes how the view's original layout margins and safe area should interact.
 public protocol SafeAreaLayoutMarginsBarView: UIView {
   var preferredSafeAreaLayoutMarginsBehavior: SafeAreaLayoutMarginsBehavior { get }
 }
+
+// MARK: - SafeAreaLayoutMarginsBehavior
 
 public enum SafeAreaLayoutMarginsBehavior {
   /// The bar's layout margins are set to the max of the safe area and its original layout margins.
