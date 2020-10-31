@@ -194,9 +194,9 @@ extension BottomBarContainer: MagicMoveTransitioning {
 
 // MARK: - UIViewController
 
-private extension UIViewController {
+extension UIViewController {
   @nonobjc
-  var originalSafeAreaInsetBottom: CGFloat {
+  fileprivate var originalSafeAreaInsetBottom: CGFloat {
     view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom
   }
 }

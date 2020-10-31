@@ -90,6 +90,12 @@ extension InternalBarContainer {
 
   // MARK: Internal
 
+  /// All immediate scroll view subviews of this bar container's view controller.
+  var allScrollViews: [UIScrollView] {
+    guard let viewController = viewController else { return [] }
+    return viewController.view.subviews.compactMap { $0 as? UIScrollView }
+  }
+
   /// The constraints necessary to ensure that the bar stacks in this view shouldn't overflow into
   /// the opposite stack or extend past the screen edge.
   func overflowConstraints(in view: UIView) -> [NSLayoutConstraint] {
@@ -102,12 +108,6 @@ extension InternalBarContainer {
     }
 
     return constraints
-  }
-
-  /// All immediate scroll view subviews of this bar container's view controller.
-  var allScrollViews: [UIScrollView] {
-    guard let viewController = viewController else { return [] }
-    return viewController.view.subviews.compactMap { $0 as? UIScrollView }
   }
 
   /// Handles the inset behavior being updated from a previous value.

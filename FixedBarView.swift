@@ -11,6 +11,6 @@ public protocol FixedBarView {
   var barView: UIView { get }
 }
 
-public extension FixedBarView where Self: UIView {
-  var barView: UIView { self }
+extension FixedBarView where Self: UIView {
+  public var barView: UIView { self }
 }
