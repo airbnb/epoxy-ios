@@ -11,6 +11,8 @@ extension BarInstaller {
   }
 }
 
+// MARK: - NavigationBarScrollEndCoordinating
+
 public protocol NavigationBarScrollEndCoordinating {
   func willEndDragging(scrollView: UIScrollView, targetContentOffset: UnsafeMutablePointer<CGPoint>)
 }

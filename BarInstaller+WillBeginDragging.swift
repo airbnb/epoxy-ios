@@ -11,6 +11,8 @@ extension BarInstaller {
   }
 }
 
+// MARK: - NavigationBarScrollBeginCoordinating
+
 public protocol NavigationBarScrollBeginCoordinating {
   func willBeginDragging(scrollView: UIScrollView)
 }

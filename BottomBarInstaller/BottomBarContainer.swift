@@ -4,6 +4,8 @@
 import MagicMoveCoreUI
 import UIKit
 
+// MARK: - BottomBarContainer
+
 /// A view that:
 /// - Contains a zero or more bars and updates their layout margins relative to the original safe
 ///   area insets of its view controller.

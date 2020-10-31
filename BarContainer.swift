@@ -50,7 +50,7 @@ public enum BarContainerInsetBehavior: Equatable {
   case none
 }
 
-// MARK: InternalBarContainer
+// MARK: - InternalBarContainer
 
 /// The internal behavior of a `BarContainer`.
 protocol InternalBarContainer: BarContainer {
