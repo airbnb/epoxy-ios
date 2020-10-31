@@ -87,10 +87,10 @@ public class ScrollPercentageBarCoordinator<ViewType>: BarCoordinating,
 
 // MARK: - BarCoordinatorProperty
 
-private extension BarCoordinatorProperty {
+extension BarCoordinatorProperty {
   /// A property storing the fractional percentage that the scroll view underneath the bar(s) has
   /// scrolled.
-  static var scrollPercentage: BarCoordinatorProperty<CGPoint> {
+  fileprivate static var scrollPercentage: BarCoordinatorProperty<CGPoint> {
     .init(keyPath: \BarScrollPercentageCoordinating.scrollPercentage, default: .zero)
   }
 }

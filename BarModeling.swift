@@ -47,6 +47,10 @@ extension AnyBarModel: BarModeling {
 // MARK: Diffable
 
 extension AnyBarModel: Diffable {
+  public var diffIdentifier: AnyHashable? {
+    model.diffIdentifier
+  }
+
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     // If comparing to another `AnyBarModel`, compare the underlying models to one another since
     // concrete models attempt to cast the `Diffable` to their type.
@@ -57,7 +61,4 @@ extension AnyBarModel: Diffable {
     return model.isDiffableItemEqual(to: otherDiffableItem)
   }
 
-  public var diffIdentifier: AnyHashable? {
-    model.diffIdentifier
-  }
 }

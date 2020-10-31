@@ -83,11 +83,12 @@ extension CoordinatedBarModel: InternalBarCoordinating {
 // MARK: Diffable
 
 extension CoordinatedBarModel: Diffable {
+  public var diffIdentifier: AnyHashable? {
+    dataID
+  }
+
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     _isDiffableItemEqual(otherDiffableItem)
   }
 
-  public var diffIdentifier: AnyHashable? {
-    dataID
-  }
 }
