@@ -1,9 +1,24 @@
 //  Created by Laura Skelton on 3/21/18.
 //  Copyright © 2018 Airbnb. All rights reserved.
 
+// MARK: - EpoxySectionControllerStringID
+
+/// An ID that can be used with a EpoxySectionController<String>.
+public struct EpoxySectionControllerStringID: RawRepresentable, Hashable {
+  public init(rawValue: String) {
+    self.rawValue = rawValue
+  }
+
+  public let rawValue: String
+}
+
+// MARK: - EpoxySectionController
+
 open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   where
-  ItemDataIDType: Hashable
+  ItemDataIDType: Hashable,
+  ItemDataIDType: RawRepresentable,
+  ItemDataIDType.RawValue == String
 {
 
   // MARK: Lifecycle
@@ -100,13 +115,13 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   private let invalidatesRemovedModelsFromCache: Bool
 
   private func convertDataID(_ dataID: ItemDataIDType) -> AnyHashable {
-    // If the dividers are EpoxyStringRepresentable, use the string values in since that's what
-    // consumers are expecting.
-    (dataID as? EpoxyStringRepresentable)?.epoxyStringValue ?? (dataID as AnyHashable)
+    // If the dividers are RawRepresentable, use the string values in since that's what consumers
+    // are expecting.
+    dataID.rawValue
   }
 
   private func cachedItemModel(forDataID dataID: ItemDataIDType) -> EpoxyableModel? {
-    if let existingItemModel = modelCache.epoxyModel(forDataID: convertDataID(dataID)) {
+    if let existingItemModel = modelCache.epoxyModel(forDataID: dataID) {
       return existingItemModel
     }
 
@@ -122,7 +137,7 @@ open class EpoxySectionController<ItemDataIDType>: EpoxySectionControlling
   private func removeOldCachedValues(_ oldDataIDs: [ItemDataIDType]) {
     oldDataIDs.forEach { itemDataID in
       if !itemDataIDs.contains(itemDataID) {
-        modelCache.invalidateEpoxyModel(withDataID: convertDataID(itemDataID))
+        modelCache.invalidateEpoxyModel(withDataID: itemDataID)
       }
     }
   }

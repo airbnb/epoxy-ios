@@ -169,32 +169,3 @@ public extension _EpoxyModel {
       .userInfo(userInfo)
   }
 }
-
-extension _EpoxyModel where DataID == String {
-  public convenience init(
-    data: DataType,
-    dataID: EpoxyStringRepresentable,
-    alternateStyleID: String? = nil,
-    makeView: @escaping () -> ViewType = { ViewType() },
-    configureView: @escaping (EpoxyContext<ViewType, DataType, DataID>) -> Void,
-    didChangeState: ((EpoxyContext<ViewType, DataType, DataID>) -> Void)? = nil,
-    setBehaviors: ((EpoxyContext<ViewType, DataType, DataID>) -> Void)? = nil,
-    didSelect: ((EpoxyContext<ViewType, DataType, DataID>) -> Void)? = nil,
-    willDisplay: ((DataType, DataID) -> Void)? = nil,
-    didEndDisplaying: ((DataType, DataID) -> Void)? = nil,
-    userInfo: [EpoxyUserInfoKey: Any] = [:])
-  {
-    self.init(
-      data: data,
-      dataID: dataID.epoxyStringValue,
-      alternateStyleID: alternateStyleID,
-      makeView: makeView,
-      configureView: configureView,
-      didChangeState: didChangeState,
-      setBehaviors: setBehaviors,
-      didSelect: didSelect,
-      willDisplay: willDisplay,
-      didEndDisplaying: didEndDisplaying,
-      userInfo: userInfo)
-  }
-}
