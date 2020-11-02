@@ -182,11 +182,3 @@ extension BaseEpoxyModelBuilder {
     set { userInfo[key] = newValue }
   }
 }
-
-// MARK: _BaseEpoxyModelBuilder
-
-extension _BaseEpoxyModelBuilder where DataID == String {
-  public convenience init(data: DataType, dataID: EpoxyStringRepresentable) {
-    self.init(data: data, dataID: dataID.epoxyStringValue)
-  }
-}
