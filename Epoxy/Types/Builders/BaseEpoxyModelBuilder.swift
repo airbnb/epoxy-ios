@@ -5,23 +5,13 @@ import UIKit
 
 // MARK: - BaseEpoxyModelBuilder
 
-/// A temporary typealias of a `_BaseEpoxyModelBuilder` with a String `dataID` to ease migration to
-/// `AnyHashable` `dataID`s.
-public typealias BaseEpoxyModelBuilder<ViewType: UIView, DataType: Equatable> = _BaseEpoxyModelBuilder<
-  ViewType,
-  DataType,
-  String>
-
-// MARK: - _BaseEpoxyModelBuilder
-
 /// An object used to progressively build EpoxyModels
-public final class _BaseEpoxyModelBuilder<ViewType, DataType, DataID> where
+public final class BaseEpoxyModelBuilder<ViewType, DataType> where
   ViewType: UIView,
-  DataType: Equatable,
-  DataID: Hashable
+  DataType: Equatable
 {
 
-  public init(data: DataType, dataID: DataID) {
+  public init(data: DataType, dataID: AnyHashable) {
     self.data = data
     self.dataID = dataID
   }
@@ -31,8 +21,8 @@ public final class _BaseEpoxyModelBuilder<ViewType, DataType, DataID> where
   /// Builds the final immutable EpoxyModel from the current data
   ///
   /// - Returns: an EpoxyModel
-  public func build() -> _EpoxyModel<ViewType, DataType, DataID> {
-    return _EpoxyModel<ViewType, DataType, DataID>(
+  public func build() -> EpoxyModel<ViewType, DataType> {
+    return EpoxyModel<ViewType, DataType>(
       data: data,
       dataID: dataID,
       alternateStyleID: alternateStyleID,
@@ -46,12 +36,12 @@ public final class _BaseEpoxyModelBuilder<ViewType, DataType, DataID> where
       userInfo: userInfo)
   }
 
-  public func alternateStyleID(_ alternateStyleID: String?) -> _BaseEpoxyModelBuilder {
+  public func alternateStyleID(_ alternateStyleID: String?) -> BaseEpoxyModelBuilder {
     self.alternateStyleID = alternateStyleID
     return self
   }
 
-  public func makeView(_ makeView: @escaping () -> ViewType) -> _BaseEpoxyModelBuilder {
+  public func makeView(_ makeView: @escaping () -> ViewType) -> BaseEpoxyModelBuilder {
     self.makeView = makeView
     return self
   }
@@ -61,7 +51,7 @@ public final class _BaseEpoxyModelBuilder<ViewType, DataType, DataID> where
    This is intended to allow for layering additional logic on top of a model produced somewhere else.
    */
 
-  public func configureView(_ configureView: @escaping (EpoxyContext<ViewType, DataType, DataID>) -> Void) -> _BaseEpoxyModelBuilder {
+  public func configureView(_ configureView: @escaping (EpoxyContext<ViewType, DataType>) -> Void) -> BaseEpoxyModelBuilder {
     let oldConfigureView = self.configureView
     self.configureView = { context in
       oldConfigureView(context)
@@ -71,7 +61,7 @@ public final class _BaseEpoxyModelBuilder<ViewType, DataType, DataID> where
     return self
   }
 
-  public func setBehaviors(_ behaviorSetter: ((EpoxyContext<ViewType, DataType, DataID>) -> Void)?) -> _BaseEpoxyModelBuilder {
+  public func setBehaviors(_ behaviorSetter: ((EpoxyContext<ViewType, DataType>) -> Void)?) -> BaseEpoxyModelBuilder {
     guard let newBehaviorSetter = behaviorSetter else { return self }
 
     if let oldBehaviorSetter = self.behaviorSetter {
@@ -86,7 +76,7 @@ public final class _BaseEpoxyModelBuilder<ViewType, DataType, DataID> where
     return self
   }
 
-  public func didSelect(_ didSelect: ((EpoxyContext<ViewType, DataType, DataID>) -> Void)?) -> _BaseEpoxyModelBuilder {
+  public func didSelect(_ didSelect: ((EpoxyContext<ViewType, DataType>) -> Void)?) -> BaseEpoxyModelBuilder {
     guard let newDidSelect = didSelect else { return self }
 
     if let oldDidSelect = self.didSelect {
@@ -101,7 +91,7 @@ public final class _BaseEpoxyModelBuilder<ViewType, DataType, DataID> where
     return self
   }
 
-  public func didChangeState(_ didChangeState: ((EpoxyContext<ViewType, DataType, DataID>) -> Void)?) -> _BaseEpoxyModelBuilder {
+  public func didChangeState(_ didChangeState: ((EpoxyContext<ViewType, DataType>) -> Void)?) -> BaseEpoxyModelBuilder {
     guard let newDidChangeState = didChangeState else { return self }
 
     if let oldDidChangeState = self.didChangeState {
@@ -116,7 +106,7 @@ public final class _BaseEpoxyModelBuilder<ViewType, DataType, DataID> where
     return self
   }
 
-  public func willDisplay(_ willDisplay: ((DataType, DataID) -> Void)?) -> _BaseEpoxyModelBuilder {
+  public func willDisplay(_ willDisplay: ((DataType, AnyHashable) -> Void)?) -> BaseEpoxyModelBuilder {
     guard let newWillDisplay = willDisplay else { return self }
 
     if let oldWillDisplay = self.willDisplay {
@@ -131,7 +121,7 @@ public final class _BaseEpoxyModelBuilder<ViewType, DataType, DataID> where
     return self
   }
 
-  public func didEndDisplaying(_ didEndDisplaying: ((DataType, DataID) -> Void)?) -> _BaseEpoxyModelBuilder {
+  public func didEndDisplaying(_ didEndDisplaying: ((DataType, AnyHashable) -> Void)?) -> BaseEpoxyModelBuilder {
     guard let newDidEndDisplaying = didEndDisplaying else { return self }
 
     if let oldDidEndDisplaying = self.didEndDisplaying {
@@ -146,12 +136,12 @@ public final class _BaseEpoxyModelBuilder<ViewType, DataType, DataID> where
     return self
   }
 
-  public func userInfo(_ userInfo: [EpoxyUserInfoKey: Any]) -> _BaseEpoxyModelBuilder {
+  public func userInfo(_ userInfo: [EpoxyUserInfoKey: Any]) -> BaseEpoxyModelBuilder {
     self.userInfo = userInfo
     return self
   }
 
-  public func setUserInfoValue(_ value: Any, for key: EpoxyUserInfoKey) -> _BaseEpoxyModelBuilder {
+  public func setUserInfoValue(_ value: Any, for key: EpoxyUserInfoKey) -> BaseEpoxyModelBuilder {
     userInfo[key] = value
     return self
   }
@@ -159,15 +149,15 @@ public final class _BaseEpoxyModelBuilder<ViewType, DataType, DataID> where
   // MARK: Private
 
   private var data: DataType
-  private var dataID: DataID
+  private var dataID: AnyHashable
   private var alternateStyleID: String? = nil
   private var makeView: () -> ViewType = { ViewType() }
-  private var configureView: (EpoxyContext<ViewType, DataType, DataID>) -> Void = { _ in }
-  private var didChangeState: ((EpoxyContext<ViewType, DataType, DataID>) -> Void)? = nil
-  private var behaviorSetter: ((EpoxyContext<ViewType, DataType, DataID>) -> Void)? = nil
-  private var didSelect: ((EpoxyContext<ViewType, DataType, DataID>) -> Void)? = nil
-  private var willDisplay: ((DataType, DataID) -> Void)? = nil
-  private var didEndDisplaying: ((DataType, DataID) -> Void)? = nil
+  private var configureView: (EpoxyContext<ViewType, DataType>) -> Void = { _ in }
+  private var didChangeState: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil
+  private var behaviorSetter: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil
+  private var didSelect: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil
+  private var willDisplay: ((DataType, AnyHashable) -> Void)? = nil
+  private var didEndDisplaying: ((DataType, AnyHashable) -> Void)? = nil
   private var userInfo: [EpoxyUserInfoKey: Any] = [:]
 }
 

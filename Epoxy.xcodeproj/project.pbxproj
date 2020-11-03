@@ -80,7 +80,6 @@
 		C7E0679F2171117D005CB689 /* EpoxyChangeset.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E067682171117D005CB689 /* EpoxyChangeset.swift */; };
 		C7E067A02171117D005CB689 /* Diffable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E067692171117D005CB689 /* Diffable.swift */; };
 		C7E067A12171117D005CB689 /* EpoxyDivider.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0676B2171117D005CB689 /* EpoxyDivider.swift */; };
-		C7E067A22171117D005CB689 /* EpoxyStringRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0676D2171117D005CB689 /* EpoxyStringRepresentable.swift */; };
 		C7E067A32171117D005CB689 /* EpoxyAccessibilityCustomizable.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0676E2171117D005CB689 /* EpoxyAccessibilityCustomizable.swift */; };
 		C7E067A42171117D005CB689 /* EpoxyableModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E0676F2171117D005CB689 /* EpoxyableModel.swift */; };
 		C7E067A52171117D005CB689 /* EpoxyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7E067702171117D005CB689 /* EpoxyCell.swift */; };
@@ -177,7 +176,6 @@
 		C7E067682171117D005CB689 /* EpoxyChangeset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpoxyChangeset.swift; sourceTree = "<group>"; };
 		C7E067692171117D005CB689 /* Diffable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Diffable.swift; sourceTree = "<group>"; };
 		C7E0676B2171117D005CB689 /* EpoxyDivider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpoxyDivider.swift; sourceTree = "<group>"; };
-		C7E0676D2171117D005CB689 /* EpoxyStringRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpoxyStringRepresentable.swift; sourceTree = "<group>"; };
 		C7E0676E2171117D005CB689 /* EpoxyAccessibilityCustomizable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpoxyAccessibilityCustomizable.swift; sourceTree = "<group>"; };
 		C7E0676F2171117D005CB689 /* EpoxyableModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpoxyableModel.swift; sourceTree = "<group>"; };
 		C7E067702171117D005CB689 /* EpoxyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpoxyCell.swift; sourceTree = "<group>"; };
@@ -511,7 +509,6 @@
 				C7E0676E2171117D005CB689 /* EpoxyAccessibilityCustomizable.swift */,
 				C7E067702171117D005CB689 /* EpoxyCell.swift */,
 				C7E067742171117D005CB689 /* EpoxyInterface.swift */,
-				C7E0676D2171117D005CB689 /* EpoxyStringRepresentable.swift */,
 				C7E067722171117D005CB689 /* InfiniteScrollingDelegate.swift */,
 				C7E0674C2171117D005CB689 /* LayoutAttributesFittingPrioritiesProvider.swift */,
 				8179787021EFB8B0003871CD /* StateCachingProtocols.swift */,
@@ -671,7 +668,6 @@
 				C7E067922171117D005CB689 /* EpoxyModelCache.swift in Sources */,
 				258EB5E62347BB6A005C410E /* EpoxyViewMetadata.swift in Sources */,
 				C7E067822171117D005CB689 /* TableViewEpoxyModelDataSourcePrefetching.swift in Sources */,
-				C7E067A22171117D005CB689 /* EpoxyStringRepresentable.swift in Sources */,
 				93CB4E0E2422E4E7003B9CD3 /* GlobalEpoxyConfig.swift in Sources */,
 				C7E067A12171117D005CB689 /* EpoxyDivider.swift in Sources */,
 				C7E067752171117D005CB689 /* InfiniteScrollingState.swift in Sources */,
