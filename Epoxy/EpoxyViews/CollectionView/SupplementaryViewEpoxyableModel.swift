@@ -22,9 +22,8 @@ public protocol SupplementaryViewEpoxyableModel {
 public protocol TypedSupplementaryViewEpoxyableModel: SupplementaryViewEpoxyableModel {
 
   associatedtype View: UIView
-  associatedtype DataID: Hashable
 
-  var dataID: DataID { get }
+  var dataID: AnyHashable { get }
   func makeView() -> View
   func configureView(_ view: View, forTraitCollection traitCollection: UITraitCollection)
   func setViewBehavior(_ view: View)
@@ -36,28 +35,14 @@ extension TypedSupplementaryViewEpoxyableModel {
     reusableView: CollectionViewReusableView,
     forTraitCollection traitCollection: UITraitCollection)
   {
-    let view = reusableView.view as? View ?? makeView() // Kyle++
+    let view = reusableView.view as? View ?? makeView()
     reusableView.setViewIfNeeded(view: view)
     configureView(view, forTraitCollection: traitCollection)
   }
 
   public func setBehavior(reusableView: CollectionViewReusableView) {
-    let view = reusableView.view as? View ?? makeView() // Kyle++
+    let view = reusableView.view as? View ?? makeView()
     reusableView.setViewIfNeeded(view: view)
     setViewBehavior(view)
-  }
-
-  public var dataID: AnyHashable {
-    // We need the explicit type annotation to ensure the compiler doesn't stack overflow here.
-    let id: DataID = dataID
-
-    // If the data ID is double-boxed as an AnyHashable<AnyHashable<…>>, we need to unbox it to
-    // ensure it would be equal to a single-boxed value. This is a Swift standard lib bug
-    // https://bugs.swift.org/browse/SR-13794.
-    let casted = id as AnyHashable
-    if let base = casted.base as? AnyHashable {
-      return base
-    }
-    return casted
   }
 }

@@ -20,7 +20,7 @@ class CustomSelfSizingContentViewController: EpoxyTableViewController {
   override func epoxySections() -> [EpoxySection] {
     let items = (0..<10)
       .map { dataID -> EpoxyableModel in
-        return _BaseEpoxyModelBuilder<CustomSizingView, Int, Int>(
+        return BaseEpoxyModelBuilder<CustomSizingView, Int>(
           data: dataID,
           dataID: dataID)
           .build()

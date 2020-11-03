@@ -21,8 +21,8 @@ public extension EpoxyUserInfoKey {
 
 // MARK: EpoxyModel
 
-extension _BaseEpoxyModelBuilder {
-  public func withTableView(bottomDividerHidden: Bool) -> _BaseEpoxyModelBuilder {
+extension BaseEpoxyModelBuilder {
+  public func withTableView(bottomDividerHidden: Bool) -> BaseEpoxyModelBuilder {
     return setUserInfoValue(
       bottomDividerHidden,
       for: EpoxyUserInfoKey.DeprecatedTableView.Row.bottomDividerHidden)
