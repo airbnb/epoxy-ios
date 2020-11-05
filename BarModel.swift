@@ -1,7 +1,6 @@
 // Created by eric_horacek on 8/21/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-import ConstellationCoreUI
 import Epoxy
 import UIKit
 
@@ -16,26 +15,50 @@ import UIKit
 ///
 /// # Additional resources
 /// - [Bar Installers Docs](***REMOVED***/projects/coreui/docs/navigation/bar_installers)
-public struct BarModel<ViewType: ConstellationView> where ViewType.Content: Equatable {
+public struct BarModel<View: UIView, Content: Equatable> {
 
   // MARK: Lifecycle
 
-  public init(dataID: AnyHashable? = nil, content: ViewType.Content, style: ViewType.Style) {
+  /// Constructs a bar model with a data ID, content, a closure to make the bar view, and a closure
+  /// configure the bar view with new content whenever it changes.
+  ///
+  /// - Parameters:
+  ///   - dataID: An optional ID that uniquely identifies this bar relative to other bars in the
+  ///     same bar group. Defaults to a representation of this view's type under the assumption that
+  ///     it is unlikely to have the same bar multiple times in a single bar stack.
+  ///   - content: The content of the bar view that will be applied to the view in the `configure`
+  ///     closure whenver it has changed.
+  ///   - makeView: A closure that constructs the view of this bar. the `configure` closure is
+  ///     called immediately after `makeView` with the returned view  to configure it with its
+  ///     initial content.
+  ///   - configureContent: A closure that's called to configure the view with its content, both
+  ///     immediately following its construction in `makeView` and subsequently whenever a new bar
+  ///     model that replaced an old bar model with the same `dataID` has content that is not equal
+  ///     to the content of the old bar model.
+  public init(
+    dataID: AnyHashable? = nil,
+    content: Content,
+    makeView: @escaping MakeView,
+    configureContent: @escaping ConfigureContent)
+  {
     // Default to the view type since it's unlikely that duplicate bars will be displayed.
-    self.dataID = dataID ?? AnyHashable(ObjectIdentifier(ViewType.self))
+    self.dataID = dataID ?? AnyHashable(ObjectIdentifier(View.self))
     self.content = content
-    self.style = style
+    _makeView = makeView
+    _configureContent = configureContent
   }
 
   // MARK: Public
 
-  public typealias BehaviorSetter = (_ view: ViewType, _ content: ViewType.Content) -> Void
-  public typealias WillDisplay = (_ view: ViewType) -> Void
-  public typealias DidDisplay = (_ view: ViewType) -> Void
+  public typealias MakeView = () -> View
+  public typealias ConfigureContent = (_ view: View, _ data: Content, _ animated: Bool) -> Void
+  public typealias ConfigureBehaviors = (_ view: View) -> Void
+  public typealias WillDisplay = (_ view: View) -> Void
+  public typealias DidDisplay = (_ view: View) -> Void
 
   /// An optional ID for an alternative style type to use for reuse of this view. Use this to
   /// differentiate between different styling configurations.
-  public func alternateStyleID(_ alternateStyleID: AnyHashable?) -> BarModel<ViewType> {
+  public func alternateStyleID(_ alternateStyleID: AnyHashable?) -> Self {
     var copy = self
     copy._alternateStyleID = alternateStyleID
     return copy
@@ -43,18 +66,18 @@ public struct BarModel<ViewType: ConstellationView> where ViewType.Content: Equa
 
   /// An optional closure that sets the view's behavior (such as interaction blocks or delegates).
   /// Called whenever a view is configured with a bar model.
-  public func behaviorSetter(_ behaviorSetter: BehaviorSetter?) -> BarModel<ViewType> {
-    guard let behaviorSetter = behaviorSetter else { return self }
+  public func configureBehaviors(_ configureBehaviors: ConfigureBehaviors?) -> Self {
+    guard let configureBehaviors = configureBehaviors else { return self }
     var copy = self
-    copy._behaviorSetter = { [previous = copy._behaviorSetter] view, content in
-      previous?(view, content)
-      behaviorSetter(view, content)
+    copy._setBehaviors = { [previous = copy._setBehaviors] view in
+      previous?(view)
+      configureBehaviors(view)
     }
     return copy
   }
 
   /// An optional closure that's called whenever the view is about to display.
-  public func willDisplay(_ willDisplay: WillDisplay?) -> BarModel<ViewType> {
+  public func willDisplay(_ willDisplay: WillDisplay?) -> Self {
     guard let willDisplay = willDisplay else { return self }
     var copy = self
     copy._willDisplay = { [previous = copy._willDisplay] content in
@@ -65,7 +88,7 @@ public struct BarModel<ViewType: ConstellationView> where ViewType.Content: Equa
   }
 
   /// An optional closure that's called after the view has been displayed.
-  public func didDisplay(_ didDisplay: DidDisplay?) -> BarModel<ViewType> {
+  public func didDisplay(_ didDisplay: DidDisplay?) -> Self {
     guard let didDisplay = didDisplay else { return self }
     var copy = self
     copy._didDisplay = { [previous = copy._didDisplay] content in
@@ -76,14 +99,14 @@ public struct BarModel<ViewType: ConstellationView> where ViewType.Content: Equa
   }
 
   /// Updates the content to the given value.
-  public func content(_ content: (inout ViewType.Content) -> Void) -> BarModel<ViewType> {
+  public func content(_ content: (inout Content) -> Void) -> Self {
     var copy = self
     content(&copy.content)
     return copy
   }
 
   /// Replaces the default closure to construct the view with the given closure.
-  public func makeView(_ makeView: @escaping (ViewType.Style) -> ViewType) -> BarModel<ViewType> {
+  public func makeView(_ makeView: @escaping () -> View) -> Self {
     var copy = self
     copy._makeView = makeView
     return copy
@@ -93,7 +116,7 @@ public struct BarModel<ViewType: ConstellationView> where ViewType.Content: Equa
   public func makeCoordinator<Coordinator: BarCoordinating>(
     _ makeCoordinator: @escaping (_ update: @escaping (_ animated: Bool) -> Void) -> Coordinator)
     -> Self where
-    Coordinator.Model == BarModel<ViewType>
+    Coordinator.Model == Self
   {
     var copy = self
     copy._makeCoordinator = { AnyBarCoordinator(makeCoordinator($0)) }
@@ -103,14 +126,14 @@ public struct BarModel<ViewType: ConstellationView> where ViewType.Content: Equa
 
   // MARK: Private
 
-  private typealias Coordinator = AnyBarCoordinator<BarModel<ViewType>>
+  private typealias Coordinator = AnyBarCoordinator<Self>
 
   private let dataID: AnyHashable?
-  private var content: ViewType.Content
-  private var style: ViewType.Style
-  private var _makeView = ViewType.make
+  private var content: Content
+  private var _makeView: MakeView
+  private var _configureContent: ConfigureContent
   private var _alternateStyleID: AnyHashable?
-  private var _behaviorSetter: BehaviorSetter?
+  private var _setBehaviors: ConfigureBehaviors?
   private var _willDisplay: WillDisplay?
   private var _didDisplay: DidDisplay?
   private var coordinatorType: AnyClass = DefaultBarCoordinator<Self>.self
@@ -118,27 +141,18 @@ public struct BarModel<ViewType: ConstellationView> where ViewType.Content: Equa
     AnyBarCoordinator(DefaultBarCoordinator(update: $0))
   }
 
-  private func configure(_ view: ViewType, animated: Bool) {
-    view.setContent(content, animated: animated)
+  private func configure(_ view: View, animated: Bool) {
+    _configureContent(view, content, animated)
   }
 
-  private func castOrAssert(_ view: UIView) -> ViewType? {
-    guard let typedView = view as? ViewType else {
-      assertionFailure("\(view) is not of the expected type \(ViewType.self)")
+  private func castOrAssert(_ view: UIView) -> View? {
+    guard let typedView = view as? View else {
+      assertionFailure("\(view) is not of the expected type \(View.self)")
       return nil
     }
     return typedView
   }
 
-}
-
-extension BarModel where ViewType: BehaviorsConfigurableView {
-  /// Replaces the behaviors for the view with the given behaviors.
-  public func behaviors(_ behaviors: ViewType.Behaviors) -> Self {
-    behaviorSetter { view, _ in
-      view.setBehaviors(behaviors)
-    }
-  }
 }
 
 // MARK: BarModeling
@@ -151,9 +165,9 @@ extension BarModel: BarModeling {
 
 extension BarModel: InternalBarModeling {
   func makeConfiguredView() -> UIView {
-    let view = _makeView(style)
+    let view = _makeView()
     configure(view, animated: false)
-    _behaviorSetter?(view, content)
+    _setBehaviors?(view)
     return view
   }
 
@@ -164,16 +178,16 @@ extension BarModel: InternalBarModeling {
 
   func configureBehavior(_ view: UIView) {
     guard let typedView = castOrAssert(view) else { return }
-    _behaviorSetter?(typedView, content)
+    _setBehaviors?(typedView)
   }
 
   func isContentEqual(to model: InternalBarModeling) -> Bool {
-    guard let model = model as? BarModel<ViewType> else { return false }
+    guard let model = model as? Self else { return false }
     return model.content == content
   }
 
   func canReuseView(from model: InternalBarModeling) -> Bool {
-    guard let model = model as? BarModel<ViewType> else { return false }
+    guard let model = model as? Self else { return false }
     return model._alternateStyleID == _alternateStyleID
   }
 
@@ -217,7 +231,7 @@ extension BarModel: Diffable {
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let otherDiffableItem = otherDiffableItem as? BarModel<ViewType> else { return false }
+    guard let otherDiffableItem = otherDiffableItem as? Self else { return false }
     return isContentEqual(to: otherDiffableItem)
   }
 }
