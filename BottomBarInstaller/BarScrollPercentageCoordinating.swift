@@ -59,13 +59,13 @@ public class ScrollPercentageBarCoordinator<ViewType>: BarCoordinating,
 
   // MARK: Public
 
-  public typealias Model = BarModel<ViewType>
+  public typealias Model = BarModel<ViewType, ViewType.Content>
 
   public var scrollPercentage: CGPoint = .zero {
     didSet { updateScrollPercentage() }
   }
 
-  public func barModel(for model: BarModel<ViewType>) -> BarModeling {
+  public func barModel(for model: BarModel<ViewType, ViewType.Content>) -> BarModeling {
     model.willDisplay { [weak self] view in
       self?.view = view
     }
