@@ -16,10 +16,7 @@ import UIKit
 ///
 /// # Additional resources
 /// - [Bar Installers Docs](***REMOVED***/projects/coreui/docs/navigation/bar_installers)
-public struct BarModel<ViewType: UIView> where ViewType: ContentConfigurableView,
-  ViewType: StyledView,
-  ViewType.Content: Equatable
-{
+public struct BarModel<ViewType: ConstellationView> where ViewType.Content: Equatable {
 
   // MARK: Lifecycle
 

@@ -49,9 +49,7 @@ extension BottomBarInstaller: UIScrollViewDelegate {
 public class ScrollPercentageBarCoordinator<ViewType>: BarCoordinating,
   BarScrollPercentageCoordinating where
   ViewType: BarScrollPercentageConfigurable,
-  ViewType: UIView,
-  ViewType: ContentConfigurableView,
-  ViewType: StyledView,
+  ViewType: ConstellationView,
   ViewType.Content: Equatable
 {
 
