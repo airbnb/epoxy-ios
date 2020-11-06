@@ -69,7 +69,7 @@ public struct BarModel<View: UIView, Content: Equatable> {
   public func configureBehaviors(_ configureBehaviors: ConfigureBehaviors?) -> Self {
     guard let configureBehaviors = configureBehaviors else { return self }
     var copy = self
-    copy._setBehaviors = { [previous = copy._setBehaviors] view in
+    copy._configureBehaviors = { [previous = copy._configureBehaviors] view in
       previous?(view)
       configureBehaviors(view)
     }
@@ -133,7 +133,7 @@ public struct BarModel<View: UIView, Content: Equatable> {
   private var _makeView: MakeView
   private var _configureContent: ConfigureContent
   private var _alternateStyleID: AnyHashable?
-  private var _setBehaviors: ConfigureBehaviors?
+  private var _configureBehaviors: ConfigureBehaviors?
   private var _willDisplay: WillDisplay?
   private var _didDisplay: DidDisplay?
   private var coordinatorType: AnyClass = DefaultBarCoordinator<Self>.self
@@ -167,7 +167,7 @@ extension BarModel: InternalBarModeling {
   func makeConfiguredView() -> UIView {
     let view = _makeView()
     configure(view, animated: false)
-    _setBehaviors?(view)
+    _configureBehaviors?(view)
     return view
   }
 
@@ -178,7 +178,7 @@ extension BarModel: InternalBarModeling {
 
   func configureBehavior(_ view: UIView) {
     guard let typedView = castOrAssert(view) else { return }
-    _setBehaviors?(typedView)
+    _configureBehaviors?(typedView)
   }
 
   func isContentEqual(to model: InternalBarModeling) -> Bool {
