@@ -75,15 +75,18 @@ final class CollectionViewScrollAnimator {
 
   /// Removes our scroll-to-item context and finalizes our custom scroll-to-item by invoking the original function. This guarantees that
   /// our last frame of animation ends us in the correct position.
-  private func finalizeScrollingTowardItem(for scrollToItemContext: ScrollToItemContext) {
+  private func finalizeScrollingTowardItem(
+    for scrollToItemContext: ScrollToItemContext,
+    animated: Bool)
+  {
     self.scrollToItemContext = nil
 
     collectionView?.scrollToItem(
       at: scrollToItemContext.targetIndexPath,
       at: scrollToItemContext.targetScrollPosition,
-      animated: false)
+      animated: animated)
 
-    if let collectionView = collectionView {
+    if let collectionView = collectionView, !animated {
       collectionView.delegate?.scrollViewDidEndScrollingAnimation?(collectionView)
     }
   }
@@ -104,9 +107,10 @@ final class CollectionViewScrollAnimator {
 
     // Figure out which axis to use for scrolling.
     guard let scrollAxis = self.scrollAxis(for: collectionView) else {
-      epoxyLogger.epoxyAssertionFailure(
-        "Programmatic scrolling is only supported for single-axis collection views.")
-      finalizeScrollingTowardItem(for: scrollToItemContext)
+      // If we can't determine a scroll axis, it's either due to the collection view being too small
+      // to be scrollable along either axis, or the collection view being scrollable along both
+      // axes. In either scenario, we can just fall back to the default scroll-to-item behavior.
+      finalizeScrollingTowardItem(for: scrollToItemContext, animated: true)
       return
     }
 
@@ -171,7 +175,7 @@ final class CollectionViewScrollAnimator {
         case .horizontal: collectionView.contentOffset.x += min(offset, distanceToTargetPosition)
         }
       default:
-        finalizeScrollingTowardItem(for: scrollToItemContext)
+        finalizeScrollingTowardItem(for: scrollToItemContext, animated: false)
       }
 
     case .none:
@@ -193,18 +197,14 @@ final class CollectionViewScrollAnimator {
     let scrollsVertically = collectionView.contentSize.height > availableHeight
 
     switch (scrollsHorizontally: scrollsHorizontally, scrollsVertically: scrollsVertically) {
-    case (scrollsHorizontally: true, scrollsVertically: true):
-      epoxyLogger.epoxyAssertionFailure(
-        "Programmatic scrolling is only supported for single-axis collection views.")
-      return nil
-
     case (scrollsHorizontally: false, scrollsVertically: true):
       return .vertical
 
     case (scrollsHorizontally: true, scrollsVertically: false):
       return .horizontal
 
-    case (scrollsHorizontally: false, scrollsVertically: false):
+    case (scrollsHorizontally: true, scrollsVertically: true),
+         (scrollsHorizontally: false, scrollsVertically: false):
       return nil
     }
   }
