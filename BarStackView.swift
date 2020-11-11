@@ -1,7 +1,6 @@
 // Created by eric_horacek on 3/30/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
-import ConstellationElementsCoreUI
 import Epoxy
 import UIKit
 
@@ -29,7 +28,7 @@ public class BarStackView: UIStackView {
     axis = .vertical
     // We need to have at least one arranged subview at all times otherwise this stack view sizes
     // subviews weirdly (e.g. massive width values).
-    addArrangedSubview(LayoutContainer())
+    addArrangedSubview(Spacer())
   }
 
   @available(*, unavailable)
@@ -147,6 +146,12 @@ public class BarStackView: UIStackView {
   private(set) var models = [AnyBarModel]()
 
   // MARK: Private
+
+  // An empty subview to ensure this stack view doesn't size subviews weirdly (e.g. massive width
+  // values).
+  private final class Spacer: UIView {
+    override class var layerClass: AnyClass { CATransformLayer.self }
+  }
 
   // The direction that the bars are Z stacked in.
   private let zOrder: ZOrder
