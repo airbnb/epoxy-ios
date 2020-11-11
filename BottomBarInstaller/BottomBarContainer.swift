@@ -107,18 +107,6 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
     bottomConstraint = nil
   }
 
-  public override func setModels(_ models: [BarModeling], animated: Bool) {
-    super.setModels(models, animated: animated)
-
-    if models.isEmpty {
-      sharedElementTransitionIdentifiers = [:]
-    } else {
-      sharedElementTransitionIdentifiers = [
-        SharedElementIdentifiers.Navigation.footer: .edgeTranslation(.maxYEdge),
-      ]
-    }
-  }
-
   // MARK: Internal
 
   let position = BarContainerPosition.bottom
@@ -188,6 +176,16 @@ extension BottomBarContainer: MagicMoveTransitioning {
     }
 
     return elements
+  }
+
+  public var sharedElementTransitionIdentifiers: [MagicMoveIdentifier: MagicMoveAnimationStyle] {
+    if models.isEmpty {
+      return [:]
+    } else {
+      return [
+        SharedElementIdentifiers.Navigation.footer: .edgeTranslation(.maxYEdge),
+      ]
+    }
   }
 
 }
