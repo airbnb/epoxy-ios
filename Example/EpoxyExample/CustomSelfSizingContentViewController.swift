@@ -4,10 +4,10 @@
 import UIKit
 import Epoxy
 
-class CustomSelfSizingContentViewController: EpoxyTableViewController {
+class CustomSelfSizingContentViewController: EpoxyCollectionViewController {
 
-  override init(epoxyLogger: EpoxyLogging = DefaultEpoxyLogger()) {
-    super.init(epoxyLogger: epoxyLogger)
+  init() {
+    super.init(collectionViewLayout: UICollectionViewCompositionalLayout.example())
     self.tabBarItem = UITabBarItem.init(tabBarSystemItem: .more, tag: 2)
   }
 
@@ -15,7 +15,16 @@ class CustomSelfSizingContentViewController: EpoxyTableViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  // MARK: EpoxyTableViewController
+  // MARK: EpoxyCollectionViewController
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    // Currently required to get the first layout pass to have the correct cell size.
+    DispatchQueue.main.async {
+      self.collectionView.collectionViewLayout.invalidateLayout()
+    }
+  }
 
   override func epoxySections() -> [EpoxySection] {
     let items = (0..<10)

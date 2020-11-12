@@ -9,5 +9,5 @@ Pod::Spec.new do |s|
   s.source_files = 'Epoxy/**/*.{swift,h}'
   s.public_header_files = 'Epoxy/*.h'
   s.frameworks = 'UIKit'
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '13.0'
 end

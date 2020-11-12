@@ -4,6 +4,16 @@
 import UIKit
 
 public struct VisibleEpoxySectionMetadata {
+
+  // MARK: Lifecycle
+
+  public init(section: EpoxyableSection, modelMetadata: [VisibleEpoxyModelMetadata]) {
+    self.section = section
+    self.modelMetadata = modelMetadata
+  }
+
+  // MARK: Public
+
   public let section: EpoxyableSection
   public let modelMetadata: [VisibleEpoxyModelMetadata]
 }

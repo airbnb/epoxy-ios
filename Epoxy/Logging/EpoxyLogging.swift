@@ -13,7 +13,7 @@ extension EpoxyLogging {
 
   /// Epoxy wrapper around `assert(_ condition: Bool, _ message: String)`.
   /// This method will broadcast the message to all logging subscribers if the condition is false.
-  func epoxyAssert(_ condition: Bool, _ message: String) {
+  public func epoxyAssert(_ condition: Bool, _ message: String) {
     if !condition {
       logAssertionMessageBlock?(message)
     }
@@ -22,7 +22,7 @@ extension EpoxyLogging {
 
   /// Epoxy wrapper around `assertionFailure(_ message: String)`.
   /// This method will broadcast the message to all logging subscribers.
-  func epoxyAssertionFailure(_ message: String) {
+  public func epoxyAssertionFailure(_ message: String) {
     logAssertionMessageBlock?(message)
     assertionFailure(message)
   }

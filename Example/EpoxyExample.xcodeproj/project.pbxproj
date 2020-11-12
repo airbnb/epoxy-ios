@@ -15,6 +15,7 @@
 		25627BB3232AC18100D7327A /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25627BB2232AC18100D7327A /* Row.swift */; };
 		2E8B007623F47E7E00D82A31 /* CustomSizingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8B007523F47E7E00D82A31 /* CustomSizingView.swift */; };
 		2E8B007823F4800000D82A31 /* CustomSelfSizingContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8B007723F4800000D82A31 /* CustomSelfSizingContentViewController.swift */; };
+		A65E4931255D03B500CC4B75 /* UICollectionViewCompositionalLayout+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65E4930255D03B500CC4B75 /* UICollectionViewCompositionalLayout+Example.swift */; };
 		A7DC0375FB4E65ACCAB5B346 /* libPods-EpoxyExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44C71F760308770E3AF68BC7 /* libPods-EpoxyExample.a */; };
 		BA93B6D623DA671700D98D8F /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA93B6D523DA671700D98D8F /* TestData.swift */; };
 		BACF3E8C23DBB8DC0001CCD1 /* ShuffeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACF3E8B23DBB8DC0001CCD1 /* ShuffeViewController.swift */; };
@@ -46,6 +47,7 @@
 		2E8B007723F4800000D82A31 /* CustomSelfSizingContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSelfSizingContentViewController.swift; sourceTree = "<group>"; };
 		44C71F760308770E3AF68BC7 /* libPods-EpoxyExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EpoxyExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		85E52AD4FC3ACEF0B14126FD /* Pods-EpoxyExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpoxyExample.debug.xcconfig"; path = "Target Support Files/Pods-EpoxyExample/Pods-EpoxyExample.debug.xcconfig"; sourceTree = "<group>"; };
+		A65E4930255D03B500CC4B75 /* UICollectionViewCompositionalLayout+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCompositionalLayout+Example.swift"; sourceTree = "<group>"; };
 		BA93B6D523DA671700D98D8F /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		BACF3E8B23DBB8DC0001CCD1 /* ShuffeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuffeViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -119,6 +121,7 @@
 				BACF3E8B23DBB8DC0001CCD1 /* ShuffeViewController.swift */,
 				2E8B007523F47E7E00D82A31 /* CustomSizingView.swift */,
 				2E8B007723F4800000D82A31 /* CustomSelfSizingContentViewController.swift */,
+				A65E4930255D03B500CC4B75 /* UICollectionViewCompositionalLayout+Example.swift */,
 			);
 			path = EpoxyExample;
 			sourceTree = "<group>";
@@ -265,6 +268,7 @@
 				BA93B6D623DA671700D98D8F /* TestData.swift in Sources */,
 				2E8B007623F47E7E00D82A31 /* CustomSizingView.swift in Sources */,
 				2E8B007823F4800000D82A31 /* CustomSelfSizingContentViewController.swift in Sources */,
+				A65E4931255D03B500CC4B75 /* UICollectionViewCompositionalLayout+Example.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -349,7 +353,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -404,7 +408,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;

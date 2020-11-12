@@ -3,12 +3,12 @@
 
 import UIKit
 
-enum InfiniteScrollingState {
+public enum InfiniteScrollingState {
   case loading
   case stopped
   case triggered
 
-  func next(in scrollView: UIScrollView) -> InfiniteScrollingState {
+  public func next(in scrollView: UIScrollView) -> InfiniteScrollingState {
     switch self {
     case .loading:
       return self

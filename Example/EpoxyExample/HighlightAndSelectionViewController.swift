@@ -4,11 +4,11 @@
 import Epoxy
 import UIKit
 
-class HighlightAndSelectionViewController: EpoxyTableViewController {
+class HighlightAndSelectionViewController: EpoxyCollectionViewController {
   // MARK: Initialization
 
-  override init(epoxyLogger: EpoxyLogging = DefaultEpoxyLogger()) {
-    super.init(epoxyLogger: epoxyLogger)
+  init() {
+    super.init(collectionViewLayout: UICollectionViewCompositionalLayout.example())
 
     self.tabBarItem = UITabBarItem.init(tabBarSystemItem: .history, tag: 1)
   }
@@ -17,7 +17,16 @@ class HighlightAndSelectionViewController: EpoxyTableViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  // MARK: EpoxyTableViewController
+  override func viewDidLoad() {
+    super.viewDidLoad()
+
+    // Currently required to get the first layout pass to have the correct cell size.
+    DispatchQueue.main.async {
+      self.collectionView.collectionViewLayout.invalidateLayout()
+    }
+  }
+
+  // MARK: EpoxyCollectionViewController
 
   override func epoxySections() -> [EpoxySection] {
     let items = (0..<10)
