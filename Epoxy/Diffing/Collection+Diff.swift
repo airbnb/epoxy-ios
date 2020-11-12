@@ -85,7 +85,7 @@ public struct IndexChangeset {
 
 public struct IndexPathChangeset {
 
-  init(
+  public init(
     inserts: [IndexPath] = [IndexPath](),
     deletes: [IndexPath] = [IndexPath](),
     updates: [(IndexPath, IndexPath)] = [(IndexPath, IndexPath)](),

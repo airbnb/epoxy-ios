@@ -6,12 +6,12 @@ import UIKit
 /// The diffing algorithm complains at compile time without this concrete wrapper
 public final class EpoxyModelWrapper {
 
-  init(epoxyModel: EpoxyableModel) {
+  public init(epoxyModel: EpoxyableModel) {
     self.epoxyModel = epoxyModel
   }
 
-  let epoxyModel: EpoxyableModel
-  var extraModelWrapperInfo: [EpoxyUserInfoKey: Any] = [:]
+  public let epoxyModel: EpoxyableModel
+  public var extraModelWrapperInfo: [EpoxyUserInfoKey: Any] = [:]
 }
 
 extension EpoxyModelWrapper: EpoxyableModel {

@@ -5,7 +5,7 @@ import Foundation
 
 /// Manages a set of EpoxyModelWrappers for use inside of internal data sources
 public final class InternalEpoxySection {
-  init(
+  public init(
     dataID: AnyHashable,
     items: [EpoxyModelWrapper],
     userInfo: [EpoxyUserInfoKey: Any])
@@ -17,7 +17,7 @@ public final class InternalEpoxySection {
 
   public let dataID: AnyHashable
   public var userInfo: [EpoxyUserInfoKey: Any]
-  var items: [EpoxyModelWrapper]
+  public var items: [EpoxyModelWrapper]
 }
 
 extension InternalEpoxySection: Diffable {

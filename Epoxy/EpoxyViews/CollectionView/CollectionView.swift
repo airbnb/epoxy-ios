@@ -3,14 +3,10 @@
 
 import UIKit
 
-/// A `UICollectionView` class that handles updates through its `setSections` method, and optionally animates diffs.
-open class CollectionView: UICollectionView,
-  TypedEpoxyInterface,
-  InternalEpoxyInterface,
-  UICollectionViewDelegate
-{
+/// A `UICollectionView` class that handles updates through its `setSections` method, and optionally
+/// animates diffs.
+open class CollectionView: UICollectionView, UICollectionViewDelegate {
 
-  public typealias DataType = InternalCollectionViewEpoxyData
   public typealias Cell = CollectionViewCell
 
   // MARK: Lifecycle
@@ -315,9 +311,9 @@ open class CollectionView: UICollectionView,
   }
 
   public func apply(
-    _ newData: DataType?,
+    _ newData: InternalCollectionViewEpoxyData?,
     animated: Bool,
-    changesetMaker: @escaping (DataType?) -> EpoxyChangeset?)
+    changesetMaker: @escaping (InternalCollectionViewEpoxyData?) -> EpoxyChangeset?)
   {
     guard GlobalEpoxyConfig.shared.disablesCVBatchUpdateQueuing || !isUpdating else {
       queuedUpdate = (
@@ -429,7 +425,7 @@ open class CollectionView: UICollectionView,
     isPrefetchingEnabled = false
 
     delegate = self
-    epoxyDataSource.epoxyInterface = self
+    epoxyDataSource.collectionView = self
     epoxyDataSource.reorderingDelegate = self
     dataSource = epoxyDataSource
     backgroundColor = .clear

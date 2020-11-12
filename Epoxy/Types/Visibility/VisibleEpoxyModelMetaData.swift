@@ -4,6 +4,17 @@
 import UIKit
 
 public struct VisibleEpoxyModelMetadata {
+
+  // MARK: Lifecycle
+
+  public init(model: EpoxyableModel, view: UIView? = nil) {
+    self.model = model
+    self.view = view
+  }
+
+  // MARK: Public
+
   public let model: EpoxyableModel
   public private(set) weak var view: UIView?
+
 }

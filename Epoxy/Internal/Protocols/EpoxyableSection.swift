@@ -46,10 +46,6 @@ extension Array where Element: EpoxyableSection {
 
 extension EpoxySection: EpoxyableSection {
 
-  public enum ElementKind: String {
-    case sectionHeader
-  }
-
   public var itemModels: [EpoxyableModel] {
     return items
   }
@@ -63,15 +59,7 @@ extension EpoxySection: EpoxyableSection {
   }
 
   public func getSupplementaryViewReuseIDs() -> [String: Set<String>] {
-    var reuseIDs = Set<String>()
-
     var newSupplementaryViewReuseIDs = [String: Set<String>]()
-
-    // DeprecatedTableView only
-    if let sectionHeader = tableViewSectionHeader {
-      reuseIDs.insert(sectionHeader.reuseID)
-      newSupplementaryViewReuseIDs[ElementKind.sectionHeader.rawValue] = reuseIDs
-    }
 
     // CollectionView only
     collectionViewSupplementaryModels?.forEach { elementKind, elementSupplementaryModels in

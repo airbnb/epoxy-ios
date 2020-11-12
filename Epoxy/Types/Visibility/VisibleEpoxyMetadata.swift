@@ -7,7 +7,7 @@ public struct VisibleEpoxyMetadata {
 
   // MARK: Lifecycle
 
-  init(
+  public init(
     sectionMetadata: [VisibleEpoxySectionMetadata],
     containerView: UIView?)
   {
