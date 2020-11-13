@@ -349,51 +349,6 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
     return epoxyDataSource.epoxySection(at: index)?.dataID
   }
 
-  /// Adds an infinite scrolling loading view and sets up a delegate to receive scrolling callbacks.
-  /// Note that infinite scrolling is only supported on vertically scrolling CollectionViews.
-  ///
-  /// - Parameters:
-  ///   - delegate: infinite scrolling delegate to handle when more content should be loaded.
-  ///   - loaderView: the view to use as the loading spinner at the bottom of the scroll view.
-  public func addInfiniteScrolling<LoaderView>(
-    delegate: InfiniteScrollingDelegate,
-    loaderView: LoaderView)
-    where LoaderView: UIView, LoaderView: Animatable
-  {
-    // If infinite loading has already been added, just no-op.
-    // If you need to change the loading spinner, please call `removeInfiniteScrolling` before
-    // calling this method again.
-    if infiniteScrollingLoader != nil {
-      return
-    }
-
-    let height = loaderView.compressedHeight(forWidth: bounds.width)
-    loaderView.translatesAutoresizingMaskIntoConstraints = true
-    loaderView.frame.size.height = height
-    contentInset.bottom += height
-
-    loaderView.stopAnimating()
-    infiniteScrollingLoader = loaderView
-    infiniteScrollingDelegate = delegate
-    addSubview(loaderView)
-    updateInfiniteLoaderPosition()
-    infiniteScrollingState = .stopped
-  }
-
-  public func removeInfiniteScrolling() {
-    if let loader = infiniteScrollingLoader {
-      contentInset.bottom -= loader.bounds.height
-      loader.removeFromSuperview()
-      infiniteScrollingLoader = nil
-    }
-    infiniteScrollingDelegate = nil
-    infiniteScrollingState = .stopped
-  }
-
-  open override var contentSize: CGSize {
-    didSet { updateInfiniteLoaderPosition() }
-  }
-
   // MARK: Fileprivate
 
   fileprivate let epoxyDataSource: CollectionViewEpoxyDataSource
@@ -408,9 +363,6 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
     changesetMaker: (InternalCollectionViewEpoxyData?) -> EpoxyChangeset?)?
 
   private var isUpdating = false
-  private var infiniteScrollingLoader: (UIView & Animatable)?
-  private weak var infiniteScrollingDelegate: InfiniteScrollingDelegate?
-  private var infiniteScrollingState: InfiniteScrollingState = .stopped
   private var ephemeralStateCache = [AnyHashable: RestorableState?]()
   private var lastFocusedDataID: AnyHashable?
 
@@ -556,21 +508,6 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
   private func completeUpdates() {
     resetBehaviors()
     isUpdating = false
-  }
-
-  private func updatedInfiniteScrollingState(in scrollView: UIScrollView) -> (InfiniteScrollingState, Bool) {
-    let previousState = infiniteScrollingState
-    let newState = previousState.next(in: scrollView)
-    return (newState, previousState == .triggered && newState == .loading)
-  }
-
-  private func updateInfiniteLoaderPosition() {
-    guard let infiniteScrollingLoader = infiniteScrollingLoader else { return }
-    infiniteScrollingLoader.frame = CGRect(
-      x: 0,
-      y: contentSize.height,
-      width: contentSize.width,
-      height: infiniteScrollingLoader.bounds.height)
   }
 
   @objc
@@ -778,19 +715,6 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
 
   public func scrollViewDidScroll(_ scrollView: UIScrollView) {
     scrollDelegate?.scrollViewDidScroll?(scrollView)
-    let (newState, shouldTrigger) = updatedInfiniteScrollingState(in: scrollView)
-    infiniteScrollingState = newState
-    let delegateWantsInfiniteScrolling = infiniteScrollingDelegate?.shouldFireInfiniteScrolling() ?? true
-    if shouldTrigger && delegateWantsInfiniteScrolling {
-      infiniteScrollingLoader?.startAnimating()
-      infiniteScrollingDelegate?.didScrollToInfiniteLoader { [weak self] in
-        self?.infiniteScrollingLoader?.stopAnimating()
-        self?.updateInfiniteLoaderPosition()
-        self?.infiniteScrollingState = .stopped
-      }
-    } else if !delegateWantsInfiniteScrolling {
-      infiniteScrollingState = .stopped
-    }
 
     // Allow the programmatic scroll-to-item to be interrupted / cancelled if the user tries to
     // scroll.
