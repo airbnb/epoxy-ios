@@ -1,7 +1,7 @@
 // Created by eric_horacek on 3/30/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
-import EpoxyCoreUI
+import EpoxyCore
 import UIKit
 
 /// A stack of arbitrary bar views, typically fixed to either the top or bottom of a view

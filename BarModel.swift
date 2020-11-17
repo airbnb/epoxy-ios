@@ -1,7 +1,7 @@
 // Created by eric_horacek on 8/21/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-import EpoxyCoreUI
+import EpoxyCore
 import UIKit
 
 // MARK: - BarModel
