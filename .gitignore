@@ -10,4 +10,5 @@ xcuserdata
 xcuserdata/
 *.xcuserstate
 
-Carthage/
+.swiftpm
+.build/

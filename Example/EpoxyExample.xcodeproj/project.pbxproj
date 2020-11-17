@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,42 +11,25 @@
 		25627B95232ABF0F00D7327A /* HighlightAndSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25627B94232ABF0F00D7327A /* HighlightAndSelectionViewController.swift */; };
 		25627B9A232ABF1000D7327A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 25627B99232ABF1000D7327A /* Assets.xcassets */; };
 		25627B9D232ABF1100D7327A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25627B9B232ABF1100D7327A /* LaunchScreen.storyboard */; };
-		25627BA8232ABF1100D7327A /* EpoxyExampleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25627BA7232ABF1100D7327A /* EpoxyExampleTests.swift */; };
 		25627BB3232AC18100D7327A /* Row.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25627BB2232AC18100D7327A /* Row.swift */; };
 		2E8B007623F47E7E00D82A31 /* CustomSizingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8B007523F47E7E00D82A31 /* CustomSizingView.swift */; };
 		2E8B007823F4800000D82A31 /* CustomSelfSizingContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8B007723F4800000D82A31 /* CustomSelfSizingContentViewController.swift */; };
 		A65E4931255D03B500CC4B75 /* UICollectionViewCompositionalLayout+Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65E4930255D03B500CC4B75 /* UICollectionViewCompositionalLayout+Example.swift */; };
-		A7DC0375FB4E65ACCAB5B346 /* libPods-EpoxyExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 44C71F760308770E3AF68BC7 /* libPods-EpoxyExample.a */; };
+		A6990DCC25633D8600689965 /* Epoxy in Frameworks */ = {isa = PBXBuildFile; productRef = A6990DCB25633D8600689965 /* Epoxy */; };
 		BA93B6D623DA671700D98D8F /* TestData.swift in Sources */ = {isa = PBXBuildFile; fileRef = BA93B6D523DA671700D98D8F /* TestData.swift */; };
 		BACF3E8C23DBB8DC0001CCD1 /* ShuffeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACF3E8B23DBB8DC0001CCD1 /* ShuffeViewController.swift */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		25627BA4232ABF1100D7327A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 25627B87232ABF0E00D7327A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 25627B8E232ABF0E00D7327A;
-			remoteInfo = EpoxyExample;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
-		1F8B3FD247D3EB84D4EFDDBA /* Pods-EpoxyExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpoxyExample.release.xcconfig"; path = "Target Support Files/Pods-EpoxyExample/Pods-EpoxyExample.release.xcconfig"; sourceTree = "<group>"; };
 		25627B8F232ABF0E00D7327A /* EpoxyExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EpoxyExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25627B92232ABF0E00D7327A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		25627B94232ABF0F00D7327A /* HighlightAndSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightAndSelectionViewController.swift; sourceTree = "<group>"; };
 		25627B99232ABF1000D7327A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		25627B9C232ABF1100D7327A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		25627B9E232ABF1100D7327A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		25627BA3232ABF1100D7327A /* EpoxyExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = EpoxyExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		25627BA7232ABF1100D7327A /* EpoxyExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpoxyExampleTests.swift; sourceTree = "<group>"; };
-		25627BA9232ABF1100D7327A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		25627BB2232AC18100D7327A /* Row.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Row.swift; sourceTree = "<group>"; };
 		2E8B007523F47E7E00D82A31 /* CustomSizingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSizingView.swift; sourceTree = "<group>"; };
 		2E8B007723F4800000D82A31 /* CustomSelfSizingContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSelfSizingContentViewController.swift; sourceTree = "<group>"; };
-		44C71F760308770E3AF68BC7 /* libPods-EpoxyExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-EpoxyExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		85E52AD4FC3ACEF0B14126FD /* Pods-EpoxyExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EpoxyExample.debug.xcconfig"; path = "Target Support Files/Pods-EpoxyExample/Pods-EpoxyExample.debug.xcconfig"; sourceTree = "<group>"; };
 		A65E4930255D03B500CC4B75 /* UICollectionViewCompositionalLayout+Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCompositionalLayout+Example.swift"; sourceTree = "<group>"; };
 		BA93B6D523DA671700D98D8F /* TestData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestData.swift; sourceTree = "<group>"; };
 		BACF3E8B23DBB8DC0001CCD1 /* ShuffeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuffeViewController.swift; sourceTree = "<group>"; };
@@ -57,45 +40,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7DC0375FB4E65ACCAB5B346 /* libPods-EpoxyExample.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		25627BA0232ABF1100D7327A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
+				A6990DCC25633D8600689965 /* Epoxy in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0FB93CE18982E0D6959FB390 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				85E52AD4FC3ACEF0B14126FD /* Pods-EpoxyExample.debug.xcconfig */,
-				1F8B3FD247D3EB84D4EFDDBA /* Pods-EpoxyExample.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		1062DD9485AC4E778CC432C8 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				44C71F760308770E3AF68BC7 /* libPods-EpoxyExample.a */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		25627B86232ABF0E00D7327A = {
 			isa = PBXGroup;
 			children = (
 				25627B91232ABF0E00D7327A /* EpoxyExample */,
-				25627BA6232ABF1100D7327A /* EpoxyExampleTests */,
 				25627B90232ABF0E00D7327A /* Products */,
-				0FB93CE18982E0D6959FB390 /* Pods */,
-				1062DD9485AC4E778CC432C8 /* Frameworks */,
+				A6990DBE25633C8C00689965 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,7 +60,6 @@
 			isa = PBXGroup;
 			children = (
 				25627B8F232ABF0E00D7327A /* EpoxyExample.app */,
-				25627BA3232ABF1100D7327A /* EpoxyExampleTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -126,13 +82,11 @@
 			path = EpoxyExample;
 			sourceTree = "<group>";
 		};
-		25627BA6232ABF1100D7327A /* EpoxyExampleTests */ = {
+		A6990DBE25633C8C00689965 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				25627BA7232ABF1100D7327A /* EpoxyExampleTests.swift */,
-				25627BA9232ABF1100D7327A /* Info.plist */,
 			);
-			path = EpoxyExampleTests;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,7 +96,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 25627BAC232ABF1100D7327A /* Build configuration list for PBXNativeTarget "EpoxyExample" */;
 			buildPhases = (
-				BC91D8E96155D125E4A7734C /* [CP] Check Pods Manifest.lock */,
 				25627B8B232ABF0E00D7327A /* Sources */,
 				25627B8C232ABF0E00D7327A /* Frameworks */,
 				25627B8D232ABF0E00D7327A /* Resources */,
@@ -152,27 +105,12 @@
 			dependencies = (
 			);
 			name = EpoxyExample;
+			packageProductDependencies = (
+				A6990DCB25633D8600689965 /* Epoxy */,
+			);
 			productName = EpoxyExample;
 			productReference = 25627B8F232ABF0E00D7327A /* EpoxyExample.app */;
 			productType = "com.apple.product-type.application";
-		};
-		25627BA2232ABF1100D7327A /* EpoxyExampleTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 25627BAF232ABF1100D7327A /* Build configuration list for PBXNativeTarget "EpoxyExampleTests" */;
-			buildPhases = (
-				25627B9F232ABF1100D7327A /* Sources */,
-				25627BA0232ABF1100D7327A /* Frameworks */,
-				25627BA1232ABF1100D7327A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				25627BA5232ABF1100D7327A /* PBXTargetDependency */,
-			);
-			name = EpoxyExampleTests;
-			productName = EpoxyExampleTests;
-			productReference = 25627BA3232ABF1100D7327A /* EpoxyExampleTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -181,15 +119,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1030;
-				LastUpgradeCheck = 1030;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = Airbnb;
 				TargetAttributes = {
 					25627B8E232ABF0E00D7327A = {
 						CreatedOnToolsVersion = 10.3;
-					};
-					25627BA2232ABF1100D7327A = {
-						CreatedOnToolsVersion = 10.3;
-						TestTargetID = 25627B8E232ABF0E00D7327A;
 					};
 				};
 			};
@@ -207,7 +141,6 @@
 			projectRoot = "";
 			targets = (
 				25627B8E232ABF0E00D7327A /* EpoxyExample */,
-				25627BA2232ABF1100D7327A /* EpoxyExampleTests */,
 			);
 		};
 /* End PBXProject section */
@@ -222,39 +155,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		25627BA1232ABF1100D7327A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		BC91D8E96155D125E4A7734C /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-EpoxyExample-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		25627B8B232ABF0E00D7327A /* Sources */ = {
@@ -272,23 +173,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		25627B9F232ABF1100D7327A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				25627BA8232ABF1100D7327A /* EpoxyExampleTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		25627BA5232ABF1100D7327A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 25627B8E232ABF0E00D7327A /* EpoxyExample */;
-			targetProxy = 25627BA4232ABF1100D7327A /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		25627B9B232ABF1100D7327A /* LaunchScreen.storyboard */ = {
@@ -328,6 +213,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -389,6 +275,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -420,7 +307,6 @@
 		};
 		25627BAD232ABF1100D7327A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 85E52AD4FC3ACEF0B14126FD /* Pods-EpoxyExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -438,7 +324,6 @@
 		};
 		25627BAE232ABF1100D7327A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1F8B3FD247D3EB84D4EFDDBA /* Pods-EpoxyExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -451,46 +336,6 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
-		25627BB0232ABF1100D7327A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = EpoxyExampleTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.airbnb.EpoxyExampleTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EpoxyExample.app/EpoxyExample";
-			};
-			name = Debug;
-		};
-		25627BB1232ABF1100D7327A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				INFOPLIST_FILE = EpoxyExampleTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@loader_path/Frameworks",
-				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.airbnb.EpoxyExampleTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/EpoxyExample.app/EpoxyExample";
 			};
 			name = Release;
 		};
@@ -515,16 +360,14 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		25627BAF232ABF1100D7327A /* Build configuration list for PBXNativeTarget "EpoxyExampleTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				25627BB0232ABF1100D7327A /* Debug */,
-				25627BB1232ABF1100D7327A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		A6990DCB25633D8600689965 /* Epoxy */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Epoxy;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 25627B87232ABF0E00D7327A /* Project object */;
 }
