@@ -1,6 +1,0 @@
-module Epoxy {
-  umbrella header "Epoxy-umbrella.h"
-
-  export *
-  module * { export * }
-}
