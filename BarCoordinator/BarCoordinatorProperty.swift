@@ -41,7 +41,11 @@ public struct BarCoordinatorProperty<Property> {
 // MARK: - BarCoordinatorPropertyConfigurable
 
 /// A type that can propagate properties to its coordinators.
-public protocol BarCoordinatorPropertyConfigurable {
+public protocol BarCoordinatorPropertyConfigurable: AnyObject {
+  /// The coordinators for each of the bars within this stack, ordered from top to bottom.
+  var coordinators: [AnyBarCoordinating] { get }
+
+  /// Gest or sets the subscripted property on all bars within this coordinator.
   subscript<Property>(property: BarCoordinatorProperty<Property>) -> Property { get set }
 
   /// Registers an observer to monitor changes to a bar coordinator property.

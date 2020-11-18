@@ -9,7 +9,7 @@ import UIKit
 ///
 /// Cannot have a `CATransformLayer` as its layer class as that prevents usage of the
 /// `UIView.transition` APIs for swapping its contents.
-final class BarWrapperView: UIView {
+public final class BarWrapperView: UIView {
 
   // MARK: Lifecycle
 
@@ -44,32 +44,9 @@ final class BarWrapperView: UIView {
     _coordinator?.backing
   }
 
-  public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    guard let view = super.hitTest(point, with: event) else { return nil }
-
-    // This view should never receive touches, but since it can contain interactive elements we
-    // need to ignore them via a hit test, not `isUserInteractionEnabled`.
-    return view === self ? nil : view
-  }
-
-  public override func layoutMarginsDidChange() {
-    super.layoutMarginsDidChange()
-    setNeedsLayout()
-  }
-
-  // MARK: Internal
-
-  /// The current bar model.
-  var model: BarModeling?
-
-  /// The current bar view.
-  private(set) var view: UIView? {
-    didSet { updateView(from: oldValue) }
-  }
-
   // MARK: UIView
 
-  override func layoutSubviews() {
+  public override func layoutSubviews() {
     super.layoutSubviews()
 
     guard let view = view else { return }
@@ -93,6 +70,29 @@ final class BarWrapperView: UIView {
     }
   }
 
+  public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    guard let view = super.hitTest(point, with: event) else { return nil }
+
+    // This view should never receive touches, but since it can contain interactive elements we
+    // need to ignore them via a hit test, not `isUserInteractionEnabled`.
+    return view === self ? nil : view
+  }
+
+  public override func layoutMarginsDidChange() {
+    super.layoutMarginsDidChange()
+    setNeedsLayout()
+  }
+
+  // MARK: Internal
+
+  /// The current bar model.
+  var model: BarModeling?
+
+  /// The current bar view.
+  private(set) var view: UIView? {
+    didSet { updateView(from: oldValue) }
+  }
+
   /// Updates the bar model the given bar model.
   func setModel(_ model: BarModeling?, animated: Bool) {
     self.model = model
@@ -112,7 +112,7 @@ final class BarWrapperView: UIView {
   /// A closure that will be invoked prior to adding the bar view to the view hierarchy.
   private let willDisplayBar: ((_ bar: UIView) -> Void)?
 
-  /// A closure that's called after the coordinator has been created.
+  /// A closure that's called after a bar coordinator has been created.
   private let didUpdateCoordinator: ((_ coordinator: AnyBarCoordinating) -> Void)?
 
   /// The original bottom layout margins of the bar before they were overridden by this view's
@@ -208,28 +208,22 @@ final class BarWrapperView: UIView {
       view.translatesAutoresizingMaskIntoConstraints = false
       view.insetsLayoutMarginsFromSafeArea = false
       addSubview(view)
+      let top = view.topAnchor.constraint(equalTo: topAnchor)
+      let bottom = view.bottomAnchor.constraint(equalTo: bottomAnchor)
+      let leading = view.leadingAnchor.constraint(equalTo: leadingAnchor)
+      let trailing = view.trailingAnchor.constraint(equalTo: trailingAnchor)
+      // Ensure that when compressed the bar slides underneath the previous bar or the edge of the
+      // screen rather than compressing its content which can result in weird layouts.
+      //
+      // We add one to `defaultLow` to allow for content to use this as its compression resistance
+      // priority to be compressed.
       switch zOrder {
       case .bottomToTop:
-        view.constrainToSuperview(anchors: [.leading, .top, .trailing])
-        let constraint = view.bottomAnchor.constraint(equalTo: bottomAnchor)
-        // Ensure that when compressed the bar slides underneath the previous bar or the edge of the
-        // screen rather than compressing its content which can result in weird layouts.
-        //
-        // We add one to `defaultLow` to allow for content to use this as its compression resistance
-        // priority to be compressed.
-        constraint.priority = UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue + 1)
-        constraint.isActive = true
+        bottom.priority = UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue + 1)
       case .topToBottom:
-        view.constrainToSuperview(anchors: [.leading, .bottom, .trailing])
-        let constraint = view.topAnchor.constraint(equalTo: topAnchor)
-        // Ensure that when compressed the bar slides underneath the previous bar or the edge of the
-        // screen rather than compressing its content which can result in weird layouts.
-        //
-        // We add one to `defaultLow` to allow for content to use this as its compression resistance
-        // priority to be compressed.
-        constraint.priority = UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue + 1)
-        constraint.isActive = true
+        top.priority = UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue + 1)
       }
+      NSLayoutConstraint.activate([top, bottom, leading, trailing])
     }
   }
 

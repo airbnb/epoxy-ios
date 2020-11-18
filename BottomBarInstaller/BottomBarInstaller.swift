@@ -30,9 +30,7 @@ public final class BottomBarInstaller: NSObject {
   {
     self.viewController = viewController
     keyboardPositionWatcher.enabled = avoidsKeyboard
-    installer = .init(viewController: viewController, willDisplayBar: { bar in
-      (bar as? LegacyBottomBarView)?.prepareForInstallation()
-    })
+    installer = .init(viewController: viewController)
     super.init()
     installer.setBars(bars, animated: false)
   }
@@ -123,6 +121,10 @@ public final class BottomBarInstaller: NSObject {
 // MARK: BarCoordinatorPropertyConfigurable
 
 extension BottomBarInstaller: BarCoordinatorPropertyConfigurable {
+  public var coordinators: [AnyBarCoordinating] {
+    installer.coordinators
+  }
+
   public subscript<Property>(property: BarCoordinatorProperty<Property>) -> Property {
     get { installer[property] }
     set { installer[property] = newValue }
@@ -134,24 +136,5 @@ extension BottomBarInstaller: BarCoordinatorPropertyConfigurable {
     -> AnyObject
   {
     installer.observe(property, observer: observer)
-  }
-}
-
-// MARK: - LegacyBottomBarView
-
-/// Describes a bottom bar view that constrains its content using `constrainToBottomSafeArea(of:)`,
-/// which doesn't interoperate gracefully with `BottomBarContainer`, since it covers the entire
-/// bar with a safe area.
-public protocol LegacyBottomBarView {
-  /// The constraints that are added via the legacy `constrainToBottomSafeArea(of:)`.
-  var bottomSafeAreaConstraints: [NSLayoutConstraint] { get }
-  /// The constraints that are constrained via standard UIKit bottom margins.
-  var bottomMarginConstraints: [NSLayoutConstraint] { get }
-}
-
-extension LegacyBottomBarView {
-  func prepareForInstallation() {
-    NSLayoutConstraint.deactivate(bottomSafeAreaConstraints)
-    NSLayoutConstraint.activate(bottomMarginConstraints)
   }
 }

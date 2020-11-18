@@ -16,10 +16,16 @@ public final class InputAccessoryBarStackView: UIView {
   // MARK: Lifecycle
 
   public init(bars: [BarModeling] = []) {
+    barStack = BarStackView(zOrder: .bottomToTop)
     barStack.setModels(bars, animated: false)
     super.init(frame: .zero)
     addSubview(barStack)
-    barStack.constrainToSuperview()
+    NSLayoutConstraint.activate([
+      barStack.topAnchor.constraint(equalTo: topAnchor),
+      barStack.leadingAnchor.constraint(equalTo: leadingAnchor),
+      barStack.bottomAnchor.constraint(equalTo: bottomAnchor),
+      barStack.trailingAnchor.constraint(equalTo: trailingAnchor),
+    ])
     autoresizingMask = .flexibleHeight
   }
 
@@ -30,9 +36,7 @@ public final class InputAccessoryBarStackView: UIView {
 
   // MARK: Public
 
-  public let barStack = BarStackView(zOrder: .bottomToTop, willDisplayBar: { bar in
-    (bar as? LegacyBottomBarView)?.prepareForInstallation()
-  })
+  public let barStack: BarStackView
 
   // MARK: UIView
 
