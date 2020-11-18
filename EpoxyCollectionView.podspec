@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'EpoxyCollectionView'
-  s.version = '0.32.0'
+  s.version = '0.34.0'
   s.license = 'Apache License, Version 2.0'
   s.summary = 'Declarative UI framework for UICollectionView'
   s.homepage = 'https://github.com/airbnb/epoxy-ios'
