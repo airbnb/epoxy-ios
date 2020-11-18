@@ -10,13 +10,14 @@ public class BarStackView: UIStackView {
 
   // MARK: Lifecycle
 
+  /// - Parameters:
+  ///   - zOrder: The order that the bars are arranged on the Z axis.
+  ///   - didUpdateCoordinator: A closure that's called after a bar coordinator has been created.
   public init(
     zOrder: ZOrder,
-    willDisplayBar: ((_ bar: UIView) -> Void)? = nil,
     didUpdateCoordinator: ((AnyBarCoordinating) -> Void)? = nil)
   {
     self.zOrder = zOrder
-    self.willDisplayBar = willDisplayBar
     self.didUpdateCoordinator = didUpdateCoordinator
     super.init(frame: .zero)
     translatesAutoresizingMaskIntoConstraints = false
@@ -38,7 +39,7 @@ public class BarStackView: UIStackView {
 
   // MARK: Public
 
-  /// The order that the bars are in on the Z axis.
+  /// The order that the bars are arranged on the Z axis.
   public enum ZOrder {
     /// The top bar is the highest in the Z stack. Used when pinned to the top of the screen.
     case topToBottom
@@ -156,10 +157,7 @@ public class BarStackView: UIStackView {
   // The direction that the bars are Z stacked in.
   private let zOrder: ZOrder
 
-  /// A closure that will be invoked prior to adding the bar view to the view hierarchy.
-  private let willDisplayBar: ((_ bar: UIView) -> Void)?
-
-  /// A closure that's called after the coordinator has been created.
+  /// A closure that's called after a bar coordinator has been created.
   private let didUpdateCoordinator: ((_ coordinator: AnyBarCoordinating) -> Void)?
 
   /// The current bar wrappers ordered from top to bottom.
@@ -227,7 +225,6 @@ public class BarStackView: UIStackView {
     (bar as? HeightInvalidatingBarView)?.heightInvalidationContext = .init { [weak self] in
       self?.superview
     }
-    willDisplayBar?(bar)
   }
 
   /// Updates the `zPosition` of the wrapper views to respect the `ZOrder` after an update.

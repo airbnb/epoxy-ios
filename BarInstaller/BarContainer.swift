@@ -7,11 +7,11 @@ import UIKit
 
 /// A container of bar views that insets its view controller's safe area insets.
 public protocol BarContainer: BarStackView {
-  /// Creates this container with a closure that's invoked when a bar is about to be displayed.
-  init(
-    willDisplayBar: ((_ bar: UIView) -> Void)?,
-    didUpdateCoordinator: ((AnyBarCoordinating) -> Void)?)
+  /// - Parameter didUpdateCoordinator: A closure that's called after a bar coordinator has been
+  ///   created.
+  init(didUpdateCoordinator: ((AnyBarCoordinating) -> Void)?)
 
+  /// The coordinators for each of the bars within this stack, ordered from top to bottom.
   var coordinators: [AnyBarCoordinating] { get }
 
   /// The view controller that will have its `additionalSafeAreaInsets` updated to accommodate for
@@ -65,10 +65,14 @@ protocol InternalBarContainer: BarContainer {
 
 /// The positions that a bar container can be placed at.
 enum BarContainerPosition {
+  /// The bar container is fixed at the top of a view.
   case top
+  /// The bar container is fixed at the bottom of a view.
   case bottom
 
-  /// They key path for the relevant
+  // MARK: Internal
+
+  /// They key path for the component of a `UIEdgeInsets` that corresponds to this position.
   var inset: WritableKeyPath<UIEdgeInsets, CGFloat> {
     switch self {
     case .top: return \.top
@@ -76,6 +80,7 @@ enum BarContainerPosition {
     }
   }
 
+  /// They y position of the edge of the given `CGRect` that corresponds to this position.
   func edge(_ rect: CGRect) -> CGFloat {
     switch self {
     case .top: return rect.minY

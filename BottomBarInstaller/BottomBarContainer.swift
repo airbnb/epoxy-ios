@@ -1,7 +1,6 @@
 // Created by eric_horacek on 8/20/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-import MagicMoveCoreUI
 import UIKit
 
 // MARK: - BottomBarContainer
@@ -11,26 +10,18 @@ import UIKit
 ///   area insets of its view controller.
 /// - Updates the additional bottom safe area insets of its weak view controller reference to be
 ///   inset by the height of the bar stack.
-public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarContainer {
+public final class BottomBarContainer: BarStackView, InternalBarContainer {
 
   // MARK: Lifecycle
 
-  public init(
-    willDisplayBar: ((_ bar: UIView) -> Void)? = nil,
-    didUpdateCoordinator: ((AnyBarCoordinating) -> Void)? = nil)
-  {
-    super.init(
-      zOrder: .bottomToTop,
-      willDisplayBar: willDisplayBar,
-      didUpdateCoordinator: didUpdateCoordinator)
+  public init(didUpdateCoordinator: ((AnyBarCoordinating) -> Void)?) {
+    super.init(zOrder: .bottomToTop, didUpdateCoordinator: didUpdateCoordinator)
 
     addSubviews()
     constrainSubviews()
   }
 
   // MARK: Public
-
-  // MARK: UIView
 
   public override var center: CGPoint {
     didSet {
@@ -160,32 +151,6 @@ public final class BottomBarContainer: BarStackView, FixedBarView, InternalBarCo
     let margin = (bottomOffset > 0) ? 0 : viewController?.originalSafeAreaInsetBottom ?? 0
     updateScrollViewInset(allScrollViews, margin: margin)
     layoutMargins.bottom = margin
-  }
-
-}
-
-// MARK: MagicMoveTransitioning
-
-extension BottomBarContainer: MagicMoveTransitioning {
-
-  public var transitionElements: [MagicMoveIdentifier: MagicMoveView] {
-    var elements = [MagicMoveIdentifier: MagicMoveView]()
-
-    for (index, (model, view)) in zip(models, barViews).enumerated() {
-      elements[model.diffIdentifier ?? AnyHashable(index)] = .view(view, animation: .edgeTranslation(.maxYEdge))
-    }
-
-    return elements
-  }
-
-  public var sharedElementTransitionIdentifiers: [MagicMoveIdentifier: MagicMoveAnimationStyle] {
-    if models.isEmpty {
-      return [:]
-    } else {
-      return [
-        SharedElementIdentifiers.Navigation.footer: .edgeTranslation(.maxYEdge),
-      ]
-    }
   }
 
 }

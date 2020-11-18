@@ -6,26 +6,20 @@ import UIKit
 // MARK: - BarInstaller
 
 /// An installer that's capable of installing a stack of fixed bars within a view controller.
-public final class BarInstaller<Container: BarContainer> {
+final class BarInstaller<Container: BarContainer> {
 
   // MARK: Lifecycle
 
-  public init(
-    viewController: UIViewController?,
-    willDisplayBar: ((_ bar: UIView) -> Void)? = nil,
-    didUpdateCoordinator: ((AnyBarCoordinating) -> Void)? = nil)
-  {
+  init(viewController: UIViewController?) {
     self.viewController = viewController
-    self.willDisplayBar = willDisplayBar
-    self.didUpdateCoordinator = didUpdateCoordinator
   }
 
-  // MARK: Public
+  // MARK: Internal
 
   /// The container that the bars are within.
   ///
   /// Non-nil while installed, nil otherwise.
-  public private(set) var container: Container?
+  private(set) var container: Container?
 
   /// Updates the bars to the given models, ordered from top to bottom.
   ///
@@ -36,7 +30,7 @@ public final class BarInstaller<Container: BarContainer> {
   /// optionally animated.
   ///
   /// If any model is no longer present, its corresponding view will be removed.
-  public func setBars(_ bars: [BarModeling], animated: Bool) {
+  func setBars(_ bars: [BarModeling], animated: Bool) {
     self.bars = bars
 
     guard installed, let view = viewController?.viewIfLoaded else {
@@ -51,7 +45,7 @@ public final class BarInstaller<Container: BarContainer> {
   /// Should be called once the view controller loads its view. If this installer has no bar model,
   /// no view will be added. A view will only be added once a non-nil bar model is set after
   /// installation or if a bar model was set prior to installation.
-  public func install() {
+  func install() {
     installed = true
 
     guard let view = viewController?.viewIfLoaded else {
@@ -63,7 +57,7 @@ public final class BarInstaller<Container: BarContainer> {
   }
 
   /// Removes the bar stack from the associated view controller.
-  public func uninstall() {
+  func uninstall() {
     uninstallContainer()
     installed = false
   }
@@ -77,12 +71,6 @@ public final class BarInstaller<Container: BarContainer> {
     /// A closure that can be used to update a coordinator's property to the value.
     var updateCoordinator: (_ coordinator: AnyObject, _ value: Any) -> Void
   }
-
-  /// A closure that's invoked when a bar is about to be displayed.
-  private let willDisplayBar: ((_ bar: UIView) -> Void)?
-
-  /// A closure that's called after a coordinator has been created.
-  private let didUpdateCoordinator: ((AnyBarCoordinating) -> Void)?
 
   /// The bar models that will be set on the container once its visible.
   private var bars: [BarModeling] = []
@@ -109,24 +97,26 @@ public final class BarInstaller<Container: BarContainer> {
       return
     }
 
-    // When the BarContainer is actively participating in a Magic Move transition,
-    // we should wait until the transition is over before we update its bars.
-    if let transitionCoordinator = container.magicMoveTransitionCoordinator {
-      transitionCoordinator.addCompletion {
+    // When the view controller is actively participating in a transition, we should wait until the
+    // transition is over before we update the bars to ensure shared elements remain constant over
+    // the course of the transition.
+    if
+      let viewController = viewController,
+      let coordinator = viewController.transitionCoordinator,
+      viewController.view.isDescendant(of: coordinator.containerView)
+    {
+      coordinator.animate(alongsideTransition: nil, completion: { _ in
         container.setModels(models, animated: animated)
-      }
+      })
     } else {
       container.setModels(models, animated: animated)
     }
   }
 
   private func installContainer(in view: UIView, with models: [BarModeling], animated: Bool) {
-    let container = Container(
-      willDisplayBar: willDisplayBar,
-      didUpdateCoordinator: { [weak self] coordinator in
-        self?.updateCoordinatorProperties(coordinator)
-        self?.didUpdateCoordinator?(coordinator)
-      })
+    let container = Container(didUpdateCoordinator: { [weak self] coordinator in
+      self?.updateCoordinatorProperties(coordinator)
+    })
     container.add(to: view)
     container.viewController = viewController
     container.setModels(models, animated: animated)
@@ -150,6 +140,10 @@ public final class BarInstaller<Container: BarContainer> {
 // MARK: BarCoordinatorPropertyConfigurable
 
 extension BarInstaller: BarCoordinatorPropertyConfigurable {
+  public var coordinators: [AnyBarCoordinating] {
+    container?.coordinators ?? []
+  }
+
   public subscript<Property>(property: BarCoordinatorProperty<Property>) -> Property {
     get {
       (storage[property.key]?.value as? Property) ?? property.default()
@@ -184,6 +178,7 @@ private final class Token {
   init(dispose: @escaping () -> Void) {
     self.dispose = dispose
   }
+
   deinit {
     dispose()
   }
