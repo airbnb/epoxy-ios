@@ -44,6 +44,20 @@ public final class BarWrapperView: UIView {
     _coordinator?.backing
   }
 
+  /// The current bar model.
+  public private(set) var model: BarModeling?
+
+  /// The current bar view.
+  public private(set) var view: UIView? {
+    didSet { updateView(from: oldValue) }
+  }
+
+  /// Updates the bar model the given bar model.
+  public func setModel(_ model: BarModeling?, animated: Bool) {
+    self.model = model
+    setModel(model?.internalBarModel, animated: animated)
+  }
+
   // MARK: UIView
 
   public override func layoutSubviews() {
@@ -81,22 +95,6 @@ public final class BarWrapperView: UIView {
   public override func layoutMarginsDidChange() {
     super.layoutMarginsDidChange()
     setNeedsLayout()
-  }
-
-  // MARK: Internal
-
-  /// The current bar model.
-  var model: BarModeling?
-
-  /// The current bar view.
-  private(set) var view: UIView? {
-    didSet { updateView(from: oldValue) }
-  }
-
-  /// Updates the bar model the given bar model.
-  func setModel(_ model: BarModeling?, animated: Bool) {
-    self.model = model
-    setModel(model?.internalBarModel, animated: animated)
   }
 
   // MARK: Private
