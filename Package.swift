@@ -11,9 +11,10 @@ let package = Package(
     .library(name: "EpoxyCore", targets: ["EpoxyCore"]),
   ],
   targets: [
-    .target(name: "Epoxy", dependencies: ["EpoxyCore", "EpoxyCollectionView"]),
+    .target(name: "Epoxy", dependencies: ["EpoxyCore", "EpoxyCollectionView", "EpoxyBars"]),
     .target(name: "EpoxyCore"),
     .target(name: "EpoxyCollectionView", dependencies: ["EpoxyCore"]),
+    .target(name: "EpoxyBars", dependencies: ["EpoxyCore"]),
     .testTarget(name: "EpoxyTests", dependencies: ["Epoxy"]),
   ]
 )

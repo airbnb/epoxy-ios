@@ -47,6 +47,9 @@ public class BarStackView: UIStackView {
     case bottomToTop
   }
 
+  /// The current bar models ordered from top to bottom.
+  public private(set) var models = [AnyBarModel]()
+
   /// The view of the bar in the primary position within this stack.
   public var primaryBar: UIView? {
     primaryWrapper?.view
@@ -140,11 +143,6 @@ public class BarStackView: UIStackView {
       completion()
     }
   }
-
-  // MARK: Internal
-
-  /// The current bar models ordered from top to bottom.
-  private(set) var models = [AnyBarModel]()
 
   // MARK: Private
 
