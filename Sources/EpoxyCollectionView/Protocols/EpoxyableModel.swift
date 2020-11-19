@@ -117,7 +117,7 @@ extension EpoxyableModel {
 
 extension EpoxyableModel {
 
-  public var diffIdentifier: AnyHashable? {
+  public var diffIdentifier: AnyHashable {
     DiffIdentifier(reuseID: reuseID, dataID: dataID)
   }
 

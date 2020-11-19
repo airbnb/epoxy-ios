@@ -181,34 +181,18 @@ extension Collection where Self.Iterator.Element: Diffable, Self.Index == Int {
 
     var newResultsArray = [Int: Record]()
     for i in startIndex..<endIndex {
-      let entry: Entry
-      if let diffIdentifier = self[i].diffIdentifier,
-        let existingEntry = entries[diffIdentifier] {
-        entry = existingEntry
-      } else {
-        entry = Entry()
-      }
+      let entry = entries[self[i].diffIdentifier] ?? Entry()
       entry.oldIndices.push(itemToPush: nil)
-      if let diffIdentifier = self[i].diffIdentifier {
-        entries[diffIdentifier] = entry
-      }
+      entries[self[i].diffIdentifier] = entry
       newResultsArray[i] = (Record(entry: entry))
     }
 
     // Old array must be done in reverse to stack indices in correct order
     var oldResultsArray = [Int: Record]()
     for i in (otherCollection.startIndex..<otherCollection.endIndex).reversed() {
-      let entry: Entry
-      if let diffIdentifier = otherCollection[i].diffIdentifier,
-        let existingEntry = entries[diffIdentifier] {
-        entry = existingEntry
-      } else {
-        entry = Entry()
-      }
+      let entry = entries[otherCollection[i].diffIdentifier] ?? Entry()
       entry.oldIndices.push(itemToPush: i)
-      if let diffIdentifier = otherCollection[i].diffIdentifier {
-        entries[diffIdentifier] = entry
-      }
+      entries[otherCollection[i].diffIdentifier] = entry
       oldResultsArray[i] = (Record(entry: entry))
     }
 
