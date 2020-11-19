@@ -217,7 +217,7 @@ public struct NavigationModel {
 // MARK: Diffable
 
 extension NavigationModel: Diffable {
-  public var diffIdentifier: AnyHashable? { dataID }
+  public var diffIdentifier: AnyHashable { dataID }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let otherDiffableItem = otherDiffableItem as? NavigationModel else { return false }
