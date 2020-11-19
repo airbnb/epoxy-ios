@@ -128,7 +128,7 @@ public struct BarModel<View: UIView, Content: Equatable> {
 
   private typealias Coordinator = AnyBarCoordinator<Self>
 
-  private let dataID: AnyHashable?
+  private let dataID: AnyHashable
   private var content: Content
   private var _makeView: MakeView
   private var _configureContent: ConfigureContent
@@ -226,7 +226,7 @@ extension BarModel: InternalBarCoordinating {
 // MARK: Diffable
 
 extension BarModel: Diffable {
-  public var diffIdentifier: AnyHashable? {
+  public var diffIdentifier: AnyHashable {
     dataID
   }
 

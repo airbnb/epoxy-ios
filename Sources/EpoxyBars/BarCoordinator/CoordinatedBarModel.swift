@@ -83,7 +83,7 @@ extension CoordinatedBarModel: InternalBarCoordinating {
 // MARK: Diffable
 
 extension CoordinatedBarModel: Diffable {
-  public var diffIdentifier: AnyHashable? {
+  public var diffIdentifier: AnyHashable {
     dataID
   }
 

@@ -47,7 +47,7 @@ extension AnyBarModel: BarModeling {
 // MARK: Diffable
 
 extension AnyBarModel: Diffable {
-  public var diffIdentifier: AnyHashable? {
+  public var diffIdentifier: AnyHashable {
     model.diffIdentifier
   }
 
