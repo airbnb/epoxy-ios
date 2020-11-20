@@ -10,11 +10,23 @@ let package = Package(
     .library(name: "Epoxy", targets: ["Epoxy"]),
     .library(name: "EpoxyCore", targets: ["EpoxyCore"]),
   ],
+  dependencies: [
+    .package(url: "https://github.com/Quick/Quick.git", .upToNextMajor(from: "3.0.0")),
+    .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "9.0.0")),
+  ],
   targets: [
-    .target(name: "Epoxy", dependencies: ["EpoxyCore", "EpoxyCollectionView", "EpoxyBars"]),
+    .target(
+      name: "Epoxy",
+      dependencies: [
+        "EpoxyCore",
+        "EpoxyCollectionView",
+        "EpoxyBars",
+        "EpoxyNavigationController"
+      ]),
     .target(name: "EpoxyCore"),
     .target(name: "EpoxyCollectionView", dependencies: ["EpoxyCore"]),
     .target(name: "EpoxyBars", dependencies: ["EpoxyCore"]),
-    .testTarget(name: "EpoxyTests", dependencies: ["Epoxy"]),
+    .target(name: "EpoxyNavigationController", dependencies: ["EpoxyCore"]),
+    .testTarget(name: "EpoxyTests", dependencies: ["Epoxy", "Quick", "Nimble"]),
   ]
 )
