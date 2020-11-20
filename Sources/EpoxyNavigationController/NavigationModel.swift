@@ -7,9 +7,9 @@ import UIKit
 // MARK: - NavigationModel
 
 /// A model of an element within a navigation stack that provides source of truth for whether its
-/// `UIViewController` should be added to a corresponding `DeclarativeNavigationController`
+/// `UIViewController` should be added to a corresponding `NavigationController`.
 ///
-/// Should be recreated and set on a `DeclarativeNavigationController` on every state change.
+/// Should be recreated and set on a `NavigationController` on every state change.
 ///
 /// Conceptually similar to Epoxy models.
 ///
@@ -23,8 +23,7 @@ public struct NavigationModel {
   /// `UIViewController` from `Params` to be added to a navigation stack.
   ///
   /// Its `UIViewController` is constructed from `Params` and added to the navigation stack when
-  /// this `NavigationModel` is set on a `DeclarativeNavigationController` via
-  /// `setStack(_:animated:)` if:
+  /// this `NavigationModel` is set on a `NavigationController` via `setStack(_:animated:)` if:
   /// - A previous `NavigationModel` with the same `dataID` is not already added, or
   /// - A `NavigationModel` that has previously been added to the navigation stack with the same
   ///   `dataID` had `Params` that are not equal to this model's `Params`.
@@ -58,8 +57,8 @@ public struct NavigationModel {
   /// `UIViewController` to be added to a navigation stack.
   ///
   /// Its `UIViewController` is constructed and added to the navigation stack when this
-  /// `NavigationModel` is set on a `DeclarativeNavigationController` via `setStack(_:animated:)`
-  /// if a previous `NavigationModel` with the same `dataID` is not already added to the navigation
+  /// `NavigationModel` is set on a `NavigationController` via `setStack(_:animated:)` if a previous
+  /// `NavigationModel` with the same `dataID` is not already added to the navigation
   /// stack.
   ///
   /// - Parameters:
@@ -86,9 +85,8 @@ public struct NavigationModel {
   /// `UIViewController` to be added to a navigation stack.
   ///
   /// Its `UIViewController` is constructed added to the navigation stack when this
-  /// `NavigationModel` is set on a `DeclarativeNavigationController` via `setStack(_:animated:)`
-  /// if a previous `NavigationModel` with the same `dataID` is not already added to the navigation
-  /// stack.
+  /// `NavigationModel` is set on a `NavigationController` via `setStack(_:animated:)` if a previous
+  /// `NavigationModel` with the same `dataID` is not already added to the navigation stack.
   ///
   /// - Note: Unlike `init(dataID:makeViewController:remove:)`, there is no `remove` closure for a
   ///   `NavigationModel` constructed with this method. It's invalid to remove a root view

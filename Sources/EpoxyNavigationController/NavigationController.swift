@@ -3,7 +3,7 @@
 
 import UIKit
 
-// MARK: - DeclarativeNavigationController
+// MARK: - NavigationController
 
 /// A navigation controller that manages its visible view controllers declaratively via an array of
 /// `NavigationModel`s that models its navigation stack.
@@ -12,12 +12,11 @@ import UIKit
 /// whenever a change occurs, rather than managed imperatively by pushing and popping individual
 /// view controllers.
 ///
-/// Conceptually similar to `DeprecatedTableView` and `CollectionView` in Epoxy, with `NavigationModel`
-/// equivalent to `EpoxyableModel`.
+/// Conceptually similar to `CollectionView`, with `NavigationModel` equivalent to `EpoxyableModel`.
 ///
 /// # Additional resources
 /// - [Navigation Models Docs](***REMOVED***/projects/coreui/docs/navigation/navigation_models)
-open class DeclarativeNavigationController: UINavigationController {
+open class NavigationController: UINavigationController {
 
   // MARK: Lifecycle
 
@@ -93,7 +92,7 @@ open class DeclarativeNavigationController: UINavigationController {
 
 // MARK: NavigationInterface
 
-extension DeclarativeNavigationController: NavigationInterface {
+extension NavigationController: NavigationInterface {
   func setStack(_ stack: [UIViewController], animated: Bool) {
     // We don't call `self` since we've made it unavailable to consumers.
     super.setViewControllers(stack, animated: animated)
