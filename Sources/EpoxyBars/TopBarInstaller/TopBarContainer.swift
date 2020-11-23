@@ -137,9 +137,9 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
     return view
   }()
 
-  private var additionalSafeAreaInsetsTop: CGFloat {
-    guard let viewController = viewController else { return 0 }
-    guard case .barHeightSafeArea = insetBehavior else { return 0 }
+  private var additionalSafeAreaInsetsTop: CGFloat? {
+    guard let viewController = viewController else { return nil }
+    guard case .barHeightSafeArea = insetBehavior else { return nil }
 
     // Using the frame.maxY here causes us to compute an temporarily invalid safe area inset top
     // during animated transitions which causes jumps in the scroll offset as it settles after the
@@ -182,7 +182,9 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
   private func updateInsets() {
     let scrollViewsAtEdge = self.scrollViewsAtEdge
 
-    viewController?.additionalSafeAreaInsets.top = additionalSafeAreaInsetsTop
+    if let additionalSafeAreaInsetsTop = additionalSafeAreaInsetsTop {
+      viewController?.additionalSafeAreaInsets.top = additionalSafeAreaInsetsTop
+    }
 
     let margin = layoutMarginsTop + extraLayoutMarginsTop
     updateScrollViewInset(allScrollViews, margin: margin)
