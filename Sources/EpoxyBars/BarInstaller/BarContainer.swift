@@ -59,6 +59,9 @@ protocol InternalBarContainer: BarContainer {
 
   /// Whether the scroll view insets should be removed on the next content inset update.
   var needsScrollViewInsetReset: Bool { get set }
+
+  /// Whether or not the additional safe area insets need to be reset to 0
+  var needsSafeAreaInsetReset: Bool { get set }
 }
 
 // MARK: - BarContainerPosition
@@ -123,6 +126,12 @@ extension InternalBarContainer {
 
     needsScrollViewInsetReset = (oldValue == .barHeightContentInset)
 
+    // Reset the safe area insets back to 0 when the `insetBehavior`
+    // changes from `.barHeightSafeArea` to something else, like `.none`
+    //  - We only want to reset the safe area insets to 0 when the `insetBehavior` changes.
+    //    Setting it on every layout pass would overwrite any values configured by the VC's owner.
+    needsSafeAreaInsetReset = (oldValue == .barHeightSafeArea)
+
     // Trigger the insets to be applied in `layoutSubviews`.
     setNeedsLayout()
   }
@@ -171,6 +180,16 @@ extension InternalBarContainer {
     // Now that we've reset the insets, make sure we don't do it again next time.
     if needsScrollViewInsetReset {
       needsScrollViewInsetReset = false
+    }
+  }
+
+  // Adjusts the additional safe area inset of the view controller based on the `insetBehavior`.
+  func updateAdditionalSafeAreaInset(_ inset: CGFloat?) {
+    if let inset = inset {
+      viewController?.additionalSafeAreaInsets[keyPath: position.inset] = inset
+    } else if needsSafeAreaInsetReset {
+      viewController?.additionalSafeAreaInsets[keyPath: position.inset] = 0
+      needsSafeAreaInsetReset = false
     }
   }
 

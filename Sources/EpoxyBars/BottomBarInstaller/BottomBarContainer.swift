@@ -102,6 +102,7 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
 
   let position = BarContainerPosition.bottom
   var needsScrollViewInsetReset = false
+  var needsSafeAreaInsetReset = false
 
   // MARK: Private
 
@@ -119,9 +120,9 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
   /// The bottom constraint of this bar stack.
   private var bottomConstraint: NSLayoutConstraint?
 
-  private var additionalSafeAreaInsetsBottom: CGFloat {
-    guard let viewController = viewController else { return 0 }
-    guard case .barHeightSafeArea = insetBehavior else { return 0 }
+  private var additionalSafeAreaInsetsBottom: CGFloat? {
+    guard let viewController = viewController else { return nil }
+    guard case .barHeightSafeArea = insetBehavior else { return nil }
 
     // Using the frame.minY here causes us to compute an temporarily invalid safe area inset bottom
     // during animated transitions which causes jumps in the scroll offset as it settles after the
@@ -144,8 +145,8 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
   /// Updates the view controller insets (either safe area or scroll view content inset) in response
   /// to the safe area, center, or bounds changing.
   private func updateInsets() {
-    viewController?.additionalSafeAreaInsets.bottom = additionalSafeAreaInsetsBottom
-
+    updateAdditionalSafeAreaInset(additionalSafeAreaInsetsBottom)
+    
     // If offset from the bottom, use the original layout margins rather than the safe area margins,
     // as the safe area no longer overlaps the bar.
     let margin = (bottomOffset > 0) ? 0 : viewController?.originalSafeAreaInsetBottom ?? 0
