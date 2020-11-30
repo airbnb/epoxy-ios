@@ -112,6 +112,7 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
 
   let position = BarContainerPosition.top
   var needsScrollViewInsetReset = false
+  var needsSafeAreaInsetReset = false
 
   // MARK: Private
 
@@ -182,9 +183,7 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
   private func updateInsets() {
     let scrollViewsAtEdge = self.scrollViewsAtEdge
 
-    if let additionalSafeAreaInsetsTop = additionalSafeAreaInsetsTop {
-      viewController?.additionalSafeAreaInsets.top = additionalSafeAreaInsetsTop
-    }
+    updateAdditionalSafeAreaInset(additionalSafeAreaInsetsTop)
 
     let margin = layoutMarginsTop + extraLayoutMarginsTop
     updateScrollViewInset(allScrollViews, margin: margin)
