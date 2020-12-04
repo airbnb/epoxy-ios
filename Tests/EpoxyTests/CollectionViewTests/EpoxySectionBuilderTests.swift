@@ -1,7 +1,7 @@
 // Created by Tyler Hedrick on 5/6/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-@testable import Epoxy
+import EpoxyCollectionView
 import XCTest
 
 class EpoxySectionBuilderTests: XCTestCase {
