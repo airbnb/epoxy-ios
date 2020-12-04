@@ -1,8 +1,8 @@
 // Created by Tyler Hedrick on 5/21/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-@testable import Epoxy
-@testable import EpoxyCollectionView
+import Epoxy
+import EpoxyCollectionView
 import XCTest
 import UIKit
 
@@ -51,7 +51,7 @@ class CollectionViewTests: XCTestCase {
   func testWillDisplayBlocksAreCalledWhenTheCellAppears() {
     collectionView.delegate?.collectionView?(
       collectionView,
-      willDisplay: CollectionViewCell(frame: .zero),
+      willDisplay: CollectionViewCell(),
       forItemAt: IndexPath(item: 0, section: 0))
     XCTAssertTrue(willDisplayBlockCalled)
   }
@@ -59,7 +59,7 @@ class CollectionViewTests: XCTestCase {
   func testDidEndDisplayingBlocksAreCalledWhenTheCellDisappears() {
     collectionView.delegate?.collectionView?(
       collectionView,
-      didEndDisplaying: CollectionViewCell(frame: .zero),
+      didEndDisplaying: CollectionViewCell(),
       forItemAt: IndexPath(item: 0, section: 0))
     XCTAssertTrue(didEndDisplayingBlockCalled)
   }
