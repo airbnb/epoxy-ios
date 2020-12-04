@@ -27,11 +27,6 @@ class ShuffleViewController: EpoxyCollectionViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    // Currently required to get the first layout pass to have the correct cell size.
-    DispatchQueue.main.async {
-      self.collectionView.collectionViewLayout.invalidateLayout()
-    }
-
     self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
       guard let self = self else {
         timer.invalidate()
@@ -50,9 +45,9 @@ class ShuffleViewController: EpoxyCollectionViewController {
       .filter { _ in Int.random(in: 0..<3) % 3 != 0 }
       .map { dataID -> EpoxyableModel in
         let text = kTestTexts[dataID]
-        return BaseEpoxyModelBuilder<Row, String>(
-          data: text,
-          dataID: dataID)
+        return EpoxyModel<Row, String>(
+          dataID: dataID,
+          content: text)
           .configureView { context in
             context.view.titleText = "Row \(dataID)"
             context.view.text = text
@@ -60,7 +55,6 @@ class ShuffleViewController: EpoxyCollectionViewController {
           .didSelect { context in
             print("DataID selected \(context.dataID) (selection handler)")
           }
-          .build()
       }
 
     return [EpoxySection(items: items)]

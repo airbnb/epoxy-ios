@@ -10,10 +10,19 @@ class CollectionViewTests: XCTestCase {
 
   var collectionView: CollectionView!
 
+  struct Flag {
+    var epoxyModel = false
+    var anyEpoxyModel = false
+
+    var bothCalled: Bool {
+      epoxyModel && anyEpoxyModel
+    }
+  }
+
   // state flags
-  var willDisplayBlockCalled: Bool = false
-  var didEndDisplayingBlockCalled: Bool = false
-  var didSelectBlockCalled: Bool = false
+  var willDisplayBlockCalled = Flag()
+  var didEndDisplayingBlockCalled = Flag()
+  var didSelectBlockCalled = Flag()
 
   override func setUp() {
     let layout = UICollectionViewFlowLayout()
@@ -21,21 +30,30 @@ class CollectionViewTests: XCTestCase {
     collectionView = CollectionView(collectionViewLayout: layout)
     collectionView.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
 
-    let model = BaseEpoxyModelBuilder(data: "", dataID: "dataID")
+    let model = EpoxyModel(dataID: "dataID", content: "")
       .configureView { context in
         context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
         context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-    }
-    .didSelect { [weak self] _ in
-      self?.didSelectBlockCalled = true
-    }
-    .willDisplay { [weak self] _, _ in
-      self?.willDisplayBlockCalled = true
-    }
-    .didEndDisplaying { [weak self] _, _ in
-      self?.didEndDisplayingBlockCalled = true
-    }
-    .build()
+      }
+      .didSelect { [weak self] _ in
+        self?.didSelectBlockCalled.epoxyModel = true
+      }
+      .willDisplay { [weak self] in
+        self?.willDisplayBlockCalled.epoxyModel = true
+      }
+      .didEndDisplaying { [weak self] in
+        self?.didEndDisplayingBlockCalled.epoxyModel = true
+      }
+      .eraseToAnyEpoxyModel()
+      .didSelect { [weak self] _, _ in
+        self?.didSelectBlockCalled.anyEpoxyModel = true
+      }
+      .willDisplay { [weak self] in
+        self?.willDisplayBlockCalled.anyEpoxyModel = true
+      }
+      .didEndDisplaying { [weak self] in
+        self?.didEndDisplayingBlockCalled.anyEpoxyModel = true
+      }
 
     collectionView.setSections([EpoxySection(items: [model])], animated: false)
     collectionView.collectionViewLayout.invalidateLayout()
@@ -43,9 +61,9 @@ class CollectionViewTests: XCTestCase {
   }
 
   override func tearDown() {
-    willDisplayBlockCalled = false
-    didEndDisplayingBlockCalled = false
-    didSelectBlockCalled = false
+    willDisplayBlockCalled = .init()
+    didEndDisplayingBlockCalled = .init()
+    didSelectBlockCalled = .init()
   }
 
   func testWillDisplayBlocksAreCalledWhenTheCellAppears() {
@@ -53,7 +71,7 @@ class CollectionViewTests: XCTestCase {
       collectionView,
       willDisplay: CollectionViewCell(),
       forItemAt: IndexPath(item: 0, section: 0))
-    XCTAssertTrue(willDisplayBlockCalled)
+    XCTAssertTrue(willDisplayBlockCalled.bothCalled)
   }
 
   func testDidEndDisplayingBlocksAreCalledWhenTheCellDisappears() {
@@ -61,14 +79,14 @@ class CollectionViewTests: XCTestCase {
       collectionView,
       didEndDisplaying: CollectionViewCell(),
       forItemAt: IndexPath(item: 0, section: 0))
-    XCTAssertTrue(didEndDisplayingBlockCalled)
+    XCTAssertTrue(didEndDisplayingBlockCalled.bothCalled)
   }
 
   func testDidSelectBlocksAreCalledWhenTheCellIsSelected() {
     collectionView.delegate?.collectionView?(
       collectionView,
       didSelectItemAt: IndexPath(item: 0, section: 0))
-    XCTAssertTrue(didSelectBlockCalled)
+    XCTAssertTrue(didSelectBlockCalled.bothCalled)
   }
 
 }

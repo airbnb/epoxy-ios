@@ -17,24 +17,13 @@ class HighlightAndSelectionViewController: EpoxyCollectionViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-
-    // Currently required to get the first layout pass to have the correct cell size.
-    DispatchQueue.main.async {
-      self.collectionView.collectionViewLayout.invalidateLayout()
-    }
-  }
-
   // MARK: EpoxyCollectionViewController
 
   override func epoxySections() -> [EpoxySection] {
     let items = (0..<10)
       .map { dataID -> EpoxyableModel in
         let text = kTestTexts[dataID]
-        return BaseEpoxyModelBuilder<Row, String>(
-          data: text,
-          dataID: dataID)
+        return EpoxyModel<Row, String>(dataID: dataID, content: text)
           .configureView { context in
             print("First configuration")
             context.view.titleText = "Row \(dataID)"
@@ -48,7 +37,6 @@ class HighlightAndSelectionViewController: EpoxyCollectionViewController {
           .didSelect { context in
             print("DataID selected \(context.dataID) (selection handler)")
           }
-          .build()
       }
 
     return [EpoxySection(items: items)]

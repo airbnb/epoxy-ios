@@ -6,158 +6,133 @@ import UIKit
 
 // MARK: - EpoxyModel
 
-/// A flexible `EpoxyModel` class for configuring views of a specific type with data of a specific type, 
-/// using blocks for creation, configuration, and behavior setting. This was designed to be used in 
-/// a `EpoxyInterface` to lazily create and configure views as they are recycled in a `UITableView` 
-/// or `UICollectionView`.
-public class EpoxyModel<ViewType, DataType>: TypedEpoxyableModel where
-  ViewType: UIView,
-  DataType: Equatable
-{
+/// A flexible `EpoxyModel` type for configuring views of a specific type with content of a specific
+/// type, using closures for creation, configuration, and behavior setting.
+///
+/// This is designed to be used with a `CollectionView` to lazily create and configure views as they
+/// are recycled in a `UICollectionView`.
+public struct EpoxyModel<View: UIView, Content: Equatable>: ContentViewEpoxyModeled {
+
   // MARK: Lifecycle
-  /**
-   Initializes an `EpoxyModel` that creates and configures a specific type of view for display in a `EpoxyInterface`.
-   - Parameters:
-     - data: The data this view takes for configuration, specific to this particular epoxy item instance.
-     - dataID: An optional ID to differentiate this row from other rows, used when diffing.
-     - alternateStyleID: An optional ID for an alternative style type to use for reuse of this view. Use this to differentiate between different styling configurations.
-     - builder: A closure that builds and returns this view type.
-     - configurer: A closure that configures this view type with the specified data type.
-     - stateConfigurer: An optional closure that configures this view type for a specific state.
-     - behaviorSetter: An optional closure that sets the view's behavior (such as interaction blocks or delegates). This block is called whenever a view is configured with an Epoxy model.
-     - selectionHandler: An optional closure that is called whenever the view is tapped.
-     - userInfo: An optional dictionary used for holding onto user-specific data
-   - Returns: An `EpoxyModel` instance that will create the specified view type with this data.
-   */
+
+  /// Constructs a item model with a data ID, content, and a closure to configure the item view with
+  /// new content whenever it changes.
+  ///
+  /// - Parameters:
+  ///   - dataID: An ID that uniquely identifies this item relative to other items in the
+  ///     same collection.
+  ///   - content: The content of the item view that will be applied to the view in the
+  ///     `configureView` closure whenver it has changed.
+  ///   - configureView: A closure that's called to configure the view with its content, both
+  ///     immediately following its construction in `makeView` and subsequently whenever a new item
+  ///     model that replaced an old item model with the same `dataID` has content that is not equal
+  ///     to the content of the old item model.
   public init(
-    data: DataType,
-    dataID: DataID,
-    alternateStyleID: String? = nil,
-    makeView: @escaping () -> ViewType = { ViewType() },
-    configureView: @escaping (EpoxyContext<ViewType, DataType>) -> Void,
-    didChangeState: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
-    setBehaviors: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
-    didSelect: ((EpoxyContext<ViewType, DataType>) -> Void)? = nil,
-    willDisplay: ((DataType, AnyHashable) -> Void)? = nil,
-    didEndDisplaying: ((DataType, AnyHashable) -> Void)? = nil,
-    userInfo: [EpoxyUserInfoKey: Any] = [:])
+    dataID: AnyHashable,
+    content: Content,
+    configureView: ((EpoxyContext<View, Content>) -> Void)? = nil)
   {
-    self.data = data
     self.dataID = dataID
-    self.alternateStyleID = alternateStyleID
-    self.reuseID = "\(type(of: ViewType.self))_\(self.alternateStyleID ?? "")"
-    self.makeViewBlock = makeView
+    self.content = content
     self.configureView = configureView
-    self.didChangeState = didChangeState
-    self.setBehaviors = setBehaviors
-    self.didSelect = didSelect
-    self.willDisplayHandler = willDisplay
-    self.didEndDisplayingHandler = didEndDisplaying
-    self.userInfo = userInfo
-    isSelectable = didSelect != nil
   }
 
   // MARK: Public
 
-  public let dataID: AnyHashable
-  public let reuseID: String
-  public let data: DataType
-  public let userInfo: [EpoxyUserInfoKey : Any]
+  public var storage = EpoxyModelStorage()
 
-  /**
-   Whether or not the view this model represents should be selectable.
-   Automatically set to true if you provide a `selectionHandler`
-   */
-  public var isSelectable: Bool
+}
 
-  /**
-   The selection style of the cell.
-   If nil, defaults to the `selectionStyle` set on the `DeprecatedTableView` or `CollectionView`.
-   Default value is `nil`
-   */
-  public var selectionStyle: CellSelectionStyle?
+extension EpoxyModel: DataIDProviding {}
+extension EpoxyModel: AlternateStyleIDProviding {}
+extension EpoxyModel: DidChangeStateProviding {}
+extension EpoxyModel: MakeViewProviding {}
+extension EpoxyModel: ConfigureViewProviding {}
+extension EpoxyModel: SetBehaviorsProviding {}
+extension EpoxyModel: DidSelectProviding {}
+extension EpoxyModel: SelectionStyleProviding {}
+extension EpoxyModel: ContentProviding {}
+extension EpoxyModel: DidEndDisplayingProviding {}
+extension EpoxyModel: WillDisplayProviding {}
+extension EpoxyModel: IsMovableProviding {}
 
-  /**
-   This is a experimental property to allow interactive reordering of items within collection view,
-   it defaults to false, but you can configure it to be true to enable reordering
-   */
-  public var isMovable: Bool = false
+// MARK: EpoxyableModel
 
-  public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    if let other = otherDiffableItem as? EpoxyModel<ViewType, DataType> {
-      return self.data == other.data
-    } else {
-      return false
-    }
-  }
-
-  public func makeView() -> ViewType {
-    return makeViewBlock()
-  }
-
-  public func configureView(_ view: ViewType, with metadata: EpoxyViewMetadata) {
-    configureView(context(for: view, with: metadata))
-  }
-
-  public func configureViewForStateChange(_ view: ViewType, with metadata: EpoxyViewMetadata) {
-    didChangeState?(context(for: view, with: metadata))
-  }
-
-  public func setViewBehavior(_ view: ViewType, with metadata: EpoxyViewMetadata) {
-    setBehaviors?(context(for: view, with: metadata))
-  }
-
-  public func didSelectView(_ view: ViewType, with metadata: EpoxyViewMetadata) {
-    didSelect?(context(for: view, with: metadata))
-  }
-
-  public func willDisplay() {
-    willDisplayHandler?(data, dataID)
-  }
-
-  public func didEndDisplaying() {
-    didEndDisplayingHandler?(data, dataID)
-  }
-
-  // MARK: Private
-  private let alternateStyleID: String?
-  private let makeViewBlock: () -> ViewType
-  private let configureView: (EpoxyContext<ViewType, DataType>) -> Void
-  private let didChangeState: ((EpoxyContext<ViewType, DataType>) -> Void)?
-  private let setBehaviors: ((EpoxyContext<ViewType, DataType>) -> Void)?
-  private let didSelect: ((EpoxyContext<ViewType, DataType>) -> Void)?
-  private let willDisplayHandler: ((DataType, AnyHashable) -> Void)?
-  private let didEndDisplayingHandler: ((DataType, AnyHashable) -> Void)?
-
-  private func context(for view: ViewType, with metadata: EpoxyViewMetadata) -> EpoxyContext<ViewType, DataType> {
-    return EpoxyContext<ViewType, DataType>(
-      view: view,
-      data: data,
-      dataID: dataID,
-      traitCollection: metadata.traitCollection,
-      cellState: metadata.state,
-      animated: metadata.animated)
+extension EpoxyModel: EpoxyableModel {
+  public func eraseToAnyEpoxyModel() -> AnyEpoxyModel {
+    .init(internalEpoxyModel: self)
   }
 }
 
-// Builder extensions
-public extension EpoxyModel {
+// MARK: InternalEpoxyableModel
 
-  /// Create a builder from an EpoxyModel
-  ///
-  /// - Returns: a builder object set up with all the data from the original EpoxyModel
-  func toBuilder() -> BaseEpoxyModelBuilder<ViewType, DataType> {
-    return BaseEpoxyModelBuilder<ViewType, DataType>(
-      data: data,
-      dataID: dataID)
-      .alternateStyleID(alternateStyleID)
-      .makeView(makeViewBlock)
-      .configureView(configureView)
-      .setBehaviors(setBehaviors)
-      .didSelect(didSelect)
-      .didChangeState(didChangeState)
-      .willDisplay(willDisplayHandler)
-      .didEndDisplaying(didEndDisplayingHandler)
-      .userInfo(userInfo)
+extension EpoxyModel: InternalEpoxyableModel {
+  public var reuseID: String {
+    let viewType = "\(type(of: View.self))"
+    guard let alternateStyleID = alternateStyleID else { return viewType }
+    return viewType + "_" + alternateStyleID
+  }
+
+  public var isSelectable: Bool {
+    didSelect != nil
+  }
+
+  public func handleWillDisplay() {
+    willDisplay?()
+  }
+
+  public func handleDidEndDisplaying() {
+    didEndDisplaying?()
+  }
+
+  public func configure(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+    let view = cell.view as? View ?? makeView()
+    cell.setViewIfNeeded(view: view)
+    configureView?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
+  }
+
+  public func configureStateChange(in cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+    let view = cell.view as? View ?? makeView()
+    cell.setViewIfNeeded(view: view)
+    didChangeState?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
+  }
+
+  public func setBehavior(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+    let view = cell.view as? View ?? makeView()
+    cell.setViewIfNeeded(view: view)
+    setBehaviors?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
+  }
+
+  public func handleDidSelect(_ cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+    guard let view = cell.view as? View else {
+      assertionFailure("The selected view is not the expected type.")
+      return
+    }
+    didSelect?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
+  }
+
+  public func configuredView(traitCollection: UITraitCollection) -> UIView {
+    let view = makeView()
+    let context = EpoxyContext(
+      view: view,
+      content: content,
+      dataID: dataID,
+      traitCollection: traitCollection,
+      cellState: .normal,
+      animated: false)
+    configureView?(context)
+    setBehaviors?(context)
+    return view
+  }
+}
+
+// MARK: Diffable
+
+extension EpoxyModel: Diffable {
+  public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
+    guard let other = otherDiffableItem as? EpoxyModel<View, Content> else {
+      return false
+    }
+    return content == other.content
   }
 }

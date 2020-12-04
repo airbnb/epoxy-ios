@@ -1,28 +1,43 @@
 //  Created by Laura Skelton on 9/6/17.
 //  Copyright © 2017 Airbnb. All rights reserved.
 
-import Foundation
+import EpoxyCore
 
-public protocol EpoxyableSection {
+// MARK: - EpoxyableSection
 
-  /// The dataID of this section
-  var dataID: AnyHashable { get }
+public protocol EpoxyableSection: ItemsProviding, SupplementaryItemsProviding, DataIDProviding {}
 
-  /// The array of items to display in this section
-  var itemModels: [EpoxyableModel] { get }
+// MARK: Extensions
 
+extension EpoxyableSection {
   /// Gets the cell reuse IDs from the given external sections
-  func getCellReuseIDs() -> Set<String>
+  public func getCellReuseIDs() -> Set<String> {
+    var newCellReuseIDs = Set<String>()
+    items.forEach { item in
+      newCellReuseIDs.insert(item.reuseID)
+    }
+    return newCellReuseIDs
+  }
 
   /// Gets the supplementary view reuse IDs by kind from the given external sections
-  func getSupplementaryViewReuseIDs() -> [String: Set<String>]
+  public func getSupplementaryViewReuseIDs() -> [String: Set<String>] {
+    var newSupplementaryViewReuseIDs = [String: Set<String>]()
 
-  /// The userInfo dictionary for this section
-  var userInfo: [EpoxyUserInfoKey: Any] { get }
+    supplementaryItems.forEach { elementKind, elementSupplementaryModels in
+      var newElementSupplementaryViewReuseIDs = Set<String>()
+      elementSupplementaryModels.forEach { elementSupplementaryModel in
+        newElementSupplementaryViewReuseIDs.insert(elementSupplementaryModel.reuseID)
+      }
+      newSupplementaryViewReuseIDs[elementKind] = newElementSupplementaryViewReuseIDs
+    }
+
+    return newSupplementaryViewReuseIDs
+  }
 }
 
-extension Array where Element: EpoxyableSection {
+// MARK: - Array
 
+extension Array where Element: EpoxyableSection {
   public func getCellReuseIDs() -> Set<String> {
     var newReuseIDs = Set<String>()
     forEach { section in
@@ -41,35 +56,5 @@ extension Array where Element: EpoxyableSection {
       }
     }
     return newReuseIDs
-  }
-}
-
-extension EpoxySection: EpoxyableSection {
-
-  public var itemModels: [EpoxyableModel] {
-    return items
-  }
-
-  public func getCellReuseIDs() -> Set<String> {
-    var newCellReuseIDs = Set<String>()
-    items.forEach { item in
-      newCellReuseIDs.insert(item.reuseID)
-    }
-    return newCellReuseIDs
-  }
-
-  public func getSupplementaryViewReuseIDs() -> [String: Set<String>] {
-    var newSupplementaryViewReuseIDs = [String: Set<String>]()
-
-    // CollectionView only
-    collectionViewSupplementaryModels?.forEach { elementKind, elementSupplementaryModels in
-      var newElementSupplementaryViewReuseIDs = Set<String>()
-      elementSupplementaryModels.forEach { elementSupplementaryModel in
-        newElementSupplementaryViewReuseIDs.insert(elementSupplementaryModel.reuseID)
-      }
-      newSupplementaryViewReuseIDs[elementKind] = newElementSupplementaryViewReuseIDs
-    }
-
-    return newSupplementaryViewReuseIDs
   }
 }

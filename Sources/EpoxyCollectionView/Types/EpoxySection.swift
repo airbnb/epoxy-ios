@@ -4,37 +4,23 @@
 import EpoxyCore
 import Foundation
 
-/// The `EpoxySection` contains the section data for a type of list, such as a DeprecatedTableView.
-public struct EpoxySection {
+/// The `EpoxySection` contains the section data for a type of list, such as a `CollectionView`.
+public struct EpoxySection: EpoxyModeled, EpoxyableSection {
 
   // MARK: Lifecycle
 
-  public init(
-    dataID: AnyHashable,
-    items: [EpoxyableModel],
-    userInfo: [EpoxyUserInfoKey: Any] = [:])
-  {
-    self.dataID = dataID
+  public init(dataID: AnyHashable, items: [EpoxyableModel]) {
     self.items = items
-    self.userInfo = userInfo
+    self.dataID = dataID
   }
 
   public init(items: [EpoxyableModel]) {
-    self.init(
-      dataID: "",
-      items: items)
+    self.init(dataID: "", items: items)
   }
 
   // MARK: Public
 
-  /// The reference id for the model backing this section.
-  public let dataID: AnyHashable
-
-  /// The data for the items to be displayed in this section.
-  public let items: [EpoxyableModel]
-
-  /// Dictionary used for holding user-specific data
-  public let userInfo: [EpoxyUserInfoKey: Any]
+  public var storage = EpoxyModelStorage()
 }
 
 // MARK: Diffable

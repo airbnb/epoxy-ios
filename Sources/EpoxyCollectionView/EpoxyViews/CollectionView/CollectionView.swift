@@ -117,14 +117,6 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
     collectionViewLayout.invalidateLayout()
   }
 
-  public func updateItem(
-    at dataID: AnyHashable,
-    with item: EpoxyableModel,
-    animated: Bool)
-  {
-    epoxyDataSource.updateItem(at: dataID, with: item, animated: animated)
-  }
-
   public func selectItem(at dataID: AnyHashable, animated: Bool) {
     guard let indexPath = indexPathForItem(at: dataID) else {
       epoxyLogger.epoxyAssertionFailure("item not found")
@@ -153,25 +145,22 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
     }
   }
 
-  /// Returns the userInfo value for a given key from the section at the provided dataID
-  public func sectionUserInfoValue<T>(at dataID: AnyHashable, for key: EpoxyUserInfoKey) -> T? {
+  /// Returns the current `EpoxySection` for the section with the given `dataID` if it exists, else
+  /// `nil`.
+  public func section(at dataID: AnyHashable) -> EpoxySection? {
     guard let sectionIndex = epoxyDataSource.internalData?.indexForSection(at: dataID) else {
       return nil
     }
-    return epoxyDataSource.epoxySection(at: sectionIndex)?.userInfo[key] as? T
+    return epoxyDataSource.epoxySection(at: sectionIndex)
   }
 
-  /// Returns the userInfo value for a given key from the item at the provided dataID
-  public func itemUserInfoValue<T>(at dataID: AnyHashable, for key: EpoxyUserInfoKey) -> T? {
+  /// Returns the current `AnyEpoxyModel` for the item with the given `dataID` if it exists, else
+  /// `nil`.
+  public func item(at dataID: AnyHashable) -> AnyEpoxyModel? {
     guard let indexPath = epoxyDataSource.internalData?.indexPathForItem(at: dataID) else {
       return nil
     }
-    return epoxyDataSource.epoxyItem(at: indexPath)?.userInfo[key] as? T
-  }
-
-  /// CollectionView does not currently support divider hiding.
-  public func hideBottomDivider(for dataIDs: [AnyHashable]) {
-    // TODO: Refactor to support layout specific data in epoxy item models
+    return epoxyDataSource.epoxyItem(at: indexPath)
   }
 
   /// Delegate for handling accessibility events.
@@ -292,7 +281,7 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
       withReuseIdentifier: supplementaryViewReuseID)
   }
 
-  public func configure(cell: Cell, with item: EpoxyModelWrapper) {
+  public func configure(cell: Cell, with item: AnyEpoxyModel) {
     configure(cell: cell, with: item, animated: false)
   }
 
@@ -385,7 +374,7 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
     translatesAutoresizingMaskIntoConstraints = false
   }
 
-  private func configure(cell: Cell, with item: EpoxyableModel, animated: Bool) {
+  private func configure(cell: Cell, with item: AnyEpoxyModel, animated: Bool) {
     let cellSelectionStyle = item.selectionStyle ?? selectionStyle
     switch cellSelectionStyle {
     case .noBackground:
@@ -400,8 +389,8 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
       traitCollection: traitCollection,
       state: cell.state,
       animated: animated)
-    _ = item.configure(cell: cell, with: metadata)
-    _ = item.setBehavior(cell: cell, with: metadata) // TODO(ls): make these items actually epoxy items
+    item.configure(cell: cell, with: metadata)
+    item.setBehavior(cell: cell, with: metadata)
     if item.isSelectable {
       cell.accessibilityTraits = [cell.accessibilityTraits, .button]
     }
@@ -531,7 +520,7 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
       return
     }
 
-    item.willDisplay()
+    item.handleWillDisplay()
     (cell.view as? DisplayResponder)?.didDisplay(true)
     epoxyItemDisplayDelegate?.collectionView(self, willDisplayEpoxyModel: item, with: cell.view, in: section)
   }
@@ -549,7 +538,7 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
       return
     }
 
-    item.didEndDisplaying()
+    item.handleDidEndDisplaying()
     (cell.view as? DisplayResponder)?.didDisplay(false)
     epoxyItemDisplayDelegate?.collectionView(self, didEndDisplayingEpoxyModel: item, with: cell.view, in: section)
   }
@@ -663,7 +652,7 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
       state: .selected,
       animated: true)
     item.configureStateChange(in: cell, with: metadata)
-    item.didSelect(cell, with: metadata)
+    item.handleDidSelect(cell, with: metadata)
     (cell.view as? Selectable)?.didSelect()
 
     if autoDeselectItems {
@@ -799,7 +788,6 @@ open class CollectionView: UICollectionView, UICollectionViewDelegate {
 extension CollectionView: UICollectionViewDataSourcePrefetching {
   public func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
     let models = indexPaths.compactMap(epoxyDataSource.epoxyItem(at:))
-      .map { $0.epoxyModel }
 
     guard !models.isEmpty else { return }
 
@@ -808,7 +796,6 @@ extension CollectionView: UICollectionViewDataSourcePrefetching {
 
   public func collectionView(_ collectionView: UICollectionView, cancelPrefetchingForItemsAt indexPaths: [IndexPath]) {
     let models = indexPaths.compactMap(epoxyDataSource.epoxyItem(at:))
-      .map { $0.epoxyModel }
 
     guard !models.isEmpty else { return }
 
@@ -838,7 +825,7 @@ extension CollectionView: CollectionViewDataSourceReorderingDelegate {
 extension CollectionView: CollectionViewCellAccessibilityDelegate {
   func collectionViewCellDidBecomeFocused(cell: CollectionViewCell) {
     guard
-      let model = epoxyableModelWrapperForCell(cell),
+      let model = epoxyModelForCell(cell),
       let section = epoxyableSectionForCell(cell)
       else { return }
     lastFocusedDataID = model.dataID
@@ -852,7 +839,7 @@ extension CollectionView: CollectionViewCellAccessibilityDelegate {
 
   func collectionViewCellDidLoseFocus(cell: CollectionViewCell) {
     guard
-      let model = epoxyableModelWrapperForCell(cell),
+      let model = epoxyModelForCell(cell),
       let section = epoxyableSectionForCell(cell)
       else { return }
 
@@ -863,7 +850,7 @@ extension CollectionView: CollectionViewCellAccessibilityDelegate {
       in: section)
   }
 
-  private func epoxyableModelWrapperForCell(_ cell: CollectionViewCell) -> EpoxyModelWrapper? {
+  private func epoxyModelForCell(_ cell: CollectionViewCell) -> AnyEpoxyModel? {
     guard
       let indexPath = indexPath(for: cell),
       let model = epoxyDataSource.epoxyItem(at: indexPath)

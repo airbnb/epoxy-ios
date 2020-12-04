@@ -3,30 +3,52 @@
 
 import UIKit
 
-/// An object used to pass context to blocks on EpoxyableModels
-/// This object contains everything you need for a given block
-/// removing the need to have multiple parameters for each block
-public class EpoxyContext<ViewType: UIView, DataType: Equatable> {
-  init(
-    view: ViewType,
-    data: DataType,
+/// An object used to provide context to blocks on `EpoxyModel`.
+///
+/// This object contains everything you need for configuration, removing the need to have multiple
+/// parameters for each closure.
+public final class EpoxyContext<View: UIView, Content: Equatable> {
+
+  // MARK: Lifecycle
+
+  public init(
+    view: View,
+    content: Content,
     dataID: AnyHashable,
     traitCollection: UITraitCollection,
     cellState: EpoxyCellState,
     animated: Bool)
   {
     self.view = view
-    self.data = data
+    self.content = content
     self.dataID = dataID
     self.traitCollection = traitCollection
     self.cellState = cellState
     self.animated = animated
   }
 
-  public let view: ViewType
-  public let data: DataType
+  public convenience init(
+    view: View,
+    content: Content,
+    dataID: AnyHashable,
+    metadata: EpoxyViewMetadata)
+  {
+    self.init(
+      view: view,
+      content: content,
+      dataID: dataID,
+      traitCollection: metadata.traitCollection,
+      cellState: metadata.state,
+      animated: metadata.animated)
+  }
+
+  // MARK: Public
+
+  public let view: View
+  public let content: Content
   public let dataID: AnyHashable
   public let traitCollection: UITraitCollection
   public let cellState: EpoxyCellState
   public let animated: Bool
+
 }
