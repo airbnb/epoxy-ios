@@ -4,9 +4,14 @@
 import EpoxyCore
 import Foundation
 
-public final class InternalCollectionViewEpoxyData: InternalEpoxyDataType {
+// MARK: - InternalCollectionViewEpoxyData
+
+public struct InternalCollectionViewEpoxyData {
+
+  // MARK: Lifecycle
+
   init(
-    sections: [InternalEpoxySection],
+    sections: [EpoxySection],
     sectionIndexMap: [AnyHashable: Int],
     itemIndexMap: [AnyHashable: IndexPath],
     epoxyLogger: EpoxyLogging)
@@ -17,63 +22,40 @@ public final class InternalCollectionViewEpoxyData: InternalEpoxyDataType {
     self.epoxyLogger = epoxyLogger
   }
 
-  public fileprivate(set) var sections: [InternalEpoxySection]
+  // MARK: Public
 
-  // MARK: Fileprivate
+  public let sections: [EpoxySection]
 
-  fileprivate var sectionIndexMap = [AnyHashable: Int]()
-  fileprivate var itemIndexMap = [AnyHashable: IndexPath]()
-  fileprivate let epoxyLogger: EpoxyLogging
-}
-
-extension InternalCollectionViewEpoxyData {
-
-  public static func make(
-    with sections: [EpoxySection],
-    epoxyLogger: EpoxyLogging)
-    -> InternalCollectionViewEpoxyData
-  {
+  public static func make(sections: [EpoxySection], epoxyLogger: EpoxyLogging) -> Self {
     var sectionIndexMap = [AnyHashable: Int]()
     var itemIndexMap = [AnyHashable: IndexPath]()
 
-    var convertedSections = [InternalEpoxySection]()
     sections.enumerated().forEach { sectionIndex, section in
       sectionIndexMap[section.dataID] = sectionIndex
-      var epoxyModelWrappers = [EpoxyModelWrapper]()
       section.items.enumerated().forEach { itemIndex, item in
         itemIndexMap[item.dataID] = IndexPath(item: itemIndex, section: sectionIndex)
-        epoxyModelWrappers.append(EpoxyModelWrapper(epoxyModel: item))
       }
-      convertedSections.append(InternalEpoxySection(
-        dataID: section.dataID,
-        items: epoxyModelWrappers,
-        userInfo: section.userInfo))
     }
 
-    return InternalCollectionViewEpoxyData(
-      sections: convertedSections,
+    return .init(
+      sections: sections,
       sectionIndexMap: sectionIndexMap,
       itemIndexMap: itemIndexMap,
       epoxyLogger: epoxyLogger)
   }
 
-  public func makeChangeset(from
-    otherData: InternalCollectionViewEpoxyData) -> EpoxyChangeset
-  {
+  public func makeChangeset(from otherData: Self) -> EpoxyChangeset {
     let sectionChangeset = sections.makeIndexSetChangeset(from: otherData.sections)
 
     var itemChangesetsForSections = [IndexPathChangeset]()
-    for i in 0..<otherData.sections.count {
-      if let newSectionIndex = sectionChangeset.newIndices[i]! {
 
-        let fromSection = i
-        let toSection = newSectionIndex
+    for fromSection in otherData.sections.indices {
+      if let toSection = sectionChangeset.newIndices[fromSection]! {
+        let fromItems = otherData.sections[fromSection].items.map { $0.eraseToAnyEpoxyModel() }
+        let toItems = sections[toSection].items.map { $0.eraseToAnyEpoxyModel() }
 
-        let fromArray = otherData.sections[fromSection].items
-        let toArray = sections[toSection].items
-
-        let itemIndexChangeset = toArray.makeIndexPathChangeset(
-          from: fromArray,
+        let itemIndexChangeset = toItems.makeIndexPathChangeset(
+          from: fromItems,
           fromSection: fromSection,
           toSection: toSection)
 
@@ -81,37 +63,27 @@ extension InternalCollectionViewEpoxyData {
       }
     }
 
-    let itemChangeset: IndexPathChangeset = itemChangesetsForSections.reduce(IndexPathChangeset(), +)
+    let itemChangeset = itemChangesetsForSections.reduce(IndexPathChangeset(), +)
 
-    return EpoxyChangeset(
-      sectionChangeset: sectionChangeset,
-      itemChangeset: itemChangeset)
-  }
-
-  public func updateItem(at dataID: AnyHashable, with item: EpoxyableModel) -> IndexPath? {
-    guard let indexPath = itemIndexMap[dataID] else {
-      epoxyLogger.epoxyAssert(false, "No item with that dataID exists")
-      return nil
-    }
-
-    let oldItem = sections[indexPath.section].items[indexPath.item]
-
-    epoxyLogger.epoxyAssert(oldItem.reuseID == item.reuseID, "Cannot update item with a different reuse ID.")
-
-    sections[indexPath.section].items[indexPath.item] = EpoxyModelWrapper(
-      epoxyModel: item)
-
-    return indexPath
+    return EpoxyChangeset(sectionChangeset: sectionChangeset, itemChangeset: itemChangeset)
   }
 
   public func indexPathForItem(at dataID: AnyHashable) -> IndexPath? {
-    return itemIndexMap[dataID]
+    itemIndexMap[dataID]
   }
 
   public func indexForSection(at dataID: AnyHashable) -> Int? {
-    return sectionIndexMap[dataID]
+    sectionIndexMap[dataID]
   }
+
+  // MARK: Private
+
+  private let sectionIndexMap: [AnyHashable: Int]
+  private let itemIndexMap: [AnyHashable: IndexPath]
+  private let epoxyLogger: EpoxyLogging
 }
+
+// MARK: CustomStringConvertible
 
 extension InternalCollectionViewEpoxyData: CustomStringConvertible {
   public var description: String {

@@ -17,23 +17,10 @@ class CustomSelfSizingContentViewController: EpoxyCollectionViewController {
 
   // MARK: EpoxyCollectionViewController
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
-
-    // Currently required to get the first layout pass to have the correct cell size.
-    DispatchQueue.main.async {
-      self.collectionView.collectionViewLayout.invalidateLayout()
-    }
-  }
-
   override func epoxySections() -> [EpoxySection] {
-    let items = (0..<10)
-      .map { dataID -> EpoxyableModel in
-        return BaseEpoxyModelBuilder<CustomSizingView, Int>(
-          data: dataID,
-          dataID: dataID)
-          .build()
-      }
+    let items = (0..<10).map { dataID in
+      EpoxyModel<CustomSizingView, Int>(dataID: dataID, content: dataID)
+    }
 
     return [EpoxySection(items: items)]
   }

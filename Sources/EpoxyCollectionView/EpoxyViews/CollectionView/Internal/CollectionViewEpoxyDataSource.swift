@@ -46,7 +46,7 @@ class CollectionViewEpoxyDataSource: NSObject {
     registerSupplementaryViewReuseIDs(with: sections)
     let newInternalData: InternalCollectionViewEpoxyData?
     if let sections = sections {
-      newInternalData = InternalCollectionViewEpoxyData.make(with: sections, epoxyLogger: epoxyLogger)
+      newInternalData = .make(sections: sections, epoxyLogger: epoxyLogger)
     } else {
       newInternalData = nil
     }
@@ -78,33 +78,10 @@ class CollectionViewEpoxyDataSource: NSObject {
   ///   coordinator.drop(firstItem.dragItem, toRowAt: destinationIndexPath)
   ///
   func modifySectionsWithoutUpdating(_ sections: [EpoxySection]?) {
-    internalData = sections.map {
-      InternalCollectionViewEpoxyData.make(with: $0, epoxyLogger: epoxyLogger)
-    }
+    internalData = sections.map { .make(sections: $0, epoxyLogger: epoxyLogger) }
   }
 
-  func updateItem(
-    at dataID: AnyHashable,
-    with item: EpoxyableModel,
-    animated: Bool)
-  {
-    guard let internalData = internalData else {
-      epoxyLogger.epoxyAssertionFailure("Update item was called when the data was nil.")
-      return
-    }
-    guard let collectionView = collectionView else {
-      epoxyLogger.epoxyAssertionFailure("Update item was called before the CollectionView was set.")
-      return
-    }
-    guard let indexPath = internalData.updateItem(at: dataID, with: item) else {
-      epoxyLogger.epoxyAssertionFailure("Update item was called with an index path that does not exist in the data.")
-      return
-    }
-
-    collectionView.reloadItem(at: indexPath, animated: animated)
-  }
-
-  func epoxyItem(at indexPath: IndexPath) -> EpoxyModelWrapper? {
+  func epoxyItem(at indexPath: IndexPath) -> AnyEpoxyModel? {
     guard let data = internalData else {
       epoxyLogger.epoxyAssertionFailure("Can't load epoxy item with nil data")
       return nil
@@ -121,20 +98,20 @@ class CollectionViewEpoxyDataSource: NSObject {
       return nil
     }
 
-    return section.items[indexPath.row]
+    return section.items[indexPath.row].eraseToAnyEpoxyModel()
   }
 
-  func epoxyItemIfPresent(at indexPath: IndexPath) -> EpoxyModelWrapper? {
+  func epoxyItemIfPresent(at indexPath: IndexPath) -> AnyEpoxyModel? {
     guard let data = internalData,
       indexPath.section < data.sections.count else { return nil }
 
     let section = data.sections[indexPath.section]
     guard indexPath.row < section.items.count else { return nil }
 
-    return section.items[indexPath.row]
+    return section.items[indexPath.row].eraseToAnyEpoxyModel()
   }
 
-  func epoxySection(at index: Int) -> InternalEpoxySection? {
+  func epoxySection(at index: Int) -> EpoxySection? {
     guard let data = internalData else {
       epoxyLogger.epoxyAssertionFailure("Can't load epoxy item with nil data")
       return nil
@@ -148,7 +125,7 @@ class CollectionViewEpoxyDataSource: NSObject {
     return data.sections[index]
   }
 
-  func epoxySectionIfPresent(at index: Int) -> InternalEpoxySection? {
+  func epoxySectionIfPresent(at index: Int) -> EpoxySection? {
     guard let data = internalData else { return nil }
     guard index < data.sections.count else { return nil }
 
@@ -164,7 +141,7 @@ class CollectionViewEpoxyDataSource: NSObject {
 
     let section = data.sections[indexPath.section]
 
-    guard let models = section.supplementaryModels[elementKind] else { return nil }
+    guard let models = section.supplementaryItems[elementKind] else { return nil }
     guard indexPath.item < models.count else { return nil }
 
     return models[indexPath.item]
@@ -184,7 +161,7 @@ class CollectionViewEpoxyDataSource: NSObject {
         let oldInternalData = self.internalData
         self.internalData = newData
         if self.usesBatchUpdatesForAllReloads {
-          let emptyData = InternalCollectionViewEpoxyData.make(with: [], epoxyLogger: self.epoxyLogger)
+          let emptyData = InternalCollectionViewEpoxyData.make(sections: [], epoxyLogger: self.epoxyLogger)
           let newData = newData ?? emptyData
           let oldData = oldInternalData ?? emptyData
           return newData.makeChangeset(from: oldData)
@@ -292,7 +269,7 @@ extension CollectionViewEpoxyDataSource: UICollectionViewDataSource {
       epoxyLogger.epoxyAssertionFailure("Index of supplementary view is out of bounds.")
       return UICollectionReusableView()
     }
-    guard let elementSupplementaryModel = data.sections[indexPath.section].supplementaryModels[kind]?[indexPath.item] else {
+    guard let elementSupplementaryModel = data.sections[indexPath.section].supplementaryItems[kind]?[indexPath.item] else {
       epoxyLogger.epoxyAssertionFailure("Supplementary epoxy models not found for the given element kind and index path.")
       return UICollectionReusableView()
     }
