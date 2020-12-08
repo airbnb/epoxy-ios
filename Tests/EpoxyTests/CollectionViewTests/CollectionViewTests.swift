@@ -11,11 +11,11 @@ class CollectionViewTests: XCTestCase {
   var collectionView: CollectionView!
 
   struct Flag {
-    var epoxyModel = false
-    var anyEpoxyModel = false
+    var itemModel = false
+    var anyItemModel = false
 
     var bothCalled: Bool {
-      epoxyModel && anyEpoxyModel
+      itemModel && anyItemModel
     }
   }
 
@@ -30,32 +30,32 @@ class CollectionViewTests: XCTestCase {
     collectionView = CollectionView(collectionViewLayout: layout)
     collectionView.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
 
-    let model = EpoxyModel(dataID: "dataID", content: "")
+    let model = ItemModel(dataID: "dataID", content: "")
       .configureView { context in
         context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
         context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true
       }
       .didSelect { [weak self] _ in
-        self?.didSelectBlockCalled.epoxyModel = true
+        self?.didSelectBlockCalled.itemModel = true
       }
       .willDisplay { [weak self] in
-        self?.willDisplayBlockCalled.epoxyModel = true
+        self?.willDisplayBlockCalled.itemModel = true
       }
       .didEndDisplaying { [weak self] in
-        self?.didEndDisplayingBlockCalled.epoxyModel = true
+        self?.didEndDisplayingBlockCalled.itemModel = true
       }
-      .eraseToAnyEpoxyModel()
+      .eraseToAnyItemModel()
       .didSelect { [weak self] _, _ in
-        self?.didSelectBlockCalled.anyEpoxyModel = true
+        self?.didSelectBlockCalled.anyItemModel = true
       }
       .willDisplay { [weak self] in
-        self?.willDisplayBlockCalled.anyEpoxyModel = true
+        self?.willDisplayBlockCalled.anyItemModel = true
       }
       .didEndDisplaying { [weak self] in
-        self?.didEndDisplayingBlockCalled.anyEpoxyModel = true
+        self?.didEndDisplayingBlockCalled.anyItemModel = true
       }
 
-    collectionView.setSections([EpoxySection(items: [model])], animated: false)
+    collectionView.setSections([SectionModel(items: [model])], animated: false)
     collectionView.collectionViewLayout.invalidateLayout()
     collectionView.layoutIfNeeded()
   }

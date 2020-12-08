@@ -8,7 +8,7 @@ import EpoxyCore
 public protocol SupplementaryItemsProviding {
   /// The supplementary items with in a collection view, with a key of the element kind and a value
   /// of the models of that specific kind.
-  typealias SupplementaryItems = [String: [SupplementaryViewEpoxyableModel]]
+  typealias SupplementaryItems = [String: [SupplementaryViewItemModeling]]
 
   /// The supplementary items with in a collection view.
   var supplementaryItems: SupplementaryItems { get }

@@ -19,11 +19,11 @@ class HighlightAndSelectionViewController: EpoxyCollectionViewController {
 
   // MARK: EpoxyCollectionViewController
 
-  override func epoxySections() -> [EpoxySection] {
+  override func epoxySections() -> [SectionModel] {
     let items = (0..<10)
-      .map { dataID -> EpoxyableModel in
+      .map { dataID -> ItemModeling in
         let text = kTestTexts[dataID]
-        return EpoxyModel<Row, String>(dataID: dataID, content: text)
+        return ItemModel<Row, String>(dataID: dataID, content: text)
           .configureView { context in
             print("First configuration")
             context.view.titleText = "Row \(dataID)"
@@ -39,6 +39,6 @@ class HighlightAndSelectionViewController: EpoxyCollectionViewController {
           }
       }
 
-    return [EpoxySection(items: items)]
+    return [SectionModel(items: items)]
   }
 }

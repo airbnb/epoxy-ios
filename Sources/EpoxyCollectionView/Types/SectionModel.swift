@@ -4,17 +4,17 @@
 import EpoxyCore
 import Foundation
 
-/// The `EpoxySection` contains the section data for a type of list, such as a `CollectionView`.
-public struct EpoxySection: EpoxyModeled, EpoxyableSection {
+/// The `SectionModel` contains the section data for a type of list, such as a `CollectionView`.
+public struct SectionModel: EpoxyModeled {
 
   // MARK: Lifecycle
 
-  public init(dataID: AnyHashable, items: [EpoxyableModel]) {
+  public init(dataID: AnyHashable, items: [ItemModeling]) {
     self.items = items
     self.dataID = dataID
   }
 
-  public init(items: [EpoxyableModel]) {
+  public init(items: [ItemModeling]) {
     self.init(dataID: "", items: items)
   }
 
@@ -23,11 +23,17 @@ public struct EpoxySection: EpoxyModeled, EpoxyableSection {
   public var storage = EpoxyModelStorage()
 }
 
+// MARK: Providers
+
+extension SectionModel: ItemsProviding {}
+extension SectionModel: SupplementaryItemsProviding {}
+extension SectionModel: DataIDProviding {}
+
 // MARK: Diffable
 
-extension EpoxySection: Diffable {
+extension SectionModel: Diffable {
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let otherDiffableSection = otherDiffableItem as? EpoxySection else { return false }
+    guard let otherDiffableSection = otherDiffableItem as? SectionModel else { return false }
     return dataID == otherDiffableSection.dataID
   }
 

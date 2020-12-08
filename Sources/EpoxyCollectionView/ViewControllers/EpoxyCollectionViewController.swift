@@ -33,8 +33,8 @@ open class EpoxyCollectionViewController: UIViewController {
     setEpoxySectionsIfReady()
   }
 
-  /// Override this in your subclass to return your Epoxy sections
-  open func epoxySections() -> [EpoxySection] {
+  /// Override this in your subclass to return your sections.
+  open func epoxySections() -> [SectionModel] {
     return []
   }
 

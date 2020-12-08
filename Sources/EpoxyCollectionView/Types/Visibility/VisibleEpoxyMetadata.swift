@@ -8,7 +8,7 @@ public struct VisibleEpoxyMetadata {
   // MARK: Lifecycle
 
   public init(
-    sectionMetadata: [VisibleEpoxySectionMetadata],
+    sectionMetadata: [VisibleSectionMetadata],
     containerView: UIView?)
   {
     self.sectionMetadata = sectionMetadata
@@ -17,6 +17,6 @@ public struct VisibleEpoxyMetadata {
 
   // MARK: Public
 
-  public let sectionMetadata: [VisibleEpoxySectionMetadata]
+  public let sectionMetadata: [VisibleSectionMetadata]
   public private(set) weak var containerView: UIView?
 }

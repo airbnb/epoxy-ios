@@ -16,7 +16,7 @@ extension ContentViewEpoxyModeled where Self: SetBehaviorsProviding {
 
   /// A closure that's called to configure this model's view with behaviors (e.g. tap handler
   /// closures) whenever this model is updated.
-  public typealias SetBehaviors = ((EpoxyContext<View, Content>) -> Void)
+  public typealias SetBehaviors = ((ItemContext<View, Content>) -> Void)
 
   /// A closure that's called to configure this model's view with behaviors (e.g. tap handler
   /// closures) whenever this model is updated.

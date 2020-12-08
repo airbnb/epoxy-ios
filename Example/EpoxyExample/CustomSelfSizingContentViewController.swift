@@ -17,11 +17,11 @@ class CustomSelfSizingContentViewController: EpoxyCollectionViewController {
 
   // MARK: EpoxyCollectionViewController
 
-  override func epoxySections() -> [EpoxySection] {
+  override func epoxySections() -> [SectionModel] {
     let items = (0..<10).map { dataID in
-      EpoxyModel<CustomSizingView, Int>(dataID: dataID, content: dataID)
+      ItemModel<CustomSizingView, Int>(dataID: dataID, content: dataID)
     }
 
-    return [EpoxySection(items: items)]
+    return [SectionModel(items: items)]
   }
 }

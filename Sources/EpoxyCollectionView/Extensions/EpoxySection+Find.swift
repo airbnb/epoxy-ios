@@ -8,10 +8,10 @@ public enum EpoxySectionFindError: Error {
   case sectionNotFound
 }
 
-public extension Sequence where Iterator.Element == EpoxySection {
+public extension Sequence where Iterator.Element == SectionModel {
 
-  /// Find the EpoxyableModel and IndexPath for a given dataID
-  func findItem(for dataID: AnyHashable) throws -> (EpoxyableModel, IndexPath) {
+  /// Find the ItemModeling and IndexPath for a given dataID
+  func findItem(for dataID: AnyHashable) throws -> (ItemModeling, IndexPath) {
 
     for (sectionIndex, section) in self.enumerated() {
       for (itemIndex, item) in section.items.enumerated() {
@@ -24,8 +24,8 @@ public extension Sequence where Iterator.Element == EpoxySection {
     throw EpoxySectionFindError.itemNotFound
   }
 
-  /// Find the EpoxySection and Index for a given section dataID
-  func findSection(for dataID: AnyHashable) throws -> (EpoxySection, Int) {
+  /// Find the SectionModel and Index for a given section dataID
+  func findSection(for dataID: AnyHashable) throws -> (SectionModel, Int) {
 
     for (sectionIndex, section) in self.enumerated() {
       if section.dataID == dataID {

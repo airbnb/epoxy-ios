@@ -3,11 +3,11 @@
 
 import UIKit
 
-/// An object used to provide context to blocks on `EpoxyModel`.
+/// An object used to provide context to closures on `ItemModel`.
 ///
 /// This object contains everything you need for configuration, removing the need to have multiple
 /// parameters for each closure.
-public final class EpoxyContext<View: UIView, Content: Equatable> {
+public final class ItemContext<View: UIView, Content: Equatable> {
 
   // MARK: Lifecycle
 
