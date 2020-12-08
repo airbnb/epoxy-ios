@@ -39,13 +39,13 @@ class ShuffleViewController: EpoxyCollectionViewController {
 
   // MARK: EpoxyCollectionViewController
 
-  override func epoxySections() -> [EpoxySection] {
+  override func epoxySections() -> [SectionModel] {
     let items = (0..<10)
       .shuffled()
       .filter { _ in Int.random(in: 0..<3) % 3 != 0 }
-      .map { dataID -> EpoxyableModel in
+      .map { dataID -> ItemModeling in
         let text = kTestTexts[dataID]
-        return EpoxyModel<Row, String>(
+        return ItemModel<Row, String>(
           dataID: dataID,
           content: text)
           .configureView { context in
@@ -57,6 +57,6 @@ class ShuffleViewController: EpoxyCollectionViewController {
           }
       }
 
-    return [EpoxySection(items: items)]
+    return [SectionModel(items: items)]
   }
 }

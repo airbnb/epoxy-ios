@@ -3,13 +3,9 @@
 
 import EpoxyCore
 
-// MARK: - EpoxyableSection
-
-public protocol EpoxyableSection: ItemsProviding, SupplementaryItemsProviding, DataIDProviding {}
-
 // MARK: Extensions
 
-extension EpoxyableSection {
+extension SectionModel {
   /// Gets the cell reuse IDs from the given external sections
   public func getCellReuseIDs() -> Set<String> {
     var newCellReuseIDs = Set<String>()
@@ -37,7 +33,7 @@ extension EpoxyableSection {
 
 // MARK: - Array
 
-extension Array where Element: EpoxyableSection {
+extension Array where Element == SectionModel {
   public func getCellReuseIDs() -> Set<String> {
     var newReuseIDs = Set<String>()
     forEach { section in

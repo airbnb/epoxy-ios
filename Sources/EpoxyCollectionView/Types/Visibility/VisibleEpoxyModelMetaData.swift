@@ -3,18 +3,18 @@
 
 import UIKit
 
-public struct VisibleEpoxyModelMetadata {
+public struct VisibleItemMetadata {
 
   // MARK: Lifecycle
 
-  public init(model: EpoxyableModel, view: UIView? = nil) {
+  public init(model: ItemModeling, view: UIView? = nil) {
     self.model = model
     self.view = view
   }
 
   // MARK: Public
 
-  public let model: EpoxyableModel
+  public let model: ItemModeling
   public private(set) weak var view: UIView?
 
 }

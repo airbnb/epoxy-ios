@@ -17,7 +17,7 @@ extension ContentViewEpoxyModeled where Self: ConfigureViewProviding {
 
   /// A closure that's called to configure this model's view when it is first created and
   /// subsequently when the content changes.
-  public typealias ConfigureView = (EpoxyContext<View, Content>) -> Void
+  public typealias ConfigureView = (ItemContext<View, Content>) -> Void
 
   /// A closure that's called to configure this model's view when it is first created and
   /// subsequently when the content changes.

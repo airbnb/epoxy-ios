@@ -6,13 +6,13 @@ import UIKit
 public protocol CollectionViewAccessibilityDelegate: class {
   func collectionView(
     _ collectionView: CollectionView,
-    epoxyModelDidBecomeFocused model: EpoxyableModel,
+    itemDidBecomeFocused item: ItemModeling,
     with view: UIView?,
-    in section: EpoxyableSection)
+    in section: SectionModel)
 
   func collectionView(
     _ collectionView: CollectionView,
-    epoxyModelDidLoseFocus model: EpoxyableModel,
+    itemDidLoseFocus item: ItemModeling,
     with view: UIView?,
-    in section: EpoxyableSection)
+    in section: SectionModel)
 }

@@ -3,9 +3,9 @@
 
 import UIKit
 
-// MARK: - SupplementaryViewEpoxyModel
+// MARK: - SupplementaryItemModel
 
-public class SupplementaryViewEpoxyModel<ViewType, DataType>: TypedSupplementaryViewEpoxyableModel where
+public class SupplementaryItemModel<ViewType, DataType>: SupplementaryViewEpoxyableModeling where
   ViewType: UIView
 {
   public typealias View = ViewType

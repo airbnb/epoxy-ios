@@ -3,17 +3,17 @@
 
 import UIKit
 
-public struct VisibleEpoxySectionMetadata {
+public struct VisibleSectionMetadata {
 
   // MARK: Lifecycle
 
-  public init(section: EpoxyableSection, modelMetadata: [VisibleEpoxyModelMetadata]) {
+  public init(section: SectionModel, modelMetadata: [VisibleItemMetadata]) {
     self.section = section
     self.modelMetadata = modelMetadata
   }
 
   // MARK: Public
 
-  public let section: EpoxyableSection
-  public let modelMetadata: [VisibleEpoxyModelMetadata]
+  public let section: SectionModel
+  public let modelMetadata: [VisibleItemMetadata]
 }

@@ -11,7 +11,7 @@ public struct InternalCollectionViewEpoxyData {
   // MARK: Lifecycle
 
   init(
-    sections: [EpoxySection],
+    sections: [SectionModel],
     sectionIndexMap: [AnyHashable: Int],
     itemIndexMap: [AnyHashable: IndexPath],
     epoxyLogger: EpoxyLogging)
@@ -24,9 +24,9 @@ public struct InternalCollectionViewEpoxyData {
 
   // MARK: Public
 
-  public let sections: [EpoxySection]
+  public let sections: [SectionModel]
 
-  public static func make(sections: [EpoxySection], epoxyLogger: EpoxyLogging) -> Self {
+  public static func make(sections: [SectionModel], epoxyLogger: EpoxyLogging) -> Self {
     var sectionIndexMap = [AnyHashable: Int]()
     var itemIndexMap = [AnyHashable: IndexPath]()
 
@@ -51,8 +51,8 @@ public struct InternalCollectionViewEpoxyData {
 
     for fromSection in otherData.sections.indices {
       if let toSection = sectionChangeset.newIndices[fromSection]! {
-        let fromItems = otherData.sections[fromSection].items.map { $0.eraseToAnyEpoxyModel() }
-        let toItems = sections[toSection].items.map { $0.eraseToAnyEpoxyModel() }
+        let fromItems = otherData.sections[fromSection].items.map { $0.eraseToAnyItemModel() }
+        let toItems = sections[toSection].items.map { $0.eraseToAnyItemModel() }
 
         let itemIndexChangeset = toItems.makeIndexPathChangeset(
           from: fromItems,

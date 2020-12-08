@@ -12,7 +12,7 @@ import UIKit
 /// whenever a change occurs, rather than managed imperatively by pushing and popping individual
 /// view controllers.
 ///
-/// Conceptually similar to `CollectionView`, with `NavigationModel` equivalent to `EpoxyableModel`.
+/// Conceptually similar to `CollectionView`, with `NavigationModel` equivalent to `ItemModeling`.
 ///
 /// # Additional resources
 /// - [Navigation Models Docs](***REMOVED***/projects/coreui/docs/navigation/navigation_models)

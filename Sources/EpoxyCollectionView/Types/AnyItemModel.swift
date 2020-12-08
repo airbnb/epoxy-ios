@@ -4,25 +4,25 @@
 import EpoxyCore
 import UIKit
 
-// MARK: - AnyEpoxyModel
+// MARK: - AnyItemModel
 
-/// A concrete `EpoxyableModel` wrapping a type-erased `EpoxyableModel`.
-public struct AnyEpoxyModel: EpoxyModeled {
+/// A concrete `ItemModeling` wrapping a type-erased `ItemModeling`.
+public struct AnyItemModel: EpoxyModeled {
 
   // MARK: Lifecycle
 
-  public init(_ model: EpoxyableModel) {
-    // Disallow nesting `AnyEpoxyModel`s.
-    self.model = model.eraseToAnyEpoxyModel().model
+  public init(_ model: ItemModeling) {
+    // Disallow nesting `AnyItemModel`s.
+    self.model = model.eraseToAnyItemModel().model
   }
 
-  public init(internalEpoxyModel model: InternalEpoxyableModel) {
+  public init(internalItemModel model: InternalItemModeling) {
     self.model = model
   }
 
   // MARK: Public
 
-  public var model: InternalEpoxyableModel
+  public var model: InternalItemModeling
 
   /// Implemented as a passthrough to the backing model's storage to allow custom model properties
   /// to be accessed and modified through this type eraser.
@@ -33,15 +33,15 @@ public struct AnyEpoxyModel: EpoxyModeled {
 
 }
 
-// MARK: EpoxyableModel
+// MARK: ItemModeling
 
-extension AnyEpoxyModel: EpoxyableModel {
-  public func eraseToAnyEpoxyModel() -> AnyEpoxyModel { self }
+extension AnyItemModel: ItemModeling {
+  public func eraseToAnyItemModel() -> AnyItemModel { self }
 }
 
-// MARK: AnyEpoxyModel + DidSelect
+// MARK: AnyItemModel + DidSelect
 
-extension AnyEpoxyModel {
+extension AnyItemModel {
 
   // MARK: Public
 
@@ -69,15 +69,15 @@ extension AnyEpoxyModel {
 
 // MARK: WillDisplayProviding
 
-extension AnyEpoxyModel: WillDisplayProviding {}
+extension AnyItemModel: WillDisplayProviding {}
 
 // MARK: DidEndDisplaying
 
-extension AnyEpoxyModel: DidEndDisplayingProviding {}
+extension AnyItemModel: DidEndDisplayingProviding {}
 
-// MARK: InternalEpoxyableModel
+// MARK: InternalItemModeling
 
-extension AnyEpoxyModel: InternalEpoxyableModel {
+extension AnyItemModel: InternalItemModeling {
   public var reuseID: String {
     model.reuseID
   }
@@ -90,19 +90,19 @@ extension AnyEpoxyModel: InternalEpoxyableModel {
     model.configuredView(traitCollection: traitCollection)
   }
 
-  public func configure(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+  public func configure(cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
     model.configure(cell: cell, with: metadata)
   }
 
-  public func setBehavior(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+  public func setBehavior(cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
     model.setBehavior(cell: cell, with: metadata)
   }
 
-  public func configureStateChange(in cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+  public func configureStateChange(in cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
     model.configureStateChange(in: cell, with: metadata)
   }
 
-  public func handleDidSelect(_ cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+  public func handleDidSelect(_ cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
     model.handleDidSelect(cell, with: metadata)
     if let view = cell.view {
       didSelect?(view, metadata)
@@ -120,15 +120,15 @@ extension AnyEpoxyModel: InternalEpoxyableModel {
 
 // MARK: Diffable
 
-extension AnyEpoxyModel: Diffable {
+extension AnyItemModel: Diffable {
   public var diffIdentifier: AnyHashable {
     model.diffIdentifier
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    // If comparing to another `AnyEpoxyModel`, compare the underlying models to one another since
+    // If comparing to another `AnyItemModel`, compare the underlying models to one another since
     // concrete models attempt to cast the `Diffable` to their type.
-    if let otherDiffableEpoxyItem = otherDiffableItem as? AnyEpoxyModel {
+    if let otherDiffableEpoxyItem = otherDiffableItem as? AnyItemModel {
       return model.isDiffableItemEqual(to: otherDiffableEpoxyItem.model)
     }
 

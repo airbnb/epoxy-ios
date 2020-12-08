@@ -4,14 +4,14 @@
 import EpoxyCore
 import UIKit
 
-// MARK: - EpoxyModel
+// MARK: - ItemModel
 
-/// A flexible `EpoxyModel` type for configuring views of a specific type with content of a specific
-/// type, using closures for creation, configuration, and behavior setting.
+/// A flexible model type for configuring views of a specific type with content of a specific type,
+/// using closures for creation, configuration, and behavior setting.
 ///
-/// This is designed to be used with a `CollectionView` to lazily create and configure views as they
-/// are recycled in a `UICollectionView`.
-public struct EpoxyModel<View: UIView, Content: Equatable>: ContentViewEpoxyModeled {
+/// Designed to be used with a `CollectionView` to lazily create and configure views as they are
+/// recycled in a `UICollectionView`.
+public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModeled {
 
   // MARK: Lifecycle
 
@@ -30,7 +30,7 @@ public struct EpoxyModel<View: UIView, Content: Equatable>: ContentViewEpoxyMode
   public init(
     dataID: AnyHashable,
     content: Content,
-    configureView: ((EpoxyContext<View, Content>) -> Void)? = nil)
+    configureView: ((ItemContext<View, Content>) -> Void)? = nil)
   {
     self.dataID = dataID
     self.content = content
@@ -43,30 +43,32 @@ public struct EpoxyModel<View: UIView, Content: Equatable>: ContentViewEpoxyMode
 
 }
 
-extension EpoxyModel: DataIDProviding {}
-extension EpoxyModel: AlternateStyleIDProviding {}
-extension EpoxyModel: DidChangeStateProviding {}
-extension EpoxyModel: MakeViewProviding {}
-extension EpoxyModel: ConfigureViewProviding {}
-extension EpoxyModel: SetBehaviorsProviding {}
-extension EpoxyModel: DidSelectProviding {}
-extension EpoxyModel: SelectionStyleProviding {}
-extension EpoxyModel: ContentProviding {}
-extension EpoxyModel: DidEndDisplayingProviding {}
-extension EpoxyModel: WillDisplayProviding {}
-extension EpoxyModel: IsMovableProviding {}
+// MARK: Providers
 
-// MARK: EpoxyableModel
+extension ItemModel: DataIDProviding {}
+extension ItemModel: AlternateStyleIDProviding {}
+extension ItemModel: DidChangeStateProviding {}
+extension ItemModel: MakeViewProviding {}
+extension ItemModel: ConfigureViewProviding {}
+extension ItemModel: SetBehaviorsProviding {}
+extension ItemModel: DidSelectProviding {}
+extension ItemModel: SelectionStyleProviding {}
+extension ItemModel: ContentProviding {}
+extension ItemModel: DidEndDisplayingProviding {}
+extension ItemModel: WillDisplayProviding {}
+extension ItemModel: IsMovableProviding {}
 
-extension EpoxyModel: EpoxyableModel {
-  public func eraseToAnyEpoxyModel() -> AnyEpoxyModel {
-    .init(internalEpoxyModel: self)
+// MARK: ItemModeling
+
+extension ItemModel: ItemModeling {
+  public func eraseToAnyItemModel() -> AnyItemModel {
+    .init(internalItemModel: self)
   }
 }
 
-// MARK: InternalEpoxyableModel
+// MARK: InternalItemModeling
 
-extension EpoxyModel: InternalEpoxyableModel {
+extension ItemModel: InternalItemModeling {
   public var reuseID: String {
     let viewType = "\(type(of: View.self))"
     guard let alternateStyleID = alternateStyleID else { return viewType }
@@ -85,25 +87,25 @@ extension EpoxyModel: InternalEpoxyableModel {
     didEndDisplaying?()
   }
 
-  public func configure(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+  public func configure(cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
     let view = cell.view as? View ?? makeView()
     cell.setViewIfNeeded(view: view)
     configureView?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
   }
 
-  public func configureStateChange(in cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+  public func configureStateChange(in cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
     let view = cell.view as? View ?? makeView()
     cell.setViewIfNeeded(view: view)
     didChangeState?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
   }
 
-  public func setBehavior(cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+  public func setBehavior(cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
     let view = cell.view as? View ?? makeView()
     cell.setViewIfNeeded(view: view)
     setBehaviors?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
   }
 
-  public func handleDidSelect(_ cell: EpoxyWrapperView, with metadata: EpoxyViewMetadata) {
+  public func handleDidSelect(_ cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
     guard let view = cell.view as? View else {
       assertionFailure("The selected view is not the expected type.")
       return
@@ -113,7 +115,7 @@ extension EpoxyModel: InternalEpoxyableModel {
 
   public func configuredView(traitCollection: UITraitCollection) -> UIView {
     let view = makeView()
-    let context = EpoxyContext(
+    let context = ItemContext(
       view: view,
       content: content,
       dataID: dataID,
@@ -128,9 +130,9 @@ extension EpoxyModel: InternalEpoxyableModel {
 
 // MARK: Diffable
 
-extension EpoxyModel: Diffable {
+extension ItemModel: Diffable {
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let other = otherDiffableItem as? EpoxyModel<View, Content> else {
+    guard let other = otherDiffableItem as? ItemModel<View, Content> else {
       return false
     }
     return content == other.content

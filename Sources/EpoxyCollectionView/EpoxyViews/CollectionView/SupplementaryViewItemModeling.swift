@@ -3,9 +3,9 @@
 
 import UIKit
 
-/// The `SupplementaryViewEpoxyableModel` contains the reference data id for the model backing
-/// an item, the element kind, as well as the reuse id for the item's type.
-public protocol SupplementaryViewEpoxyableModel {
+/// Contains the reference data id for the model backing an item, the element kind, as well as the
+/// reuse id for the item's type.
+public protocol SupplementaryViewItemModeling {
 
   var elementKind: String { get }
   var reuseID: String { get }
@@ -19,7 +19,7 @@ public protocol SupplementaryViewEpoxyableModel {
 }
 
 /// This contains the view's data and methods for lazily creating views and applying the data to a view.
-public protocol TypedSupplementaryViewEpoxyableModel: SupplementaryViewEpoxyableModel {
+public protocol SupplementaryViewEpoxyableModeling: SupplementaryViewItemModeling {
 
   associatedtype View: UIView
 
@@ -29,7 +29,7 @@ public protocol TypedSupplementaryViewEpoxyableModel: SupplementaryViewEpoxyable
   func setViewBehavior(_ view: View)
 }
 
-extension TypedSupplementaryViewEpoxyableModel {
+extension SupplementaryViewEpoxyableModeling {
 
   public func configure(
     reusableView: CollectionViewReusableView,

@@ -15,7 +15,7 @@ extension ContentViewEpoxyModeled where Self: DidSelectProviding {
   // MARK: Public
 
   /// A closure that's called to handle this model's view being selected.
-  public typealias DidSelect = ((EpoxyContext<View, Content>) -> Void)
+  public typealias DidSelect = ((ItemContext<View, Content>) -> Void)
 
   /// A closure that's called to handle this model's view being selected.
   public var didSelect: DidSelect? {

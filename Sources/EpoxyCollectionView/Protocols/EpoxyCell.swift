@@ -3,12 +3,12 @@
 
 import UIKit
 
-public protocol EpoxyWrapperView {
+public protocol ItemWrapperView {
   var view: UIView? { get }
   func setViewIfNeeded(view: UIView)
 }
 
-public protocol EpoxyCell: EpoxyWrapperView {
+public protocol EpoxyCell: ItemWrapperView {
   var isHighlighted: Bool { get }
   var isSelected: Bool { get }
 }

@@ -17,7 +17,7 @@ extension ContentViewEpoxyModeled where Self: DidChangeStateProviding {
   // MARK: Public
 
   /// A closure that's called to configure the state of this model's view when it changes.
-  public typealias DidChangeState = (EpoxyContext<View, Content>) -> Void
+  public typealias DidChangeState = (ItemContext<View, Content>) -> Void
 
   /// A closure that's called to configure the state of this model's view when it changes.
   public var didChangeState: DidChangeState? {
