@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'EpoxyBars'
-  s.version = '0.37.0'
+  s.version = '0.38.0'
   s.license = 'Apache License, Version 2.0'
   s.summary = 'Declarative UI framework for fixed bar stacks'
   s.homepage = 'https://github.com/airbnb/epoxy-ios'
