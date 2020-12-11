@@ -1,18 +1,15 @@
 //  Created by Laura Skelton on 6/30/17.
 //  Copyright © 2017 Airbnb. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 open class EpoxyCollectionViewController: UIViewController {
 
   // MARK: Lifecycle
 
-  public init(
-    collectionViewLayout: UICollectionViewLayout,
-    epoxyLogger: EpoxyLogging = DefaultEpoxyLogger())
-  {
+  public init(collectionViewLayout: UICollectionViewLayout) {
     self.collectionViewLayout = collectionViewLayout
-    self.epoxyLogger = epoxyLogger
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -40,7 +37,7 @@ open class EpoxyCollectionViewController: UIViewController {
 
   /// Returns a `CollectionView` by default. Override this to configure it differently.
   open func makeCollectionView() -> CollectionView {
-    return CollectionView(collectionViewLayout: collectionViewLayout, epoxyLogger: epoxyLogger)
+    return CollectionView(collectionViewLayout: collectionViewLayout)
   }
 
   // MARK: Public
@@ -50,7 +47,7 @@ open class EpoxyCollectionViewController: UIViewController {
   }
 
   public lazy var collectionView: CollectionView = {
-    epoxyLogger.epoxyAssert(self.isViewLoaded, "Accessed collectionView before view was loaded.")
+    EpoxyLogger.shared.assert(self.isViewLoaded, "Accessed collectionView before view was loaded.")
     return self.makeCollectionView()
   }()
 
@@ -65,7 +62,6 @@ open class EpoxyCollectionViewController: UIViewController {
   // MARK: Private
 
   private let collectionViewLayout: UICollectionViewLayout
-  private let epoxyLogger: EpoxyLogging
 
   private func setUpViews() {
     view.backgroundColor = .white

@@ -39,7 +39,7 @@ extension EpoxyModeled where Self: DataIDProviding {
     EpoxyModelProperty(
       keyPath: \DataIDProviding.dataID,
       defaultValue: {
-        assertionFailure("dataID must be set at init, this is programmer error")
+        EpoxyLogger.shared.assertionFailure("dataID must be set at init, this is programmer error")
         return ""
       }(),
       updateStrategy: .replace)

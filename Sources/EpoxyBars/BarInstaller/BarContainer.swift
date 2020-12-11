@@ -1,6 +1,7 @@
 // Created by eric_horacek on 5/8/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 // MARK: - BarContainer
@@ -197,12 +198,12 @@ extension InternalBarContainer {
   func verifyViewController() {
     guard let viewController = viewController else { return }
 
-    assert(
+    EpoxyLogger.shared.assert(
       viewController.isViewLoaded,
       "The view controller's view should be loaded when it has a bar container added")
 
     // Bar pinning won't work within a scroll view, e.g. with `UITableViewController`.
-    assert(
+    EpoxyLogger.shared.assert(
       !(viewController.view is UIScrollView),
       "The view controller's view must not be a scroll view. Nest any scroll views in a container.")
   }
@@ -232,7 +233,7 @@ extension InternalBarContainer {
       subview == self ? nil : subview as? InternalBarContainer
     }
 
-    assert(
+    EpoxyLogger.shared.assert(
       others.count < 2,
       "Found two or more bar containers in \(viewController as Any): \(others + [self]). This is programmer error.")
 

@@ -4,9 +4,9 @@
 public protocol CollectionViewPrefetchingDelegate: AnyObject {
   func collectionView(
     _ collectionView: CollectionView,
-    prefetch epoxyItems: [ItemModeling])
+    prefetch items: [AnyItemModel])
 
   func collectionView(
     _ collectionView: CollectionView,
-    cancelPrefetchingOf epoxyItems: [ItemModeling])
+    cancelPrefetchingOf items: [AnyItemModel])
 }

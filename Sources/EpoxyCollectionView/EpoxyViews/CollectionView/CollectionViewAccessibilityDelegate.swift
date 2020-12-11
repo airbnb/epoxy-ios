@@ -6,13 +6,13 @@ import UIKit
 public protocol CollectionViewAccessibilityDelegate: class {
   func collectionView(
     _ collectionView: CollectionView,
-    itemDidBecomeFocused item: ItemModeling,
+    itemDidBecomeFocused item: AnyItemModel,
     with view: UIView?,
     in section: SectionModel)
 
   func collectionView(
     _ collectionView: CollectionView,
-    itemDidLoseFocus item: ItemModeling,
+    itemDidLoseFocus item: AnyItemModel,
     with view: UIView?,
     in section: SectionModel)
 }

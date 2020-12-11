@@ -1,6 +1,7 @@
 // Created by eric_horacek on 8/20/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 // MARK: - BottomBarInstaller
@@ -103,7 +104,8 @@ public final class BottomBarInstaller: NSObject {
     guard keyboardPositionWatcher.enabled else { return }
 
     guard let view = viewController?.viewIfLoaded else {
-      assertionFailure("Should only watch keyboard for a view controller that's loaded its view")
+      EpoxyLogger.shared.assertionFailure(
+        "Should only watch keyboard for a view controller that's loaded its view")
       return
     }
 

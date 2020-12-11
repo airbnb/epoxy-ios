@@ -1,6 +1,7 @@
 // Created by eric_horacek on 10/24/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 // MARK: - NavigationController
@@ -61,12 +62,14 @@ open class NavigationController: UINavigationController {
 
   @available (*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
   public final override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
-    assertionFailure("Manual management of view controllers is not allowed, use `setStack(...)`")
+    EpoxyLogger.shared.assertionFailure(
+      "Manual management of view controllers is not allowed, use `setStack(...)`")
   }
 
   @available (*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
   public final override func pushViewController(_ viewController: UIViewController, animated: Bool) {
-    assertionFailure("Manual management of view controllers is not allowed, use `setStack(...)`")
+    EpoxyLogger.shared.assertionFailure(
+      "Manual management of view controllers is not allowed, use `setStack(...)`")
   }
 
   /// Updates the navigation stack to the provided array of navigation models, optionally animating

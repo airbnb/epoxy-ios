@@ -107,7 +107,7 @@ extension ItemModel: InternalItemModeling {
 
   public func handleDidSelect(_ cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
     guard let view = cell.view as? View else {
-      assertionFailure("The selected view is not the expected type.")
+      EpoxyLogger.shared.assertionFailure("The selected view is not the expected type.")
       return
     }
     didSelect?(.init(view: view, content: content, dataID: dataID, metadata: metadata))

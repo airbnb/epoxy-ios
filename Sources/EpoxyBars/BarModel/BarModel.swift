@@ -147,7 +147,7 @@ public struct BarModel<View: UIView, Content: Equatable> {
 
   private func castOrAssert(_ view: UIView) -> View? {
     guard let typedView = view as? View else {
-      assertionFailure("\(view) is not of the expected type \(View.self)")
+      EpoxyLogger.shared.assertionFailure("\(view) is not of the expected type \(View.self)")
       return nil
     }
     return typedView
@@ -207,7 +207,7 @@ extension BarModel: InternalBarModeling {
 extension BarModel: InternalBarCoordinating {
   func barModel(for coordinator: AnyBarCoordinating) -> BarModeling {
     guard let typedCoordinator = coordinator as? Coordinator else {
-      assertionFailure("\(coordinator) is not of the expected type \(Coordinator.self)")
+      EpoxyLogger.shared.assertionFailure("\(coordinator) is not of the expected type \(Coordinator.self)")
       return self
     }
     return typedCoordinator.barModel(for: self)
