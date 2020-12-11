@@ -1,6 +1,7 @@
 //  Created by Laura Skelton on 5/19/17.
 //  Copyright © 2017 Airbnb. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 // MARK: - CollectionViewDataSourceReorderingDelegate
@@ -20,15 +21,12 @@ final class CollectionViewEpoxyDataSource: NSObject {
 
   // MARK: Lifecycle
 
-  init(epoxyLogger: EpoxyLogging, usesBatchUpdatesForAllReloads: Bool) {
-    self.epoxyLogger = epoxyLogger
+  init(usesBatchUpdatesForAllReloads: Bool) {
     self.usesBatchUpdatesForAllReloads = usesBatchUpdatesForAllReloads
     super.init()
   }
 
   // MARK: Internal
-
-  let epoxyLogger: EpoxyLogging
 
   weak var reorderingDelegate: CollectionViewDataSourceReorderingDelegate?
 
@@ -41,12 +39,12 @@ final class CollectionViewEpoxyDataSource: NSObject {
   private(set) var internalData: InternalCollectionViewEpoxyData?
 
   func setSections(_ sections: [SectionModel]?, animated: Bool) {
-    epoxyLogger.epoxyAssert(Thread.isMainThread, "This method must be called on the main thread.")
+    EpoxyLogger.shared.assert(Thread.isMainThread, "This method must be called on the main thread.")
     registerCellReuseIDs(with: sections)
     registerSupplementaryViewReuseIDs(with: sections)
     let newInternalData: InternalCollectionViewEpoxyData?
     if let sections = sections {
-      newInternalData = .make(sections: sections, epoxyLogger: epoxyLogger)
+      newInternalData = .make(sections: sections)
     } else {
       newInternalData = nil
     }
@@ -78,12 +76,12 @@ final class CollectionViewEpoxyDataSource: NSObject {
   ///   coordinator.drop(firstItem.dragItem, toRowAt: destinationIndexPath)
   ///
   func modifySectionsWithoutUpdating(_ sections: [SectionModel]?) {
-    internalData = sections.map { .make(sections: $0, epoxyLogger: epoxyLogger) }
+    internalData = sections.map { .make(sections: $0) }
   }
 
   func item(at indexPath: IndexPath) -> AnyItemModel? {
     guard let data = internalData else {
-      epoxyLogger.epoxyAssertionFailure("Can't load epoxy item with nil data")
+      EpoxyLogger.shared.assertionFailure("Can't load epoxy item with nil data")
       return nil
     }
 
@@ -94,7 +92,7 @@ final class CollectionViewEpoxyDataSource: NSObject {
     let section = data.sections[indexPath.section]
 
     if section.items.count < indexPath.row + 1 {
-      epoxyLogger.epoxyAssertionFailure("Item is out of bounds. Make sure your section models and item models all have unique dataIDs")
+      EpoxyLogger.shared.assertionFailure("Item is out of bounds. Make sure your section models and item models all have unique dataIDs")
       return nil
     }
 
@@ -113,12 +111,12 @@ final class CollectionViewEpoxyDataSource: NSObject {
 
   func section(at index: Int) -> SectionModel? {
     guard let data = internalData else {
-      epoxyLogger.epoxyAssertionFailure("Can't load epoxy item with nil data")
+      EpoxyLogger.shared.assertionFailure("Can't load epoxy item with nil data")
       return nil
     }
 
     if data.sections.count < index + 1 {
-      epoxyLogger.epoxyAssertionFailure("Section is out of bounds. Make sure your section models and item models all have unique dataIDs")
+      EpoxyLogger.shared.assertionFailure("Section is out of bounds. Make sure your section models and item models all have unique dataIDs")
       return nil
     }
 
@@ -161,7 +159,7 @@ final class CollectionViewEpoxyDataSource: NSObject {
         let oldInternalData = self.internalData
         self.internalData = newData
         if self.usesBatchUpdatesForAllReloads {
-          let emptyData = InternalCollectionViewEpoxyData.make(sections: [], epoxyLogger: self.epoxyLogger)
+          let emptyData = InternalCollectionViewEpoxyData.make(sections: [])
           let newData = newData ?? emptyData
           let oldData = oldInternalData ?? emptyData
           return newData.makeChangeset(from: oldData)
@@ -196,7 +194,7 @@ final class CollectionViewEpoxyDataSource: NSObject {
 
   private func registerNewCellReuseIDs(_ newCellReuseIDs: Set<String>) {
     guard let collectionView = collectionView else {
-      epoxyLogger.epoxyAssertionFailure("Trying to register reuse IDs before the CollectionView was set.")
+      EpoxyLogger.shared.assertionFailure("Trying to register reuse IDs before the CollectionView was set.")
       return
     }
     newCellReuseIDs.forEach { cellReuseID in
@@ -206,7 +204,7 @@ final class CollectionViewEpoxyDataSource: NSObject {
 
   private func registerNewSupplementaryViewReuseIDs(_ newSupplementaryViewReuseIDs: Set<String>, forKind elementKind: String) {
     guard let collectionView = collectionView else {
-      epoxyLogger.epoxyAssertionFailure("Trying to register reuse IDs before the CollectionView was set.")
+      EpoxyLogger.shared.assertionFailure("Trying to register reuse IDs before the CollectionView was set.")
       return
     }
     newSupplementaryViewReuseIDs.forEach { supplementaryViewReuseID in
@@ -240,7 +238,7 @@ extension CollectionViewEpoxyDataSource: UICollectionViewDataSource {
     cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
   {
     guard let item = item(at: indexPath) else {
-      epoxyLogger.epoxyAssertionFailure("Index path is out of bounds.")
+      EpoxyLogger.shared.assertionFailure("Index path is out of bounds.")
       return UICollectionViewCell(frame: .zero)
     }
 
@@ -251,7 +249,7 @@ extension CollectionViewEpoxyDataSource: UICollectionViewDataSource {
     if let cell = cell as? CollectionViewCell {
       self.collectionView?.configure(cell: cell, with: item)
     } else {
-      epoxyLogger.epoxyAssertionFailure("Only CollectionViewCell and subclasses are allowed in a CollectionView.")
+      EpoxyLogger.shared.assertionFailure("Only CollectionViewCell and subclasses are allowed in a CollectionView.")
     }
     return cell
   }
@@ -262,15 +260,15 @@ extension CollectionViewEpoxyDataSource: UICollectionViewDataSource {
     at indexPath: IndexPath) -> UICollectionReusableView
   {
     guard let data = internalData else {
-      epoxyLogger.epoxyAssertionFailure("Can't load epoxy item with nil data")
+      EpoxyLogger.shared.assertionFailure("Can't load epoxy item with nil data")
       return UICollectionReusableView()
     }
     guard indexPath.section < data.sections.count else {
-      epoxyLogger.epoxyAssertionFailure("Index of supplementary view is out of bounds.")
+      EpoxyLogger.shared.assertionFailure("Index of supplementary view is out of bounds.")
       return UICollectionReusableView()
     }
     guard let elementSupplementaryModel = data.sections[indexPath.section].supplementaryItems[kind]?[indexPath.item] else {
-      epoxyLogger.epoxyAssertionFailure("Supplementary item model not found for the given element kind and index path.")
+      EpoxyLogger.shared.assertionFailure("Supplementary item model not found for the given element kind and index path.")
       return UICollectionReusableView()
     }
 
@@ -282,7 +280,7 @@ extension CollectionViewEpoxyDataSource: UICollectionViewDataSource {
     if let supplementaryView = supplementaryView as? CollectionViewReusableView {
       self.collectionView?.configure(supplementaryView: supplementaryView, with: elementSupplementaryModel)
     } else {
-      epoxyLogger.epoxyAssertionFailure("Only CollectionViewReusableView and subclasses are allowed in a CollectionView.")
+      EpoxyLogger.shared.assertionFailure("Only CollectionViewReusableView and subclasses are allowed in a CollectionView.")
     }
     return supplementaryView
   }
@@ -303,7 +301,6 @@ extension CollectionViewEpoxyDataSource: UICollectionViewDataSource {
     let beforeIndexPath = IndexPath(item: destinationIndexPath.item, section: destinationIndexPath.section)
 
     // We do all this extra checking just so that it doesn't crash on debug/alpha/beta
-
     if let data = internalData,
       data.sections[beforeIndexPath.section].items.count >= beforeIndexPath.item + 1,
       let destinationBeforeDataID = item(at: beforeIndexPath)?.dataID {

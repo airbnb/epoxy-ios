@@ -1,6 +1,7 @@
 // Created by Bryan Keller on 10/20/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 // MARK: - CollectionViewScrollAnimator
@@ -13,9 +14,8 @@ final class CollectionViewScrollAnimator {
   // MARK: Lifecycle
 
   /// The collection view instance is weakly-held.
-  init(collectionView: UICollectionView, epoxyLogger: EpoxyLogging) {
+  init(collectionView: UICollectionView) {
     self.collectionView = collectionView
-    self.epoxyLogger = epoxyLogger
   }
 
   // MARK: Internal
@@ -53,8 +53,6 @@ final class CollectionViewScrollAnimator {
   }
 
   // MARK: Private
-
-  private let epoxyLogger: EpoxyLogging
 
   private var scrollToItemContext: ScrollToItemContext? {
     willSet {
@@ -95,9 +93,11 @@ final class CollectionViewScrollAnimator {
   private func scrollToItemDisplayLinkFired() {
     guard let collectionView = collectionView else { return }
     guard let scrollToItemContext = scrollToItemContext else {
-      epoxyLogger.epoxyAssertionFailure("""
-        Expected `scrollToItemContext` to be non-nil when programmatically scrolling toward an item.
-      """)
+      EpoxyLogger.shared.assertionFailure(
+        """
+        Expected `scrollToItemContext` to be non-nil when programmatically scrolling toward an \
+        item.
+        """)
       return
     }
 
@@ -245,7 +245,7 @@ final class CollectionViewScrollAnimator {
     {
       return .after
     } else {
-      epoxyLogger.epoxyAssertionFailure(
+      EpoxyLogger.shared.assertionFailure(
         "Could not find a position relative to the visible bounds for item at \(targetIndexPath)")
       return nil
     }
@@ -283,7 +283,7 @@ final class CollectionViewScrollAnimator {
       guard !collectionView.bounds.contains(itemFrame) else { return nil }
       return itemFrame.midX < collectionView.bounds.midX ? .left : .right
     default:
-      epoxyLogger.epoxyAssertionFailure("Unsupported scroll position.")
+      EpoxyLogger.shared.assertionFailure("Unsupported scroll position.")
       return nil
     }
   }
@@ -323,7 +323,7 @@ final class CollectionViewScrollAnimator {
     case []:
       newOffset = 0
     default:
-      epoxyLogger.epoxyAssertionFailure("Unsupported scroll position.")
+      EpoxyLogger.shared.assertionFailure("Unsupported scroll position.")
       return itemFrame.origin
     }
 

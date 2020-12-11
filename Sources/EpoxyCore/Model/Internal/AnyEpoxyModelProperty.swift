@@ -15,11 +15,13 @@ protocol AnyEpoxyModelProperty {
 extension EpoxyModelProperty: AnyEpoxyModelProperty {
   func update(old: Any, new: Any) -> Any {
     guard let typedOld = old as? Value else {
-      assertionFailure("Expected old to be of type \(Value.self), instead found \(old). This is programmer error.")
+      EpoxyLogger.shared.assertionFailure(
+        "Expected old to be of type \(Value.self), instead found \(old). This is programmer error.")
       return defaultValue()
     }
     guard let typedNew = new as? Value else {
-      assertionFailure("Expected new to be of type \(Value.self), instead found \(old). This is programmer error.")
+      EpoxyLogger.shared.assertionFailure(
+        "Expected new to be of type \(Value.self), instead found \(old). This is programmer error.")
       return defaultValue()
     }
     return updateStrategy.update(typedOld, typedNew)

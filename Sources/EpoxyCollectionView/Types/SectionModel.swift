@@ -41,3 +41,11 @@ extension SectionModel: Diffable {
     return dataID
   }
 }
+
+// MARK: DiffableSection
+
+extension SectionModel: DiffableSection {
+  public var diffableItems: [AnyItemModel] {
+    items.map { $0.eraseToAnyItemModel() }
+  }
+}

@@ -1,6 +1,7 @@
 // Created by eric_horacek on 11/3/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 // MARK: - BarInstaller
@@ -49,7 +50,8 @@ final class BarInstaller<Container: BarContainer> {
     installed = true
 
     guard let view = viewController?.viewIfLoaded else {
-      assertionFailure("A bar should only be installed on a view controller that's loaded its view")
+      EpoxyLogger.shared.assertionFailure(
+        "A bar should only be installed on a view controller that's loaded its view")
       return
     }
 

@@ -1,6 +1,7 @@
 // Created by eric_horacek on 3/31/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 // MARK: - BarWrapperView
@@ -130,10 +131,11 @@ public final class BarWrapperView: UIView {
     let coordinator = self.coordinator(for: originalModel)
 
     guard let model = originalModel.barModel(for: coordinator).internalBarModel as? InternalBarModeling else {
-      assertionFailure("""
-      Unable to extract an InternalBarModeling from \(originalModel), nesting BarModeling models
-      deeper than two layers is not supported
-      """)
+      EpoxyLogger.shared.assertionFailure(
+        """
+        Unable to extract an InternalBarModeling from \(originalModel), nesting BarModeling models \
+        deeper than two layers is not supported
+        """)
       return
     }
 

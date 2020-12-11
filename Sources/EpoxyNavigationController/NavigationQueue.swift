@@ -53,7 +53,8 @@ final class NavigationQueue {
     guard !popped.isEmpty else { return }
 
     guard let current = current else {
-      assertionFailure("Popped \(popped) with no current, this is programmer error.")
+      EpoxyLogger.shared.assertionFailure(
+        "Popped \(popped) with no current, this is programmer error.")
       return
     }
 
@@ -334,7 +335,8 @@ private struct NavigationStack {
     var removals = [NavigationModel]()
     for element in popped {
       guard let index = viewControllers.firstIndex(where: { $0?.stackable === element }) else {
-        assertionFailure("\(element) not in \(viewControllers), this is programmer error.")
+        EpoxyLogger.shared.assertionFailure(
+          "\(element) not in \(viewControllers), this is programmer error.")
         continue
       }
       viewControllers.remove(at: index)

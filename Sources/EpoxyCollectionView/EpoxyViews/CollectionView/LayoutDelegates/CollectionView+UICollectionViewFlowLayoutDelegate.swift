@@ -3,7 +3,8 @@
 
 import UIKit
 
-/// Protocol that maps UICollectionViewDelegateFlowLayout methods to the `layoutDelegate` of a `CollectionView`
+/// Protocol that maps `UICollectionViewDelegateFlowLayout` methods to the `layoutDelegate` of a
+/// `CollectionView`.
 public protocol EpoxyCollectionViewDelegateFlowLayout {
   func collectionView(
     _ collectionView: UICollectionView,
@@ -111,9 +112,11 @@ extension CollectionView: UICollectionViewDelegateFlowLayout {
       }
     }
 
-    guard let itemID = dataIDForItem(at: indexPath),
-      let sectionID = dataIDForSection(at: indexPath.section) else {
-        return defaultItemSize
+    guard
+      let itemID = self.item(at: indexPath)?.dataID,
+      let sectionID = self.section(at: indexPath.section)?.dataID
+    else {
+      return defaultItemSize
     }
 
     return flowLayoutDelegate.collectionView(
@@ -136,7 +139,7 @@ extension CollectionView: UICollectionViewDelegateFlowLayout {
       }
     }
 
-    guard let sectionID = dataIDForSection(at: section) else {
+    guard let sectionID = self.section(at: section)?.dataID else {
       return defaultSectionInset
     }
 
@@ -159,7 +162,7 @@ extension CollectionView: UICollectionViewDelegateFlowLayout {
       }
     }
 
-    guard let sectionID = dataIDForSection(at: section) else {
+    guard let sectionID = self.section(at: section)?.dataID else {
       return defaultMinimumLineSpacingForSection
     }
 
@@ -182,7 +185,7 @@ extension CollectionView: UICollectionViewDelegateFlowLayout {
       }
     }
 
-    guard let sectionID = dataIDForSection(at: section) else {
+    guard let sectionID = self.section(at: section)?.dataID else {
       return defaultMinimumInteritemSpacingForSection
     }
 
@@ -205,7 +208,7 @@ extension CollectionView: UICollectionViewDelegateFlowLayout {
       }
     }
 
-    guard let sectionID = dataIDForSection(at: section) else {
+    guard let sectionID = self.section(at: section)?.dataID else {
       return defaultHeaderReferenceSize
     }
 
@@ -228,7 +231,7 @@ extension CollectionView: UICollectionViewDelegateFlowLayout {
       }
     }
 
-    guard let sectionID = dataIDForSection(at: section) else {
+    guard let sectionID = self.section(at: section)?.dataID else {
       return defaultFooterReferenceSize
     }
 
