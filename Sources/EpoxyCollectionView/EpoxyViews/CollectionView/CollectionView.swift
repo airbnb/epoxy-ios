@@ -48,7 +48,7 @@ open class CollectionView: UICollectionView {
     super.didMoveToWindow()
 
     if window == nil {
-      scrollAnimator.cancelScrollToItem()
+      scrollToItemHelper.cancelAnimatedScrollToItem()
     }
   }
 
@@ -65,8 +65,11 @@ open class CollectionView: UICollectionView {
   public func scrollToItem(at path: ItemPath, position: ScrollPosition, animated: Bool) {
     guard let indexPath = indexPathForItem(at: path) else { return }
 
-    if GlobalEpoxyConfig.shared.usesAccurateAnimatedScrollToItem && animated {
-      scrollAnimator.accuratelyScrollToItem(at: indexPath, position: position)
+    if GlobalEpoxyConfig.shared.usesAccurateScrollToItem {
+      scrollToItemHelper.accuratelyScrollToItem(
+        at: indexPath,
+        position: position,
+        animated: animated)
     } else {
       scrollToItem(at: indexPath, at: position, animated: animated)
     }
@@ -374,7 +377,7 @@ open class CollectionView: UICollectionView {
   private var ephemeralStateCache = [AnyHashable: RestorableState?]()
   private var lastFocusedDataID: ItemPath?
 
-  private lazy var scrollAnimator = CollectionViewScrollAnimator(collectionView: self)
+  private lazy var scrollToItemHelper = CollectionViewScrollToItemHelper(collectionView: self)
 
   private func setUp() {
     // There are rendering issues in iOS 10 when using self-sizing supplementary views
@@ -534,7 +537,7 @@ extension CollectionView: UIScrollViewDelegate {
     // scroll.
     let isUserInitiatedScrolling = scrollView.isDragging && scrollView.isTracking
     if isUserInitiatedScrolling {
-      scrollAnimator.cancelScrollToItem()
+      scrollToItemHelper.cancelAnimatedScrollToItem()
     }
   }
 
@@ -561,7 +564,7 @@ extension CollectionView: UIScrollViewDelegate {
     let shouldScrollToTop = scrollDelegate?.scrollViewShouldScrollToTop?(scrollView) ?? true
 
     if shouldScrollToTop {
-      scrollAnimator.cancelScrollToItem()
+      scrollToItemHelper.cancelAnimatedScrollToItem()
     }
 
     return shouldScrollToTop

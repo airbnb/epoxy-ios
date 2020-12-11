@@ -4,12 +4,14 @@
 import EpoxyCore
 import UIKit
 
-// MARK: - CollectionViewScrollAnimator
+// MARK: - CollectionViewScrollToItemHelper
 
-/// Programmatically drives a scroll-to-item animation for a `UICollectionView`. This class is necessary because the built-in
-/// scroll-to-item functionality is broken for self-sizing cells. Since this class drives the animation itself, we're able to accurately scroll to
-/// any item in the collection view.
-final class CollectionViewScrollAnimator {
+/// This class facilitates scrolling to an item at a particular index path, since the built-in scroll-to-item functionality is broken for
+/// self-sizing cells.
+/// The fix for the animated case involves driving the scroll animation ourselves using a `CADisplayLink`.
+/// The fix for the non-animated case involves repeatedly calling the UIKit `scrollToItem` implementation until we land at a stable
+/// content offset.
+final class CollectionViewScrollToItemHelper {
 
   // MARK: Lifecycle
 
@@ -20,14 +22,89 @@ final class CollectionViewScrollAnimator {
 
   // MARK: Internal
 
-  func accuratelyScrollToItem(at indexPath: IndexPath, position: UICollectionView.ScrollPosition) {
+  func accuratelyScrollToItem(
+    at indexPath: IndexPath,
+    position: UICollectionView.ScrollPosition,
+    animated: Bool)
+  {
+    if animated {
+      accurateScrollToItemWithAnimation(itemIndexPath: indexPath, position: position)
+    } else {
+      accurateScrollToItemWithoutAnimation(itemIndexPath: indexPath, position: position)
+    }
+  }
+
+  /// Cancels an in-flight animated scroll-to-item, if there is one.
+  ///
+  /// Call this function if your collection view is about to deallocate. For example, you can call this from `viewWillDisappear` in a
+  /// view controller, or `didMoveToWindow` when `window == nil` in a view. You can also call this when a user interacts with
+  /// the collection view so that control is returned to the user.
+  func cancelAnimatedScrollToItem() {
+    scrollToItemContext = nil
+  }
+
+  // MARK: Private
+
+  private weak var collectionView: UICollectionView?
+  private weak var scrollToItemDisplayLink: CADisplayLink?
+
+  private var scrollToItemContext: ScrollToItemContext? {
+    willSet {
+      scrollToItemDisplayLink?.invalidate()
+    }
+  }
+
+  private func accurateScrollToItemWithoutAnimation(
+    itemIndexPath: IndexPath,
+    position: UICollectionView.ScrollPosition)
+  {
+    guard let collectionView = collectionView else { return }
+
+    // Programmatically scrolling to an item, even without an animation, when using self-sizing
+    // cells usually results in slightly incorrect scroll offsets. By invoking `scrollToItem`
+    // multiple times in a row, we can force the collection view to eventually end up in the right
+    // spot.
+    //
+    // This usually only takes 3 iterations: 1 to get to an estimated offset, 1 to get to the
+    // final offset, and 1 to verify that we're at the final offset. If it takes more than 5
+    // attempts, we'll stop trying since we're blocking the main thread during these attempts.
+    var previousContentOffset = CGPoint(
+      x: CGFloat.greatestFiniteMagnitude,
+      y: CGFloat.greatestFiniteMagnitude)
+    var numberOfAttempts = 1
+    while
+      (abs(collectionView.contentOffset.x - previousContentOffset.x) >= 1 ||
+        abs(collectionView.contentOffset.y - previousContentOffset.y) >= 1) &&
+      numberOfAttempts <= 5
+    {
+      if numberOfAttempts > 1 {
+        collectionView.setNeedsLayout()
+        collectionView.layoutIfNeeded()
+      }
+
+      previousContentOffset = collectionView.contentOffset
+      collectionView.scrollToItem(at: itemIndexPath, at: position, animated: false)
+
+      numberOfAttempts += 1
+    }
+
+    if numberOfAttempts > 5 {
+      EpoxyLogger.shared.warn(
+        "Gave up scrolling to an item without an animation because it took more than 5 attempts.")
+    }
+  }
+
+  private func accurateScrollToItemWithAnimation(
+    itemIndexPath: IndexPath,
+    position: UICollectionView.ScrollPosition)
+  {
     guard let collectionView = collectionView else { return }
 
     let scrollPosition: UICollectionView.ScrollPosition
     if position == [] {
       guard
         let closestScrollPosition = closestRestingScrollPosition(
-          forTargetItemIndexPath: indexPath,
+          forTargetItemIndexPath: itemIndexPath,
           collectionView: collectionView)
       else
       {
@@ -41,27 +118,12 @@ final class CollectionViewScrollAnimator {
     }
 
     scrollToItemContext = ScrollToItemContext(
-      targetIndexPath: indexPath,
+      targetIndexPath: itemIndexPath,
       targetScrollPosition: scrollPosition,
       animationStartTime: CACurrentMediaTime())
 
     startScrollingTowardTargetItem()
   }
-
-  func cancelScrollToItem() {
-    scrollToItemContext = nil
-  }
-
-  // MARK: Private
-
-  private var scrollToItemContext: ScrollToItemContext? {
-    willSet {
-      scrollToItemDisplayLink?.invalidate()
-    }
-  }
-
-  private weak var collectionView: UICollectionView?
-  private weak var scrollToItemDisplayLink: CADisplayLink?
 
   private func startScrollingTowardTargetItem() {
     let scrollToItemDisplayLink = CADisplayLink(
