@@ -70,14 +70,20 @@ public class BarStackView: UIStackView {
     wrappers.compactMap { $0.view }
   }
 
-  // MARK: UIView
-
   public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    guard let view = super.hitTest(point, with: event) else { return nil }
+    // Validate hitTest preconditions, since we aren't calling super.
+    guard isUserInteractionEnabled, !isHidden, alpha >= 0.01 else { return nil }
 
-    // This view shouldn't ever receive touches, but since it can contain interactive elements we
-    // need to ignore them via a hit test, not `isUserInteractionEnabled`.
-    return view === self ? nil : view
+    /// We allow bar views to recieve touches outside of this container,
+    /// so we manually hit test all bar views.
+    for wrapper in zOrderedWrappers {
+      if let candidate = wrapper.hitTest(wrapper.convert(point, from: self), with: event) {
+        return candidate
+      }
+    }
+
+    // This view shouldn't recieve any touches
+    return nil
   }
 
   /// Updates the contents of this stack to the stack modeled by the given model array, inserting,
@@ -161,6 +167,16 @@ public class BarStackView: UIStackView {
   /// The current bar wrappers ordered from top to bottom.
   private var wrappers = [BarWrapperView]()
 
+  /// Wrappers ordered by their order in the Z axis (from highest to lowest)
+  private var zOrderedWrappers: [BarWrapperView] {
+    switch zOrder {
+    case .topToBottom:
+      return wrappers
+    case .bottomToTop:
+      return wrappers.reversed()
+    }
+  }
+
   private var primaryWrapper: BarWrapperView? {
     switch zOrder {
     case .topToBottom:
@@ -227,17 +243,9 @@ public class BarStackView: UIStackView {
 
   /// Updates the `zPosition` of the wrapper views to respect the `ZOrder` after an update.
   private func updateWrapperZOrder() {
-    let wrappers: [BarWrapperView]
-    switch zOrder {
-    case .bottomToTop:
-      wrappers = self.wrappers.reversed()
-    case .topToBottom:
-      wrappers = self.wrappers
-    }
-
     // The bottom wrapper should be highest in the z index so that new bars slide underneath it when
     // being hidden and shown.
-    for (index, wrapper) in wrappers.enumerated() {
+    for (index, wrapper) in zOrderedWrappers.enumerated() {
       // We pick 1000 as a sensible max to decrement from since we would never have that may bars.
       // We don't decrement from 0 since that causes bars to be invisible for some reason.
       wrapper.layer.zPosition = CGFloat(1000 - index)

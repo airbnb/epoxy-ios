@@ -86,11 +86,14 @@ public final class BarWrapperView: UIView {
   }
 
   public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-    guard let view = super.hitTest(point, with: event) else { return nil }
+    // Validate hitTest preconditions, since we aren't calling super.
+    guard isUserInteractionEnabled, !isHidden, alpha >= 0.01 else { return nil }
 
-    // This view should never receive touches, but since it can contain interactive elements we
-    // need to ignore them via a hit test, not `isUserInteractionEnabled`.
-    return view === self ? nil : view
+    guard let view = view else { return nil }
+
+    /// We allow bar views to recieve touches outside of this wrapper,
+    /// so we manually hit test the bar view.
+    return view.hitTest(view.convert(point, from: self), with: event)
   }
 
   public override func layoutMarginsDidChange() {
