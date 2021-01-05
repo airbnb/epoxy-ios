@@ -459,7 +459,9 @@ open class CollectionView: UICollectionView {
         let sectionCount = dataSource?.numberOfSections?(in: self),
         sectionCount > 0
       else {
-        _ = epoxyDataSource.applyData(data)
+        if let result = epoxyDataSource.applyData(data) {
+          updateState = .updating(from: result.oldData)
+        }
         reloadData()
         completeUpdates()
         return
