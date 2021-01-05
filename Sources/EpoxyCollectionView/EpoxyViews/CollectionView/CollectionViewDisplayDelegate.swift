@@ -6,25 +6,27 @@ import UIKit
 public protocol CollectionViewDisplayDelegate: AnyObject {
   func collectionView(
     _ collectionView: CollectionView,
-    willDisplayItem item: ItemModeling,
+    willDisplayItem item: AnyItemModel,
     with view: UIView?,
     in section: SectionModel)
 
   func collectionView(
     _ collectionView: CollectionView,
-    didEndDisplayingItem item: ItemModeling,
+    didEndDisplayingItem item: AnyItemModel,
     with view: UIView?,
     in section: SectionModel)
 
   func collectionView(
     _ collectionView: CollectionView,
-    willDisplaySupplementaryItem item: SupplementaryViewItemModeling,
-    with view: UIView,
+    willDisplaySupplementaryItem item: AnySupplementaryItemModel,
+    forElementKind elementKind: String,
+    with view: UIView?,
     in section: SectionModel)
 
   func collectionView(
     _ collectionView: CollectionView,
-    didEndDisplayingSupplementaryItem item: SupplementaryViewItemModeling,
-    with view: UIView,
+    didEndDisplayingSupplementaryItem item: AnySupplementaryItemModel,
+    forElementKind elementKind: String,
+    with view: UIView?,
     in section: SectionModel)
 }

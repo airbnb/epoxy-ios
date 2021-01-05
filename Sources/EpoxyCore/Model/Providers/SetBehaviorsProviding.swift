@@ -1,22 +1,21 @@
 // Created by eric_horacek on 12/2/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
-import EpoxyCore
-
 // MARK: - SetBehaviorsProviding
 
-/// A sentinel protocol for enabling an `EpoxyModeled` to provide a `setBehaviors` closure property.
+/// A sentinel protocol for enabling an `CallbackContextEpoxyModeled` to provide a `setBehaviors`
+/// closure property.
 public protocol SetBehaviorsProviding {}
 
-// MARK: - ContentViewEpoxyModeled
+// MARK: - CallbackContextEpoxyModeled
 
-extension ContentViewEpoxyModeled where Self: SetBehaviorsProviding {
+extension CallbackContextEpoxyModeled where Self: SetBehaviorsProviding {
 
   // MARK: Public
 
   /// A closure that's called to configure this model's view with behaviors (e.g. tap handler
   /// closures) whenever this model is updated.
-  public typealias SetBehaviors = ((ItemContext<View, Content>) -> Void)
+  public typealias SetBehaviors = ((CallbackContext) -> Void)
 
   /// A closure that's called to configure this model's view with behaviors (e.g. tap handler
   /// closures) whenever this model is updated.

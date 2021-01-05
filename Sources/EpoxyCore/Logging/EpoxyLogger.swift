@@ -38,7 +38,7 @@ public final class EpoxyLogger {
     _ line: UInt)
     -> Void
 
-  /// Logs that an warning occurred.
+  /// Logs a warning message.
   public typealias Warn = (
     _ message: @autoclosure () -> String,
     _ fileID: StaticString,

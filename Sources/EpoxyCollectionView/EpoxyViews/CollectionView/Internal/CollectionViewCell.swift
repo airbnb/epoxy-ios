@@ -44,13 +44,14 @@ public final class CollectionViewCell: UICollectionViewCell, EpoxyCell {
     self.view = view
     normalViewBackgroundColor = view.backgroundColor
 
-    contentView.addSubview(view)
-
     view.translatesAutoresizingMaskIntoConstraints = false
-    view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor).isActive = true
-    view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor).isActive = true
-    view.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
-    view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
+    contentView.addSubview(view)
+    NSLayoutConstraint.activate([
+      view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+      view.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+      view.topAnchor.constraint(equalTo: contentView.topAnchor),
+      view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+    ])
   }
 
   override public func preferredLayoutAttributesFitting(

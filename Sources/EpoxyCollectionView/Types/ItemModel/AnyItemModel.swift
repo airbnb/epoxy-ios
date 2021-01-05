@@ -33,47 +33,17 @@ public struct AnyItemModel: EpoxyModeled {
 
 }
 
+// MARK: Providers
+
+extension AnyItemModel: WillDisplayProviding {}
+extension AnyItemModel: DidEndDisplayingProviding {}
+extension AnyItemModel: DidSelectProviding {}
+
 // MARK: ItemModeling
 
 extension AnyItemModel: ItemModeling {
   public func eraseToAnyItemModel() -> AnyItemModel { self }
 }
-
-// MARK: AnyItemModel + DidSelect
-
-extension AnyItemModel {
-
-  // MARK: Public
-
-  /// A closure that's called when the view is selected, if the view is selectable.
-  public typealias DidSelect = ((UIView, EpoxyViewMetadata) -> Void)
-
-  /// A closure that's called when the view is selected, if the view is selectable.
-  public var didSelect: DidSelect? {
-    get { storage[didSelectProperty] }
-    set { storage[didSelectProperty] = newValue }
-  }
-
-  /// Returns a copy of this model with the given did select closure called after the current did
-  /// select closure of this model, if is one.
-  public func didSelect(_ value: DidSelect?) -> Self {
-    copy(updating: didSelectProperty, to: value)
-  }
-
-  // MARK: Private
-
-  private var didSelectProperty: EpoxyModelProperty<DidSelect?> {
-    .init(keyPath: \Self.didSelect, defaultValue: nil, updateStrategy: .chain())
-  }
-}
-
-// MARK: WillDisplayProviding
-
-extension AnyItemModel: WillDisplayProviding {}
-
-// MARK: DidEndDisplaying
-
-extension AnyItemModel: DidEndDisplayingProviding {}
 
 // MARK: InternalItemModeling
 
@@ -105,16 +75,22 @@ extension AnyItemModel: InternalItemModeling {
   public func handleDidSelect(_ cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
     model.handleDidSelect(cell, with: metadata)
     if let view = cell.view {
-      didSelect?(view, metadata)
+      didSelect?(.init(view: view, dataID: dataID, metadata: metadata))
     }
   }
 
-  public func handleWillDisplay() {
-    model.handleWillDisplay()
+  public func handleWillDisplay(_ cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
+    model.handleWillDisplay(cell, with: metadata)
+    if let view = cell.view {
+      willDisplay?(.init(view: view, dataID: dataID, metadata: metadata))
+    }
   }
 
-  public func handleDidEndDisplaying() {
-    model.handleDidEndDisplaying()
+  public func handleDidEndDisplaying(_ cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
+    model.handleDidEndDisplaying(cell, with: metadata)
+    if let view = cell.view {
+      didEndDisplaying?(.init(view: view, dataID: dataID, metadata: metadata))
+    }
   }
 }
 
@@ -134,4 +110,46 @@ extension AnyItemModel: Diffable {
 
     return model.isDiffableItemEqual(to: otherDiffableItem)
   }
+}
+
+// MARK: - CallbackContextEpoxyModeled
+
+extension AnyItemModel: CallbackContextEpoxyModeled {
+
+  /// The context passed to callbacks on an `AnyItemModel`.
+  public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {
+
+    // MARK: Lifecycle
+
+    public init(
+      view: UIView,
+      traitCollection: UITraitCollection,
+      state: EpoxyCellState,
+      dataID: AnyHashable,
+      animated: Bool)
+    {
+      self.view = view
+      self.traitCollection = traitCollection
+      self.state = state
+      self.dataID = dataID
+      self.animated = animated
+    }
+
+    public init(view: UIView, dataID: AnyHashable, metadata: EpoxyViewMetadata) {
+      self.view = view
+      self.traitCollection = metadata.traitCollection
+      self.state = metadata.state
+      self.dataID = dataID
+      self.animated = metadata.animated
+    }
+
+    // MARK: Public
+
+    public var dataID: AnyHashable
+    public var view: UIView
+    public var traitCollection: UITraitCollection
+    public var state: EpoxyCellState
+    public var animated: Bool
+  }
+
 }

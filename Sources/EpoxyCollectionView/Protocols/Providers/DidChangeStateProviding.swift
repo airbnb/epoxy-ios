@@ -6,18 +6,18 @@ import UIKit
 
 // MARK: - DidChangeStateProviding
 
-/// A sentinel protocol for enabling a `EpoxyModeled` to provide a `didChangeState` closure
-/// property.
+/// A sentinel protocol for enabling a `CallbackContextEpoxyModeled` to provide a `didChangeState`
+/// closure property.
 public protocol DidChangeStateProviding {}
 
-// MARK: - ContentViewEpoxyModeled
+// MARK: - CallbackContextEpoxyModeled
 
-extension ContentViewEpoxyModeled where Self: DidChangeStateProviding {
+extension CallbackContextEpoxyModeled where Self: DidChangeStateProviding {
 
   // MARK: Public
 
   /// A closure that's called to configure the state of this model's view when it changes.
-  public typealias DidChangeState = (ItemContext<View, Content>) -> Void
+  public typealias DidChangeState = (CallbackContext) -> Void
 
   /// A closure that's called to configure the state of this model's view when it changes.
   public var didChangeState: DidChangeState? {

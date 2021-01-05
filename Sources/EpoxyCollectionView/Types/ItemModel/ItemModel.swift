@@ -30,7 +30,7 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
   public init(
     dataID: AnyHashable,
     content: Content,
-    configureView: ((ItemContext<View, Content>) -> Void)? = nil)
+    configureView: ((CallbackContext) -> Void)? = nil)
   {
     self.dataID = dataID
     self.content = content
@@ -41,22 +41,46 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
 
   public var storage = EpoxyModelStorage()
 
+  // MARK: Private
+
+  private func viewForCell(_ cell: ItemWrapperView) -> View {
+    guard let cellView = cell.view else {
+      let view = makeView()
+      cell.setViewIfNeeded(view: view)
+      return view
+    }
+
+    let view: View
+    if let cellView = cellView as? View {
+      view = cellView
+    } else {
+      EpoxyLogger.shared.assertionFailure(
+        """
+        Overriding existing view \(cellView) on cell \(cell), which is not of expected type \
+        \(View.self). This is programmer error.
+        """)
+      view = makeView()
+    }
+    cell.setViewIfNeeded(view: view)
+    return view
+  }
+
 }
 
 // MARK: Providers
 
-extension ItemModel: DataIDProviding {}
 extension ItemModel: AlternateStyleIDProviding {}
-extension ItemModel: DidChangeStateProviding {}
-extension ItemModel: MakeViewProviding {}
 extension ItemModel: ConfigureViewProviding {}
-extension ItemModel: SetBehaviorsProviding {}
-extension ItemModel: DidSelectProviding {}
-extension ItemModel: SelectionStyleProviding {}
 extension ItemModel: ContentProviding {}
+extension ItemModel: DataIDProviding {}
+extension ItemModel: DidChangeStateProviding {}
 extension ItemModel: DidEndDisplayingProviding {}
-extension ItemModel: WillDisplayProviding {}
+extension ItemModel: DidSelectProviding {}
 extension ItemModel: IsMovableProviding {}
+extension ItemModel: MakeViewProviding {}
+extension ItemModel: SelectionStyleProviding {}
+extension ItemModel: SetBehaviorsProviding {}
+extension ItemModel: WillDisplayProviding {}
 
 // MARK: ItemModeling
 
@@ -79,43 +103,36 @@ extension ItemModel: InternalItemModeling {
     didSelect != nil
   }
 
-  public func handleWillDisplay() {
-    willDisplay?()
+  public func handleWillDisplay(_ cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
+    willDisplay?(.init(view: viewForCell(cell), content: content, dataID: dataID, metadata: metadata))
   }
 
-  public func handleDidEndDisplaying() {
-    didEndDisplaying?()
+  public func handleDidEndDisplaying(_ cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
+    didEndDisplaying?(.init(view: viewForCell(cell), content: content, dataID: dataID, metadata: metadata))
   }
 
   public func configure(cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
-    let view = cell.view as? View ?? makeView()
-    cell.setViewIfNeeded(view: view)
+    // Even if there's no `configureView` closure, we need to make sure to call `viewForCell` to
+    // ensure that the cell is set up.
+    let view = viewForCell(cell)
     configureView?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
   }
 
   public func configureStateChange(in cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
-    let view = cell.view as? View ?? makeView()
-    cell.setViewIfNeeded(view: view)
-    didChangeState?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
+    didChangeState?(.init(view: viewForCell(cell), content: content, dataID: dataID, metadata: metadata))
   }
 
   public func setBehavior(cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
-    let view = cell.view as? View ?? makeView()
-    cell.setViewIfNeeded(view: view)
-    setBehaviors?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
+    setBehaviors?(.init(view: viewForCell(cell), content: content, dataID: dataID, metadata: metadata))
   }
 
   public func handleDidSelect(_ cell: ItemWrapperView, with metadata: EpoxyViewMetadata) {
-    guard let view = cell.view as? View else {
-      EpoxyLogger.shared.assertionFailure("The selected view is not the expected type.")
-      return
-    }
-    didSelect?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
+    didSelect?(.init(view: viewForCell(cell), content: content, dataID: dataID, metadata: metadata))
   }
 
   public func configuredView(traitCollection: UITraitCollection) -> UIView {
     let view = makeView()
-    let context = ItemContext(
+    let context = CallbackContext(
       view: view,
       content: content,
       dataID: dataID,
@@ -132,9 +149,61 @@ extension ItemModel: InternalItemModeling {
 
 extension ItemModel: Diffable {
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let other = otherDiffableItem as? ItemModel<View, Content> else {
+    guard let other = otherDiffableItem as? Self else {
       return false
     }
     return content == other.content
   }
+}
+
+// MARK: CallbackContextEpoxyModeled
+
+extension ItemModel: CallbackContextEpoxyModeled {
+
+  /// The context passed to callbacks on an `ItemModel`.
+  public struct CallbackContext: ViewProviding, ContentProviding, TraitCollectionProviding, AnimatedProviding {
+
+    // MARK: Lifecycle
+
+    public init(
+      view: View,
+      content: Content,
+      dataID: AnyHashable,
+      traitCollection: UITraitCollection,
+      cellState: EpoxyCellState,
+      animated: Bool)
+    {
+      self.view = view
+      self.content = content
+      self.dataID = dataID
+      self.traitCollection = traitCollection
+      self.cellState = cellState
+      self.animated = animated
+    }
+
+    public init(
+      view: View,
+      content: Content,
+      dataID: AnyHashable,
+      metadata: EpoxyViewMetadata)
+    {
+      self.init(
+        view: view,
+        content: content,
+        dataID: dataID,
+        traitCollection: metadata.traitCollection,
+        cellState: metadata.state,
+        animated: metadata.animated)
+    }
+
+    // MARK: Public
+
+    public var view: View
+    public var content: Content
+    public var dataID: AnyHashable
+    public var traitCollection: UITraitCollection
+    public var cellState: EpoxyCellState
+    public var animated: Bool
+  }
+
 }

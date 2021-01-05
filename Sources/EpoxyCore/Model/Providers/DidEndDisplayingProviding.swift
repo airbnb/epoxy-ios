@@ -1,23 +1,20 @@
-// Created by eric_horacek on 12/2/20.
+// Created by eric_horacek on 12/15/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
-
-import EpoxyCore
 
 // MARK: - DidEndDisplayingProviding
 
-public protocol DidEndDisplayingProviding {
-  /// A closure that's called when a view is no longer displayed.
-  typealias DidEndDisplaying = (() -> Void)
+/// A sentinel protocol for enabling an `CallbackContextEpoxyModeled` to provide a
+/// `didEndDisplaying` closure property.
+public protocol DidEndDisplayingProviding {}
 
-  /// A closure that's called when a view is no longer displayed.
-  var didEndDisplaying: DidEndDisplaying? {  get }
-}
+// MARK: - CallbackContextEpoxyModeled
 
-// MARK: - EpoxyModeled
-
-extension EpoxyModeled where Self: DidEndDisplayingProviding {
+extension CallbackContextEpoxyModeled where Self: DidEndDisplayingProviding {
 
   // MARK: Public
+
+  /// A closure that's called when a view is no longer displayed.
+  public typealias DidEndDisplaying = ((_ context: CallbackContext) -> Void)
 
   /// A closure that's called when a view is no longer displayed.
   public var didEndDisplaying: DidEndDisplaying? {
@@ -33,7 +30,7 @@ extension EpoxyModeled where Self: DidEndDisplayingProviding {
 
   private var didEndDisplayingProperty: EpoxyModelProperty<DidEndDisplaying?> {
     .init(
-      keyPath: \DidEndDisplayingProviding.didEndDisplaying,
+      keyPath: \Self.didEndDisplaying,
       defaultValue: nil,
       updateStrategy: .chain())
   }

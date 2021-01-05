@@ -28,13 +28,12 @@ public final class CollectionViewReusableView: UICollectionReusableView {
     }
     view.translatesAutoresizingMaskIntoConstraints = false
     addSubview(view)
-    let constraints = [
+    NSLayoutConstraint.activate([
       view.leadingAnchor.constraint(equalTo: leadingAnchor),
       view.trailingAnchor.constraint(equalTo: trailingAnchor),
       view.topAnchor.constraint(equalTo: topAnchor),
       view.bottomAnchor.constraint(equalTo: bottomAnchor),
-    ]
-    NSLayoutConstraint.activate(constraints)
+    ])
     self.view = view
   }
 

@@ -8,7 +8,7 @@ import EpoxyCore
 public protocol SupplementaryItemsProviding {
   /// The supplementary items with in a collection view, with a key of the element kind and a value
   /// of the models of that specific kind.
-  typealias SupplementaryItems = [String: [SupplementaryViewItemModeling]]
+  typealias SupplementaryItems = [String: [SupplementaryItemModeling]]
 
   /// The supplementary items with in a collection view.
   var supplementaryItems: SupplementaryItems { get }
@@ -29,6 +29,18 @@ extension EpoxyModeled where Self: SupplementaryItemsProviding {
   /// provided `value`.
   public func supplementaryItems(_ value: SupplementaryItems) -> Self {
     copy(updating: supplementaryItemsProperty, to: value)
+  }
+
+  /// Returns a copy of this model with the `supplementaryItems` of the given `elementKind` replaced
+  /// with the provided `value`.
+  public func supplementaryItems(
+    ofKind elementKind: String,
+    _ value: [SupplementaryItemModeling]?)
+    -> Self
+  {
+    var copy = self
+    copy.supplementaryItems[elementKind] = value
+    return copy
   }
 
   // MARK: Private

@@ -1,23 +1,20 @@
-// Created by eric_horacek on 12/2/20.
+// Created by eric_horacek on 12/15/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
-
-import EpoxyCore
 
 // MARK: - WillDisplayProviding
 
-public protocol WillDisplayProviding {
-  /// A closure that's called when a view is about to be displayed.
-  typealias WillDisplay = (() -> Void)
+/// A sentinel protocol for enabling an `CallbackContextEpoxyModeled` to provide a `willDisplay`
+/// closure property.
+public protocol WillDisplayProviding {}
 
-  /// A closure that's called when a view is about to be displayed
-  var willDisplay: WillDisplay? {  get }
-}
+// MARK: - CallbackContextEpoxyModeled
 
-// MARK: - ContentViewEpoxyModeled
-
-extension EpoxyModeled where Self: WillDisplayProviding {
+extension CallbackContextEpoxyModeled where Self: WillDisplayProviding {
 
   // MARK: Public
+
+  /// A closure that's called when a view is about to be displayed.
+  public typealias WillDisplay = ((_ context: CallbackContext) -> Void)
 
   /// A closure that's called when the view is about to be displayed.
   public var willDisplay: WillDisplay? {
@@ -34,6 +31,6 @@ extension EpoxyModeled where Self: WillDisplayProviding {
   // MARK: Private
 
   private var willDisplayProperty: EpoxyModelProperty<WillDisplay?> {
-    .init(keyPath: \WillDisplayProviding.willDisplay, defaultValue: nil, updateStrategy: .chain())
+    .init(keyPath: \Self.willDisplay, defaultValue: nil, updateStrategy: .chain())
   }
 }

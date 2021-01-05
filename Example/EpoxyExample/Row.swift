@@ -72,6 +72,11 @@ public final class Row: UIView {
   }
 }
 
+struct RowContent: Equatable {
+  var title: String?
+  var subtitle: String?
+}
+
 extension Row: Selectable {
   public func didSelect() {
     print("Firing haptic feedback!")

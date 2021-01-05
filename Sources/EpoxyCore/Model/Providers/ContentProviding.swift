@@ -1,7 +1,7 @@
 // Created by eric_horacek on 12/2/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
-// MARK: - DidChangeStateProviding
+// MARK: - ContentProviding
 
 /// The capability of providing an `Equatable` content instance.
 public protocol ContentProviding {

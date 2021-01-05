@@ -43,10 +43,10 @@ public protocol InternalItemModeling: ItemModeling,
   func handleDidSelect(_ cell: ItemWrapperView, with metadata: EpoxyViewMetadata)
 
   /// Informs consumers that this item is about to be displayed.
-  func handleWillDisplay()
+  func handleWillDisplay(_ cell: ItemWrapperView, with metadata: EpoxyViewMetadata)
 
   /// Informs consumers that this item is no longer displayed.
-  func handleDidEndDisplaying()
+  func handleDidEndDisplaying(_ cell: ItemWrapperView, with metadata: EpoxyViewMetadata)
 
   /// Whether the cell should be selectable.
   var isSelectable: Bool { get }
