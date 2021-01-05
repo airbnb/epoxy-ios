@@ -7,14 +7,14 @@ public struct VisibleItemMetadata {
 
   // MARK: Lifecycle
 
-  public init(model: ItemModeling, view: UIView? = nil) {
+  public init(model: AnyItemModel, view: UIView? = nil) {
     self.model = model
     self.view = view
   }
 
   // MARK: Public
 
-  public let model: ItemModeling
+  public let model: AnyItemModel
   public private(set) weak var view: UIView?
 
 }

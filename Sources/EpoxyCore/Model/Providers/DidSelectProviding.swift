@@ -1,21 +1,20 @@
 // Created by eric_horacek on 12/2/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
-import EpoxyCore
-
 // MARK: - DidSelectProviding
 
-/// A sentinel protocol for enabling an `EpoxyModeled` to provide a `didSelect` closure property.
+/// A sentinel protocol for enabling an `CallbackContextEpoxyModeled` to provide a `didSelect`
+/// closure property.
 public protocol DidSelectProviding {}
 
-// MARK: - ContentViewEpoxyModeled
+// MARK: - CallbackContextEpoxyModeled
 
-extension ContentViewEpoxyModeled where Self: DidSelectProviding {
+extension CallbackContextEpoxyModeled where Self: DidSelectProviding {
 
   // MARK: Public
 
   /// A closure that's called to handle this model's view being selected.
-  public typealias DidSelect = ((ItemContext<View, Content>) -> Void)
+  public typealias DidSelect = ((CallbackContext) -> Void)
 
   /// A closure that's called to handle this model's view being selected.
   public var didSelect: DidSelect? {

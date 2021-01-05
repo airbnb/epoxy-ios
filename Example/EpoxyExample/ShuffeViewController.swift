@@ -40,23 +40,30 @@ class ShuffleViewController: EpoxyCollectionViewController {
   // MARK: EpoxyCollectionViewController
 
   override func epoxySections() -> [SectionModel] {
-    let items = (0..<10)
-      .shuffled()
-      .filter { _ in Int.random(in: 0..<3) % 3 != 0 }
-      .map { dataID -> ItemModeling in
-        let text = kTestTexts[dataID]
-        return ItemModel<Row, String>(
-          dataID: dataID,
-          content: text)
-          .configureView { context in
-            context.view.titleText = "Row \(dataID)"
-            context.view.text = text
-          }
-          .didSelect { context in
-            print("DataID selected \(context.dataID) (selection handler)")
-          }
-      }
-
-    return [SectionModel(items: items)]
+    [
+      SectionModel(
+        items: (0..<10).shuffled().filter { _ in Int.random(in: 0..<3) % 3 != 0 }
+          .map { dataID in
+            ItemModel<Row, RowContent>(
+              dataID: dataID,
+              content: .init(
+                title: "Row \(dataID)",
+                subtitle: kTestTexts[dataID]))
+              .configureView { context in
+                context.view.titleText = context.content.title
+                context.view.text = context.content.subtitle
+              }
+              .didSelect { context in
+                print("DataID selected \(context.dataID) (selection handler)")
+              }
+          })
+        .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
+          SupplementaryItemModel<Row, String>(dataID: 0, content: "Section 0")
+            .configureView { context in
+              context.view.titleText = context.content
+            }
+        ])
+    ]
   }
+
 }

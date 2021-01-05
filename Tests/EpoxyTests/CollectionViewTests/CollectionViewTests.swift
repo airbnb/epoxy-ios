@@ -11,18 +11,20 @@ class CollectionViewTests: XCTestCase {
   var collectionView: CollectionView!
 
   struct Flag {
-    var itemModel = false
-    var anyItemModel = false
+    var model = false
+    var anyModel = false
 
     var bothCalled: Bool {
-      itemModel && anyItemModel
+      model && anyModel
     }
   }
 
   // state flags
-  var willDisplayBlockCalled = Flag()
-  var didEndDisplayingBlockCalled = Flag()
-  var didSelectBlockCalled = Flag()
+  var itemWillDisplayBlockCalled = Flag()
+  var itemDidEndDisplayingBlockCalled = Flag()
+  var itemDidSelectBlockCalled = Flag()
+  var supplementaryItemWillDisplayBlockCalled = Flag()
+  var supplementaryItemDidEndDisplayingBlockCalled = Flag()
 
   override func setUp() {
     let layout = UICollectionViewFlowLayout()
@@ -30,63 +32,103 @@ class CollectionViewTests: XCTestCase {
     collectionView = CollectionView(collectionViewLayout: layout)
     collectionView.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
 
-    let model = ItemModel(dataID: "dataID", content: "")
+    let item = ItemModel(dataID: "dataID", content: "")
       .configureView { context in
         context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
         context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true
       }
       .didSelect { [weak self] _ in
-        self?.didSelectBlockCalled.itemModel = true
+        self?.itemDidSelectBlockCalled.model = true
       }
-      .willDisplay { [weak self] in
-        self?.willDisplayBlockCalled.itemModel = true
+      .willDisplay { [weak self] _ in
+        self?.itemWillDisplayBlockCalled.model = true
       }
-      .didEndDisplaying { [weak self] in
-        self?.didEndDisplayingBlockCalled.itemModel = true
+      .didEndDisplaying { [weak self] _ in
+        self?.itemDidEndDisplayingBlockCalled.model = true
       }
       .eraseToAnyItemModel()
-      .didSelect { [weak self] _, _ in
-        self?.didSelectBlockCalled.anyItemModel = true
+      .didSelect { [weak self] _ in
+        self?.itemDidSelectBlockCalled.anyModel = true
       }
-      .willDisplay { [weak self] in
-        self?.willDisplayBlockCalled.anyItemModel = true
+      .willDisplay { [weak self] _ in
+        self?.itemWillDisplayBlockCalled.anyModel = true
       }
-      .didEndDisplaying { [weak self] in
-        self?.didEndDisplayingBlockCalled.anyItemModel = true
+      .didEndDisplaying { [weak self] _ in
+        self?.itemDidEndDisplayingBlockCalled.anyModel = true
       }
 
-    collectionView.setSections([SectionModel(items: [model])], animated: false)
+    let supplementaryItem = SupplementaryItemModel(dataID: "dataID", content: "")
+      .configureView { context in
+        context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true
+      }
+      .willDisplay { [weak self] _ in
+        self?.supplementaryItemWillDisplayBlockCalled.model = true
+      }
+      .didEndDisplaying { [weak self] _ in
+        self?.supplementaryItemDidEndDisplayingBlockCalled.model = true
+      }
+      .eraseToAnySupplementaryItemModel()
+      .willDisplay { [weak self] _ in
+        self?.supplementaryItemWillDisplayBlockCalled.anyModel = true
+      }
+      .didEndDisplaying { [weak self] _ in
+        self?.supplementaryItemDidEndDisplayingBlockCalled.anyModel = true
+      }
+
+    let section = SectionModel(items: [item])
+      .supplementaryItems([UICollectionView.elementKindSectionHeader: [supplementaryItem]])
+
+    collectionView.setSections([section], animated: false)
     collectionView.collectionViewLayout.invalidateLayout()
     collectionView.layoutIfNeeded()
   }
 
   override func tearDown() {
-    willDisplayBlockCalled = .init()
-    didEndDisplayingBlockCalled = .init()
-    didSelectBlockCalled = .init()
+    itemWillDisplayBlockCalled = .init()
+    itemDidEndDisplayingBlockCalled = .init()
+    itemDidSelectBlockCalled = .init()
   }
 
-  func testWillDisplayBlocksAreCalledWhenTheCellAppears() {
+  func testItemWillDisplayBlocksAreCalledWhenTheCellAppears() {
     collectionView.delegate?.collectionView?(
       collectionView,
       willDisplay: CollectionViewCell(),
       forItemAt: IndexPath(item: 0, section: 0))
-    XCTAssertTrue(willDisplayBlockCalled.bothCalled)
+    XCTAssertTrue(itemWillDisplayBlockCalled.bothCalled)
   }
 
-  func testDidEndDisplayingBlocksAreCalledWhenTheCellDisappears() {
+  func testItemDidEndDisplayingBlocksAreCalledWhenTheCellDisappears() {
     collectionView.delegate?.collectionView?(
       collectionView,
       didEndDisplaying: CollectionViewCell(),
       forItemAt: IndexPath(item: 0, section: 0))
-    XCTAssertTrue(didEndDisplayingBlockCalled.bothCalled)
+    XCTAssertTrue(itemDidEndDisplayingBlockCalled.bothCalled)
   }
 
-  func testDidSelectBlocksAreCalledWhenTheCellIsSelected() {
+  func testItemDidSelectBlocksAreCalledWhenTheCellIsSelected() {
     collectionView.delegate?.collectionView?(
       collectionView,
       didSelectItemAt: IndexPath(item: 0, section: 0))
-    XCTAssertTrue(didSelectBlockCalled.bothCalled)
+    XCTAssertTrue(itemDidSelectBlockCalled.bothCalled)
+  }
+
+  func testSupplementaryItemWillDisplayBlocksAreCalledWhenTheReusableViewAppears() {
+    collectionView.delegate?.collectionView?(
+      collectionView,
+      willDisplaySupplementaryView: CollectionViewReusableView(),
+      forElementKind: UICollectionView.elementKindSectionHeader,
+      at: IndexPath(item: 0, section: 0))
+    XCTAssertTrue(supplementaryItemWillDisplayBlockCalled.bothCalled)
+  }
+
+  func testSupplementaryItemDidEndDisplayingBlocksAreCalledWhenReusableViewCellDisappears() {
+    collectionView.delegate?.collectionView?(
+      collectionView,
+      didEndDisplayingSupplementaryView: CollectionViewReusableView(),
+      forElementOfKind: UICollectionView.elementKindSectionHeader,
+      at: IndexPath(item: 0, section: 0))
+    XCTAssertTrue(supplementaryItemDidEndDisplayingBlockCalled.bothCalled)
   }
 
 }

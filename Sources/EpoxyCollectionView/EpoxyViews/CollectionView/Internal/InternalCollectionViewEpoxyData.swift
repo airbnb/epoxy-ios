@@ -44,12 +44,115 @@ struct InternalCollectionViewEpoxyData {
     return .init(sections: sections, sectionIndexMap: sectionIndexMap, itemIndexMap: itemIndexMap)
   }
 
-  func makeChangeset(from otherData: Self) -> SectionedChangeset {
-    let changeset = sections.makeSectionedChangeset(from: otherData.sections)
+  func makeChangeset(from otherData: Self) -> CollectionViewChangeset {
+    let section = sections.makeSectionedChangeset(from: otherData.sections)
+
+    let supplementaryItem = supplementaryItemChangeset(
+      from: otherData,
+      sectionChangeset: section.sectionChangeset)
+
+    let changeset = CollectionViewChangeset(
+      sectionChangeset: section.sectionChangeset,
+      itemChangeset: section.itemChangeset,
+      supplementaryItemChangeset: supplementaryItem)
 
     warnOnDuplicates(in: changeset)
 
     return changeset
+  }
+
+  /// Returns the erased item model at the given index path, asserting if it does not exist.
+  func item(at indexPath: IndexPath) -> AnyItemModel? {
+    guard indexPath.section < sections.count else {
+      return nil
+    }
+
+    let section = sections[indexPath.section]
+
+    guard indexPath.row < section.items.count else {
+      EpoxyLogger.shared.assertionFailure(
+        """
+        Item index \(indexPath.section) is out of bounds \(section.items.count). Make sure your \
+        section models and item models all have unique dataIDs.
+        """)
+      return nil
+    }
+
+    return section.items[indexPath.row].eraseToAnyItemModel()
+  }
+
+  /// Returns the erased item model at the given index path, otherwise `nil` if it does not exist.
+  func itemIfPresent(at indexPath: IndexPath) -> AnyItemModel? {
+    guard indexPath.section < sections.count else { return nil }
+
+    let section = sections[indexPath.section]
+    guard indexPath.row < section.items.count else { return nil }
+
+    return section.items[indexPath.row].eraseToAnyItemModel()
+  }
+
+  /// Returns the section model at the given index, asserting if it does not exist.
+  func section(at index: Int) -> SectionModel? {
+    guard index < sections.count else {
+      EpoxyLogger.shared.assertionFailure(
+        """
+        Section index \(index) is out of bounds \(sections.count). Make sure your section models \
+        and item models all have unique dataIDs.
+        """)
+      return nil
+    }
+
+    return sections[index]
+  }
+
+  /// Returns the section model at the given index, otherwise `nil` if it does not exist.
+  func sectionIfPresent(at index: Int) -> SectionModel? {
+    guard index < sections.count else { return nil }
+
+    return sections[index]
+  }
+
+  /// Returns the supplementary item model of the provided kind at the given index, otherwise `nil`
+  /// if it does not exist.
+  func supplementaryItemIfPresent(
+    ofKind elementKind: String,
+    at indexPath: IndexPath)
+    -> AnySupplementaryItemModel?
+  {
+    guard indexPath.section < sections.count else { return nil }
+
+    let section = sections[indexPath.section]
+
+    guard let models = section.supplementaryItems[elementKind] else { return nil }
+    guard indexPath.item < models.count else { return nil }
+
+    return models[indexPath.item].eraseToAnySupplementaryItemModel()
+  }
+
+  /// Returns the supplementary item model of the provided kind at the given index, asserting if it
+  /// does not exist.
+  func supplementaryItem(
+    ofKind elementKind: String,
+    at indexPath: IndexPath)
+    -> AnySupplementaryItemModel?
+  {
+    guard indexPath.section < sections.count else {
+      EpoxyLogger.shared.assertionFailure("Index of supplementary view is out of bounds.")
+      return nil
+    }
+
+    let section = sections[indexPath.section]
+
+    guard let model = section.supplementaryItems[elementKind]?[indexPath.item] else {
+      EpoxyLogger.shared.assertionFailure(
+        """
+        Supplementary item model not found for the given element kind \(elementKind) and index \
+        path \(indexPath).
+        """)
+      return nil
+    }
+
+    return model.eraseToAnySupplementaryItemModel()
   }
 
   /// Returns the `IndexPath` corresponding to the given `ItemPath`, logging a warning if the
@@ -151,11 +254,44 @@ struct InternalCollectionViewEpoxyData {
   private let sectionIndexMap: SectionIndexMap
   private let itemIndexMap: ItemIndexMap
 
+  private func supplementaryItemChangeset(
+    from otherData: Self,
+    sectionChangeset: IndexSetChangeset)
+    -> [String: IndexPathChangeset]
+  {
+    var supplementaryItem = [String: IndexPathChangeset]()
+
+    for fromSectionIndex in otherData.sections.indices {
+      guard let toSectionIndex = sectionChangeset.newIndices[fromSectionIndex] else {
+        continue
+      }
+
+      let fromSupplementaryItems = otherData.sections[fromSectionIndex].supplementaryItems
+        .mapValues { $0.map { $0.eraseToAnySupplementaryItemModel() } }
+      let toSupplementaryItems = sections[toSectionIndex].supplementaryItems
+        .mapValues { $0.map { $0.eraseToAnySupplementaryItemModel() } }
+
+      for (elementKind, toSupplementaryItems) in toSupplementaryItems {
+        let fromSupplementaryItems = fromSupplementaryItems[elementKind, default: []]
+
+        let itemIndexChangeset = toSupplementaryItems.makeIndexPathChangeset(
+          from: fromSupplementaryItems,
+          fromSection: fromSectionIndex,
+          toSection: toSectionIndex)
+
+        supplementaryItem[elementKind, default: .init()] += itemIndexChangeset
+      }
+    }
+
+    return supplementaryItem
+  }
+
   /// Outputs a warning for the given `changeset` if it contains duplicate IDs.
-  private func warnOnDuplicates(in changeset: SectionedChangeset) {
+  private func warnOnDuplicates(in changeset: CollectionViewChangeset) {
     let sectionDuplicates = !changeset.sectionChangeset.duplicates.isEmpty
     let itemDuplicates = !changeset.itemChangeset.duplicates.isEmpty
-    guard sectionDuplicates || itemDuplicates else { return }
+    let supplementaryItemDuplicates = !changeset.supplementaryItemChangeset.allSatisfy { $0.value.duplicates.isEmpty }
+    guard sectionDuplicates || itemDuplicates || supplementaryItemDuplicates else { return }
 
     EpoxyLogger.shared.warn({
       var message: [String] = [
@@ -189,6 +325,28 @@ struct InternalCollectionViewEpoxyData {
               - In section with ID \(duplicateSectionID) at index \(firstIndex.section) item \
             with ID \(duplicateItemID) duplicated at indexes \(duplicateIndexes.map { $0.item })
             """)
+        }
+      }
+
+      if supplementaryItemDuplicates {
+        message.append("- Duplicate supplementary item IDs:")
+        for (elementKind, changeset) in changeset.supplementaryItemChangeset {
+          for duplicateIndexes in changeset.duplicates {
+            // Subscripting is safe here since `duplicateIndexes` is never empty.
+            let firstIndex = duplicateIndexes[0]
+            let duplicateSection = sections[firstIndex.section]
+            let duplicateSectionID = duplicateSection.dataID
+            let duplicateItemID = duplicateSection
+              .supplementaryItems[elementKind, default: []][firstIndex.item]
+              .eraseToAnySupplementaryItemModel()
+              .dataID
+            message.append(
+              """
+                - In section with ID \(duplicateSectionID) at index \(firstIndex.section) \
+              supplementary item of kind \(elementKind) with ID \(duplicateItemID) duplicated at \
+              indexes \(duplicateIndexes.map { $0.item })
+              """)
+          }
         }
       }
 

@@ -9,7 +9,7 @@ extension SectionModel {
   /// Gets the cell reuse IDs from the given external sections
   public func getCellReuseIDs() -> Set<String> {
     var newCellReuseIDs = Set<String>()
-    items.forEach { item in
+    for item in items {
       newCellReuseIDs.insert(item.reuseID)
     }
     return newCellReuseIDs
@@ -19,10 +19,11 @@ extension SectionModel {
   public func getSupplementaryViewReuseIDs() -> [String: Set<String>] {
     var newSupplementaryViewReuseIDs = [String: Set<String>]()
 
-    supplementaryItems.forEach { elementKind, elementSupplementaryModels in
+    for (elementKind, elementSupplementaryModels) in supplementaryItems {
       var newElementSupplementaryViewReuseIDs = Set<String>()
-      elementSupplementaryModels.forEach { elementSupplementaryModel in
-        newElementSupplementaryViewReuseIDs.insert(elementSupplementaryModel.reuseID)
+      for elementSupplementaryModel in elementSupplementaryModels {
+        let reuseID = elementSupplementaryModel.eraseToAnySupplementaryItemModel().reuseID
+        newElementSupplementaryViewReuseIDs.insert(reuseID)
       }
       newSupplementaryViewReuseIDs[elementKind] = newElementSupplementaryViewReuseIDs
     }
@@ -46,7 +47,7 @@ extension Array where Element == SectionModel {
     var newReuseIDs = [String: Set<String>]()
     forEach { section in
       let sectionReuseIDs = section.getSupplementaryViewReuseIDs()
-      sectionReuseIDs.forEach { elementKind, reuseIDs in
+      for (elementKind, reuseIDs) in sectionReuseIDs {
         let existingSet = newReuseIDs[elementKind] ?? Set<String>()
         newReuseIDs[elementKind] = existingSet.union(reuseIDs)
       }

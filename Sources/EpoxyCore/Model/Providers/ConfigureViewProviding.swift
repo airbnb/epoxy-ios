@@ -1,23 +1,21 @@
 // Created by eric_horacek on 12/1/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
-import EpoxyCore
-
 // MARK: - ConfigureViewProviding
 
-/// A sentinel protocol for enabling an `EpoxyModeled` to provide a `configureView` closure
-/// property.
+/// A sentinel protocol for enabling an `CallbackContextEpoxyModeled` to provide a `configureView`
+/// closure property.
 public protocol ConfigureViewProviding {}
 
-// MARK: - ContentViewEpoxyModeled
+// MARK: - CallbackContextEpoxyModeled
 
-extension ContentViewEpoxyModeled where Self: ConfigureViewProviding {
+extension CallbackContextEpoxyModeled where Self: ConfigureViewProviding {
 
   // MARK: Public
 
   /// A closure that's called to configure this model's view when it is first created and
   /// subsequently when the content changes.
-  public typealias ConfigureView = (ItemContext<View, Content>) -> Void
+  public typealias ConfigureView = (CallbackContext) -> Void
 
   /// A closure that's called to configure this model's view when it is first created and
   /// subsequently when the content changes.
