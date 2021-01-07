@@ -25,7 +25,7 @@ extension CallbackContextEpoxyModeled where Self: ConfigureViewProviding {
   }
 
   /// Returns a copy of this model with the given configure view closure called after the current
-  /// configure view closure of this model, if is one.
+  /// configure view closure of this model, if there is one.
   public func configureView(_ value: ConfigureView?) -> Self {
     copy(updating: configureViewProperty, to: value)
   }

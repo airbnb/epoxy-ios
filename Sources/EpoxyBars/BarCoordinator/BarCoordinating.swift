@@ -77,7 +77,7 @@ final class DefaultBarCoordinator<BarModel: BarModeling>: BarCoordinating {
 
   // MARK: Lifecycle
 
-  init(update: @escaping (_ animated: Bool) -> Void) {}
+  init() {}
 
   // MARK: Internal
 

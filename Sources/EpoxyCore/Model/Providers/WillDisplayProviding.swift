@@ -5,6 +5,9 @@
 
 /// A sentinel protocol for enabling an `CallbackContextEpoxyModeled` to provide a `willDisplay`
 /// closure property.
+///
+/// - SeeAlso: `DidDisplayProviding`
+/// - SeeAlso: `DidEndDisplayingProviding`
 public protocol WillDisplayProviding {}
 
 // MARK: - CallbackContextEpoxyModeled
@@ -13,17 +16,19 @@ extension CallbackContextEpoxyModeled where Self: WillDisplayProviding {
 
   // MARK: Public
 
-  /// A closure that's called when a view is about to be displayed.
+  /// A closure that's called when a view is about to be displayed, before it has been added to the
+  /// view hierarcy.
   public typealias WillDisplay = ((_ context: CallbackContext) -> Void)
 
-  /// A closure that's called when the view is about to be displayed.
+  /// A closure that's called when the view is about to be displayed, before it has been added to
+  /// the view hierarcy.
   public var willDisplay: WillDisplay? {
     get { self[willDisplayProperty] }
     set { self[willDisplayProperty] = newValue }
   }
 
   /// Returns a copy of this model with the given will display closure called after the current will
-  /// display closure of this model, if is one.
+  /// display closure of this model, if there is one.
   public func willDisplay(_ value: WillDisplay?) -> Self {
     copy(updating: willDisplayProperty, to: value)
   }

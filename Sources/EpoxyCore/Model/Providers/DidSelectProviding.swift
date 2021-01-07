@@ -23,7 +23,7 @@ extension CallbackContextEpoxyModeled where Self: DidSelectProviding {
   }
 
   /// Returns a copy of this model with the given did select closure called after the current did
-  /// select closure of this model, if is one.
+  /// select closure of this model, if there is one.
   public func didSelect(_ value: DidSelect?) -> Self {
     copy(updating: didSelectProperty, to: value)
   }

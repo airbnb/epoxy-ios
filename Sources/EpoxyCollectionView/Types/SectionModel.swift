@@ -9,13 +9,11 @@ public struct SectionModel: EpoxyModeled {
 
   // MARK: Lifecycle
 
-  public init(dataID: AnyHashable, items: [ItemModeling]) {
+  public init(dataID: AnyHashable? = nil, items: [ItemModeling]) {
+    if let dataID = dataID {
+      self.dataID = dataID
+    }
     self.items = items
-    self.dataID = dataID
-  }
-
-  public init(items: [ItemModeling]) {
-    self.init(dataID: "", items: items)
   }
 
   // MARK: Public
@@ -33,12 +31,14 @@ extension SectionModel: DataIDProviding {}
 
 extension SectionModel: Diffable {
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let otherDiffableSection = otherDiffableItem as? SectionModel else { return false }
+    guard let otherDiffableSection = otherDiffableItem as? Self else { return false }
+
+    // Sections don't have a concept of diffable content, so just compare the data IDs.
     return dataID == otherDiffableSection.dataID
   }
 
   public var diffIdentifier: AnyHashable {
-    return dataID
+    dataID
   }
 }
 

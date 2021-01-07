@@ -193,10 +193,11 @@ public class BarStackView: UIStackView {
     animated: Bool)
     -> (added: [BarWrapperView], removed: [BarWrapperView])
   {
-    let newModels = models.map { $0.barModel }
+    let newModels = models.map { $0.eraseToAnyBarModel() }
     let changeset = newModels.makeChangeset(from: self.models)
     // We always update all models as they could have new behavior setters even with equal content.
     self.models = newModels
+    warnOnDuplicates(in: changeset)
 
     var removed = [BarWrapperView]()
     var added = [BarWrapperView]()
@@ -290,6 +291,29 @@ public class BarStackView: UIStackView {
       // overlapping one another creating an "furling" effect.
       break
     }
+  }
+
+  /// Outputs a warning for the given `changeset` if it contains duplicate IDs.
+  private func warnOnDuplicates(in changeset: IndexChangeset) {
+    guard !changeset.duplicates.isEmpty else { return }
+
+    EpoxyLogger.shared.warn({
+      var message: [String] = [
+        """
+        Warning! Duplicate data IDs detected. Bars with the same view type should have unique data \
+        IDs within a bar stack. Duplicate data IDs can cause undefined behavior. Digest:
+        """
+      ]
+
+      for duplicateIndexes in changeset.duplicates {
+        // Subscripting is safe here since `duplicateIndexes` is never empty.
+        let firstIndex = duplicateIndexes[0]
+        let duplicateItemID = models[firstIndex].dataID
+        message.append("- Bar with ID \(duplicateItemID) duplicated at indexes \(duplicateIndexes)")
+      }
+
+      return message.joined(separator: "\n")
+    }())
   }
 
 }

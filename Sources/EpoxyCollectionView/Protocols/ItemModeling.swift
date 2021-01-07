@@ -12,15 +12,6 @@ public protocol ItemModeling: DataIDProviding, ReuseIDProviding, Diffable {
   func eraseToAnyItemModel() -> AnyItemModel
 }
 
-// MARK: Extensions
-
-extension ItemModeling {
-  /// The internal wrapped item model.
-  var internalItemModel: InternalItemModeling {
-    eraseToAnyItemModel().model
-  }
-}
-
 // MARK: - InternalItemModeling
 
 public protocol InternalItemModeling: ItemModeling,
@@ -57,19 +48,4 @@ public protocol InternalItemModeling: ItemModeling,
   /// - Parameter traitCollection: The trait collection to create the view for
   /// - Returns: The configured view for this item model.
   func configuredView(traitCollection: UITraitCollection) -> UIView
-}
-
-// MARK: Diffable
-
-extension InternalItemModeling {
-  public var diffIdentifier: AnyHashable {
-    DiffIdentifier(reuseID: reuseID, dataID: dataID)
-  }
-}
-
-// MARK: - DiffIdentifier
-
-private struct DiffIdentifier: Hashable {
-  var reuseID: String
-  var dataID: AnyHashable
 }

@@ -13,6 +13,8 @@
 /// - SeeAlso: `Identifiable`.
 public protocol DataIDProviding {
   /// A stable identifier that uniquely identifies this instance, with its typed erased.
+  ///
+  /// Defaults to `DefaultDataID.noneProvided` if no data ID is provided.
   var dataID: AnyHashable { get }
 }
 
@@ -38,10 +40,18 @@ extension EpoxyModeled where Self: DataIDProviding {
   private var dataIDProperty: EpoxyModelProperty<AnyHashable> {
     EpoxyModelProperty(
       keyPath: \DataIDProviding.dataID,
-      defaultValue: {
-        EpoxyLogger.shared.assertionFailure("dataID must be set at init, this is programmer error")
-        return ""
-      }(),
+      defaultValue: DefaultDataID.noneProvided,
       updateStrategy: .replace)
+  }
+}
+
+// MARK: - DefaultDataID
+
+/// The default data ID when none is provided.
+public enum DefaultDataID: Hashable, CustomDebugStringConvertible {
+  case noneProvided
+
+  public var debugDescription: String {
+    "DefaultDataID.noneProvided"
   }
 }

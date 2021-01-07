@@ -2,6 +2,7 @@
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
 import EpoxyCore
+import UIKit
 
 // MARK: - CoordinatedBarModel
 
@@ -11,14 +12,15 @@ public struct CoordinatedBarModel {
 
   // MARK: Lifecycle
 
-  public init<Coordinator: BarCoordinating, Content: Equatable>(
-    dataID: AnyHashable,
+  public init<Coordinator: BarCoordinating, Content: Equatable, View: UIView>(
+    dataID: AnyHashable? = nil,
     content: Content,
+    viewType: View.Type,
     barModel: Coordinator.Model,
     makeCoordinator: @escaping (_ update: @escaping (_ animated: Bool) -> Void) -> Coordinator)
   {
-    self.dataID = dataID
     self.content = content
+    self.viewClass = viewType
 
     typealias CoordinatorWrapper = AnyBarCoordinator<Coordinator.Model>
 
@@ -47,12 +49,20 @@ public struct CoordinatedBarModel {
       guard let otherContent = other.content as? Content else { return false }
       return otherContent == content
     }
+
+    if let dataID = dataID {
+      self.dataID = dataID
+    }
   }
+
+  // MARK: Public
+
+  public var storage = EpoxyModelStorage()
 
   // MARK: Private
 
-  private let dataID: AnyHashable
   private let content: Any
+  private let viewClass: AnyClass
   private let _isDiffableItemEqual: (Diffable) -> Bool
   private let _makeCoordinator: (_ update: @escaping (_ animated: Bool) -> Void) -> AnyBarCoordinating
   private let _canReuseCoordinator: (_ coordinator: AnyBarCoordinating) -> Bool
@@ -60,24 +70,29 @@ public struct CoordinatedBarModel {
 
 }
 
+// MARK: Providers
+
+extension CoordinatedBarModel: DataIDProviding {}
+extension CoordinatedBarModel: AlternateStyleIDProviding {}
+
 // MARK: BarModeling
 
 extension CoordinatedBarModel: BarModeling {
-  public var barModel: AnyBarModel { .init(self) }
+  public func eraseToAnyBarModel() -> AnyBarModel { .init(self) }
 }
 
 // MARK: InternalBarCoordinating
 
 extension CoordinatedBarModel: InternalBarCoordinating {
-  func makeCoordinator(update: @escaping (Bool) -> Void) -> AnyBarCoordinating {
+  public func makeCoordinator(update: @escaping (Bool) -> Void) -> AnyBarCoordinating {
     _makeCoordinator(update)
   }
 
-  func barModel(for coordinator: AnyBarCoordinating) -> BarModeling {
+  public func barModel(for coordinator: AnyBarCoordinating) -> BarModeling {
     _barModel(coordinator) ?? self
   }
 
-  func canReuseCoordinator(_ coordinator: AnyBarCoordinating) -> Bool {
+  public func canReuseCoordinator(_ coordinator: AnyBarCoordinating) -> Bool {
     _canReuseCoordinator(coordinator)
   }
 }
@@ -86,11 +101,10 @@ extension CoordinatedBarModel: InternalBarCoordinating {
 
 extension CoordinatedBarModel: Diffable {
   public var diffIdentifier: AnyHashable {
-    dataID
+    DiffIdentifier(dataID: dataID, viewClass: .init(viewClass), alternateStyleID: alternateStyleID)
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     _isDiffableItemEqual(otherDiffableItem)
   }
-
 }
