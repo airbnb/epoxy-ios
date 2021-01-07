@@ -3,7 +3,7 @@ def configure(spec:, name:, summary:, local_deps: [])
   # The shared CocoaPods version number for Epoxy.
   #
   # Change this constant to increment the Podspec version for all Epoxy Podspecs from a single place.
-  version = '0.41.1'
+  version = '0.42.0'
 
   spec.name = name
   spec.summary = summary
