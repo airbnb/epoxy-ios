@@ -29,7 +29,7 @@ final class StaticHeightBar: UIView {
     BarModel<StaticHeightBar, EmptyContent>(
       content: EmptyContent(),
       makeView: { StaticHeightBar(height: 100) },
-      configureContent: { _, _, _ in })
+      configureView: { _ in })
   }
 
 }
