@@ -26,7 +26,7 @@ extension CallbackContextEpoxyModeled where Self: DidChangeStateProviding {
   }
 
   /// Returns a copy of this model with the given did change state closure called after the current
-  /// did change state closure of this model, if is one.
+  /// did change state closure of this model, if there is one.
   public func didChangeState(_ value: DidChangeState?) -> Self {
     copy(updating: didChangeStateProperty, to: value)
   }

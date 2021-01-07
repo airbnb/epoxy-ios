@@ -56,18 +56,3 @@ protocol InternalSupplementaryItemModeling: SupplementaryItemModeling,
     traitCollection: UITraitCollection,
     animated: Bool)
 }
-
-// MARK: Diffable
-
-extension InternalSupplementaryItemModeling {
-  public var diffIdentifier: AnyHashable {
-    DiffIdentifier(reuseID: reuseID, dataID: dataID)
-  }
-}
-
-// MARK: - DiffIdentifier
-
-private struct DiffIdentifier: Hashable {
-  var reuseID: String
-  var dataID: AnyHashable
-}

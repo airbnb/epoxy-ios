@@ -9,33 +9,27 @@ import UIKit
 /// A model that can provide a bar view to a `BarStackView`.
 ///
 /// Used to reference a `BarModel` without a generic type.
-protocol InternalBarModeling: Diffable {
+protocol InternalBarModeling: Diffable, EpoxyModeled {
   /// Constructs a configured bar view.
-  func makeConfiguredView() -> UIView
+  func makeConfiguredView(traitCollection: UITraitCollection) -> UIView
 
   /// Configures the content of an existing bar view
-  func configureContent(_ view: UIView, animated: Bool)
+  func configureContent(_ view: UIView, traitCollection: UITraitCollection, animated: Bool)
 
   /// Configures the behavior of an existing bar view.
-  func configureBehavior(_ view: UIView)
-
-  /// Returns whether the given bar model has equal content to this bar model.
-  func isContentEqual(to model: InternalBarModeling) -> Bool
-
-  /// Returns whether the given bar model's view can be reused by this bar model.
-  func canReuseView(from model: InternalBarModeling) -> Bool
+  func configureBehavior(_ view: UIView, traitCollection: UITraitCollection)
 
   /// Should inform consumers that this bar model will be displayed.
-  func willDisplay(_ view: UIView)
+  func willDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool)
 
   /// Should inform consumers that this bar model has been displayed.
-  func didDisplay(_ view: UIView)
+  func didDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool)
 }
 
 // MARK: - InternalBarCoordinating
 
 /// A model that can provide a bar coordinator to a `BarStackView`.
-protocol InternalBarCoordinating: Diffable {
+public protocol InternalBarCoordinating: Diffable, EpoxyModeled {
   /// Constructs the coordinator responsible for additional configuration of this bar.
   ///
   /// - Parameters:

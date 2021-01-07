@@ -15,7 +15,7 @@ import UIKit
 ///
 /// # Additional resources
 /// - [Bar Installers Docs](***REMOVED***/projects/coreui/docs/navigation/bar_installers)
-public struct BarModel<View: UIView, Content: Equatable> {
+public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModeled {
 
   // MARK: Lifecycle
 
@@ -24,14 +24,13 @@ public struct BarModel<View: UIView, Content: Equatable> {
   ///
   /// - Parameters:
   ///   - dataID: An optional ID that uniquely identifies this bar relative to other bars in the
-  ///     same bar group. Defaults to a representation of this view's type under the assumption that
-  ///     it is unlikely to have the same bar multiple times in a single bar stack.
+  ///     same bar group.
   ///   - content: The content of the bar view that will be applied to the view in the `configure`
   ///     closure whenver it has changed.
   ///   - makeView: A closure that constructs the view of this bar. the `configure` closure is
   ///     called immediately after `makeView` with the returned view  to configure it with its
   ///     initial content.
-  ///   - configureContent: A closure that's called to configure the view with its content, both
+  ///   - configureView: A closure that's called to configure the view with its content, both
   ///     immediately following its construction in `makeView` and subsequently whenever a new bar
   ///     model that replaced an old bar model with the same `dataID` has content that is not equal
   ///     to the content of the old bar model.
@@ -39,78 +38,19 @@ public struct BarModel<View: UIView, Content: Equatable> {
     dataID: AnyHashable? = nil,
     content: Content,
     makeView: @escaping MakeView,
-    configureContent: @escaping ConfigureContent)
+    configureView: @escaping ConfigureView)
   {
-    // Default to the view type since it's unlikely that duplicate bars will be displayed.
-    self.dataID = dataID ?? AnyHashable(ObjectIdentifier(View.self))
+    if let dataID = dataID {
+      self.dataID = dataID
+    }
     self.content = content
-    _makeView = makeView
-    _configureContent = configureContent
+    self.makeView = makeView
+    self.configureView = configureView
   }
 
   // MARK: Public
 
-  public typealias MakeView = () -> View
-  public typealias ConfigureContent = (_ view: View, _ data: Content, _ animated: Bool) -> Void
-  public typealias ConfigureBehaviors = (_ view: View) -> Void
-  public typealias WillDisplay = (_ view: View) -> Void
-  public typealias DidDisplay = (_ view: View) -> Void
-
-  /// An optional ID for an alternative style type to use for reuse of this view. Use this to
-  /// differentiate between different styling configurations.
-  public func alternateStyleID(_ alternateStyleID: AnyHashable?) -> Self {
-    var copy = self
-    copy._alternateStyleID = alternateStyleID
-    return copy
-  }
-
-  /// An optional closure that sets the view's behavior (such as interaction blocks or delegates).
-  /// Called whenever a view is configured with a bar model.
-  public func configureBehaviors(_ configureBehaviors: ConfigureBehaviors?) -> Self {
-    guard let configureBehaviors = configureBehaviors else { return self }
-    var copy = self
-    copy._configureBehaviors = { [previous = copy._configureBehaviors] view in
-      previous?(view)
-      configureBehaviors(view)
-    }
-    return copy
-  }
-
-  /// An optional closure that's called whenever the view is about to display.
-  public func willDisplay(_ willDisplay: WillDisplay?) -> Self {
-    guard let willDisplay = willDisplay else { return self }
-    var copy = self
-    copy._willDisplay = { [previous = copy._willDisplay] content in
-      previous?(content)
-      willDisplay(content)
-    }
-    return copy
-  }
-
-  /// An optional closure that's called after the view has been displayed.
-  public func didDisplay(_ didDisplay: DidDisplay?) -> Self {
-    guard let didDisplay = didDisplay else { return self }
-    var copy = self
-    copy._didDisplay = { [previous = copy._didDisplay] content in
-      previous?(content)
-      didDisplay(content)
-    }
-    return copy
-  }
-
-  /// Updates the content to the given value.
-  public func content(_ content: (inout Content) -> Void) -> Self {
-    var copy = self
-    content(&copy.content)
-    return copy
-  }
-
-  /// Replaces the default closure to construct the view with the given closure.
-  public func makeView(_ makeView: @escaping () -> View) -> Self {
-    var copy = self
-    copy._makeView = makeView
-    return copy
-  }
+  public var storage = EpoxyModelStorage()
 
   /// Replaces the default closure to construct the coordinator with the given closure.
   public func makeCoordinator<Coordinator: BarCoordinating>(
@@ -128,96 +68,82 @@ public struct BarModel<View: UIView, Content: Equatable> {
 
   private typealias Coordinator = AnyBarCoordinator<Self>
 
-  private let dataID: AnyHashable
-  private var content: Content
-  private var _makeView: MakeView
-  private var _configureContent: ConfigureContent
-  private var _alternateStyleID: AnyHashable?
-  private var _configureBehaviors: ConfigureBehaviors?
-  private var _willDisplay: WillDisplay?
-  private var _didDisplay: DidDisplay?
-  private var coordinatorType: AnyClass = DefaultBarCoordinator<Self>.self
-  private var _makeCoordinator: (_ update: @escaping (_ animated: Bool) -> Void) -> Coordinator = {
-    AnyBarCoordinator(DefaultBarCoordinator(update: $0))
-  }
+  private var coordinatorType: AnyClass?
+  private var _makeCoordinator: ((_ update: @escaping (_ animated: Bool) -> Void) -> Coordinator)?
 
-  private func configure(_ view: View, animated: Bool) {
-    _configureContent(view, content, animated)
-  }
-
-  private func castOrAssert(_ view: UIView) -> View? {
+  private func castOrAssert(_ view: UIView) -> View {
     guard let typedView = view as? View else {
-      EpoxyLogger.shared.assertionFailure("\(view) is not of the expected type \(View.self)")
-      return nil
+      EpoxyLogger.shared.assertionFailure(
+        "\(view) is not of the expected type \(View.self). This is programmer error.")
+      return makeView()
     }
     return typedView
   }
 
 }
 
+// MARK: Providers
+
+extension BarModel: AlternateStyleIDProviding {}
+extension BarModel: ConfigureViewProviding {}
+extension BarModel: ContentProviding {}
+extension BarModel: DataIDProviding {}
+extension BarModel: DidDisplayProviding {}
+extension BarModel: MakeViewProviding {}
+extension BarModel: SetBehaviorsProviding {}
+extension BarModel: WillDisplayProviding {}
+
 // MARK: BarModeling
 
 extension BarModel: BarModeling {
-  public var barModel: AnyBarModel { .init(self) }
+  public func eraseToAnyBarModel() -> AnyBarModel { .init(self) }
 }
 
 // MARK: InternalBarModeling
 
 extension BarModel: InternalBarModeling {
-  func makeConfiguredView() -> UIView {
-    let view = _makeView()
-    configure(view, animated: false)
-    _configureBehaviors?(view)
+  func makeConfiguredView(traitCollection: UITraitCollection) -> UIView {
+    let view = makeView()
+    let context = CallbackContext(view: view, content: content, traitCollection: traitCollection, animated: false)
+    configureView?(context)
+    setBehaviors?(context)
     return view
   }
 
-  func configureContent(_ view: UIView, animated: Bool) {
-    guard let typedView = castOrAssert(view) else { return }
-    configure(typedView, animated: animated)
+  func configureContent(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+    configureView?(.init(view: castOrAssert(view), content: content, traitCollection: traitCollection, animated: animated))
   }
 
-  func configureBehavior(_ view: UIView) {
-    guard let typedView = castOrAssert(view) else { return }
-    _configureBehaviors?(typedView)
+  func configureBehavior(_ view: UIView, traitCollection: UITraitCollection) {
+    setBehaviors?(.init(view: castOrAssert(view), content: content, traitCollection: traitCollection, animated: false))
   }
 
-  func isContentEqual(to model: InternalBarModeling) -> Bool {
-    guard let model = model as? Self else { return false }
-    return model.content == content
+  func willDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+    willDisplay?(.init(view: castOrAssert(view), content: content, traitCollection: traitCollection, animated: animated))
   }
 
-  func canReuseView(from model: InternalBarModeling) -> Bool {
-    guard let model = model as? Self else { return false }
-    return model._alternateStyleID == _alternateStyleID
-  }
-
-  func willDisplay(_ view: UIView) {
-    guard let typedView = castOrAssert(view) else { return }
-    _willDisplay?(typedView)
-  }
-
-  func didDisplay(_ view: UIView) {
-    guard let typedView = castOrAssert(view) else { return }
-    _didDisplay?(typedView)
+  func didDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+    didDisplay?(.init(view: castOrAssert(view), content: content, traitCollection: traitCollection, animated: animated))
   }
 }
 
 // MARK: InternalBarCoordinating
 
 extension BarModel: InternalBarCoordinating {
-  func barModel(for coordinator: AnyBarCoordinating) -> BarModeling {
+  public func barModel(for coordinator: AnyBarCoordinating) -> BarModeling {
     guard let typedCoordinator = coordinator as? Coordinator else {
-      EpoxyLogger.shared.assertionFailure("\(coordinator) is not of the expected type \(Coordinator.self)")
+      EpoxyLogger.shared.assertionFailure(
+        "\(coordinator) is not of the expected type \(Coordinator.self). This is programmer error.")
       return self
     }
     return typedCoordinator.barModel(for: self)
   }
 
-  func makeCoordinator(update: @escaping (Bool) -> Void) -> AnyBarCoordinating {
-    _makeCoordinator(update)
+  public func makeCoordinator(update: @escaping (Bool) -> Void) -> AnyBarCoordinating {
+    _makeCoordinator?(update) ?? AnyBarCoordinator(DefaultBarCoordinator())
   }
 
-  func canReuseCoordinator(_ coordinator: AnyBarCoordinating) -> Bool {
+  public func canReuseCoordinator(_ coordinator: AnyBarCoordinating) -> Bool {
     guard let typedCoordinator = coordinator as? Coordinator else { return false }
     return typedCoordinator.type == coordinatorType
   }
@@ -227,11 +153,54 @@ extension BarModel: InternalBarCoordinating {
 
 extension BarModel: Diffable {
   public var diffIdentifier: AnyHashable {
-    dataID
+    DiffIdentifier(dataID: dataID, viewClass: .init(View.self), alternateStyleID: alternateStyleID)
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let otherDiffableItem = otherDiffableItem as? Self else { return false }
-    return isContentEqual(to: otherDiffableItem)
+    return otherDiffableItem.content == content
   }
+}
+
+// MARK: CallbackContextEpoxyModeled
+
+extension BarModel: CallbackContextEpoxyModeled {
+
+  /// The context passed to callbacks on an `BarModel`.
+  public struct CallbackContext: ViewProviding, ContentProviding, TraitCollectionProviding, AnimatedProviding {
+
+    // MARK: Lifecycle
+
+    public init(
+      view: View,
+      content: Content,
+      traitCollection: UITraitCollection,
+      animated: Bool)
+    {
+      self.view = view
+      self.content = content
+      self.traitCollection = traitCollection
+      self.animated = animated
+    }
+
+    // MARK: Public
+
+    public var view: View
+    public var content: Content
+    public var traitCollection: UITraitCollection
+    public var animated: Bool
+  }
+
+}
+
+// MARK: - DiffIdentifier
+
+/// The identity of a bar: a bar view instance can be shared between two bar model instances if
+/// their `DiffIdentifier`s are equal. If they are not equal, the old bar view will be considered
+/// removed and a new bar view will be created and inserted in its place.
+struct DiffIdentifier: Hashable {
+  var dataID: AnyHashable
+  // The `View.Type` wrapped in `ObjectIdentifier` since `AnyClass` is not `Hashable`.
+  var viewClass: ObjectIdentifier
+  var alternateStyleID: AnyHashable?
 }

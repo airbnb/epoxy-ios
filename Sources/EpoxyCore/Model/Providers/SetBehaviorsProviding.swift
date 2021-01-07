@@ -25,7 +25,7 @@ extension CallbackContextEpoxyModeled where Self: SetBehaviorsProviding {
   }
 
   /// Returns a copy of this model with the set behaviors closure called after the current set
-  /// behaviors closure of this model, if is one.
+  /// behaviors closure of this model, if there is one.
   public func setBehaviors(_ value: SetBehaviors?) -> Self {
     copy(updating: setBehaviorsProperty, to: value)
   }

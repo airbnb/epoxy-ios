@@ -144,14 +144,14 @@ public final class BarWrapperView: UIView {
 
     _model = model
 
-    if let oldValue = oldValue, let view = view, oldValue.canReuseView(from: model) {
-      if !oldValue.isContentEqual(to: model) {
-        model.configureContent(view, animated: animated)
+    if let oldValue = oldValue, let view = view, oldValue.diffIdentifier == model.diffIdentifier {
+      if !oldValue.isDiffableItemEqual(to: model) {
+        model.configureContent(view, traitCollection: traitCollection, animated: animated)
       }
       // The behavior is configured regardless of content equality sice behavior is not equatable.
-      model.configureBehavior(view)
+      model.configureBehavior(view, traitCollection: traitCollection)
     } else {
-      let view = makeView(from: model)
+      let view = makeView(from: model, animated: animated)
       let animations = { self.view = view }
       if animated {
         // We do not allow consumers to pass in this duration as they can configure it by wrapping
@@ -161,20 +161,21 @@ public final class BarWrapperView: UIView {
           duration: 0.3,
           options: .transitionCrossDissolve,
           animations: animations,
-          completion: { _ in
-            model.didDisplay(view)
+          completion: { [weak self] _ in
+            guard let self = self else { return }
+            model.didDisplay(view, traitCollection: self.traitCollection, animated: animated)
           })
       } else {
         animations()
-        model.didDisplay(view)
+        model.didDisplay(view, traitCollection: traitCollection, animated: animated)
       }
     }
   }
 
-  private func makeView(from model: InternalBarModeling) -> UIView {
-    let view = model.makeConfiguredView()
+  private func makeView(from model: InternalBarModeling, animated: Bool) -> UIView {
+    let view = model.makeConfiguredView(traitCollection: traitCollection)
     willDisplayBar?(view)
-    model.willDisplay(view)
+    model.willDisplay(view, traitCollection: traitCollection, animated: animated)
     originalViewLayoutMargins = nil
     return view
   }

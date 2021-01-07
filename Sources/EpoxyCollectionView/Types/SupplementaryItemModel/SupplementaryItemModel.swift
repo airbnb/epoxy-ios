@@ -57,7 +57,7 @@ public struct SupplementaryItemModel<View: UIView, Content: Equatable>: ContentV
 
 // MARK: Providers
 
-extension SupplementaryItemModel: AlternateStyleIDProviding {}
+extension SupplementaryItemModel: AlternateStyleIDStringProviding {}
 extension SupplementaryItemModel: ConfigureViewProviding {}
 extension SupplementaryItemModel: ContentProviding {}
 extension SupplementaryItemModel: DataIDProviding {}
@@ -122,6 +122,10 @@ extension SupplementaryItemModel: InternalSupplementaryItemModeling {
 // MARK: Diffable
 
 extension SupplementaryItemModel: Diffable {
+  public var diffIdentifier: AnyHashable {
+    DiffIdentifier(dataID: dataID, viewClass: .init(View.self), alternateStyleID: alternateStyleID)
+  }
+
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let other = otherDiffableItem as? Self else {
       return false
@@ -162,4 +166,16 @@ extension SupplementaryItemModel: CallbackContextEpoxyModeled {
     public var animated: Bool
   }
 
+}
+
+// MARK: - DiffIdentifier
+
+/// The identity of an item: a item view instance can be shared between two item model instances if
+/// their `DiffIdentifier`s are equal. If they are not equal, the old item view will be considered
+/// removed and a new item view will be created and inserted in its place.
+private struct DiffIdentifier: Hashable {
+  var dataID: AnyHashable
+  // The `View.Type` wrapped in `ObjectIdentifier` since `AnyClass` is not `Hashable`.
+  var viewClass: ObjectIdentifier
+  var alternateStyleID: AnyHashable?
 }
