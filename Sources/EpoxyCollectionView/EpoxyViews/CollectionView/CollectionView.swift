@@ -405,6 +405,12 @@ open class CollectionView: UICollectionView {
     }
   }
 
+  /// An identifier used to track the items that are visible in a section.
+  private enum SectionVisibleItemID: Hashable {
+    case item(dataID: AnyHashable)
+    case supplementaryItem(elementKind: String, dataID: AnyHashable)
+  }
+
   private let epoxyDataSource: CollectionViewEpoxyDataSource
 
   private var queuedUpdate: (newData: InternalCollectionViewEpoxyData, animated: Bool)?
@@ -412,6 +418,10 @@ open class CollectionView: UICollectionView {
   private var updateState = UpdateState.notUpdating
   private var ephemeralStateCache = [AnyHashable: RestorableState?]()
   private var lastFocusedDataID: ItemPath?
+
+  /// A dictionary used to track visible sections, keyed by `SectionModel.dataID` and with a value
+  /// of the `Set` of visible items in that section, else an empty `Set` or `nil` if there are none.
+  private var visibleSectionItems = [AnyHashable: Set<SectionVisibleItemID>]()
 
   private lazy var scrollToItemHelper = CollectionViewScrollToItemHelper(collectionView: self)
 
@@ -522,7 +532,8 @@ open class CollectionView: UICollectionView {
   private func resetBehaviors() {
     for indexPath in indexPathsForVisibleItems {
       guard let cell = cellForItem(at: indexPath) as? CollectionViewCell else {
-        EpoxyLogger.shared.assertionFailure("Only CollectionViewCell and subclasses are allowed in a CollectionView.")
+        EpoxyLogger.shared.assertionFailure(
+          "Only CollectionViewCell and subclasses are allowed in a CollectionView.")
         return
       }
       if let item = epoxyDataSource.data?.item(at: indexPath) {
@@ -541,6 +552,26 @@ open class CollectionView: UICollectionView {
   @objc
   private func didTriggerPullToRefreshControl(sender: UIRefreshControl) {
     didTriggerPullToRefresh?(sender)
+  }
+
+  /// Tracks whether the given `section` will display by determining if the given appearing `item`
+  /// is its first visible `item`.
+  private func handleSection(_ section: SectionModel, itemWillDisplay item: SectionVisibleItemID) {
+    let previouslyNotVisible = visibleSectionItems[section.dataID, default: []].isEmpty
+    visibleSectionItems[section.dataID, default: []].insert(item)
+    if previouslyNotVisible {
+      section.willDisplay?(())
+    }
+  }
+
+  /// Tracks whether the given `section` did end displaying by determining if the given disappearing
+  /// `item` its last visible `item`.
+  private func handleSection(_ section: SectionModel, itemDidEndDisplaying item: SectionVisibleItemID) {
+    visibleSectionItems[section.dataID, default: []].remove(item)
+    let notVisible = visibleSectionItems[section.dataID, default: []].isEmpty
+    if notVisible {
+      section.didEndDisplaying?(())
+    }
   }
 
 }
@@ -618,9 +649,15 @@ extension CollectionView: UICollectionViewDelegate {
   {
     guard
       let item = epoxyDataSource.data?.item(at: indexPath),
-      let section = epoxyDataSource.data?.section(at: indexPath.section),
-      let cell = cell as? CollectionViewCell
+      let section = epoxyDataSource.data?.section(at: indexPath.section)
     else {
+      return
+    }
+
+    handleSection(section, itemWillDisplay: .item(dataID: item.dataID))
+
+    guard let cell = cell as? CollectionViewCell else {
+      EpoxyLogger.shared.assertionFailure("Cell does not match expected type CollectionViewCell.")
       return
     }
 
@@ -650,6 +687,8 @@ extension CollectionView: UICollectionViewDelegate {
       return
     }
 
+    handleSection(section, itemDidEndDisplaying: .item(dataID: item.dataID))
+
     guard let cell = cell as? CollectionViewCell else {
       EpoxyLogger.shared.assertionFailure("Cell does not match expected type CollectionViewCell.")
       return
@@ -674,6 +713,10 @@ extension CollectionView: UICollectionViewDelegate {
     else {
       return
     }
+
+    handleSection(
+      section,
+      itemWillDisplay: .supplementaryItem(elementKind: elementKind, dataID: item.dataID))
 
     guard let view = view as? CollectionViewReusableView else {
       EpoxyLogger.shared.assertionFailure(
@@ -716,6 +759,10 @@ extension CollectionView: UICollectionViewDelegate {
     else {
       return
     }
+
+    handleSection(
+      section,
+      itemDidEndDisplaying: .supplementaryItem(elementKind: elementKind, dataID: item.dataID))
 
     guard let view = view as? CollectionViewReusableView else {
       EpoxyLogger.shared.assertionFailure(
@@ -861,28 +908,6 @@ extension CollectionView: UICollectionViewDelegate {
     return delegate.collectionView(collectionView, transitionLayoutForOldLayout: fromLayout, newLayout: toLayout)
   }
 
-  // MARK: Unavailable Methods
-
-  @available (*, unavailable, message: "You shouldn't be registering cell classes on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
-  final override public func register(_ cellClass: AnyClass?, forCellWithReuseIdentifier identifier: String) {
-    super.register(cellClass, forCellWithReuseIdentifier: identifier)
-  }
-
-  @available (*, unavailable, message: "You shouldn't be registering cell nibs on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
-  final override public func register(_ nib: UINib?, forCellWithReuseIdentifier identifier: String) {
-    super.register(nib, forCellWithReuseIdentifier: identifier)
-  }
-
-  @available (*, unavailable, message: "You shouldn't be registering supplementary view nibs on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
-  final override public func register(_ nib: UINib?, forSupplementaryViewOfKind kind: String, withReuseIdentifier identifier: String) {
-    super.register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: identifier)
-  }
-
-  @available (*, unavailable, message: "You shouldn't be registering supplementary view classes on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
-  final override public func register(_ viewClass: AnyClass?, forSupplementaryViewOfKind elementKind: String, withReuseIdentifier identifier: String) {
-    super.register(viewClass, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: identifier)
-  }
-
 }
 
 // MARK: UICollectionViewDataSourcePrefetching
@@ -983,5 +1008,29 @@ extension CollectionView: CollectionViewCellAccessibilityDelegate {
       return nil
     }
     return section
+  }
+}
+
+// MARK: Unavailable Methods
+
+extension CollectionView {
+  @available (*, unavailable, message: "You shouldn't be registering cell classes on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
+  final override public func register(_ cellClass: AnyClass?, forCellWithReuseIdentifier identifier: String) {
+    super.register(cellClass, forCellWithReuseIdentifier: identifier)
+  }
+
+  @available (*, unavailable, message: "You shouldn't be registering cell nibs on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
+  final override public func register(_ nib: UINib?, forCellWithReuseIdentifier identifier: String) {
+    super.register(nib, forCellWithReuseIdentifier: identifier)
+  }
+
+  @available (*, unavailable, message: "You shouldn't be registering supplementary view nibs on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
+  final override public func register(_ nib: UINib?, forSupplementaryViewOfKind kind: String, withReuseIdentifier identifier: String) {
+    super.register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: identifier)
+  }
+
+  @available (*, unavailable, message: "You shouldn't be registering supplementary view classes on a CollectionView. The CollectionViewEpoxyDataSource handles this for you.")
+  final override public func register(_ viewClass: AnyClass?, forSupplementaryViewOfKind elementKind: String, withReuseIdentifier identifier: String) {
+    super.register(viewClass, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: identifier)
   }
 }
