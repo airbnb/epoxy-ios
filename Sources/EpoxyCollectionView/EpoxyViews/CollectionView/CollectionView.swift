@@ -11,8 +11,7 @@ open class CollectionView: UICollectionView {
   // MARK: Lifecycle
 
   public init(collectionViewLayout: UICollectionViewLayout) {
-    epoxyDataSource = CollectionViewEpoxyDataSource(
-      usesBatchUpdatesForAllReloads: GlobalEpoxyConfig.shared.usesBatchUpdatesForAllCVReloads)
+    epoxyDataSource = CollectionViewEpoxyDataSource()
     super.init(frame: .zero, collectionViewLayout: collectionViewLayout)
     setUp()
   }
@@ -375,7 +374,7 @@ open class CollectionView: UICollectionView {
   }
 
   func apply(_ newData: InternalCollectionViewEpoxyData, animated: Bool) {
-    guard GlobalEpoxyConfig.shared.disablesCVBatchUpdateQueuing || !updateState.isUpdating else {
+    guard !updateState.isUpdating else {
       queuedUpdate = (newData: newData, animated: animated)
       return
     }
@@ -426,10 +425,7 @@ open class CollectionView: UICollectionView {
   private lazy var scrollToItemHelper = CollectionViewScrollToItemHelper(collectionView: self)
 
   private func setUp() {
-    // There are rendering issues in iOS 10 when using self-sizing supplementary views
-    // when prefetching is enabled.
-    // There are also self sizing invalidation issues in iOS 10 and iOS 11 if prefetching is enabled.
-    isPrefetchingEnabled = false
+    isPrefetchingEnabled = GlobalEpoxyConfig.shared.usesCellPrefetching
 
     delegate = self
     epoxyDataSource.collectionView = self
@@ -455,7 +451,7 @@ open class CollectionView: UICollectionView {
       })
     }
 
-    if GlobalEpoxyConfig.shared.usesBatchUpdatesForAllCVReloads {
+    if GlobalEpoxyConfig.shared.usesBatchUpdatesForAllReloads {
       if animated {
         performUpdates()
       } else {

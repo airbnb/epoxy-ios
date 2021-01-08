@@ -19,13 +19,6 @@ protocol CollectionViewDataSourceReorderingDelegate: AnyObject {
 
 final class CollectionViewEpoxyDataSource: NSObject {
 
-  // MARK: Lifecycle
-
-  init(usesBatchUpdatesForAllReloads: Bool) {
-    self.usesBatchUpdatesForAllReloads = usesBatchUpdatesForAllReloads
-    super.init()
-  }
-
   // MARK: Internal
 
   weak var reorderingDelegate: CollectionViewDataSourceReorderingDelegate?
@@ -60,7 +53,7 @@ final class CollectionViewEpoxyDataSource: NSObject {
   func applyData(_ newData: InternalCollectionViewEpoxyData) -> ApplyDataResult? {
     let oldData = self.data
     self.data = newData
-    if self.usesBatchUpdatesForAllReloads {
+    if GlobalEpoxyConfig.shared.usesBatchUpdatesForAllReloads {
       let oldData = oldData ?? .make(sections: [])
       return .init(changeset: newData.makeChangeset(from: oldData), oldData: oldData)
     } else {
@@ -100,7 +93,6 @@ final class CollectionViewEpoxyDataSource: NSObject {
 
   private var cellReuseIDs = Set<String>()
   private var supplementaryViewReuseIDs = [String: Set<String>]()
-  private var usesBatchUpdatesForAllReloads: Bool
 
   private func reregisterReuseIDs() {
     registerNewCellReuseIDs(cellReuseIDs)

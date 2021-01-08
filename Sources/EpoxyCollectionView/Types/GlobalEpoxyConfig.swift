@@ -11,27 +11,25 @@ public final class GlobalEpoxyConfig {
 
   public static let shared = GlobalEpoxyConfig()
 
-  // Queing batch updates should not be necessary - there's no rate limit to collection view's batch
-  // update API. Some notes on this topic:
-  //
-  // * Calling `performBatchUpdates` n times in a row results in n calls to
-  //  `prepareForCollectionViewUpdates` and `finalizeCollectionViewUpdates`
-  // * Updates are not coalesced, but also no updates are lost (see above bullet point)
-  // * Collection view appears to just do one animation for all of the batch updates, not n
-  //  independent / chained ones
-  //
-  // For these reasons, Epoxy probably shouldn’t do anything clever - if new data is provided,
-  // simply perform a batch update. If a particular feature requires data update throttling, that’s
-  // a specific feature requirement and can be implemented in feature code.
-  public var disablesCVBatchUpdateQueuing = false
-
   // UIKit engineers have suggested that we should never call `reloadData` ourselves, and instead,
   // use batch updates for all data changes.
-  public var usesBatchUpdatesForAllCVReloads = false
+  public var usesBatchUpdatesForAllReloads = false
+
+  // In the past, UICollectionView has crashed when prefetching was enabled. There were also some
+  // other issues:
+  //
+  // - Rendering issues on iOS 10, 11 and maybe newer versions when using self-sizing supplementary
+  // views.
+  // - Invalidation issues on iOS 10, 11 and maybe newer versions when using self-sizing
+  // supplementary views.
+  // - Scroll-jumpiness issues (https://openradar.appspot.com/radar?id=4970013802889216).
+  //
+  // If this is set to `true`, then cell-prefetching will be turned on by default.
+  public var usesCellPrefetching = false
 
   // Collection view does not accurately scroll to items if they're self-sized, due to it using
   // estimated heights to calculate the final offset. Setting this to true will cause collection
   // Epoxy to use a custom scroll-to-item implementation which is more accurate.
-  public var usesAccurateScrollToItem = false
+  public var usesAccurateScrollToItem = true
   
 }
