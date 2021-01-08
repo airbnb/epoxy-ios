@@ -18,12 +18,18 @@ public final class Row: UIView {
   }
 
   public var titleText: String? {
-    set { titleLabel.text = newValue }
+    set {
+      titleLabel.text = newValue
+      titleLabel.isHidden = (newValue == nil)
+    }
     get { return titleLabel.text }
   }
 
   public var text: String? {
-    set { label.text = newValue }
+    set {
+      label.text = newValue
+      label.isHidden = (newValue == nil)
+    }
     get { return label.text }
   }
 
@@ -42,9 +48,11 @@ public final class Row: UIView {
     titleLabel.textColor = .black
     titleLabel.font = .boldSystemFont(ofSize: 20)
     titleLabel.translatesAutoresizingMaskIntoConstraints = false
+    titleLabel.isHidden = true
     label.textColor = .black
     label.numberOfLines = 0
     label.translatesAutoresizingMaskIntoConstraints = false
+    label.isHidden = true
     stackView.spacing = 8
     stackView.axis = .vertical
     stackView.alignment = .leading
@@ -79,7 +87,7 @@ struct RowContent: Equatable {
 
 extension Row: Selectable {
   public func didSelect() {
-    print("Firing haptic feedback!")
+    // Handle this row being selected, e.g. to trigger haptics.
     UISelectionFeedbackGenerator().selectionChanged()
   }
 }
@@ -97,7 +105,7 @@ extension Row: Highlightable {
 
 extension Row: DisplayResponder {
   public func didDisplay(_ isDisplayed: Bool) {
-    print("Is displayed? \(isDisplayed)")
+    // Handle this row being displayed.
   }
 }
 
