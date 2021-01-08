@@ -23,9 +23,11 @@ public struct SectionModel: EpoxyModeled {
 
 // MARK: Providers
 
+extension SectionModel: DataIDProviding {}
+extension SectionModel: DidEndDisplayingProviding {}
 extension SectionModel: ItemsProviding {}
 extension SectionModel: SupplementaryItemsProviding {}
-extension SectionModel: DataIDProviding {}
+extension SectionModel: WillDisplayProviding {}
 
 // MARK: Diffable
 
@@ -48,4 +50,12 @@ extension SectionModel: DiffableSection {
   public var diffableItems: [AnyItemModel] {
     items.map { $0.eraseToAnyItemModel() }
   }
+}
+
+// MARK: CallbackContextEpoxyModeled
+
+extension SectionModel: CallbackContextEpoxyModeled {
+  /// There's no additional context available on a Section callback as it does not represent a
+  /// `UIView`, and instead is just a grouping mechanism.
+  public typealias CallbackContext = Void
 }
