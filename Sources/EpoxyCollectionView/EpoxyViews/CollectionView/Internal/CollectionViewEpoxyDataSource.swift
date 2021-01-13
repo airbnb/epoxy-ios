@@ -30,6 +30,11 @@ final class CollectionViewEpoxyDataSource: NSObject {
     }
   }
 
+  /// All supplementary view element kinds that have been registered with this data source.
+  var supplementaryViewElementKinds: Set<String> {
+    .init(supplementaryViewReuseIDs.keys)
+  }
+
   private(set) var data: InternalCollectionViewEpoxyData?
 
   /// Registers the reuse IDs of the items in the given sections with this data source's associated
@@ -91,7 +96,11 @@ final class CollectionViewEpoxyDataSource: NSObject {
 
   // MARK: Private
 
+  /// The set of cell reuse IDs that have been registered on the collection view.
   private var cellReuseIDs = Set<String>()
+
+  /// The set of supplementary view reuse IDs that have been registered on the collection view,
+  /// keyed by element kind.
   private var supplementaryViewReuseIDs = [String: Set<String>]()
 
   private func reregisterReuseIDs() {

@@ -8,29 +8,29 @@ public struct ItemPath: Hashable {
 
   // MARK: Lifecycle
 
-  public init(itemDataID: AnyHashable, sectionDataID: AnyHashable?) {
+  public init(itemDataID: AnyHashable, section: Section) {
     self.itemDataID = itemDataID
-    self.sectionDataID = sectionDataID
+    self.section = section
   }
 
   // MARK: Public
 
-  /// The identifier that uniquely identifies an item within its section.
+  /// The section in which the item referenced by an `ItemPath` is located.
+  public enum Section: Hashable {
+    /// The section identified by the `dataID` on its corresponding `SectionModel`.
+    case dataID(AnyHashable)
+
+    /// The last section that contains an item with `itemDataID` as its `dataID`.
+    ///
+    /// If there are multiple sections with an items that have the same `dataID`, it is not
+    /// recommended use this case, as the located item may be unstable over time.
+    case lastWithItemDataID
+  }
+
+  /// The item identified by the `dataID` on its corresponding `ItemModel`.
   public let itemDataID: AnyHashable
 
-  /// The identifier that uniquely identifies a section within all sections of a collection.
-  ///
-  /// If `nil`, this path refers to the first item with `itemDataID` as its `dataID` in any section.
-  /// If there are multiple sections with an items that share the same `dataID`, it is not
-  /// recommended to have this property as `nil`, as the located item may be unstable over time
-  ///
-  /// Set this to `nil` only if you are certain that you will not have duplicate `itemDataID`s
-  /// across sections, e.g. if there is only ever one section in your collection.
-  public let sectionDataID: AnyHashable?
-
-  /// Constructs an `ItemPath` for the last section that has an item that has the given data ID.
-  public static func lastSectionWith(itemDataID: AnyHashable) -> ItemPath {
-    .init(itemDataID: itemDataID, sectionDataID: nil)
-  }
+  /// The section in which the item referenced by this path located.
+  public let section: Section
 
 }

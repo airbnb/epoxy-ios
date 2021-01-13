@@ -28,6 +28,7 @@ final class CollectionViewSpec: QuickSpec {
     beforeEach {
       let layout = UICollectionViewFlowLayout()
       layout.itemSize = CGSize(width: 50, height: 50)
+      layout.headerReferenceSize = CGSize(width: 50, height: 50)
       collectionView = CollectionView(collectionViewLayout: layout)
       collectionView.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
     }
@@ -310,6 +311,7 @@ final class CollectionViewSpec: QuickSpec {
         erasedItemDidSelect = []
 
         let section = SectionModel(items: [item])
+          .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItemModel])
         collectionView.setSections([section], animated: false)
         // Required to prevent a index path out of bounds exception during selection.
         collectionView.layoutIfNeeded()
@@ -337,6 +339,127 @@ final class CollectionViewSpec: QuickSpec {
         it("should call didSelect") {
           expect(itemDidSelect).to(haveCount(1))
           expect(erasedItemDidSelect).to(haveCount(1))
+        }
+      }
+    }
+
+    describe("visibilityMetadata") {
+      enum TestID {
+        case section, item, supplementaryItem
+      }
+
+      var itemView: UIView!
+      var supplementaryItemView: UIView!
+
+      beforeEach {
+        itemView = UIView()
+        supplementaryItemView = UIView()
+
+        let section = SectionModel(
+          dataID: TestID.section,
+          items: [
+            itemModel.dataID(TestID.item)
+              .makeView { itemView },
+          ])
+          .supplementaryItems(
+            ofKind: UICollectionView.elementKindSectionHeader,
+            [
+              supplementaryItemModel.dataID(TestID.supplementaryItem)
+                .makeView { supplementaryItemView },
+            ])
+
+        collectionView.setSections([section], animated: false)
+        // Required to prevent a index path out of bounds exception during selection.
+        collectionView.layoutIfNeeded()
+      }
+
+      describe("collectionView") {
+        it("should be identical to the receiver") {
+          expect(collectionView.visibilityMetadata.collectionView) === collectionView
+        }
+      }
+
+      describe("sections") {
+        it("should include the sections") {
+          expect(collectionView.visibilityMetadata.sections).to(haveCount(1))
+        }
+
+        describe("section") {
+          var section: CollectionViewVisibilityMetadata.Section?
+
+          beforeEach {
+            section = collectionView.visibilityMetadata.sections.first
+          }
+
+          afterEach {
+            section = nil
+          }
+
+          describe("model") {
+            it("should match the provided section") {
+              expect(section?.model.dataID) == AnyHashable(TestID.section)
+            }
+          }
+
+          describe("items") {
+            var items: [CollectionViewVisibilityMetadata.Item]?
+
+            beforeEach {
+              items = collectionView.visibilityMetadata.sections.first?.items
+            }
+
+            afterEach {
+              items = nil
+            }
+
+            it("should include the items") {
+              expect(items).to(haveCount(1))
+            }
+
+            describe("model") {
+              it("should match the model set on the collection view") {
+                expect(items?.first?.model.dataID) == AnyHashable(TestID.item)
+              }
+            }
+
+            describe("view") {
+              it("should be identical to the view returned by makeView") {
+                expect(section?.items.first?.view) === itemView
+              }
+            }
+          }
+
+          describe("supplementaryItems") {
+            var supplementaryItems: [CollectionViewVisibilityMetadata.SupplementaryItem]?
+
+            beforeEach {
+              supplementaryItems = section?.supplementaryItems[UICollectionView.elementKindSectionHeader]
+            }
+
+            afterEach {
+              supplementaryItems = nil
+            }
+
+            it("should include the supplementary items") {
+              expect(section?.supplementaryItems).to(haveCount(1))
+            }
+
+            it("should include the items of the correct kind") {
+              expect(supplementaryItems).to(haveCount(1))
+            }
+
+            describe("model") {
+              it("should match the model set on the collection view") {
+                expect(supplementaryItems?.first?.model.dataID) == AnyHashable(TestID.supplementaryItem)
+              }
+            }
+
+            describe("view") {
+              it("should be identical to the view returned by makeView") {
+                expect(supplementaryItems?.first?.view) == supplementaryItemView
+              }
+            }
+          }
         }
       }
     }

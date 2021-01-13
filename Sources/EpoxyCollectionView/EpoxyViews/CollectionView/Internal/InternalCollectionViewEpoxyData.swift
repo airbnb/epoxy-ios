@@ -181,39 +181,44 @@ struct InternalCollectionViewEpoxyData {
       return indexPaths.last
     }
 
-    // If the section ID is specified, just look up the indexes for that section.
-    if let sectionID = path.sectionDataID, let indexPaths = itemIndexMapBySectionID[sectionID] {
-      return lastIndexPath(in: indexPaths, sectionID: sectionID)
+    switch path.section {
+    case .dataID(let sectionID):
+      if let indexPaths = itemIndexMapBySectionID[sectionID] {
+        // If the section ID is specified, just look up the indexes for that section.
+        return lastIndexPath(in: indexPaths, sectionID: sectionID)
+      }
+      return nil
+
+    case .lastWithItemDataID:
+      // If the section ID is unspecified but there's only one section with this data ID:
+      if itemIndexMapBySectionID.count == 1, let idAndIndexes = itemIndexMapBySectionID.first {
+        return lastIndexPath(in: idAndIndexes.value, sectionID: idAndIndexes.key)
+      }
+
+      // Otherwise there's multiple sections with the same data ID so we pick the last section so
+      // that it's stable.
+      let lastSectionID = itemIndexMapBySectionID.max(by: { first, second in
+        // `sectionIndexMap` is constructed from the same data as `itemIndexMap` so we can safely
+        // force unwrap.
+        sectionIndexMap[first.key]!.last! < sectionIndexMap[second.key]!.last!
+      })
+
+      if let sectionID = lastSectionID {
+        EpoxyLogger.shared.warn({
+          return """
+          Warning! Attempted to locate item \(path.itemDataID) when there are multiple sections that \
+          contain it each with IDs \(itemIndexMapBySectionID.keys) at the indexes \
+          \(itemIndexMapBySectionID.keys.map { sectionIndexMap[$0] }). Choosing the last section \
+          \(sectionID.key). To fix this warning specify the desired section data ID when \
+          constructing your `ItemPath`.
+          """
+        }())
+
+        return lastIndexPath(in: sectionID.value, sectionID: sectionID.key)
+      }
+
+      return nil
     }
-
-    // If the section ID is unspecified but there's only one section with this data ID:
-    if itemIndexMapBySectionID.count == 1, let idAndIndexes = itemIndexMapBySectionID.first {
-      return lastIndexPath(in: idAndIndexes.value, sectionID: idAndIndexes.key)
-    }
-
-    // Otherwise there's multiple sections with the same data ID so we pick the last section so
-    // that it's stable.
-    let lastSectionID = itemIndexMapBySectionID.max(by: { first, second in
-      // `sectionIndexMap` is constructed from the same data as `itemIndexMap` so we can safely
-      // force unwrap.
-      sectionIndexMap[first.key]!.last! < sectionIndexMap[second.key]!.last!
-    })
-
-    if let sectionID = lastSectionID {
-      EpoxyLogger.shared.warn({
-        return """
-        Warning! Attempted to locate item \(path.itemDataID) when there are multiple sections that \
-        contain it each with IDs \(itemIndexMapBySectionID.keys) at the indexes \
-        \(itemIndexMapBySectionID.keys.map { sectionIndexMap[$0] }). Choosing the last section \
-        \(sectionID.key). To fix this warning specify the desired `sectionDataID` when \
-        constructing your `ItemPath`.
-        """
-      }())
-
-      return lastIndexPath(in: sectionID.value, sectionID: sectionID.key)
-    }
-
-    return nil
   }
 
   /// Returns the `Int` index corresponding to the given section `dataID`, logging a warning if the

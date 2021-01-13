@@ -41,7 +41,7 @@ open class CollectionView: UICollectionView {
     }
   }
 
-  public override func didMoveToWindow() {
+  open override func didMoveToWindow() {
     super.didMoveToWindow()
 
     if window == nil {
@@ -185,7 +185,7 @@ open class CollectionView: UICollectionView {
     else {
       return nil
     }
-    return .init(itemDataID: itemID, sectionDataID: sectionID)
+    return .init(itemDataID: itemID, section: .dataID(sectionID))
   }
 
   public func item(at point: CGPoint) -> AnyItemModel? {
@@ -281,41 +281,50 @@ open class CollectionView: UICollectionView {
     }
   }
 
-  public var visibleIndexPaths: [IndexPath] {
-    return indexPathsForVisibleItems
-  }
-
-  public var visibleEpoxyMetadata: VisibleEpoxyMetadata {
+  /// Metadata about the sections and items that are currently visible in this collection.
+  public var visibilityMetadata: CollectionViewVisibilityMetadata {
     // UICollectionView's indexPathsForVisibleItems is unsorted per Apple's documentation
     // https://developer.apple.com/documentation/uikit/uicollectionview/1618020-indexpathsforvisibleitems
-    let visibleIndexPaths = self.visibleIndexPaths.sorted()
-    var sectionMetadata = [VisibleSectionMetadata]()
-    let visibleSections = Set<Int>(visibleIndexPaths.map({ $0.section })).sorted()
+    let visibleItems = indexPathsForVisibleItems.sorted()
 
-    for section in visibleSections {
-      let sectionIndexPaths = visibleIndexPaths.filter({ $0.section == section })
-      let modelMetadata: [VisibleItemMetadata] = sectionIndexPaths.compactMap { [weak self] indexPath in
-        guard let cell = self?.cellForItem(at: indexPath) as? CollectionViewCell else { return nil }
-        guard let item = self?.epoxyDataSource.data?.item(at: indexPath) else {
-          EpoxyLogger.shared.assertionFailure("model not found")
-          return nil
-        }
-        return VisibleItemMetadata(model: item, view: cell.view)
+    let visibleSupplementaryItems = epoxyDataSource.supplementaryViewElementKinds
+      .reduce(into: [String: [IndexPath]]()) { result, kind in
+        let indexPaths = indexPathsForVisibleSupplementaryElements(ofKind: kind).sorted()
+        result[kind] = indexPaths
       }
 
-      guard let section = epoxyDataSource.data?.section(at: section) else {
-        EpoxyLogger.shared.assertionFailure("section not found")
-        break
+    let visibleSections = Set<Int>(visibleItems.map { $0.section }).sorted()
+
+    let sections: [CollectionViewVisibilityMetadata.Section] = visibleSections.compactMap { sectionIndex in
+      guard let section = epoxyDataSource.data?.section(at: sectionIndex) else { return nil }
+
+      let items: [CollectionViewVisibilityMetadata.Item] = visibleItems.compactMap { indexPath in
+        guard
+          indexPath.section == sectionIndex,
+          let item = epoxyDataSource.data?.item(at: indexPath)
+        else { return nil }
+        let view = (cellForItem(at: indexPath) as? CollectionViewCell)?.view
+        return CollectionViewVisibilityMetadata.Item(model: item, view: view)
       }
-      let newSectionMetadata = VisibleSectionMetadata(
-        section: section,
-        modelMetadata: modelMetadata)
-      sectionMetadata.append(newSectionMetadata)
+
+      let supplementaryItems = visibleSupplementaryItems.reduce(
+        into: [String: [CollectionViewVisibilityMetadata.SupplementaryItem]](),
+        { result, element in
+          result[element.key] = element.value.compactMap { indexPath in
+            guard
+              indexPath.section == sectionIndex,
+              let item = epoxyDataSource.data?.supplementaryItem(ofKind: element.key, at: indexPath)
+            else { return nil }
+            let supplementaryView = self.supplementaryView(forElementKind: element.key, at: indexPath)
+            let view = (supplementaryView as? CollectionViewReusableView)?.view
+            return CollectionViewVisibilityMetadata.SupplementaryItem(model: item, view: view)
+          }
+        })
+
+      return .init(model: section, items: items, supplementaryItems: supplementaryItems)
     }
 
-    return VisibleEpoxyMetadata(
-      sectionMetadata: sectionMetadata,
-      containerView: self)
+    return CollectionViewVisibilityMetadata(sections: sections, collectionView: self)
   }
 
   // MARK: Internal
@@ -958,7 +967,7 @@ extension CollectionView: CollectionViewCellAccessibilityDelegate {
       return
     }
 
-    lastFocusedDataID = .init(itemDataID: model.dataID, sectionDataID: section.dataID)
+    lastFocusedDataID = .init(itemDataID: model.dataID, section: .dataID(section.dataID))
 
     accessibilityDelegate?.collectionView(
       self,
