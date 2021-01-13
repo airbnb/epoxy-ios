@@ -14,8 +14,7 @@ class ShuffleViewController: EpoxyCollectionViewController {
 
   init() {
     super.init(collectionViewLayout: UICollectionViewCompositionalLayout.example())
-
-    self.tabBarItem = UITabBarItem.init(tabBarSystemItem: .bookmarks, tag: 0)
+    title = "Shuffle"
   }
 
   required init?(coder aDecoder: NSCoder) {

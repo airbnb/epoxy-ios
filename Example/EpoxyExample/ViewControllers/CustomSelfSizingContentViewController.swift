@@ -8,7 +8,7 @@ class CustomSelfSizingContentViewController: EpoxyCollectionViewController {
 
   init() {
     super.init(collectionViewLayout: UICollectionViewCompositionalLayout.example())
-    self.tabBarItem = UITabBarItem.init(tabBarSystemItem: .more, tag: 2)
+    title = "Custom self-sizing"
   }
 
   required init?(coder aDecoder: NSCoder) {

@@ -13,16 +13,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?)
     -> Bool
   {
-    let tabBarController = UITabBarController()
-    tabBarController.setViewControllers([
-      HighlightAndSelectionViewController(),
-      ShuffleViewController(),
-      CustomSelfSizingContentViewController(),
-    ], animated: false)
-
     window = UIWindow(frame: UIScreen.main.bounds)
     window?.backgroundColor = .white
-    window?.rootViewController = tabBarController
+    window?.rootViewController = MainViewController()
     window?.makeKeyAndVisible()
     return true
   }

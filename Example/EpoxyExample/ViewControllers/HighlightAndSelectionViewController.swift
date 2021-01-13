@@ -9,8 +9,7 @@ class HighlightAndSelectionViewController: EpoxyCollectionViewController {
 
   init() {
     super.init(collectionViewLayout: UICollectionViewCompositionalLayout.epoxy)
-
-    self.tabBarItem = UITabBarItem.init(tabBarSystemItem: .history, tag: 1)
+    title = "Highlight and Selection"
   }
   
   required init?(coder aDecoder: NSCoder) {

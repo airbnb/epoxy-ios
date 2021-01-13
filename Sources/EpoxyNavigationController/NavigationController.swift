@@ -25,7 +25,7 @@ open class NavigationController: UINavigationController {
   ///   controller into a wrapper container view controller to prevent the UIKit exception
   ///   thrown when a navigation controller is pushed within another navigation controller. Nesting
   ///   navigation controllers enables nesting sub-flows with a overarching flow.
-  public init(wrapNavigation: @escaping (_ nested: UINavigationController) -> UIViewController) {
+  public init(wrapNavigation: ((_ nested: UINavigationController) -> UIViewController)? = nil) {
     self.wrapNavigation = wrapNavigation
     super.init(nibName: nil, bundle: nil)
   }
@@ -89,7 +89,7 @@ open class NavigationController: UINavigationController {
   // MARK: Private
 
   private let queue = NavigationQueue()
-  private let wrapNavigation: (UINavigationController) -> UIViewController
+  private let wrapNavigation: ((UINavigationController) -> UIViewController)?
 
 }
 
@@ -104,6 +104,6 @@ extension NavigationController: NavigationInterface {
   }
 
   func wrapNavigation(_ navigationController: UINavigationController) -> UIViewController {
-    wrapNavigation(navigationController)
+    wrapNavigation?(navigationController) ?? navigationController
   }
 }
