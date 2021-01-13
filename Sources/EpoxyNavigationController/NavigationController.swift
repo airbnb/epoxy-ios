@@ -39,14 +39,31 @@ open class NavigationController: UINavigationController {
 
   @discardableResult
   open override func popViewController(animated: Bool) -> UIViewController? {
-    guard let popped = super.popViewController(animated: animated) else { return nil }
+    guard let popped = super.popViewController(animated: animated) else {
+      return nil
+    }
     queue.didPop([popped], animated: animated, from: self)
     return popped
   }
 
   @discardableResult
   open override func popToRootViewController(animated: Bool) -> [UIViewController]? {
-    guard let popped = super.popToRootViewController(animated: animated) else { return nil }
+    guard let popped = super.popToRootViewController(animated: animated) else {
+      return nil
+    }
+    queue.didPop(popped, animated: animated, from: self)
+    return popped
+  }
+
+  @discardableResult
+  open override func popToViewController(
+    _ viewController: UIViewController,
+    animated: Bool)
+    -> [UIViewController]?
+  {
+    guard let popped = super.popToViewController(viewController, animated: animated) else {
+      return nil
+    }
     queue.didPop(popped, animated: animated, from: self)
     return popped
   }
