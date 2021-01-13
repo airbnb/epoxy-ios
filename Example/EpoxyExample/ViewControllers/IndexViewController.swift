@@ -23,6 +23,7 @@ final class IndexViewController: EpoxyCollectionViewController {
     case highlightAndSelection
     case shuffle
     case customSelfSizing
+    case product
   }
 
   override func epoxySections() -> [SectionModel] {
@@ -60,6 +61,8 @@ extension IndexViewController.ListItem {
       return "Highlight and selection demo"
     case .shuffle:
       return "Shuffle demo"
+    case .product:
+      return "Product Detail Page"
     }
   }
 }
