@@ -19,6 +19,7 @@ final class MainViewController: NavigationController {
     var showCustomSelfSizing = false
     var showHighlightAndSelection = false
     var showShuffle = false
+    var showProduct = false
   }
 
   private enum DataIDs {
@@ -26,6 +27,7 @@ final class MainViewController: NavigationController {
     case customSelfSizing
     case higlightAndSelection
     case shuffle
+    case product
   }
 
   private var state = State() {
@@ -39,7 +41,8 @@ final class MainViewController: NavigationController {
       root,
       customSelfSizing,
       highlightAndSelection,
-      shuffle
+      shuffle,
+      product
     ]
   }
 
@@ -53,6 +56,8 @@ final class MainViewController: NavigationController {
           self?.state.showHighlightAndSelection = true
         case .shuffle:
           self?.state.showShuffle = true
+        case .product:
+          self?.state.showProduct = true
         }
       }
     }
@@ -91,6 +96,18 @@ final class MainViewController: NavigationController {
       },
       remove: { [weak self] in
         self?.state.showShuffle = false
+      })
+  }
+
+  private var product: NavigationModel? {
+    guard state.showProduct else { return nil }
+    return NavigationModel(
+      dataID: DataIDs.product,
+      makeViewController: {
+        ProductViewController()
+      },
+      remove: { [weak self] in
+        self?.state.showProduct = false
       })
   }
 
