@@ -6,52 +6,55 @@ import EpoxyCore
 // MARK: Extensions
 
 extension SectionModel {
-  /// Gets the cell reuse IDs from the given external sections
-  public func getCellReuseIDs() -> Set<String> {
-    var newCellReuseIDs = Set<String>()
+
+  /// Gets all items' view differentiators from the section.
+  public func getItemViewDifferentiators() -> Set<ViewDifferentiator> {
+    var newViewDifferentiators = Set<ViewDifferentiator>(minimumCapacity: items.count)
     for item in items {
-      newCellReuseIDs.insert(item.reuseID)
+      newViewDifferentiators.insert(item.viewDifferentiator)
     }
-    return newCellReuseIDs
+    return newViewDifferentiators
   }
 
-  /// Gets the supplementary view reuse IDs by kind from the given external sections
-  public func getSupplementaryViewReuseIDs() -> [String: Set<String>] {
-    var newSupplementaryViewReuseIDs = [String: Set<String>]()
+  /// Gets the supplementary views' view differentiators for each element kind from the given section.
+  public func getSupplementaryViewDifferentiators() -> [String: Set<ViewDifferentiator>] {
+    var newViewDifferentiatorsForElementKind = [String: Set<ViewDifferentiator>]()
 
     for (elementKind, elementSupplementaryModels) in supplementaryItems {
-      var newElementSupplementaryViewReuseIDs = Set<String>()
+      var newViewDifferentiators = Set<ViewDifferentiator>()
       for elementSupplementaryModel in elementSupplementaryModels {
-        let reuseID = elementSupplementaryModel.eraseToAnySupplementaryItemModel().reuseID
-        newElementSupplementaryViewReuseIDs.insert(reuseID)
+        let viewDifferentiator = elementSupplementaryModel
+          .eraseToAnySupplementaryItemModel()
+          .viewDifferentiator
+        newViewDifferentiators.insert(viewDifferentiator)
       }
-      newSupplementaryViewReuseIDs[elementKind] = newElementSupplementaryViewReuseIDs
+      newViewDifferentiatorsForElementKind[elementKind] = newViewDifferentiators
     }
 
-    return newSupplementaryViewReuseIDs
+    return newViewDifferentiatorsForElementKind
   }
 }
 
 // MARK: - Array
 
 extension Array where Element == SectionModel {
-  public func getCellReuseIDs() -> Set<String> {
-    var newReuseIDs = Set<String>()
-    forEach { section in
-      newReuseIDs = newReuseIDs.union(section.getCellReuseIDs())
+  public func getItemViewDifferentiators() -> Set<ViewDifferentiator> {
+    var newViewDifferentiators = Set<ViewDifferentiator>()
+    for section in self {
+      newViewDifferentiators = newViewDifferentiators.union(section.getItemViewDifferentiators())
     }
-    return newReuseIDs
+    return newViewDifferentiators
   }
 
-  public func getSupplementaryViewReuseIDs() -> [String: Set<String>] {
-    var newReuseIDs = [String: Set<String>]()
-    forEach { section in
-      let sectionReuseIDs = section.getSupplementaryViewReuseIDs()
-      for (elementKind, reuseIDs) in sectionReuseIDs {
-        let existingSet = newReuseIDs[elementKind] ?? Set<String>()
-        newReuseIDs[elementKind] = existingSet.union(reuseIDs)
+  public func getSupplementaryViewDifferentiators() -> [String: Set<ViewDifferentiator>] {
+    var newViewDifferentiatorsForElementKind = [String: Set<ViewDifferentiator>]()
+    for section in self {
+      let sectionViewDifferentiators = section.getSupplementaryViewDifferentiators()
+      for (elementKind, viewDifferentiators) in sectionViewDifferentiators {
+        let existingSet = newViewDifferentiatorsForElementKind[elementKind] ?? []
+        newViewDifferentiatorsForElementKind[elementKind] = existingSet.union(viewDifferentiators)
       }
     }
-    return newReuseIDs
+    return newViewDifferentiatorsForElementKind
   }
 }

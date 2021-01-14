@@ -51,8 +51,8 @@ extension AnySupplementaryItemModel: SupplementaryItemModeling {
 
 extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
 
-  public var reuseID: String {
-    model.reuseID
+  public var viewDifferentiator: ViewDifferentiator {
+    model.viewDifferentiator
   }
 
   public var dataID: AnyHashable {

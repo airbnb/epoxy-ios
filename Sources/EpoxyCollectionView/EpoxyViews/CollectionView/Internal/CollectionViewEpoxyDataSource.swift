@@ -26,22 +26,22 @@ final class CollectionViewEpoxyDataSource: NSObject {
   weak var collectionView: CollectionView? {
     didSet {
       guard collectionView !== oldValue else { return }
-      reregisterReuseIDs()
+      reregisterViewDifferentiators()
     }
   }
 
   /// All supplementary view element kinds that have been registered with this data source.
   var supplementaryViewElementKinds: Set<String> {
-    .init(supplementaryViewReuseIDs.keys)
+    .init(registeredSupplementaryViewDifferentiators.keys)
   }
 
   private(set) var data: InternalCollectionViewEpoxyData?
 
-  /// Registers the reuse IDs of the items in the given sections with this data source's associated
+  /// Registers reuse IDs for the items in the given sections with this data source's associated
   /// `CollectionView`.
   func registerSections(_ sections: [SectionModel]) {
-    registerCellReuseIDs(with: sections)
-    registerSupplementaryViewReuseIDs(with: sections)
+    registerViewDifferentiators(with: sections)
+    registerSupplementaryViewDifferentiators(with: sections)
   }
 
   /// The result of applying new data to this data source.
@@ -96,55 +96,57 @@ final class CollectionViewEpoxyDataSource: NSObject {
 
   // MARK: Private
 
-  /// The set of cell reuse IDs that have been registered on the collection view.
-  private var cellReuseIDs = Set<String>()
+  private let reuseIDStore = ReuseIDStore()
 
-  /// The set of supplementary view reuse IDs that have been registered on the collection view,
-  /// keyed by element kind.
-  private var supplementaryViewReuseIDs = [String: Set<String>]()
+  /// The set of cell ViewDifferentiators that have been registered on the collection view.
+  private var registeredCellViewDifferentiators = Set<ViewDifferentiator>()
+  /// The set of supplementary view ViewDifferentiators that have been registered on the collection
+  /// view, keyed by element kind.
+  private var registeredSupplementaryViewDifferentiators = [String: Set<ViewDifferentiator>]()
 
-  private func reregisterReuseIDs() {
-    registerNewCellReuseIDs(cellReuseIDs)
-
-    for (elementKind, reuseIDs) in supplementaryViewReuseIDs {
-      registerNewSupplementaryViewReuseIDs(reuseIDs, forKind: elementKind)
+  private func reregisterViewDifferentiators() {
+    registerNewViewDifferentiators(registeredCellViewDifferentiators)
+    for (elementKind, viewDifferentiators) in registeredSupplementaryViewDifferentiators {
+      registerNewSupplementaryViewDifferentiator(viewDifferentiators, forKind: elementKind)
     }
   }
 
-  private func registerCellReuseIDs(with sections: [SectionModel]) {
-    let newReuseIDs = sections.getCellReuseIDs()
-    registerNewCellReuseIDs(newReuseIDs.subtracting(cellReuseIDs))
-    cellReuseIDs = cellReuseIDs.union(newReuseIDs)
+  private func registerViewDifferentiators(with sections: [SectionModel]?) {
+    let newViewDifferentiators = sections?.getItemViewDifferentiators() ?? []
+    registerNewViewDifferentiators(
+      newViewDifferentiators.subtracting(registeredCellViewDifferentiators))
+    registeredCellViewDifferentiators =
+      registeredCellViewDifferentiators.union(newViewDifferentiators)
   }
 
-  private func registerSupplementaryViewReuseIDs(with sections: [SectionModel]) {
-    let newReuseIDs = sections.getSupplementaryViewReuseIDs()
+  private func registerSupplementaryViewDifferentiators(with sections: [SectionModel]?) {
+    let newViewDifferentiators = sections?.getSupplementaryViewDifferentiators() ?? [:]
+    for (elementKind, newElementViewDifferentiators) in newViewDifferentiators {
+      let existingViewDifferentiators = registeredSupplementaryViewDifferentiators[elementKind]
+        ?? []
+      registerNewSupplementaryViewDifferentiator(
+        newElementViewDifferentiators.subtracting(existingViewDifferentiators),
+        forKind: elementKind)
+      registeredSupplementaryViewDifferentiators[elementKind] = existingViewDifferentiators
+        .union(newElementViewDifferentiators)
 
-    for (kind, newKindReuseIDs) in newReuseIDs {
-      let existingKindReuseIDs: Set<String> = supplementaryViewReuseIDs[kind] ?? []
-
-      registerNewSupplementaryViewReuseIDs(
-        newKindReuseIDs.subtracting(existingKindReuseIDs),
-        forKind: kind)
-
-      supplementaryViewReuseIDs[kind] = existingKindReuseIDs.union(newKindReuseIDs)
     }
   }
 
-  private func registerNewCellReuseIDs(_ newCellReuseIDs: Set<String>) {
+  private func registerNewViewDifferentiators(_ newViewDifferentiators: Set<ViewDifferentiator>) {
     guard let collectionView = collectionView else {
       EpoxyLogger.shared.assertionFailure(
         "Trying to register reuse IDs before the CollectionView was set.")
       return
     }
-
-    for cellReuseID in newCellReuseIDs {
-      collectionView.register(cellReuseID: cellReuseID)
+    for viewDifferentiator in newViewDifferentiators {
+      let reuseID = reuseIDStore.reuseID(for: viewDifferentiator)
+      collectionView.register(cellReuseID: reuseID)
     }
   }
 
-  private func registerNewSupplementaryViewReuseIDs(
-    _ newSupplementaryViewReuseIDs: Set<String>,
+  private func registerNewSupplementaryViewDifferentiator(
+    _ newViewDifferentiators: Set<ViewDifferentiator>,
     forKind elementKind: String)
   {
     guard let collectionView = collectionView else {
@@ -152,10 +154,10 @@ final class CollectionViewEpoxyDataSource: NSObject {
         "Trying to register reuse IDs before the CollectionView was set.")
       return
     }
-
-    for supplementaryViewReuseID in newSupplementaryViewReuseIDs {
+    for viewDifferentiator in newViewDifferentiators {
+      let reuseID = reuseIDStore.reuseID(for: viewDifferentiator)
       collectionView.register(
-        supplementaryViewReuseID: supplementaryViewReuseID,
+        supplementaryViewReuseID: reuseID,
         forKind: elementKind)
     }
   }
@@ -190,8 +192,9 @@ extension CollectionViewEpoxyDataSource: UICollectionViewDataSource {
       return UICollectionViewCell()
     }
 
+    let reuseID = reuseIDStore.reuseID(for: item.viewDifferentiator)
     let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: item.reuseID,
+      withReuseIdentifier: reuseID,
       for: indexPath)
 
     if let cell = cell as? CollectionViewCell {
@@ -214,13 +217,17 @@ extension CollectionViewEpoxyDataSource: UICollectionViewDataSource {
       return UICollectionReusableView()
     }
 
+    let reuseID = reuseIDStore.reuseID(for: model.viewDifferentiator)
     let supplementaryView = collectionView.dequeueReusableSupplementaryView(
       ofKind: kind,
-      withReuseIdentifier: model.reuseID,
+      withReuseIdentifier: reuseID,
       for: indexPath)
 
     if let supplementaryView = supplementaryView as? CollectionViewReusableView {
-      self.collectionView?.configure(supplementaryView: supplementaryView, with: model, animated: false)
+      self.collectionView?.configure(
+        supplementaryView: supplementaryView,
+        with: model,
+        animated: false)
     } else {
       EpoxyLogger.shared.assertionFailure(
         "Only CollectionViewReusableView and subclasses are allowed in a CollectionView.")

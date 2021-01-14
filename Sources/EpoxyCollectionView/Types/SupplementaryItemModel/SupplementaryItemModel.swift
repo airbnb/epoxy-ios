@@ -57,7 +57,7 @@ public struct SupplementaryItemModel<View: UIView, Content: Equatable>: ContentV
 
 // MARK: Providers
 
-extension SupplementaryItemModel: AlternateStyleIDStringProviding {}
+extension SupplementaryItemModel: AlternateStyleIDProviding {}
 extension SupplementaryItemModel: ConfigureViewProviding {}
 extension SupplementaryItemModel: ContentProviding {}
 extension SupplementaryItemModel: DataIDProviding {}
@@ -77,10 +77,8 @@ extension SupplementaryItemModel: SupplementaryItemModeling {
 // MARK: InternalSupplementaryItemModeling
 
 extension SupplementaryItemModel: InternalSupplementaryItemModeling {
-  public var reuseID: String {
-    let viewType = "\(type(of: View.self))"
-    guard let alternateStyleID = alternateStyleID else { return viewType }
-    return viewType + "_" + alternateStyleID
+  public var viewDifferentiator: ViewDifferentiator {
+    .init(viewType: View.self, styleID: alternateStyleID)
   }
 
   public func configure(
