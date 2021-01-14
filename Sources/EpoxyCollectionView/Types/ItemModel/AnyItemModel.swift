@@ -48,8 +48,8 @@ extension AnyItemModel: ItemModeling {
 // MARK: InternalItemModeling
 
 extension AnyItemModel: InternalItemModeling {
-  public var reuseID: String {
-    model.reuseID
+  public var viewDifferentiator: ViewDifferentiator {
+    model.viewDifferentiator
   }
 
   public var isSelectable: Bool {

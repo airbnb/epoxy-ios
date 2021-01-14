@@ -26,7 +26,7 @@ extension SupplementaryItemModeling {
 
 protocol InternalSupplementaryItemModeling: SupplementaryItemModeling,
   DataIDProviding,
-  ReuseIDProviding,
+  ViewDifferentiatorProviding,
   Diffable,
   EpoxyModeled
 {

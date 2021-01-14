@@ -7,7 +7,7 @@ import UIKit
 
 // MARK: - ItemModeling
 
-public protocol ItemModeling: DataIDProviding, ReuseIDProviding, Diffable {
+public protocol ItemModeling: ViewDifferentiatorProviding, DataIDProviding, Diffable {
   /// Returns this item model with its type erased to the `AnyItemModel` type.
   func eraseToAnyItemModel() -> AnyItemModel
 }

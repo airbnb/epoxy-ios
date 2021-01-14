@@ -69,7 +69,7 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
 
 // MARK: Providers
 
-extension ItemModel: AlternateStyleIDStringProviding {}
+extension ItemModel: AlternateStyleIDProviding {}
 extension ItemModel: ConfigureViewProviding {}
 extension ItemModel: ContentProviding {}
 extension ItemModel: DataIDProviding {}
@@ -93,10 +93,8 @@ extension ItemModel: ItemModeling {
 // MARK: InternalItemModeling
 
 extension ItemModel: InternalItemModeling {
-  public var reuseID: String {
-    let viewType = "\(type(of: View.self))"
-    guard let alternateStyleID = alternateStyleID else { return viewType }
-    return viewType + "_" + alternateStyleID
+  public var viewDifferentiator: ViewDifferentiator {
+    .init(viewType: View.self, styleID: alternateStyleID)
   }
 
   public var isSelectable: Bool {
