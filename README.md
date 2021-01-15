@@ -8,7 +8,7 @@ Epoxy can be installed using CocoaPods, Carthage or Swift Package Manager.
 
 ### CocoaPods
 
-To get started with Epoxy using [Cocoapods](https://cocoapods.org) add `pod 'Epoxy'` to your Podfile and then follow the integration tutorial [here](https://guides.cocoapods.org/using/using-cocoapods.html).
+To get started with Epoxy using [Cocoapods](https://cocoapods.org) add `pod 'Epoxy'` to your Podfile and then follow the integration instructions [here](https://guides.cocoapods.org/using/using-cocoapods.html).
 
 Epoxy also comes with a number of [subspecs](https://guides.cocoapods.org/syntax/podspec.html#subspec) so you only have to include what you need. The following subspecs are available:
 
@@ -23,7 +23,7 @@ To use a subspec, simply include the name of the subspec in your `Podfile` inste
 
 ### Carthage
 
-To install Epoxy using [Carthage](https://github.com/Carthage/Carthage) include `github "airbnb/epoxy-ios"` in your `Cartfile` and follow the integrations instructions [here](https://github.com/Carthage/Carthage#if-youre-building-for-ios-tvos-or-watchos).
+To install Epoxy using [Carthage](https://github.com/Carthage/Carthage) include `github "airbnb/epoxy-ios"` in your `Cartfile` and follow the integration instructions [here](https://github.com/Carthage/Carthage#if-youre-building-for-ios-tvos-or-watchos).
 
 ### Swift Package Manager (SPM)
 
