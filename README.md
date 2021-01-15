@@ -35,7 +35,7 @@ To install Epoxy using [Swift Package Manager](https://github.com/apple/swift-pa
 
 `EpoxyCollectionView` provides a declarative API for driving the content of a `UICollectionView`. `EpoxyCollectionViewController` is a subclassable `UIViewController` that lets you easily spin up a `UICollectionView`-backed view controller with a declarative API.
 
-The following code sample will render a single cell in a `UICollectionView` with a `UIButton` rendered in that cell:
+The following code sample will render a single cell in a `UICollectionView` with a `Row` component rendered in that cell. Note that the `Row` component is a simple `UIView` containing 2 labels, and conforms to the [`EpoxyableView`](https://github.com/airbnb/epoxy-ios/blob/master/Sources/EpoxyCore/Views/EpoxyableView.swift) protocol:
 
 ```swift
 import Epoxy
@@ -65,7 +65,7 @@ final class FeatureViewController: EpoxyCollectionViewController {
 
 `EpoxyBars` provides a declarative API for rendering fixed top and bottom bars in a `UIViewController`
 
-The following code example will render a `UIButton` fixed to the bottom of the `UIViewController's` view:
+The following code example will render a `ButtonRow` component fixed to the bottom of the `UIViewController's` view. Note that `ButtonRow` is a simple `UIView` component that contains a single `UIButton` constrained to the margins of the superview that conforms to the `EpoxyableView` protocol:
 
 ```swift
 final class FeatureViewController: UIViewController {
