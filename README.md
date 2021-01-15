@@ -4,7 +4,7 @@ Epoxy is a suite of declarative UI frameworks for use in iOS applications writte
 
 ## Installation
 
-Epoxy can be installed using CocoaPods or Swift Package Manager.
+Epoxy can be installed using CocoaPods, Carthage or Swift Package Manager.
 
 ### CocoaPods
 
