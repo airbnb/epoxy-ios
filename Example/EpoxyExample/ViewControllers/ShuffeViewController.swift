@@ -6,14 +6,10 @@ import UIKit
 
 class ShuffleViewController: EpoxyCollectionViewController {
 
-  // MARK: Properties
-
-  private var timer: Timer?
-
-  // MARK: Initialization
+  // MARK: Lifecycle
 
   init() {
-    super.init(collectionViewLayout: UICollectionViewCompositionalLayout.example())
+    super.init(collectionViewLayout: UICollectionViewCompositionalLayout.listNoDividers)
     title = "Shuffle"
   }
 
@@ -21,47 +17,59 @@ class ShuffleViewController: EpoxyCollectionViewController {
     fatalError("init(coder:) has not been implemented")
   }
 
-  // MARK: View Lifecycle
+  // MARK: Internal
 
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    self.timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] timer in
+    Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] timer in
       guard let self = self else {
         timer.invalidate()
         return
       }
-
-      self.updateData(animated: true)
+      self.state.shuffle()
     }
   }
 
-  // MARK: EpoxyCollectionViewController
-
   override func epoxySections() -> [SectionModel] {
-    [
+    state.sections.map { section in
       SectionModel(
-        items: (0..<10).shuffled().filter { _ in Int.random(in: 0..<3) % 3 != 0 }.map { dataID in
-          ItemModel<Row, RowContent>(
-            dataID: dataID,
+        dataID: section.id,
+        items: section.itemIDs.map { itemID in
+          Row.itemModel(
+            dataID: itemID,
             content: .init(
-              title: "Row \(dataID)",
-              subtitle: kTestTexts[dataID]))
-            .configureView { context in
-              context.view.titleText = context.content.title
-              context.view.text = context.content.subtitle
-            }
+              title: "Section \(section.id), Row \(itemID)",
+              body: kTestTexts[itemID % 10]),
+            style: .small)
             .didSelect { context in
-              print("Shuffle selected \(context.dataID) (selection handler)")
+              print("Selected section \(section.id), Row \(itemID)")
             }
         })
-        .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
-          SupplementaryItemModel<Row, String>(dataID: 0, content: "Section 0")
-            .configureView { context in
-              context.view.titleText = context.content
-            }
-        ])
-    ]
+    }
+  }
+
+  // MARK: Private
+
+  private struct State {
+    init() {
+      shuffle()
+    }
+
+    var sections = [(id: Int, itemIDs: [Int])]()
+
+    mutating func shuffle() {
+      sections = (0..<3).shuffled().filter { _ in Int.random(in: 0..<3) % 3 != 0 }.map { id in
+        let itemIDs = (0..<10).shuffled().filter { _ in Int.random(in: 0..<3) % 3 != 0 }
+        return (id: id, itemIDs: itemIDs)
+      }
+    }
+  }
+
+  private var state = State() {
+    didSet {
+      updateData(animated: true)
+    }
   }
 
 }

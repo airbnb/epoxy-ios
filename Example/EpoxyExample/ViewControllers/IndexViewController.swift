@@ -9,7 +9,7 @@ final class IndexViewController: EpoxyCollectionViewController {
 
   init(didSelectItem: @escaping (ListItem) -> Void) {
     self.didSelectItem = didSelectItem
-    super.init(collectionViewLayout: UICollectionViewCompositionalLayout.list())
+    super.init(collectionViewLayout: UICollectionViewCompositionalLayout.list)
     title = "Epoxy"
   }
   
@@ -38,12 +38,7 @@ final class IndexViewController: EpoxyCollectionViewController {
 
   private func items() -> [ItemModeling] {
     ListItem.allCases.map { item in
-      ItemModel<Row, String>(
-        dataID: item,
-        content: item.rowTitle,
-        configureView: { context in
-          context.view.titleText = context.content
-        })
+      Row.itemModel(dataID: item, content: .init(title: item.rowTitle), style: .small)
         .didSelect { [weak self] _ in
           self?.didSelectItem(item)
         }

@@ -15,6 +15,18 @@ public struct SupplementaryItemModel<View: UIView, Content: Equatable>: ContentV
 
   // MARK: Lifecycle
 
+  /// Constructs an item model with a data ID, content, and a closure to configure the item view
+  /// with new content whenever it changes.
+  ///
+  /// - Parameters:
+  ///   - dataID: An ID that uniquely identifies this item relative to other items in the
+  ///     same collection.
+  ///   - content: The content of the item view that will be applied to the view in the
+  ///     `configureView` closure whenver it has changed.
+  ///   - configureView: A closure that's called to configure the view with its content, both
+  ///     immediately following its construction in `makeView` and subsequently whenever a new item
+  ///     model that replaced an old item model with the same `dataID` has content that is not equal
+  ///     to the content of the old item model.
   public init(
     dataID: AnyHashable,
     content: Content,
@@ -22,6 +34,36 @@ public struct SupplementaryItemModel<View: UIView, Content: Equatable>: ContentV
   {
     self.dataID = dataID
     self.content = content
+    self.configureView = configureView
+  }
+
+  /// Constructs an item model with a data ID, initializer parameters, content, a closure to
+  /// construct the view from the parameters, and a closure to configure the item view with new
+  /// content whenever it changes.
+  ///
+  /// - Parameters:
+  ///   - dataID: An ID that uniquely identifies this item relative to other items in the
+  ///     same collection.
+  ///   - params: The parameters used to construct an instance of the view, passed into the
+  ///     `makeView` function and used as a view reuse identifier.
+  ///   - content: The content of the item view that will be applied to the view in the
+  ///     `configureView` closure whenver it has changed.
+  ///   - makeView: A closure that's called with `params` to construct view instances as required.
+  ///   - configureView: A closure that's called to configure the view with its content, both
+  ///     immediately following its construction in `makeView` and subsequently whenever a new item
+  ///     model that replaced an old item model with the same `dataID` has content that is not equal
+  ///     to the content of the old item model.
+  public init<Params: Hashable>(
+    dataID: AnyHashable,
+    params: Params,
+    content: Content,
+    makeView: @escaping (Params) -> View,
+    configureView: @escaping ConfigureView)
+  {
+    self.dataID = dataID
+    self.alternateStyleID = params
+    self.content = content
+    self.makeView = { makeView(params) }
     self.configureView = configureView
   }
 

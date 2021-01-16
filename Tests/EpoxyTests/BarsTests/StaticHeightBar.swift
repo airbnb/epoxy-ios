@@ -2,34 +2,29 @@
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
 import UIKit
-import EpoxyBars
+import Epoxy
 
 // MARK: - StaticHeightBar
 
-final class StaticHeightBar: UIView {
+final class StaticHeightBar: UIView, EpoxyableView {
 
   // MARK: Lifecycle
 
-  init(height: CGFloat) {
+  struct Style: Hashable {
+    var height: CGFloat
+  }
+
+  init(style: Style) {
     super.init(frame: .zero)
     translatesAutoresizingMaskIntoConstraints = false
 
     NSLayoutConstraint.activate([
-      heightAnchor.constraint(equalToConstant: height)
+      heightAnchor.constraint(equalToConstant: style.height)
     ])
   }
 
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
-  }
-  
-  // MARK: Internal
-
-  static func barModel(height: CGFloat) -> BarModeling {
-    BarModel<StaticHeightBar, EmptyContent>(
-      content: EmptyContent(),
-      makeView: { StaticHeightBar(height: 100) },
-      configureView: { _ in })
   }
 
 }

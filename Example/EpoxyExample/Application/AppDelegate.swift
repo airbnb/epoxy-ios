@@ -14,7 +14,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     -> Bool
   {
     window = UIWindow(frame: UIScreen.main.bounds)
-    window?.backgroundColor = .white
     window?.rootViewController = MainViewController()
     window?.makeKeyAndVisible()
     return true

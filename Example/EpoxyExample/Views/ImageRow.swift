@@ -1,9 +1,10 @@
 // Created by Tyler Hedrick on 1/12/21.
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
+import Epoxy
 import UIKit
 
-final class ImageRow: UIView {
+final class ImageRow: UIView, EpoxyableView {
 
   init() {
     super.init(frame: .zero)
@@ -17,13 +18,10 @@ final class ImageRow: UIView {
 
   // MARK: Public
 
-  public var content: ImageRowContent? {
-    didSet {
-      guard let content = content else { return }
-      titleLabel.text = content.title
-      subtitleLabel.text = content.subtitle
-      imageView.setURL(content.imageURL)
-    }
+  func setContent(_ content: ImageRowContent, animated: Bool) {
+    titleLabel.text = content.title
+    subtitleLabel.text = content.subtitle
+    imageView.setURL(content.imageURL)
   }
 
   // MARK: Private

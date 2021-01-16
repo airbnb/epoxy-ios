@@ -6,8 +6,10 @@ import Epoxy
 
 class CustomSelfSizingContentViewController: EpoxyCollectionViewController {
 
+  // MARK: Lifecycle
+
   init() {
-    super.init(collectionViewLayout: UICollectionViewCompositionalLayout.example())
+    super.init(collectionViewLayout: UICollectionViewCompositionalLayout.listNoDividers)
     title = "Custom self-sizing"
   }
 
@@ -19,16 +21,9 @@ class CustomSelfSizingContentViewController: EpoxyCollectionViewController {
 
   override func epoxySections() -> [SectionModel] {
     [
-      SectionModel(
-        items: (0..<10).map { dataID in
-          ItemModel<CustomSizingView, Int>(dataID: dataID, content: dataID)
-        })
-        .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
-          SupplementaryItemModel<Row, String>(dataID: 0, content: "Section 0")
-            .configureView { context in
-              context.view.titleText = context.content
-            }
-        ])
+      SectionModel(items: (Int(0)..<Int(10)).map { dataID in
+        CustomSizingView.itemModel(dataID: dataID)
+      }),
     ]
   }
 }
