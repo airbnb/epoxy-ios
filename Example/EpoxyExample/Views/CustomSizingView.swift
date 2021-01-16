@@ -1,9 +1,10 @@
 // Created by Cal Stephens on 2/12/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
+import Epoxy
 import UIKit
 
-final class CustomSizingView: UIView {
+final class CustomSizingView: UIView, EpoxyableView {
 
   // MARK: Lifecycle
 

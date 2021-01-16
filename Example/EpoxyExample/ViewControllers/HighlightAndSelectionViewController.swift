@@ -27,14 +27,10 @@ class HighlightAndSelectionViewController: EpoxyCollectionViewController {
       SectionModel(
         dataID: SectionID.carousel,
         items: (0..<10).map { (dataID: Int) in
-          ItemModel<Row, RowContent>(
+          Row.itemModel(
             dataID: dataID,
-            content: RowContent(title: nil, subtitle: "Page \(dataID)"))
-            .configureView { context in
-              print("Carousel page \(dataID) configuration")
-              context.view.titleText = context.content.title
-              context.view.text = context.content.subtitle
-            }
+            content: .init(title: "Page \(dataID)", body: ""),
+            style: .small)
             .didSelect { _ in
               print("Carousel page \(dataID) did select")
             }
@@ -43,23 +39,16 @@ class HighlightAndSelectionViewController: EpoxyCollectionViewController {
             }
         })
         .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
-          SupplementaryItemModel<Row, String>(dataID: 0, content: "Carousel section")
-            .configureView { context in
-              context.view.titleText = context.content
-            }
+          Row.supplementaryItemModel(dataID: 0, content: .init(title: "Carousel section"), style: .large)
         ])
-        .compositionalLayoutSection(.carousel),
+        .compositionalLayoutSection(.carouselWithHeader),
       SectionModel(
         dataID: SectionID.list,
         items: (0..<10).map { dataID in
-          ItemModel<Row, RowContent>(
+          Row.itemModel(
             dataID: dataID,
-            content: .init(title: "Row \(dataID)", subtitle: kTestTexts[dataID]))
-            .configureView { context in
-              print("List row \(dataID) configuration")
-              context.view.titleText = context.content.title
-              context.view.text = context.content.subtitle
-            }
+            content: .init(title: "Row \(dataID)", body: kTestTexts[dataID]),
+            style: .small)
             .didSelect { _ in
               print("List row \(dataID) selected")
             }
@@ -68,66 +57,9 @@ class HighlightAndSelectionViewController: EpoxyCollectionViewController {
             }
         })
         .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
-          SupplementaryItemModel<Row, String>(dataID: 0, content: "List section")
-            .configureView { context in
-              context.view.titleText = context.content
-            }
+          Row.supplementaryItemModel(dataID: 0, content: .init(title: "List section"), style: .large)
         ])
-        .compositionalLayoutSectionProvider(NSCollectionLayoutSection.list(layoutEnvironment:)),
+        .compositionalLayoutSectionProvider(NSCollectionLayoutSection.listWithHeader),
     ]
-  }
-}
-
-// MARK: - NSCollectionLayoutSection
-
-extension NSCollectionLayoutSection {
-  fileprivate static var carousel: NSCollectionLayoutSection {
-    let item = NSCollectionLayoutItem(
-      layoutSize: .init(widthDimension: .fractionalWidth(0.8), heightDimension: .estimated(50)))
-
-    let group = NSCollectionLayoutGroup.horizontal(
-      layoutSize: .init(widthDimension: .fractionalWidth(0.8), heightDimension: .estimated(50)),
-      subitems: [item])
-    group.contentInsets = .zero
-
-    let section = NSCollectionLayoutSection(group: group)
-    section.orthogonalScrollingBehavior = .groupPaging
-
-    let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)),
-      elementKind: UICollectionView.elementKindSectionHeader,
-      alignment: .top)
-
-    section.boundarySupplementaryItems = [sectionHeader]
-
-    return section
-  }
-
-  fileprivate static func list(
-    layoutEnvironment: NSCollectionLayoutEnvironment)
-    -> NSCollectionLayoutSection
-  {
-    let section: NSCollectionLayoutSection
-    if #available(iOS 14, *) {
-      section = .list(using: .init(appearance: .plain), layoutEnvironment: layoutEnvironment)
-    } else {
-      let item = NSCollectionLayoutItem(
-        layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(150)))
-
-      let group = NSCollectionLayoutGroup.vertical(
-        layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(150)),
-        subitems: [item])
-
-      section = NSCollectionLayoutSection(group: group)
-    }
-
-    let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
-      layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)),
-      elementKind: UICollectionView.elementKindSectionHeader,
-      alignment: .top)
-
-    section.boundarySupplementaryItems = [sectionHeader]
-
-    return section
   }
 }

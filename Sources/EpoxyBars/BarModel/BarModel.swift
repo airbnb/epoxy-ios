@@ -24,7 +24,7 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
   ///
   /// - Parameters:
   ///   - dataID: An optional ID that uniquely identifies this bar relative to other bars in the
-  ///     same bar group.
+  ///     same bar stack.
   ///   - content: The content of the bar view that will be applied to the view in the `configure`
   ///     closure whenver it has changed.
   ///   - makeView: A closure that constructs the view of this bar. the `configure` closure is
@@ -37,14 +37,44 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
   public init(
     dataID: AnyHashable? = nil,
     content: Content,
-    makeView: @escaping MakeView,
     configureView: @escaping ConfigureView)
   {
     if let dataID = dataID {
       self.dataID = dataID
     }
     self.content = content
-    self.makeView = makeView
+    self.configureView = configureView
+  }
+
+  /// Constructs a bar model with a data ID, initializer parameters, content, a closure to construct
+  /// the view from the parameters, and a closure to configure the bar view with new content
+  /// whenever it changes.
+  ///
+  /// - Parameters:
+  ///   - dataID: An optional ID that uniquely identifies this bar relative to other bars in the
+  ///     same bar stack.
+  ///   - params: The parameters used to construct an instance of the view, passed into the
+  ///     `makeView` function and used as a view reuse identifier.
+  ///   - content: The content of the bar view that will be applied to the view in the
+  ///     `configureView` closure whenver it has changed.
+  ///   - makeView: A closure that's called with `params` to construct view instances as required.
+  ///   - configureView: A closure that's called to configure the view with its content, both
+  ///     immediately following its construction in `makeView` and subsequently whenever a new bar
+  ///     model that replaced an old bar model with the same `dataID` has content that is not equal
+  ///     to the content of the old bar model.
+  public init<Params: Hashable>(
+    dataID: AnyHashable? = nil,
+    params: Params,
+    content: Content,
+    makeView: @escaping (Params) -> View,
+    configureView: @escaping ConfigureView)
+  {
+    if let dataID = dataID {
+      self.dataID = dataID
+    }
+    self.alternateStyleID = params
+    self.content = content
+    self.makeView = { makeView(params) }
     self.configureView = configureView
   }
 
