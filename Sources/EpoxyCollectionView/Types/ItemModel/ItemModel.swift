@@ -61,7 +61,7 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
     configureView: @escaping ConfigureView)
   {
     self.dataID = dataID
-    self.alternateStyleID = params
+    self.styleID = params
     self.content = content
     self.makeView = { makeView(params) }
     self.configureView = configureView
@@ -99,7 +99,6 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
 
 // MARK: Providers
 
-extension ItemModel: AlternateStyleIDProviding {}
 extension ItemModel: ConfigureViewProviding {}
 extension ItemModel: ContentProviding {}
 extension ItemModel: DataIDProviding {}
@@ -110,6 +109,7 @@ extension ItemModel: IsMovableProviding {}
 extension ItemModel: MakeViewProviding {}
 extension ItemModel: SelectionStyleProviding {}
 extension ItemModel: SetBehaviorsProviding {}
+extension ItemModel: StyleIDProviding {}
 extension ItemModel: WillDisplayProviding {}
 
 // MARK: ItemModeling
@@ -124,7 +124,7 @@ extension ItemModel: ItemModeling {
 
 extension ItemModel: InternalItemModeling {
   public var viewDifferentiator: ViewDifferentiator {
-    .init(viewType: View.self, styleID: alternateStyleID)
+    .init(viewType: View.self, styleID: styleID)
   }
 
   public var isSelectable: Bool {
@@ -177,7 +177,7 @@ extension ItemModel: InternalItemModeling {
 
 extension ItemModel: Diffable {
   public var diffIdentifier: AnyHashable {
-    DiffIdentifier(dataID: dataID, viewClass: .init(View.self), alternateStyleID: alternateStyleID)
+    DiffIdentifier(dataID: dataID, viewClass: .init(View.self), styleID: styleID)
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
@@ -249,5 +249,5 @@ private struct DiffIdentifier: Hashable {
   var dataID: AnyHashable
   // The `View.Type` wrapped in `ObjectIdentifier` since `AnyClass` is not `Hashable`.
   var viewClass: ObjectIdentifier
-  var alternateStyleID: AnyHashable?
+  var styleID: AnyHashable?
 }

@@ -72,7 +72,7 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
     if let dataID = dataID {
       self.dataID = dataID
     }
-    self.alternateStyleID = params
+    self.styleID = params
     self.content = content
     self.makeView = { makeView(params) }
     self.configureView = configureView
@@ -114,13 +114,13 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
 
 // MARK: Providers
 
-extension BarModel: AlternateStyleIDProviding {}
 extension BarModel: ConfigureViewProviding {}
 extension BarModel: ContentProviding {}
 extension BarModel: DataIDProviding {}
 extension BarModel: DidDisplayProviding {}
 extension BarModel: MakeViewProviding {}
 extension BarModel: SetBehaviorsProviding {}
+extension BarModel: StyleIDProviding {}
 extension BarModel: WillDisplayProviding {}
 
 // MARK: BarModeling
@@ -183,7 +183,7 @@ extension BarModel: InternalBarCoordinating {
 
 extension BarModel: Diffable {
   public var diffIdentifier: AnyHashable {
-    DiffIdentifier(dataID: dataID, viewClass: .init(View.self), alternateStyleID: alternateStyleID)
+    DiffIdentifier(dataID: dataID, viewClass: .init(View.self), styleID: styleID)
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
@@ -232,5 +232,5 @@ struct DiffIdentifier: Hashable {
   var dataID: AnyHashable
   // The `View.Type` wrapped in `ObjectIdentifier` since `AnyClass` is not `Hashable`.
   var viewClass: ObjectIdentifier
-  var alternateStyleID: AnyHashable?
+  var styleID: AnyHashable?
 }

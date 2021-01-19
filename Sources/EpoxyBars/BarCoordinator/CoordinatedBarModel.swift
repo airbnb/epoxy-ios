@@ -73,7 +73,7 @@ public struct CoordinatedBarModel {
 // MARK: Providers
 
 extension CoordinatedBarModel: DataIDProviding {}
-extension CoordinatedBarModel: AlternateStyleIDProviding {}
+extension CoordinatedBarModel: StyleIDProviding {}
 
 // MARK: BarModeling
 
@@ -101,7 +101,7 @@ extension CoordinatedBarModel: InternalBarCoordinating {
 
 extension CoordinatedBarModel: Diffable {
   public var diffIdentifier: AnyHashable {
-    DiffIdentifier(dataID: dataID, viewClass: .init(viewClass), alternateStyleID: alternateStyleID)
+    DiffIdentifier(dataID: dataID, viewClass: .init(viewClass), styleID: styleID)
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
