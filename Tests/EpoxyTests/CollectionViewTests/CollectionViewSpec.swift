@@ -11,7 +11,7 @@ import EpoxyCollectionView
 
 final class CollectionViewSpec: QuickSpec {
   override func spec() {
-    let itemModel = ItemModel(dataID: DefaultDataID.noneProvided, content: "")
+    let itemModel = ItemModel(dataID: DefaultDataID.noneProvided, content: "", configureView: { _ in })
       .configureView { context in
         context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
         context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true
@@ -124,7 +124,7 @@ final class CollectionViewSpec: QuickSpec {
           erasedItemWillDisplay = []
           erasedItemDidEndDisplaying = []
 
-          let section = SectionModel(items: [ItemModel(dataID: "dataID", content: "")])
+          let section = SectionModel(items: [ItemModel(dataID: "dataID", content: "", configureView: { _ in })])
             .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [item])
           collectionView.setSections([section], animated: false)
         }

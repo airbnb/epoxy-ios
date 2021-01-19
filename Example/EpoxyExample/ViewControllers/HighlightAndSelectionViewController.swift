@@ -5,7 +5,6 @@ import Epoxy
 import UIKit
 
 class HighlightAndSelectionViewController: EpoxyCollectionViewController {
-  // MARK: Initialization
 
   init() {
     super.init(collectionViewLayout: UICollectionViewCompositionalLayout.epoxy)
@@ -15,8 +14,6 @@ class HighlightAndSelectionViewController: EpoxyCollectionViewController {
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
-
-  // MARK: EpoxyCollectionViewController
 
   enum SectionID {
     case carousel, list
@@ -29,7 +26,7 @@ class HighlightAndSelectionViewController: EpoxyCollectionViewController {
         items: (0..<10).map { (dataID: Int) in
           Row.itemModel(
             dataID: dataID,
-            content: .init(title: "Page \(dataID)", body: ""),
+            content: .init(title: "Page \(dataID)"),
             style: .small)
             .didSelect { _ in
               print("Carousel page \(dataID) did select")
@@ -44,10 +41,10 @@ class HighlightAndSelectionViewController: EpoxyCollectionViewController {
         .compositionalLayoutSection(.carouselWithHeader),
       SectionModel(
         dataID: SectionID.list,
-        items: (0..<10).map { dataID in
+        items: (0..<10).map { (dataID: Int) in
           Row.itemModel(
             dataID: dataID,
-            content: .init(title: "Row \(dataID)", body: kTestTexts[dataID]),
+            content: .init(title: "Row \(dataID)", body: BeloIpsum.paragraph(count: 1, seed: dataID)),
             style: .small)
             .didSelect { _ in
               print("List row \(dataID) selected")
@@ -62,4 +59,5 @@ class HighlightAndSelectionViewController: EpoxyCollectionViewController {
         .compositionalLayoutSectionProvider(NSCollectionLayoutSection.listWithHeader),
     ]
   }
+
 }
