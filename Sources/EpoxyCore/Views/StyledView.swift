@@ -45,9 +45,9 @@ extension StyledView where Style == EmptyStyle {
     // ```
     // MyView.itemModel(…)
     //   .makeView { MyView(customParameter: …) }
-    //   .alternateStyleID(…)
+    //   .styleID(…)
     // ```
-    // Note that with the above approach that you must supply an `alternateStyleID` with the same
+    // Note that with the above approach that you must supply an `styleID` with the same
     // identity as your view parameters to ensure that views with different parameters are not
     // reused in place of one another.
     self.init()

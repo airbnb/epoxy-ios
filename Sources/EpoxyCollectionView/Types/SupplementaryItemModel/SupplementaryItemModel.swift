@@ -61,7 +61,7 @@ public struct SupplementaryItemModel<View: UIView, Content: Equatable>: ContentV
     configureView: @escaping ConfigureView)
   {
     self.dataID = dataID
-    self.alternateStyleID = params
+    self.styleID = params
     self.content = content
     self.makeView = { makeView(params) }
     self.configureView = configureView
@@ -99,13 +99,13 @@ public struct SupplementaryItemModel<View: UIView, Content: Equatable>: ContentV
 
 // MARK: Providers
 
-extension SupplementaryItemModel: AlternateStyleIDProviding {}
 extension SupplementaryItemModel: ConfigureViewProviding {}
 extension SupplementaryItemModel: ContentProviding {}
 extension SupplementaryItemModel: DataIDProviding {}
 extension SupplementaryItemModel: DidEndDisplayingProviding {}
 extension SupplementaryItemModel: MakeViewProviding {}
 extension SupplementaryItemModel: SetBehaviorsProviding {}
+extension SupplementaryItemModel: StyleIDProviding {}
 extension SupplementaryItemModel: WillDisplayProviding {}
 
 // MARK: SupplementaryItemModeling
@@ -120,7 +120,7 @@ extension SupplementaryItemModel: SupplementaryItemModeling {
 
 extension SupplementaryItemModel: InternalSupplementaryItemModeling {
   public var viewDifferentiator: ViewDifferentiator {
-    .init(viewType: View.self, styleID: alternateStyleID)
+    .init(viewType: View.self, styleID: styleID)
   }
 
   public func configure(
@@ -163,7 +163,7 @@ extension SupplementaryItemModel: InternalSupplementaryItemModeling {
 
 extension SupplementaryItemModel: Diffable {
   public var diffIdentifier: AnyHashable {
-    DiffIdentifier(dataID: dataID, viewClass: .init(View.self), alternateStyleID: alternateStyleID)
+    DiffIdentifier(dataID: dataID, viewClass: .init(View.self), styleID: styleID)
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
@@ -217,5 +217,5 @@ private struct DiffIdentifier: Hashable {
   var dataID: AnyHashable
   // The `View.Type` wrapped in `ObjectIdentifier` since `AnyClass` is not `Hashable`.
   var viewClass: ObjectIdentifier
-  var alternateStyleID: AnyHashable?
+  var styleID: AnyHashable?
 }
