@@ -2,8 +2,6 @@
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
 import Epoxy
-import EpoxyNavigationController
-import Foundation
 import UIKit
 
 final class MainViewController: NavigationController {

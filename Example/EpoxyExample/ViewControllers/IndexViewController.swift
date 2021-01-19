@@ -2,7 +2,6 @@
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
 import Epoxy
-import Foundation
 import UIKit
 
 final class IndexViewController: EpoxyCollectionViewController {
@@ -28,7 +27,7 @@ final class IndexViewController: EpoxyCollectionViewController {
 
   override func epoxySections() -> [SectionModel] {
     [
-      SectionModel(items: items())
+      SectionModel(items: items)
     ]
   }
 
@@ -36,7 +35,7 @@ final class IndexViewController: EpoxyCollectionViewController {
 
   private let didSelectItem: (ListItem) -> Void
 
-  private func items() -> [ItemModeling] {
+  private var items: [ItemModeling] {
     ListItem.allCases.map { item in
       Row.itemModel(dataID: item, content: .init(title: item.rowTitle), style: .small)
         .didSelect { [weak self] _ in
@@ -44,7 +43,7 @@ final class IndexViewController: EpoxyCollectionViewController {
         }
     }
   }
-  
+
 }
 
 extension IndexViewController.ListItem {

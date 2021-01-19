@@ -22,13 +22,7 @@ class ShuffleViewController: EpoxyCollectionViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] timer in
-      guard let self = self else {
-        timer.invalidate()
-        return
-      }
-      self.state.shuffle()
-    }
+    addTimer()
   }
 
   override func epoxySections() -> [SectionModel] {
@@ -40,7 +34,7 @@ class ShuffleViewController: EpoxyCollectionViewController {
             dataID: itemID,
             content: .init(
               title: "Section \(section.id), Row \(itemID)",
-              body: kTestTexts[itemID % 10]),
+              body: BeloIpsum.paragraph(count: 1, seed: itemID)),
             style: .small)
             .didSelect { context in
               print("Selected section \(section.id), Row \(itemID)")
@@ -53,14 +47,14 @@ class ShuffleViewController: EpoxyCollectionViewController {
 
   private struct State {
     init() {
-      shuffle()
+      randomize()
     }
 
     var sections = [(id: Int, itemIDs: [Int])]()
 
-    mutating func shuffle() {
-      sections = (0..<3).shuffled().filter { _ in Int.random(in: 0..<3) % 3 != 0 }.map { id in
-        let itemIDs = (0..<10).shuffled().filter { _ in Int.random(in: 0..<3) % 3 != 0 }
+    mutating func randomize() {
+      sections = (0..<3).shuffled().filter { _ in Int.random(in: 0..<3) != 0 }.map { id in
+        let itemIDs = (0..<10).shuffled().filter { _ in Int.random(in: 0..<3) != 0 }
         return (id: id, itemIDs: itemIDs)
       }
     }
@@ -69,6 +63,16 @@ class ShuffleViewController: EpoxyCollectionViewController {
   private var state = State() {
     didSet {
       updateData(animated: true)
+    }
+  }
+
+  private func addTimer() {
+    Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] timer in
+      guard let self = self else {
+        timer.invalidate()
+        return
+      }
+      self.state.randomize()
     }
   }
 

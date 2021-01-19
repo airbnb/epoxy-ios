@@ -42,18 +42,10 @@ final class ProductViewController: EpoxyCollectionViewController {
 
   private var items: [ItemModeling] {
     [
-      ItemModel<UIImageView, URL>(
+      ImageMarquee.itemModel(
         dataID: DataID.headerImage,
-        content: URL(string: "https://picsum.photos/id/350/500/500")!,
-        configureView: { context in
-          context.view.contentMode = .scaleAspectFill
-          context.view.clipsToBounds = true
-          context.view.translatesAutoresizingMaskIntoConstraints = false
-          let constraint = context.view.heightAnchor.constraint(equalToConstant: 250)
-          constraint.priority = .defaultHigh
-          constraint.isActive = true
-          context.view.setURL(context.content)
-        }),
+        content: .init(imageURL: URL(string: "https://picsum.photos/id/350/500/500")!),
+        style: .init(height: 250, contentMode: .scaleAspectFill)),
       Row.itemModel(
         dataID: DataID.titleRow,
         content: .init(title: "Our Great Product"),
