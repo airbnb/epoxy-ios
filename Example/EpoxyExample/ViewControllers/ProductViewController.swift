@@ -4,7 +4,7 @@
 import Epoxy
 import UIKit
 
-final class ProductViewController: EpoxyCollectionViewController {
+final class ProductViewController: CollectionViewController {
 
   // MARK: Lifecycle
 
@@ -12,15 +12,10 @@ final class ProductViewController: EpoxyCollectionViewController {
     super.init(collectionViewLayout: UICollectionViewCompositionalLayout.listNoDividers)
   }
 
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
   // MARK: Internal
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    barInstaller.setBars(bars, animated: false)
     barInstaller.install()
   }
 
@@ -38,7 +33,7 @@ final class ProductViewController: EpoxyCollectionViewController {
     case imageRow
   }
 
-  private lazy var barInstaller = BottomBarInstaller(viewController: self)
+  private lazy var barInstaller = BottomBarInstaller(viewController: self, bars: bars)
 
   private var items: [ItemModeling] {
     [

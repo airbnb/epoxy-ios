@@ -120,7 +120,7 @@ final class Row: UIView, EpoxyableView {
 
 // MARK: SelectableView
 
-extension Row: Selectable {
+extension Row: SelectableView {
   func didSelect() {
     // Handle this row being selected, e.g. to trigger haptics.
     UISelectionFeedbackGenerator().selectionChanged()
@@ -129,7 +129,7 @@ extension Row: Selectable {
 
 // MARK: HighlightableView
 
-extension Row: Highlightable {
+extension Row: HighlightableView {
   func didHighlight(_ isHighlighted: Bool) {
     UIView.animate(withDuration: 0.15, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction]) {
       switch isHighlighted {
@@ -144,7 +144,7 @@ extension Row: Highlightable {
 
 // MARK: DisplayRespondingView
 
-extension Row: DisplayResponder {
+extension Row: DisplayRespondingView {
   func didDisplay(_ isDisplayed: Bool) {
     // Handle this row being displayed.
   }

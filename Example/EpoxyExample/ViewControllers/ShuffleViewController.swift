@@ -4,17 +4,13 @@
 import Epoxy
 import UIKit
 
-class ShuffleViewController: EpoxyCollectionViewController {
+class ShuffleViewController: CollectionViewController {
 
   // MARK: Lifecycle
 
   init() {
     super.init(collectionViewLayout: UICollectionViewCompositionalLayout.listNoDividers)
     title = "Shuffle"
-  }
-
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: Internal

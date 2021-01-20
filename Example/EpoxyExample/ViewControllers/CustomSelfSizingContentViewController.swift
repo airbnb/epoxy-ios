@@ -4,7 +4,7 @@
 import UIKit
 import Epoxy
 
-class CustomSelfSizingContentViewController: EpoxyCollectionViewController {
+class CustomSelfSizingContentViewController: CollectionViewController {
 
   // MARK: Lifecycle
 
@@ -13,11 +13,7 @@ class CustomSelfSizingContentViewController: EpoxyCollectionViewController {
     title = "Custom self-sizing"
   }
 
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
-
-  // MARK: EpoxyCollectionViewController
+  // MARK: CollectionViewController
 
   override func epoxySections() -> [SectionModel] {
     [
