@@ -88,7 +88,7 @@ public class BarStackView: UIStackView {
 
   /// Updates the contents of this stack to the stack modeled by the given model array, inserting,
   /// removing, and updating any bars as needed.
-  public func setModels(_ models: [BarModeling], animated: Bool) {
+  public func setBars(_ models: [BarModeling], animated: Bool) {
     let (added, removed) = updateModels(models, animated: animated)
 
     updateWrapperZOrder()
