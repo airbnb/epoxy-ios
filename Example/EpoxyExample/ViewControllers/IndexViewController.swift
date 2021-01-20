@@ -4,16 +4,12 @@
 import Epoxy
 import UIKit
 
-final class IndexViewController: EpoxyCollectionViewController {
+final class IndexViewController: CollectionViewController {
 
   init(didSelectItem: @escaping (ListItem) -> Void) {
     self.didSelectItem = didSelectItem
     super.init(collectionViewLayout: UICollectionViewCompositionalLayout.list)
     title = "Epoxy"
-  }
-  
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
 
   // MARK: Internal

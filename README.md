@@ -33,19 +33,19 @@ To install Epoxy using [Swift Package Manager](https://github.com/apple/swift-pa
 
 ### EpoxyCollectionView
 
-`EpoxyCollectionView` provides a declarative API for driving the content of a `UICollectionView`. `EpoxyCollectionViewController` is a subclassable `UIViewController` that lets you easily spin up a `UICollectionView`-backed view controller with a declarative API.
+`EpoxyCollectionView` provides a declarative API for driving the content of a `UICollectionView`. `CollectionViewController` is a subclassable `UIViewController` that lets you easily spin up a `UICollectionView`-backed view controller with a declarative API.
 
 The following code sample will render a single cell in a `UICollectionView` with a `Row` component rendered in that cell. Note that the `Row` component is a simple `UIView` containing 2 labels, and conforms to the [`EpoxyableView`](https://github.com/airbnb/epoxy-ios/blob/master/Sources/EpoxyCore/Views/EpoxyableView.swift) protocol:
 
 ```swift
 import Epoxy
 
-final class FeatureViewController: EpoxyCollectionViewController {
+final class FeatureViewController: CollectionViewController {
   private enum DataIDs {
     case ctaRow
   }
 
-  override func epoxySections -> [SectionModel] {
+  override func epoxySections() -> [SectionModel] {
     [
       SectionModel(items: [
         Row.itemModel(

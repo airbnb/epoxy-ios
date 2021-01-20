@@ -40,7 +40,7 @@ final class MainViewController: NavigationController {
       customSelfSizing,
       highlightAndSelection,
       shuffle,
-      product
+      product,
     ]
   }
 

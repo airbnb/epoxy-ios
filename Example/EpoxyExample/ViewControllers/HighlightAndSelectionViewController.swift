@@ -4,15 +4,11 @@
 import Epoxy
 import UIKit
 
-class HighlightAndSelectionViewController: EpoxyCollectionViewController {
+class HighlightAndSelectionViewController: CollectionViewController {
 
   init() {
     super.init(collectionViewLayout: UICollectionViewCompositionalLayout.epoxy)
     title = "Highlight and Selection"
-  }
-  
-  required init?(coder aDecoder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
   }
 
   enum SectionID {
