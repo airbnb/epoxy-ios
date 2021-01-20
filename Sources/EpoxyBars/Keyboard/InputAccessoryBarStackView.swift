@@ -17,7 +17,7 @@ public final class InputAccessoryBarStackView: UIView {
 
   public init(bars: [BarModeling] = []) {
     barStack = BarStackView(zOrder: .bottomToTop)
-    barStack.setModels(bars, animated: false)
+    barStack.setBars(bars, animated: false)
     super.init(frame: .zero)
     addSubview(barStack)
     NSLayoutConstraint.activate([
@@ -55,7 +55,7 @@ public final class InputAccessoryBarStackView: UIView {
   }
 
   public func setBars(_ bars: [BarModeling], animated: Bool) {
-    barStack.setModels(bars, animated: animated)
+    barStack.setBars(bars, animated: animated)
   }
 
   // MARK: Private

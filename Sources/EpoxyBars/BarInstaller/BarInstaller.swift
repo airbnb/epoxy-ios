@@ -108,10 +108,10 @@ final class BarInstaller<Container: BarContainer> {
       viewController.view.isDescendant(of: coordinator.containerView)
     {
       coordinator.animate(alongsideTransition: nil, completion: { _ in
-        container.setModels(models, animated: animated)
+        container.setBars(models, animated: animated)
       })
     } else {
-      container.setModels(models, animated: animated)
+      container.setBars(models, animated: animated)
     }
   }
 
@@ -121,7 +121,7 @@ final class BarInstaller<Container: BarContainer> {
     })
     container.add(to: view)
     container.viewController = viewController
-    container.setModels(models, animated: animated)
+    container.setBars(models, animated: animated)
     self.container = container
   }
 
