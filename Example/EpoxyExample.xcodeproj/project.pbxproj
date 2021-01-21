@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2518441925B8E35A000B801F /* FlowLayoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2518441825B8E35A000B801F /* FlowLayoutViewController.swift */; };
+		2518441C25B8E38A000B801F /* ColorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2518441B25B8E38A000B801F /* ColorView.swift */; };
 		25627B93232ABF0F00D7327A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25627B92232ABF0E00D7327A /* AppDelegate.swift */; };
 		25627B95232ABF0F00D7327A /* HighlightAndSelectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25627B94232ABF0F00D7327A /* HighlightAndSelectionViewController.swift */; };
 		25627B9A232ABF1000D7327A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 25627B99232ABF1000D7327A /* Assets.xcassets */; };
@@ -31,6 +33,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2518441825B8E35A000B801F /* FlowLayoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlowLayoutViewController.swift; sourceTree = "<group>"; };
+		2518441B25B8E38A000B801F /* ColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorView.swift; sourceTree = "<group>"; };
 		25627B8F232ABF0E00D7327A /* EpoxyExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EpoxyExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25627B92232ABF0E00D7327A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		25627B94232ABF0F00D7327A /* HighlightAndSelectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HighlightAndSelectionViewController.swift; sourceTree = "<group>"; };
@@ -116,6 +120,7 @@
 				BACF3E8B23DBB8DC0001CCD1 /* ShuffleViewController.swift */,
 				2E8B007723F4800000D82A31 /* CustomSelfSizingContentViewController.swift */,
 				25FEB79125AE431100F8EFBD /* MainViewController.swift */,
+				2518441825B8E35A000B801F /* FlowLayoutViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -128,6 +133,7 @@
 				25B6766125AE898B00C00B20 /* ImageRow.swift */,
 				25B6766725AFA67100C00B20 /* ButtonRow.swift */,
 				A633B24525B6507A0095E464 /* ImageMarquee.swift */,
+				2518441B25B8E38A000B801F /* ColorView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -257,6 +263,7 @@
 				A6F0928B25B9E983007D902B /* TextRow.swift in Sources */,
 				25B6766525AE8BEA00C00B20 /* UIImageView+RemoteImage.swift in Sources */,
 				A6F0929625B9EEF3007D902B /* BottomButtonViewController.swift in Sources */,
+				2518441C25B8E38A000B801F /* ColorView.swift in Sources */,
 				2E8B007623F47E7E00D82A31 /* CustomSizingView.swift in Sources */,
 				25B6765F25AE883700C00B20 /* ProductViewController.swift in Sources */,
 				A6F0928F25B9ECC6007D902B /* ReadmeExamplesViewController.swift in Sources */,
@@ -265,6 +272,7 @@
 				A633B24025B6494D0095E464 /* BeloIpsum.swift in Sources */,
 				A6F0929D25B9EFB9007D902B /* FormNavigationController.swift in Sources */,
 				2E8B007823F4800000D82A31 /* CustomSelfSizingContentViewController.swift in Sources */,
+				2518441925B8E35A000B801F /* FlowLayoutViewController.swift in Sources */,
 				259863A225AE47710065024B /* UICollectionViewCompositionalLayout+List.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
