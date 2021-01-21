@@ -6,14 +6,14 @@ import UIKit
 
 // MARK: - NavigationController
 
-/// A navigation controller that manages its visible view controllers declaratively via an array of
-/// `NavigationModel`s that models its navigation stack.
+/// A subclassable navigation controller that manages its visible view controllers declaratively via
+/// an array of `NavigationModel`s that represent its navigation stack.
 ///
-/// The representation of the entire the navigation stack should be set at once via `setStack(...)`
-/// whenever a change occurs, rather than managed imperatively by pushing and popping individual
-/// view controllers.
+/// The `NavigationModel` representation of the entire navigation stack should be set at once via
+/// `setStack(_:animated:)` whenever a change occurs, rather than being managed imperatively by
+/// pushing and popping individual view controllers as is typical with `UINavigationController`.
 ///
-/// Conceptually similar to `CollectionView`, with `NavigationModel` equivalent to `ItemModeling`.
+/// Conceptually similar to `CollectionView`, with `NavigationModel` equivalent to `ItemModel`.
 ///
 /// # Additional resources
 /// - [Navigation Models Docs](***REMOVED***/projects/coreui/docs/navigation/navigation_models)
@@ -22,9 +22,9 @@ open class NavigationController: UINavigationController {
   // MARK: Lifecycle
 
   /// - Parameter wrapNavigation: A closure that's called to wrap the given pushed navigation
-  ///   controller into a wrapper container view controller to prevent the UIKit exception
+  ///   controller into a wrapper container view controller to prevent the UIKit exception that's
   ///   thrown when a navigation controller is pushed within another navigation controller. Nesting
-  ///   navigation controllers enables nesting sub-flows with a overarching flow.
+  ///   navigation controllers enables nesting sub-flows with an overarching flow.
   public init(wrapNavigation: ((_ nested: UINavigationController) -> UIViewController)? = nil) {
     self.wrapNavigation = wrapNavigation
     super.init(nibName: nil, bundle: nil)
@@ -68,7 +68,7 @@ open class NavigationController: UINavigationController {
     return popped
   }
 
-  /// A method that can be overridden to react to the navigation stack being updated.
+  /// A method that can be overridden by subclasses to react to the navigation stack being updated.
   open func didSetViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
     // Available to be overridden by subclasses.
   }

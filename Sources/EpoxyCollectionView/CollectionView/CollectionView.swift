@@ -12,12 +12,12 @@ open class CollectionView: UICollectionView {
 
   /// Creates a collection view with the specified layout and an optional override configuration.
   public init(
-    collectionViewLayout: UICollectionViewLayout,
+    layout: UICollectionViewLayout,
     configuration: CollectionViewConfiguration = .shared)
   {
     epoxyDataSource = CollectionViewDataSource(configuration: configuration)
     self.configuration = configuration
-    super.init(frame: .zero, collectionViewLayout: collectionViewLayout)
+    super.init(frame: .zero, collectionViewLayout: layout)
     setUp()
   }
 

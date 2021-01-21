@@ -4,13 +4,13 @@
 import Epoxy
 import UIKit
 
-class ShuffleViewController: CollectionViewController {
+final class ShuffleViewController: CollectionViewController {
 
   // MARK: Lifecycle
 
   init() {
-    super.init(collectionViewLayout: UICollectionViewCompositionalLayout.listNoDividers)
-    title = "Shuffle"
+    super.init(layout: UICollectionViewCompositionalLayout.listNoDividers)
+    setSections(sections, animated: false)
   }
 
   // MARK: Internal
@@ -19,24 +19,6 @@ class ShuffleViewController: CollectionViewController {
     super.viewDidLoad()
 
     addTimer()
-  }
-
-  override func epoxySections() -> [SectionModel] {
-    state.sections.map { section in
-      SectionModel(
-        dataID: section.id,
-        items: section.itemIDs.map { itemID in
-          Row.itemModel(
-            dataID: itemID,
-            content: .init(
-              title: "Section \(section.id), Row \(itemID)",
-              body: BeloIpsum.paragraph(count: 1, seed: itemID)),
-            style: .small)
-            .didSelect { context in
-              print("Selected section \(section.id), Row \(itemID)")
-            }
-        })
-    }
   }
 
   // MARK: Private
@@ -57,8 +39,24 @@ class ShuffleViewController: CollectionViewController {
   }
 
   private var state = State() {
-    didSet {
-      updateData(animated: true)
+    didSet { setSections(sections, animated: true) }
+  }
+
+  private var sections: [SectionModel] {
+    state.sections.map { section in
+      SectionModel(
+        dataID: section.id,
+        items: section.itemIDs.map { itemID in
+          TextRow.itemModel(
+            dataID: itemID,
+            content: .init(
+              title: "Section \(section.id), Row \(itemID)",
+              body: BeloIpsum.paragraph(count: 1, seed: itemID)),
+            style: .small)
+            .didSelect { context in
+              print("Selected section \(section.id), Row \(itemID)")
+            }
+        })
     }
   }
 

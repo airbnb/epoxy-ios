@@ -4,20 +4,16 @@
 import UIKit
 import Epoxy
 
-class CustomSelfSizingContentViewController: CollectionViewController {
-
-  // MARK: Lifecycle
+final class CustomSelfSizingContentViewController: CollectionViewController {
 
   init() {
-    super.init(collectionViewLayout: UICollectionViewCompositionalLayout.listNoDividers)
-    title = "Custom self-sizing"
+    super.init(layout: UICollectionViewCompositionalLayout.listNoDividers)
+    setSections(sections, animated: false)
   }
 
-  // MARK: CollectionViewController
-
-  override func epoxySections() -> [SectionModel] {
+  private var sections: [SectionModel] {
     [
-      SectionModel(items: (Int(0)..<Int(10)).map { dataID in
+      SectionModel(items: (0..<10).map { (dataID: Int) in
         CustomSizingView.itemModel(dataID: dataID)
       }),
     ]
