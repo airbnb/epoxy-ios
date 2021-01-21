@@ -4,12 +4,19 @@
 import Epoxy
 import UIKit
 
+// MARK: - FormNavigationController
+
 /// Source code for `EpoxyNavigationController` "Form Navigation" example from `README.md`:
 final class FormNavigationController: NavigationController {
+
+  // MARK: Lifecycle
+
   init() {
     super.init()
     setStack(stack, animated: false)
   }
+
+  // MARK: Private
 
   private struct State {
     var showStep2 = false
@@ -54,18 +61,25 @@ final class FormNavigationController: NavigationController {
 // MARK: - Step1ViewController
 
 final class Step1ViewController: CollectionViewController {
+
+  // MARK: Lifecycle
+
   init(didTapNext: @escaping () -> Void) {
     super.init(layout: UICollectionViewCompositionalLayout.list)
     title = "Step 1"
     bottomBarInstaller.setBars([
-      ButtonRow.barModel(content: .init(text: "Show step 2"), behaviors: .init(didTap: didTapNext))
+      ButtonRow.barModel(content: .init(text: "Show step 2"), behaviors: .init(didTap: didTapNext)),
     ], animated: false)
   }
+
+  // MARK: Internal
 
   override func viewDidLoad() {
     super.viewDidLoad()
     bottomBarInstaller.install()
   }
+
+  // MARK: Private
 
   private lazy var bottomBarInstaller = BottomBarInstaller(viewController: self)
 }
@@ -73,18 +87,25 @@ final class Step1ViewController: CollectionViewController {
 // MARK: - Step2ViewController
 
 final class Step2ViewController: CollectionViewController {
+
+  // MARK: Lifecycle
+
   init(didTapNext: @escaping () -> Void) {
     super.init(layout: UICollectionViewCompositionalLayout.list)
     title = "Step 2"
     bottomBarInstaller.setBars([
-      ButtonRow.barModel(content: .init(text: "Finish"), behaviors: .init(didTap: didTapNext))
+      ButtonRow.barModel(content: .init(text: "Finish"), behaviors: .init(didTap: didTapNext)),
     ], animated: false)
   }
+
+  // MARK: Internal
 
   override func viewDidLoad() {
     super.viewDidLoad()
     bottomBarInstaller.install()
   }
+
+  // MARK: Private
 
   private lazy var bottomBarInstaller = BottomBarInstaller(viewController: self)
 }

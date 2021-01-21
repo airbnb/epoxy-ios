@@ -4,7 +4,13 @@
 import EpoxyCore
 import XCTest
 
+// MARK: - Int + Diffable
+
 extension Int: Diffable {
+  public var diffIdentifier: AnyHashable {
+    self
+  }
+
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let other = otherDiffableItem as? Int else {
       return false
@@ -12,10 +18,9 @@ extension Int: Diffable {
     return self == other
   }
 
-  public var diffIdentifier: AnyHashable {
-    self
-  }
 }
+
+// MARK: - TestSection
 
 struct TestSection: DiffableSection {
   var diffIdentifier: AnyHashable
@@ -25,9 +30,11 @@ struct TestSection: DiffableSection {
     guard let other = otherDiffableItem as? TestSection else {
       return false
     }
-    return self.diffIdentifier == other.diffIdentifier
+    return diffIdentifier == other.diffIdentifier
   }
 }
+
+// MARK: - CollectionDiffPerformanceTestCase
 
 final class CollectionDiffPerformanceTestCase: XCTestCase {
 
@@ -61,9 +68,9 @@ final class CollectionDiffPerformanceTestCase: XCTestCase {
 
 }
 
-// MARK: - SeededRandomNumberGenerator
-
 import class GameplayKit.GKMersenneTwisterRandomSource
+
+// MARK: - SeededRandomNumberGenerator
 
 // Adapted from https://stackoverflow.com/a/57370987/4076325
 private struct SeededRandomNumberGenerator: RandomNumberGenerator {

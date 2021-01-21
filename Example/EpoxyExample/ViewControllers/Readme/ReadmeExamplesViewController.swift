@@ -4,21 +4,12 @@
 import Epoxy
 import UIKit
 
+// MARK: - ReadmeExample
+
 enum ReadmeExample: CaseIterable {
   case tapMe, counter, bottomButton, formNavigation
 
-  func makeViewController() -> UIViewController {
-    switch self {
-    case .tapMe:
-      return makeTapMeViewController()
-    case .counter:
-      return CounterViewController()
-    case .bottomButton:
-      return BottomButtonViewController()
-    case .formNavigation:
-      return FormNavigationController()
-    }
-  }
+  // MARK: Internal
 
   var title: String {
     switch self {
@@ -44,6 +35,21 @@ enum ReadmeExample: CaseIterable {
     }
   }
 
+  func makeViewController() -> UIViewController {
+    switch self {
+    case .tapMe:
+      return makeTapMeViewController()
+    case .counter:
+      return CounterViewController()
+    case .bottomButton:
+      return BottomButtonViewController()
+    case .formNavigation:
+      return FormNavigationController()
+    }
+  }
+
+  // MARK: Private
+
   /// Source code for `EpoxyCollectionView` "Tap me" example from `README.md`:
   private func makeTapMeViewController() -> UIViewController {
     enum DataID {
@@ -60,11 +66,13 @@ enum ReadmeExample: CaseIterable {
             style: .small)
             .didSelect { _ in
               // Handle selection
-            }
-        ])
+            },
+        ]),
       ])
-    }
+  }
 }
+
+// MARK: - ReadmeExamplesViewController
 
 final class ReadmeExamplesViewController: CollectionViewController {
   init(didSelect: @escaping (ReadmeExample) -> Void) {
@@ -74,10 +82,10 @@ final class ReadmeExamplesViewController: CollectionViewController {
           dataID: example,
           content: .init(title: example.title, body: example.body),
           style: .small)
-          .didSelect { context in
+          .didSelect { _ in
             didSelect(example)
           }
-      })
+      }),
     ])
   }
 }

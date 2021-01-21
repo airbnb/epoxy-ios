@@ -72,7 +72,7 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
     if let dataID = dataID {
       self.dataID = dataID
     }
-    self.styleID = params
+    styleID = params
     self.content = content
     self.makeView = { makeView(params) }
     self.configureView = configureView
@@ -112,15 +112,36 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
 
 }
 
-// MARK: Providers
+// MARK: ConfigureViewProviding
 
 extension BarModel: ConfigureViewProviding {}
+
+// MARK: ContentProviding
+
 extension BarModel: ContentProviding {}
+
+// MARK: DataIDProviding
+
 extension BarModel: DataIDProviding {}
+
+// MARK: DidDisplayProviding
+
 extension BarModel: DidDisplayProviding {}
+
+// MARK: MakeViewProviding
+
 extension BarModel: MakeViewProviding {}
+
+// MARK: SetBehaviorsProviding
+
 extension BarModel: SetBehaviorsProviding {}
+
+// MARK: StyleIDProviding
+
 extension BarModel: StyleIDProviding {}
+
+// MARK: WillDisplayProviding
+
 extension BarModel: WillDisplayProviding {}
 
 // MARK: BarModeling

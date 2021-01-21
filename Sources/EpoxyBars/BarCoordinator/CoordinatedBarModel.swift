@@ -20,7 +20,7 @@ public struct CoordinatedBarModel {
     makeCoordinator: @escaping (_ update: @escaping (_ animated: Bool) -> Void) -> Coordinator)
   {
     self.content = content
-    self.viewClass = viewType
+    viewClass = viewType
 
     typealias CoordinatorWrapper = AnyBarCoordinator<Coordinator.Model>
 
@@ -70,9 +70,12 @@ public struct CoordinatedBarModel {
 
 }
 
-// MARK: Providers
+// MARK: DataIDProviding
 
 extension CoordinatedBarModel: DataIDProviding {}
+
+// MARK: StyleIDProviding
+
 extension CoordinatedBarModel: StyleIDProviding {}
 
 // MARK: BarModeling

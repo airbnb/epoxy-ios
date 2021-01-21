@@ -59,7 +59,7 @@ final class ButtonRow: UIView, EpoxyableView {
       button.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
       button.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
       button.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
-      button.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+      button.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
     ])
 
     button.addTarget(self, action: #selector(handleTap), for: .touchUpInside)

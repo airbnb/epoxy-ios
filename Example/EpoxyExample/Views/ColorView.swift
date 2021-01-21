@@ -4,7 +4,11 @@
 import EpoxyCore
 import UIKit
 
+// MARK: - ColorView
+
 final class ColorView: UIView, EpoxyableView {
+
+  // MARK: Lifecycle
 
   init(style: Style) {
     super.init(frame: .zero)
@@ -15,6 +19,8 @@ final class ColorView: UIView, EpoxyableView {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
+  // MARK: Internal
 
   struct Style: Hashable {
     var color = UIColor.red

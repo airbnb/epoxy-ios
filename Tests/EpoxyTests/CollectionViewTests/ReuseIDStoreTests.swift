@@ -5,7 +5,11 @@ import EpoxyCollectionView
 import EpoxyCore
 import XCTest
 
+// MARK: - ReuseIDStoreTests
+
 final class ReuseIDStoreTests: XCTestCase {
+
+  // MARK: Internal
 
   // MARK: Setup/Teardown
 
@@ -60,13 +64,14 @@ final class ReuseIDStoreTests: XCTestCase {
   private var reuseIDStore: ReuseIDStore!
 }
 
-// MARK: Test Helpers
+// MARK: - MyFirstView
 
 private class MyFirstView {
   init() {}
 }
 
+// MARK: - MySecondView
+
 private class MySecondView {
   init() {}
 }
-

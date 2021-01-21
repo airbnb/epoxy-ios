@@ -3,12 +3,12 @@
 
 // MARK: - BeloIpsum
 
-public final class BeloIpsum {
+final class BeloIpsum {
 
-  // MARK: Public
+  // MARK: Internal
 
   /// Generate Belo Ipsum sentences.
-  public static func sentence(
+  static func sentence(
     count: Int,
     wordCount: Int = 5,
     seed: Int = 0)
@@ -31,7 +31,7 @@ public final class BeloIpsum {
   }
 
   /// Generate Belo Ipsum paragraphs
-  public static func paragraph(
+  static func paragraph(
     count: Int,
     sentencesPerParagraph: Int = 5,
     seed: Int = 0)
@@ -142,9 +142,9 @@ extension String {
   }
 }
 
-// MARK: - SeededRandomNumberGenerator
-
 import class GameplayKit.GKMersenneTwisterRandomSource
+
+// MARK: - SeededRandomNumberGenerator
 
 // Adapted from https://stackoverflow.com/a/57370987/4076325
 private struct SeededRandomNumberGenerator: RandomNumberGenerator {

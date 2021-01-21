@@ -35,7 +35,7 @@ extension AnyBarModel: BarModeling {
   public func eraseToAnyBarModel() -> AnyBarModel { self }
 }
 
-// MARK: Providers
+// MARK: DataIDProviding
 
 extension AnyBarModel: DataIDProviding {}
 

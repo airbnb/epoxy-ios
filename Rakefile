@@ -13,4 +13,12 @@ namespace :lint do
       sh "bundle exec pod lib lint #{spec} --include-podspecs=**/*.podspec --allow-warnings"
     end
   end
+
+  task :swift do
+    `which mint`
+    throw 'You must have mint installed to lint swift' unless $?.success?
+    sh 'mint bootstrap'
+    sh 'mint run SwiftLint autocorrect --config script/lint/swiftlint.yml'
+    sh 'mint run SwiftFormat . --config script/lint/airbnb.swiftformat'
+  end
 end

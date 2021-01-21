@@ -35,10 +35,16 @@ public struct AnySupplementaryItemModel: EpoxyModeled {
 
 }
 
-// MARK: Providers
+// MARK: DataIDProviding
 
 extension AnySupplementaryItemModel: DataIDProviding {}
+
+// MARK: WillDisplayProviding
+
 extension AnySupplementaryItemModel: WillDisplayProviding {}
+
+// MARK: DidEndDisplayingProviding
+
 extension AnySupplementaryItemModel: DidEndDisplayingProviding {}
 
 // MARK: SupplementaryItemModeling
@@ -51,6 +57,8 @@ extension AnySupplementaryItemModel: SupplementaryItemModeling {
 
 extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
 
+  // MARK: Public
+
   public var viewDifferentiator: ViewDifferentiator {
     model.viewDifferentiator
   }
@@ -58,6 +66,8 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
   public var dataID: AnyHashable {
     model.dataID
   }
+
+  // MARK: Internal
 
   func configure(
     reusableView: CollectionViewReusableView,

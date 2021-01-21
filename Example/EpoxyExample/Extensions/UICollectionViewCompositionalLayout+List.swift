@@ -26,7 +26,7 @@ extension UICollectionViewCompositionalLayout {
   }
 
   static var listNoDividers: UICollectionViewCompositionalLayout {
-    UICollectionViewCompositionalLayout { sectionIndex, _ in
+    UICollectionViewCompositionalLayout { _, _ in
       let item = NSCollectionLayoutItem(
         layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50)))
 

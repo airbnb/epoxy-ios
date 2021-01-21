@@ -1,17 +1,17 @@
 // Created by Tyler Hedrick on 1/12/21.
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
-import ObjectiveC
 import Foundation
+import ObjectiveC
 import UIKit
 
 /// Note that this is a quick and dirty solution for downloading images and
 /// should by no means be used in a production app.
 extension UIImageView {
 
-  // MARK: Public
+  // MARK: Internal
 
-  public func setURL(_ url: URL?) {
+  func setURL(_ url: URL?) {
     // Currently loading an image, URL is updated to nil:
     guard let url = url else {
       if let storage = storage {
@@ -29,7 +29,7 @@ extension UIImageView {
 
     // We need to load the image at the URL:
     image = nil
-    let task = URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+    let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
       guard
         self?.storage?.url == url,
         let data = data,

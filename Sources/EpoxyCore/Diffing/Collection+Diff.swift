@@ -92,7 +92,7 @@ extension Collection where Element: Diffable, Index == Int {
 
         let insertOffset = insertOffsets[index]
         let deleteOffset = deleteOffsets[oldArrayIndex]
-        if ((oldArrayIndex - deleteOffset + insertOffset) != index) {
+        if (oldArrayIndex - deleteOffset + insertOffset) != index {
           moves.append((oldArrayIndex, index))
         }
 
@@ -205,9 +205,11 @@ extension Collection where Element: DiffableSection, Index == Int {
 
 /// A bookkeeping refrence type for the diffing algorithm.
 private final class Entry {
+
+  // MARK: Internal
+
   private(set) var oldIndices = [Int]()
   private(set) var newIndices = [Int]()
-  private var currentOldIndex = 0
   var isUpdated = false
 
   /// Tracks an index from the new indices, returning `true` if this entry has previously tracked
@@ -238,6 +240,10 @@ private final class Entry {
     }
     return oldIndices[currentOldIndex]
   }
+
+  // MARK: Private
+
+  private var currentOldIndex = 0
 }
 
 // MARK: - OldRecord

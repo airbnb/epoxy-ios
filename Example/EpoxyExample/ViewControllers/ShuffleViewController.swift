@@ -53,7 +53,7 @@ final class ShuffleViewController: CollectionViewController {
               title: "Section \(section.id), Row \(itemID)",
               body: BeloIpsum.paragraph(count: 1, seed: itemID)),
             style: .small)
-            .didSelect { context in
+            .didSelect { _ in
               print("Selected section \(section.id), Row \(itemID)")
             }
         })

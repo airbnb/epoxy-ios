@@ -6,10 +6,14 @@ import UIKit
 
 final class HighlightAndSelectionViewController: CollectionViewController {
 
+  // MARK: Lifecycle
+
   init() {
     super.init(layout: UICollectionViewCompositionalLayout.epoxy)
     setSections(sections, animated: false)
   }
+
+  // MARK: Private
 
   private enum SectionID {
     case carousel, list
@@ -32,7 +36,7 @@ final class HighlightAndSelectionViewController: CollectionViewController {
             }
         })
         .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
-          TextRow.supplementaryItemModel(dataID: 0, content: .init(title: "Carousel section"), style: .large)
+          TextRow.supplementaryItemModel(dataID: 0, content: .init(title: "Carousel section"), style: .large),
         ])
         .compositionalLayoutSection(.carouselWithHeader),
       SectionModel(
@@ -50,7 +54,7 @@ final class HighlightAndSelectionViewController: CollectionViewController {
             }
         })
         .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
-          TextRow.supplementaryItemModel(dataID: 0, content: .init(title: "List section"), style: .large)
+          TextRow.supplementaryItemModel(dataID: 0, content: .init(title: "List section"), style: .large),
         ])
         .compositionalLayoutSectionProvider(NSCollectionLayoutSection.listWithHeader),
     ]

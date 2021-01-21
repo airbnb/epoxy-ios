@@ -6,6 +6,8 @@ import UIKit
 
 final class ImageMarquee: UIView, EpoxyableView {
 
+  // MARK: Lifecycle
+
   init(style: Style) {
     self.style = style
     super.init(frame: .zero)
@@ -19,6 +21,8 @@ final class ImageMarquee: UIView, EpoxyableView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: Internal
+
   struct Style: Hashable {
     var height: CGFloat
     var contentMode: UIView.ContentMode
@@ -31,6 +35,8 @@ final class ImageMarquee: UIView, EpoxyableView {
   func setContent(_ content: Content, animated: Bool) {
     imageView.setURL(content.imageURL)
   }
+
+  // MARK: Private
 
   private let style: Style
   private let imageView = UIImageView()

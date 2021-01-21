@@ -32,6 +32,8 @@
 /// ````
 public struct EpoxyModelProperty<Value> {
 
+  // MARK: Lifecycle
+
   /// Creates a property identified by a `KeyPath` to its provided `value` and with its default
   /// value if not customized in content by consumers.
   ///
@@ -46,6 +48,8 @@ public struct EpoxyModelProperty<Value> {
     self.defaultValue = defaultValue
     self.updateStrategy = updateStrategy
   }
+
+  // MARK: Public
 
   /// The `KeyPath` that uniquely identifies this property.
   public let keyPath: AnyKeyPath
