@@ -4,6 +4,8 @@
 import EpoxyCore
 import UIKit
 
+// MARK: - EpoxyCollectionViewDelegateFlowLayout
+
 /// Protocol that maps `UICollectionViewDelegateFlowLayout` methods to the `layoutDelegate` of a
 /// `CollectionView`.
 public protocol EpoxyCollectionViewDelegateFlowLayout {
@@ -28,7 +30,7 @@ public protocol EpoxyCollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     minimumInteritemSpacingForSectionWith sectionDataID: AnyHashable) -> CGFloat
 
- func collectionView(
+  func collectionView(
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     referenceSizeForHeaderInSectionWith sectionDataID: AnyHashable) -> CGSize
@@ -38,6 +40,8 @@ public protocol EpoxyCollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     referenceSizeForFooterInSectionWith sectionDataID: AnyHashable) -> CGSize
 }
+
+// MARK: - FlowLayoutDefaults
 
 enum FlowLayoutDefaults {
   fileprivate static var itemSize = CGSize(width: 50, height: 50)
@@ -99,6 +103,8 @@ extension EpoxyCollectionViewDelegateFlowLayout {
   }
 
 }
+
+// MARK: - CollectionView + UICollectionViewDelegateFlowLayout
 
 extension CollectionView: UICollectionViewDelegateFlowLayout {
 

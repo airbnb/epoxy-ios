@@ -4,6 +4,8 @@
 import Epoxy
 import UIKit
 
+// MARK: - TextRow
+
 final class TextRow: UIView, EpoxyableView {
 
   // MARK: Lifecycle

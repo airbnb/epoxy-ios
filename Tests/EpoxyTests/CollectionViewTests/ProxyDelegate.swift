@@ -17,7 +17,7 @@ class ProxyDelegate: EpoxyCollectionViewDelegateFlowLayout {
     layout collectionViewLayout: UICollectionViewLayout,
     sizeForItemWith dataID: AnyHashable,
     inSectionWith sectionDataID: AnyHashable)
-  -> CGSize
+    -> CGSize
   {
     size
   }
@@ -26,7 +26,7 @@ class ProxyDelegate: EpoxyCollectionViewDelegateFlowLayout {
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     insetForSectionWith sectionDataID: AnyHashable)
-  -> UIEdgeInsets
+    -> UIEdgeInsets
   {
     sectionInset
   }
@@ -35,7 +35,7 @@ class ProxyDelegate: EpoxyCollectionViewDelegateFlowLayout {
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     minimumLineSpacingForSectionWith sectionDataID: AnyHashable)
-  -> CGFloat
+    -> CGFloat
   {
     minimumLineSpacing
   }
@@ -44,7 +44,7 @@ class ProxyDelegate: EpoxyCollectionViewDelegateFlowLayout {
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     minimumInteritemSpacingForSectionWith sectionDataID: AnyHashable)
-  -> CGFloat
+    -> CGFloat
   {
     minimumInteritemSpacing
   }
@@ -53,7 +53,7 @@ class ProxyDelegate: EpoxyCollectionViewDelegateFlowLayout {
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     referenceSizeForHeaderInSectionWith sectionDataID: AnyHashable)
-  -> CGSize
+    -> CGSize
   {
     headerSize
   }
@@ -62,7 +62,7 @@ class ProxyDelegate: EpoxyCollectionViewDelegateFlowLayout {
     _ collectionView: UICollectionView,
     layout collectionViewLayout: UICollectionViewLayout,
     referenceSizeForFooterInSectionWith sectionDataID: AnyHashable)
-  -> CGSize
+    -> CGSize
   {
     footerSize
   }

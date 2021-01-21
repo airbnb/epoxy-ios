@@ -4,6 +4,8 @@
 import EpoxyCore
 import UIKit
 
+// MARK: - CollectionView
+
 /// A `UICollectionView` class that handles updates through its `setSections(_:animated:)` method,
 /// optionally animates the differences between `sections`.
 open class CollectionView: UICollectionView {
@@ -54,6 +56,130 @@ open class CollectionView: UICollectionView {
   }
 
   // MARK: Public
+
+  /// A delegate for handling accessibility events.
+  public weak var accessibilityDelegate: CollectionViewAccessibilityDelegate?
+
+  /// A delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
+  ///
+  /// Zooming delegate methods are ignored.
+  public weak var scrollDelegate: UIScrollViewDelegate?
+
+  /// A delegate for handling forwarded `UICollectionViewLayout` methods.
+  ///
+  /// See `EpoxyCollectionViewDelegateFlowLayout` for an example of forwarding
+  /// `UICollectionViewFlowLayoutDelegate` methods.
+  public weak var layoutDelegate: AnyObject?
+
+  /// A delegate for reacting to item display events, typically used for logging.
+  public weak var displayDelegate: CollectionViewDisplayDelegate?
+
+  /// The delegate that builds transition layouts.
+  public weak var transitionLayoutDelegate: CollectionViewTransitionLayoutDelegate?
+
+  /// The delegate that handles items reordering.
+  public weak var reorderingDelegate: CollectionViewReorderingDelegate?
+
+  /// Selection color for the `UICollectionViewCell`s of `ItemModel`s that have a `true` value for
+  /// `isSelectable`
+  ///
+  /// Defaults to no selection style.
+  public var selectionStyle = ItemSelectionStyle.noBackground
+
+  /// Whether to deselect items immediately after they are selected.
+  ///
+  /// Defaults to `true`.
+  public var autoDeselectItems = true
+
+  /// The pull to refresh control of this collection view.
+  public lazy var pullToRefreshControl: UIRefreshControl = {
+    let refreshControl = UIRefreshControl()
+    refreshControl.addTarget(
+      self,
+      action: #selector(didTriggerPullToRefreshControl(sender:)),
+      for: .valueChanged)
+    return refreshControl
+  }()
+
+  /// A delegate for prefetching the contents of offscreen items that are likely to come
+  /// on-screen soon.
+  public weak var prefetchDelegate: CollectionViewPrefetchingDelegate? {
+    didSet {
+      prefetchDataSource = (prefetchDelegate != nil) ? self : nil
+    }
+  }
+
+  /// A closure that handles the pull to refresh action being triggered.
+  public var didTriggerPullToRefresh: ((UIRefreshControl) -> Void)? {
+    didSet {
+      pullToRefreshEnabled = didTriggerPullToRefresh != nil
+    }
+  }
+
+  /// Whether pull to refresh is enabled.
+  ///
+  /// Defaults to `false`.
+  public var pullToRefreshEnabled = false {
+    didSet {
+      // TODO: Once we drop iOS 9, set UIScrollView's refreshControl directly
+      if pullToRefreshEnabled {
+        addSubview(pullToRefreshControl)
+      } else {
+        pullToRefreshControl.removeFromSuperview()
+      }
+    }
+  }
+
+  /// Metadata about the sections and items that are currently visible in this collection.
+  public var visibilityMetadata: CollectionViewVisibilityMetadata {
+    // UICollectionView's indexPathsForVisibleItems is unsorted per Apple's documentation
+    // https://developer.apple.com/documentation/uikit/uicollectionview/1618020-indexpathsforvisibleitems
+    let visibleItems = indexPathsForVisibleItems.sorted()
+
+    let visibleSupplementaryItems = epoxyDataSource.supplementaryViewElementKinds
+      .reduce(into: [String: [IndexPath]]()) { result, kind in
+        let indexPaths = indexPathsForVisibleSupplementaryElements(ofKind: kind).sorted()
+        result[kind] = indexPaths
+      }
+
+    let visibleSections = Set<Int>(visibleItems.map { $0.section }).sorted()
+
+    let sections: [CollectionViewVisibilityMetadata.Section] = visibleSections
+      .compactMap { sectionIndex in
+        guard let section = epoxyDataSource.data?.section(at: sectionIndex) else { return nil }
+
+        let items: [CollectionViewVisibilityMetadata.Item] = visibleItems.compactMap { indexPath in
+          guard
+            indexPath.section == sectionIndex,
+            let item = epoxyDataSource.data?.item(at: indexPath)
+          else { return nil }
+          let view = (cellForItem(at: indexPath) as? CollectionViewCell)?.view
+          return CollectionViewVisibilityMetadata.Item(model: item, view: view)
+        }
+
+        let supplementaryItems = visibleSupplementaryItems.reduce(
+          into: [String: [CollectionViewVisibilityMetadata.SupplementaryItem]](),
+          { result, element in
+            result[element.key] = element.value.compactMap { indexPath in
+              guard
+                indexPath.section == sectionIndex,
+                let item = epoxyDataSource.data?.supplementaryItem(
+                  ofKind: element.key,
+                  at: indexPath)
+              else { return nil }
+              let supplementaryView = self.supplementaryView(
+                forElementKind: element.key,
+                at: indexPath)
+              let view = (supplementaryView as? CollectionViewReusableView)?.view
+              return CollectionViewVisibilityMetadata.SupplementaryItem(model: item, view: view)
+            }
+          })
+
+        return .init(model: section, items: items, supplementaryItems: supplementaryItems)
+      }
+
+    return CollectionViewVisibilityMetadata(sections: sections, collectionView: self)
+  }
 
   /// Updates the sections of this collection view to the provided `sections`, optionally animating
   /// the differences from the current sections.
@@ -220,7 +346,7 @@ open class CollectionView: UICollectionView {
   /// Converts a section index to its `SectionModel`, asserting and returning `nil` if a section
   /// does not exist at that idnex.
   public func section(at index: Int) -> SectionModel? {
-    return epoxyDataSource.data?.section(at: index)
+    epoxyDataSource.data?.section(at: index)
   }
 
   /// Reconfigures the item at the given `indexPath`.
@@ -238,130 +364,6 @@ open class CollectionView: UICollectionView {
   /// Invalidates the layout of this collection view's underlying `collectionViewLayout`.
   public func invalidateLayout() {
     collectionViewLayout.invalidateLayout()
-  }
-
-  /// A delegate for handling accessibility events.
-  public weak var accessibilityDelegate: CollectionViewAccessibilityDelegate?
-
-  /// A delegate for handling `UIScrollViewDelegate` callbacks related to scrolling.
-  ///
-  /// Zooming delegate methods are ignored.
-  public weak var scrollDelegate: UIScrollViewDelegate?
-
-  /// A delegate for handling forwarded `UICollectionViewLayout` methods.
-  ///
-  /// See `EpoxyCollectionViewDelegateFlowLayout` for an example of forwarding
-  /// `UICollectionViewFlowLayoutDelegate` methods.
-  public weak var layoutDelegate: AnyObject?
-
-  /// A delegate for reacting to item display events, typically used for logging.
-  public weak var displayDelegate: CollectionViewDisplayDelegate?
-
-  /// A delegate for prefetching the contents of offscreen items that are likely to come
-  /// on-screen soon.
-  public weak var prefetchDelegate: CollectionViewPrefetchingDelegate? {
-    didSet {
-      prefetchDataSource = (prefetchDelegate != nil) ? self : nil
-    }
-  }
-
-  /// The delegate that builds transition layouts.
-  public weak var transitionLayoutDelegate: CollectionViewTransitionLayoutDelegate?
-
-  /// The delegate that handles items reordering.
-  public weak var reorderingDelegate: CollectionViewReorderingDelegate?
-
-  /// Selection color for the `UICollectionViewCell`s of `ItemModel`s that have a `true` value for
-  /// `isSelectable`
-  ///
-  /// Defaults to no selection style.
-  public var selectionStyle = ItemSelectionStyle.noBackground
-
-  /// Whether to deselect items immediately after they are selected.
-  ///
-  /// Defaults to `true`.
-  public var autoDeselectItems = true
-
-  /// A closure that handles the pull to refresh action being triggered.
-  public var didTriggerPullToRefresh: ((UIRefreshControl) -> Void)? {
-    didSet {
-      pullToRefreshEnabled = didTriggerPullToRefresh != nil
-    }
-  }
-
-  /// The pull to refresh control of this collection view.
-  public lazy var pullToRefreshControl: UIRefreshControl = {
-    let refreshControl = UIRefreshControl()
-    refreshControl.addTarget(
-      self,
-      action: #selector(didTriggerPullToRefreshControl(sender:)),
-      for: .valueChanged)
-    return refreshControl
-  }()
-
-  /// Whether pull to refresh is enabled.
-  ///
-  /// Defaults to `false`.
-  public var pullToRefreshEnabled = false {
-    didSet {
-      // TODO: Once we drop iOS 9, set UIScrollView's refreshControl directly
-      if pullToRefreshEnabled {
-        addSubview(pullToRefreshControl)
-      } else {
-        pullToRefreshControl.removeFromSuperview()
-      }
-    }
-  }
-
-  /// Metadata about the sections and items that are currently visible in this collection.
-  public var visibilityMetadata: CollectionViewVisibilityMetadata {
-    // UICollectionView's indexPathsForVisibleItems is unsorted per Apple's documentation
-    // https://developer.apple.com/documentation/uikit/uicollectionview/1618020-indexpathsforvisibleitems
-    let visibleItems = indexPathsForVisibleItems.sorted()
-
-    let visibleSupplementaryItems = epoxyDataSource.supplementaryViewElementKinds
-      .reduce(into: [String: [IndexPath]]()) { result, kind in
-        let indexPaths = indexPathsForVisibleSupplementaryElements(ofKind: kind).sorted()
-        result[kind] = indexPaths
-      }
-
-    let visibleSections = Set<Int>(visibleItems.map { $0.section }).sorted()
-
-    let sections: [CollectionViewVisibilityMetadata.Section] = visibleSections
-      .compactMap { sectionIndex in
-        guard let section = epoxyDataSource.data?.section(at: sectionIndex) else { return nil }
-
-        let items: [CollectionViewVisibilityMetadata.Item] = visibleItems.compactMap { indexPath in
-          guard
-            indexPath.section == sectionIndex,
-            let item = epoxyDataSource.data?.item(at: indexPath)
-          else { return nil }
-          let view = (cellForItem(at: indexPath) as? CollectionViewCell)?.view
-          return CollectionViewVisibilityMetadata.Item(model: item, view: view)
-        }
-
-        let supplementaryItems = visibleSupplementaryItems.reduce(
-          into: [String: [CollectionViewVisibilityMetadata.SupplementaryItem]](),
-          { result, element in
-            result[element.key] = element.value.compactMap { indexPath in
-              guard
-                indexPath.section == sectionIndex,
-                let item = epoxyDataSource.data?.supplementaryItem(
-                  ofKind: element.key,
-                  at: indexPath)
-              else { return nil }
-              let supplementaryView = self.supplementaryView(
-                forElementKind: element.key,
-                at: indexPath)
-              let view = (supplementaryView as? CollectionViewReusableView)?.view
-              return CollectionViewVisibilityMetadata.SupplementaryItem(model: item, view: view)
-            }
-          })
-
-        return .init(model: section, items: items, supplementaryItems: supplementaryItems)
-      }
-
-    return CollectionViewVisibilityMetadata(sections: sections, collectionView: self)
   }
 
   // MARK: Internal
@@ -1010,7 +1012,7 @@ extension CollectionView: UICollectionViewDataSourcePrefetching {
     _ collectionView: UICollectionView,
     cancelPrefetchingForItemsAt indexPaths: [IndexPath])
   {
-    let models = indexPaths.compactMap { epoxyDataSource.data?.item(at:$0) }
+    let models = indexPaths.compactMap { epoxyDataSource.data?.item(at: $0) }
 
     guard !models.isEmpty else { return }
 

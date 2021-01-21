@@ -1,6 +1,8 @@
 // Created by eric_horacek on 11/18/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
+// MARK: - EpoxyModelStorage
+
 /// The underlying storage for an `EpoxyModeled` model that is capable of storing any
 /// `EpoxyModelProperty`.
 ///

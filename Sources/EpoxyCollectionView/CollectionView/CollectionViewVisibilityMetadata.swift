@@ -29,7 +29,7 @@ extension CollectionViewVisibilityMetadata {
     public init(
       model: SectionModel,
       items: [Item],
-      supplementaryItems: [String : [SupplementaryItem]])
+      supplementaryItems: [String: [SupplementaryItem]])
     {
       self.model = model
       self.items = items

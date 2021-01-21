@@ -206,7 +206,7 @@ struct CollectionViewData {
 
       if let sectionID = lastSectionID {
         EpoxyLogger.shared.warn({
-          return """
+          """
           Warning! Attempted to locate item \(path.itemDataID) when there are multiple sections that \
           contain it each with IDs \(itemIndexMapBySectionID.keys) at the indexes \
           \(itemIndexMapBySectionID.keys.map { sectionIndexMap[$0] }). Choosing the last section \
@@ -234,7 +234,7 @@ struct CollectionViewData {
     }
 
     EpoxyLogger.shared.warn({
-      return """
+      """
       Warning! Attempted to locate section \(dataID) when there are multiple sections with that ID \
       at the indexes \(indexes.map { $0 }). Choosing the last index. Sections should have unique \
       data IDs within a collection as duplicate data IDs can cause undefined behavior.
@@ -305,7 +305,7 @@ struct CollectionViewData {
         Warning! Duplicate data IDs detected. Items should have unique data IDs within a section \
         and sections should have unique data IDs within a collection. Duplicate data IDs can cause \
         undefined behavior. Digest:
-        """
+        """,
       ]
 
       if sectionDuplicates {

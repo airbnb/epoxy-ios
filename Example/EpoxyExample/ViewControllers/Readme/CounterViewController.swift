@@ -6,10 +6,15 @@ import UIKit
 
 /// Source code for `EpoxyCollectionView` "Counter" example from `README.md`:
 class CounterViewController: CollectionViewController {
+
+  // MARK: Lifecycle
+
   init() {
     super.init(layout: UICollectionViewCompositionalLayout.list)
     setSections(sections, animated: false)
   }
+
+  // MARK: Private
 
   private enum DataID {
     case row
@@ -30,8 +35,8 @@ class CounterViewController: CollectionViewController {
           style: .large)
           .didSelect { [weak self] _ in
             self?.count += 1
-          }
-      ])
+          },
+      ]),
     ]
   }
 }

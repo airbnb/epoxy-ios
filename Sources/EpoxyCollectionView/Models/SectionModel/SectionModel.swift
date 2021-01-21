@@ -4,6 +4,8 @@
 import EpoxyCore
 import Foundation
 
+// MARK: - SectionModel
+
 /// The `SectionModel` contains the section data for a type of list, such as a `CollectionView`.
 public struct SectionModel: EpoxyModeled {
 
@@ -21,17 +23,33 @@ public struct SectionModel: EpoxyModeled {
   public var storage = EpoxyModelStorage()
 }
 
-// MARK: Providers
+// MARK: DataIDProviding
 
 extension SectionModel: DataIDProviding {}
+
+// MARK: DidEndDisplayingProviding
+
 extension SectionModel: DidEndDisplayingProviding {}
+
+// MARK: ItemsProviding
+
 extension SectionModel: ItemsProviding {}
+
+// MARK: SupplementaryItemsProviding
+
 extension SectionModel: SupplementaryItemsProviding {}
+
+// MARK: WillDisplayProviding
+
 extension SectionModel: WillDisplayProviding {}
 
 // MARK: Diffable
 
 extension SectionModel: Diffable {
+  public var diffIdentifier: AnyHashable {
+    dataID
+  }
+
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let otherDiffableSection = otherDiffableItem as? Self else { return false }
 
@@ -39,9 +57,6 @@ extension SectionModel: Diffable {
     return dataID == otherDiffableSection.dataID
   }
 
-  public var diffIdentifier: AnyHashable {
-    dataID
-  }
 }
 
 // MARK: DiffableSection

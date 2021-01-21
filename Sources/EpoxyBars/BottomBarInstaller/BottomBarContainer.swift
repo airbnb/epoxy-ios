@@ -146,7 +146,7 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
   /// to the safe area, center, or bounds changing.
   private func updateInsets() {
     updateAdditionalSafeAreaInset(additionalSafeAreaInsetsBottom)
-    
+
     // If offset from the bottom, use the original layout margins rather than the safe area margins,
     // as the safe area no longer overlaps the bar.
     let margin = (bottomOffset > 0) ? 0 : viewController?.originalSafeAreaInsetBottom ?? 0

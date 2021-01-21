@@ -40,13 +40,13 @@ public final class BarWrapperView: UIView {
 
   // MARK: Public
 
+  /// The current bar model.
+  public private(set) var model: BarModeling?
+
   /// The current bar coordinator.
   public var coordinator: AnyBarCoordinating? {
     _coordinator?.backing
   }
-
-  /// The current bar model.
-  public private(set) var model: BarModeling?
 
   /// The current bar view.
   public private(set) var view: UIView? {

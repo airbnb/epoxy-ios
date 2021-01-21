@@ -45,6 +45,11 @@ public final class EpoxyLogger {
     _ line: UInt)
     -> Void
 
+  /// The shared instance used to log Epoxy assertions and warnings.
+  ///
+  /// Set this to a new logger instance to intercept assertions and warnings logged by Epoxy.
+  public static var shared = EpoxyLogger()
+
   /// Logs that an assertion occurred.
   public func assert(
     _ condition: @autoclosure () -> Bool,
@@ -72,13 +77,6 @@ public final class EpoxyLogger {
   {
     _warn(message(), fileID, line)
   }
-
-  // MARK: Public
-
-  /// The shared instance used to log Epoxy assertions and warnings.
-  ///
-  /// Set this to a new logger instance to intercept assertions and warnings logged by Epoxy.
-  public static var shared = EpoxyLogger()
 
   // MARK: Private
 

@@ -17,7 +17,7 @@ protocol BaseBarInstallerSpec {
 // MARK: Spec implementation
 
 extension BaseBarInstallerSpec {
-  
+
   func baseSpec() {
     var window: UIWindow!
     var viewController: UIViewController!

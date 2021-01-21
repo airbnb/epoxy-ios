@@ -4,11 +4,26 @@
 import Epoxy
 import UIKit
 
+// MARK: - MainViewController
+
 final class MainViewController: NavigationController {
+
+  // MARK: Lifecycle
 
   init() {
     super.init(wrapNavigation: NavigationWrapperViewController.init(navigationController:))
     setStack(stack, animated: false)
+  }
+
+  // MARK: Internal
+
+  enum Example: CaseIterable {
+    case highlightAndSelection
+    case shuffle
+    case customSelfSizing
+    case product
+    case readme
+    case flowLayout
   }
 
   // MARK: Private
@@ -22,15 +37,6 @@ final class MainViewController: NavigationController {
     case index
     case item(Example)
     case readme(ReadmeExample)
-  }
-
-  enum Example: CaseIterable {
-    case highlightAndSelection
-    case shuffle
-    case customSelfSizing
-    case product
-    case readme
-    case flowLayout
   }
 
   private var state = State() {
@@ -82,7 +88,7 @@ final class MainViewController: NavigationController {
             .didSelect { [weak self] _ in
               self?.state.showExample = example
             }
-        })
+        }),
       ])
     viewController.title = "Epoxy"
     return viewController
@@ -130,6 +136,8 @@ extension MainViewController.Example {
     }
   }
 }
+
+// MARK: - NavigationWrapperViewController
 
 /// A naive implementation a Navigation wrapper so we can nest the `FormNavigationController`
 /// without a crash.

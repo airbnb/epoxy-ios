@@ -6,6 +6,8 @@ import UIKit
 
 final class FlowLayoutViewController: CollectionViewController {
 
+  // MARK: Lifecycle
+
   init() {
     super.init(layout: UICollectionViewFlowLayout())
     setSections(sections, animated: false)
@@ -51,7 +53,7 @@ final class FlowLayoutViewController: CollectionViewController {
         .supplementaryItems(thirdSectionSupplementaryItems)
         // Width is ignored for headers / footers
         .flowLayoutHeaderReferenceSize(.init(width: 0, height: 30))
-        .flowLayoutFooterReferenceSize(.init(width: 0, height: 60))
+        .flowLayoutFooterReferenceSize(.init(width: 0, height: 60)),
     ]
   }
 
@@ -64,7 +66,7 @@ final class FlowLayoutViewController: CollectionViewController {
       ColorView.itemModel(
         dataID: DataIDs.Section1.red2,
         style: .red)
-        .flowLayoutItemSize(.init(width: 100, height: 100))
+        .flowLayoutItemSize(.init(width: 100, height: 100)),
     ]
   }
 
@@ -72,7 +74,7 @@ final class FlowLayoutViewController: CollectionViewController {
     [
       ColorView.itemModel(
         dataID: DataIDs.Section2.orange,
-        style: .orange)
+        style: .orange),
     ]
   }
 
@@ -81,7 +83,7 @@ final class FlowLayoutViewController: CollectionViewController {
       ColorView.itemModel(
         dataID: DataIDs.Section3.item,
         style: .green)
-        .flowLayoutItemSize(.init(width: 200, height: 50))
+        .flowLayoutItemSize(.init(width: 200, height: 50)),
     ]
   }
 
@@ -90,13 +92,13 @@ final class FlowLayoutViewController: CollectionViewController {
       UICollectionView.elementKindSectionHeader: [
         ColorView.supplementaryItemModel(
           dataID: DataIDs.Section3.header,
-          style: .yellow)
+          style: .yellow),
       ],
       UICollectionView.elementKindSectionFooter: [
         ColorView.supplementaryItemModel(
           dataID: DataIDs.Section3.footer,
-          style: .blue)
-      ]
+          style: .blue),
+      ],
     ]
   }
 

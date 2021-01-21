@@ -1,9 +1,11 @@
 // Created by eric_horacek on 12/1/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
-import Quick
-import Nimble
 import EpoxyCore
+import Nimble
+import Quick
+
+// MARK: - EpoxyModeledSpec
 
 final class EpoxyModeledSpec: QuickSpec {
   override func spec() {
@@ -304,13 +306,14 @@ extension EpoxyModeled where Self: TestStringProviding {
     set { self[testStringProperty] = newValue }
   }
 
+  var testStringProperty: EpoxyModelProperty<String?> {
+    .init(keyPath: \Self.testString, defaultValue: "defaultValue", updateStrategy: .replace)
+  }
+
   func testString(_ value: String?) -> Self {
     copy(updating: testStringProperty, to: value)
   }
 
-  var testStringProperty: EpoxyModelProperty<String?> {
-    .init(keyPath: \Self.testString, defaultValue: "defaultValue", updateStrategy: .replace)
-  }
 }
 
 extension EpoxyModeled where Self: TestArity0ClosureProviding {
@@ -319,16 +322,17 @@ extension EpoxyModeled where Self: TestArity0ClosureProviding {
     set { self[testArity0ClosureProperty] = newValue }
   }
 
-  func testArity0Closure(_ value: (() -> Void)?) -> Self {
-    copy(updating: testArity0ClosureProperty, to: value)
-  }
-
   var testArity0ClosureProperty: EpoxyModelProperty<(() -> Void)?> {
     EpoxyModelProperty(
       keyPath: \Self.testArity0Closure,
       defaultValue: nil,
       updateStrategy: .chain())
   }
+
+  func testArity0Closure(_ value: (() -> Void)?) -> Self {
+    copy(updating: testArity0ClosureProperty, to: value)
+  }
+
 }
 
 extension EpoxyModeled where Self: TestArity1ClosureProviding {
@@ -337,16 +341,17 @@ extension EpoxyModeled where Self: TestArity1ClosureProviding {
     set { self[testArity1ClosureProperty] = newValue }
   }
 
-  func testArity1Closure(_ value: ((String) -> Void)?) -> Self {
-    copy(updating: testArity1ClosureProperty, to: value)
-  }
-
   var testArity1ClosureProperty: EpoxyModelProperty<((String) -> Void)?> {
     EpoxyModelProperty(
       keyPath: \Self.testArity1Closure,
       defaultValue: nil,
       updateStrategy: .chain())
   }
+
+  func testArity1Closure(_ value: ((String) -> Void)?) -> Self {
+    copy(updating: testArity1ClosureProperty, to: value)
+  }
+
 }
 
 extension EpoxyModeled where Self: TestArity2ClosureProviding {
@@ -355,16 +360,17 @@ extension EpoxyModeled where Self: TestArity2ClosureProviding {
     set { self[testArity2ClosureProperty] = newValue }
   }
 
-  func testArity2Closure(_ value: ((String, String) -> Void)?) -> Self {
-    copy(updating: testArity2ClosureProperty, to: value)
-  }
-
   var testArity2ClosureProperty: EpoxyModelProperty<((String, String) -> Void)?> {
     EpoxyModelProperty(
       keyPath: \Self.testArity2Closure,
       defaultValue: nil,
       updateStrategy: .chain())
   }
+
+  func testArity2Closure(_ value: ((String, String) -> Void)?) -> Self {
+    copy(updating: testArity2ClosureProperty, to: value)
+  }
+
 }
 
 extension EpoxyModeled where Self: TestArity3ClosureProviding {
@@ -373,16 +379,17 @@ extension EpoxyModeled where Self: TestArity3ClosureProviding {
     set { self[testArity3ClosureProperty] = newValue }
   }
 
-  func testArity3Closure(_ value: ((String, String, String) -> Void)?) -> Self {
-    copy(updating: testArity3ClosureProperty, to: value)
-  }
-
   var testArity3ClosureProperty: EpoxyModelProperty<((String, String, String) -> Void)?> {
     EpoxyModelProperty(
       keyPath: \Self.testArity3Closure,
       defaultValue: nil,
       updateStrategy: .chain())
   }
+
+  func testArity3Closure(_ value: ((String, String, String) -> Void)?) -> Self {
+    copy(updating: testArity3ClosureProperty, to: value)
+  }
+
 }
 
 extension EpoxyModeled where Self: TestArity4ClosureProviding {
@@ -391,16 +398,17 @@ extension EpoxyModeled where Self: TestArity4ClosureProviding {
     set { self[testArity4ClosureProperty] = newValue }
   }
 
-  func testArity4Closure(_ value: ((String, String, String, String) -> Void)?) -> Self {
-    copy(updating: testArity4ClosureProperty, to: value)
-  }
-
   var testArity4ClosureProperty: EpoxyModelProperty<((String, String, String, String) -> Void)?> {
     EpoxyModelProperty(
       keyPath: \Self.testArity4Closure,
       defaultValue: nil,
       updateStrategy: .chain())
   }
+
+  func testArity4Closure(_ value: ((String, String, String, String) -> Void)?) -> Self {
+    copy(updating: testArity4ClosureProperty, to: value)
+  }
+
 }
 
 // MARK: - TestModel
@@ -409,9 +417,26 @@ private struct TestModel: EpoxyModeled {
   var storage = EpoxyModelStorage()
 }
 
+// MARK: TestStringProviding
+
 extension TestModel: TestStringProviding {}
+
+// MARK: TestArity0ClosureProviding
+
 extension TestModel: TestArity0ClosureProviding {}
+
+// MARK: TestArity1ClosureProviding
+
 extension TestModel: TestArity1ClosureProviding {}
+
+// MARK: TestArity2ClosureProviding
+
 extension TestModel: TestArity2ClosureProviding {}
+
+// MARK: TestArity3ClosureProviding
+
 extension TestModel: TestArity3ClosureProviding {}
+
+// MARK: TestArity4ClosureProviding
+
 extension TestModel: TestArity4ClosureProviding {}

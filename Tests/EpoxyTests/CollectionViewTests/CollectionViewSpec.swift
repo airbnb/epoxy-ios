@@ -1,11 +1,11 @@
 // Created by eric_horacek on 1/8/21.
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
+import EpoxyCollectionView
+import EpoxyCore
 import Nimble
 import Quick
 import UIKit
-import EpoxyCore
-import EpoxyCollectionView
 
 // MARK: - CollectionViewSpec
 

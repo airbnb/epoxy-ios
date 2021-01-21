@@ -4,6 +4,8 @@
 import Epoxy
 import UIKit
 
+// MARK: - CustomSizingView
+
 final class CustomSizingView: UIView, EpoxyableView {
 
   // MARK: Lifecycle
@@ -21,7 +23,8 @@ final class CustomSizingView: UIView, EpoxyableView {
 
   override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
     super.traitCollectionDidChange(previousTraitCollection)
-    if traitCollection.preferredContentSizeCategory != .unspecified
+    if
+      traitCollection.preferredContentSizeCategory != .unspecified
       && previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory
     {
       sizingLabel.invalidateIntrinsicContentSize()
@@ -38,7 +41,7 @@ final class CustomSizingView: UIView, EpoxyableView {
   private func setUpViews() {
     sizingLabel.numberOfLines = 0
     sizingLabel.contentSize = { width in
-      return CGSize(width: width, height: width * 0.3)
+      CGSize(width: width, height: width * 0.3)
     }
     sizingLabel.translatesAutoresizingMaskIntoConstraints = false
     addSubview(sizingLabel)
@@ -65,6 +68,7 @@ final class CustomSizingView: UIView, EpoxyableView {
 private class SizingLabel: UILabel {
 
   var contentSize: ((CGFloat) -> CGSize)?
+
   override var intrinsicContentSize: CGSize {
     let constrainingWidth: CGFloat
     if preferredMaxLayoutWidth != 0 {

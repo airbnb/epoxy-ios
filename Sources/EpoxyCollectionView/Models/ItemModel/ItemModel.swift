@@ -61,7 +61,7 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
     configureView: @escaping ConfigureView)
   {
     self.dataID = dataID
-    self.styleID = params
+    styleID = params
     self.content = content
     self.makeView = { makeView(params) }
     self.configureView = configureView
@@ -97,19 +97,52 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
 
 }
 
-// MARK: Providers
+// MARK: ConfigureViewProviding
 
 extension ItemModel: ConfigureViewProviding {}
+
+// MARK: ContentProviding
+
 extension ItemModel: ContentProviding {}
+
+// MARK: DataIDProviding
+
 extension ItemModel: DataIDProviding {}
+
+// MARK: DidChangeStateProviding
+
 extension ItemModel: DidChangeStateProviding {}
+
+// MARK: DidEndDisplayingProviding
+
 extension ItemModel: DidEndDisplayingProviding {}
+
+// MARK: DidSelectProviding
+
 extension ItemModel: DidSelectProviding {}
+
+// MARK: IsMovableProviding
+
 extension ItemModel: IsMovableProviding {}
+
+// MARK: MakeViewProviding
+
 extension ItemModel: MakeViewProviding {}
+
+// MARK: SelectionStyleProviding
+
 extension ItemModel: SelectionStyleProviding {}
+
+// MARK: SetBehaviorsProviding
+
 extension ItemModel: SetBehaviorsProviding {}
+
+// MARK: StyleIDProviding
+
 extension ItemModel: StyleIDProviding {}
+
+// MARK: WillDisplayProviding
+
 extension ItemModel: WillDisplayProviding {}
 
 // MARK: ItemModeling

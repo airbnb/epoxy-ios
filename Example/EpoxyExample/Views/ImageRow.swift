@@ -4,7 +4,11 @@
 import Epoxy
 import UIKit
 
+// MARK: - ImageRow
+
 final class ImageRow: UIView, EpoxyableView {
+
+  // MARK: Lifecycle
 
   init() {
     super.init(frame: .zero)
@@ -16,7 +20,7 @@ final class ImageRow: UIView, EpoxyableView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  // MARK: Public
+  // MARK: Internal
 
   func setContent(_ content: ImageRowContent, animated: Bool) {
     titleLabel.text = content.title
@@ -73,11 +77,13 @@ final class ImageRow: UIView, EpoxyableView {
       labelStackView.leadingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: 16),
       labelStackView.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
       labelStackView.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
-      labelStackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+      labelStackView.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
     ])
     layoutMargins = UIEdgeInsets(top: 20, left: 24, bottom: 20, right: 24)
   }
 }
+
+// MARK: - ImageRowContent
 
 struct ImageRowContent: Equatable {
   let title: String

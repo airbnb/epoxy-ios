@@ -1,45 +1,61 @@
 // Created by Laura Skelton on 12/15/16
 // Copyright © 2016 Airbnb Inc. All rights reserved.
 
+import EpoxyCore
 import Nimble
 import Quick
-import EpoxyCore
+
+// MARK: - Int + Diffable
 
 extension Int: Diffable {
+  public var diffIdentifier: AnyHashable {
+    self
+  }
+
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let otherInt = otherDiffableItem as? Int else { return false }
     return self == otherInt
   }
 
-  public var diffIdentifier: AnyHashable {
-    self
-  }
 }
+
+// MARK: - TestDiffable
 
 private struct TestDiffable {
   let identifier: Int
   let content: String
 }
 
-extension TestDiffable: Diffable {
-  func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let otherTestDiffable = otherDiffableItem as? TestDiffable else { return false }
-    return self.content == otherTestDiffable.content
-  }
+// MARK: Diffable
 
+extension TestDiffable: Diffable {
   var diffIdentifier: AnyHashable {
     identifier
   }
+
+  func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
+    guard let otherTestDiffable = otherDiffableItem as? TestDiffable else { return false }
+    return content == otherTestDiffable.content
+  }
+
 }
+
+// MARK: - TestDiffableSection
 
 private struct TestDiffableSection {
   let identifier: Int
   let items: [TestDiffable]
 }
 
+// MARK: DiffableSection
+
 extension TestDiffableSection: DiffableSection {
   var diffableItems: [TestDiffable] {
     items
+  }
+
+  var diffIdentifier: AnyHashable {
+    identifier
   }
 
   func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
@@ -47,10 +63,9 @@ extension TestDiffableSection: DiffableSection {
     return diffIdentifier == otherTestDiffable.diffIdentifier
   }
 
-  var diffIdentifier: AnyHashable {
-    identifier
-  }
 }
+
+// MARK: - CollectionDiffSpec
 
 final class CollectionDiffSpec: QuickSpec {
 
@@ -242,13 +257,13 @@ final class CollectionDiffSpec: QuickSpec {
             let changeset = otherIntArray.makeChangeset(from: intArray)
             expect(changeset.moves.count).to(equal(7))
 
-            let firstMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 0
+            let firstMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 0
             }
             expect(firstMove.first!.new).to(equal(6))
 
-            let secondMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 1
+            let secondMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 1
             }
             expect(secondMove.first!.new).to(equal(0))
             expect(changeset.inserts).to(beEmpty())
@@ -264,13 +279,13 @@ final class CollectionDiffSpec: QuickSpec {
             let changeset = otherIntArray.makeChangeset(from: intArray)
             expect(changeset.moves.count).to(equal(4))
 
-            let firstMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 0
+            let firstMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 0
             }
             expect(firstMove.first!.new).to(equal(3))
 
-            let secondMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 1
+            let secondMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 1
             }
             expect(secondMove.first!.new).to(equal(0))
             expect(changeset.inserts).to(beEmpty())
@@ -286,18 +301,18 @@ final class CollectionDiffSpec: QuickSpec {
             let changeset = otherIntArray.makeChangeset(from: intArray)
             expect(changeset.moves.count).to(equal(3))
 
-            let firstMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 0
+            let firstMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 0
             }
             expect(firstMove.first!.new).to(equal(1))
 
-            let secondMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 1
+            let secondMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 1
             }
             expect(secondMove.first!.new).to(equal(2))
 
-            let thirdMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 2
+            let thirdMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 2
             }
             expect(thirdMove.first!.new).to(equal(0))
             expect(changeset.inserts).to(beEmpty())
@@ -313,18 +328,18 @@ final class CollectionDiffSpec: QuickSpec {
             let changeset = otherIntArray.makeChangeset(from: intArray)
             expect(changeset.moves.count).to(equal(5))
 
-            let firstMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 2
+            let firstMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 2
             }
             expect(firstMove.first!.new).to(equal(6))
 
-            let secondMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 3
+            let secondMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 3
             }
             expect(secondMove.first!.new).to(equal(2))
 
-            let thirdMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 4
+            let thirdMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 4
             }
             expect(thirdMove.first!.new).to(equal(3))
             expect(changeset.inserts).to(beEmpty())
@@ -340,13 +355,13 @@ final class CollectionDiffSpec: QuickSpec {
             let changeset = otherIntArray.makeChangeset(from: intArray)
             expect(changeset.moves.count).to(equal(2))
 
-            let firstMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 2
+            let firstMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 2
             }
             expect(firstMove.first!.new).to(equal(3))
 
-            let secondMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 3
+            let secondMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 3
             }
             expect(secondMove.first!.new).to(equal(2))
 
@@ -363,13 +378,13 @@ final class CollectionDiffSpec: QuickSpec {
             let changeset = otherIntArray.makeChangeset(from: intArray)
             expect(changeset.moves.count).to(equal(7))
 
-            let firstMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 6
+            let firstMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 6
             }
             expect(firstMove.first!.new).to(equal(0))
 
-            let secondMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 0
+            let secondMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 0
             }
             expect(secondMove.first!.new).to(equal(1))
 
@@ -386,13 +401,13 @@ final class CollectionDiffSpec: QuickSpec {
             let changeset = otherIntArray.makeChangeset(from: intArray)
             expect(changeset.moves.count).to(equal(4))
 
-            let firstMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 6
+            let firstMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 6
             }
             expect(firstMove.first!.new).to(equal(3))
 
-            let secondMove = changeset.moves.filter { (startIndex, endIndex) in
-              return startIndex == 3
+            let secondMove = changeset.moves.filter { startIndex, _ in
+              startIndex == 3
             }
             expect(secondMove.first!.new).to(equal(4))
 
@@ -418,8 +433,8 @@ final class CollectionDiffSpec: QuickSpec {
           it("returns the correct changeset") {
             let changeset = otherTestDiffableArray.makeChangeset(from: testDiffableArray)
             expect(changeset.updates.count).to(equal(1))
-            let firstUpdate = changeset.updates.filter { (startIndex, endIndex) in
-              return startIndex == 2
+            let firstUpdate = changeset.updates.filter { startIndex, _ in
+              startIndex == 2
             }
             expect(firstUpdate.first).toNot(beNil())
             expect(firstUpdate.first!.new).to(equal(2))
@@ -443,14 +458,14 @@ final class CollectionDiffSpec: QuickSpec {
           it("returns the correct changeset") {
             let changeset = otherTestDiffableArray.makeChangeset(from: testDiffableArray)
             expect(changeset.updates.count).to(equal(2))
-            let firstUpdate = changeset.updates.filter { (startIndex, endIndex) in
-              return startIndex == 2
+            let firstUpdate = changeset.updates.filter { startIndex, _ in
+              startIndex == 2
             }
             expect(firstUpdate.first).toNot(beNil())
             expect(firstUpdate.first!.new).to(equal(2))
 
-            let secondUpdate = changeset.updates.filter { (startIndex, endIndex) in
-              return startIndex == 4
+            let secondUpdate = changeset.updates.filter { startIndex, _ in
+              startIndex == 4
             }
             expect(secondUpdate.first).toNot(beNil())
             expect(secondUpdate.first!.new).to(equal(4))
@@ -492,16 +507,16 @@ final class CollectionDiffSpec: QuickSpec {
         it("returns the correct changeset") {
           let changeset = otherTestDiffableArray.makeChangeset(from: testDiffableArray)
           expect(changeset.updates.count).to(equal(1))
-          let firstUpdate = changeset.updates.filter { (startIndex, endIndex) in
-            return startIndex == 2
+          let firstUpdate = changeset.updates.filter { startIndex, _ in
+            startIndex == 2
           }
           expect(firstUpdate.first).toNot(beNil())
           expect(firstUpdate.first!.new).to(equal(1))
 
           expect(changeset.moves.count).to(equal(2))
 
-          let firstMove = changeset.moves.filter { (startIndex, endIndex) in
-            return startIndex == 2
+          let firstMove = changeset.moves.filter { startIndex, _ in
+            startIndex == 2
           }
           expect(firstMove.first).toNot(beNil())
           expect(firstMove.first!.new).to(equal(1))

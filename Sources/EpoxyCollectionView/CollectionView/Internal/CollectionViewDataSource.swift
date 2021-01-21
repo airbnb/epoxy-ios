@@ -17,7 +17,18 @@ final class CollectionViewDataSource: NSObject {
 
   // MARK: Internal
 
+  /// The result of applying new data to this data source.
+  struct ApplyDataResult {
+    /// The changes from the new data to the old data
+    var changeset: CollectionViewChangeset
+
+    /// The previous data, used to identify disappearing items from the old index paths.
+    var oldData: CollectionViewData
+  }
+
   weak var reorderingDelegate: CollectionViewDataSourceReorderingDelegate?
+
+  private(set) var data: CollectionViewData?
 
   weak var collectionView: CollectionView? {
     didSet {
@@ -31,8 +42,6 @@ final class CollectionViewDataSource: NSObject {
     .init(registeredSupplementaryViewDifferentiators.keys)
   }
 
-  private(set) var data: CollectionViewData?
-
   /// Registers reuse IDs for the items in the given sections with this data source's associated
   /// `CollectionView`.
   func registerSections(_ sections: [SectionModel]) {
@@ -40,20 +49,11 @@ final class CollectionViewDataSource: NSObject {
     registerSupplementaryViewDifferentiators(with: sections)
   }
 
-  /// The result of applying new data to this data source.
-  struct ApplyDataResult {
-    /// The changes from the new data to the old data
-    var changeset: CollectionViewChangeset
-
-    /// The previous data, used to identify disappearing items from the old index paths.
-    var oldData: CollectionViewData
-  }
-
   /// Applies the given new data to this data source, returning old data and the minimal changes
   /// necessary to get to the provided new data.
   func applyData(_ newData: CollectionViewData) -> ApplyDataResult? {
-    let oldData = self.data
-    self.data = newData
+    let oldData = data
+    data = newData
     if configuration.usesBatchUpdatesForAllReloads {
       let oldData = oldData ?? .make(sections: [])
       return .init(changeset: newData.makeChangeset(from: oldData), oldData: oldData)

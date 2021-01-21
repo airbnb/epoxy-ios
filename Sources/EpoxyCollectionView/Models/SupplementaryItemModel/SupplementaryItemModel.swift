@@ -61,7 +61,7 @@ public struct SupplementaryItemModel<View: UIView, Content: Equatable>: ContentV
     configureView: @escaping ConfigureView)
   {
     self.dataID = dataID
-    self.styleID = params
+    styleID = params
     self.content = content
     self.makeView = { makeView(params) }
     self.configureView = configureView
@@ -97,15 +97,36 @@ public struct SupplementaryItemModel<View: UIView, Content: Equatable>: ContentV
 
 }
 
-// MARK: Providers
+// MARK: ConfigureViewProviding
 
 extension SupplementaryItemModel: ConfigureViewProviding {}
+
+// MARK: ContentProviding
+
 extension SupplementaryItemModel: ContentProviding {}
+
+// MARK: DataIDProviding
+
 extension SupplementaryItemModel: DataIDProviding {}
+
+// MARK: DidEndDisplayingProviding
+
 extension SupplementaryItemModel: DidEndDisplayingProviding {}
+
+// MARK: MakeViewProviding
+
 extension SupplementaryItemModel: MakeViewProviding {}
+
+// MARK: SetBehaviorsProviding
+
 extension SupplementaryItemModel: SetBehaviorsProviding {}
+
+// MARK: StyleIDProviding
+
 extension SupplementaryItemModel: StyleIDProviding {}
+
+// MARK: WillDisplayProviding
+
 extension SupplementaryItemModel: WillDisplayProviding {}
 
 // MARK: SupplementaryItemModeling
@@ -119,6 +140,9 @@ extension SupplementaryItemModel: SupplementaryItemModeling {
 // MARK: InternalSupplementaryItemModeling
 
 extension SupplementaryItemModel: InternalSupplementaryItemModeling {
+
+  // MARK: Public
+
   public var viewDifferentiator: ViewDifferentiator {
     .init(viewType: View.self, styleID: styleID)
   }
@@ -141,6 +165,8 @@ extension SupplementaryItemModel: InternalSupplementaryItemModeling {
   {
     setBehaviors?(.init(view: viewForReusableView(reusableView), content: content, dataID: dataID, traitCollection: traitCollection, animated: animated))
   }
+
+  // MARK: Internal
 
   func handleWillDisplay(
     _ reusableView: CollectionViewReusableView,

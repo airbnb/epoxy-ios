@@ -33,10 +33,16 @@ public struct AnyItemModel: EpoxyModeled {
 
 }
 
-// MARK: Providers
+// MARK: WillDisplayProviding
 
 extension AnyItemModel: WillDisplayProviding {}
+
+// MARK: DidEndDisplayingProviding
+
 extension AnyItemModel: DidEndDisplayingProviding {}
+
+// MARK: DidSelectProviding
+
 extension AnyItemModel: DidSelectProviding {}
 
 // MARK: ItemModeling
@@ -112,7 +118,7 @@ extension AnyItemModel: Diffable {
   }
 }
 
-// MARK: - CallbackContextEpoxyModeled
+// MARK: CallbackContextEpoxyModeled
 
 extension AnyItemModel: CallbackContextEpoxyModeled {
 
@@ -137,10 +143,10 @@ extension AnyItemModel: CallbackContextEpoxyModeled {
 
     public init(view: UIView, dataID: AnyHashable, metadata: ItemCellMetadata) {
       self.view = view
-      self.traitCollection = metadata.traitCollection
-      self.state = metadata.state
+      traitCollection = metadata.traitCollection
+      state = metadata.state
       self.dataID = dataID
-      self.animated = metadata.animated
+      animated = metadata.animated
     }
 
     // MARK: Public

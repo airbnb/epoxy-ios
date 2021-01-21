@@ -6,11 +6,16 @@ import UIKit
 
 /// Source code for `EpoxyBars` "Bottom Button" example from `README.md`:
 class BottomButtonViewController: UIViewController {
+
+  // MARK: Internal
+
   override func viewDidLoad() {
     super.viewDidLoad()
     view.backgroundColor = .systemBackground
     bottomBarInstaller.install()
   }
+
+  // MARK: Private
 
   private lazy var bottomBarInstaller = BottomBarInstaller(
     viewController: self,
@@ -22,7 +27,7 @@ class BottomButtonViewController: UIViewController {
         content: .init(text: "Tap me!"),
         behaviors: .init(didTap: {
           // Handle button selection
-        }))
+        })),
     ]
   }
 }

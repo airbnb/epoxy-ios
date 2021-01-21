@@ -302,7 +302,7 @@ public class BarStackView: UIStackView {
         """
         Warning! Duplicate data IDs detected. Bars with the same view type should have unique data \
         IDs within a bar stack. Duplicate data IDs can cause undefined behavior. Digest:
-        """
+        """,
       ]
 
       for duplicateIndexes in changeset.duplicates {

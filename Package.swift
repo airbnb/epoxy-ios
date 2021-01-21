@@ -21,7 +21,7 @@ let package = Package(
         "EpoxyCore",
         "EpoxyCollectionView",
         "EpoxyBars",
-        "EpoxyNavigationController"
+        "EpoxyNavigationController",
       ]),
     .target(name: "EpoxyCore"),
     .target(name: "EpoxyCollectionView", dependencies: ["EpoxyCore"]),
@@ -29,5 +29,4 @@ let package = Package(
     .target(name: "EpoxyNavigationController", dependencies: ["EpoxyCore"]),
     .testTarget(name: "EpoxyTests", dependencies: ["Epoxy", "Quick", "Nimble"]),
     .testTarget(name: "PerformanceTests", dependencies: ["EpoxyCore"]),
-  ]
-)
+  ])

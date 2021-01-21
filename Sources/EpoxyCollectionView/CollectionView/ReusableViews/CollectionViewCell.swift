@@ -3,6 +3,8 @@
 
 import UIKit
 
+// MARK: - CollectionViewCell
+
 /// An internal cell class for use in a `CollectionView`.
 public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
 
@@ -114,7 +116,7 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
   // MARK: Internal
 
   weak var accessibilityDelegate: CollectionViewCellAccessibilityDelegate?
-  var ephemeralViewCachedStateProvider: ((Any?) -> ())?
+  var ephemeralViewCachedStateProvider: ((Any?) -> Void)?
 
   // MARK: Private
 
@@ -134,11 +136,11 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
 
 }
 
-// MARK: EphemeralViewState
+// MARK: EphemeralCachedStateView
 
 extension CollectionViewCell: EphemeralCachedStateView {
   public var cachedEphemeralState: Any? {
-    get { return (view as? EphemeralCachedStateView)?.cachedEphemeralState }
+    get { (view as? EphemeralCachedStateView)?.cachedEphemeralState }
     set { (view as? EphemeralCachedStateView)?.cachedEphemeralState = newValue }
   }
 }

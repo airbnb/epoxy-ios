@@ -46,6 +46,10 @@ open class CollectionViewController: UIViewController {
   /// The layout object used to initialize the collection view controller.
   public let layout: UICollectionViewLayout
 
+  /// The collection view rendering this view controller's sections, else `nil` if it has not yet
+  /// been loaded.
+  public private(set) var collectionViewIfLoaded: CollectionView?
+
   /// The collection view that renders this view controller's sections.
   ///
   /// Access triggers the view to load.
@@ -55,10 +59,6 @@ open class CollectionViewController: UIViewController {
     loadViewIfNeeded()
     return loadCollectionView()
   }
-
-  /// The collection view rendering this view controller's sections, else `nil` if it has not yet
-  /// been loaded.
-  public private(set) var collectionViewIfLoaded: CollectionView?
 
   /// Updates the sections of the `collectionView` to the provided `sections`, optionally animating
   /// the differences from the current sections.
@@ -94,7 +94,7 @@ open class CollectionViewController: UIViewController {
       collectionView.topAnchor.constraint(equalTo: view.topAnchor),
       collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
       collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-      collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+      collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
     ])
 
     if let sections = initialSections {
