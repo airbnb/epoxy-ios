@@ -1,9 +1,17 @@
-task :build do
-  sh 'xcodebuild build -scheme Epoxy-Package -destination generic/platform=iOS'
+namespace :build do
+  task :package do
+    sh 'xcodebuild build -scheme Epoxy-Package -destination generic/platform=iOS'
+  end
+
+  task :example do
+    sh 'xcodebuild build -scheme EpoxyExample -destination "platform=iOS Simulator,name=iPhone 8"'
+  end
 end
 
-task :test do
-  sh 'xcodebuild test -scheme Epoxy-Package -destination "platform=iOS Simulator,name=iPhone 8"'
+namespace :test do
+  task :package do
+    sh 'xcodebuild test -scheme Epoxy-Package -destination "platform=iOS Simulator,name=iPhone 8"'
+  end
 end
 
 namespace :lint do
@@ -14,11 +22,23 @@ namespace :lint do
     end
   end
 
-  task :swift do
+  task :swift => 'bootstrap:mint' do
+    sh 'mint run SwiftLint lint Sources Example --config script/lint/swiftlint.yml --strict'
+    sh 'mint run SwiftFormat Sources Example --config script/lint/airbnb.swiftformat --lint '
+  end
+end
+
+namespace :format do
+  task :swift => 'bootstrap:mint' do
+    sh 'mint run SwiftLint autocorrect Sources Example --config script/lint/swiftlint.yml'
+    sh 'mint run SwiftFormat Sources Example --config script/lint/airbnb.swiftformat'
+  end
+end
+
+namespace :bootstrap do
+  task :mint do
     `which mint`
-    throw 'You must have mint installed to lint swift' unless $?.success?
+    throw 'You must have mint installed to lint or format swift' unless $?.success?
     sh 'mint bootstrap'
-    sh 'mint run SwiftLint autocorrect --config script/lint/swiftlint.yml'
-    sh 'mint run SwiftFormat . --config script/lint/airbnb.swiftformat'
   end
 end
