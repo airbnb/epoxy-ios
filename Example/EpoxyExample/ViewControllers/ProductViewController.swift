@@ -9,20 +9,15 @@ final class ProductViewController: CollectionViewController {
   // MARK: Lifecycle
 
   init() {
-    super.init(collectionViewLayout: UICollectionViewCompositionalLayout.listNoDividers)
+    super.init(layout: UICollectionViewCompositionalLayout.listNoDividers)
+    setSections(sections, animated: false)
   }
 
   // MARK: Internal
 
   override func viewDidLoad() {
     super.viewDidLoad()
-    barInstaller.install()
-  }
-
-  override func epoxySections() -> [SectionModel] {
-    [
-      SectionModel(items: items)
-    ]
+    bottomBarInstaller.install()
   }
 
   // MARK: Private
@@ -33,24 +28,26 @@ final class ProductViewController: CollectionViewController {
     case imageRow
   }
 
-  private lazy var barInstaller = BottomBarInstaller(viewController: self, bars: bars)
+  private lazy var bottomBarInstaller = BottomBarInstaller(viewController: self, bars: bars)
 
-  private var items: [ItemModeling] {
+  private var sections: [SectionModel] {
     [
-      ImageMarquee.itemModel(
-        dataID: DataID.headerImage,
-        content: .init(imageURL: URL(string: "https://picsum.photos/id/350/500/500")!),
-        style: .init(height: 250, contentMode: .scaleAspectFill)),
-      Row.itemModel(
-        dataID: DataID.titleRow,
-        content: .init(title: "Our Great Product"),
-        style: .small),
-      ImageRow.itemModel(
-        dataID: DataID.imageRow,
-        content: .init(
-          title: "Here is our exciting product",
-          subtitle: "We think you should buy it.",
-          imageURL: URL(string: "https://picsum.photos/id/350/500/500")!)),
+      SectionModel(items: [
+        ImageMarquee.itemModel(
+          dataID: DataID.headerImage,
+          content: .init(imageURL: URL(string: "https://picsum.photos/id/350/500/500")!),
+          style: .init(height: 250, contentMode: .scaleAspectFill)),
+        TextRow.itemModel(
+          dataID: DataID.titleRow,
+          content: .init(title: "Our Great Product"),
+          style: .large),
+        ImageRow.itemModel(
+          dataID: DataID.imageRow,
+          content: .init(
+            title: "Here is our exciting product",
+            subtitle: "We think you should buy it.",
+            imageURL: URL(string: "https://picsum.photos/id/350/500/500")!)),
+      ]),
     ]
   }
 

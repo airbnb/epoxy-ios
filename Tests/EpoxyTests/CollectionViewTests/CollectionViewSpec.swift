@@ -29,7 +29,7 @@ final class CollectionViewSpec: QuickSpec {
       let layout = UICollectionViewFlowLayout()
       layout.itemSize = CGSize(width: 50, height: 50)
       layout.headerReferenceSize = CGSize(width: 50, height: 50)
-      collectionView = CollectionView(collectionViewLayout: layout)
+      collectionView = CollectionView(layout: layout)
       collectionView.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
     }
 

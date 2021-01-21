@@ -20,7 +20,7 @@ final class ButtonRow: UIView, EpoxyableView {
   // MARK: Internal
 
   struct Behaviors: ViewBehaviors {
-    var buttonWasTapped: ((UIButton) -> Void)?
+    var didTap: (() -> Void)?
   }
 
   struct Content: Equatable {
@@ -32,13 +32,13 @@ final class ButtonRow: UIView, EpoxyableView {
   }
 
   func setBehaviors(_ behaviors: Behaviors) {
-    buttonWasTapped = behaviors.buttonWasTapped
+    didTap = behaviors.didTap
   }
 
   // MARK: Private
 
   private let button = UIButton(type: .system)
-  private var buttonWasTapped: ((UIButton) -> Void)?
+  private var didTap: (() -> Void)?
 
   private var text: String? {
     get { button.title(for: .normal) }
@@ -48,10 +48,10 @@ final class ButtonRow: UIView, EpoxyableView {
   private func setUp() {
     translatesAutoresizingMaskIntoConstraints = false
     layoutMargins = UIEdgeInsets(top: 20, left: 24, bottom: 20, right: 24)
-    backgroundColor = .tertiarySystemFill
+    backgroundColor = .quaternarySystemFill
 
     button.tintColor = .systemBlue
-    button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .title2)
+    button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .title3)
     button.translatesAutoresizingMaskIntoConstraints = false
 
     addSubview(button)
@@ -62,15 +62,12 @@ final class ButtonRow: UIView, EpoxyableView {
       button.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
     ])
 
-    button.addTarget(
-      self,
-      action: #selector(buttonTapped),
-      for: .touchUpInside)
+    button.addTarget(self, action: #selector(handleTap), for: .touchUpInside)
   }
 
   @objc
-  private func buttonTapped() {
-    buttonWasTapped?(button)
+  private func handleTap() {
+    didTap?()
   }
 
 }

@@ -4,7 +4,7 @@
 import Epoxy
 import UIKit
 
-final class Row: UIView, EpoxyableView {
+final class TextRow: UIView, EpoxyableView {
 
   // MARK: Lifecycle
 
@@ -23,8 +23,7 @@ final class Row: UIView, EpoxyableView {
   // MARK: Internal
 
   enum Style {
-    case large
-    case small
+    case small, large
   }
 
   struct Content: Equatable {
@@ -120,31 +119,26 @@ final class Row: UIView, EpoxyableView {
 
 // MARK: SelectableView
 
-extension Row: SelectableView {
+extension TextRow: SelectableView {
   func didSelect() {
-    // Handle this row being selected, e.g. to trigger haptics.
+    // Handle this row being selected, e.g. to trigger haptics:
     UISelectionFeedbackGenerator().selectionChanged()
   }
 }
 
 // MARK: HighlightableView
 
-extension Row: HighlightableView {
+extension TextRow: HighlightableView {
   func didHighlight(_ isHighlighted: Bool) {
     UIView.animate(withDuration: 0.15, delay: 0, options: [.beginFromCurrentState, .allowUserInteraction]) {
-      switch isHighlighted {
-      case true:
-        self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-      case false:
-        self.transform = .identity
-      }
+      self.transform = isHighlighted ? CGAffineTransform(scaleX: 0.95, y: 0.95) : .identity
     }
   }
 }
 
 // MARK: DisplayRespondingView
 
-extension Row: DisplayRespondingView {
+extension TextRow: DisplayRespondingView {
   func didDisplay(_ isDisplayed: Bool) {
     // Handle this row being displayed.
   }

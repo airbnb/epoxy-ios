@@ -25,10 +25,10 @@ extension BaseBarInstallerSpec {
     var setBars: (([BarModeling]) -> Void)!
 
     beforeEach {
-      window = UIWindow(frame: .init(origin: .zero, size: CGSize(width: 300, height: 600)))
+      window = UIWindow(frame: .init(origin: CGPoint(x: 0, y: 100), size: CGSize(width: 300, height: 300)))
       viewController = UIViewController()
       viewController.loadView()
-      viewController.view.frame = CGRect(origin: .zero, size: CGSize(width: 300, height: 600))
+      viewController.view.frame = window.bounds
 
       window.rootViewController = viewController
       window.makeKeyAndVisible()

@@ -1,20 +1,22 @@
 //  Created by Laura Skelton on 6/30/17.
 //  Copyright © 2017 Airbnb. All rights reserved.
 
-import EpoxyCore
 import UIKit
 
-/// A subclassable `UIViewController` with its content provided by an overridden `epoxySections()`
-/// method, queried first when a valid `traitCollection` is determined and subsequently whenever
-/// `updateData(animated:)` is called.
+/// A subclassable collection view controller that manages its sections declarative via an array of
+/// `SectionModel`s that represent its scrollable content.
+///
+/// To update the sections of this view controller, call `setSections(_:animated:)` with a new array
+/// of `SectionModel`s modeling the new content.
 open class CollectionViewController: UIViewController {
 
   // MARK: Lifecycle
 
-  /// Initializes a collection view controller and configures the collection view with the provided
-  /// layout.
-  public init(collectionViewLayout: UICollectionViewLayout) {
-    self.collectionViewLayout = collectionViewLayout
+  /// Initializes a collection view controller and configures its collection view with the provided
+  /// layout and sections once the view loads.
+  public init(layout: UICollectionViewLayout, sections: [SectionModel]? = nil) {
+    self.layout = layout
+    initialSections = sections
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -31,27 +33,20 @@ open class CollectionViewController: UIViewController {
     loadCollectionView()
   }
 
-  open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-    super.traitCollectionDidChange(previousTraitCollection)
-    setEpoxySectionsIfReady()
-  }
-
-  /// Override this in your subclass to return your sections.
+  /// A method that can be overridden by subclasses to initialize a custom `CollectionView` for this
+  /// view controller.
   ///
-  /// Queried first when a valid `traitCollection` is determined and subsequently whenever
-  /// `updateData(animated:)` is called.
-  open func epoxySections() -> [SectionModel] {
-    []
-  }
-
-  /// Returns a `CollectionView` by default. Override this to configure it differently.
+  /// Returns a `CollectionView` with `layout` by default.
   open func makeCollectionView() -> CollectionView {
-    CollectionView(collectionViewLayout: collectionViewLayout)
+    CollectionView(layout: layout)
   }
 
   // MARK: Public
 
-  /// The collection view rendering the content in `epoxySections()`
+  /// The layout object used to initialize the collection view controller.
+  public let layout: UICollectionViewLayout
+
+  /// The collection view that renders this view controller's sections.
   ///
   /// Access triggers the view to load.
   public var collectionView: CollectionView {
@@ -61,26 +56,35 @@ open class CollectionViewController: UIViewController {
     return loadCollectionView()
   }
 
-  /// Updates the collection view sections by calling the `epoxySections()` method, optionally
-  /// animating the updates.
-  public func updateData(animated: Bool) {
-    if isViewLoaded && traitCollection.horizontalSizeClass != .unspecified {
-      let sections = epoxySections()
-      collectionView.setSections(sections, animated: animated)
+  /// The collection view rendering this view controller's sections, else `nil` if it has not yet
+  /// been loaded.
+  public private(set) var collectionViewIfLoaded: CollectionView?
+
+  /// Updates the sections of the `collectionView` to the provided `sections`, optionally animating
+  /// the differences from the current sections.
+  ///
+  /// If `collectionView` has not yet been loaded, `sections` are stored until the view loads and
+  /// set on `collectionView` non-animatedly at that point.
+  public func setSections(_ sections: [SectionModel], animated: Bool) {
+    guard let collectionView = collectionViewIfLoaded else {
+      initialSections = sections
+      return
     }
+    collectionView.setSections(sections, animated: animated)
   }
 
   // MARK: Private
 
-  private let collectionViewLayout: UICollectionViewLayout
-  private var _collectionView: CollectionView?
+  /// The sections that should be set on the collection view when it loads, else `nil`.
+  private var initialSections: [SectionModel]?
 
+  /// Loads the collection view or returns it if already loaded.
   @discardableResult
   private func loadCollectionView() -> CollectionView {
-    if let collectionView = _collectionView { return collectionView }
+    if let collectionView = collectionViewIfLoaded { return collectionView }
 
     let collectionView = makeCollectionView()
-    _collectionView = collectionView
+    collectionViewIfLoaded = collectionView
 
     view.addSubview(collectionView)
     collectionView.layoutDelegate = self
@@ -93,12 +97,11 @@ open class CollectionViewController: UIViewController {
       collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
     ])
 
-    setEpoxySectionsIfReady()
-    return collectionView
-  }
+    if let sections = initialSections {
+      collectionView.setSections(sections, animated: false)
+      initialSections = nil
+    }
 
-  private func setEpoxySectionsIfReady() {
-    guard traitCollection.horizontalSizeClass != .unspecified else { return }
-    updateData(animated: false)
+    return collectionView
   }
 }

@@ -4,23 +4,23 @@
 import Epoxy
 import UIKit
 
-class HighlightAndSelectionViewController: CollectionViewController {
+final class HighlightAndSelectionViewController: CollectionViewController {
 
   init() {
-    super.init(collectionViewLayout: UICollectionViewCompositionalLayout.epoxy)
-    title = "Highlight and Selection"
+    super.init(layout: UICollectionViewCompositionalLayout.epoxy)
+    setSections(sections, animated: false)
   }
 
-  enum SectionID {
+  private enum SectionID {
     case carousel, list
   }
 
-  override func epoxySections() -> [SectionModel] {
+  private var sections: [SectionModel] {
     [
       SectionModel(
         dataID: SectionID.carousel,
         items: (0..<10).map { (dataID: Int) in
-          Row.itemModel(
+          TextRow.itemModel(
             dataID: dataID,
             content: .init(title: "Page \(dataID)"),
             style: .small)
@@ -32,13 +32,13 @@ class HighlightAndSelectionViewController: CollectionViewController {
             }
         })
         .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
-          Row.supplementaryItemModel(dataID: 0, content: .init(title: "Carousel section"), style: .large)
+          TextRow.supplementaryItemModel(dataID: 0, content: .init(title: "Carousel section"), style: .large)
         ])
         .compositionalLayoutSection(.carouselWithHeader),
       SectionModel(
         dataID: SectionID.list,
         items: (0..<10).map { (dataID: Int) in
-          Row.itemModel(
+          TextRow.itemModel(
             dataID: dataID,
             content: .init(title: "Row \(dataID)", body: BeloIpsum.paragraph(count: 1, seed: dataID)),
             style: .small)
@@ -50,7 +50,7 @@ class HighlightAndSelectionViewController: CollectionViewController {
             }
         })
         .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
-          Row.supplementaryItemModel(dataID: 0, content: .init(title: "List section"), style: .large)
+          TextRow.supplementaryItemModel(dataID: 0, content: .init(title: "List section"), style: .large)
         ])
         .compositionalLayoutSectionProvider(NSCollectionLayoutSection.listWithHeader),
     ]

@@ -1,0 +1,90 @@
+// Created by eric_horacek on 1/21/21.
+// Copyright © 2021 Airbnb Inc. All rights reserved.
+
+import Epoxy
+import UIKit
+
+/// Source code for `EpoxyNavigationController` "Form Navigation" example from `README.md`:
+final class FormNavigationController: NavigationController {
+  init() {
+    super.init()
+    setStack(stack, animated: false)
+  }
+
+  private struct State {
+    var showStep2 = false
+  }
+
+  private enum DataIDs {
+    case step1, step2
+  }
+
+  private var state = State() {
+    didSet { setStack(stack, animated: true) }
+  }
+
+  private var stack: [NavigationModel?] {
+    [step1, step2]
+  }
+
+  private var step1: NavigationModel {
+    .root(dataID: DataIDs.step1) { [weak self] in
+      Step1ViewController(didTapNext: {
+        self?.state.showStep2 = true
+      })
+    }
+  }
+
+  private var step2: NavigationModel? {
+    guard state.showStep2 else { return nil }
+
+    return NavigationModel(
+      dataID: DataIDs.step2,
+      makeViewController: {
+        Step2ViewController(didTapNext: {
+          // Navigate away from this step.
+        })
+      },
+      remove: { [weak self] in
+        self?.state.showStep2 = false
+      })
+  }
+}
+
+// MARK: - Step1ViewController
+
+final class Step1ViewController: CollectionViewController {
+  init(didTapNext: @escaping () -> Void) {
+    super.init(layout: UICollectionViewCompositionalLayout.list)
+    title = "Step 1"
+    bottomBarInstaller.setBars([
+      ButtonRow.barModel(content: .init(text: "Show step 2"), behaviors: .init(didTap: didTapNext))
+    ], animated: false)
+  }
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    bottomBarInstaller.install()
+  }
+
+  private lazy var bottomBarInstaller = BottomBarInstaller(viewController: self)
+}
+
+// MARK: - Step2ViewController
+
+final class Step2ViewController: CollectionViewController {
+  init(didTapNext: @escaping () -> Void) {
+    super.init(layout: UICollectionViewCompositionalLayout.list)
+    title = "Step 2"
+    bottomBarInstaller.setBars([
+      ButtonRow.barModel(content: .init(text: "Finish"), behaviors: .init(didTap: didTapNext))
+    ], animated: false)
+  }
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    bottomBarInstaller.install()
+  }
+
+  private lazy var bottomBarInstaller = BottomBarInstaller(viewController: self)
+}
