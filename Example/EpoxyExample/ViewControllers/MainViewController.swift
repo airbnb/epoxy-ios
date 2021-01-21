@@ -30,6 +30,7 @@ final class MainViewController: NavigationController {
     case customSelfSizing
     case product
     case readme
+    case flowLayout
   }
 
   private var state = State() {
@@ -102,6 +103,8 @@ final class MainViewController: NavigationController {
       viewController = CustomSelfSizingContentViewController()
     case .product:
       viewController = ProductViewController()
+    case .flowLayout:
+      viewController = FlowLayoutViewController()
     }
     viewController.title = example.title
     return viewController
@@ -122,6 +125,8 @@ extension MainViewController.Example {
       return "Shuffle demo"
     case .product:
       return "Product Detail Page"
+    case .flowLayout:
+      return "Flow Layout demo"
     }
   }
 }
