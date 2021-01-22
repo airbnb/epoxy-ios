@@ -13,93 +13,93 @@ final class FlowLayoutViewController: CollectionViewController {
     setSections(sections, animated: false)
   }
 
+  // MARK: Internal
+
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    collectionView.alwaysBounceVertical = true
+  }
+
   // MARK: Private
 
-  private enum DataIDs {
-    enum Sections {
-      case section1
-      case section2
-      case section3
+  private enum DataID {
+    enum Section {
+      case red, orange, blue
     }
 
-    enum Section1 {
-      case red1
-      case red2
+    enum Red {
+      case red1, red2
     }
 
-    enum Section2 {
-      case orange
+    enum Orange {
+      case orange1
     }
 
-    enum Section3 {
-      case header
-      case item
-      case footer
+    enum Blue {
+      case header, item, footer
     }
   }
 
   private var sections: [SectionModel] {
-    [
-      // example of setting insets, item spacing, and line spacing for the section
-      SectionModel(dataID: DataIDs.Sections.section1, items: firstSection)
-        .flowLayoutSectionInset(.init(top: 12, left: 20, bottom: 12, right: 48))
-        .flowLayoutMinimumInteritemSpacing(18)
-        .flowLayoutMinimumLineSpacing(48),
-      // example of setting an item size for the entire section
-      SectionModel(dataID: DataIDs.Sections.section2, items: secondSection)
-        .flowLayoutItemSize(.init(width: 300, height: 150))
-        .flowLayoutSectionInset(.init(top: 0, left: 0, bottom: 0, right: 0)),
-      SectionModel(dataID: DataIDs.Sections.section3, items: thirdSection)
-        .supplementaryItems(thirdSectionSupplementaryItems)
-        // Width is ignored for headers / footers
-        .flowLayoutHeaderReferenceSize(.init(width: 0, height: 30))
-        .flowLayoutFooterReferenceSize(.init(width: 0, height: 60)),
-    ]
+    [redSection, orangeSection, blueSection]
   }
 
-  private var firstSection: [ItemModeling] {
-    [
-      ColorView.itemModel(
-        dataID: DataIDs.Section1.red1,
-        style: .red)
-        .flowLayoutItemSize(.init(width: 100, height: 100)),
-      ColorView.itemModel(
-        dataID: DataIDs.Section1.red2,
-        style: .red)
-        .flowLayoutItemSize(.init(width: 100, height: 100)),
-    ]
+  private var redSection: SectionModel {
+    // Example of setting insets, item spacing, and line spacing for the section
+    SectionModel(
+      dataID: DataID.Section.red,
+      items: [
+        ColorView.itemModel(
+          dataID: DataID.Red.red1,
+          style: .red)
+          .flowLayoutItemSize(.init(width: 100, height: 100)),
+        ColorView.itemModel(
+          dataID: DataID.Red.red2,
+          style: .red)
+          .flowLayoutItemSize(.init(width: 100, height: 100)),
+      ])
+      .flowLayoutSectionInset(.init(top: 12, left: 20, bottom: 12, right: 48))
+      .flowLayoutMinimumInteritemSpacing(18)
+      .flowLayoutMinimumLineSpacing(48)
   }
 
-  private var secondSection: [ItemModeling] {
-    [
-      ColorView.itemModel(
-        dataID: DataIDs.Section2.orange,
-        style: .orange),
-    ]
+  private var orangeSection: SectionModel {
+    // Example of setting an item size for the entire section
+    SectionModel(
+      dataID: DataID.Section.orange,
+      items: [
+        ColorView.itemModel(
+          dataID: DataID.Orange.orange1,
+          style: .orange),
+      ])
+      .flowLayoutItemSize(.init(width: 300, height: 150))
+      .flowLayoutSectionInset(.init(top: 0, left: 0, bottom: 0, right: 0))
   }
 
-  private var thirdSection: [ItemModeling] {
-    [
-      ColorView.itemModel(
-        dataID: DataIDs.Section3.item,
-        style: .green)
-        .flowLayoutItemSize(.init(width: 200, height: 50)),
-    ]
-  }
-
-  private var thirdSectionSupplementaryItems: [String: [SupplementaryItemModeling]] {
-    [
-      UICollectionView.elementKindSectionHeader: [
+  private var blueSection: SectionModel {
+    // Example of setting an item size for the entire section
+    SectionModel(
+      dataID: DataID.Section.blue,
+      items: [
+        ColorView.itemModel(
+          dataID: DataID.Blue.item,
+          style: .green)
+          .flowLayoutItemSize(.init(width: 200, height: 50)),
+      ])
+      .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
         ColorView.supplementaryItemModel(
-          dataID: DataIDs.Section3.header,
+          dataID: DataID.Blue.header,
           style: .yellow),
-      ],
-      UICollectionView.elementKindSectionFooter: [
+      ])
+      // Width is ignored for headers
+      .flowLayoutHeaderReferenceSize(.init(width: 0, height: 30))
+      .supplementaryItems(ofKind: UICollectionView.elementKindSectionFooter, [
         ColorView.supplementaryItemModel(
-          dataID: DataIDs.Section3.footer,
+          dataID: DataID.Blue.footer,
           style: .blue),
-      ],
-    ]
+      ])
+      // Width is ignored for footers
+      .flowLayoutFooterReferenceSize(.init(width: 0, height: 60))
   }
 
 }

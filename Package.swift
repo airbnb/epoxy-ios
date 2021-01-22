@@ -9,6 +9,9 @@ let package = Package(
   products: [
     .library(name: "Epoxy", targets: ["Epoxy"]),
     .library(name: "EpoxyCore", targets: ["EpoxyCore"]),
+    .library(name: "EpoxyCollectionView", targets: ["EpoxyCollectionView"]),
+    .library(name: "EpoxyBars", targets: ["EpoxyBars"]),
+    .library(name: "EpoxyNavigationController", targets: ["EpoxyNavigationController"]),
   ],
   dependencies: [
     .package(url: "https://github.com/Quick/Quick.git", .upToNextMajor(from: "3.0.0")),

@@ -1,33 +1,40 @@
 # Epoxy
 
-Epoxy is a suite of declarative UI frameworks building pure UIKit applications in Swift. Epoxy is inspired and influenced by the wonderful [Epoxy framework on Android](https://github.com/airbnb/epoxy), as well as declarative UI systems in Swift such as SwiftUI.
+Epoxy is a suite of declarative UI APIs for building [UIKit](https://developer.apple.com/documentation/uikit) applications in Swift. Epoxy is inspired and influenced by the wonderful [Epoxy framework on Android](https://github.com/airbnb/epoxy), as well as other declarative UI frameworks in Swift such as [SwiftUI](https://developer.apple.com/documentation/swiftui).
+
+Epoxy was developed at [Airbnb](https://www.airbnb.com/) and powers thousands of screens in apps that are shipped to millions of users. It has been developed and refined for years by [dozens of contributors](https://github.com/airbnb/epoxy-ios/graphs/contributors).
 
 ## Installation
 
-Epoxy can be installed using CocoaPods, Carthage or Swift Package Manager.
+Epoxy can be installed using [CocoaPods](#CocoaPods) or [Swift Package Manager](#Swift-Package-Manager-(SPM)).
 
 ### CocoaPods
 
-To get started with Epoxy using [Cocoapods](https://cocoapods.org) add `pod 'Epoxy'` to your Podfile and then follow the integration instructions [here](https://guides.cocoapods.org/using/using-cocoapods.html).
+To get started with Epoxy using [Cocoapods](https://cocoapods.org) add the following to your `Podfile` and then follow the [integration instructions](https://guides.cocoapods.org/using/using-cocoapods.html).
 
-Epoxy also comes with a number of [subspecs](https://guides.cocoapods.org/syntax/podspec.html#subspec) so you only have to include what you need. The following subspecs are available:
+```ruby
+pod 'Epoxy'
+```
 
-| Subspec | Description |
-| ------- | ----------- |
-| `Epoxy/EpoxyCore` | Foundational module that contains the diffing algorithm and shared model storage |
-| `Epoxy/EpoxyCollectionView` | Declarative API for driving content of a UICollectionView |
-| `Epoxy/EpoxyNavigationController` | Declarative API for driving the navigation stack of a `UINavigationController` |
-| `Epoxy/EpoxyBars` | Declarative API for fixed top and bottom bars in a `UIViewController` |
-
-To use a subspec, simply include the name of the subspec in your `Podfile` instead of the entire library. If you only want `EpoxyCollectionView`, for example, use `pod 'Epoxy/EpoxyCollectionView'` in your `Podfile`. Using `pod 'Epoxy'` will include the entire Epoxy library.
-
-### Carthage
-
-To install Epoxy using [Carthage](https://github.com/Carthage/Carthage) include `github "airbnb/epoxy-ios"` in your `Cartfile` and follow the integration instructions [here](https://github.com/Carthage/Carthage#if-youre-building-for-ios-tvos-or-watchos).
+Epoxy is separated into a number of distinct [podspecs](https://guides.cocoapods.org/syntax/podspec.html) for each [module](#modules) so you only have to include what you need.
 
 ### Swift Package Manager (SPM)
 
-To install Epoxy using [Swift Package Manager](https://github.com/apple/swift-package-manager) you can follow the tutorial published by Apple [here](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) using the URL for the Epoxy repo.
+To install Epoxy using [Swift Package Manager](https://github.com/apple/swift-package-manager)  you can follow the [tutorial published by Apple](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) using the URL for the Epoxy repo with the current version.
+
+Epoxy is separated into a number of [library products](https://swift.org/package-manager/#products) for each [module](#modules) so you only have to include what you need.
+
+## Modules
+
+Epoxy has a modular architecture so you only have to include what you need for your use case:
+
+| Module | Description |
+| ------ | ----------- |
+| `Epoxy` | Includes all of the below modules in a single import statement |
+| [`EpoxyCollectionView`](#EpoxyCollectionView) | Declarative APIs for driving content of a [`UICollectionView`](https://developer.apple.com/documentation/uikit/uicollectionview) |
+| [`EpoxyNavigationController`](#EpoxyNavigationController) | Declarative APIs for driving the navigation stack of a [`UINavigationController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller) |
+| [`EpoxyBars`](#EpoxyBars) | Declarative APIs for adding fixed top and bottom bar stacks to a [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller) |
+| `EpoxyCore` | Foundational APIs that are used to build all Epoxy declarative UI APIs |
 
 ## Getting Started
 
@@ -35,7 +42,7 @@ To install Epoxy using [Swift Package Manager](https://github.com/apple/swift-pa
 
 `EpoxyCollectionView` provides a declarative API for driving the content of a `UICollectionView`. `CollectionViewController` is a subclassable `UIViewController` that lets you easily spin up a `UICollectionView`-backed view controller with a declarative API.
 
-The following code samples will render a single cell in a `UICollectionView` with a `TextRow` component rendered in that cell. Note that the `TextRow` component is a simple `UIView` containing 2 labels, and conforms to the [`EpoxyableView`](https://github.com/airbnb/epoxy-ios/blob/master/Sources/EpoxyCore/Views/EpoxyableView.swift) protocol.
+The following code samples will render a single cell in a `UICollectionView` with a `TextRow` component rendered in that cell. Note that the `TextRow` component is a simple `UIView` containing two labels, and conforms to the [`EpoxyableView`](https://github.com/airbnb/epoxy-ios/blob/master/Sources/EpoxyCore/Views/EpoxyableView.swift) protocol.
 
 You can either instantiate a `CollectionViewController` instance directly with sections, e.g. this view controller with a selectable row:
 
@@ -127,7 +134,7 @@ class CounterViewController: CollectionViewController {
 
 ### EpoxyBars
 
-`EpoxyBars` provides a declarative API for rendering fixed top, bottom, or input accessory bars in a `UIViewController`.
+`EpoxyBars` provides a declarative API for rendering stacks of fixed top, bottom, or [input accessory](https://developer.apple.com/documentation/uikit/uiresponder/1621119-inputaccessoryview) bar stacks in a `UIViewController`.
 
 The following code example will render a `ButtonRow` component fixed to the bottom of the `UIViewController`'s view. Note that `ButtonRow` is a simple `UIView` component that contains a single `UIButton` constrained to the margins of the superview that conforms to the `EpoxyableView` protocol:
 
@@ -168,9 +175,9 @@ class BottomButtonViewController: UIViewController {
 </tr>
 </table>
 
-### EpoxyNavigation
+### EpoxyNavigationController
 
-`EpoxyNavigation` provides a declarative API for driving the navigation stack of a `UINavigationController`.
+`EpoxyNavigationController` provides a declarative API for driving the navigation stack of a `UINavigationController`.
 
 The following code example shows how you can use this to easily drive a feature that has a flow of multiple view controllers:
 
@@ -190,7 +197,7 @@ class FormNavigationController: NavigationController {
     var showStep2 = false
   }
 
-  private enum DataIDs {
+  private enum DataID {
     case step1, step2
   }
 
@@ -203,7 +210,7 @@ class FormNavigationController: NavigationController {
   }
 
   private var step1: NavigationModel {
-    .root(dataID: DataIDs.step1) { [weak self] in
+    .root(dataID: DataID.step1) { [weak self] in
       Step1ViewController(didTapNext: {
         self?.state.showStep2 = true
       })
@@ -214,7 +221,7 @@ class FormNavigationController: NavigationController {
     guard state.showStep2 else { return nil }
 
     return NavigationModel(
-      dataID: DataIDs.step2,
+      dataID: DataID.step2,
       makeViewController: {
         Step2ViewController(didTapNext: {
           // Navigate away from this step.
@@ -240,9 +247,20 @@ class FormNavigationController: NavigationController {
 
 For full documentation and step-by-step tutorials please check the [wiki](https://github.com/airbnb/epoxy-ios/wiki).
 
-There's also a full sample app with a lot of examples you can run by opening `Epoxy.xcworkspace` and running the `EpoxyExample` scheme or browse the [source of](https://github.com/airbnb/epoxy-ios/tree/master/Example).
+There's also a full sample app with a lot of examples that you can either run via the `EpoxyExample` scheme in `Epoxy.xcworkspace` or just [browse its source](https://github.com/airbnb/epoxy-ios/tree/master/Example).
 
 If you still have questions, feel free to create a new issue.
+
+## FAQ
+
+### Why would I use Epoxy and UIKit instead of SwiftUI?
+
+SwiftUI is a declarative UI framework that was introduced by Apple in iOS 13. We've found that while SwiftUI has a fantastic API and is certainly the future of building UI on Apple platforms in the long term. However, in the short to medium term we have found that SwiftUI is not a good fit for most of our production use cases:
+- SwiftUI behavior is unstable across iOS versions, with large behavior differences between minor and even patch iOS versions, especially on iOS 13
+- It is not possible to substitute a SwiftUI `View` for a `UIView`, which makes it hard to mix UIKit and SwiftUI in large apps or gradually migrate to SwiftUI, especially in apps with custom UI components
+- SwiftUI does not yet have the flexibility or maturity of the equivalent UIKit APIs, requiring you to "drop down" to UIKit, often after implementing a large fraction of your requirements using SwiftUI APIs
+- SwiftUI hides the underlying view rendering system from consumers, limiting flexibility and introspection capabilities
+- SwiftUI requires Swift reflection metadata, which large Swift apps often strip via the `SWIFT_REFLECTION_METADATA_LEVEL=none` build setting to reduce their binary size
 
 ## Contributing
 
