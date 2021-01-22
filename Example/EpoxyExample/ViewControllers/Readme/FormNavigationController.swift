@@ -22,7 +22,7 @@ final class FormNavigationController: NavigationController {
     var showStep2 = false
   }
 
-  private enum DataIDs {
+  private enum DataID {
     case step1, step2
   }
 
@@ -35,7 +35,7 @@ final class FormNavigationController: NavigationController {
   }
 
   private var step1: NavigationModel {
-    .root(dataID: DataIDs.step1) { [weak self] in
+    .root(dataID: DataID.step1) { [weak self] in
       Step1ViewController(didTapNext: {
         self?.state.showStep2 = true
       })
@@ -46,7 +46,7 @@ final class FormNavigationController: NavigationController {
     guard state.showStep2 else { return nil }
 
     return NavigationModel(
-      dataID: DataIDs.step2,
+      dataID: DataID.step2,
       makeViewController: {
         Step2ViewController(didTapNext: {
           // Navigate away from this step.
