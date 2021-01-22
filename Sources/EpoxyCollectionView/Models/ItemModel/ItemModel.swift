@@ -22,19 +22,19 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
   ///   - dataID: An ID that uniquely identifies this item relative to other items in the
   ///     same collection.
   ///   - content: The content of the item view that will be applied to the view in the
-  ///     `configureView` closure whenver it has changed.
-  ///   - configureView: A closure that's called to configure the view with its content, both
+  ///     `setContent` closure whenver it has changed.
+  ///   - setContent: A closure that's called to configure the view with its content, both
   ///     immediately following its construction in `makeView` and subsequently whenever a new item
   ///     model that replaced an old item model with the same `dataID` has content that is not equal
   ///     to the content of the old item model.
   public init(
     dataID: AnyHashable,
     content: Content,
-    configureView: @escaping ConfigureView)
+    setContent: @escaping SetContent)
   {
     self.dataID = dataID
     self.content = content
-    self.configureView = configureView
+    self.setContent = setContent
   }
 
   /// Constructs an item model with a data ID, initializer parameters, content, a closure to
@@ -47,9 +47,9 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
   ///   - params: The parameters used to construct an instance of the view, passed into the
   ///     `makeView` function and used as a view reuse identifier.
   ///   - content: The content of the item view that will be applied to the view in the
-  ///     `configureView` closure whenver it has changed.
+  ///     `setContent` closure whenver it has changed.
   ///   - makeView: A closure that's called with `params` to construct view instances as required.
-  ///   - configureView: A closure that's called to configure the view with its content, both
+  ///   - setContent: A closure that's called to configure the view with its content, both
   ///     immediately following its construction in `makeView` and subsequently whenever a new item
   ///     model that replaced an old item model with the same `dataID` has content that is not equal
   ///     to the content of the old item model.
@@ -58,13 +58,13 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
     params: Params,
     content: Content,
     makeView: @escaping (Params) -> View,
-    configureView: @escaping ConfigureView)
+    setContent: @escaping SetContent)
   {
     self.dataID = dataID
     styleID = params
     self.content = content
     self.makeView = { makeView(params) }
-    self.configureView = configureView
+    self.setContent = setContent
   }
 
   // MARK: Public
@@ -97,9 +97,9 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
 
 }
 
-// MARK: ConfigureViewProviding
+// MARK: SetContentProviding
 
-extension ItemModel: ConfigureViewProviding {}
+extension ItemModel: SetContentProviding {}
 
 // MARK: ContentProviding
 
@@ -173,10 +173,10 @@ extension ItemModel: InternalItemModeling {
   }
 
   public func configure(cell: ItemWrapperView, with metadata: ItemCellMetadata) {
-    // Even if there's no `configureView` closure, we need to make sure to call `viewForCell` to
+    // Even if there's no `setContent` closure, we need to make sure to call `viewForCell` to
     // ensure that the cell is set up.
     let view = viewForCell(cell)
-    configureView?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
+    setContent?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
   }
 
   public func configureStateChange(in cell: ItemWrapperView, with metadata: ItemCellMetadata) {
@@ -200,7 +200,7 @@ extension ItemModel: InternalItemModeling {
       traitCollection: traitCollection,
       cellState: .normal,
       animated: false)
-    configureView?(context)
+    setContent?(context)
     setBehaviors?(context)
     return view
   }
