@@ -29,7 +29,7 @@ extension StyledView where Self: EpoxyableView {
       params: style,
       content: content,
       makeView: Self.init(style:),
-      configureView: { context in
+      setContent: { context in
         context.view.setContent(context.content, animated: context.animated)
       })
       .setBehaviors { context in

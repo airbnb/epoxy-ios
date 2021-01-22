@@ -13,11 +13,11 @@ extension CallbackContextEpoxyModeled where Self: SetBehaviorsProviding {
 
   // MARK: Public
 
-  /// A closure that's called to configure this model's view with behaviors (e.g. tap handler
+  /// A closure that's called to set the content on this model's view with behaviors (e.g. tap handler
   /// closures) whenever this model is updated.
   public typealias SetBehaviors = ((CallbackContext) -> Void)
 
-  /// A closure that's called to configure this model's view with behaviors (e.g. tap handler
+  /// A closure that's called to set the content on this model's view with behaviors (e.g. tap handler
   /// closures) whenever this model is updated.
   public var setBehaviors: SetBehaviors? {
     get { self[setBehaviorsProperty] }

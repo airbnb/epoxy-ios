@@ -25,25 +25,25 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
   /// - Parameters:
   ///   - dataID: An optional ID that uniquely identifies this bar relative to other bars in the
   ///     same bar stack.
-  ///   - content: The content of the bar view that will be applied to the view in the `configure`
+  ///   - content: The content of the bar view that will be applied to the view in the `setContent`
   ///     closure whenver it has changed.
-  ///   - makeView: A closure that constructs the view of this bar. the `configure` closure is
+  ///   - makeView: A closure that constructs the view of this bar. the `setContent` closure is
   ///     called immediately after `makeView` with the returned view  to configure it with its
   ///     initial content.
-  ///   - configureView: A closure that's called to configure the view with its content, both
+  ///   - setContent: A closure that's called to configure the view with its content, both
   ///     immediately following its construction in `makeView` and subsequently whenever a new bar
   ///     model that replaced an old bar model with the same `dataID` has content that is not equal
   ///     to the content of the old bar model.
   public init(
     dataID: AnyHashable? = nil,
     content: Content,
-    configureView: @escaping ConfigureView)
+    setContent: @escaping SetContent)
   {
     if let dataID = dataID {
       self.dataID = dataID
     }
     self.content = content
-    self.configureView = configureView
+    self.setContent = setContent
   }
 
   /// Constructs a bar model with a data ID, initializer parameters, content, a closure to construct
@@ -56,9 +56,9 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
   ///   - params: The parameters used to construct an instance of the view, passed into the
   ///     `makeView` function and used as a view reuse identifier.
   ///   - content: The content of the bar view that will be applied to the view in the
-  ///     `configureView` closure whenver it has changed.
+  ///     `setContent` closure whenver it has changed.
   ///   - makeView: A closure that's called with `params` to construct view instances as required.
-  ///   - configureView: A closure that's called to configure the view with its content, both
+  ///   - setContent: A closure that's called to configure the view with its content, both
   ///     immediately following its construction in `makeView` and subsequently whenever a new bar
   ///     model that replaced an old bar model with the same `dataID` has content that is not equal
   ///     to the content of the old bar model.
@@ -67,7 +67,7 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
     params: Params,
     content: Content,
     makeView: @escaping (Params) -> View,
-    configureView: @escaping ConfigureView)
+    setContent: @escaping SetContent)
   {
     if let dataID = dataID {
       self.dataID = dataID
@@ -75,7 +75,7 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
     styleID = params
     self.content = content
     self.makeView = { makeView(params) }
-    self.configureView = configureView
+    self.setContent = setContent
   }
 
   // MARK: Public
@@ -112,9 +112,9 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
 
 }
 
-// MARK: ConfigureViewProviding
+// MARK: SetContentProviding
 
-extension BarModel: ConfigureViewProviding {}
+extension BarModel: SetContentProviding {}
 
 // MARK: ContentProviding
 
@@ -156,13 +156,13 @@ extension BarModel: InternalBarModeling {
   func makeConfiguredView(traitCollection: UITraitCollection) -> UIView {
     let view = makeView()
     let context = CallbackContext(view: view, content: content, traitCollection: traitCollection, animated: false)
-    configureView?(context)
+    setContent?(context)
     setBehaviors?(context)
     return view
   }
 
   func configureContent(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
-    configureView?(.init(view: castOrAssert(view), content: content, traitCollection: traitCollection, animated: animated))
+    setContent?(.init(view: castOrAssert(view), content: content, traitCollection: traitCollection, animated: animated))
   }
 
   func configureBehavior(_ view: UIView, traitCollection: UITraitCollection) {

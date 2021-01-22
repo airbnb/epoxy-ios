@@ -11,14 +11,13 @@ import UIKit
 
 final class CollectionViewSpec: QuickSpec {
   override func spec() {
-    let itemModel = ItemModel(dataID: DefaultDataID.noneProvided, content: "", configureView: { _ in })
-      .configureView { context in
+    let itemModel = ItemModel(dataID: DefaultDataID.noneProvided, content: "", setContent: { context in
         context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
         context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-      }
+      })
 
     let supplementaryItemModel = SupplementaryItemModel(dataID: DefaultDataID.noneProvided, content: "")
-      .configureView { context in
+      .setContent { context in
         context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
         context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true
       }
@@ -124,7 +123,7 @@ final class CollectionViewSpec: QuickSpec {
           erasedItemWillDisplay = []
           erasedItemDidEndDisplaying = []
 
-          let section = SectionModel(items: [ItemModel(dataID: "dataID", content: "", configureView: { _ in })])
+          let section = SectionModel(items: [ItemModel(dataID: "dataID", content: "", setContent: { _ in })])
             .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [item])
           collectionView.setSections([section], animated: false)
         }
