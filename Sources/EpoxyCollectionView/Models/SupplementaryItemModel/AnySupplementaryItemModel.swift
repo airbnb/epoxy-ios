@@ -84,7 +84,7 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
   {
     model.handleWillDisplay(view, traitCollection: traitCollection, animated: animated)
     if let view = view.view {
-      willDisplay?(.init(view: view, traitCollection: traitCollection, dataID: dataID, animated: animated))
+      willDisplay?(.init(view: view, traitCollection: traitCollection, animated: animated))
     }
   }
 
@@ -95,7 +95,7 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
   {
     model.handleDidEndDisplaying(view, traitCollection: traitCollection, animated: animated)
     if let view = view.view {
-      didEndDisplaying?(.init(view: view, traitCollection: traitCollection, dataID: dataID, animated: animated))
+      didEndDisplaying?(.init(view: view, traitCollection: traitCollection, animated: animated))
     }
   }
 
@@ -135,15 +135,9 @@ extension AnySupplementaryItemModel: CallbackContextEpoxyModeled {
 
     // MARK: Lifecycle
 
-    public init(
-      view: UIView,
-      traitCollection: UITraitCollection,
-      dataID: AnyHashable,
-      animated: Bool)
-    {
+    public init(view: UIView, traitCollection: UITraitCollection, animated: Bool) {
       self.view = view
       self.traitCollection = traitCollection
-      self.dataID = dataID
       self.animated = animated
     }
 
@@ -151,7 +145,6 @@ extension AnySupplementaryItemModel: CallbackContextEpoxyModeled {
 
     public var view: UIView
     public var traitCollection: UITraitCollection
-    public var dataID: AnyHashable
     public var animated: Bool
   }
 

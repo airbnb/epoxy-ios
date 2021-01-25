@@ -3,16 +3,6 @@
 
 import UIKit
 
-// MARK: - ViewBehaviors
-
-/// Behaviors must be "resettable" - you should have a default initializer that sets all of your
-/// behavior closures or delegates to `nil` in order for Epoxy to reset the behaviors on your view
-/// when no behaviors are provided.
-public protocol ViewBehaviors {
-  /// Constructs an instance with no behaviors.
-  init()
-}
-
 // MARK: - BehaviorsConfigurableView
 
 /// A view that can be configured with a `Behaviors` instance that contains the view's non-
@@ -24,7 +14,7 @@ public protocol ViewBehaviors {
 /// the view's corresponding `EpoxyModeled` instance is updated. As such, setting behaviors should
 /// be as lightweight as possible.
 ///
-/// Properties of `Behaviors` should mutually exclusive with the properties in the
+/// Properties of `Behaviors` should be mutually exclusive with the properties in the
 /// `StyledView.Style` and `ContentConfigurableView.Content`.
 ///
 /// - SeeAlso: `ContentConfigurableView`
@@ -33,22 +23,25 @@ public protocol ViewBehaviors {
 public protocol BehaviorsConfigurableView: UIView {
   /// The non-`Equatable` properties that can be changed over of the lifecycle this View's
   /// instances, e.g. callback closures or delegates.
-  associatedtype Behaviors: ViewBehaviors = EmptyBehaviors
+  ///
+  /// Defaults to `Never` for views that do not have `Behaviors`.
+  associatedtype Behaviors = Never
 
-  /// Updates the behaviors of this view to those in the given `behaviors`.
-  func setBehaviors(_ behaviors: Self.Behaviors)
+  /// Updates the behaviors of this view to those in the given `behaviors`, else resets the
+  /// behaviors if `nil`.
+  ///
+  /// Behaviors are optional as they must be "resettable" in order for Epoxy to reset the behaviors
+  /// on your view when no behaviors are provided.
+  func setBehaviors(_ behaviors: Self.Behaviors?)
 }
 
 // MARK: Defaults
 
-extension BehaviorsConfigurableView where Behaviors == EmptyBehaviors {
-  public func setBehaviors(_ behaviors: EmptyBehaviors) {
-    // No-op
+extension BehaviorsConfigurableView where Behaviors == Never {
+  public func setBehaviors(_ behaviors: Never?) {
+    switch behaviors {
+    case nil:
+      break
+    }
   }
-}
-
-// MARK: - EmptyBehaviors
-
-public struct EmptyBehaviors: ViewBehaviors {
-  public init() {}
 }

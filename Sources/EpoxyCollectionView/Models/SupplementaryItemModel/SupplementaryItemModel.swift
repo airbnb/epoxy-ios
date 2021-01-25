@@ -11,9 +11,18 @@ import UIKit
 ///
 /// Designed to be used with a `CollectionView` to lazily create and configure views as they are
 /// recycled in a `UICollectionView`.
-public struct SupplementaryItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModeled {
+public struct SupplementaryItemModel<View: UIView>: ViewEpoxyModeled {
 
   // MARK: Lifecycle
+
+  /// Constructs an item model with a data ID.
+  ///
+  /// - Parameters:
+  ///   - dataID: An ID that uniquely identifies this item relative to other items in the
+  ///     same collection.
+  public init(dataID: AnyHashable) {
+    self.dataID = dataID
+  }
 
   /// Constructs an item model with a data ID, content, and a closure to configure the item view
   /// with new content whenever it changes.
@@ -27,14 +36,18 @@ public struct SupplementaryItemModel<View: UIView, Content: Equatable>: ContentV
   ///     immediately following its construction in `makeView` and subsequently whenever a new item
   ///     model that replaced an old item model with the same `dataID` has content that is not equal
   ///     to the content of the old item model.
-  public init(
+  public init<Content: Equatable>(
     dataID: AnyHashable,
     content: Content,
-    setContent: ((CallbackContext) -> Void)? = nil)
+    setContent: @escaping (CallbackContext, Content) -> Void)
   {
     self.dataID = dataID
-    self.content = content
-    self.setContent = setContent
+    erasedContent = content
+    self.setContent = { setContent($0, content) }
+    isErasedContentEqual = { otherModel in
+      guard let otherContent = otherModel.erasedContent as? Content else { return false }
+      return otherContent == content
+    }
   }
 
   /// Constructs an item model with a data ID, initializer parameters, content, a closure to
@@ -53,18 +66,22 @@ public struct SupplementaryItemModel<View: UIView, Content: Equatable>: ContentV
   ///     immediately following its construction in `makeView` and subsequently whenever a new item
   ///     model that replaced an old item model with the same `dataID` has content that is not equal
   ///     to the content of the old item model.
-  public init<Params: Hashable>(
+  public init<Params: Hashable, Content: Equatable>(
     dataID: AnyHashable,
     params: Params,
     content: Content,
     makeView: @escaping (Params) -> View,
-    setContent: @escaping SetContent)
+    setContent: @escaping (CallbackContext, Content) -> Void)
   {
     self.dataID = dataID
     styleID = params
-    self.content = content
+    erasedContent = content
     self.makeView = { makeView(params) }
-    self.setContent = setContent
+    self.setContent = { setContent($0, content) }
+    isErasedContentEqual = { otherModel in
+      guard let otherContent = otherModel.erasedContent as? Content else { return false }
+      return otherContent == content
+    }
   }
 
   // MARK: Public
@@ -101,9 +118,9 @@ public struct SupplementaryItemModel<View: UIView, Content: Equatable>: ContentV
 
 extension SupplementaryItemModel: SetContentProviding {}
 
-// MARK: ContentProviding
+// MARK: ErasedContentProviding
 
-extension SupplementaryItemModel: ContentProviding {}
+extension SupplementaryItemModel: ErasedContentProviding {}
 
 // MARK: DataIDProviding
 
@@ -155,7 +172,7 @@ extension SupplementaryItemModel: InternalSupplementaryItemModeling {
     // Even if there's no `setContent` closure, we need to make sure to call
     // `viewForReusableView` to ensure that the view is created.
     let view = viewForReusableView(reusableView)
-    setContent?(.init(view: view, content: content, dataID: dataID, traitCollection: traitCollection, animated: animated))
+    setContent?(.init(view: view, traitCollection: traitCollection, animated: animated))
   }
 
   public func setBehavior(
@@ -163,7 +180,7 @@ extension SupplementaryItemModel: InternalSupplementaryItemModeling {
     traitCollection: UITraitCollection,
     animated: Bool)
   {
-    setBehaviors?(.init(view: viewForReusableView(reusableView), content: content, dataID: dataID, traitCollection: traitCollection, animated: animated))
+    setBehaviors?(.init(view: viewForReusableView(reusableView), traitCollection: traitCollection, animated: animated))
   }
 
   // MARK: Internal
@@ -173,7 +190,7 @@ extension SupplementaryItemModel: InternalSupplementaryItemModeling {
     traitCollection: UITraitCollection,
     animated: Bool)
   {
-    willDisplay?(.init(view: viewForReusableView(reusableView), content: content, dataID: dataID, traitCollection: traitCollection, animated: animated))
+    willDisplay?(.init(view: viewForReusableView(reusableView), traitCollection: traitCollection, animated: animated))
   }
 
   func handleDidEndDisplaying(
@@ -181,7 +198,7 @@ extension SupplementaryItemModel: InternalSupplementaryItemModeling {
     traitCollection: UITraitCollection,
     animated: Bool)
   {
-    didEndDisplaying?(.init(view: viewForReusableView(reusableView), content: content, dataID: dataID, traitCollection: traitCollection, animated: animated))
+    didEndDisplaying?(.init(view: viewForReusableView(reusableView), traitCollection: traitCollection, animated: animated))
   }
 }
 
@@ -196,7 +213,7 @@ extension SupplementaryItemModel: Diffable {
     guard let other = otherDiffableItem as? Self else {
       return false
     }
-    return content == other.content
+    return isErasedContentEqual?(other) ?? true
   }
 }
 
@@ -205,20 +222,12 @@ extension SupplementaryItemModel: Diffable {
 extension SupplementaryItemModel: CallbackContextEpoxyModeled {
 
   /// The context passed to callbacks on an `SupplementaryItemModel`.
-  public struct CallbackContext: ViewProviding, ContentProviding, TraitCollectionProviding, AnimatedProviding {
+  public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {
 
     // MARK: Lifecycle
 
-    public init(
-      view: View,
-      content: Content,
-      dataID: AnyHashable,
-      traitCollection: UITraitCollection,
-      animated: Bool)
-    {
+    public init(view: View, traitCollection: UITraitCollection, animated: Bool) {
       self.view = view
-      self.content = content
-      self.dataID = dataID
       self.traitCollection = traitCollection
       self.animated = animated
     }
@@ -226,8 +235,6 @@ extension SupplementaryItemModel: CallbackContextEpoxyModeled {
     // MARK: Public
 
     public var view: View
-    public var content: Content
-    public var dataID: AnyHashable
     public var traitCollection: UITraitCollection
     public var animated: Bool
   }

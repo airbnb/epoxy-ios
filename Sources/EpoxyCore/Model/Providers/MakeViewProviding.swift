@@ -37,6 +37,26 @@ extension ViewEpoxyModeled where Self: MakeViewProviding {
   // MARK: Private
 
   private var makeViewProperty: EpoxyModelProperty<MakeView> {
-    .init(keyPath: \Self.makeView, defaultValue: View.init, updateStrategy: .replace)
+    // If you're getting a `EXC_BAD_INSTRUCTION` crash with this property in your stack trace, you
+    // probably either:
+    // - Conformed a view to `EpoxyableView` / `StyledView` with a custom initializer that
+    // takes parameters, or:
+    // - Used the `EpoxyModeled.init(dataID:)` initializer on a view has required initializer
+    //   parameters.
+    // If you have parameters to view initialization, they should either be passed to `init(style:)`
+    // or you should provide a `makeView` closure when constructing your view's corresponding model,
+    // e.g:
+    // ```
+    // MyView.itemModel(…)
+    //   .makeView { MyView(customParameter: …) }
+    //   .styleID(…)
+    // ```
+    // Note that with the above approach that you must supply an `styleID` with the same identity as
+    // your view parameters to ensure that views with different parameters are not reused in place
+    // of one another.
+    .init(
+      keyPath: \Self.makeView,
+      defaultValue: View.init,
+      updateStrategy: .replace)
   }
 }

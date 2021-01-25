@@ -17,7 +17,7 @@ import UIKit
 /// A `Style` is `Hashable` to allow views of the same type with equal `Style`s to be reused by
 /// establishing whether their invariant `Style` instances are equal.
 ///
-/// Properties of `Style` should mutually exclusive with the properties of the
+/// Properties of `Style` should be mutually exclusive with the properties of the
 /// `ContentConfigurableView.Content` and `BehaviorsConfigurableView.Behaviors`.
 ///
 /// - SeeAlso: `ContentConfigurableView`
@@ -26,40 +26,19 @@ import UIKit
 public protocol StyledView: UIView {
   /// The style type of this view, passed into its initializer to configure the resulting instance.
   ///
-  /// Defaults to `EmptyStyle` for views that do not have a `Style`.
-  associatedtype Style: Hashable = EmptyStyle
+  /// Defaults to `Never` for views that do not have a `Style`.
+  associatedtype Style: Hashable = Never
 
   /// Creates an instance of this view configured with the given `Style` instance.
   init(style: Style)
 }
 
-// MARK: Extensions
+// MARK: Defaults
 
-extension StyledView where Style == EmptyStyle {
-  public init(style: Style) {
-    // If you're getting a `EXC_BAD_INSTRUCTION` crash with this method in your stack trace, you
-    // probably conformed a view to `EpoxyableView` / `StyledView` with a custom initializer that
-    // takes parameters. If you have parameters to view initialization, they should either be passed
-    // to `init(style:)` or you should provide a `makeView` closure when constructing your view's
-    // corresponding Epoxy model, e.g:
-    // ```
-    // MyView.itemModel(…)
-    //   .makeView { MyView(customParameter: …) }
-    //   .styleID(…)
-    // ```
-    // Note that with the above approach that you must supply an `styleID` with the same
-    // identity as your view parameters to ensure that views with different parameters are not
-    // reused in place of one another.
-    self.init()
+extension StyledView where Style == Never {
+  public init(style: Never) {
+    // An empty switch is required to silence the "'self.init' isn't called on all paths before
+    // returning from initializer" error.
+    switch style {}
   }
-}
-
-// MARK: - EmptyStyle
-
-/// A type used to allow a view with no style to conform to `StyledView`.
-///
-/// The default `Style` for `StyledView`s that do not have a custom associated `Style` type.
-public struct EmptyStyle: Hashable {
-  /// The single shared instance of `EmptyStyle`.
-  public static let shared = EmptyStyle()
 }

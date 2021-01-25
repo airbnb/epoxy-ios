@@ -19,7 +19,7 @@ final class ButtonRow: UIView, EpoxyableView {
 
   // MARK: Internal
 
-  struct Behaviors: ViewBehaviors {
+  struct Behaviors {
     var didTap: (() -> Void)?
   }
 
@@ -31,8 +31,8 @@ final class ButtonRow: UIView, EpoxyableView {
     text = content.text
   }
 
-  func setBehaviors(_ behaviors: Behaviors) {
-    didTap = behaviors.didTap
+  func setBehaviors(_ behaviors: Behaviors?) {
+    didTap = behaviors?.didTap
   }
 
   // MARK: Private
