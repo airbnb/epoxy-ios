@@ -81,21 +81,21 @@ extension AnyItemModel: InternalItemModeling {
   public func handleDidSelect(_ cell: ItemWrapperView, with metadata: ItemCellMetadata) {
     model.handleDidSelect(cell, with: metadata)
     if let view = cell.view {
-      didSelect?(.init(view: view, dataID: dataID, metadata: metadata))
+      didSelect?(.init(view: view, metadata: metadata))
     }
   }
 
   public func handleWillDisplay(_ cell: ItemWrapperView, with metadata: ItemCellMetadata) {
     model.handleWillDisplay(cell, with: metadata)
     if let view = cell.view {
-      willDisplay?(.init(view: view, dataID: dataID, metadata: metadata))
+      willDisplay?(.init(view: view, metadata: metadata))
     }
   }
 
   public func handleDidEndDisplaying(_ cell: ItemWrapperView, with metadata: ItemCellMetadata) {
     model.handleDidEndDisplaying(cell, with: metadata)
     if let view = cell.view {
-      didEndDisplaying?(.init(view: view, dataID: dataID, metadata: metadata))
+      didEndDisplaying?(.init(view: view, metadata: metadata))
     }
   }
 }
@@ -131,27 +131,23 @@ extension AnyItemModel: CallbackContextEpoxyModeled {
       view: UIView,
       traitCollection: UITraitCollection,
       state: ItemCellState,
-      dataID: AnyHashable,
       animated: Bool)
     {
       self.view = view
       self.traitCollection = traitCollection
       self.state = state
-      self.dataID = dataID
       self.animated = animated
     }
 
-    public init(view: UIView, dataID: AnyHashable, metadata: ItemCellMetadata) {
+    public init(view: UIView, metadata: ItemCellMetadata) {
       self.view = view
       traitCollection = metadata.traitCollection
       state = metadata.state
-      self.dataID = dataID
       animated = metadata.animated
     }
 
     // MARK: Public
 
-    public var dataID: AnyHashable
     public var view: UIView
     public var traitCollection: UITraitCollection
     public var state: ItemCellState

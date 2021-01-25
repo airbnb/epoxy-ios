@@ -11,16 +11,8 @@ import UIKit
 
 final class CollectionViewSpec: QuickSpec {
   override func spec() {
-    let itemModel = ItemModel(dataID: DefaultDataID.noneProvided, content: "", setContent: { context in
-        context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-      })
-
-    let supplementaryItemModel = SupplementaryItemModel(dataID: DefaultDataID.noneProvided, content: "")
-      .setContent { context in
-        context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-      }
+    let itemModel = ItemModel<TestView>(dataID: DefaultDataID.noneProvided)
+    let supplementaryItemModel = SupplementaryItemModel<TestView>(dataID: DefaultDataID.noneProvided)
 
     var collectionView: CollectionView!
 
@@ -34,8 +26,8 @@ final class CollectionViewSpec: QuickSpec {
 
     describe("visibility") {
       describe("of an item") {
-        var itemWillDisplay: [ItemModel<UIView, String>.CallbackContext]!
-        var itemDidEndDisplaying: [ItemModel<UIView, String>.CallbackContext]!
+        var itemWillDisplay: [ItemModel<TestView>.CallbackContext]!
+        var itemDidEndDisplaying: [ItemModel<TestView>.CallbackContext]!
         var erasedItemWillDisplay: [AnyItemModel.CallbackContext]!
         var erasedItemDidEndDisplaying: [AnyItemModel.CallbackContext]!
 
@@ -105,8 +97,8 @@ final class CollectionViewSpec: QuickSpec {
       }
 
       describe("of a supplementary item") {
-        var itemWillDisplay: [SupplementaryItemModel<UIView, String>.CallbackContext]!
-        var itemDidEndDisplaying: [SupplementaryItemModel<UIView, String>.CallbackContext]!
+        var itemWillDisplay: [SupplementaryItemModel<TestView>.CallbackContext]!
+        var itemDidEndDisplaying: [SupplementaryItemModel<TestView>.CallbackContext]!
         var erasedItemWillDisplay: [AnySupplementaryItemModel.CallbackContext]!
         var erasedItemDidEndDisplaying: [AnySupplementaryItemModel.CallbackContext]!
 
@@ -123,7 +115,7 @@ final class CollectionViewSpec: QuickSpec {
           erasedItemWillDisplay = []
           erasedItemDidEndDisplaying = []
 
-          let section = SectionModel(items: [ItemModel(dataID: "dataID", content: "", setContent: { _ in })])
+          let section = SectionModel(items: [ItemModel(dataID: "dataID")])
             .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [item])
           collectionView.setSections([section], animated: false)
         }
@@ -297,7 +289,7 @@ final class CollectionViewSpec: QuickSpec {
     }
 
     describe("item selection") {
-      var itemDidSelect: [ItemModel<UIView, String>.CallbackContext]!
+      var itemDidSelect: [ItemModel<TestView>.CallbackContext]!
       var erasedItemDidSelect: [AnyItemModel.CallbackContext]!
 
       beforeEach {
@@ -347,12 +339,12 @@ final class CollectionViewSpec: QuickSpec {
         case section, item, supplementaryItem
       }
 
-      var itemView: UIView!
-      var supplementaryItemView: UIView!
+      var itemView: TestView!
+      var supplementaryItemView: TestView!
 
       beforeEach {
-        itemView = UIView()
-        supplementaryItemView = UIView()
+        itemView = TestView()
+        supplementaryItemView = TestView()
 
         let section = SectionModel(
           dataID: TestID.section,
@@ -461,6 +453,18 @@ final class CollectionViewSpec: QuickSpec {
           }
         }
       }
+    }
+  }
+
+  final class TestView: UIView, EpoxyableView {
+    init() {
+      super.init(frame: .zero)
+      widthAnchor.constraint(equalToConstant: 50).isActive = true
+      heightAnchor.constraint(equalToConstant: 50).isActive = true
+    }
+
+    required init?(coder: NSCoder) {
+      fatalError("init(coder:) has not been implemented")
     }
   }
 }

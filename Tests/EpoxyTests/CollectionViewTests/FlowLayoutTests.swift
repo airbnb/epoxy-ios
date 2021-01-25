@@ -10,7 +10,7 @@ import XCTest
 final class FlowLayoutSpec: QuickSpec {
 
   override func spec() {
-    let itemModel = ItemModel(dataID: DefaultDataID.noneProvided, content: "", setContent: { _ in })
+    let itemModel = ItemModel(dataID: DefaultDataID.noneProvided)
       .setContent { context in
         context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
         context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true

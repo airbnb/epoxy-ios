@@ -13,7 +13,7 @@ import UIKit
 /// this view can guard updates on the equality of each property of the `Content` against the
 /// current property value when set.
 ///
-/// Properties of `Content` should mutually exclusive with the properties of the
+/// Properties of `Content` should be mutually exclusive with the properties of the
 /// `StyledView.Style` and `BehaviorsConfigurableView.Behaviors`.
 ///
 /// - SeeAlso: `BehaviorsConfigurableView`
@@ -23,8 +23,8 @@ public protocol ContentConfigurableView: UIView {
   /// The `Equatable` properties that can be updated on instances of this view, e.g. text `String`s
   /// or image `URL`s.
   ///
-  /// Defaults to `EmptyContent` for views that do not have `Content`.
-  associatedtype Content: Equatable = EmptyContent
+  /// Defaults to `Never` for views that do not have `Content`.
+  associatedtype Content: Equatable = Never
 
   /// Updates the content of this view to the properties of the given `content`, optionally
   /// animating the updates.
@@ -33,19 +33,6 @@ public protocol ContentConfigurableView: UIView {
 
 // MARK: Defaults
 
-extension ContentConfigurableView where Content == EmptyContent {
-  public func setContent(_ content: EmptyContent, animated: Bool) {
-    // No-op
-  }
-}
-
-// MARK: - EmptyContent
-
-/// A type used to allow a view with no content to conform to `ContentConfigurableView`.
-///
-/// The default `Content` for `ContentConfigurableView`s that do not have a custom associated
-/// `Content` type.
-public struct EmptyContent: Equatable {
-  /// The single shared instance of `EmptyContent`.
-  public static let shared = EmptyContent()
+extension ContentConfigurableView where Content == Never {
+  public func setContent(_ content: Never, animated: Bool) {}
 }

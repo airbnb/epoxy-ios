@@ -6,7 +6,7 @@ import EpoxyCore
 // MARK: - StyledView
 
 extension StyledView where Self: EpoxyableView {
-  /// Constructs an `BarModel` with an instance of this view as its bar view.
+  /// Constructs a `BarModel` with an instance of this view as its bar view.
   ///
   /// - Parameters:
   ///   - dataID: An ID that uniquely identifies this bar relative to other supplementary bars in
@@ -16,21 +16,21 @@ extension StyledView where Self: EpoxyableView {
   ///   - behaviors: The behaviors that will be applied to the bar view via the `setBehaviors(_:)`
   ///     method whenever this model is updated. Defaults to no behaviors.
   ///   - style: The style of the bar view that uniquely identifies.
-  /// - Returns: An `BarModel` with an instance of this view as its bar view.
+  /// - Returns: A `BarModel` with an instance of this view as its bar view.
   public static func barModel(
     dataID: AnyHashable? = nil,
     content: Content,
-    behaviors: Behaviors = .init(),
+    behaviors: Behaviors? = nil,
     style: Style)
-    -> BarModel<Self, Content>
+    -> BarModel<Self>
   {
-    BarModel<Self, Content>(
+    BarModel<Self>(
       dataID: dataID,
       params: style,
       content: content,
       makeView: Self.init(style:),
-      setContent: { context in
-        context.view.setContent(context.content, animated: context.animated)
+      setContent: { context, content in
+        context.view.setContent(content, animated: context.animated)
       })
       .setBehaviors { context in
         context.view.setBehaviors(behaviors)
@@ -38,10 +38,10 @@ extension StyledView where Self: EpoxyableView {
   }
 }
 
-// MARK: Style == EmptyStyle
+// MARK: Style == Never
 
-extension StyledView where Self: EpoxyableView, Style == EmptyStyle {
-  /// Constructs an `BarModel` with an instance of this view as its bar view.
+extension StyledView where Self: EpoxyableView, Style == Never {
+  /// Constructs a `BarModel` with an instance of this view as its bar view.
   ///
   /// - Parameters:
   ///   - dataID: An ID that uniquely identifies this bar relative to other bars in the same bar
@@ -50,21 +50,29 @@ extension StyledView where Self: EpoxyableView, Style == EmptyStyle {
   ///     `setContent(_:animated:)` method whenever the content has changed.
   ///   - behaviors: The behaviors that will be applied to the bar view via the `setBehaviors(_:)`
   ///     method whenever this model is updated. Defaults to no behaviors.
-  /// - Returns: An `BarModel` with an instance of this view as its bar view.
+  /// - Returns: A `BarModel` with an instance of this view as its bar view.
   public static func barModel(
     dataID: AnyHashable? = nil,
     content: Content,
-    behaviors: Behaviors = .init())
-    -> BarModel<Self, Content>
+    behaviors: Behaviors? = nil)
+    -> BarModel<Self>
   {
-    barModel(dataID: dataID, content: content, behaviors: behaviors, style: .shared)
+    BarModel<Self>(
+      dataID: dataID,
+      content: content,
+      setContent: { context, content in
+        context.view.setContent(content, animated: context.animated)
+      })
+      .setBehaviors { context in
+        context.view.setBehaviors(behaviors)
+      }
   }
 }
 
-// MARK: Content == EmptyContent
+// MARK: Content == Never
 
-extension StyledView where Self: EpoxyableView, Content == EmptyContent {
-  /// Constructs an `BarModel` with an instance of this view as its bar view.
+extension StyledView where Self: EpoxyableView, Content == Never {
+  /// Constructs a `BarModel` with an instance of this view as its bar view.
   ///
   /// - Parameters:
   ///   - dataID: An ID that uniquely identifies this bar relative to other supplementary bars in
@@ -72,33 +80,41 @@ extension StyledView where Self: EpoxyableView, Content == EmptyContent {
   ///   - behaviors: The behaviors that will be applied to the bar view via the `setBehaviors(_:)`
   ///     method whenever this model is updated. Defaults to no behaviors.
   ///   - style: The style of the bar view that uniquely identifies.
-  /// - Returns: An `BarModel` with an instance of this view as its bar view.
+  /// - Returns: A `BarModel` with an instance of this view as its bar view.
   public static func barModel(
     dataID: AnyHashable? = nil,
-    behaviors: Behaviors = .init(),
+    behaviors: Behaviors? = nil,
     style: Style)
-    -> BarModel<Self, Content>
+    -> BarModel<Self>
   {
-    barModel(dataID: dataID, content: .shared, behaviors: behaviors, style: style)
+    BarModel<Self>(dataID: dataID)
+      .styleID(style)
+      .makeView { Self(style: style) }
+      .setBehaviors { context in
+        context.view.setBehaviors(behaviors)
+      }
   }
 }
 
-// MARK: Style == EmptyStyle, Content == EmptyContent
+// MARK: Style == Never, Content == Never
 
-extension StyledView where Self: EpoxyableView, Style == EmptyStyle, Content == EmptyContent {
-  /// Constructs an `BarModel` with an instance of this view as its bar view.
+extension StyledView where Self: EpoxyableView, Style == Never, Content == Never {
+  /// Constructs a `BarModel` with an instance of this view as its bar view.
   ///
   /// - Parameters:
   ///   - dataID: An ID that uniquely identifies this bar relative to other bars in the same bar
   ///     stack.
   ///   - behaviors: The behaviors that will be applied to the bar view via the `setBehaviors(_:)`
   ///     method whenever this model is updated. Defaults to no behaviors.
-  /// - Returns: An `BarModel` with an instance of this view as its bar view.
+  /// - Returns: A `BarModel` with an instance of this view as its bar view.
   public static func barModel(
     dataID: AnyHashable? = nil,
-    behaviors: Behaviors = .init())
-    -> BarModel<Self, Content>
+    behaviors: Behaviors? = nil)
+    -> BarModel<Self>
   {
-    barModel(dataID: dataID, content: .shared, behaviors: behaviors, style: .shared)
+    BarModel<Self>(dataID: dataID)
+      .setBehaviors { context in
+        context.view.setBehaviors(behaviors)
+      }
   }
 }

@@ -15,9 +15,20 @@ import UIKit
 ///
 /// # Additional resources
 /// - [Bar Installers Docs](***REMOVED***/projects/coreui/docs/navigation/bar_installers)
-public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModeled {
+public struct BarModel<View: UIView>: ViewEpoxyModeled {
 
   // MARK: Lifecycle
+
+  /// Constructs a bar model with a data ID.
+  ///
+  /// - Parameters:
+  ///   - dataID: An optional ID that uniquely identifies this bar relative to other bars in the
+  ///     same bar stack.
+  public init(dataID: AnyHashable? = nil) {
+    if let dataID = dataID {
+      self.dataID = dataID
+    }
+  }
 
   /// Constructs a bar model with a data ID, content, a closure to make the bar view, and a closure
   /// configure the bar view with new content whenever it changes.
@@ -27,23 +38,24 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
   ///     same bar stack.
   ///   - content: The content of the bar view that will be applied to the view in the `setContent`
   ///     closure whenver it has changed.
-  ///   - makeView: A closure that constructs the view of this bar. the `setContent` closure is
-  ///     called immediately after `makeView` with the returned view  to configure it with its
-  ///     initial content.
   ///   - setContent: A closure that's called to configure the view with its content, both
   ///     immediately following its construction in `makeView` and subsequently whenever a new bar
   ///     model that replaced an old bar model with the same `dataID` has content that is not equal
   ///     to the content of the old bar model.
-  public init(
+  public init<Content: Equatable>(
     dataID: AnyHashable? = nil,
     content: Content,
-    setContent: @escaping SetContent)
+    setContent: @escaping (CallbackContext, Content) -> Void)
   {
     if let dataID = dataID {
       self.dataID = dataID
     }
-    self.content = content
-    self.setContent = setContent
+    erasedContent = content
+    self.setContent = { setContent($0, content) }
+    isErasedContentEqual = { otherModel in
+      guard let otherContent = otherModel.erasedContent as? Content else { return false }
+      return otherContent == content
+    }
   }
 
   /// Constructs a bar model with a data ID, initializer parameters, content, a closure to construct
@@ -62,20 +74,24 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
   ///     immediately following its construction in `makeView` and subsequently whenever a new bar
   ///     model that replaced an old bar model with the same `dataID` has content that is not equal
   ///     to the content of the old bar model.
-  public init<Params: Hashable>(
+  public init<Params: Hashable, Content: Equatable>(
     dataID: AnyHashable? = nil,
     params: Params,
     content: Content,
     makeView: @escaping (Params) -> View,
-    setContent: @escaping SetContent)
+    setContent: @escaping (CallbackContext, Content) -> Void)
   {
     if let dataID = dataID {
       self.dataID = dataID
     }
     styleID = params
-    self.content = content
+    erasedContent = content
     self.makeView = { makeView(params) }
-    self.setContent = setContent
+    self.setContent = { setContent($0, content) }
+    isErasedContentEqual = { otherModel in
+      guard let otherContent = otherModel.erasedContent as? Content else { return false }
+      return otherContent == content
+    }
   }
 
   // MARK: Public
@@ -116,9 +132,9 @@ public struct BarModel<View: UIView, Content: Equatable>: ContentViewEpoxyModele
 
 extension BarModel: SetContentProviding {}
 
-// MARK: ContentProviding
+// MARK: ErasedContentProviding
 
-extension BarModel: ContentProviding {}
+extension BarModel: ErasedContentProviding {}
 
 // MARK: DataIDProviding
 
@@ -155,26 +171,26 @@ extension BarModel: BarModeling {
 extension BarModel: InternalBarModeling {
   func makeConfiguredView(traitCollection: UITraitCollection) -> UIView {
     let view = makeView()
-    let context = CallbackContext(view: view, content: content, traitCollection: traitCollection, animated: false)
+    let context = CallbackContext(view: view, traitCollection: traitCollection, animated: false)
     setContent?(context)
     setBehaviors?(context)
     return view
   }
 
   func configureContent(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
-    setContent?(.init(view: castOrAssert(view), content: content, traitCollection: traitCollection, animated: animated))
+    setContent?(.init(view: castOrAssert(view), traitCollection: traitCollection, animated: animated))
   }
 
   func configureBehavior(_ view: UIView, traitCollection: UITraitCollection) {
-    setBehaviors?(.init(view: castOrAssert(view), content: content, traitCollection: traitCollection, animated: false))
+    setBehaviors?(.init(view: castOrAssert(view), traitCollection: traitCollection, animated: false))
   }
 
   func willDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
-    willDisplay?(.init(view: castOrAssert(view), content: content, traitCollection: traitCollection, animated: animated))
+    willDisplay?(.init(view: castOrAssert(view), traitCollection: traitCollection, animated: animated))
   }
 
   func didDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
-    didDisplay?(.init(view: castOrAssert(view), content: content, traitCollection: traitCollection, animated: animated))
+    didDisplay?(.init(view: castOrAssert(view), traitCollection: traitCollection, animated: animated))
   }
 }
 
@@ -208,8 +224,8 @@ extension BarModel: Diffable {
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
-    guard let otherDiffableItem = otherDiffableItem as? Self else { return false }
-    return otherDiffableItem.content == content
+    guard let other = otherDiffableItem as? Self else { return false }
+    return isErasedContentEqual?(other) ?? true
   }
 }
 
@@ -218,18 +234,16 @@ extension BarModel: Diffable {
 extension BarModel: CallbackContextEpoxyModeled {
 
   /// The context passed to callbacks on an `BarModel`.
-  public struct CallbackContext: ViewProviding, ContentProviding, TraitCollectionProviding, AnimatedProviding {
+  public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {
 
     // MARK: Lifecycle
 
     public init(
       view: View,
-      content: Content,
       traitCollection: UITraitCollection,
       animated: Bool)
     {
       self.view = view
-      self.content = content
       self.traitCollection = traitCollection
       self.animated = animated
     }
@@ -237,7 +251,6 @@ extension BarModel: CallbackContextEpoxyModeled {
     // MARK: Public
 
     public var view: View
-    public var content: Content
     public var traitCollection: UITraitCollection
     public var animated: Bool
   }

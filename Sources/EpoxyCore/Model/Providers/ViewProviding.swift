@@ -3,7 +3,9 @@
 
 import UIKit
 
-/// The capability of providing an `View` instance.
+/// The capability of providing an `View` instance
+///
+/// Typically conformed to by the `CallbackContext` of a `CallbackContextEpoxyModeled`.
 public protocol ViewProviding {
   /// The `UIView` view of this type.
   associatedtype View: UIView

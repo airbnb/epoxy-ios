@@ -11,9 +11,18 @@ import UIKit
 ///
 /// Designed to be used with a `CollectionView` to lazily create and configure views as they are
 /// recycled in a `UICollectionView`.
-public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModeled {
+public struct ItemModel<View: UIView>: ViewEpoxyModeled {
 
   // MARK: Lifecycle
+
+  /// Constructs an item model with a data ID.
+  ///
+  /// - Parameters:
+  ///   - dataID: An ID that uniquely identifies this item relative to other items in the
+  ///     same collection.
+  public init(dataID: AnyHashable) {
+    self.dataID = dataID
+  }
 
   /// Constructs an item model with a data ID, content, and a closure to configure the item view
   /// with new content whenever it changes.
@@ -27,14 +36,18 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
   ///     immediately following its construction in `makeView` and subsequently whenever a new item
   ///     model that replaced an old item model with the same `dataID` has content that is not equal
   ///     to the content of the old item model.
-  public init(
+  public init<Content: Equatable>(
     dataID: AnyHashable,
     content: Content,
-    setContent: @escaping SetContent)
+    setContent: @escaping (CallbackContext, Content) -> Void)
   {
     self.dataID = dataID
-    self.content = content
-    self.setContent = setContent
+    erasedContent = content
+    self.setContent = { setContent($0, content) }
+    isErasedContentEqual = { otherModel in
+      guard let otherContent = otherModel.erasedContent as? Content else { return false }
+      return otherContent == content
+    }
   }
 
   /// Constructs an item model with a data ID, initializer parameters, content, a closure to
@@ -53,18 +66,22 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
   ///     immediately following its construction in `makeView` and subsequently whenever a new item
   ///     model that replaced an old item model with the same `dataID` has content that is not equal
   ///     to the content of the old item model.
-  public init<Params: Hashable>(
+  public init<Params: Hashable, Content: Equatable>(
     dataID: AnyHashable,
     params: Params,
     content: Content,
     makeView: @escaping (Params) -> View,
-    setContent: @escaping SetContent)
+    setContent: @escaping (CallbackContext, Content) -> Void)
   {
     self.dataID = dataID
     styleID = params
-    self.content = content
+    erasedContent = content
     self.makeView = { makeView(params) }
-    self.setContent = setContent
+    self.setContent = { setContent($0, content) }
+    isErasedContentEqual = { otherModel in
+      guard let otherContent = otherModel.erasedContent as? Content else { return false }
+      return otherContent == content
+    }
   }
 
   // MARK: Public
@@ -101,9 +118,9 @@ public struct ItemModel<View: UIView, Content: Equatable>: ContentViewEpoxyModel
 
 extension ItemModel: SetContentProviding {}
 
-// MARK: ContentProviding
+// MARK: ErasedContentProviding
 
-extension ItemModel: ContentProviding {}
+extension ItemModel: ErasedContentProviding {}
 
 // MARK: DataIDProviding
 
@@ -165,38 +182,36 @@ extension ItemModel: InternalItemModeling {
   }
 
   public func handleWillDisplay(_ cell: ItemWrapperView, with metadata: ItemCellMetadata) {
-    willDisplay?(.init(view: viewForCell(cell), content: content, dataID: dataID, metadata: metadata))
+    willDisplay?(.init(view: viewForCell(cell), metadata: metadata))
   }
 
   public func handleDidEndDisplaying(_ cell: ItemWrapperView, with metadata: ItemCellMetadata) {
-    didEndDisplaying?(.init(view: viewForCell(cell), content: content, dataID: dataID, metadata: metadata))
+    didEndDisplaying?(.init(view: viewForCell(cell), metadata: metadata))
   }
 
   public func configure(cell: ItemWrapperView, with metadata: ItemCellMetadata) {
     // Even if there's no `setContent` closure, we need to make sure to call `viewForCell` to
     // ensure that the cell is set up.
     let view = viewForCell(cell)
-    setContent?(.init(view: view, content: content, dataID: dataID, metadata: metadata))
+    setContent?(.init(view: view, metadata: metadata))
   }
 
   public func configureStateChange(in cell: ItemWrapperView, with metadata: ItemCellMetadata) {
-    didChangeState?(.init(view: viewForCell(cell), content: content, dataID: dataID, metadata: metadata))
+    didChangeState?(.init(view: viewForCell(cell), metadata: metadata))
   }
 
   public func setBehavior(cell: ItemWrapperView, with metadata: ItemCellMetadata) {
-    setBehaviors?(.init(view: viewForCell(cell), content: content, dataID: dataID, metadata: metadata))
+    setBehaviors?(.init(view: viewForCell(cell), metadata: metadata))
   }
 
   public func handleDidSelect(_ cell: ItemWrapperView, with metadata: ItemCellMetadata) {
-    didSelect?(.init(view: viewForCell(cell), content: content, dataID: dataID, metadata: metadata))
+    didSelect?(.init(view: viewForCell(cell), metadata: metadata))
   }
 
   public func configuredView(traitCollection: UITraitCollection) -> UIView {
     let view = makeView()
     let context = CallbackContext(
       view: view,
-      content: content,
-      dataID: dataID,
       traitCollection: traitCollection,
       cellState: .normal,
       animated: false)
@@ -217,7 +232,7 @@ extension ItemModel: Diffable {
     guard let other = otherDiffableItem as? Self else {
       return false
     }
-    return content == other.content
+    return isErasedContentEqual?(other) ?? true
   }
 }
 
@@ -226,36 +241,25 @@ extension ItemModel: Diffable {
 extension ItemModel: CallbackContextEpoxyModeled {
 
   /// The context passed to callbacks on an `ItemModel`.
-  public struct CallbackContext: ViewProviding, ContentProviding, TraitCollectionProviding, AnimatedProviding {
+  public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {
 
     // MARK: Lifecycle
 
     public init(
       view: View,
-      content: Content,
-      dataID: AnyHashable,
       traitCollection: UITraitCollection,
       cellState: ItemCellState,
       animated: Bool)
     {
       self.view = view
-      self.content = content
-      self.dataID = dataID
       self.traitCollection = traitCollection
       self.cellState = cellState
       self.animated = animated
     }
 
-    public init(
-      view: View,
-      content: Content,
-      dataID: AnyHashable,
-      metadata: ItemCellMetadata)
-    {
+    public init(view: View, metadata: ItemCellMetadata) {
       self.init(
         view: view,
-        content: content,
-        dataID: dataID,
         traitCollection: metadata.traitCollection,
         cellState: metadata.state,
         animated: metadata.animated)
@@ -264,8 +268,6 @@ extension ItemModel: CallbackContextEpoxyModeled {
     // MARK: Public
 
     public var view: View
-    public var content: Content
-    public var dataID: AnyHashable
     public var traitCollection: UITraitCollection
     public var cellState: ItemCellState
     public var animated: Bool

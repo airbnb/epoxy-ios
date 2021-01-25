@@ -55,5 +55,4 @@ extension AnyBarModel: Diffable {
 
     return model.isDiffableItemEqual(to: otherDiffableItem)
   }
-
 }

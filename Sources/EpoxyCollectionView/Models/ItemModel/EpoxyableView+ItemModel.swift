@@ -20,17 +20,17 @@ extension StyledView where Self: EpoxyableView {
   public static func itemModel(
     dataID: AnyHashable,
     content: Content,
-    behaviors: Behaviors = .init(),
+    behaviors: Behaviors? = nil,
     style: Style)
-    -> ItemModel<Self, Content>
+    -> ItemModel<Self>
   {
-    ItemModel<Self, Content>(
+    ItemModel<Self>(
       dataID: dataID,
       params: style,
       content: content,
       makeView: Self.init(style:),
-      setContent: { context in
-        context.view.setContent(context.content, animated: context.animated)
+      setContent: { context, content in
+        context.view.setContent(content, animated: context.animated)
       })
       .setBehaviors { context in
         context.view.setBehaviors(behaviors)
@@ -38,9 +38,9 @@ extension StyledView where Self: EpoxyableView {
   }
 }
 
-// MARK: Style == EmptyStyle
+// MARK: Style == Never
 
-extension StyledView where Self: EpoxyableView, Style == EmptyStyle {
+extension StyledView where Self: EpoxyableView, Style == Never {
   /// Constructs an `ItemModel` with an instance of this view as its item view.
   ///
   /// - Parameters:
@@ -54,16 +54,24 @@ extension StyledView where Self: EpoxyableView, Style == EmptyStyle {
   public static func itemModel(
     dataID: AnyHashable,
     content: Content,
-    behaviors: Behaviors = .init())
-    -> ItemModel<Self, Content>
+    behaviors: Behaviors? = nil)
+    -> ItemModel<Self>
   {
-    itemModel(dataID: dataID, content: content, behaviors: behaviors, style: .shared)
+    ItemModel<Self>(
+      dataID: dataID,
+      content: content,
+      setContent: { context, content in
+        context.view.setContent(content, animated: context.animated)
+      })
+      .setBehaviors { context in
+        context.view.setBehaviors(behaviors)
+      }
   }
 }
 
-// MARK: Content == EmptyContent
+// MARK: Content == Never
 
-extension StyledView where Self: EpoxyableView, Content == EmptyContent {
+extension StyledView where Self: EpoxyableView, Content == Never {
   /// Constructs an `ItemModel` with an instance of this view as its item view.
   ///
   /// - Parameters:
@@ -75,17 +83,22 @@ extension StyledView where Self: EpoxyableView, Content == EmptyContent {
   /// - Returns: An `ItemModel` with an instance of this view as its item view.
   public static func itemModel(
     dataID: AnyHashable,
-    behaviors: Behaviors = .init(),
+    behaviors: Behaviors? = nil,
     style: Style)
-    -> ItemModel<Self, Content>
+    -> ItemModel<Self>
   {
-    itemModel(dataID: dataID, content: .shared, behaviors: behaviors, style: style)
+    ItemModel<Self>(dataID: dataID)
+      .styleID(style)
+      .makeView { Self(style: style) }
+      .setBehaviors { context in
+        context.view.setBehaviors(behaviors)
+      }
   }
 }
 
-// MARK: Style == EmptyStyle, Content == EmptyContent
+// MARK: Style == Never, Content == Never
 
-extension StyledView where Self: EpoxyableView, Style == EmptyStyle, Content == EmptyContent {
+extension StyledView where Self: EpoxyableView, Style == Never, Content == Never {
   /// Constructs an `ItemModel` with an instance of this view as its item view.
   ///
   /// - Parameters:
@@ -96,9 +109,12 @@ extension StyledView where Self: EpoxyableView, Style == EmptyStyle, Content == 
   /// - Returns: An `ItemModel` with an instance of this view as its item view.
   public static func itemModel(
     dataID: AnyHashable,
-    behaviors: Behaviors = .init())
-    -> ItemModel<Self, Content>
+    behaviors: Behaviors? = nil)
+    -> ItemModel<Self>
   {
-    itemModel(dataID: dataID, content: .shared, behaviors: behaviors, style: .shared)
+    ItemModel<Self>(dataID: dataID)
+      .setBehaviors { context in
+        context.view.setBehaviors(behaviors)
+      }
   }
 }
