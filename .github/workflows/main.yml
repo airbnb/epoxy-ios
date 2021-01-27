@@ -1,0 +1,33 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build-package:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Package
+        run: bundle install && bundle exec rake build:package
+  build-example:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Example
+        run: bundle install && bundle exec rake build:example
+  test-package:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Test Package
+        run: bundle install && bundle exec rake test:package
+  lint-swift:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint Swift
+        run: brew install mint && bundle install && bundle exec rake lint:swift
