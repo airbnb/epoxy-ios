@@ -12,11 +12,6 @@ import UIKit
 /// The `NavigationModel` representation of the entire navigation stack should be set at once via
 /// `setStack(_:animated:)` whenever a change occurs, rather than being managed imperatively by
 /// pushing and popping individual view controllers as is typical with `UINavigationController`.
-///
-/// Conceptually similar to `CollectionView`, with `NavigationModel` equivalent to `ItemModel`.
-///
-/// # Additional resources
-/// - [Navigation Models Docs](***REMOVED***/projects/coreui/docs/navigation/navigation_models)
 open class NavigationController: UINavigationController {
 
   // MARK: Lifecycle
