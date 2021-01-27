@@ -12,9 +12,6 @@ import UIKit
 ///
 /// - SeeAlso: `BottomBarInstaller`
 /// - SeeAlso: `TopBarInstaller`
-///
-/// # Additional resources
-/// - [Bar Installers Docs](***REMOVED***/projects/coreui/docs/navigation/bar_installers)
 public struct BarModel<View: UIView>: ViewEpoxyModeled {
 
   // MARK: Lifecycle

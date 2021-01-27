@@ -13,11 +13,6 @@ import UIKit
 /// ensuring that any scrollable content is inset by the height of the bars.
 ///
 /// - SeeAlso: `BarModel`
-///
-/// # Additional resources
-/// - [Bar Installers Docs](***REMOVED***/projects/coreui/docs/navigation/bar_installers)
-/// - [DLS Nav Bars Docs](***REMOVED***/projects/coreui/docs/dls/navigation/navigation_bars)
-/// - [DLS Search Bar Docs](***REMOVED***/projects/coreui/docs/dls/inputs/search#search-bar)
 public final class TopBarInstaller: NSObject {
 
   // MARK: Lifecycle

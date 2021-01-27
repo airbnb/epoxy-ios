@@ -17,8 +17,7 @@ end
 namespace :lint do
   task :podspec do
     Dir.glob('*.podspec') do |spec|
-      # Allow warnings to silence 'The URL (https://github.com/airbnb/epoxy-ios) is not reachable'
-      sh "bundle exec pod lib lint #{spec} --include-podspecs=**/*.podspec --allow-warnings"
+      sh "bundle exec pod lib lint #{spec} --include-podspecs=**/*.podspec"
     end
   end
 

@@ -10,11 +10,6 @@ import UIKit
 /// `UIViewController` should be added to a corresponding `NavigationController`.
 ///
 /// Should be recreated and set on a `NavigationController` on every state change.
-///
-/// Conceptually similar to Epoxy models.
-///
-/// # Additional resources
-/// - [Navigation Models Docs](***REMOVED***/projects/coreui/docs/navigation/navigation_models)
 public struct NavigationModel {
 
   // MARK: Lifecycle

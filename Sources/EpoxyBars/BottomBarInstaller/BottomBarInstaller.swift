@@ -14,12 +14,6 @@ import UIKit
 /// stack, ensuring that any scrollable content is inset by the height of the bars.
 ///
 /// - SeeAlso: `BarModel`
-///
-/// # Additional resources
-/// - [Bar Installers Docs](***REMOVED***/projects/coreui/docs/navigation/bar_installers)
-/// - [Alert Bar Docs](***REMOVED***/projects/coreui/docs/navigation/alert_bar)
-/// - [DLS Footers Docs](***REMOVED***/projects/coreui/docs/dls/navigation/footers)
-/// - [DLS Toasts Docs](***REMOVED***/projects/coreui/docs/dls/navigation/toasts)
 public final class BottomBarInstaller: NSObject {
 
   // MARK: Lifecycle
