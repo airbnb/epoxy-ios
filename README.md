@@ -122,7 +122,6 @@ class CounterViewController: CollectionViewController {
   }
 }
 ```
-
 </td>
 <td>
 
@@ -253,14 +252,8 @@ If you still have questions, feel free to create a new issue.
 
 ## FAQ
 
-### Why would I use Epoxy and UIKit instead of SwiftUI?
-
-SwiftUI is a declarative UI framework that was introduced by Apple in iOS 13. We've found that while SwiftUI has a fantastic API and is certainly the future of building UI on Apple platforms in the long term. However, in the short to medium term we have found that SwiftUI is not a good fit for most of our production use cases:
-- SwiftUI behavior is unstable across iOS versions, with large behavior differences between minor and even patch iOS versions, especially on iOS 13
-- It is not possible to substitute a SwiftUI `View` for a `UIView`, which makes it hard to mix UIKit and SwiftUI in large apps or gradually migrate to SwiftUI, especially in apps with custom UI components
-- SwiftUI does not yet have the flexibility or maturity of the equivalent UIKit APIs, requiring you to "drop down" to UIKit, often after implementing a large fraction of your requirements using SwiftUI APIs
-- SwiftUI hides the underlying view rendering system from consumers, limiting flexibility and introspection capabilities
-- SwiftUI requires Swift reflection metadata, which large Swift apps often strip via the `SWIFT_REFLECTION_METADATA_LEVEL=none` build setting to reduce their binary size
+- [Why would I use Epoxy and UIKit instead of SwiftUI?](https://github.com/airbnb/epoxy-ios/wiki/FAQ#why-would-i-use-epoxy-and-uikit-instead-of-swiftui)
+- [How does Epoxy for iOS differ from Epoxy for Android?](https://github.com/airbnb/epoxy-ios/wiki/FAQ#how-does-epoxy-for-ios-differ-from-epoxy-for-android)
 
 ## Contributing
 
