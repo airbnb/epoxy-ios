@@ -269,3 +269,6 @@ Pull requests are welcome! We'd love help improving this library. Feel free to b
 ## License
 
 Epoxy is released under the Apache License 2.0. See `LICENSE` for details.
+
+## Credits
+Logo design by [Alana Hanada](https://twitter.com/AlanaHanada) and [Jonard La Rosa](https://twitter.com/NotJoNacho)
