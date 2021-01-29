@@ -2,6 +2,7 @@
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
 import ObjectiveC
+import TransitionCoreUI
 
 // MARK: - ModalTransitioning
 

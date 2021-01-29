@@ -1,7 +1,7 @@
 // Created by eric_horacek on 10/12/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-import FlowCoreUI
+import TransitionCoreUI
 import UIKit
 
 // MARK: - PresentationModel
@@ -247,8 +247,8 @@ extension PresentationModel {
       /// Whether the presentation should be animated.
       public var animated: Bool
 
-      /// The hooks that should be called as the presentation progresses.
-      public var hooks: ModalTransitions.Hooks
+      /// The callbacks that should be called as the presentation progresses.
+      public var callbacks: ModalTransitions.Callbacks
     }
 
     /// A closure that's invoked to perform the presentation from the provided context, returning a
@@ -265,7 +265,7 @@ extension PresentationModel.Presentable {
         presented,
         style: style,
         animated: context.animated,
-        hooks: context.hooks)
+        callbacks: context.callbacks)
     }
   }
 }

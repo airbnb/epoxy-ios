@@ -1,7 +1,7 @@
 // Created by eric_horacek on 10/22/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-import FlowCoreUI
+import TransitionCoreUI
 import UIKit
 
 // MARK: - PresentationQueue
@@ -109,7 +109,7 @@ final class PresentationQueue {
     let dismissible = presentable.present(.init(
       presenting: presenter,
       animated: animated,
-      hooks: .init(didPresent: model.handleDidPresent, didDismiss: { [weak self] in
+      callbacks: .init(didPresent: model.handleDidPresent, didDismiss: { [weak self] in
         self?.handleDidDismiss(model)
       })))
 
