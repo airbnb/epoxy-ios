@@ -19,13 +19,13 @@ extension ModalTransitioning {
   }
 }
 
-// MARK: - UIViewController
-
-private extension UIViewController {
+private extension ModalTransitioning {
   /// The queue of in progress presentations for this view controller.
   @nonobjc
   var queue: PresentationQueue {
-    if let queue = objc_getAssociatedObject(self, &Keys.queue) as? PresentationQueue { return queue }
+    if let queue = objc_getAssociatedObject(self, &Keys.queue) as? PresentationQueue {
+      return queue
+    }
     let queue = PresentationQueue()
     objc_setAssociatedObject(self, &Keys.queue, queue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     return queue

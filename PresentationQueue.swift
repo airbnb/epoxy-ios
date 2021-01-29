@@ -107,7 +107,6 @@ final class PresentationQueue {
     let dismissible = presentable.present(.init(
       presenting: presenter,
       animated: animated,
-      style: model.style,
       hooks: hooksForDisplay(model, presentable: presentable, animated: animated, from: presenter)))
 
     // If for some reason the presentation failed (e.g. not in a window), make sure not to errantly
@@ -128,10 +127,7 @@ final class PresentationQueue {
     -> ModalTransitions.Hooks
   {
     .init(
-      didPresent: { [weak presented = presentable.presented] in
-        guard let presented = presented else { return }
-        model.handleDidPresent(presented)
-      },
+      didPresent: model.handleDidPresent,
       didDismiss: { [weak self] in
         // Only update current to dismissed and update the state if it is still at current and
         // presented. This only occurs when a dismissal occurs outside of an `enqueue(...)`
