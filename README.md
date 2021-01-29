@@ -4,6 +4,15 @@ Epoxy is a suite of declarative UI APIs for building [UIKit](https://developer.
 
 Epoxy was developed at [Airbnb](https://www.airbnb.com/) and powers thousands of screens in apps that are shipped to millions of users. It has been developed and refined for years by [dozens of contributors](https://github.com/airbnb/epoxy-ios/graphs/contributors).
 
+Below are a few sample screens from the Airbnb app that we've built using Epoxy. Our usages of Epoxy span from our simplest forms and static screens to our most advanced and dynamic features.
+| Home Details | Home Photos | Messaging | Registration |
+| --- | --- | --- | --- |
+| ![Home Details](docs/images/home_details.png) | ![Home Photos](docs/images/home_photos.png)  | ![Messaging](docs/images/messaging.png) | ![Registration](docs/images/registration.png) |
+
+## Table of contents
+
+
+
 ## Installation
 
 Epoxy can be installed using [CocoaPods](#CocoaPods) or [Swift Package Manager](#Swift-Package-Manager-(SPM)).
@@ -249,9 +258,9 @@ class FormNavigationController: NavigationController {
 
 For full documentation and step-by-step tutorials please check the [wiki](https://github.com/airbnb/epoxy-ios/wiki).
 
-There's also a full sample app with a lot of examples that you can either run via the `EpoxyExample` scheme in `Epoxy.xcworkspace` or just [browse its source](https://github.com/airbnb/epoxy-ios/tree/master/Example).
+There's also a full sample app with a lot of examples that you can either run via the `EpoxyExample` scheme in `Epoxy.xcworkspace` or just browse its [source](https://github.com/airbnb/epoxy-ios/tree/master/Example).
 
-If you still have questions, feel free to create a new issue.
+If you still have questions, feel free to create a new [issue](https://github.com/airbnb/epoxy-ios/issues).
 
 ## FAQ
 
@@ -260,7 +269,7 @@ If you still have questions, feel free to create a new issue.
 
 ## Contributing
 
-Pull requests are welcome! We'd love help improving this library. Feel free to browse through open issues to look for things that need work. If you have a feature request or bug, please open a new issue so we can track it.
+Pull requests are welcome! We'd love help improving this library. Feel free to browse through open [issues](https://github.com/airbnb/epoxy-ios/issues) to look for things that need work. If you have a feature request or bug, please open a new issue so we can track it.
 
 ## License
 
