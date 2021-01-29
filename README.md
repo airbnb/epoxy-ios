@@ -11,7 +11,19 @@ Below are a few sample screens from the Airbnb app that we've built using Epoxy.
 
 ## Table of contents
 
-
+* [Installation](#installation)
+    * [CocoaPods](#cocoapods)
+    * [Swift Package Manager (SPM)](#swift-package-manager-spm)
+* [Modules](#modules)
+* [Getting Started](#getting-started)
+    * [EpoxyCollectionView](#epoxycollectionview)
+    * [EpoxyBars](#epoxybars)
+    * [EpoxyNavigationController](#epoxynavigationcontroller)
+* [Documentation and Tutorials](#documentation-and-tutorials)
+* [FAQ](#faq)
+* [Contributing](#contributing)
+* [License](#license)
+* [Credits](#credits)
 
 ## Installation
 
