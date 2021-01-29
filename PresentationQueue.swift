@@ -1,7 +1,6 @@
 // Created by eric_horacek on 10/22/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
-import TransitionCoreUI
 import UIKit
 
 // MARK: - PresentationQueue
@@ -21,7 +20,7 @@ final class PresentationQueue {
 
   /// Enqueues the given presentation in this queue, performing it immediately if a transition is
   /// not in progress, otherwise performing once the in-progress transition completes.
-  func enqueue(_ model: PresentationModel?, animated: Bool, from presenter: ModalTransitioning) {
+  func enqueue(_ model: PresentationModel?, animated: Bool, from presenter: UIViewController) {
     guard !isTransitioning(presenter, animated: animated) else {
       next = .pending(model)
       return
@@ -40,7 +39,7 @@ final class PresentationQueue {
 
     /// The state that the current presentation can be in: either presented or dismissed.
     enum State {
-      case presented(Dismissible)
+      case presented(PresentationModel.Dismissible)
       case dismissed
     }
   }
@@ -59,7 +58,7 @@ final class PresentationQueue {
   private func apply(
     _ changes: Changes,
     animated: Bool,
-    to presenter: ModalTransitioning)
+    to presenter: UIViewController)
     -> (current: Presentation?, next: Next)
   {
     switch changes {
@@ -76,13 +75,13 @@ final class PresentationQueue {
 
   /// Dismisses the given model using the provided `Dismissible`.
   private func dismiss(
-    _ dismissible: Dismissible,
+    _ dismissible: PresentationModel.Dismissible,
     model: PresentationModel,
     newDataID: Bool,
     animated: Bool,
-    from presenter: ModalTransitioning)
+    from presenter: UIViewController)
   {
-    dismissible.dismiss(animated: animated)
+    dismissible(animated, nil)
     if let coordinator = presenter.transitionCoordinator {
       transitionAlongside(coordinator, animated: animated, from: presenter) { context in
         if !context.isCancelled {
@@ -99,19 +98,20 @@ final class PresentationQueue {
   private func display(
     _ model: PresentationModel,
     animated: Bool,
-    from presenter: ModalTransitioning)
+    from presenter: UIViewController)
     -> Presentation.State
   {
     guard let presentable = model.makePresentable() else {
       return .dismissed
     }
 
-    let dismissible = presentable.present(.init(
+    let dismissible = presentable(.init(
       presenting: presenter,
       animated: animated,
-      callbacks: .init(didPresent: model.handleDidPresent, didDismiss: { [weak self] in
+      didPresent: model.handleDidPresent,
+      didDismiss: { [weak self] in
         self?.handleDidDismiss(model)
-      })))
+      }))
 
     // If for some reason the presentation failed (e.g. not in a window), make sure not to errantly
     // set current to a value.
@@ -156,7 +156,7 @@ final class PresentationQueue {
   ///
   /// Has a side-effect of tracking the transition if `true` is returned, which will defer any
   /// submitted presentation models until after the transition.
-  private func isTransitioning(_ presenter: ModalTransitioning, animated: Bool) -> Bool {
+  private func isTransitioning(_ presenter: UIViewController, animated: Bool) -> Bool {
     guard !isTransitioning else { return true }
     guard let coordinator = presenter.transitionCoordinator else { return false }
     transitionAlongside(coordinator, animated: animated, from: presenter)
@@ -167,7 +167,7 @@ final class PresentationQueue {
   private func transitionAlongside(
     _ coordinator: UIViewControllerTransitionCoordinator,
     animated: Bool,
-    from presenter: ModalTransitioning,
+    from presenter: UIViewController,
     completion: ((UIViewControllerTransitionCoordinatorContext) -> Void)? = nil)
   {
     isTransitioning = true
@@ -184,7 +184,7 @@ final class PresentationQueue {
 
   /// Sets `isTransitioning` to `false` at the completion of a transition and enqueues the next
   /// presentation if there is one.
-  private func stopTransition(presenter: ModalTransitioning, animated: Bool) {
+  private func stopTransition(presenter: UIViewController, animated: Bool) {
     guard isTransitioning else { return }
     isTransitioning = false
 
@@ -207,7 +207,7 @@ extension PresentationQueue {
     case none
     /// The current presentation needs to be dismissed, optionally followed by another presentation
     /// once the dismissal has completed.
-    case dismiss(Dismissible, PresentationModel, newDataID: Bool, followedBy: Next = .none)
+    case dismiss(PresentationModel.Dismissible, PresentationModel, newDataID: Bool, followedBy: Next = .none)
     /// A presentation needs to occur.
     case present(PresentationModel)
 

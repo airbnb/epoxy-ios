@@ -2,11 +2,11 @@
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
 import ObjectiveC
-import TransitionCoreUI
+import UIKit
 
-// MARK: - ModalTransitioning
+// MARK: - UIViewController
 
-extension ModalTransitioning {
+extension UIViewController {
   /// Presents the given model as a view controller, optionally animating the presentation.
   ///
   /// A `nil` `model` is treated as a dismissal.
@@ -20,7 +20,7 @@ extension ModalTransitioning {
   }
 }
 
-extension ModalTransitioning {
+extension UIViewController {
   /// The queue of in progress presentations for this view controller.
   @nonobjc
   fileprivate var queue: PresentationQueue {
