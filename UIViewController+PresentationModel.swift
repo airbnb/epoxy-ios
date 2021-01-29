@@ -20,10 +20,10 @@ extension ModalTransitioning {
   }
 }
 
-private extension ModalTransitioning {
+extension ModalTransitioning {
   /// The queue of in progress presentations for this view controller.
   @nonobjc
-  var queue: PresentationQueue {
+  fileprivate var queue: PresentationQueue {
     if let queue = objc_getAssociatedObject(self, &Keys.queue) as? PresentationQueue {
       return queue
     }
