@@ -4,6 +4,6 @@ Pod::Spec.new do |spec|
   configure(
     spec: spec,
     name: 'EpoxyNavigationController',
-    summary: 'Declarative UI framework for UINavigationController',
+    summary: 'Declarative API for driving the navigation stack of a UINavigationController',
     local_deps: ['EpoxyCore'])
 end

@@ -4,6 +4,6 @@ Pod::Spec.new do |spec|
   configure(
     spec: spec,
     name: 'Epoxy',
-    summary: 'Declarative UI framework for UIKit',
-    local_deps: ['EpoxyCore', 'EpoxyCollectionView', 'EpoxyBars', 'EpoxyNavigationController'])
+    summary: 'Declarative UI APIs for UIKit',
+    local_deps: ['EpoxyCore', 'EpoxyCollectionView', 'EpoxyBars', 'EpoxyNavigationController', 'EpoxyPresentations'])
 end

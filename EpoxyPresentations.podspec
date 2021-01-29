@@ -3,6 +3,7 @@ Pod::Spec.new do |spec|
   require_relative 'ConfigurePodspec'
   configure(
     spec: spec,
-    name: 'EpoxyCore',
-    summary: 'Foundational APIs that are used to build all Epoxy declarative UI APIs')
+    name: 'EpoxyPresentations',
+    summary: 'Declarative API for driving the modal presentations of a UIViewController',
+    local_deps: ['EpoxyCore'])
 end

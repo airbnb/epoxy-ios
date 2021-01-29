@@ -1,6 +1,7 @@
 // Created by eric_horacek on 10/12/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 // MARK: - PresentationModel
@@ -137,6 +138,17 @@ public struct PresentationModel {
   /// The value of this model at the time of its creation.
   private var value: Any
 
+}
+
+// MARK: Diffable
+
+extension PresentationModel: Diffable {
+  public var diffIdentifier: AnyHashable { dataID }
+
+  public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
+    guard let otherDiffableItem = otherDiffableItem as? PresentationModel else { return false }
+    return _isValueEqual(otherDiffableItem)
+  }
 }
 
 // MARK: Advanced Lifecycle

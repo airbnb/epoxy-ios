@@ -55,9 +55,10 @@ Epoxy has a modular architecture so you only have to include what you need for y
 | Module | Description |
 | ------ | ----------- |
 | `Epoxy` | Includes all of the below modules in a single import statement |
-| [`EpoxyCollectionView`](#EpoxyCollectionView) | Declarative APIs for driving content of a [`UICollectionView`](https://developer.apple.com/documentation/uikit/uicollectionview) |
-| [`EpoxyNavigationController`](#EpoxyNavigationController) | Declarative APIs for driving the navigation stack of a [`UINavigationController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller) |
-| [`EpoxyBars`](#EpoxyBars) | Declarative APIs for adding fixed top and bottom bar stacks to a [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller) |
+| [`EpoxyCollectionView`](#EpoxyCollectionView) | Declarative API for driving the content of a [`UICollectionView`](https://developer.apple.com/documentation/uikit/uicollectionview) |
+| [`EpoxyNavigationController`](#EpoxyNavigationController) | Declarative API for driving the navigation stack of a [`UINavigationController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller) |
+| [`EpoxyPresentations`](#EpoxyPresentations) | Declarative API for driving the modal presentations of a [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller) |
+| [`EpoxyBars`](#EpoxyBars) | Declarative API for adding fixed top/bottom bar stacks to a [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller) |
 | `EpoxyCore` | Foundational APIs that are used to build all Epoxy declarative UI APIs |
 
 ## Getting Started

@@ -6,3 +6,4 @@
 @_exported import EpoxyCollectionView
 @_exported import EpoxyCore
 @_exported import EpoxyNavigationController
+@_exported import EpoxyPresentations

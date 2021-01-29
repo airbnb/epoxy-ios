@@ -1,6 +1,6 @@
 namespace :build do
   task :package do
-    sh 'xcodebuild build -scheme Epoxy-Package -destination generic/platform=iOS'
+    sh 'xcodebuild build -scheme Epoxy -destination generic/platform=iOS'
   end
 
   task :example do
@@ -9,8 +9,14 @@ namespace :build do
 end
 
 namespace :test do
-  task :package do
-    sh 'xcodebuild test -scheme Epoxy-Package -destination "platform=iOS Simulator,name=iPhone 8"'
+  task :package => ['test:unit', 'test:performance']
+
+  task :unit do
+    sh 'xcodebuild test -scheme Epoxy -destination "platform=iOS Simulator,name=iPhone 8"'
+  end
+
+  task :performance do
+    sh 'xcodebuild test -scheme PerformanceTests -destination "platform=iOS Simulator,name=iPhone 8"'
   end
 end
 

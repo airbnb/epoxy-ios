@@ -15,6 +15,7 @@ extension UIViewController {
   /// subsequent presentation.
   ///
   /// Conceptually similar `setSections(_:animated:)` for Epoxy models.
+  @nonobjc
   public func setPresentation(_ model: PresentationModel?, animated: Bool) {
     queue.enqueue(model, animated: animated, from: self)
   }

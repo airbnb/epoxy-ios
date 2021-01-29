@@ -4,6 +4,6 @@ Pod::Spec.new do |spec|
   configure(
     spec: spec,
     name: 'EpoxyBars',
-    summary: 'Declarative UI framework for fixed bar stacks',
+    summary: 'Declarative API for adding fixed top/bottom bar stacks to a UIViewController',
     local_deps: ['EpoxyCore'])
 end

@@ -4,6 +4,6 @@ Pod::Spec.new do |spec|
   configure(
     spec: spec,
     name: 'EpoxyCollectionView',
-    summary: 'Declarative UI framework for UICollectionView',
+    summary: 'Declarative API for driving the content of a UICollectionView',
     local_deps: ['EpoxyCore'])
 end

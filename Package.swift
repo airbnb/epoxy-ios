@@ -12,6 +12,7 @@ let package = Package(
     .library(name: "EpoxyCollectionView", targets: ["EpoxyCollectionView"]),
     .library(name: "EpoxyBars", targets: ["EpoxyBars"]),
     .library(name: "EpoxyNavigationController", targets: ["EpoxyNavigationController"]),
+    .library(name: "EpoxyPresentations", targets: ["EpoxyPresentations"]),
   ],
   dependencies: [
     .package(url: "https://github.com/Quick/Quick.git", .upToNextMajor(from: "3.0.0")),
@@ -25,11 +26,13 @@ let package = Package(
         "EpoxyCollectionView",
         "EpoxyBars",
         "EpoxyNavigationController",
+        "EpoxyPresentations",
       ]),
     .target(name: "EpoxyCore"),
     .target(name: "EpoxyCollectionView", dependencies: ["EpoxyCore"]),
     .target(name: "EpoxyBars", dependencies: ["EpoxyCore"]),
     .target(name: "EpoxyNavigationController", dependencies: ["EpoxyCore"]),
+    .target(name: "EpoxyPresentations", dependencies: ["EpoxyCore"]),
     .testTarget(name: "EpoxyTests", dependencies: ["Epoxy", "Quick", "Nimble"]),
     .testTarget(name: "PerformanceTests", dependencies: ["EpoxyCore"]),
   ])
