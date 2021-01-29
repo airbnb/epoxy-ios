@@ -16,13 +16,16 @@ To get started with Epoxy using [Cocoapods](https://cocoapods.org) add the follo
 pod 'Epoxy'
 ```
 
-Epoxy is separated into a number of distinct [podspecs](https://guides.cocoapods.org/syntax/podspec.html) for each [module](#modules) so you only have to include what you need.
+Epoxy is separated into [podspecs](https://guides.cocoapods.org/syntax/podspec.html) for each [module](#modules) so you only have to include what you need.
 
 ### Swift Package Manager (SPM)
 
-To install Epoxy using [Swift Package Manager](https://github.com/apple/swift-package-manager)  you can follow the [tutorial published by Apple](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) using the URL for the Epoxy repo with the current version.
+To install Epoxy using [Swift Package Manager](https://github.com/apple/swift-package-manager)  you can follow the [tutorial published by Apple](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) using the URL for the Epoxy repo with the current version:
 
-Epoxy is separated into a number of [library products](https://swift.org/package-manager/#products) for each [module](#modules) so you only have to include what you need.
+1. In Xcode, select “File” → “Swift Packages” → “Add Package Dependency”
+1. Enter https://github.com/airbnb/epoxy-ios.git
+
+Epoxy is separated [library products](https://swift.org/package-manager/#products) for each [module](#modules) so you only have to include what you need.
 
 ## Modules
 
