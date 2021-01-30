@@ -22,10 +22,18 @@ final class ProductViewController: CollectionViewController {
 
   // MARK: Private
 
+  private var showBuy = false {
+    didSet { setPresentation(presentation, animated: true) }
+  }
+
   private enum DataID {
-    case headerImage
-    case titleRow
-    case imageRow
+    enum Item {
+      case headerImage, titleRow, imageRow
+    }
+
+    enum Presentation {
+      case buy
+    }
   }
 
   private lazy var bottomBarInstaller = BottomBarInstaller(viewController: self, bars: bars)
@@ -34,15 +42,15 @@ final class ProductViewController: CollectionViewController {
     [
       SectionModel(items: [
         ImageMarquee.itemModel(
-          dataID: DataID.headerImage,
+          dataID: DataID.Item.headerImage,
           content: .init(imageURL: URL(string: "https://picsum.photos/id/350/500/500")!),
           style: .init(height: 250, contentMode: .scaleAspectFill)),
         TextRow.itemModel(
-          dataID: DataID.titleRow,
+          dataID: DataID.Item.titleRow,
           content: .init(title: "Our Great Product"),
           style: .large),
         ImageRow.itemModel(
-          dataID: DataID.imageRow,
+          dataID: DataID.Item.imageRow,
           content: .init(
             title: "Here is our exciting product",
             subtitle: "We think you should buy it.",
@@ -53,8 +61,39 @@ final class ProductViewController: CollectionViewController {
 
   private var bars: [BarModeling] {
     [
-      ButtonRow.barModel(content: .init(text: "Buy now")),
+      ButtonRow.barModel(content: .init(text: "Buy now"), behaviors: .init(didTap: { [weak self] in
+        self?.showBuy = true
+      })),
     ]
+  }
+
+  private var presentation: PresentationModel? {
+    guard showBuy else { return nil }
+
+    return PresentationModel(
+      dataID: DataID.Presentation.buy,
+      presentation: .system,
+      makeViewController: {
+        enum DataID {
+          case titleRow
+        }
+
+        return CollectionViewController(
+          layout: UICollectionViewCompositionalLayout.listNoDividers,
+          sections: [
+            SectionModel(items: [
+              TextRow.itemModel(
+                dataID: DataID.titleRow,
+                content: .init(
+                  title: "You bought it, congrats!",
+                  body: "Let's check out"),
+                style: .large),
+            ])
+          ])
+      },
+      dismiss: { [weak self] in
+        self?.showBuy = false
+      })
   }
 
 }

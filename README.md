@@ -19,6 +19,7 @@ Below are a few sample screens from the Airbnb app that we've built using Epoxy.
     * [EpoxyCollectionView](#epoxycollectionview)
     * [EpoxyBars](#epoxybars)
     * [EpoxyNavigationController](#epoxynavigationcontroller)
+    * [EpoxyPresentations](#epoxypresentations)
 * [Documentation and Tutorials](#documentation-and-tutorials)
 * [FAQ](#faq)
 * [Contributing](#contributing)
@@ -262,6 +263,63 @@ class FormNavigationController: NavigationController {
 <td>
 
 <img width="250" alt="Screenshot" src="docs/images/form_navigation_example.gif">
+
+</td>
+</tr>
+</table>
+
+### EpoxyPresentations
+
+`EpoxyPresentations` provides a declarative API for driving the modal presentation of a `UIViewController`.
+
+The following code example shows how you can use this to easily drive a feature that shows a modal when it first appears:
+
+<table>
+<tr><td> Source </td> <td> Result </td></tr>
+<tr>
+<td>
+
+```swift
+class PresentationViewController: UIViewController {
+  override func viewDidAppear(_ animated: Bool) {
+    super.viewDidAppear(animated)
+    setPresentation(presentation, animated: true)
+  }
+
+  private enum DataID {
+    case detail
+  }
+
+  private var showDetail = true {
+    didSet {
+      setPresentation(presentation, animated: true)
+    }
+  }
+
+  private var presentation: PresentationModel? {
+    guard showDetail else { return nil }
+
+    return PresentationModel(
+      dataID: DataID.detail,
+      presentation: .system,
+      makeViewController: { [weak self] in
+        DetailViewController(didTapDismiss: {
+          // Handle tapping the dismiss button:
+          self?.showDetail = false
+        })
+      },
+      dismiss: { [weak self] in
+        // Or swiping down the sheet:
+        self?.showDetail = false
+      })
+  }
+}
+```
+
+</td>
+<td>
+
+<img width="250" alt="Screenshot" src="docs/images/modal_example.gif">
 
 </td>
 </tr>

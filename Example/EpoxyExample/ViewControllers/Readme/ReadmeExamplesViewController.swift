@@ -7,7 +7,7 @@ import UIKit
 // MARK: - ReadmeExample
 
 enum ReadmeExample: CaseIterable {
-  case tapMe, counter, bottomButton, formNavigation
+  case tapMe, counter, bottomButton, formNavigation, modalPresentation
 
   // MARK: Internal
 
@@ -21,6 +21,8 @@ enum ReadmeExample: CaseIterable {
       return "Bottom button"
     case .formNavigation:
       return "Form Navigation"
+    case .modalPresentation:
+      return "Modal Presentation"
     }
   }
 
@@ -32,6 +34,8 @@ enum ReadmeExample: CaseIterable {
       return "EpoxyBars"
     case .formNavigation:
       return "EpoxyNavigationController"
+    case .modalPresentation:
+      return "EpoxyPresentations"
     }
   }
 
@@ -45,6 +49,8 @@ enum ReadmeExample: CaseIterable {
       return BottomButtonViewController()
     case .formNavigation:
       return FormNavigationController()
+    case .modalPresentation:
+      return PresentationViewController()
     }
   }
 

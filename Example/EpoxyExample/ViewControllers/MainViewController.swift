@@ -18,11 +18,11 @@ final class MainViewController: NavigationController {
   // MARK: Internal
 
   enum Example: CaseIterable {
+    case readme
     case highlightAndSelection
     case shuffle
     case customSelfSizing
     case product
-    case readme
     case flowLayout
   }
 
