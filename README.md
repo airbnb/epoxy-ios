@@ -157,6 +157,8 @@ class CounterViewController: CollectionViewController {
 </tr>
 </table>
 
+You can learn more about `EpoxyCollectionView` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyCollectionView).
+
 ### EpoxyBars
 
 `EpoxyBars` provides a declarative API for rendering fixed top, fixed bottom, or [input accessory](https://developer.apple.com/documentation/uikit/uiresponder/1621119-inputaccessoryview) bar stacks in a `UIViewController`.
@@ -199,6 +201,8 @@ class BottomButtonViewController: UIViewController {
 </td>
 </tr>
 </table>
+
+You can learn more about `EpoxyBars` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyBars).
 
 ### EpoxyNavigationController
 
@@ -268,6 +272,8 @@ class FormNavigationController: NavigationController {
 </tr>
 </table>
 
+You can learn more about `EpoxyNavigationController` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyNavigationController).
+
 ### EpoxyPresentations
 
 `EpoxyPresentations` provides a declarative API for driving the modal presentation of a `UIViewController`.
@@ -325,11 +331,13 @@ class PresentationViewController: UIViewController {
 </tr>
 </table>
 
+You can learn more about `EpoxyPresentations` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyPresentations).
+
 ## Documentation and Tutorials
 
 For full documentation and step-by-step tutorials please check the [wiki](https://github.com/airbnb/epoxy-ios/wiki).
 
-There's also a full sample app with a lot of examples that you can either run via the `EpoxyExample` scheme in `Epoxy.xcworkspace` or just browse its [source](https://github.com/airbnb/epoxy-ios/tree/master/Example).
+There's also a full sample app with a lot of examples that you can either run via the `EpoxyExample` scheme in `Epoxy.xcworkspace` or browse its [source](https://github.com/airbnb/epoxy-ios/tree/master/Example).
 
 If you still have questions, feel free to create a new [issue](https://github.com/airbnb/epoxy-ios/issues).
 
