@@ -55,12 +55,12 @@ Epoxy has a modular architecture so you only have to include what you need for y
 
 | Module | Description |
 | ------ | ----------- |
-| `Epoxy` | Includes all of the below modules in a single import statement |
+| [`Epoxy`](https://github.com/airbnb/epoxy-ios/blob/master/Sources/Epoxy/Exports.swift) | Includes all of the below modules in a single import statement |
 | [`EpoxyCollectionView`](#EpoxyCollectionView) | Declarative API for driving the content of a [`UICollectionView`](https://developer.apple.com/documentation/uikit/uicollectionview) |
 | [`EpoxyNavigationController`](#EpoxyNavigationController) | Declarative API for driving the navigation stack of a [`UINavigationController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller) |
 | [`EpoxyPresentations`](#EpoxyPresentations) | Declarative API for driving the modal presentations of a [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller) |
 | [`EpoxyBars`](#EpoxyBars) | Declarative API for adding fixed top/bottom bar stacks to a [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller) |
-| `EpoxyCore` | Foundational APIs that are used to build all Epoxy declarative UI APIs |
+| [`EpoxyCore`](https://github.com/airbnb/epoxy-ios/wiki/EpoxyCore) | Foundational APIs that are used to build all Epoxy declarative UI APIs |
 
 ## Getting Started
 
@@ -68,7 +68,7 @@ Epoxy has a modular architecture so you only have to include what you need for y
 
 `EpoxyCollectionView` provides a declarative API for driving the content of a `UICollectionView`. `CollectionViewController` is a subclassable `UIViewController` that lets you easily spin up a `UICollectionView`-backed view controller with a declarative API.
 
-The following code samples will render a single cell in a `UICollectionView` with a `TextRow` component rendered in that cell. Note that the `TextRow` component is a simple `UIView` containing two labels, and conforms to the [`EpoxyableView`](https://github.com/airbnb/epoxy-ios/blob/master/Sources/EpoxyCore/Views/EpoxyableView.swift) protocol.
+The following code samples will render a single cell in a `UICollectionView` with a `TextRow` component rendered in that cell. `TextRow` is a simple `UIView` containing two labels that conforms to the [`EpoxyableView`](https://github.com/airbnb/epoxy-ios/wiki/EpoxyCore#views) protocol.
 
 You can either instantiate a `CollectionViewController` instance directly with sections, e.g. this view controller with a selectable row:
 
@@ -163,7 +163,7 @@ You can learn more about `EpoxyCollectionView` in its [wiki entry](https://githu
 
 `EpoxyBars` provides a declarative API for rendering fixed top, fixed bottom, or [input accessory](https://developer.apple.com/documentation/uikit/uiresponder/1621119-inputaccessoryview) bar stacks in a `UIViewController`.
 
-The following code example will render a `ButtonRow` component fixed to the bottom of the `UIViewController`'s view. Note that `ButtonRow` is a simple `UIView` component that contains a single `UIButton` constrained to the margins of the superview that conforms to the `EpoxyableView` protocol:
+The following code example will render a `ButtonRow` component fixed to the bottom of the `UIViewController`'s view. `ButtonRow` is a simple `UIView` component that contains a single `UIButton` constrained to the margins of the superview that conforms to the [`EpoxyableView`](https://github.com/airbnb/epoxy-ios/wiki/EpoxyCore#views) protocol:
 
 <table>
 <tr><td> Source </td> <td> Result </td></tr>
