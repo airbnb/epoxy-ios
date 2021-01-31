@@ -340,7 +340,7 @@ If you still have questions, feel free to create a new [issue](https://github.co
 
 ## Contributing
 
-Pull requests are welcome! We'd love help improving this library. Feel free to browse through open [issues](https://github.com/airbnb/epoxy-ios/issues) to look for things that need work. If you have a feature request or bug, please open a new issue so we can track it.
+Pull requests are welcome! We'd love help improving this library. Feel free to browse through open [issues](https://github.com/airbnb/epoxy-ios/issues) to look for things that need work. If you have a feature request or bug, please open a new issue so we can track it. Contributors are expected to follow the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
 ## License
 
