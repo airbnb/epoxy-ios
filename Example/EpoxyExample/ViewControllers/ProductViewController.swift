@@ -22,10 +22,6 @@ final class ProductViewController: CollectionViewController {
 
   // MARK: Private
 
-  private var showBuy = false {
-    didSet { setPresentation(presentation, animated: true) }
-  }
-
   private enum DataID {
     enum Item {
       case headerImage, titleRow, imageRow
@@ -37,6 +33,10 @@ final class ProductViewController: CollectionViewController {
   }
 
   private lazy var bottomBarInstaller = BottomBarInstaller(viewController: self, bars: bars)
+
+  private var showBuy = false {
+    didSet { setPresentation(presentation, animated: true) }
+  }
 
   private var sections: [SectionModel] {
     [
@@ -88,7 +88,7 @@ final class ProductViewController: CollectionViewController {
                   title: "You bought it, congrats!",
                   body: "Let's check out"),
                 style: .large),
-            ])
+            ]),
           ])
       },
       dismiss: { [weak self] in
