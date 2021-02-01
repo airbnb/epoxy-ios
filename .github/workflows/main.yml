@@ -31,3 +31,9 @@ jobs:
       - uses: actions/checkout@v2
       - name: Lint Swift
         run: brew install mint && bundle install && bundle exec rake lint:swift
+  lint-podspec:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Lint Podspec
+        run: bundle install && bundle exec rake lint:podspec
