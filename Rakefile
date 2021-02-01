@@ -12,7 +12,7 @@ namespace :test do
   task :package => ['test:unit', 'test:performance']
 
   task :unit do
-    sh 'xcodebuild test -scheme Epoxy -destination "platform=iOS Simulator,name=iPhone 8"'
+    sh 'xcodebuild test -scheme EpoxyTests -destination "platform=iOS Simulator,name=iPhone 8"'
   end
 
   task :performance do
