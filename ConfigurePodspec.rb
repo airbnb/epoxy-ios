@@ -11,7 +11,7 @@ def configure(spec:, name:, summary:, local_deps: [])
   spec.license = 'Apache License, Version 2.0'
   spec.homepage = 'https://github.com/airbnb/epoxy-ios'
   spec.authors = 'Airbnb'
-  spec.source = { git: 'https://github.com/airbnb/epoxy-ios', tag: version }
+  spec.source = { git: 'https://github.com/airbnb/epoxy-ios.git', tag: version }
   spec.source_files = "Sources/#{name}/**/*.swift"
   spec.ios.deployment_target = '13.0'
   spec.swift_versions = ['5.3']
