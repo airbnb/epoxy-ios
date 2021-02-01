@@ -70,7 +70,7 @@ GEM
     nap (1.1.0)
     netrc (0.11.0)
     public_suffix (4.0.6)
-    rake (10.4.2)
+    rake (13.0.3)
     ruby-macho (1.4.0)
     thread_safe (0.3.6)
     typhoeus (1.4.0)
@@ -89,7 +89,7 @@ PLATFORMS
 
 DEPENDENCIES
   cocoapods (~> 1.10.0)!
-  rake!
+  rake (>= 12.3.3)!
 
 BUNDLED WITH
    2.1.4
