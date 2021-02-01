@@ -1,5 +1,10 @@
 <img  width="300" alt="Epoxy logo" src="docs/images/logo.svg" >
 
+[![Build Status](https://github.com/airbnb/epoxy-ios/workflows/CI/badge.svg)](https://github.com/airbnb/epoxy-ios/actions)
+[![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
+[![Version](https://img.shields.io/cocoapods/v/Epoxy.svg)](https://cocoapods.org/pods/Epoxy)
+[![Platform](https://img.shields.io/badge/platform-ios-lightgrey.svg?style=flat)](https://cocoapods.org/pods/Epoxy)
+
 Epoxy is a suite of declarative UI APIs for building [UIKit](https://developer.apple.com/documentation/uikit) applications in Swift. Epoxy is inspired and influenced by the wonderful [Epoxy framework on Android](https://github.com/airbnb/epoxy), as well as other declarative UI frameworks in Swift such as [SwiftUI](https://developer.apple.com/documentation/swiftui).
 
 Epoxy was developed at [Airbnb](https://www.airbnb.com/) and powers thousands of screens in apps that are shipped to millions of users. It has been developed and refined for years by [dozens of contributors](https://github.com/airbnb/epoxy-ios/graphs/contributors).
