@@ -33,6 +33,17 @@ namespace :lint do
   end
 end
 
+namespace :publish do
+  task :podspec do
+    # Topologically sorted by dependencies
+    podspecs = ['EpoxyCore', 'EpoxyCollectionView', 'EpoxyBars', 'EpoxyNavigationController', 'EpoxyPresentations', 'Epoxy']
+
+    for podspec in podspecs
+      sh "bundle exec pod trunk push #{podspec}.podspec --synchronous"
+    end
+  end
+end
+
 namespace :format do
   task :swift => 'bootstrap:mint' do
     sh 'mint run SwiftLint autocorrect Sources Example --config script/lint/swiftlint.yml'
