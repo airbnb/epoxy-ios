@@ -7,7 +7,7 @@
 - [ ] Built and ran on a device
 
 ## Pull request checklist
-*All items in this checklist must be completed before a pull request will be reviewed*
+*All items in this checklist must be completed before a pull request will be reviewed.*
 
 - [ ] Risky changes have been put behind a feature flag, e.g. `CollectionViewConfiguration`
 - [ ] Added a [`CHANGELOG.md` entry](https://keepachangelog.com/en/1.0.0/) in the "Unreleased" section for any library changes
