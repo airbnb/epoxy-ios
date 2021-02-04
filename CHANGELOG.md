@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.1.0...HEAD)
 
+### Changed
+- Updated public let properties of public structs with memberwise initializers to be public var.
+
 ## [0.1.0](https://github.com/airbnb/epoxy-ios/compare/171f63da...0.1.0) - 2021-02-01
 
 ### Added
