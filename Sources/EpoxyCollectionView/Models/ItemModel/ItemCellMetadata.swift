@@ -16,7 +16,7 @@ public struct ItemCellMetadata {
 
   // MARK: Public
 
-  public let traitCollection: UITraitCollection
-  public let state: ItemCellState
-  public let animated: Bool
+  public var traitCollection: UITraitCollection
+  public var state: ItemCellState
+  public var animated: Bool
 }
