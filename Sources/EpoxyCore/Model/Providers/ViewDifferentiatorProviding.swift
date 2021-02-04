@@ -28,6 +28,6 @@ public struct ViewDifferentiator: Hashable {
 
   // MARK: Public
 
-  public let viewTypeDescription: String
-  public let styleID: AnyHashable?
+  public var viewTypeDescription: String
+  public var styleID: AnyHashable?
 }

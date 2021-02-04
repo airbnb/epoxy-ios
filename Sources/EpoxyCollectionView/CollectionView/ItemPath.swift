@@ -28,9 +28,9 @@ public struct ItemPath: Hashable {
   }
 
   /// The item identified by the `dataID` on its corresponding `ItemModel`.
-  public let itemDataID: AnyHashable
+  public var itemDataID: AnyHashable
 
   /// The section in which the item referenced by this path located.
-  public let section: Section
+  public var section: Section
 
 }
