@@ -39,10 +39,6 @@ extension AnyBarModel: BarModeling {
 
 extension AnyBarModel: DataIDProviding {}
 
-// MARK: DidSelectProviding
-
-extension AnyBarModel: DidSelectProviding {}
-
 // MARK: Diffable
 
 extension AnyBarModel: Diffable {

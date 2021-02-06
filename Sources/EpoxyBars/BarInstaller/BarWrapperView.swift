@@ -59,11 +59,6 @@ public final class BarWrapperView: UIView {
     setModel(model?.internalBarModel, animated: animated)
   }
 
-  public func handleSelection(animated: Bool) {
-    guard let view = view else { return }
-    _model?.didSelect(view, traitCollection: traitCollection, animated: animated)
-  }
-
   // MARK: UIView
 
   public override func layoutSubviews() {
@@ -104,6 +99,13 @@ public final class BarWrapperView: UIView {
   public override func layoutMarginsDidChange() {
     super.layoutMarginsDidChange()
     setNeedsLayout()
+  }
+
+  // MARK: Internal
+
+  func handleSelection(animated: Bool) {
+    guard let view = view, _model?.isSelectable == true else { return }
+    _model?.didSelect(view, traitCollection: traitCollection, animated: animated)
   }
 
   // MARK: Private

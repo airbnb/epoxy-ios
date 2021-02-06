@@ -159,6 +159,7 @@ extension BarModel: WillDisplayProviding {}
 
 // MARK: DidSelectProviding
 
+/// This behavior is only supported within `SelectableStackView`.
 extension BarModel: DidSelectProviding {}
 
 // MARK: BarModeling
@@ -170,6 +171,10 @@ extension BarModel: BarModeling {
 // MARK: InternalBarModeling
 
 extension BarModel: InternalBarModeling {
+  var isSelectable: Bool {
+    didSelect != nil
+  }
+
   func makeConfiguredView(traitCollection: UITraitCollection) -> UIView {
     let view = makeView()
     let context = CallbackContext(view: view, traitCollection: traitCollection, animated: false)
@@ -197,6 +202,7 @@ extension BarModel: InternalBarModeling {
   func didSelect(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
     didSelect?(.init(view: castOrAssert(view), traitCollection: traitCollection, animated: animated))
   }
+
 }
 
 // MARK: InternalBarCoordinating

@@ -7,7 +7,7 @@ import UIKit
 // MARK: - SelectableStackView
 
 /// A stack of arbitrary bar views that can handle user selection.
-public final class SelectableStackView: BarStackView, StyledView {
+public final class SelectableStackView: BarStackView, EpoxyableView {
 
   // MARK: Lifecycle
 
@@ -37,6 +37,11 @@ public final class SelectableStackView: BarStackView, StyledView {
 
   public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesMoved(touches, with: event)
+
+    /// TODO: Potentially suppport highlighting another bar that's currently beneath the touch
+    /// (in the same style as `UIAlertController.Style.actionsheet`.)
+    /// This would involve iterating through the wrappers to find the one contains the current point.
+
     guard
       let wrapper = selectedWrapper,
       let location = touches.first?.location(in: self),
@@ -57,6 +62,13 @@ public final class SelectableStackView: BarStackView, StyledView {
     updateHighlighting()
   }
 
+  public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesCancelled(touches, with: event)
+
+    selectedWrapper = nil
+    updateHighlighting()
+  }
+
   // MARK: Private
 
   /// The style to be used.
@@ -70,7 +82,7 @@ public final class SelectableStackView: BarStackView, StyledView {
     for wrapper in wrappers {
       wrapper.view?.backgroundColor = (selectedWrapper === wrapper)
         ? style.selectedBackgroundColor
-        : .clear
+        : nil
     }
   }
 }
@@ -83,9 +95,9 @@ extension SelectableStackView {
   public struct Style: Hashable {
 
     /// The selected background color to apply.
-    var selectedBackgroundColor: UIColor
+    var selectedBackgroundColor: UIColor?
 
-    public init(selectedBackgroundColor: UIColor) {
+    public init(selectedBackgroundColor: UIColor?) {
       self.selectedBackgroundColor = selectedBackgroundColor
     }
   }
@@ -93,7 +105,7 @@ extension SelectableStackView {
 
 // MARK: ContentConfigurableView
 
-extension SelectableStackView: ContentConfigurableView {
+extension SelectableStackView {
 
   /// The content of the stack view.
   public struct Content: Equatable {
@@ -108,6 +120,8 @@ extension SelectableStackView: ContentConfigurableView {
     }
 
     public static func ==(lhs: Self, rhs: Self) -> Bool {
+      // The content should never be equal since we need the `models`'s behavior to be updated on
+      // every content change.
       false
     }
   }

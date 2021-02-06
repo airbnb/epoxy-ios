@@ -153,7 +153,7 @@ public class BarStackView: UIStackView {
   // MARK: Internal
 
   /// The current bar wrappers ordered from top to bottom.
-  var wrappers = [BarWrapperView]()
+  private(set) var wrappers = [BarWrapperView]()
 
   // MARK: Private
 

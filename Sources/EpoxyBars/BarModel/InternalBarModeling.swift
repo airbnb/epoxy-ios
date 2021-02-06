@@ -27,6 +27,9 @@ protocol InternalBarModeling: Diffable, EpoxyModeled {
 
   /// Should inform consumers that this bar model has been selected.
   func didSelect(_ view: UIView, traitCollection: UITraitCollection, animated: Bool)
+
+  /// Whether the bar model should be selectable.
+  var isSelectable: Bool { get }
 }
 
 // MARK: - InternalBarCoordinating
