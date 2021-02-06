@@ -157,6 +157,10 @@ extension BarModel: StyleIDProviding {}
 
 extension BarModel: WillDisplayProviding {}
 
+// MARK: DidSelectProviding
+
+extension BarModel: DidSelectProviding {}
+
 // MARK: BarModeling
 
 extension BarModel: BarModeling {
@@ -188,6 +192,10 @@ extension BarModel: InternalBarModeling {
 
   func didDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
     didDisplay?(.init(view: castOrAssert(view), traitCollection: traitCollection, animated: animated))
+  }
+
+  func didSelect(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+    didSelect?(.init(view: castOrAssert(view), traitCollection: traitCollection, animated: animated))
   }
 }
 

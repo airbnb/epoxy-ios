@@ -59,6 +59,11 @@ public final class BarWrapperView: UIView {
     setModel(model?.internalBarModel, animated: animated)
   }
 
+  public func handleSelection(animated: Bool) {
+    guard let view = view else { return }
+    _model?.didSelect(view, traitCollection: traitCollection, animated: animated)
+  }
+
   // MARK: UIView
 
   public override func layoutSubviews() {

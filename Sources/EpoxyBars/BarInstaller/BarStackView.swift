@@ -150,6 +150,11 @@ public class BarStackView: UIStackView {
     }
   }
 
+  // MARK: Internal
+
+  /// The current bar wrappers ordered from top to bottom.
+  var wrappers = [BarWrapperView]()
+
   // MARK: Private
 
   // An empty subview to ensure this stack view doesn't size subviews weirdly (e.g. massive width
@@ -163,9 +168,6 @@ public class BarStackView: UIStackView {
 
   /// A closure that's called after a bar coordinator has been created.
   private let didUpdateCoordinator: ((_ coordinator: AnyBarCoordinating) -> Void)?
-
-  /// The current bar wrappers ordered from top to bottom.
-  private var wrappers = [BarWrapperView]()
 
   /// Wrappers ordered by their order in the Z axis (from highest to lowest)
   private var zOrderedWrappers: [BarWrapperView] {
