@@ -16,10 +16,12 @@ public final class BarWrapperView: UIView {
 
   init(
     zOrder: BarStackView.ZOrder,
+    selectedBackgroundColor: UIColor?,
     willDisplayBar: ((_ bar: UIView) -> Void)? = nil,
     didUpdateCoordinator: ((AnyBarCoordinating) -> Void)? = nil)
   {
     self.zOrder = zOrder
+    self.selectedBackgroundColor = selectedBackgroundColor
     self.willDisplayBar = willDisplayBar
     self.didUpdateCoordinator = didUpdateCoordinator
     super.init(frame: .zero)
@@ -103,6 +105,14 @@ public final class BarWrapperView: UIView {
 
   // MARK: Internal
 
+  func updateSelection(isSelected: Bool) {
+    if isSelected && _model?.isSelectable == true {
+      backgroundColor = selectedBackgroundColor
+    } else {
+      backgroundColor = nil
+    }
+  }
+
   func handleSelection(animated: Bool) {
     guard let view = view, _model?.isSelectable == true else { return }
     _model?.didSelect(view, traitCollection: traitCollection, animated: animated)
@@ -111,6 +121,8 @@ public final class BarWrapperView: UIView {
   // MARK: Private
 
   private let zOrder: BarStackView.ZOrder
+
+  private let selectedBackgroundColor: UIColor?
 
   /// The current bar model.
   private var _model: InternalBarModeling?

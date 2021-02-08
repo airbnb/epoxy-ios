@@ -159,7 +159,6 @@ extension BarModel: WillDisplayProviding {}
 
 // MARK: DidSelectProviding
 
-/// This behavior is only supported within `SelectableStackView`.
 extension BarModel: DidSelectProviding {}
 
 // MARK: BarModeling

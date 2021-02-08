@@ -4,32 +4,34 @@
 import EpoxyCore
 import UIKit
 
+// MARK: - BarStackView
+
 /// A stack of arbitrary bar views, typically fixed to either the top or bottom of a view
 /// controller.
-public class BarStackView: UIStackView {
+public class BarStackView: UIStackView, EpoxyableView {
 
   // MARK: Lifecycle
 
   /// - Parameters:
-  ///   - zOrder: The order that the bars are arranged on the Z axis.
+  ///   - style: The style to apply with this view.
+  required public init(style: Style) {
+    self.style = style
+    didUpdateCoordinator = nil
+    super.init(frame: .zero)
+    setup()
+  }
+
+  /// - Parameters:
+  ///   - style: The style to apply with this view.
   ///   - didUpdateCoordinator: A closure that's called after a bar coordinator has been created.
   public init(
-    zOrder: ZOrder,
+    style: Style,
     didUpdateCoordinator: ((AnyBarCoordinating) -> Void)? = nil)
   {
-    self.zOrder = zOrder
+    self.style = style
     self.didUpdateCoordinator = didUpdateCoordinator
     super.init(frame: .zero)
-    translatesAutoresizingMaskIntoConstraints = false
-    layoutMargins = .zero
-    insetsLayoutMarginsFromSafeArea = false
-    // Ensure that each bar is focused one after another rather than jumping to the content below if
-    // it extends beneath the bar stack.
-    shouldGroupAccessibilityChildren = true
-    axis = .vertical
-    // We need to have at least one arranged subview at all times otherwise this stack view sizes
-    // subviews weirdly (e.g. massive width values).
-    addArrangedSubview(Spacer())
+    setup()
   }
 
   @available(*, unavailable)
@@ -84,6 +86,55 @@ public class BarStackView: UIStackView {
 
     // This view shouldn't recieve any touches
     return nil
+  }
+
+  public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesBegan(touches, with: event)
+    guard let location = touches.first?.location(in: self) else { return }
+
+    for wrapper in wrappers {
+      guard let converted = wrapper.view?.convert(location, from: self) else { continue }
+      if wrapper.view?.point(inside: converted, with: event) == true {
+        selectedWrapper = wrapper
+        break
+      }
+    }
+
+    updateHighlighting()
+  }
+
+  public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesMoved(touches, with: event)
+
+    /// TODO: Potentially suppport highlighting another bar that's currently beneath the touch
+    /// (in the same style as `UIAlertController.Style.actionsheet`.)
+    /// This would involve iterating through the wrappers to find the one contains the current point.
+
+    guard
+      let wrapper = selectedWrapper,
+      let location = touches.first?.location(in: self),
+      let converted = wrapper.view?.convert(location, from: self)
+    else { return }
+
+    if wrapper.view?.point(inside: converted, with: event) == false {
+      selectedWrapper = nil
+      updateHighlighting()
+    }
+  }
+
+  public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesEnded(touches, with: event)
+
+    selectedWrapper?.handleSelection(animated: false)
+    selectedWrapper = nil
+    updateHighlighting()
+  }
+
+  public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    super.touchesCancelled(touches, with: event)
+
+    selectedWrapper = nil
+    updateHighlighting()
   }
 
   /// Updates the contents of this stack to the stack modeled by the given model array, inserting,
@@ -150,10 +201,6 @@ public class BarStackView: UIStackView {
     }
   }
 
-  // MARK: Internal
-
-  /// The current bar wrappers ordered from top to bottom.
-  private(set) var wrappers = [BarWrapperView]()
 
   // MARK: Private
 
@@ -163,15 +210,21 @@ public class BarStackView: UIStackView {
     override class var layerClass: AnyClass { CATransformLayer.self }
   }
 
-  // The direction that the bars are Z stacked in.
-  private let zOrder: ZOrder
+  // The style to apply in this view.s
+  private let style: Style
 
   /// A closure that's called after a bar coordinator has been created.
   private let didUpdateCoordinator: ((_ coordinator: AnyBarCoordinating) -> Void)?
 
+  /// The current bar wrappers ordered from top to bottom.
+  private var wrappers = [BarWrapperView]()
+
+  /// The wrapper of the model being selected.
+  private var selectedWrapper: BarWrapperView?
+
   /// Wrappers ordered by their order in the Z axis (from highest to lowest)
   private var zOrderedWrappers: [BarWrapperView] {
-    switch zOrder {
+    switch style.zOrder {
     case .topToBottom:
       return wrappers
     case .bottomToTop:
@@ -180,12 +233,25 @@ public class BarStackView: UIStackView {
   }
 
   private var primaryWrapper: BarWrapperView? {
-    switch zOrder {
+    switch style.zOrder {
     case .topToBottom:
       return wrappers.first
     case .bottomToTop:
       return wrappers.last
     }
+  }
+
+  private func setup() {
+    translatesAutoresizingMaskIntoConstraints = false
+    layoutMargins = .zero
+    insetsLayoutMarginsFromSafeArea = false
+    // Ensure that each bar is focused one after another rather than jumping to the content below if
+    // it extends beneath the bar stack.
+    shouldGroupAccessibilityChildren = true
+    axis = .vertical
+    // We need to have at least one arranged subview at all times otherwise this stack view sizes
+    // subviews weirdly (e.g. massive width values).
+    addArrangedSubview(Spacer())
   }
 
   /// Updates the `wrappers` and `models` to reflect the given `models`, returning the wrappers that
@@ -229,7 +295,8 @@ public class BarStackView: UIStackView {
 
   private func makeWrapper(_ model: BarModeling) -> BarWrapperView {
     let wrapper = BarWrapperView(
-      zOrder: zOrder,
+      zOrder: style.zOrder,
+      selectedBackgroundColor: style.selectedBackgroundColor,
       willDisplayBar: { [weak self] bar in
         self?.handleWillDisplayBar(bar)
       },
@@ -258,7 +325,7 @@ public class BarStackView: UIStackView {
   // Transforms the added wrapper views either beneath the next visible wrapper or below the bottom
   // of this container if none are visible so that they animatedly slide up into view in a stack.
   private func transformAddedWrappers() {
-    switch zOrder {
+    switch style.zOrder {
     case .bottomToTop:
       for (index, wrapper) in wrappers.enumerated() where wrapper.isHidden {
         let nextVisible = wrappers[index...].first { !$0.isHidden }
@@ -280,7 +347,7 @@ public class BarStackView: UIStackView {
   /// Transforms the removed wrapper views to make it appear like they're sliding underneath
   /// previous bars or the edge of the screen.
   private func transformRemovedWrappers(_ wrappers: [BarWrapperView]) {
-    switch zOrder {
+    switch style.zOrder {
     case .topToBottom:
       // This isn't a perfect heuristic, but it's simple enough to work for what we need it to do
       // for the time being. If you want to improve the animations this could be reworked.
@@ -318,4 +385,76 @@ public class BarStackView: UIStackView {
     }())
   }
 
+  /// Update the background of wrappers according to the current selection.
+  private func updateHighlighting() {
+    for wrapper in wrappers {
+      wrapper.updateSelection(isSelected: selectedWrapper === wrapper)
+    }
+  }
+
+}
+
+// MARK: - StyledView
+
+extension BarStackView {
+
+  /// The style to be used.
+  public struct Style: Hashable {
+
+    // MARK: Lifecycle
+
+    public init(
+      selectedBackgroundColor: UIColor? = nil,
+      zOrder: BarStackView.ZOrder = .topToBottom)
+    {
+      self.selectedBackgroundColor = selectedBackgroundColor
+      self.zOrder = zOrder
+    }
+
+    // MARK: Internal
+
+    static var topToBottom: Self {
+      .init(zOrder: .topToBottom)
+    }
+
+    static var bottomToTop: Self {
+      .init(zOrder: .bottomToTop)
+    }
+
+    /// The selected background color to apply.
+    var selectedBackgroundColor: UIColor?
+
+    /// The order that the bars are arranged on the Z axis.
+    var zOrder: BarStackView.ZOrder
+
+  }
+}
+
+// MARK: ContentConfigurableView
+
+extension BarStackView {
+
+  /// The content of the stack view.
+  public struct Content: Equatable {
+
+    /// The bar models to be rendered.
+    public let models: [BarModeling]
+
+    /// - Parameters:
+    ///   - models: The bar models to be rendered.
+    public init(models: [BarModeling]) {
+      self.models = models
+    }
+
+    public static func ==(lhs: Self, rhs: Self) -> Bool {
+      // The content should never be equal since we need the `models`'s behavior to be updated on
+      // every content change.
+      false
+    }
+  }
+
+  /// Update the content of the stack view.
+  public func setContent(_ content: Content, animated: Bool) {
+    setBars(content.models, animated: animated)
+  }
 }
