@@ -105,6 +105,10 @@ public final class BarWrapperView: UIView {
 
   // MARK: Internal
 
+  var canHighlight: Bool {
+    _model?.isSelectable ?? false
+  }
+
   func updateSelection(isSelected: Bool) {
     if isSelected && _model?.isSelectable == true {
       backgroundColor = selectedBackgroundColor

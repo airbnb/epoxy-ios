@@ -7,13 +7,13 @@ import UIKit
 // MARK: - BarStackView
 
 /// A stack of arbitrary bar views, typically fixed to either the top or bottom of a view
-/// controller.
+/// controller. It can also be used as a stack view that supports selection.
 public class BarStackView: UIStackView, EpoxyableView {
 
   // MARK: Lifecycle
 
   /// - Parameters:
-  ///   - style: The style to apply with this view.
+  ///   - style: The style of this view.
   required public init(style: Style) {
     self.style = style
     didUpdateCoordinator = nil
@@ -22,7 +22,7 @@ public class BarStackView: UIStackView, EpoxyableView {
   }
 
   /// - Parameters:
-  ///   - style: The style to apply with this view.
+  ///   - style: The style of this view.
   ///   - didUpdateCoordinator: A closure that's called after a bar coordinator has been created.
   public init(
     style: Style,
@@ -93,7 +93,7 @@ public class BarStackView: UIStackView, EpoxyableView {
     guard let location = touches.first?.location(in: self) else { return }
 
     for wrapper in wrappers {
-      guard let converted = wrapper.view?.convert(location, from: self) else { continue }
+      guard wrapper.canHighlight, let converted = wrapper.view?.convert(location, from: self) else { continue }
       if wrapper.view?.point(inside: converted, with: event) == true {
         selectedWrapper = wrapper
         break
@@ -201,7 +201,6 @@ public class BarStackView: UIStackView, EpoxyableView {
     }
   }
 
-
   // MARK: Private
 
   // An empty subview to ensure this stack view doesn't size subviews weirdly (e.g. massive width
@@ -210,7 +209,7 @@ public class BarStackView: UIStackView, EpoxyableView {
     override class var layerClass: AnyClass { CATransformLayer.self }
   }
 
-  // The style to apply in this view.s
+  // The style of this view.
   private let style: Style
 
   /// A closure that's called after a bar coordinator has been created.
@@ -219,7 +218,7 @@ public class BarStackView: UIStackView, EpoxyableView {
   /// The current bar wrappers ordered from top to bottom.
   private var wrappers = [BarWrapperView]()
 
-  /// The wrapper of the model being selected.
+  /// The wrapper of the model being selected or highlighted.
   private var selectedWrapper: BarWrapperView?
 
   /// Wrappers ordered by their order in the Z axis (from highest to lowest)
@@ -394,7 +393,7 @@ public class BarStackView: UIStackView, EpoxyableView {
 
 }
 
-// MARK: - StyledView
+// MARK: StyledView
 
 extension BarStackView {
 
@@ -411,6 +410,14 @@ extension BarStackView {
       self.zOrder = zOrder
     }
 
+    // MARK: Public
+
+    /// The selected background color to apply.
+    public var selectedBackgroundColor: UIColor?
+
+    /// The order that the bars are arranged on the Z axis.
+    public var zOrder: BarStackView.ZOrder
+
     // MARK: Internal
 
     static var topToBottom: Self {
@@ -420,12 +427,6 @@ extension BarStackView {
     static var bottomToTop: Self {
       .init(zOrder: .bottomToTop)
     }
-
-    /// The selected background color to apply.
-    var selectedBackgroundColor: UIColor?
-
-    /// The order that the bars are arranged on the Z axis.
-    var zOrder: BarStackView.ZOrder
 
   }
 }
