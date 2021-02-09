@@ -40,6 +40,7 @@ final class CardContainer<ContentView: EpoxyableView>: UIView, EpoxyableView {
       self.card = card
     }
 
+    // swiftlint:disable implicitly_unwrapped_optional
     fileprivate var content: ContentView.Style!
     fileprivate var card: CardStyle
   }
