@@ -4,7 +4,7 @@
 import Epoxy
 import UIKit
 
-final class HighlightAndSelectionViewController: CollectionViewController {
+final class CompositionalLayoutViewController: CollectionViewController {
 
   // MARK: Lifecycle
 

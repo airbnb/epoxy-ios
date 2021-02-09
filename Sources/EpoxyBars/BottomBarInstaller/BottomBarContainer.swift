@@ -14,13 +14,14 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
 
   // MARK: Lifecycle
 
-  public init(didUpdateCoordinator: ((AnyBarCoordinating) -> Void)?) {
-    super.init(style: .bottomToTop, didUpdateCoordinator: didUpdateCoordinator)
-
+  public required init() {
+    super.init()
+    zOrder = .bottomToTop
     addSubviews()
     constrainSubviews()
   }
 
+  @available(*, unavailable)
   required public init(style: Style) {
     fatalError("init(style:) has not been implemented")
   }

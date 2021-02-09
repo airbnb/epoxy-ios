@@ -19,11 +19,12 @@ final class MainViewController: NavigationController {
 
   enum Example: CaseIterable {
     case readme
-    case highlightAndSelection
+    case product
+    case compositionalLayout
+    case cardStack
+    case flowLayout
     case shuffle
     case customSelfSizing
-    case product
-    case flowLayout
   }
 
   // MARK: Private
@@ -84,7 +85,10 @@ final class MainViewController: NavigationController {
       layout: UICollectionViewCompositionalLayout.list,
       sections: [
         SectionModel(items: Example.allCases.map { example in
-          TextRow.itemModel(dataID: example, content: .init(title: example.title), style: .small)
+          TextRow.itemModel(
+            dataID: example,
+            content: .init(title: example.title, body: example.body),
+            style: .small)
             .didSelect { [weak self] _ in
               self?.state.showExample = example
             }
@@ -101,8 +105,8 @@ final class MainViewController: NavigationController {
       viewController = ReadmeExamplesViewController(didSelect: { [weak self] example in
         self?.state.showReadmeExample = example
       })
-    case .highlightAndSelection:
-      viewController = HighlightAndSelectionViewController()
+    case .compositionalLayout:
+      viewController = CompositionalLayoutViewController()
     case .shuffle:
       viewController = ShuffleViewController()
     case .customSelfSizing:
@@ -111,6 +115,8 @@ final class MainViewController: NavigationController {
       viewController = ProductViewController()
     case .flowLayout:
       viewController = FlowLayoutViewController()
+    case .cardStack:
+      viewController = CardStackViewController()
     }
     viewController.title = example.title
     return viewController
@@ -125,14 +131,35 @@ extension MainViewController.Example {
       return "Readme examples"
     case .customSelfSizing:
       return "Custom self-sizing cells"
-    case .highlightAndSelection:
-      return "Highlight and selection demo"
+    case .compositionalLayout:
+      return "Compositional Layout"
     case .shuffle:
       return "Shuffle demo"
     case .product:
       return "Product Detail Page"
     case .flowLayout:
       return "Flow Layout demo"
+    case .cardStack:
+      return "Card Stack"
+    }
+  }
+
+  var body: String {
+    switch self {
+    case .readme:
+      return "All of the examples from the README"
+    case .customSelfSizing:
+      return "A CollectionView with custom self-sizing cells"
+    case .compositionalLayout:
+      return "A CollectionView with a UICollectionViewCompositionalLayout"
+    case .shuffle:
+      return "A CollectionView with cells that are randomly shuffled on a timer"
+    case .product:
+      return "An example that combines collections, bars, and presentations"
+    case .flowLayout:
+      return "A CollectionView with a UICollectionViewFlowLayout"
+    case .cardStack:
+      return "A CollectionView with BarStackView items that have a card drawn around each stack"
     }
   }
 }

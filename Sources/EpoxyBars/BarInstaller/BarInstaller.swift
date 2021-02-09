@@ -116,9 +116,10 @@ final class BarInstaller<Container: BarContainer> {
   }
 
   private func installContainer(in view: UIView, with models: [BarModeling], animated: Bool) {
-    let container = Container(didUpdateCoordinator: { [weak self] coordinator in
+    let container = Container()
+    container.didUpdateCoordinator = { [weak self] coordinator in
       self?.updateCoordinatorProperties(coordinator)
-    })
+    }
     container.add(to: view)
     container.viewController = viewController
     container.setBars(models, animated: animated)
