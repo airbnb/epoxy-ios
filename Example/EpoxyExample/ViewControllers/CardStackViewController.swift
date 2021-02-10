@@ -33,7 +33,7 @@ final class CardStackViewController: CollectionViewController {
               .didSelect { _ in
                 print("Selected Text Row \(dataID)")
               },
-          ]),
+          ], selectedBackgroundColor: .secondarySystemBackground),
           style: .init(card: .init()))
       }),
     ]

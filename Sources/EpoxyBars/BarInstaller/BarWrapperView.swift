@@ -103,7 +103,7 @@ public final class BarWrapperView: UIView {
   var willDisplayBar: ((_ bar: UIView) -> Void)?
 
   /// The ordering of this bar within a bar stack.
-  var zOrder = BarStackView.ZOrder.topToBottom
+  var zOrder = BarStackView.ZOrder.firstToLast
 
   /// The background color drawn behind this bar when it is selected.
   var selectedBackgroundColor: UIColor? {
@@ -252,9 +252,9 @@ public final class BarWrapperView: UIView {
       // We add one to `defaultLow` to allow for content to use this as its compression resistance
       // priority to be compressed.
       switch zOrder {
-      case .bottomToTop:
+      case .lastToFirst:
         bottom.priority = UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue + 1)
-      case .topToBottom:
+      case .firstToLast:
         top.priority = UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue + 1)
       }
       NSLayoutConstraint.activate([top, bottom, leading, trailing])

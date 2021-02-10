@@ -16,7 +16,7 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
 
   public required init() {
     super.init()
-    zOrder = .topToBottom
+    zOrder = .firstToLast
     addSubviews()
     constrainSubviews()
   }
