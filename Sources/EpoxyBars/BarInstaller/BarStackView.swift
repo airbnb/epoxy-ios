@@ -311,6 +311,7 @@ public class BarStackView: UIStackView, EpoxyableView {
     wrapper.willDisplayBar = { [weak self] bar in
       self?.handleWillDisplayBar(bar)
     }
+    wrapper.didUpdateCoordinator = didUpdateCoordinator
     wrapper.setModel(model, animated: false)
     return wrapper
   }
