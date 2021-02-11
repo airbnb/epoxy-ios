@@ -14,16 +14,7 @@ public final class BarWrapperView: UIView {
 
   // MARK: Lifecycle
 
-  init(
-    zOrder: BarStackView.ZOrder,
-    selectedBackgroundColor: UIColor?,
-    willDisplayBar: ((_ bar: UIView) -> Void)? = nil,
-    didUpdateCoordinator: ((AnyBarCoordinating) -> Void)? = nil)
-  {
-    self.zOrder = zOrder
-    self.selectedBackgroundColor = selectedBackgroundColor
-    self.willDisplayBar = willDisplayBar
-    self.didUpdateCoordinator = didUpdateCoordinator
+  init() {
     super.init(frame: .zero)
     layoutMargins = .zero
     translatesAutoresizingMaskIntoConstraints = false
@@ -105,16 +96,34 @@ public final class BarWrapperView: UIView {
 
   // MARK: Internal
 
-  var canHighlight: Bool {
-    _model?.isSelectable ?? false
+  /// A closure that's called after a bar coordinator has been created.
+  var didUpdateCoordinator: ((_ coordinator: AnyBarCoordinating) -> Void)?
+
+  /// A closure that will be invoked prior to adding the bar view to the view hierarchy.
+  var willDisplayBar: ((_ bar: UIView) -> Void)?
+
+  /// The ordering of this bar within a bar stack.
+  var zOrder = BarStackView.ZOrder.firstToLast
+
+  /// The background color drawn behind this bar when it is selected.
+  var selectedBackgroundColor: UIColor? {
+    didSet {
+      guard selectedBackgroundColor != oldValue else { return }
+      updateSelected()
+    }
   }
 
-  func updateSelection(isSelected: Bool) {
-    if isSelected && _model?.isSelectable == true {
-      backgroundColor = selectedBackgroundColor
-    } else {
-      backgroundColor = nil
+  /// Whether this bar should draw its selected state.
+  var isSelected = false {
+    didSet {
+      guard isSelected != oldValue else { return }
+      updateSelected()
     }
+  }
+
+  /// Whether this wrapper can be highlighted.
+  var canHighlight: Bool {
+    _model?.isSelectable ?? false
   }
 
   func handleSelection(animated: Bool) {
@@ -124,25 +133,23 @@ public final class BarWrapperView: UIView {
 
   // MARK: Private
 
-  private let zOrder: BarStackView.ZOrder
-
-  private let selectedBackgroundColor: UIColor?
-
   /// The current bar model.
   private var _model: InternalBarModeling?
 
   /// The coordinator wrapper: a type-erased `AnyBarCoordinator`.
   private var _coordinator: AnyBarCoordinating?
 
-  /// A closure that will be invoked prior to adding the bar view to the view hierarchy.
-  private let willDisplayBar: ((_ bar: UIView) -> Void)?
-
-  /// A closure that's called after a bar coordinator has been created.
-  private let didUpdateCoordinator: ((_ coordinator: AnyBarCoordinating) -> Void)?
-
   /// The original bottom layout margins of the bar before they were overridden by this view's
   /// layout margins.
   private var originalViewLayoutMargins: UIEdgeInsets?
+
+  private func updateSelected() {
+    if isSelected && _model?.isSelectable == true {
+      backgroundColor = selectedBackgroundColor
+    } else {
+      backgroundColor = nil
+    }
+  }
 
   private func setModel(_ model: InternalBarCoordinating?, animated: Bool) {
     let oldValue = _model
@@ -245,9 +252,9 @@ public final class BarWrapperView: UIView {
       // We add one to `defaultLow` to allow for content to use this as its compression resistance
       // priority to be compressed.
       switch zOrder {
-      case .bottomToTop:
+      case .lastToFirst:
         bottom.priority = UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue + 1)
-      case .topToBottom:
+      case .firstToLast:
         top.priority = UILayoutPriority(rawValue: UILayoutPriority.defaultLow.rawValue + 1)
       }
       NSLayoutConstraint.activate([top, bottom, leading, trailing])

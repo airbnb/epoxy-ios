@@ -12,24 +12,7 @@ public class BarStackView: UIStackView, EpoxyableView {
 
   // MARK: Lifecycle
 
-  /// - Parameters:
-  ///   - style: The style of this view.
-  required public init(style: Style) {
-    self.style = style
-    didUpdateCoordinator = nil
-    super.init(frame: .zero)
-    setup()
-  }
-
-  /// - Parameters:
-  ///   - style: The style of this view.
-  ///   - didUpdateCoordinator: A closure that's called after a bar coordinator has been created.
-  public init(
-    style: Style,
-    didUpdateCoordinator: ((AnyBarCoordinating) -> Void)? = nil)
-  {
-    self.style = style
-    self.didUpdateCoordinator = didUpdateCoordinator
+  public required init() {
     super.init(frame: .zero)
     setup()
   }
@@ -43,14 +26,38 @@ public class BarStackView: UIStackView, EpoxyableView {
 
   /// The order that the bars are arranged on the Z axis.
   public enum ZOrder {
-    /// The top bar is the highest in the Z stack. Used when pinned to the top of the screen.
-    case topToBottom
-    /// The bottom bar is the highest in the Z stack. Used when pinned to the bottom of the screen.
-    case bottomToTop
+    /// The first bar is the highest in the Z axis, and the last bar is the lowest.
+    ///
+    /// Used when a bar stack's top is fixed to an edge, e.g. the top of the screen.
+    case firstToLast
+    /// The last bar is the highest in the Z stack, and the first bar is the lowest.
+    ///
+    /// Used when a bar stack's bottom is fixed to an edge, e.g. the bottom of the screen or the
+    /// keyboard.
+    case lastToFirst
   }
 
-  /// The current bar models ordered from top to bottom.
+  /// The current bar models ordered from first to last.
   public private(set) var models = [AnyBarModel]()
+
+  /// The order that the bars are arranged on the Z axis.
+  public var zOrder = ZOrder.firstToLast {
+    didSet {
+      guard oldValue != zOrder else { return }
+      updateWrapperZOrder()
+    }
+  }
+
+  /// The background color drawn behind bars in this stack when they are selected, else `nil` if
+  /// there should be no selected background color.
+  public var selectedBackgroundColor: UIColor? {
+    didSet {
+      guard selectedBackgroundColor != oldValue else { return }
+      for wrapper in wrappers {
+        wrapper.selectedBackgroundColor = selectedBackgroundColor
+      }
+    }
+  }
 
   /// The view of the bar in the primary position within this stack.
   public var primaryBar: UIView? {
@@ -62,12 +69,12 @@ public class BarStackView: UIStackView, EpoxyableView {
     primaryWrapper?.coordinator
   }
 
-  /// All coordinators in this stack, ordered from top to bottom.
+  /// All coordinators in this stack, ordered from first to last.
   public var coordinators: [AnyBarCoordinating] {
     wrappers.compactMap { $0.coordinator }
   }
 
-  /// All bars in this stack, ordered from top to bottom.
+  /// All bars in this stack, ordered from first to last.
   public var barViews: [UIView] {
     wrappers.compactMap { $0.view }
   }
@@ -100,7 +107,7 @@ public class BarStackView: UIStackView, EpoxyableView {
       }
     }
 
-    updateHighlighting()
+    updateWrapperSelection()
   }
 
   public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -118,7 +125,7 @@ public class BarStackView: UIStackView, EpoxyableView {
 
     if wrapper.view?.point(inside: converted, with: event) == false {
       selectedWrapper = nil
-      updateHighlighting()
+      updateWrapperSelection()
     }
   }
 
@@ -127,14 +134,14 @@ public class BarStackView: UIStackView, EpoxyableView {
 
     selectedWrapper?.handleSelection(animated: false)
     selectedWrapper = nil
-    updateHighlighting()
+    updateWrapperSelection()
   }
 
   public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesCancelled(touches, with: event)
 
     selectedWrapper = nil
-    updateHighlighting()
+    updateWrapperSelection()
   }
 
   /// Updates the contents of this stack to the stack modeled by the given model array, inserting,
@@ -201,6 +208,17 @@ public class BarStackView: UIStackView, EpoxyableView {
     }
   }
 
+  // MARK: Internal
+
+  /// A closure that's called after a bar coordinator has been created.
+  var didUpdateCoordinator: ((_ coordinator: AnyBarCoordinating) -> Void)? {
+    didSet {
+      for wrapper in wrappers {
+        wrapper.didUpdateCoordinator = didUpdateCoordinator
+      }
+    }
+  }
+
   // MARK: Private
 
   // An empty subview to ensure this stack view doesn't size subviews weirdly (e.g. massive width
@@ -209,13 +227,7 @@ public class BarStackView: UIStackView, EpoxyableView {
     override class var layerClass: AnyClass { CATransformLayer.self }
   }
 
-  // The style of this view.
-  private let style: Style
-
-  /// A closure that's called after a bar coordinator has been created.
-  private let didUpdateCoordinator: ((_ coordinator: AnyBarCoordinating) -> Void)?
-
-  /// The current bar wrappers ordered from top to bottom.
+  /// The current bar wrappers ordered from first to last.
   private var wrappers = [BarWrapperView]()
 
   /// The wrapper of the model being selected or highlighted.
@@ -223,19 +235,19 @@ public class BarStackView: UIStackView, EpoxyableView {
 
   /// Wrappers ordered by their order in the Z axis (from highest to lowest)
   private var zOrderedWrappers: [BarWrapperView] {
-    switch style.zOrder {
-    case .topToBottom:
+    switch zOrder {
+    case .firstToLast:
       return wrappers
-    case .bottomToTop:
+    case .lastToFirst:
       return wrappers.reversed()
     }
   }
 
   private var primaryWrapper: BarWrapperView? {
-    switch style.zOrder {
-    case .topToBottom:
+    switch zOrder {
+    case .firstToLast:
       return wrappers.first
-    case .bottomToTop:
+    case .lastToFirst:
       return wrappers.last
     }
   }
@@ -293,13 +305,13 @@ public class BarStackView: UIStackView, EpoxyableView {
   }
 
   private func makeWrapper(_ model: BarModeling) -> BarWrapperView {
-    let wrapper = BarWrapperView(
-      zOrder: style.zOrder,
-      selectedBackgroundColor: style.selectedBackgroundColor,
-      willDisplayBar: { [weak self] bar in
-        self?.handleWillDisplayBar(bar)
-      },
-      didUpdateCoordinator: didUpdateCoordinator)
+    let wrapper = BarWrapperView()
+    wrapper.zOrder = zOrder
+    wrapper.selectedBackgroundColor = selectedBackgroundColor
+    wrapper.willDisplayBar = { [weak self] bar in
+      self?.handleWillDisplayBar(bar)
+    }
+    wrapper.didUpdateCoordinator = didUpdateCoordinator
     wrapper.setModel(model, animated: false)
     return wrapper
   }
@@ -318,14 +330,15 @@ public class BarStackView: UIStackView, EpoxyableView {
       // We pick 1000 as a sensible max to decrement from since we would never have that may bars.
       // We don't decrement from 0 since that causes bars to be invisible for some reason.
       wrapper.layer.zPosition = CGFloat(1000 - index)
+      wrapper.zOrder = zOrder
     }
   }
 
   // Transforms the added wrapper views either beneath the next visible wrapper or below the bottom
   // of this container if none are visible so that they animatedly slide up into view in a stack.
   private func transformAddedWrappers() {
-    switch style.zOrder {
-    case .bottomToTop:
+    switch zOrder {
+    case .lastToFirst:
       for (index, wrapper) in wrappers.enumerated() where wrapper.isHidden {
         let nextVisible = wrappers[index...].first { !$0.isHidden }
         let previousVisible = wrappers[...index].last { !$0.isHidden }
@@ -336,7 +349,7 @@ public class BarStackView: UIStackView, EpoxyableView {
           wrapper.transform = .init(translationX: 0, y: bounds.height)
         }
       }
-    case .topToBottom:
+    case .firstToLast:
       // This could use some logic to ensure that shown bars slide out as a stack rather than
       // overlapping one another creating an "unfurling" effect.
       break
@@ -346,15 +359,15 @@ public class BarStackView: UIStackView, EpoxyableView {
   /// Transforms the removed wrapper views to make it appear like they're sliding underneath
   /// previous bars or the edge of the screen.
   private func transformRemovedWrappers(_ wrappers: [BarWrapperView]) {
-    switch style.zOrder {
-    case .topToBottom:
+    switch zOrder {
+    case .firstToLast:
       // This isn't a perfect heuristic, but it's simple enough to work for what we need it to do
       // for the time being. If you want to improve the animations this could be reworked.
       for wrapper in wrappers {
         let barHeight = wrapper.view?.frame.height ?? 0
         wrapper.transform = .init(translationX: 0, y: -barHeight)
       }
-    case .bottomToTop:
+    case .lastToFirst:
       // This could use some logic to ensure that hidden bars slide out as a stack rather than
       // overlapping one another creating an "furling" effect.
       break
@@ -384,78 +397,64 @@ public class BarStackView: UIStackView, EpoxyableView {
     }())
   }
 
-  /// Update the background of wrappers according to the current selection.
-  private func updateHighlighting() {
+  /// Update the background of wrappers according to the current selected wrapper.
+  private func updateWrapperSelection() {
     for wrapper in wrappers {
-      wrapper.updateSelection(isSelected: selectedWrapper === wrapper)
+      wrapper.isSelected = (selectedWrapper === wrapper)
     }
   }
 
 }
 
-// MARK: StyledView
+// MARK: ContentConfigurableView
 
 extension BarStackView {
+  public func setContent(_ content: Content, animated: Bool) {
+    setBars(content.models, animated: animated)
+    selectedBackgroundColor = content.selectedBackgroundColor
+    zOrder = content.zOrder
+  }
+}
 
-  /// The style to be used.
-  public struct Style: Hashable {
+// MARK: - BarStackView.Content
+
+extension BarStackView {
+  /// The content of a `BarStackView`.
+  public struct Content: Equatable {
 
     // MARK: Lifecycle
 
+    /// - Parameters:
+    ///   - models: The bar models to be rendered within the `BarStackView`.
+    ///   - selectedBackgroundColor: The background color drawn behind bars in this stack when they
+    ///     are selected, else `nil` if there should be no selected background color.
+    ///   - zOrder: The order that the bars are arranged on the Z axis.
     public init(
+      models: [BarModeling],
       selectedBackgroundColor: UIColor? = nil,
-      zOrder: BarStackView.ZOrder = .topToBottom)
+      zOrder: ZOrder = .firstToLast)
     {
+      self.models = models
       self.selectedBackgroundColor = selectedBackgroundColor
       self.zOrder = zOrder
     }
 
     // MARK: Public
 
-    /// The selected background color to apply.
+    /// The bar models to be rendered within the `BarStackView`.
+    public var models: [BarModeling]
+
+    /// The background color drawn behind bars in this stack when they are selected, else `nil` if
+    /// there should be no selected background color.
     public var selectedBackgroundColor: UIColor?
 
     /// The order that the bars are arranged on the Z axis.
-    public var zOrder: BarStackView.ZOrder
-
-    // MARK: Internal
-
-    static var topToBottom: Self {
-      .init(zOrder: .topToBottom)
-    }
-
-    static var bottomToTop: Self {
-      .init(zOrder: .bottomToTop)
-    }
-
-  }
-}
-
-// MARK: ContentConfigurableView
-
-extension BarStackView {
-
-  /// The content of the stack view.
-  public struct Content: Equatable {
-
-    /// The bar models to be rendered.
-    public let models: [BarModeling]
-
-    /// - Parameters:
-    ///   - models: The bar models to be rendered.
-    public init(models: [BarModeling]) {
-      self.models = models
-    }
+    public var zOrder: ZOrder
 
     public static func ==(lhs: Self, rhs: Self) -> Bool {
       // The content should never be equal since we need the `models`'s behavior to be updated on
       // every content change.
       false
     }
-  }
-
-  /// Update the content of the stack view.
-  public func setContent(_ content: Content, animated: Bool) {
-    setBars(content.models, animated: animated)
   }
 }

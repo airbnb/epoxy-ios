@@ -8,10 +8,6 @@ import UIKit
 
 /// A container of bar views that insets its view controller's safe area insets.
 public protocol BarContainer: BarStackView {
-  /// - Parameter didUpdateCoordinator: A closure that's called after a bar coordinator has been
-  ///   created.
-  init(didUpdateCoordinator: ((AnyBarCoordinating) -> Void)?)
-
   /// The coordinators for each of the bars within this stack, ordered from top to bottom.
   var coordinators: [AnyBarCoordinating] { get }
 
@@ -55,6 +51,10 @@ public enum BarContainerInsetBehavior: Equatable {
 
 /// The internal behavior of a `BarContainer`.
 protocol InternalBarContainer: BarContainer {
+
+  /// A closure that's called after a bar coordinator has been created.
+  var didUpdateCoordinator: ((AnyBarCoordinating) -> Void)? { get set }
+
   /// The position of this bar container within its view controller's view.
   var position: BarContainerPosition { get }
 

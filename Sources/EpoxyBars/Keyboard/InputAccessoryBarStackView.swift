@@ -16,7 +16,8 @@ public final class InputAccessoryBarStackView: UIView {
   // MARK: Lifecycle
 
   public init(bars: [BarModeling] = []) {
-    barStack = BarStackView(style: .bottomToTop)
+    barStack = BarStackView()
+    barStack.zOrder = .lastToFirst
     barStack.setBars(bars, animated: false)
     super.init(frame: .zero)
     addSubview(barStack)
