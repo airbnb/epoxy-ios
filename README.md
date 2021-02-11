@@ -1,6 +1,6 @@
 <img  width="300" alt="Epoxy logo" src="docs/images/logo.svg" >
 
-[![Build Status](https://github.com/airbnb/epoxy-ios/workflows/CI/badge.svg)](https://github.com/airbnb/epoxy-ios/actions)
+[![Build Status](https://github.com/airbnb/epoxy-ios/workflows/CI/badge.svg?branch=master)](https://github.com/airbnb/epoxy-ios/actions?query=branch%3Amaster+workflow%3ACI)
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![Version](https://img.shields.io/cocoapods/v/Epoxy.svg)](https://cocoapods.org/pods/Epoxy)
 [![Platform](https://img.shields.io/badge/platform-ios-lightgrey.svg?style=flat)](https://cocoapods.org/pods/Epoxy)
