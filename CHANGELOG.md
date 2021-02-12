@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated public let properties of public structs with memberwise initializers to be public var.
 - `BarStackView` now handles selection of bar models and can be used as an `EpoxyableView`.
 - The cases of `BarStackView.ZOrder` have been renamed to be more semantically accurate
+- Enables `CollectionView` prefetching by default, as the issues preventing it from being enabled by
+  default are now resolved in recent iOS versions
 
 ## [0.1.0](https://github.com/airbnb/epoxy-ios/compare/171f63da...0.1.0) - 2021-02-01
 
