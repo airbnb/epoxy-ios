@@ -12,7 +12,7 @@ public final class CollectionViewConfiguration {
 
   public init(
     usesBatchUpdatesForAllReloads: Bool = false,
-    usesCellPrefetching: Bool = false,
+    usesCellPrefetching: Bool = true,
     usesAccurateScrollToItem: Bool = true)
   {
     self.usesBatchUpdatesForAllReloads = usesBatchUpdatesForAllReloads
@@ -45,7 +45,7 @@ public final class CollectionViewConfiguration {
   ///
   /// If this is set to `true`, then cell-prefetching will be turned on by default.
   ///
-  /// Defaults to `false`.
+  /// Defaults to `true`.
   public let usesCellPrefetching: Bool
 
   /// Collection view does not accurately scroll to items if they're self-sized, due to it using
