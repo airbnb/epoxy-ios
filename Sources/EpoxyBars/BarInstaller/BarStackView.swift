@@ -83,7 +83,7 @@ public class BarStackView: UIStackView, EpoxyableView {
     // Validate hitTest preconditions, since we aren't calling super.
     guard isUserInteractionEnabled, !isHidden, alpha >= 0.01 else { return nil }
 
-    /// We allow bar views to recieve touches outside of this container,
+    /// We allow bar views to receive touches outside of this container,
     /// so we manually hit test all bar views.
     for wrapper in zOrderedWrappers {
       if let candidate = wrapper.hitTest(wrapper.convert(point, from: self), with: event) {
@@ -91,7 +91,7 @@ public class BarStackView: UIStackView, EpoxyableView {
       }
     }
 
-    // This view shouldn't recieve any touches
+    // This view shouldn't receive any touches
     return nil
   }
 
@@ -113,8 +113,8 @@ public class BarStackView: UIStackView, EpoxyableView {
   public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
     super.touchesMoved(touches, with: event)
 
-    /// TODO: Potentially suppport highlighting another bar that's currently beneath the touch
-    /// (in the same style as `UIAlertController.Style.actionsheet`.)
+    /// TODO: Potentially support highlighting another bar that's currently beneath the touch
+    /// (in the same style as `UIAlertController.Style.actionSheet`.)
     /// This would involve iterating through the wrappers to find the one contains the current point.
 
     guard
@@ -147,65 +147,11 @@ public class BarStackView: UIStackView, EpoxyableView {
   /// Updates the contents of this stack to the stack modeled by the given model array, inserting,
   /// removing, and updating any bars as needed.
   public func setBars(_ models: [BarModeling], animated: Bool) {
-    let (added, removed) = updateModels(models, animated: animated)
+    let updates = updateModels(models, animated: animated)
 
     updateWrapperZOrder()
 
-    // No animations are required if both added and removed are empty. Animations between existing
-    // bar's wapper views's content is handled by `BarWrapperView.setModel` in `updateModels(…)`.
-    if added.isEmpty, removed.isEmpty {
-      return
-    }
-
-    // Only hide/shown views if animated as hiding/showing `UIStackView` subviews can sometimes
-    // result in animations even if performed outside of an animation transaction.
-    if animated {
-      // Hide each of the added views so that we can animate them in.
-      added.forEach { $0.isHidden = true }
-
-      // Layout the new bar subviews prior to animating/transforming so their first layout pass
-      // isn't animated and so they have valid frames that we can use to transform.
-      //
-      // Furthermore, we perform this layout on our superview since a (non-`layoutIfNeeded`) layout
-      // in this subview can trigger the superview to layout if it has a dirty layout (via
-      // `UIView.layoutBelowIfNeeded`), and we don't want that layout to be animated either.
-      superview?.layoutIfNeeded()
-
-      transformAddedWrappers()
-    }
-
-    let animations = {
-      removed.forEach { $0.isHidden = true }
-      added.forEach { view in
-        view.isHidden = false
-        view.transform = .identity
-      }
-      self.transformRemovedWrappers(removed)
-    }
-
-    let completion = {
-      removed.forEach { $0.removeFromSuperview() }
-    }
-
-    if animated {
-      // We do not allow consumers to pass in the duration as they can configure it by wrapping
-      // this call in their own animation transaction that will override this one.
-      //
-      // We enable user interaction so that scrolling can continue uninterrupted while bars are
-      // being shown or hidden.
-      UIView.animate(
-        withDuration: 0.5,
-        delay: 0,
-        usingSpringWithDamping: 1.0,
-        initialSpringVelocity: 0,
-        options: [.allowUserInteraction, .beginFromCurrentState],
-        animations: animations,
-        completion: { _ in completion() })
-    } else {
-      // Don't perform any animations (e.g. transforming, hiding/showing) if non-animated since we
-      // didn't perform the animation setup.
-      completion()
-    }
+    applyWrapperUpdates(updates, animated: animated)
   }
 
   // MARK: Internal
@@ -225,6 +171,21 @@ public class BarStackView: UIStackView, EpoxyableView {
   // values).
   private final class Spacer: UIView {
     override class var layerClass: AnyClass { CATransformLayer.self }
+  }
+
+  /// The updates resulting from a call to `updateModels(_:animated:)`
+  private struct WrapperUpdates {
+    /// The wrappers that were added.
+    var added = [BarWrapperView]()
+    /// The wrappers that were removed.
+    var removed = [BarWrapperView]()
+    /// The wrappers that were moved, and the index that they were moved to.
+    var moved = [(wrapper: BarWrapperView, index: Int)]()
+
+    /// Whether any wrapper updates occurred.
+    var isEmpty: Bool {
+      added.isEmpty && removed.isEmpty && moved.isEmpty
+    }
   }
 
   /// The current bar wrappers ordered from first to last.
@@ -265,33 +226,36 @@ public class BarStackView: UIStackView, EpoxyableView {
     addArrangedSubview(Spacer())
   }
 
-  /// Updates the `wrappers` and `models` to reflect the given `models`, returning the wrappers that
-  /// were added and removed.
-  private func updateModels(
-    _ models: [BarModeling],
-    animated: Bool)
-    -> (added: [BarWrapperView], removed: [BarWrapperView])
-  {
+  /// Updates the `wrappers` and `models` to reflect the given `models`, returning a
+  /// `WrapperUpdates` describing the updates that have been performed.
+  private func updateModels(_ models: [BarModeling], animated: Bool) -> WrapperUpdates {
     let newModels = models.map { $0.eraseToAnyBarModel() }
     let changeset = newModels.makeChangeset(from: self.models)
     // We always update all models as they could have new behavior setters even with equal content.
     self.models = newModels
     warnOnDuplicates(in: changeset)
 
-    var removed = [BarWrapperView]()
-    var added = [BarWrapperView]()
+    let oldWrappers = wrappers
+    var update = WrapperUpdates()
 
     for index in changeset.deletes.reversed() {
       let wrapper = wrappers.remove(at: index)
-      removed.append(wrapper)
+      update.removed.append(wrapper)
     }
 
     for index in changeset.inserts {
       let wrapper = makeWrapper(self.models[index])
       wrappers.insert(wrapper, at: index)
-      // Add one since we always have the `LayoutContainer` to keep the size sensible.
+      // Add one since we always have the `Spacer` to keep the size sensible.
       insertArrangedSubview(wrapper, at: index + 1)
-      added.append(wrapper)
+      update.added.append(wrapper)
+    }
+
+    for (from, to) in changeset.moves {
+      let fromWrapper = oldWrappers[from]
+      // Add one since we always have the `Spacer` to keep the size sensible.
+      update.moved.append((fromWrapper, to + 1))
+      wrappers[to] = fromWrapper
     }
 
     // We set the model on every wrapper even if they have equal diffable content. This ensures that
@@ -301,7 +265,7 @@ public class BarStackView: UIStackView, EpoxyableView {
       wrapper.setModel(self.models[index], animated: animated)
     }
 
-    return (added: added, removed: removed)
+    return update
   }
 
   private func makeWrapper(_ model: BarModeling) -> BarWrapperView {
@@ -331,6 +295,77 @@ public class BarStackView: UIStackView, EpoxyableView {
       // We don't decrement from 0 since that causes bars to be invisible for some reason.
       wrapper.layer.zPosition = CGFloat(1000 - index)
       wrapper.zOrder = zOrder
+    }
+  }
+
+  /// Applies the given wrapper updates, optionally animated.
+  private func applyWrapperUpdates(_ updates: WrapperUpdates, animated: Bool) {
+    guard !updates.isEmpty else { return }
+
+    if animated {
+      prepareAnimatedWrapperUpdates(updates)
+
+      // We do not allow consumers to pass in the duration as they can configure it by wrapping
+      // this call in their own animation transaction that will override this one.
+      //
+      // We enable user interaction so that scrolling can continue uninterrupted while bars are
+      // being shown or hidden.
+      UIView.animate(
+        withDuration: 0.5,
+        delay: 0,
+        usingSpringWithDamping: 1.0,
+        initialSpringVelocity: 0,
+        options: [.allowUserInteraction, .beginFromCurrentState],
+        animations: { self.animateWrapperUpdates(updates) },
+        completion: { [weak self] _ in self?.completeAnimatedWrapperUpdates(updates) })
+    } else {
+      updates.moved.forEach(insertArrangedSubview(_:at:))
+
+      for view in updates.removed {
+        view.removeFromSuperview()
+      }
+    }
+  }
+
+  /// Prepares to animate the given wrapper updates.
+  private func prepareAnimatedWrapperUpdates(_ updates: WrapperUpdates) {
+    // Hide each of the added views so that we can animate them in.
+    for view in updates.added {
+      view.isHidden = true
+    }
+
+    // Layout the new bar subviews prior to animating/transforming so their first layout pass
+    // isn't animated and so they have valid frames that we can use to transform.
+    //
+    // Furthermore, we perform this layout on our superview since a (non-`layoutIfNeeded`) layout
+    // in this subview can trigger the superview to layout if it has a dirty layout (via
+    // `UIView.layoutBelowIfNeeded`), and we don't want that layout to be animated either.
+    superview?.layoutIfNeeded()
+
+    transformAddedWrappers()
+  }
+
+  /// Animates the given wrapper updates, expecting to be called within an animation transaction.
+  private func animateWrapperUpdates(_ updates: WrapperUpdates) {
+    for view in updates.removed {
+      view.isHidden = true
+    }
+
+    for view in updates.added {
+      view.isHidden = false
+      view.transform = .identity
+    }
+
+    // Inserting the moved wrappers as part of the animation results in the moves being animated.
+    updates.moved.forEach(insertArrangedSubview(_:at:))
+
+    transformRemovedWrappers(updates.removed)
+  }
+
+  /// Completes the given animated wrapper updates.
+  private func completeAnimatedWrapperUpdates(_ updates: WrapperUpdates) {
+    for view in updates.removed {
+      view.removeFromSuperview()
     }
   }
 
