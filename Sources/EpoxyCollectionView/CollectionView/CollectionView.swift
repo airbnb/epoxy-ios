@@ -866,7 +866,8 @@ extension CollectionView: UICollectionViewDelegate {
 
   public func collectionView(
     _ collectionView: UICollectionView,
-    shouldHighlightItemAt indexPath: IndexPath) -> Bool
+    shouldHighlightItemAt indexPath: IndexPath)
+    -> Bool
   {
     guard let item = epoxyDataSource.data?.item(at: indexPath) else {
       EpoxyLogger.shared.assertionFailure("Index path is out of bounds")
@@ -910,7 +911,8 @@ extension CollectionView: UICollectionViewDelegate {
 
   public func collectionView(
     _ collectionView: UICollectionView,
-    shouldSelectItemAt indexPath: IndexPath) -> Bool
+    shouldSelectItemAt indexPath: IndexPath)
+    -> Bool
   {
     guard let item = epoxyDataSource.data?.item(at: indexPath) else {
       EpoxyLogger.shared.assertionFailure("Index path is out of bounds")
@@ -955,7 +957,8 @@ extension CollectionView: UICollectionViewDelegate {
 
   public func collectionView(
     _ collectionView: UICollectionView,
-    shouldDeselectItemAt indexPath: IndexPath) -> Bool
+    shouldDeselectItemAt indexPath: IndexPath)
+    -> Bool
   {
     guard let item = epoxyDataSource.data?.item(at: indexPath) else {
       EpoxyLogger.shared.assertionFailure("Index path is out of bounds")
@@ -982,7 +985,8 @@ extension CollectionView: UICollectionViewDelegate {
   public func collectionView(
     _ collectionView: UICollectionView,
     transitionLayoutForOldLayout fromLayout: UICollectionViewLayout,
-    newLayout toLayout: UICollectionViewLayout) -> UICollectionViewTransitionLayout
+    newLayout toLayout: UICollectionViewLayout)
+    -> UICollectionViewTransitionLayout
   {
     guard let delegate = transitionLayoutDelegate else {
       return UICollectionViewTransitionLayout(currentLayout: fromLayout, nextLayout: toLayout)

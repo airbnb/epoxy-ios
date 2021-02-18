@@ -173,7 +173,8 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
 
   func collectionView(
     _ collectionView: UICollectionView,
-    numberOfItemsInSection section: Int) -> Int
+    numberOfItemsInSection section: Int)
+    -> Int
   {
     guard let data = data else { return 0 }
 
@@ -182,7 +183,8 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
 
   func collectionView(
     _ collectionView: UICollectionView,
-    cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
+    cellForItemAt indexPath: IndexPath)
+    -> UICollectionViewCell
   {
     guard let item = data?.item(at: indexPath) else {
       // The `item(…)` method asserts in this scenario.
