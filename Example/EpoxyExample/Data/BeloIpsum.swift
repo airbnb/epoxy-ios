@@ -97,7 +97,9 @@ final class BeloIpsum {
     "Shepherd’s hut",
   ]
 
-  private static func makeSentence(wordCount: Int, startingAt: Int) -> (String, Int) {
+  private static func makeSentence(wordCount: Int, startingAt: Int)
+    -> (String, Int)
+  {
     var words: [String] = []
     let range = 0..<Int(wordCount)
     var i = startingAt
