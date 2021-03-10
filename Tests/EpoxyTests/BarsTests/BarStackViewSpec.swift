@@ -10,34 +10,44 @@ import EpoxyCore
 
 final class BarStackViewSpec: QuickSpec {
   override func spec() {
-    let view = BarStackView()
+    var view: BarStackView! 
+    beforeEach { 
+      view = BarStackView() 
+    } 
+    afterEach { 
+      view = nil 
+    }
 
-    it("should contain views in the right order after content updates") {
-      view.setBars([
-        TestView.barModel(content: 1).styleID(StyleID.loading)
-          .dataID(1),
-        TestView.barModel(content: 2)
-          .dataID(2),
-        TestView.barModel(content: 3).styleID(StyleID.loading)
-          .dataID(3),
-        TestView.barModel(content: 4)
-          .dataID(4),
-      ], animated: false)
+    describe("setBars(_:animated:)") { 
+      context("when called with two different arrays of bar models") {
+        it("should contain bar subviews representing the last array of bar models") {
+          view.setBars([
+            TestView.barModel(content: 1).styleID(StyleID.loading)
+              .dataID(1),
+            TestView.barModel(content: 2)
+              .dataID(2),
+            TestView.barModel(content: 3).styleID(StyleID.loading)
+              .dataID(3),
+            TestView.barModel(content: 4)
+              .dataID(4),
+          ], animated: false)
 
-      expect(view.childTags).to(equal([1,2,3,4]))
+          expect(view.arrangedBarViewTags).to(equal([1,2,3,4]))
 
-      view.setBars([
-        TestView.barModel(content: 10).styleID(StyleID.loaded)
-          .dataID(1),
-        TestView.barModel(content: 2)
-          .dataID(2),
-        TestView.barModel(content: 30).styleID(StyleID.loaded)
-          .dataID(3),
-        TestView.barModel(content: 4)
-          .dataID(4),
-      ], animated: false)
+          view.setBars([
+            TestView.barModel(content: 10).styleID(StyleID.loaded)
+              .dataID(1),
+            TestView.barModel(content: 2)
+              .dataID(2),
+            TestView.barModel(content: 30).styleID(StyleID.loaded)
+              .dataID(3),
+            TestView.barModel(content: 4)
+              .dataID(4),
+          ], animated: false)
 
-      expect(view.childTags).to(equal([10,2,30,4]))
+          expect(view.arrangedBarViewTags).to(equal([10,2,30,4]))
+        } 
+      } 
     }
   }
 
@@ -65,7 +75,7 @@ final class BarStackViewSpec: QuickSpec {
 
 
 extension BarStackView {
-  var childTags: [Int] {
+  var arrangedBarViewTags: [Int] {
     arrangedSubviews.compactMap { view in
       guard let wrapper = view as? BarWrapperView else { return nil }
       return wrapper.view?.tag
