@@ -230,7 +230,7 @@ extension BarModel: InternalBarCoordinating {
 
 extension BarModel: Diffable {
   public var diffIdentifier: AnyHashable {
-    DiffIdentifier(dataID: dataID, viewClass: .init(View.self), styleID: styleID)
+    DiffIdentifier(dataID: dataID, viewClass: .init(View.self))
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
@@ -276,5 +276,4 @@ struct DiffIdentifier: Hashable {
   var dataID: AnyHashable
   // The `View.Type` wrapped in `ObjectIdentifier` since `AnyClass` is not `Hashable`.
   var viewClass: ObjectIdentifier
-  var styleID: AnyHashable?
 }

@@ -174,7 +174,12 @@ public final class BarWrapperView: UIView {
 
     _model = model
 
-    if let oldValue = oldValue, let view = view, oldValue.diffIdentifier == model.diffIdentifier {
+    if
+      let oldValue = oldValue,
+      let view = view,
+      oldValue.diffIdentifier == model.diffIdentifier,
+      oldValue.styleID == model.styleID
+    {
       if !oldValue.isDiffableItemEqual(to: model) {
         model.configureContent(view, traitCollection: traitCollection, animated: animated)
       }
