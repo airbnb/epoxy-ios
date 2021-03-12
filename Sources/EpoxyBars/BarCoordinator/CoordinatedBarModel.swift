@@ -104,7 +104,7 @@ extension CoordinatedBarModel: InternalBarCoordinating {
 
 extension CoordinatedBarModel: Diffable {
   public var diffIdentifier: AnyHashable {
-    DiffIdentifier(dataID: dataID, viewClass: .init(viewClass), styleID: styleID)
+    DiffIdentifier(dataID: dataID, viewClass: .init(viewClass))
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {

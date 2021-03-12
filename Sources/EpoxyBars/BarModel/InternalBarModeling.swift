@@ -9,7 +9,7 @@ import UIKit
 /// A model that can provide a bar view to a `BarStackView`.
 ///
 /// Used to reference a `BarModel` without a generic type.
-protocol InternalBarModeling: Diffable, EpoxyModeled {
+protocol InternalBarModeling: Diffable, EpoxyModeled, StyleIDProviding {
   /// Constructs a configured bar view.
   func makeConfiguredView(traitCollection: UITraitCollection) -> UIView
 
