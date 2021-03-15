@@ -98,6 +98,20 @@ open class NavigationController: UINavigationController {
     queue.enqueue(stack.compactMap { $0 }, animated: animated, from: self)
   }
 
+  /// Updates the navigation stack to the provided array of navigation models, optionally animating
+  /// the transition.
+  ///
+  /// Only the differences between the previous stack and the provided stack are applied as changes
+  /// to the view controller hierarchy.
+  ///
+  /// If a transition is in progress when this method is called, the provided stack is queued for
+  /// subsequent presentation following the completion of the transition.
+  ///
+  /// Conceptually similar to `setSections(_:animated:)` for Epoxy models.
+  public func setStack(_ stack: [NavigationModel], animated: Bool) {
+    queue.enqueue(stack, animated: animated, from: self)
+  }
+
   // MARK: Private
 
   private let queue = NavigationQueue()

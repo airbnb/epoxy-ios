@@ -30,31 +30,25 @@ final class FormNavigationController: NavigationController {
     didSet { setStack(stack, animated: true) }
   }
 
-  private var stack: [NavigationModel?] {
-    [step1, step2]
-  }
-
-  private var step1: NavigationModel {
-    .root(dataID: DataID.step1) { [weak self] in
+  @NavigationModelBuilder private var stack: [NavigationModel] {
+    NavigationModel.root(dataID: DataID.step1) { [weak self] in
       Step1ViewController(didTapNext: {
         self?.state.showStep2 = true
       })
     }
-  }
 
-  private var step2: NavigationModel? {
-    guard state.showStep2 else { return nil }
-
-    return NavigationModel(
-      dataID: DataID.step2,
-      makeViewController: {
-        Step2ViewController(didTapNext: {
-          // Navigate away from this step.
+    if state.showStep2 {
+      NavigationModel(
+        dataID: DataID.step2,
+        makeViewController: {
+          Step2ViewController(didTapNext: {
+            // Navigate away from this step.
+          })
+        },
+        remove: { [weak self] in
+          self?.state.showStep2 = false
         })
-      },
-      remove: { [weak self] in
-        self?.state.showStep2 = false
-      })
+    }
   }
 }
 

@@ -30,6 +30,10 @@ public final class InputAccessoryBarStackView: UIView {
     autoresizingMask = .flexibleHeight
   }
 
+  public convenience init(@BarModelBuilder bars: () -> [BarModeling]) {
+    self.init(bars: bars())
+  }
+
   @available(*, unavailable)
   public required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")

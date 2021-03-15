@@ -20,6 +20,24 @@ open class CollectionViewController: UIViewController {
     super.init(nibName: nil, bundle: nil)
   }
 
+  /// Initializes a collection view controller and configures its collection view with the provided
+  /// layout and sections once the view loads.
+  public convenience init(
+    layout: UICollectionViewLayout,
+    @SectionModelBuilder sections: () -> [SectionModel])
+  {
+    self.init(layout: layout, sections: sections())
+  }
+
+  /// Initializes a collection view controller and configures its collection view with the provided
+  /// layout and items once the view loads.
+  public convenience init(
+    layout: UICollectionViewLayout,
+    @ItemModelBuilder items: () -> [ItemModeling])
+  {
+    self.init(layout: layout, sections: [SectionModel(items: items())])
+  }
+
   @available(*, unavailable)
   public required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")

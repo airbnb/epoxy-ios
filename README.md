@@ -90,17 +90,15 @@ enum DataID {
 let viewController = CollectionViewController(
   layout: UICollectionViewCompositionalLayout
     .list(using: .init(appearance: .plain)),
-  sections: [
-    SectionModel(items: [
-      TextRow.itemModel(
-        dataID: DataID.row,
-        content: .init(title: "Tap me!"),
-        style: .small)
-        .didSelect { _ in
-          // Handle selection
-        }
-    ])
-  ])
+  items: {
+    TextRow.itemModel(
+      dataID: DataID.row,
+      content: .init(title: "Tap me!"),
+      style: .small)
+      .didSelect { _ in
+        // Handle selection
+      }
+  })
 ```
 
 </td>
@@ -136,20 +134,18 @@ class CounterViewController: CollectionViewController {
     didSet { setSections(sections, animated: true) }
   }
 
-  private var sections: [SectionModel] {
-    [
-      SectionModel(items: [
-        TextRow.itemModel(
-          dataID: DataID.row,
-          content: .init(
-            title: "Count \(count)",
-            body: "Tap to increment"),
-          style: .large)
-          .didSelect { [weak self] _ in
-            self?.count += 1
-          }
-      ])
-    ]
+  @SectionModelBuilder private var sections: [SectionModel] {
+    SectionModel {
+      TextRow.itemModel(
+        dataID: DataID.row,
+        content: .init(
+          title: "Count \(count)",
+          body: "Tap to increment"),
+        style: .large)
+        .didSelect { [weak self] _ in
+          self?.count += 1
+        }
+    }
   }
 }
 ```
@@ -186,14 +182,12 @@ class BottomButtonViewController: UIViewController {
     viewController: self,
     bars: bars)
 
-  private var bars: [BarModeling] {
-    [
-      ButtonRow.barModel(
-        content: .init(text: "Click me!"),
-        behaviors: .init(didTap: {
-          // Handle button selection
-        }))
-    ]
+  @BarModelBuilder private var bars: [BarModeling] {
+    ButtonRow.barModel(
+      content: .init(text: "Click me!"),
+      behaviors: .init(didTap: {
+        // Handle button selection
+      }))
   }
 }
 ```
@@ -239,31 +233,25 @@ class FormNavigationController: NavigationController {
     didSet { setStack(stack, animated: true) }
   }
 
-  private var stack: [NavigationModel?] {
-    [step1, step2]
-  }
-
-  private var step1: NavigationModel {
-    .root(dataID: DataID.step1) { [weak self] in
+  @NavigationModelBuilder private var stack: [NavigationModel] {
+    NavigationModel.root(dataID: DataID.step1) { [weak self] in
       Step1ViewController(didTapNext: {
         self?.state.showStep2 = true
       })
     }
-  }
 
-  private var step2: NavigationModel? {
-    guard state.showStep2 else { return nil }
-
-    return NavigationModel(
-      dataID: DataID.step2,
-      makeViewController: {
-        Step2ViewController(didTapNext: {
-          // Navigate away from this step.
+    if state.showStep2 {
+      NavigationModel(
+        dataID: DataID.step2,
+        makeViewController: {
+          Step2ViewController(didTapNext: {
+            // Navigate away from this step.
+          })
+        },
+        remove: { [weak self] in
+          self?.state.showStep2 = false
         })
-      },
-      remove: { [weak self] in
-        self?.state.showStep2 = false
-      })
+    }
   }
 }
 ```

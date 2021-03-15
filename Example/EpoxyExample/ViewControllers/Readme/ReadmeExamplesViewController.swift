@@ -64,17 +64,15 @@ enum ReadmeExample: CaseIterable {
 
     return CollectionViewController(
       layout: UICollectionViewCompositionalLayout.list,
-      sections: [
-        SectionModel(items: [
-          TextRow.itemModel(
-            dataID: DataID.row,
-            content: .init(title: "Tap me!"),
-            style: .small)
-            .didSelect { _ in
-              // Handle selection
-            },
-        ]),
-      ])
+      items: {
+        TextRow.itemModel(
+          dataID: DataID.row,
+          content: .init(title: "Tap me!"),
+          style: .small)
+          .didSelect { _ in
+            // Handle selection
+          }
+      })
   }
 }
 

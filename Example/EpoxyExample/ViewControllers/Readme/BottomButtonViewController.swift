@@ -21,13 +21,11 @@ class BottomButtonViewController: UIViewController {
     viewController: self,
     bars: bars)
 
-  private var bars: [BarModeling] {
-    [
-      ButtonRow.barModel(
-        content: .init(text: "Tap me!"),
-        behaviors: .init(didTap: {
-          // Handle button selection
-        })),
-    ]
+  @BarModelBuilder private var bars: [BarModeling] {
+    ButtonRow.barModel(
+      content: .init(text: "Click me!"),
+      behaviors: .init(didTap: {
+        // Handle button selection
+      }))
   }
 }

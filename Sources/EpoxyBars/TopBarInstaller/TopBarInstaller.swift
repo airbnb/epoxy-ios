@@ -28,6 +28,13 @@ public final class TopBarInstaller: NSObject {
     installer.setBars(bars, animated: false)
   }
 
+  public convenience init(
+    viewController: UIViewController,
+    @BarModelBuilder bars: () -> [BarModeling])
+  {
+    self.init(viewController: viewController, bars: bars())
+  }
+
   // MARK: Public
 
   /// The container installed in the view controller's view that contains the bar stack.
