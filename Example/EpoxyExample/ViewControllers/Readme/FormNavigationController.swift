@@ -27,7 +27,7 @@ final class FormNavigationController: NavigationController {
   }
 
   @NavigationModelBuilder private var stack: [NavigationModel] {
-    NavigationModel.root(dataID: DataID.step1) { [weak self] in
+    .root(dataID: DataID.step1) { [weak self] in
       Step1ViewController(didTapNext: {
         self?.showStep2 = true
       })
