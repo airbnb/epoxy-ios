@@ -11,7 +11,7 @@ class CounterViewController: CollectionViewController {
 
   init() {
     super.init(layout: UICollectionViewCompositionalLayout.list)
-    setSections(sections, animated: false)
+    setItems(items, animated: false)
   }
 
   // MARK: Private
@@ -21,22 +21,18 @@ class CounterViewController: CollectionViewController {
   }
 
   private var count = 0 {
-    didSet { setSections(sections, animated: true) }
+    didSet { setItems(items, animated: true) }
   }
 
-  private var sections: [SectionModel] {
-    [
-      SectionModel(items: [
-        TextRow.itemModel(
-          dataID: DataID.row,
-          content: .init(
-            title: "Count \(count)",
-            body: "Tap to increment"),
-          style: .large)
-          .didSelect { [weak self] _ in
-            self?.count += 1
-          },
-      ]),
-    ]
+  @ItemModelBuilder private var items: [ItemModeling] {
+    TextRow.itemModel(
+      dataID: DataID.row,
+      content: .init(
+        title: "Count \(count)",
+        body: "Tap to increment"),
+      style: .large)
+      .didSelect { [weak self] _ in
+        self?.count += 1
+      }
   }
 }

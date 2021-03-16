@@ -90,17 +90,15 @@ enum DataID {
 let viewController = CollectionViewController(
   layout: UICollectionViewCompositionalLayout
     .list(using: .init(appearance: .plain)),
-  sections: [
-    SectionModel(items: [
-      TextRow.itemModel(
-        dataID: DataID.row,
-        content: .init(title: "Tap me!"),
-        style: .small)
-        .didSelect { _ in
-          // Handle selection
-        }
-    ])
-  ])
+  items: {
+    TextRow.itemModel(
+      dataID: DataID.row,
+      content: .init(title: "Tap me!"),
+      style: .small)
+      .didSelect { _ in
+        // Handle selection
+      }
+  })
 ```
 
 </td>
@@ -128,28 +126,24 @@ class CounterViewController: CollectionViewController {
     setSections(sections, animated: false)
   }
 
-  private enum DataID {
+  enum DataID {
     case row
   }
 
-  private var count = 0 {
-    didSet { setSections(sections, animated: true) }
+  var count = 0 {
+    didSet { setItems(items, animated: true) }
   }
 
-  private var sections: [SectionModel] {
-    [
-      SectionModel(items: [
-        TextRow.itemModel(
-          dataID: DataID.row,
-          content: .init(
-            title: "Count \(count)",
-            body: "Tap to increment"),
-          style: .large)
-          .didSelect { [weak self] _ in
-            self?.count += 1
-          }
-      ])
-    ]
+  @ItemModelBuilder var items: [ItemModeling] {
+    TextRow.itemModel(
+      dataID: DataID.row,
+      content: .init(
+        title: "Count \(count)",
+        body: "Tap to increment"),
+      style: .large)
+      .didSelect { [weak self] _ in
+        self?.count += 1
+      }
   }
 }
 ```
@@ -182,18 +176,16 @@ class BottomButtonViewController: UIViewController {
     bottomBarInstaller.install()
   }
 
-  private lazy var bottomBarInstaller = BottomBarInstaller(
+  lazy var bottomBarInstaller = BottomBarInstaller(
     viewController: self,
     bars: bars)
 
-  private var bars: [BarModeling] {
-    [
-      ButtonRow.barModel(
-        content: .init(text: "Click me!"),
-        behaviors: .init(didTap: {
-          // Handle button selection
-        }))
-    ]
+  @BarModelBuilder var bars: [BarModeling] {
+    ButtonRow.barModel(
+      content: .init(text: "Click me!"),
+      behaviors: .init(didTap: {
+        // Handle button selection
+      }))
   }
 }
 ```
@@ -227,43 +219,33 @@ class FormNavigationController: NavigationController {
     setStack(stack, animated: false)
   }
 
-  private struct State {
-    var showStep2 = false
-  }
-
-  private enum DataID {
+  enum DataID {
     case step1, step2
   }
 
-  private var state = State() {
+  var showStep2 = false {
     didSet { setStack(stack, animated: true) }
   }
 
-  private var stack: [NavigationModel?] {
-    [step1, step2]
-  }
-
-  private var step1: NavigationModel {
+  @NavigationModelBuilder var stack: [NavigationModel] {
     .root(dataID: DataID.step1) { [weak self] in
       Step1ViewController(didTapNext: {
-        self?.state.showStep2 = true
+        self?.showStep2 = true
       })
     }
-  }
 
-  private var step2: NavigationModel? {
-    guard state.showStep2 else { return nil }
-
-    return NavigationModel(
-      dataID: DataID.step2,
-      makeViewController: {
-        Step2ViewController(didTapNext: {
-          // Navigate away from this step.
+    if showStep2 {
+      NavigationModel(
+        dataID: DataID.step2,
+        makeViewController: {
+          Step2ViewController(didTapNext: {
+            // Navigate away from this step.
+          })
+        },
+        remove: { [weak self] in
+          self?.showStep2 = false
         })
-      },
-      remove: { [weak self] in
-        self?.state.showStep2 = false
-      })
+    }
   }
 }
 ```
@@ -297,32 +279,28 @@ class PresentationViewController: UIViewController {
     setPresentation(presentation, animated: true)
   }
 
-  private enum DataID {
+  enum DataID {
     case detail
   }
 
-  private var showDetail = true {
-    didSet {
-      setPresentation(presentation, animated: true)
-    }
+  var showDetail = true {
+    didSet { setPresentation(presentation, animated: true) }
   }
 
-  private var presentation: PresentationModel? {
-    guard showDetail else { return nil }
-
-    return PresentationModel(
-      dataID: DataID.detail,
-      presentation: .system,
-      makeViewController: { [weak self] in
-        DetailViewController(didTapDismiss: {
-          // Handle tapping the dismiss button:
+  @PresentationModelBuilder var presentation: PresentationModel? {
+    if showDetail {
+      PresentationModel(
+        dataID: DataID.detail,
+        presentation: .system,
+        makeViewController: { [weak self] in
+          DetailViewController(didTapDismiss: {
+            self?.showDetail = false
+          })
+        },
+        dismiss: { [weak self] in
           self?.showDetail = false
         })
-      },
-      dismiss: { [weak self] in
-        // Or swiping down the sheet:
-        self?.showDetail = false
-      })
+    }
   }
 }
 ```

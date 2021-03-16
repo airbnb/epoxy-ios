@@ -18,6 +18,10 @@ public struct SectionModel: EpoxyModeled {
     self.items = items
   }
 
+  public init(dataID: AnyHashable? = nil, @ItemModelBuilder items: () -> [ItemModeling]) {
+    self.init(dataID: dataID, items: items())
+  }
+
   // MARK: Public
 
   public var storage = EpoxyModelStorage()

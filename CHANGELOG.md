@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.1.0...HEAD)
 
+### Added
+- Added result builders for `SectionModel`, `ItemModel`, `BarModel`, `PresentationModel`, and
+  `NavigationModel`
+- Added initializers and methods to `CollectionViewController` that take an array of `ItemModel`s
+  and transparently wrap them in a `SectionModel` for consumers.
+
 ### Changed
 - Updated public let properties of public structs with memberwise initializers to be public var
 - `BarStackView` now handles selection of bar models and can be used as an `EpoxyableView`
