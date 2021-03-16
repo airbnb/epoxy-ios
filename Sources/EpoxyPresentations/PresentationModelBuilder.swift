@@ -3,6 +3,21 @@
 
 #if swift(>=5.4)
 /// A result builder that enables a DSL for building an optional presentation model.
+///
+/// For example:
+/// ```
+/// @PresentationModelBuilder var presentation: PresentationModel? {
+///    if showA {
+///      PresentationModel(…)
+///    }
+///    if showB {
+///      PresentationModel(…)
+///    }
+/// }
+/// ```
+///
+/// Will return a `nil` presentation model if `showA` and `showB` are false, else will return the
+/// first non-`nil` presentation model.
 @resultBuilder
 public struct PresentationModelBuilder {
   public typealias Expression = PresentationModel
@@ -51,6 +66,21 @@ public struct PresentationModelBuilder {
 }
 #else
 /// A result builder that enables a DSL for building an optional presentation model.
+///
+/// For example:
+/// ```
+/// @PresentationModelBuilder var presentation: PresentationModel? {
+///    if showA {
+///      PresentationModel(…)
+///    }
+///    if showB {
+///      PresentationModel(…)
+///    }
+/// }
+/// ```
+///
+/// Will return a `nil` presentation model if `showA` and `showB` are false, else will return the
+/// first non-`nil` presentation model.
 @_functionBuilder
 public struct PresentationModelBuilder {
   public typealias Expression = PresentationModel
