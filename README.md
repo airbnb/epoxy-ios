@@ -123,7 +123,7 @@ class CounterViewController: CollectionViewController {
     let layout = UICollectionViewCompositionalLayout
       .list(using: .init(appearance: .plain))
     super.init(layout: layout)
-    setSections(sections, animated: false)
+    setItems(items, animated: false)
   }
 
   enum DataID {
