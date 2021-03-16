@@ -126,15 +126,15 @@ class CounterViewController: CollectionViewController {
     setSections(sections, animated: false)
   }
 
-  private enum DataID {
+  enum DataID {
     case row
   }
 
-  private var count = 0 {
+  var count = 0 {
     didSet { setItems(items, animated: true) }
   }
 
-  @ItemModelBuilder private var items: [ItemModeling] {
+  @ItemModelBuilder var items: [ItemModeling] {
     TextRow.itemModel(
       dataID: DataID.row,
       content: .init(
@@ -176,11 +176,11 @@ class BottomButtonViewController: UIViewController {
     bottomBarInstaller.install()
   }
 
-  private lazy var bottomBarInstaller = BottomBarInstaller(
+  lazy var bottomBarInstaller = BottomBarInstaller(
     viewController: self,
     bars: bars)
 
-  @BarModelBuilder private var bars: [BarModeling] {
+  @BarModelBuilder var bars: [BarModeling] {
     ButtonRow.barModel(
       content: .init(text: "Click me!"),
       behaviors: .init(didTap: {
@@ -219,26 +219,22 @@ class FormNavigationController: NavigationController {
     setStack(stack, animated: false)
   }
 
-  private struct State {
-    var showStep2 = false
-  }
-
-  private enum DataID {
+  enum DataID {
     case step1, step2
   }
 
-  private var state = State() {
+  var showStep2 = false {
     didSet { setStack(stack, animated: true) }
   }
 
-  @NavigationModelBuilder private var stack: [NavigationModel] {
+  @NavigationModelBuilder var stack: [NavigationModel] {
     NavigationModel.root(dataID: DataID.step1) { [weak self] in
       Step1ViewController(didTapNext: {
-        self?.state.showStep2 = true
+        self?.showStep2 = true
       })
     }
 
-    if state.showStep2 {
+    if showStep2 {
       NavigationModel(
         dataID: DataID.step2,
         makeViewController: {
@@ -247,7 +243,7 @@ class FormNavigationController: NavigationController {
           })
         },
         remove: { [weak self] in
-          self?.state.showStep2 = false
+          self?.showStep2 = false
         })
     }
   }
@@ -283,32 +279,28 @@ class PresentationViewController: UIViewController {
     setPresentation(presentation, animated: true)
   }
 
-  private enum DataID {
+  enum DataID {
     case detail
   }
 
-  private var showDetail = true {
-    didSet {
-      setPresentation(presentation, animated: true)
-    }
+  var showDetail = true {
+    didSet { setPresentation(presentation, animated: true) }
   }
 
-  private var presentation: PresentationModel? {
-    guard showDetail else { return nil }
-
-    return PresentationModel(
-      dataID: DataID.detail,
-      presentation: .system,
-      makeViewController: { [weak self] in
-        DetailViewController(didTapDismiss: {
-          // Handle tapping the dismiss button:
+  @PresentationModelBuilder private var presentation: PresentationModel? {
+    if showDetail {
+      PresentationModel(
+        dataID: DataID.detail,
+        presentation: .system,
+        makeViewController: { [weak self] in
+          DetailViewController(didTapDismiss: {
+            self?.showDetail = false
+          })
+        },
+        dismiss: { [weak self] in
           self?.showDetail = false
         })
-      },
-      dismiss: { [weak self] in
-        // Or swiping down the sheet:
-        self?.showDetail = false
-      })
+    }
   }
 }
 ```

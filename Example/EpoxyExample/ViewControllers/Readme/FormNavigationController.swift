@@ -18,26 +18,22 @@ final class FormNavigationController: NavigationController {
 
   // MARK: Private
 
-  private struct State {
-    var showStep2 = false
-  }
-
   private enum DataID {
     case step1, step2
   }
 
-  private var state = State() {
+  private var showStep2 = false {
     didSet { setStack(stack, animated: true) }
   }
 
   @NavigationModelBuilder private var stack: [NavigationModel] {
     NavigationModel.root(dataID: DataID.step1) { [weak self] in
       Step1ViewController(didTapNext: {
-        self?.state.showStep2 = true
+        self?.showStep2 = true
       })
     }
 
-    if state.showStep2 {
+    if showStep2 {
       NavigationModel(
         dataID: DataID.step2,
         makeViewController: {
@@ -46,7 +42,7 @@ final class FormNavigationController: NavigationController {
           })
         },
         remove: { [weak self] in
-          self?.state.showStep2 = false
+          self?.showStep2 = false
         })
     }
   }

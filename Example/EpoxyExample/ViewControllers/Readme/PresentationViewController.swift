@@ -31,20 +31,20 @@ final class PresentationViewController: UIViewController {
     didSet { setPresentation(presentation, animated: true) }
   }
 
-  private var presentation: PresentationModel? {
-    guard showDetail else { return nil }
-
-    return PresentationModel(
-      dataID: DataID.detail,
-      presentation: .system,
-      makeViewController: { [weak self] in
-        DetailViewController(didTapDismiss: {
+  @PresentationModelBuilder private var presentation: PresentationModel? {
+    if showDetail {
+      PresentationModel(
+        dataID: DataID.detail,
+        presentation: .system,
+        makeViewController: { [weak self] in
+          DetailViewController(didTapDismiss: {
+            self?.showDetail = false
+          })
+        },
+        dismiss: { [weak self] in
           self?.showDetail = false
         })
-      },
-      dismiss: { [weak self] in
-        self?.showDetail = false
-      })
+    }
   }
 
 }
