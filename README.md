@@ -287,7 +287,7 @@ class PresentationViewController: UIViewController {
     didSet { setPresentation(presentation, animated: true) }
   }
 
-  @PresentationModelBuilder private var presentation: PresentationModel? {
+  @PresentationModelBuilder var presentation: PresentationModel? {
     if showDetail {
       PresentationModel(
         dataID: DataID.detail,
