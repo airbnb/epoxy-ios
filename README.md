@@ -131,21 +131,19 @@ class CounterViewController: CollectionViewController {
   }
 
   private var count = 0 {
-    didSet { setSections(sections, animated: true) }
+    didSet { setItems(items, animated: true) }
   }
 
-  @SectionModelBuilder private var sections: [SectionModel] {
-    SectionModel {
-      TextRow.itemModel(
-        dataID: DataID.row,
-        content: .init(
-          title: "Count \(count)",
-          body: "Tap to increment"),
-        style: .large)
-        .didSelect { [weak self] _ in
-          self?.count += 1
-        }
-    }
+  @ItemModelBuilder private var items: [ItemModeling] {
+    TextRow.itemModel(
+      dataID: DataID.row,
+      content: .init(
+        title: "Count \(count)",
+        body: "Tap to increment"),
+      style: .large)
+      .didSelect { [weak self] _ in
+        self?.count += 1
+      }
   }
 }
 ```
