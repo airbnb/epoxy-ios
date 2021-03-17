@@ -12,6 +12,17 @@ public struct EpoxyModelArrayBuilder<Model> {
     [expression]
   }
 
+  public static func buildExpression(_ expression: Component) -> Component {
+    expression
+  }
+
+  public static func buildExpression(_ expression: Expression?) -> Component {
+    if let expression = expression {
+      return [expression]
+    }
+    return []
+  }
+
   public static func buildBlock(_ children: Component...) -> Component {
     children.flatMap { $0 }
   }
@@ -45,6 +56,17 @@ public struct EpoxyModelArrayBuilder<Model> {
 
   public static func buildExpression(_ expression: Expression) -> Component {
     [expression]
+  }
+
+  public static func buildExpression(_ expression: Component) -> Component {
+    expression
+  }
+
+  public static func buildExpression(_ expression: Expression?) -> Component {
+    if let expression = expression {
+      return [expression]
+    }
+    return []
   }
 
   public static func buildBlock(_ children: Component...) -> Component {
