@@ -16,7 +16,7 @@ final class PresentationModelBuilderSpec: QuickSpec {
   }
 
   override func spec() {
-    context("with a single presentation model") {
+    context("with a single presentation model expression") {
       it("should build the first presentation") {
         let builder = TestBuilder {
           PresentationModel(
@@ -29,7 +29,7 @@ final class PresentationModelBuilderSpec: QuickSpec {
       }
     }
 
-    context("with multiple presentation model") {
+    context("with multiple presentation model expressions") {
       it("should build the first presentation") {
         let builder = TestBuilder {
           PresentationModel(
@@ -44,6 +44,42 @@ final class PresentationModelBuilderSpec: QuickSpec {
             dismiss: {})
         }
         expect(builder.model?.dataID as? String) == "1"
+      }
+    }
+
+    context("with an optional presentation model expression") {
+      context("that evaluates to a non-nil value") {
+        it("should build the first non-nil presentation") {
+          let optionalPresentation: PresentationModel? = PresentationModel(
+            dataID: "1",
+            presentation: .system,
+            makeViewController: UIViewController.init,
+            dismiss: {})
+          let builder = TestBuilder {
+            optionalPresentation
+            PresentationModel(
+              dataID: "2",
+              presentation: .system,
+              makeViewController: UIViewController.init,
+              dismiss: {})
+          }
+          expect(builder.model?.dataID as? String) == "1"
+        }
+      }
+
+      context("that evaluates to a nil value") {
+        it("should build the first non-nil presentation") {
+          let optionalPresentation: PresentationModel? = nil
+          let builder = TestBuilder {
+            optionalPresentation
+            PresentationModel(
+              dataID: "2",
+              presentation: .system,
+              makeViewController: UIViewController.init,
+              dismiss: {})
+          }
+          expect(builder.model?.dataID as? String) == "2"
+        }
       }
     }
 
