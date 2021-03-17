@@ -11,14 +11,12 @@ public struct SectionModel: EpoxyModeled {
 
   // MARK: Lifecycle
 
-  public init(dataID: AnyHashable? = nil, items: [ItemModeling]) {
-    if let dataID = dataID {
-      self.dataID = dataID
-    }
+  public init(dataID: AnyHashable, items: [ItemModeling]) {
+    self.dataID = dataID
     self.items = items
   }
 
-  public init(dataID: AnyHashable? = nil, @ItemModelBuilder items: () -> [ItemModeling]) {
+  public init(dataID: AnyHashable, @ItemModelBuilder items: () -> [ItemModeling]) {
     self.init(dataID: dataID, items: items())
   }
 
@@ -77,4 +75,18 @@ extension SectionModel: CallbackContextEpoxyModeled {
   /// There's no additional context available on a Section callback as it does not represent a
   /// `UIView`, and instead is just a grouping mechanism.
   public typealias CallbackContext = Void
+}
+
+// MARK: Deprecations
+
+extension SectionModel {
+  @available(*, deprecated, renamed: "init(dataID:items:)", message: "SectionModels now require a dataID to make it harder to have sections with duplicated identities")
+  public init(items: [ItemModeling]) {
+    self.items = items
+  }
+
+  @available(*, deprecated, renamed: "init(dataID:items:)", message: "SectionModels now require a dataID to make it harder to have sections with duplicated identities")
+  public init(@ItemModelBuilder items: () -> [ItemModeling]) {
+    self.items = items()
+  }
 }
