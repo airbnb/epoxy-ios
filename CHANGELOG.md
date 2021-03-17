@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.2.0...HEAD)
 
+### Added
+- Added support for `Array` and `Optional` expressions to model result builders
+
 ## [0.2.0](https://github.com/airbnb/epoxy-ios/compare/0.1.0...0.2.0) - 2021-03-16
 
 ### Added

@@ -17,7 +17,7 @@ final class EpoxyModelBuilderArraySpec: QuickSpec {
   }
 
   override func spec() {
-    context("with a single model") {
+    context("with a single model expression") {
       it("should build the model") {
         let builder = BuilderTest {
           1
@@ -26,13 +26,59 @@ final class EpoxyModelBuilderArraySpec: QuickSpec {
       }
     }
 
-    context("with multiple models") {
+    context("with multiple model expressions") {
       it("should build the models") {
         let builder = BuilderTest {
           1
           2
         }
         expect(builder.models) == [1, 2]
+      }
+    }
+
+    context("with an array expression of models") {
+      context("when non-empty") {
+        it("should include the array models") {
+          let builder = BuilderTest {
+            [1, 2, 3]
+            4
+          }
+          expect(builder.models) == [1, 2, 3, 4]
+        }
+      }
+
+      context("when empty") {
+        it("should omit the array models") {
+          let builder = BuilderTest {
+            []
+            4
+          }
+          expect(builder.models) == [4]
+        }
+      }
+    }
+
+    context("with an optional expression of models") {
+      context("that evaluates to a non-nil value") {
+        it("should include the optional model") {
+          let optionalInt: Int? = 1
+          let builder = BuilderTest {
+            optionalInt
+            2
+          }
+          expect(builder.models) == [1, 2]
+        }
+      }
+
+      context("that evaluates to a nil value") {
+        it("should omit the optional model") {
+          let optionalInt: Int? = nil
+          let builder = BuilderTest {
+            optionalInt
+            2
+          }
+          expect(builder.models) == [2]
+        }
       }
     }
 
