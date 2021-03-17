@@ -27,6 +27,10 @@ public struct PresentationModelBuilder {
     expression
   }
 
+  public static func buildExpression(_ expression: Component) -> Component {
+    expression
+  }
+
   public static func buildBlock(_ children: Component...) -> Component {
     for child in children {
       if let child = child {
@@ -87,6 +91,10 @@ public struct PresentationModelBuilder {
   public typealias Component = PresentationModel?
 
   public static func buildExpression(_ expression: Expression) -> Component {
+    expression
+  }
+
+  public static func buildExpression(_ expression: Component) -> Component {
     expression
   }
 
