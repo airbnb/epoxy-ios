@@ -19,45 +19,43 @@ final class CompositionalLayoutViewController: CollectionViewController {
     case carousel, list
   }
 
-  private var sections: [SectionModel] {
-    [
-      SectionModel(
-        dataID: SectionID.carousel,
-        items: (0..<10).map { (dataID: Int) in
-          TextRow.itemModel(
-            dataID: dataID,
-            content: .init(title: "Page \(dataID)"),
-            style: .small)
-            .didSelect { _ in
-              print("Carousel page \(dataID) did select")
-            }
-            .willDisplay { _ in
-              print("Carousel page \(dataID) will display")
-            }
-        })
-        .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
-          TextRow.supplementaryItemModel(dataID: 0, content: .init(title: "Carousel section"), style: .large),
-        ])
-        .compositionalLayoutSection(.carouselWithHeader),
-      SectionModel(
-        dataID: SectionID.list,
-        items: (0..<10).map { (dataID: Int) in
-          TextRow.itemModel(
-            dataID: dataID,
-            content: .init(title: "Row \(dataID)", body: BeloIpsum.paragraph(count: 1, seed: dataID)),
-            style: .small)
-            .didSelect { _ in
-              print("List row \(dataID) selected")
-            }
-            .willDisplay { _ in
-              print("List row \(dataID) will display")
-            }
-        })
-        .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
-          TextRow.supplementaryItemModel(dataID: 0, content: .init(title: "List section"), style: .large),
-        ])
-        .compositionalLayoutSectionProvider(NSCollectionLayoutSection.listWithHeader),
-    ]
-  }
+  @SectionModelBuilder private var sections: [SectionModel] {
+    SectionModel(dataID: SectionID.carousel) {
+      (0..<10).map { (dataID: Int) in
+        TextRow.itemModel(
+          dataID: dataID,
+          content: .init(title: "Page \(dataID)"),
+          style: .small)
+          .didSelect { _ in
+            print("Carousel page \(dataID) did select")
+          }
+          .willDisplay { _ in
+            print("Carousel page \(dataID) will display")
+          }
+      }
+    }
+    .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
+      TextRow.supplementaryItemModel(dataID: 0, content: .init(title: "Carousel section"), style: .large),
+    ])
+    .compositionalLayoutSection(.carouselWithHeader)
 
+    SectionModel(dataID: SectionID.list) {
+      (0..<10).map { (dataID: Int) in
+        TextRow.itemModel(
+          dataID: dataID,
+          content: .init(title: "Row \(dataID)", body: BeloIpsum.paragraph(count: 1, seed: dataID)),
+          style: .small)
+          .didSelect { _ in
+            print("List row \(dataID) selected")
+          }
+          .willDisplay { _ in
+            print("List row \(dataID) will display")
+          }
+      }
+    }
+    .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [
+      TextRow.supplementaryItemModel(dataID: 0, content: .init(title: "List section"), style: .large),
+    ])
+    .compositionalLayoutSectionProvider(NSCollectionLayoutSection.listWithHeader)
+  }
 }

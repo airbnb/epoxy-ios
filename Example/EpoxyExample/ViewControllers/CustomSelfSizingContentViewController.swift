@@ -10,16 +10,14 @@ final class CustomSelfSizingContentViewController: CollectionViewController {
 
   init() {
     super.init(layout: UICollectionViewCompositionalLayout.listNoDividers)
-    setSections(sections, animated: false)
+    setItems(items, animated: false)
   }
 
   // MARK: Private
 
-  private var sections: [SectionModel] {
-    [
-      SectionModel(items: (0..<10).map { (dataID: Int) in
-        CustomSizingView.itemModel(dataID: dataID)
-      }),
-    ]
+  private var items: [ItemModeling] {
+    (0..<10).map { (dataID: Int) in
+      CustomSizingView.itemModel(dataID: dataID)
+    }
   }
 }
