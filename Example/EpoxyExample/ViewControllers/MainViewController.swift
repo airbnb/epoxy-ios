@@ -4,8 +4,6 @@
 import Epoxy
 import UIKit
 
-// MARK: - MainViewController
-
 final class MainViewController: NavigationController {
 
   // MARK: Lifecycle
@@ -15,24 +13,7 @@ final class MainViewController: NavigationController {
     setStack(stack, animated: false)
   }
 
-  // MARK: Internal
-
-  enum Example: CaseIterable {
-    case readme
-    case product
-    case compositionalLayout
-    case cardStack
-    case flowLayout
-    case shuffle
-    case customSelfSizing
-  }
-
   // MARK: Private
-
-  private struct State {
-    var showExample: Example?
-    var showReadmeExample: ReadmeExample?
-  }
 
   private enum DataID: Hashable {
     case index
@@ -40,51 +21,48 @@ final class MainViewController: NavigationController {
     case readme(ReadmeExample)
   }
 
+  private struct State {
+    var showExample: Example?
+    var showReadmeExample: ReadmeExample?
+  }
+
   private var state = State() {
     didSet { setStack(stack, animated: true) }
   }
 
-  private var stack: [NavigationModel?] {
-    [
-      indexModel,
-      state.showExample.map(exampleModel(example:)),
-      state.showReadmeExample.map(readmeExampleModel(example:)),
-    ]
-  }
-
-  private var indexModel: NavigationModel {
-    .root(dataID: DataID.index) { [weak self] in
+  @NavigationModelBuilder private var stack: [NavigationModel] {
+    NavigationModel.root(dataID: DataID.index) { [weak self] in
       self?.makeExampleIndexViewController()
     }
-  }
 
-  private func exampleModel(example: Example) -> NavigationModel {
-    NavigationModel(
-      dataID: DataID.item(example),
-      makeViewController: { [weak self] in
-        self?.makeExampleController(example: example)
-      },
-      remove: { [weak self] in
-        self?.state.showExample = nil
-      })
-  }
+    if let example = state.showExample {
+      NavigationModel(
+        dataID: DataID.item(example),
+        makeViewController: { [weak self] in
+          self?.makeExampleController(example)
+        },
+        remove: { [weak self] in
+          self?.state.showExample = nil
+        })
+    }
 
-  private func readmeExampleModel(example: ReadmeExample) -> NavigationModel {
-    NavigationModel(
-      dataID: DataID.readme(example),
-      makeViewController: {
-        example.makeViewController()
-      },
-      remove: { [weak self] in
-        self?.state.showReadmeExample = nil
-      })
+    if let example = state.showReadmeExample {
+      NavigationModel(
+        dataID: DataID.readme(example),
+        makeViewController: { [weak self] in
+          self?.makeReadmeExampleViewController(example)
+        },
+        remove: { [weak self] in
+          self?.state.showReadmeExample = nil
+        })
+    }
   }
 
   private func makeExampleIndexViewController() -> UIViewController {
     let viewController = CollectionViewController(
       layout: UICollectionViewCompositionalLayout.list,
-      sections: [
-        SectionModel(items: Example.allCases.map { example in
+      items: {
+        Example.allCases.map { example in
           TextRow.itemModel(
             dataID: example,
             content: .init(title: example.title, body: example.body),
@@ -92,19 +70,20 @@ final class MainViewController: NavigationController {
             .didSelect { [weak self] _ in
               self?.state.showExample = example
             }
-        }),
-      ])
+        }
+      })
     viewController.title = "Epoxy"
     return viewController
   }
 
-  private func makeExampleController(example: Example) -> UIViewController {
+  private func makeExampleController(_ example: Example) -> UIViewController {
     let viewController: UIViewController
     switch example {
     case .readme:
-      viewController = ReadmeExamplesViewController(didSelect: { [weak self] example in
-        self?.state.showReadmeExample = example
-      })
+      viewController = CollectionViewController.readmeExamplesViewController(
+        didSelect: { [weak self] example in
+          self?.state.showReadmeExample = example
+        })
     case .compositionalLayout:
       viewController = CompositionalLayoutViewController()
     case .shuffle:
@@ -122,70 +101,19 @@ final class MainViewController: NavigationController {
     return viewController
   }
 
-}
-
-extension MainViewController.Example {
-  var title: String {
-    switch self {
-    case .readme:
-      return "Readme examples"
-    case .customSelfSizing:
-      return "Custom self-sizing cells"
-    case .compositionalLayout:
-      return "Compositional Layout"
-    case .shuffle:
-      return "Shuffle demo"
-    case .product:
-      return "Product Detail Page"
-    case .flowLayout:
-      return "Flow Layout demo"
-    case .cardStack:
-      return "Card Stack"
+  private func makeReadmeExampleViewController(_ example: ReadmeExample) -> UIViewController {
+    switch example {
+    case .tapMe:
+      return CollectionViewController.makeTapMeViewController()
+    case .counter:
+      return CounterViewController()
+    case .bottomButton:
+      return BottomButtonViewController()
+    case .formNavigation:
+      return FormNavigationController()
+    case .modalPresentation:
+      return PresentationViewController()
     }
   }
 
-  var body: String {
-    switch self {
-    case .readme:
-      return "All of the examples from the README"
-    case .customSelfSizing:
-      return "A CollectionView with custom self-sizing cells"
-    case .compositionalLayout:
-      return "A CollectionView with a UICollectionViewCompositionalLayout"
-    case .shuffle:
-      return "A CollectionView with cells that are randomly shuffled on a timer"
-    case .product:
-      return "An example that combines collections, bars, and presentations"
-    case .flowLayout:
-      return "A CollectionView with a UICollectionViewFlowLayout"
-    case .cardStack:
-      return "A CollectionView with BarStackView items that have a card drawn around each stack"
-    }
-  }
-}
-
-// MARK: - NavigationWrapperViewController
-
-/// A naive implementation a Navigation wrapper so we can nest the `FormNavigationController`
-/// without a crash.
-///
-/// You probably want a custom wrapper for your use cases.
-final class NavigationWrapperViewController: UIViewController {
-  init(navigationController: UINavigationController) {
-    // A naive implementation of `wrapNavigation` so we can nest the `FormNavigationController`.
-    navigationController.setNavigationBarHidden(true, animated: false)
-
-    super.init(nibName: nil, bundle: nil)
-
-    addChild(navigationController)
-    view.addSubview(navigationController.view)
-    navigationController.view.frame = view.bounds
-    navigationController.view.translatesAutoresizingMaskIntoConstraints = true
-    navigationController.view.autoresizingMask = [.flexibleHeight, .flexibleWidth]
-    navigationController.didMove(toParent: self)
-  }
-
-  required init?(coder: NSCoder) {
-    fatalError("init(coder:) has not been implemented")
-  }
 }

@@ -16,26 +16,30 @@ final class CardStackViewController: CollectionViewController {
   // MARK: Private
 
   private var sections: [SectionModel] {
-    [
-      SectionModel(items: (0..<10).map { (dataID: Int) in
-        CardContainer<BarStackView>.itemModel(
-          dataID: dataID,
-          content: .init(models: [
-            ImageMarquee.barModel(
-              content: .init(imageURL: URL(string: "https://picsum.photos/id/\(dataID + 310)/600/300")!),
-              style: .init(height: 150, contentMode: .scaleAspectFill))
-              .didSelect { _ in
-                print("Selected Image Marquee \(dataID)")
-              },
-            TextRow.barModel(
-              content: .init(title: "Row \(dataID)", body: BeloIpsum.paragraph(count: 1, seed: dataID)),
-              style: .small)
-              .didSelect { _ in
-                print("Selected Text Row \(dataID)")
-              },
-          ], selectedBackgroundColor: .secondarySystemBackground),
-          style: .init(card: .init()))
-      }),
-    ]
+    (0..<10).map { (dataID: Int) in
+      SectionModel(dataID: dataID) {
+        (0..<10).map { (dataID: Int) in
+          CardContainer<BarStackView>.itemModel(
+            dataID: dataID,
+            content: .init(
+              models: [
+                ImageMarquee.barModel(
+                  content: .init(imageURL: URL(string: "https://picsum.photos/id/\(dataID + 310)/600/300")!),
+                  style: .init(height: 150, contentMode: .scaleAspectFill))
+                  .didSelect { _ in
+                    print("Selected Image Marquee \(dataID)")
+                  },
+                TextRow.barModel(
+                  content: .init(title: "Row \(dataID)", body: BeloIpsum.paragraph(count: 1, seed: dataID)),
+                  style: .small)
+                  .didSelect { _ in
+                    print("Selected Text Row \(dataID)")
+                  },
+              ],
+              selectedBackgroundColor: .secondarySystemBackground),
+            style: .init(card: .init()))
+        }
+      }
+    }
   }
 }

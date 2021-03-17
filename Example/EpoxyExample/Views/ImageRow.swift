@@ -4,8 +4,6 @@
 import Epoxy
 import UIKit
 
-// MARK: - ImageRow
-
 final class ImageRow: UIView, EpoxyableView {
 
   // MARK: Lifecycle
@@ -22,7 +20,13 @@ final class ImageRow: UIView, EpoxyableView {
 
   // MARK: Internal
 
-  func setContent(_ content: ImageRowContent, animated: Bool) {
+  struct Content: Equatable {
+    let title: String
+    let subtitle: String
+    let imageURL: URL
+  }
+
+  func setContent(_ content: Content, animated: Bool) {
     titleLabel.text = content.title
     subtitleLabel.text = content.subtitle
     imageView.setURL(content.imageURL)
@@ -81,12 +85,4 @@ final class ImageRow: UIView, EpoxyableView {
     ])
     layoutMargins = UIEdgeInsets(top: 20, left: 24, bottom: 20, right: 24)
   }
-}
-
-// MARK: - ImageRowContent
-
-struct ImageRowContent: Equatable {
-  let title: String
-  let subtitle: String
-  let imageURL: URL
 }

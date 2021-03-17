@@ -10,7 +10,7 @@ final class ProductViewController: CollectionViewController {
 
   init() {
     super.init(layout: UICollectionViewCompositionalLayout.listNoDividers)
-    setSections(sections, animated: false)
+    setItems(items, animated: false)
   }
 
   // MARK: Internal
@@ -38,62 +38,54 @@ final class ProductViewController: CollectionViewController {
     didSet { setPresentation(presentation, animated: true) }
   }
 
-  private var sections: [SectionModel] {
-    [
-      SectionModel(items: [
-        ImageMarquee.itemModel(
-          dataID: DataID.Item.headerImage,
-          content: .init(imageURL: URL(string: "https://picsum.photos/id/350/500/500")!),
-          style: .init(height: 250, contentMode: .scaleAspectFill)),
-        TextRow.itemModel(
-          dataID: DataID.Item.titleRow,
-          content: .init(title: "Our Great Product"),
-          style: .large),
-        ImageRow.itemModel(
-          dataID: DataID.Item.imageRow,
-          content: .init(
-            title: "Here is our exciting product",
-            subtitle: "We think you should buy it.",
-            imageURL: URL(string: "https://picsum.photos/id/350/500/500")!)),
-      ]),
-    ]
+  @ItemModelBuilder private var items: [ItemModeling] {
+    ImageMarquee.itemModel(
+      dataID: DataID.Item.headerImage,
+      content: .init(imageURL: URL(string: "https://picsum.photos/id/350/500/500")!),
+      style: .init(height: 250, contentMode: .scaleAspectFill))
+    TextRow.itemModel(
+      dataID: DataID.Item.titleRow,
+      content: .init(title: "Our Great Product"),
+      style: .large)
+    ImageRow.itemModel(
+      dataID: DataID.Item.imageRow,
+      content: .init(
+        title: "Here is our exciting product",
+        subtitle: "We think you should buy it.",
+        imageURL: URL(string: "https://picsum.photos/id/350/500/500")!))
   }
 
-  private var bars: [BarModeling] {
-    [
-      ButtonRow.barModel(content: .init(text: "Buy now"), behaviors: .init(didTap: { [weak self] in
-        self?.showBuy = true
-      })),
-    ]
+  @BarModelBuilder private var bars: [BarModeling] {
+    ButtonRow.barModel(content: .init(text: "Buy now"), behaviors: .init(didTap: { [weak self] in
+      self?.showBuy = true
+    }))
   }
 
-  private var presentation: PresentationModel? {
-    guard showBuy else { return nil }
+  @PresentationModelBuilder private var presentation: PresentationModel? {
+    if showBuy {
+      PresentationModel(
+        dataID: DataID.Presentation.buy,
+        presentation: .system,
+        makeViewController: {
+          enum DataID {
+            case titleRow
+          }
 
-    return PresentationModel(
-      dataID: DataID.Presentation.buy,
-      presentation: .system,
-      makeViewController: {
-        enum DataID {
-          case titleRow
-        }
-
-        return CollectionViewController(
-          layout: UICollectionViewCompositionalLayout.listNoDividers,
-          sections: [
-            SectionModel(items: [
+          return CollectionViewController(
+            layout: UICollectionViewCompositionalLayout.listNoDividers,
+            items: {
               TextRow.itemModel(
                 dataID: DataID.titleRow,
                 content: .init(
                   title: "You bought it, congrats!",
                   body: "Let's check out"),
-                style: .large),
-            ]),
-          ])
-      },
-      dismiss: { [weak self] in
-        self?.showBuy = false
-      })
+                style: .large)
+            })
+        },
+        dismiss: { [weak self] in
+          self?.showBuy = false
+        })
+    }
   }
 
 }
