@@ -288,33 +288,224 @@ final class CollectionViewSpec: QuickSpec {
       }
     }
 
-    describe("setContent") {
-      var didSetContent: [ItemModel<TestView>.CallbackContext]!
-      var erasedItemDidSetContent: [AnyItemModel.CallbackContext]!
+    describe("setBehavior") {
+      var section: SectionModel!
 
-      context("when the content is set") {
+      context("when the behavior is set") {
+        context("ItemModel") {
+          var didSetBehaviors: [ItemModel<TestView>.CallbackContext]!
+          var erasedItemDidSetBehaviors: [AnyItemModel.CallbackContext]!
+          
+          beforeEach {
+            let item = itemModel
+              .setBehaviors {
+                didSetBehaviors.append($0)
+              }
+              .eraseToAnyItemModel()
+              .setBehaviors {
+                erasedItemDidSetBehaviors.append($0)
+              }
+
+            didSetBehaviors = []
+            erasedItemDidSetBehaviors = []
+
+            section = SectionModel(items: [item])
+              .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItemModel])
+          }
+
+          afterEach {
+            didSetBehaviors = nil
+            erasedItemDidSetBehaviors = nil
+            section = nil
+          }
+
+          context("before its behavior is set") {
+            it("should not call setBehavior") {
+              expect(didSetBehaviors).to(haveCount(0))
+              expect(erasedItemDidSetBehaviors).to(haveCount(0))
+            }
+          }
+
+          context("behavior has been set") {
+            beforeEach {
+              collectionView.setSections([section], animated: false)
+              // layoutIfNeeded is required to force the epoxy lifecycle and trigger didSetBehaviors
+              collectionView.layoutIfNeeded()
+            }
+
+            it("should call didSetBehaviors") {
+              expect(didSetBehaviors).to(haveCount(1))
+              expect(erasedItemDidSetBehaviors).to(haveCount(1))
+            }
+          }
+        }
+        context("SupplementaryItemModel") {
+          var didSetBehaviorsSupplementary: [SupplementaryItemModel<TestView>.CallbackContext]!
+          var erasedItemDidSetBehaviorsSupplementary: [AnySupplementaryItemModel.CallbackContext]!
+
+          beforeEach {
+            let supplementaryItem = supplementaryItemModel
+              .setBehaviors {
+                didSetBehaviorsSupplementary.append($0)
+              }
+              .eraseToAnySupplementaryItemModel()
+              .setBehaviors {
+                erasedItemDidSetBehaviorsSupplementary.append($0)
+              }
+
+            didSetBehaviorsSupplementary = []
+            erasedItemDidSetBehaviorsSupplementary = []
+
+            section = SectionModel(items: [itemModel])
+              .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItem])
+          }
+
+          afterEach {
+            didSetBehaviorsSupplementary = nil
+            erasedItemDidSetBehaviorsSupplementary = nil
+            section = nil
+          }
+
+          context("before its behavior is set") {
+            it("should not call setBehavior") {
+              expect(didSetBehaviorsSupplementary).to(haveCount(0))
+              expect(erasedItemDidSetBehaviorsSupplementary).to(haveCount(0))
+            }
+          }
+          context("behavior has been set") {
+            beforeEach {
+              collectionView.setSections([section], animated: false)
+              // layoutIfNeeded is required to force the epoxy lifecycle and trigger didSetBehaviors
+              collectionView.layoutIfNeeded()
+            }
+
+            it("should call didSetBehaviors") {
+              expect(didSetBehaviorsSupplementary).to(haveCount(1))
+              expect(erasedItemDidSetBehaviorsSupplementary).to(haveCount(1))
+            }
+          }
+        }
+      }
+    }
+
+    describe("setContent") {
+      context("ItemModel") {
+        var didSetContent: [ItemModel<TestView>.CallbackContext]!
+        var erasedItemDidSetContent: [AnyItemModel.CallbackContext]!
+
+        context("when the content is set") {
+          beforeEach {
+            let item = itemModel
+              .setContent {
+                didSetContent.append($0)
+              }
+              .eraseToAnyItemModel()
+              .setContent {
+                erasedItemDidSetContent.append($0)
+              }
+
+            didSetContent = []
+            erasedItemDidSetContent = []
+
+            let section = SectionModel(items: [item])
+              .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItemModel])
+
+            collectionView.setSections([section], animated: false)
+            // // layoutIfNeeded is required to force the epoxy lifecycle and trigger didSetContent
+            collectionView.layoutIfNeeded()
+          }
+
+          it("should call didSetContent") {
+            expect(didSetContent).to(haveCount(1))
+            expect(erasedItemDidSetContent).to(haveCount(1))
+          }
+        }
+      }
+      context("SupplementaryItemModel") {
+        var didSetContentSupplementary: [SupplementaryItemModel<TestView>.CallbackContext]!
+        var erasedItemDidSetContentSupplementary: [AnySupplementaryItemModel.CallbackContext]!
+
+        context("when the content is set") {
+          beforeEach {
+            let supplementaryItem = supplementaryItemModel
+              .setContent {
+                didSetContentSupplementary.append($0)
+              }
+              .eraseToAnySupplementaryItemModel()
+              .setContent {
+                erasedItemDidSetContentSupplementary.append($0)
+              }
+
+            didSetContentSupplementary = []
+            erasedItemDidSetContentSupplementary = []
+
+            let section = SectionModel(items: [itemModel])
+              .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItem])
+
+            collectionView.setSections([section], animated: false)
+            // // layoutIfNeeded is required to force the epoxy lifecycle and trigger didSetContent
+            collectionView.layoutIfNeeded()
+          }
+
+          it("should call didSetContent") {
+            expect(didSetContentSupplementary).to(haveCount(1))
+            expect(erasedItemDidSetContentSupplementary).to(haveCount(1))
+          }
+        }
+      }
+    }
+
+    describe("didChangeState") {
+      var didChangeState: [ItemModel<TestView>.CallbackContext]!
+      var erasedItemDidChangeState: [AnyItemModel.CallbackContext]!
+      var section: SectionModel!
+
+      context("when the behavior is set") {
         beforeEach {
           let item = itemModel
-            .setContent {
-              didSetContent.append($0)
+            .didChangeState {
+              didChangeState.append($0)
             }
             .eraseToAnyItemModel()
-            .setContent {
-              erasedItemDidSetContent.append($0)
+            .didChangeState {
+              erasedItemDidChangeState.append($0)
             }
 
-          didSetContent = []
-          erasedItemDidSetContent = []
+          didChangeState = []
+          erasedItemDidChangeState = []
 
-          let section = SectionModel(items: [item])
+          section = SectionModel(items: [item])
             .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItemModel])
-          
           collectionView.setSections([section], animated: false)
+          // Required to prevent a index path out of bounds exception during selection.
+          collectionView.layoutIfNeeded()
         }
 
-        it("should call didSetContent") {
-          expect(didSetContent).to(haveCount(1))
-          expect(erasedItemDidSetContent).to(haveCount(1))
+        afterEach {
+          didChangeState = nil
+          erasedItemDidChangeState = nil
+          section = nil
+        }
+
+        context("before its behavior is set") {
+          it("should not call setBehavior") {
+            expect(didChangeState).to(haveCount(0))
+            expect(erasedItemDidChangeState).to(haveCount(0))
+          }
+        }
+
+        context("behavior has been set") {
+          beforeEach {
+            // didHighlightItemAt is being used to trigger didChangeState
+            collectionView.delegate?.collectionView?(
+              collectionView,
+              didHighlightItemAt: IndexPath(item: 0, section: 0))
+          }
+
+          it("should call didSetBehaviors") {
+            expect(didChangeState).to(haveCount(1))
+            expect(erasedItemDidChangeState).to(haveCount(1))
+          }
         }
       }
     }

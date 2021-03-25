@@ -49,6 +49,14 @@ extension AnyItemModel: DidSelectProviding {}
 
 extension AnyItemModel: SetContentProviding {}
 
+// MARK: DidChangeStateProviding
+
+extension AnyItemModel: DidChangeStateProviding {}
+
+// MARK: SetBehaviorsProviding
+
+extension AnyItemModel: SetBehaviorsProviding {}
+
 // MARK: ItemModeling
 
 extension AnyItemModel: ItemModeling {
@@ -79,10 +87,16 @@ extension AnyItemModel: InternalItemModeling {
 
   public func setBehavior(cell: ItemWrapperView, with metadata: ItemCellMetadata) {
     model.setBehavior(cell: cell, with: metadata)
+    if let view = cell.view {
+      setBehaviors?(.init(view: view, metadata: metadata))
+    }
   }
 
   public func configureStateChange(in cell: ItemWrapperView, with metadata: ItemCellMetadata) {
     model.configureStateChange(in: cell, with: metadata)
+    if let view = cell.view {
+      didChangeState?(.init(view: view, metadata: metadata))
+    }
   }
 
   public func handleDidSelect(_ cell: ItemWrapperView, with metadata: ItemCellMetadata) {
