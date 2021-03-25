@@ -310,8 +310,6 @@ final class CollectionViewSpec: QuickSpec {
             .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItemModel])
           
           collectionView.setSections([section], animated: false)
-          // Required to prevent a index path out of bounds exception during selection.
-          collectionView.layoutIfNeeded()
         }
 
         it("should call didSetContent") {
