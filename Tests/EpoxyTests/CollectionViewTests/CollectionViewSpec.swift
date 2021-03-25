@@ -288,7 +288,7 @@ final class CollectionViewSpec: QuickSpec {
       }
     }
 
-    describe("did Set Content") {
+    describe("setContent") {
       var didSetContent: [ItemModel<TestView>.CallbackContext]!
       var erasedItemDidSetContent: [AnyItemModel.CallbackContext]!
 
