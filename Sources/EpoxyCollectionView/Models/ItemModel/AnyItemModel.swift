@@ -45,6 +45,10 @@ extension AnyItemModel: DidEndDisplayingProviding {}
 
 extension AnyItemModel: DidSelectProviding {}
 
+// MARK: SetContentProviding
+
+extension AnyItemModel: SetContentProviding {}
+
 // MARK: ItemModeling
 
 extension AnyItemModel: ItemModeling {
@@ -68,6 +72,9 @@ extension AnyItemModel: InternalItemModeling {
 
   public func configure(cell: ItemWrapperView, with metadata: ItemCellMetadata) {
     model.configure(cell: cell, with: metadata)
+    if let view = cell.view {
+      setContent?(.init(view: view, metadata: metadata))
+    }
   }
 
   public func setBehavior(cell: ItemWrapperView, with metadata: ItemCellMetadata) {

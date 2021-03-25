@@ -288,6 +288,39 @@ final class CollectionViewSpec: QuickSpec {
       }
     }
 
+    describe("did Set Content") {
+      var didSetContent: [ItemModel<TestView>.CallbackContext]!
+      var erasedItemDidSetContent: [AnyItemModel.CallbackContext]!
+
+      context("when the content is set") {
+        beforeEach {
+          let item = itemModel
+            .setContent {
+              didSetContent.append($0)
+            }
+            .eraseToAnyItemModel()
+            .setContent {
+              erasedItemDidSetContent.append($0)
+            }
+
+          didSetContent = []
+          erasedItemDidSetContent = []
+
+          let section = SectionModel(items: [item])
+            .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItemModel])
+          
+          collectionView.setSections([section], animated: false)
+          // Required to prevent a index path out of bounds exception during selection.
+          collectionView.layoutIfNeeded()
+        }
+
+        it("should call didSetContent") {
+          expect(didSetContent).to(haveCount(1))
+          expect(erasedItemDidSetContent).to(haveCount(1))
+        }
+      }
+    }
+
     describe("item selection") {
       var itemDidSelect: [ItemModel<TestView>.CallbackContext]!
       var erasedItemDidSelect: [AnyItemModel.CallbackContext]!
