@@ -47,6 +47,14 @@ extension AnySupplementaryItemModel: WillDisplayProviding {}
 
 extension AnySupplementaryItemModel: DidEndDisplayingProviding {}
 
+// MARK: SetContentProviding
+
+extension AnySupplementaryItemModel: SetContentProviding {}
+
+// MARK: SetBehaviorsProviding
+
+extension AnySupplementaryItemModel: SetBehaviorsProviding {}
+
 // MARK: SupplementaryItemModeling
 
 extension AnySupplementaryItemModel: SupplementaryItemModeling {
@@ -75,6 +83,9 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
     animated: Bool)
   {
     model.configure(reusableView: reusableView, traitCollection: traitCollection, animated: animated)
+    if let view = reusableView.view {
+      setContent?(.init(view: view, traitCollection: traitCollection, animated: animated))
+    }
   }
 
   func handleWillDisplay(
@@ -105,6 +116,9 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
     animated: Bool)
   {
     model.setBehavior(reusableView: reusableView, traitCollection: traitCollection, animated: animated)
+    if let view = reusableView.view {
+      setBehaviors?(.init(view: view, traitCollection: traitCollection, animated: animated))
+    }
   }
 }
 
