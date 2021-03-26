@@ -411,7 +411,7 @@ final class CollectionViewSpec: QuickSpec {
               .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItemModel])
 
             collectionView.setSections([section], animated: false)
-            // // layoutIfNeeded is required to force the epoxy lifecycle and trigger didSetContent
+            // layoutIfNeeded is required to force the epoxy lifecycle and trigger didSetContent
             collectionView.layoutIfNeeded()
           }
 
@@ -443,7 +443,7 @@ final class CollectionViewSpec: QuickSpec {
               .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItem])
 
             collectionView.setSections([section], animated: false)
-            // // layoutIfNeeded is required to force the epoxy lifecycle and trigger didSetContent
+            // layoutIfNeeded is required to force the epoxy lifecycle and trigger didSetContent
             collectionView.layoutIfNeeded()
           }
 
