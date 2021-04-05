@@ -58,7 +58,6 @@ public class KeyboardPositionWatcher {
     guard let scrollView = scrollView else { return }
 
     var previousOverlap: CGFloat = 0
-    var saved: BottomInsets?
 
     observeOverlap(in: scrollView) { [weak scrollView] overlap in
       guard let scrollView = scrollView, scrollView.keyboardAdjustsBottomContentInset else { return }
@@ -67,10 +66,10 @@ public class KeyboardPositionWatcher {
 
       // Store the previous insets when the keyboard appears and reapply when disappeared.
       if overlap > 0, previousOverlap == 0 {
-        saved = scrollView.bottomInsets
-      } else if overlap == 0, previousOverlap > 0, let unwrappedSaved = saved {
-        insets = unwrappedSaved
-        saved = nil
+        scrollView.originalBottomInsets = scrollView.bottomInsets
+      } else if overlap == 0, previousOverlap > 0, let saved = scrollView.originalBottomInsets {
+        insets = saved
+        scrollView.originalBottomInsets = nil
       }
 
       scrollView.bottomInsets = insets
@@ -233,8 +232,16 @@ extension UIScrollView {
       objc_getAssociatedObject(self, &Keys.adjustsKeyboardPosition) as? Bool ?? true
     }
     set {
-      objc_setAssociatedObject(self, &Keys.adjustsKeyboardPosition, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+      objc_setAssociatedObject(self, &Keys.adjustsKeyboardPosition, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
     }
+  }
+
+  /// The amount that the `contentInset.bottom` of this scroll view has been adjusted to accommodate
+  /// for the keyboard by a `KeyboardPositionWatcher`, else `nil` if no adjustment has occurred.
+  @nonobjc
+  public var keyboardContentInsetAdjustment: CGFloat? {
+    guard let originalBottomInsets = originalBottomInsets else { return nil }
+    return max(contentInset.bottom - originalBottomInsets.content, 0)
   }
 
   // MARK: Fileprivate
@@ -251,6 +258,17 @@ extension UIScrollView {
       contentInset.bottom = newValue.content
       verticalScrollIndicatorInsets.bottom = newValue.verticalScrollIndicator
       horizontalScrollIndicatorInsets.bottom = newValue.horizontalScrollIndicator
+    }
+  }
+
+  /// The original bottom insets of this scroll view from before the keyboard was displayed,
+  /// populated while the keyboard is visible and `nil` otherwise.
+  fileprivate var originalBottomInsets: BottomInsets? {
+    get {
+      objc_getAssociatedObject(self, &Keys.originalBottomInsets) as? BottomInsets
+    }
+    set {
+      objc_setAssociatedObject(self, &Keys.originalBottomInsets, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
     }
   }
 
@@ -285,4 +303,5 @@ extension UIScrollView {
 /// Associated object keys.
 private enum Keys {
   static var adjustsKeyboardPosition = 0
+  static var originalBottomInsets = 0
 }
