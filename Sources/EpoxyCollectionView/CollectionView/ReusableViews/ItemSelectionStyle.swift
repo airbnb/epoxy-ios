@@ -6,7 +6,7 @@ import UIKit
 /// The style applied to selected items in a `CollectionView`.
 ///
 /// - SeeAlso: `SelectionStyleProviding`
-public enum ItemSelectionStyle {
+public enum ItemSelectionStyle: Hashable {
   /// No background is drawn behind selected items.
   ///
   /// This case can't be labeled "none" as that is misinterpreted by the compiler as Optional.none
