@@ -44,10 +44,10 @@ final class BarInstaller<Container: BarContainer> {
   /// Installs the bar stack into the associated view controller.
   ///
   /// Should be called once the view controller loads its view. If this installer has no bar model,
-  /// no view will be added. A view will only be added once a non-nil bar model is set after
-  /// installation or if a bar model was set prior to installation.
+  /// no view will be added. Bar views will only be added once bar models are set after installation
+  /// or if bar models were set prior to installation.
   func install() {
-    installed = true
+    guard !installed else { return }
 
     guard let view = viewController?.viewIfLoaded else {
       EpoxyLogger.shared.assertionFailure(
@@ -56,11 +56,16 @@ final class BarInstaller<Container: BarContainer> {
     }
 
     setBars(bars, animated: false, in: view)
+
+    installed = true
   }
 
   /// Removes the bar stack from the associated view controller.
   func uninstall() {
+    guard installed else { return }
+
     uninstallContainer()
+
     installed = false
   }
 
