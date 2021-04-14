@@ -42,4 +42,3 @@ extension EpoxyModeled where Self: MakeConstrainableProviding {
       updateStrategy: .replace)
   }
 }
-
