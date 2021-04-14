@@ -19,11 +19,13 @@ final class MainViewController: NavigationController {
     case index
     case item(Example)
     case readme(ReadmeExample)
+    case layoutGroups(LayoutGroupsExample)
   }
 
   private struct State {
     var showExample: Example?
     var showReadmeExample: ReadmeExample?
+    var showLayoutGroupsExample: LayoutGroupsExample?
   }
 
   private var state = State() {
@@ -54,6 +56,17 @@ final class MainViewController: NavigationController {
         },
         remove: { [weak self] in
           self?.state.showReadmeExample = nil
+        })
+    }
+
+    if let example = state.showLayoutGroupsExample {
+      NavigationModel(
+        dataID: DataID.layoutGroups(example),
+        makeViewController: { [weak self] in
+          self?.makeLayoutGroupsExampleViewController(example)
+        },
+        remove: { [weak self] in
+          self?.state.showLayoutGroupsExample = nil
         })
     }
   }
@@ -98,6 +111,11 @@ final class MainViewController: NavigationController {
       viewController = CardStackViewController()
     case .textField:
       viewController = TextFieldViewController()
+    case .layoutGroups:
+      viewController = CollectionViewController.layoutGroupsExampleViewController(
+        didSelect: { [weak self] example in
+          self?.state.showLayoutGroupsExample = example
+        })
     }
     viewController.title = example.title
     return viewController
@@ -115,6 +133,27 @@ final class MainViewController: NavigationController {
       return FormNavigationController()
     case .modalPresentation:
       return PresentationViewController()
+    }
+  }
+
+  private func makeLayoutGroupsExampleViewController(_ example: LayoutGroupsExample) -> UIViewController {
+    switch example {
+    case .readmeExamples:
+      return CollectionViewController(contentProvider: ReadmeExamplesContentProvider())
+    case .textRowExample:
+      return CollectionViewController(contentProvider: TextRowExampleContentProvider())
+    case .colors:
+      return CollectionViewController(contentProvider: ColorsContentProvider())
+    case .messages:
+      return CollectionViewController(contentProvider: MessagesContentProvider())
+    case .messagesUIStackView:
+      return CollectionViewController(contentProvider: MessagesUIStackViewContentProvider())
+    case .todoList:
+      return CollectionViewController(contentProvider: TodoListContentProvider())
+    case .entirelyInline:
+      return CollectionViewController(contentProvider: EntirelyInlineContentProvider())
+    case .complex:
+      return ComplexDeclarativeViewController()
     }
   }
 
