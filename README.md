@@ -25,6 +25,7 @@ Below are a few sample screens from the Airbnb app that we've built using Epoxy.
     * [EpoxyBars](#epoxybars)
     * [EpoxyNavigationController](#epoxynavigationcontroller)
     * [EpoxyPresentations](#epoxypresentations)
+    * [EpoxyLayoutGroups](#epoxylayoutgroups)
 * [Documentation and Tutorials](#documentation-and-tutorials)
 * [FAQ](#faq)
 * [Contributing](#contributing)
@@ -65,6 +66,7 @@ Epoxy has a modular architecture so you only have to include what you need for y
 | [`EpoxyNavigationController`](#EpoxyNavigationController) | Declarative API for driving the navigation stack of a [`UINavigationController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller) |
 | [`EpoxyPresentations`](#EpoxyPresentations) | Declarative API for driving the modal presentations of a [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller) |
 | [`EpoxyBars`](#EpoxyBars) | Declarative API for adding fixed top/bottom bar stacks to a [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller) |
+| [`EpoxyLayoutGroups`](#EpoxyLayoutGroups) | Declarative API for driving the subviews of a UIView |
 | [`EpoxyCore`](https://github.com/airbnb/epoxy-ios/wiki/EpoxyCore) | Foundational APIs that are used to build all Epoxy declarative UI APIs |
 
 ## Getting Started
@@ -325,6 +327,61 @@ class PresentationViewController: UIViewController {
 </table>
 
 You can learn more about `EpoxyPresentations` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyPresentations).
+
+## EpoxyLayoutGroups
+
+LayoutGroups are UIKit [Auto Layout](https://developer.apple.com/library/archive/documentation/UserExperience/Conceptual/AutolayoutPG/index.html) containers inspired by SwiftUI's [`HStack`](https://developer.apple.com/documentation/swiftui/hstack) and [`VStack`](https://developer.apple.com/documentation/swiftui/vstack) that allow you to easily compose UIKit elements into horizontal and vertical groups.
+
+`VGroup` allows you to group components together vertically to create stacked components like this:
+
+| ActionRow |
+| --------- |
+| ![ActionRow screenshot](docs/images/ActionRow.png) |
+
+```swift
+// create any number of views you want to vertically group
+let titleLabel = UILabel(...)
+let subtitleLabel = UILabel(...)
+let actionButton = UIButton(...)
+
+// add them to the group
+let group = VGroup(alignment: .leading, spacing: 8) {
+  titleLabel
+  subtitleLabel
+  actionButton
+}
+
+// install your group in a view
+group.install(in: view)
+
+// constrain the group like you would a normal subview
+group.constrainToMargins()
+```
+
+Note that we can use the same syntax as `SwiftUI`‘s `VStack` thanks to some result builder magic ✨. For the most part this is a lot like using regular views, the main difference being that `install(in: view)` call.
+
+Both `HGroup` and `VGroup` are written using [`UILayoutGuide`](https://developer.apple.com/documentation/uikit/uilayoutguide) which prevents having large nested view hierarchies. To account for this, we’ve added this `install` method to prevent the user from having to add subviews and the layout guide manually.
+
+Using `HGroup` is almost exactly the same as `VGroup` but the components are now horizontally laid out instead of vertically:
+
+| IconRow |
+| --------- |
+| ![IconRow screenshot](docs/images/IconRow.png) |
+
+```swift
+let titleLabel = UILabel(...)
+let iconView = UIImageView(...)
+
+let group = HGroup(spacing: 8) {
+  iconView
+  subtitleLabel
+}
+
+group.install(in: view)
+group.constrainToMargins()
+```
+
+You can learn more about `EpoxyLayoutGroups` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyLayoutGruops).
 
 ## Documentation and Tutorials
 
