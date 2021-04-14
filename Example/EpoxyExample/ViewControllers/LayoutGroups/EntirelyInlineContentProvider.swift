@@ -2,27 +2,17 @@
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
 import EpoxyCollectionView
-import Foundation
 import EpoxyLayoutGroups
+import Foundation
 import UIKit
 
 /// This content provider shows how you can create entire components
 /// inline using VGroupView and HGroupView inside of Epoxy
 struct EntirelyInlineContentProvider: ContentProvider {
 
+  // MARK: Internal
+
   var title: String { "Entirely Inline" }
-
-  private enum RowDataID {
-    case textRow
-    case imageRow
-  }
-
-  private enum GroupDataID {
-    case title
-    case subtitle
-    case image
-    case verticalGroup
-  }
 
   var items: [ItemModeling] {
     [
@@ -53,8 +43,22 @@ struct EntirelyInlineContentProvider: ContentProvider {
         },
         style: .init(
           hGroupStyle: .init(spacing: 16),
-          layoutMargins: .init(top: 16, left: 24, bottom: 16, right: 24)))
+          layoutMargins: .init(top: 16, left: 24, bottom: 16, right: 24))),
     ]
+  }
+
+  // MARK: Private
+
+  private enum RowDataID {
+    case textRow
+    case imageRow
+  }
+
+  private enum GroupDataID {
+    case title
+    case subtitle
+    case image
+    case verticalGroup
   }
 
   private func titleItem(title: String) -> GroupItemModeling {

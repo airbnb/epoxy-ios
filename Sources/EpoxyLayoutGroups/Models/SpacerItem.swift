@@ -4,12 +4,14 @@
 import EpoxyCore
 import UIKit
 
+// MARK: - SpacerItem
+
 /// A `GroupItemModeling` implementation of `Spacer` to be used within groups
 public struct SpacerItem {
 
   public init(
     dataID: AnyHashable,
-    style: Spacer.Style = .init()) 
+    style: Spacer.Style = .init())
   {
     self.dataID = dataID
     self.style = style
@@ -21,16 +23,18 @@ public struct SpacerItem {
   public var style: Spacer.Style
 }
 
+// MARK: GroupItemModeling
+
 extension SpacerItem: GroupItemModeling {
+  public var diffIdentifier: AnyHashable {
+    DiffIdentifier(dataID: dataID, style: style)
+  }
+
   public func eraseToAnyGroupItem() -> AnyGroupItem {
     GroupItem<Spacer>(dataID: dataID) {
       Spacer(style: style)
     }
     .eraseToAnyGroupItem()
-  }
-
-  public var diffIdentifier: AnyHashable {
-    DiffIdentifier(dataID: dataID, style: style)
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
@@ -41,7 +45,7 @@ extension SpacerItem: GroupItemModeling {
   }
 }
 
-// MARK: DiffIdentifier
+// MARK: - DiffIdentifier
 
 private struct DiffIdentifier: Hashable {
   let dataID: AnyHashable

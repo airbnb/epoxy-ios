@@ -8,7 +8,8 @@ import UIKit
 extension VGroup.ItemAlignment: Equatable {
   public static func ==(
     lhs: VGroup.ItemAlignment,
-    rhs: VGroup.ItemAlignment) -> Bool
+    rhs: VGroup.ItemAlignment)
+    -> Bool
   {
     switch (lhs, rhs) {
     case (.fill, .fill),
@@ -31,7 +32,8 @@ extension VGroup.ItemAlignment: Equatable {
 extension HGroup.ItemAlignment: Equatable {
   public static func ==(
     lhs: HGroup.ItemAlignment,
-    rhs: HGroup.ItemAlignment) -> Bool
+    rhs: HGroup.ItemAlignment)
+    -> Bool
   {
     switch (lhs, rhs) {
     case (.fill, .fill),

@@ -6,13 +6,9 @@ import Foundation
 
 struct MessagesContentProvider: ContentProvider {
 
-  var title: String { "Message List (LayoutGroups)" }
+  // MARK: Internal
 
-  private enum DataID {
-    case sara
-    case beyonce
-    case taylor
-  }
+  var title: String { "Message List (LayoutGroups)" }
 
   var items: [ItemModeling] {
     let sampleRows = [
@@ -43,4 +39,13 @@ struct MessagesContentProvider: ContentProvider {
     ]
     return sampleRows.duplicate(100)
   }
+
+  // MARK: Private
+
+  private enum DataID {
+    case sara
+    case beyonce
+    case taylor
+  }
+
 }

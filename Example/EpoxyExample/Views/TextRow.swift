@@ -82,7 +82,7 @@ final class TextRow: UIView, EpoxyableView {
     dataID: AnyHashable,
     text: String,
     font: UIFont)
-  -> GroupItem<UILabel>
+    -> GroupItem<UILabel>
   {
     GroupItem<UILabel>(
       dataID: dataID,

@@ -6,6 +6,8 @@ import UIKit
 
 final class Button: UIButton, EpoxyableView {
 
+  // MARK: Lifecycle
+
   init(style: Style) {
     super.init(frame: .zero)
     translatesAutoresizingMaskIntoConstraints = false
@@ -21,6 +23,8 @@ final class Button: UIButton, EpoxyableView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: Internal
+
   // MARK: EpoxyableView
 
   struct Style: Hashable {
@@ -31,25 +35,25 @@ final class Button: UIButton, EpoxyableView {
     let title: String
   }
 
-  func setContent(_ content: Content, animated: Bool) {
-    setTitle(content.title, for: .normal)
-  }
-
   struct Behaviors {
     let didTap: (UIButton) -> Void
+  }
+
+  func setContent(_ content: Content, animated: Bool) {
+    setTitle(content.title, for: .normal)
   }
 
   func setBehaviors(_ behaviors: Behaviors?) {
     didTap = behaviors?.didTap
   }
 
-  // MARK: Private
-
-  private var didTap: ((UIButton) -> Void)?
-
   @objc
   func handleButtonTapped(_ sender: UIButton) {
     didTap?(sender)
   }
+
+  // MARK: Private
+
+  private var didTap: ((UIButton) -> Void)?
 
 }

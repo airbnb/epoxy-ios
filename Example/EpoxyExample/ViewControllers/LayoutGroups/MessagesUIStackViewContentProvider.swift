@@ -6,13 +6,9 @@ import Foundation
 
 struct MessagesUIStackViewContentProvider: ContentProvider {
 
-  var title: String { "Message List (UIStackView)" }
+  // MARK: Internal
 
-  private enum DataID {
-    case sara
-    case beyonce
-    case taylor
-  }
+  var title: String { "Message List (UIStackView)" }
 
   var items: [ItemModeling] {
     let sampleRows = [
@@ -43,4 +39,13 @@ struct MessagesUIStackViewContentProvider: ContentProvider {
     ]
     return sampleRows.duplicate(100)
   }
+
+  // MARK: Private
+
+  private enum DataID {
+    case sara
+    case beyonce
+    case taylor
+  }
+
 }

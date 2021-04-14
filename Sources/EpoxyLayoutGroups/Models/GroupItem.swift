@@ -4,8 +4,13 @@
 import EpoxyCore
 import UIKit
 
+// MARK: - GroupItem
+
 @dynamicMemberLookup
 public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
+
+  // MARK: Lifecycle
+
   /// Create a GroupItem
   /// - Parameters:
   ///   - dataID: a unique identifier for this group item
@@ -66,6 +71,10 @@ public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
   }
 
   // MARK: Public
+
+  public var make: () -> ItemType
+
+  public var storage = EpoxyModelStorage()
 
   /// Set a value on this group item for the provided keypath. Note that this value will
   /// be set on any update to the group, so use this sparingly. Try to set values in the
@@ -130,9 +139,6 @@ public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
     }
   }
 
-  public var make: () -> ItemType
-
-  public var storage = EpoxyModelStorage()
 }
 
 // MARK: GroupItem + UIView extensions
@@ -147,7 +153,7 @@ extension GroupItem where ItemType: UIView {
   public func contentCompressionResistancePriority(
     _ priority: UILayoutPriority,
     for axis: NSLayoutConstraint.Axis)
-  -> Self
+    -> Self
   {
     setBehaviors { context in
       context.constrainable.setContentCompressionResistancePriority(priority, for: axis)
@@ -163,7 +169,7 @@ extension GroupItem where ItemType: UIView {
   public func contentHuggingPriority(
     _ priority: UILayoutPriority,
     for axis: NSLayoutConstraint.Axis)
-  -> Self
+    -> Self
   {
     setBehaviors { context in
       context.constrainable.setContentHuggingPriority(priority, for: axis)

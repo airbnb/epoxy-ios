@@ -45,9 +45,10 @@ public final class Spacer: UILayoutGuide, Constrainable {
 
   // MARK: Public
 
-  public let style: Style
-
   public struct Style: Hashable {
+
+    // MARK: Lifecycle
+
     public init(
       minHeight: CGFloat? = nil,
       minWidth: CGFloat? = nil,
@@ -64,6 +65,8 @@ public final class Spacer: UILayoutGuide, Constrainable {
       self.fixedWidth = fixedWidth
     }
 
+    // MARK: Public
+
     public var minHeight: CGFloat?
     public var minWidth: CGFloat?
     public var maxHeight: CGFloat?
@@ -71,6 +74,8 @@ public final class Spacer: UILayoutGuide, Constrainable {
     public var fixedHeight: CGFloat?
     public var fixedWidth: CGFloat?
   }
+
+  public let style: Style
 
   // MARK: Constrainable
 

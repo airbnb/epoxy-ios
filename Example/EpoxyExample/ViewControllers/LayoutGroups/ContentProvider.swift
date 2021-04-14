@@ -4,6 +4,8 @@
 import EpoxyCollectionView
 import UIKit
 
+// MARK: - ContentProvider
+
 protocol ContentProvider {
   var items: [ItemModeling] { get }
   var title: String { get }
@@ -14,6 +16,6 @@ extension CollectionViewController {
     self.init(
       layout: UICollectionViewCompositionalLayout.list,
       items: contentProvider.items)
-    self.title = contentProvider.title
+    title = contentProvider.title
   }
 }

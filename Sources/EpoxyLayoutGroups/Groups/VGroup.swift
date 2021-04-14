@@ -19,10 +19,10 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     items: [GroupItemModeling] = [])
   {
     let erasedItems = items.eraseToAnyGroupItems()
-    self.alignment = style.alignment
-    self.spacing = style.spacing
+    alignment = style.alignment
+    spacing = style.spacing
     self.items = erasedItems
-    self.constrainableContainers = erasedItems.map { item in
+    constrainableContainers = erasedItems.map { item in
       let constrainable = item.makeConstrainable()
       item.update(constrainable)
       return ConstrainableContainer(constrainable)
@@ -131,8 +131,10 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     ///     container: the parent container that should be constrained to
     ///     constrainable: the constrainable that this alignment is affecting
     case custom(
-          alignmentID: AnyHashable,
-          layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint])
+      alignmentID: AnyHashable,
+      layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint])
+
+    // MARK: Public
 
     // MARK: Hashable
 
@@ -152,6 +154,8 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
         hasher.combine(alignmentID)
       }
     }
+
+    // MARK: Private
 
     private enum HashableAlignment {
       case fill, leading, trailing, center

@@ -13,6 +13,8 @@ enum LayoutGroupsExample: CaseIterable {
   case entirelyInline
   case complex
 
+  // MARK: Internal
+
   var title: String {
     switch self {
     case .readmeExamples:

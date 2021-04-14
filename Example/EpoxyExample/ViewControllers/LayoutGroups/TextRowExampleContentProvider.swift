@@ -6,13 +6,9 @@ import Foundation
 
 struct TextRowExampleContentProvider: ContentProvider {
 
-  var title: String { "Label alignment" }
+  // MARK: Internal
 
-  private enum DataID {
-    case leading
-    case center
-    case trailing
-  }
+  var title: String { "Label alignment" }
 
   var items: [ItemModeling] {
     [
@@ -30,4 +26,13 @@ struct TextRowExampleContentProvider: ContentProvider {
         style: .trailingTitle),
     ]
   }
+
+  // MARK: Private
+
+  private enum DataID {
+    case leading
+    case center
+    case trailing
+  }
+
 }

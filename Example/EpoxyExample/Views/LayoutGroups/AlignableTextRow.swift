@@ -48,11 +48,6 @@ final class AlignableTextRow: BaseRow, EpoxyableView {
     let subtitle: String?
   }
 
-  private enum DataID {
-    case title
-    case subtitle
-  }
-
   func setContent(_ content: Content, animated: Bool) {
     let showLabelBackgrounds = style.showLabelBackgrounds
 
@@ -73,6 +68,11 @@ final class AlignableTextRow: BaseRow, EpoxyableView {
   }
 
   // MARK: Private
+
+  private enum DataID {
+    case title
+    case subtitle
+  }
 
   private let style: Style
   private lazy var group = VGroup(spacing: 8) { }

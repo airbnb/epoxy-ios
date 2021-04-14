@@ -9,7 +9,7 @@ final class ImageView: UIImageView, EpoxyableView {
   // MARK: Lifecycle
 
   init(style: Style) {
-    self.size = style.size
+    size = style.size
     super.init(image: nil)
     translatesAutoresizingMaskIntoConstraints = false
     tintColor = style.tintColor
@@ -28,6 +28,8 @@ final class ImageView: UIImageView, EpoxyableView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: Internal
+
   struct Style: Hashable {
     var size: CGSize
     var tintColor: UIColor = .systemBlue
@@ -39,16 +41,14 @@ final class ImageView: UIImageView, EpoxyableView {
     }
   }
 
-  func setContent(_ content: UIImage?, animated: Bool) {
-    self.image = content
-  }
-
-  // MARK: Internal
-
   let size: CGSize
 
   override var intrinsicContentSize: CGSize {
     size
+  }
+
+  func setContent(_ content: UIImage?, animated: Bool) {
+    image = content
   }
 
 }

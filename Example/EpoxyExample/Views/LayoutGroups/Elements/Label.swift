@@ -24,6 +24,8 @@ final class Label: UILabel, EpoxyableView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: Internal
+
   // MARK: StyledView
 
   struct Style: Hashable {
@@ -46,7 +48,7 @@ extension Label.Style {
   static func style(
     with textStyle: UIFont.TextStyle,
     showBackground: Bool = false)
-  -> Label.Style
+    -> Label.Style
   {
     .init(
       font: UIFont.preferredFont(forTextStyle: textStyle),

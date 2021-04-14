@@ -7,6 +7,8 @@ import UIKit
 /// A view backed version of VGroup that can also be used seamlessly with Epoxy
 public final class VGroupView: UIView, EpoxyableView {
 
+  // MARK: Lifecycle
+
   /// Creates a `VGroupView` that can be used to render a `VGroup` backed by a `UIView`.
   /// This view is also ready to be used directly in Epoxy's `CollectionView`
   /// - Parameter style: the style for the `VGroup`
@@ -23,9 +25,14 @@ public final class VGroupView: UIView, EpoxyableView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: Public
+
   // MARK: Style
 
   public struct Style: Hashable {
+
+    // MARK: Lifecycle
+
     /// Creates a Style for the `VGroupView`
     /// - Parameters:
     ///   - vGroupStyle: the style for the nested `VGroup`
@@ -37,6 +44,8 @@ public final class VGroupView: UIView, EpoxyableView {
       self.vGroupStyle = vGroupStyle
       self.layoutMargins = layoutMargins
     }
+
+    // MARK: Public
 
     public var vGroupStyle: VGroup.Style
     public var layoutMargins: UIEdgeInsets
@@ -62,7 +71,7 @@ public final class VGroupView: UIView, EpoxyableView {
     /// Creates a Content model for the `VGroupView`
     /// - Parameter itemBuilder: a builder that builds the items for the `VGroup` to render
     public init(@GroupModelBuilder _ itemBuilder: () -> [GroupItemModeling]) {
-      self.items = itemBuilder().eraseToAnyGroupItems()
+      items = itemBuilder().eraseToAnyGroupItems()
     }
 
     public var items: [AnyGroupItem]

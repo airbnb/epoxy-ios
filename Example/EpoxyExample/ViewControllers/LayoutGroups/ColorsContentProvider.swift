@@ -6,8 +6,6 @@ import Foundation
 
 struct ColorsContentProvider: ContentProvider {
 
-  var title: String { "Static sized squares" }
-
   enum DataID {
     case hGroupFill
     case hGroupTop
@@ -18,7 +16,9 @@ struct ColorsContentProvider: ContentProvider {
     case vGroupCenter
     case vGroupTrailing
   }
-  
+
+  var title: String { "Static sized squares" }
+
   var items: [ItemModeling] {
     [
       ColorsRow.itemModel(dataID: DataID.hGroupFill, style: .init(variant: .hGroup(.fill))),

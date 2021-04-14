@@ -92,6 +92,10 @@ final class VGroupConstraints: GroupConstraints {
     }
   }
 
+  var allConstraints: [NSLayoutConstraint] {
+    constraints.values.flatMap { $0 } + topSpacingConstraints.values + bottomSpacingConstraints.values
+  }
+
   /// Generates a set of constraints for the VGroup layout
   /// - Parameters:
   ///   - items: a set of ConstrainableContainers to generate constraints for
@@ -126,10 +130,6 @@ final class VGroupConstraints: GroupConstraints {
   /// uninstall the constraints
   func uninstall() {
     NSLayoutConstraint.deactivate(allConstraints)
-  }
-
-  var allConstraints: [NSLayoutConstraint] {
-    constraints.values.flatMap { $0 } + topSpacingConstraints.values + bottomSpacingConstraints.values
   }
 
   // MARK: Private

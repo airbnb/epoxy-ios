@@ -17,6 +17,8 @@ struct TodoItem {
 
 struct TodoListContentProvider: ContentProvider {
 
+  // MARK: Internal
+
   var title: String { "Todo List" }
 
   var items: [ItemModeling] {

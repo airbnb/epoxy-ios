@@ -6,12 +6,9 @@ import UIKit
 
 struct ReadmeExamplesContentProvider: ContentProvider {
 
-  var title: String { "Readme Examples" }
+  // MARK: Internal
 
-  private enum DataID {
-    case actionButtonRow
-    case iconRow
-  }
+  var title: String { "Readme Examples" }
 
   var items: [ItemModeling] {
     [
@@ -25,7 +22,15 @@ struct ReadmeExamplesContentProvider: ContentProvider {
         dataID: DataID.iconRow,
         content: .init(
           title: "This is an IconRow",
-          icon: UIImage(systemName: "person.fill")!))
+          icon: UIImage(systemName: "person.fill")!)),
     ]
   }
+
+  // MARK: Private
+
+  private enum DataID {
+    case actionButtonRow
+    case iconRow
+  }
+
 }

@@ -85,7 +85,7 @@ final class MessageRow: BaseRow, EpoxyableView {
             }
           }
           .reflowsForAccessibilityTypeSizes(false)
-          
+
           SpacerItem(dataID: DataID.topSpacer)
 
           HGroupItem(

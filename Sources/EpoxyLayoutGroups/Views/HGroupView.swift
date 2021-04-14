@@ -7,6 +7,8 @@ import UIKit
 /// A view backed version of HGroup that can also be used seamlessly with Epoxy
 public final class HGroupView: UIView, EpoxyableView {
 
+  // MARK: Lifecycle
+
   /// Creates an `HGroupView` that can be used to render an `HGroup` backed by a `UIView`.
   /// This view is also ready to be used directly in Epoxy's `CollectionView`
   /// - Parameter style: the style for the `HGroup`
@@ -23,9 +25,14 @@ public final class HGroupView: UIView, EpoxyableView {
     fatalError("init(coder:) has not been implemented")
   }
 
+  // MARK: Public
+
   // MARK: Style
 
   public struct Style: Hashable {
+
+    // MARK: Lifecycle
+
     /// Creates a Style for the `HGroupView`
     /// - Parameters:
     ///   - hGroupStyle: the style for the nested `HGroup`
@@ -37,6 +44,8 @@ public final class HGroupView: UIView, EpoxyableView {
       self.hGroupStyle = hGroupStyle
       self.layoutMargins = layoutMargins
     }
+
+    // MARK: Public
 
     public var hGroupStyle: HGroup.Style
     public var layoutMargins: UIEdgeInsets
@@ -63,7 +72,7 @@ public final class HGroupView: UIView, EpoxyableView {
     /// Creates a Content model for the `HGroupView`
     /// - Parameter itemBuilder: a builder that builds the items for the `HGroup` to render
     public init(@GroupModelBuilder _ itemBuilder: () -> [GroupItemModeling]) {
-      self.items = itemBuilder().eraseToAnyGroupItems()
+      items = itemBuilder().eraseToAnyGroupItems()
     }
 
     public var items: [AnyGroupItem]

@@ -6,6 +6,8 @@ import UIKit
 
 final class ComplexDeclarativeViewController: UIViewController {
 
+  // MARK: Lifecycle
+
   init() {
     super.init(nibName: nil, bundle: nil)
   }
@@ -13,6 +15,8 @@ final class ComplexDeclarativeViewController: UIViewController {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
+  // MARK: Internal
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -26,7 +30,7 @@ final class ComplexDeclarativeViewController: UIViewController {
       group.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
       group.topAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.topAnchor),
       group.bottomAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.bottomAnchor),
-      group.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+      group.centerYAnchor.constraint(equalTo: view.centerYAnchor),
     ])
 
     updateGroup()

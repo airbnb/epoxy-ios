@@ -7,6 +7,8 @@ import UIKit
 
 final class IconRow: BaseRow, EpoxyableView {
 
+  // MARK: Lifecycle
+
   override init() {
     super.init()
     setUp()
@@ -15,6 +17,8 @@ final class IconRow: BaseRow, EpoxyableView {
   required init?(coder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
+  // MARK: Internal
 
   struct Content: Equatable {
     let title: String
