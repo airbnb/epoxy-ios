@@ -23,9 +23,10 @@ public final class ReuseIDStore {
 
   // MARK: Public
 
-  /// Vends a new reuse identifier string for the given `ViewDifferentiator`, generating a new reuse
-  /// identifier whenever a new `viewDifferentiator` is encountered as determined by its equality.
-  public func registerReuseID(for viewDifferentiator: ViewDifferentiator) -> String {
+  /// Vends a new reuse identifier string for the given `ViewDifferentiator` by generating a
+  /// registering new reuse identifier whenever a new `ViewDifferentiator` is encountered as
+  /// determined by its equality.
+  public func reuseID(byRegistering viewDifferentiator: ViewDifferentiator) -> String {
     if let existingReuseID = reuseIDsForViewDifferentiators[viewDifferentiator] {
       return existingReuseID
     }
@@ -39,21 +40,19 @@ public final class ReuseIDStore {
     return reuseID
   }
 
-  /// Attempts to dequeue a reuse identifier string for the given `ViewDifferentiator`.
-  public func dequeueReuseID(for viewDifferentiator: ViewDifferentiator) -> String? {
+  /// Attempts to retrieve a previously registered reuse identifier string for the given
+  /// `ViewDifferentiator`, else asserts and attempts to return a fallback reuse ID for a view
+  /// of the same type if one could not be found, and otherwise returns nil.
+  public func registeredReuseID(for viewDifferentiator: ViewDifferentiator) -> String? {
     if let existingReuseID = reuseIDsForViewDifferentiators[viewDifferentiator] {
       return existingReuseID
     }
 
-    // We're attempting to dequeue a reuse ID for a `ViewDifferentiator` that doesn't exist in . This
-    // is probably due to an `ViewDifferentiator.styleID` instance that an has unstable hash value,
-    // e.g. a `Hashable` `class` that is mutated _after_ being set on a component, giving it a new
-    // hash value.
     EpoxyLogger.shared.assertionFailure(
       """
       Unable to dequeue reuse ID for \(viewDifferentiator.viewTypeDescription) styleID \
       \(viewDifferentiator.styleID?.base as Any) as it has an unstable implementation of \
-      `Hashable`. This is likely due to an `styleID` instance that an has unstable hash value, \
+      `Hashable`. This is likely due to a `styleID` instance that an has unstable hash value, \
       e.g. a `Hashable` `class` that is mutated _after_ being set on a view, causing it to be \
       unequal to the `styleID` that was originally registered. Attempting to dequeue another view \
       of the same type. This is programmer error.

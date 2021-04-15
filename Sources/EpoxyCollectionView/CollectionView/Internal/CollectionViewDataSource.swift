@@ -137,7 +137,7 @@ final class CollectionViewDataSource: NSObject {
       return
     }
     for viewDifferentiator in newViewDifferentiators {
-      let reuseID = reuseIDStore.registerReuseID(for: viewDifferentiator)
+      let reuseID = reuseIDStore.reuseID(byRegistering: viewDifferentiator)
       collectionView.register(cellReuseID: reuseID)
     }
   }
@@ -152,7 +152,7 @@ final class CollectionViewDataSource: NSObject {
       return
     }
     for viewDifferentiator in newViewDifferentiators {
-      let reuseID = reuseIDStore.registerReuseID(for: viewDifferentiator)
+      let reuseID = reuseIDStore.reuseID(byRegistering: viewDifferentiator)
       collectionView.register(
         supplementaryViewReuseID: reuseID,
         forKind: elementKind)
@@ -188,7 +188,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
   {
     guard
       let item = data?.item(at: indexPath),
-      let reuseID = reuseIDStore.dequeueReuseID(for: item.viewDifferentiator)
+      let reuseID = reuseIDStore.registeredReuseID(for: item.viewDifferentiator)
     else {
       // The `item(…)` or `dequeueReuseID(…)` methods will assert in this scenario.
       return UICollectionViewCell()
@@ -213,7 +213,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
   {
     guard
       let item = data?.supplementaryItem(ofKind: kind, at: indexPath),
-      let reuseID = reuseIDStore.dequeueReuseID(for: item.viewDifferentiator)
+      let reuseID = reuseIDStore.registeredReuseID(for: item.viewDifferentiator)
     else {
       // The `supplementaryItem(…)` or `dequeueReuseID(…)` methods will assert in this scenario.
       return UICollectionReusableView()
