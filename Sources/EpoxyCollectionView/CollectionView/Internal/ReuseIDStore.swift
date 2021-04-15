@@ -25,18 +25,46 @@ public final class ReuseIDStore {
 
   /// Vends a new reuse identifier string for the given `ViewDifferentiator`, generating a new reuse
   /// identifier whenever a new `viewDifferentiator` is encountered as determined by its equality.
-  public func reuseID(for viewDifferentiator: ViewDifferentiator) -> String {
+  public func registerReuseID(for viewDifferentiator: ViewDifferentiator) -> String {
     if let existingReuseID = reuseIDsForViewDifferentiators[viewDifferentiator] {
       return existingReuseID
-    } else {
-      let viewType = viewDifferentiator.viewTypeDescription
-      let uniqueViewDifferentiatorCount = uniqueViewDifferentiatorCountsForViewTypes[viewType] ?? 0
-      uniqueViewDifferentiatorCountsForViewTypes[viewType] = uniqueViewDifferentiatorCount + 1
-
-      let reuseID = "\(viewType)_\(uniqueViewDifferentiatorCount)"
-      reuseIDsForViewDifferentiators[viewDifferentiator] = reuseID
-      return reuseID
     }
+
+    let viewType = viewDifferentiator.viewTypeDescription
+    let uniqueViewDifferentiatorCount = uniqueViewDifferentiatorCountsForViewTypes[viewType] ?? 0
+    uniqueViewDifferentiatorCountsForViewTypes[viewType] = uniqueViewDifferentiatorCount + 1
+
+    let reuseID = "\(viewType)_\(uniqueViewDifferentiatorCount)"
+    reuseIDsForViewDifferentiators[viewDifferentiator] = reuseID
+    return reuseID
+  }
+
+  /// Attempts to dequeue a reuse identifier string for the given `ViewDifferentiator`.
+  public func dequeueReuseID(for viewDifferentiator: ViewDifferentiator) -> String? {
+    if let existingReuseID = reuseIDsForViewDifferentiators[viewDifferentiator] {
+      return existingReuseID
+    }
+
+    // We're attempting to dequeue a reuse ID for a `ViewDifferentiator` that doesn't exist in . This
+    // is probably due to an `ViewDifferentiator.styleID` instance that an has unstable hash value,
+    // e.g. a `Hashable` `class` that is mutated _after_ being set on a component, giving it a new
+    // hash value.
+    EpoxyLogger.shared.assertionFailure(
+      """
+      Unable to dequeue reuse ID for \(viewDifferentiator.viewTypeDescription) styleID \
+      \(viewDifferentiator.styleID?.base as Any) as it has an unstable implementation of \
+      `Hashable`. This is likely due to an `styleID` instance that an has unstable hash value, \
+      e.g. a `Hashable` `class` that is mutated _after_ being set on a view, causing it to be \
+      unequal to the `styleID` that was originally registered. Attempting to dequeue another view \
+      of the same type. This is programmer error.
+      """)
+
+    return reuseIDsForViewDifferentiators
+      .filter { $0.key.viewTypeDescription == viewDifferentiator.viewTypeDescription }
+      .sorted(by: { $0.value < $1.value })
+      // Take the first item so it's stable over time in case more items are added later.
+      .first?
+      .value
   }
 
   // MARK: Private

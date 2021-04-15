@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Bar installers gracefully handle redundant calls to install/uninstall
+- Collection Views more gracefully handle styleID mutations after registration
 
 ## [0.2.0](https://github.com/airbnb/epoxy-ios/compare/0.1.0...0.2.0) - 2021-03-16
 
