@@ -190,7 +190,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
       let item = data?.item(at: indexPath),
       let reuseID = reuseIDStore.registeredReuseID(for: item.viewDifferentiator)
     else {
-      // The `item(…)` or `dequeueReuseID(…)` methods will assert in this scenario.
+      // The `item(…)` or `registeredReuseID(…)` methods will assert in this scenario.
       return UICollectionViewCell()
     }
 
@@ -215,7 +215,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
       let item = data?.supplementaryItem(ofKind: kind, at: indexPath),
       let reuseID = reuseIDStore.registeredReuseID(for: item.viewDifferentiator)
     else {
-      // The `supplementaryItem(…)` or `dequeueReuseID(…)` methods will assert in this scenario.
+      // The `supplementaryItem(…)` or `registeredReuseID(…)` methods will assert in this scenario.
       return UICollectionReusableView()
     }
 
