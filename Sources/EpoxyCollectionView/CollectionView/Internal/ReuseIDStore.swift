@@ -23,20 +23,47 @@ public final class ReuseIDStore {
 
   // MARK: Public
 
-  /// Vends a new reuse identifier string for the given `ViewDifferentiator`, generating a new reuse
-  /// identifier whenever a new `viewDifferentiator` is encountered as determined by its equality.
-  public func reuseID(for viewDifferentiator: ViewDifferentiator) -> String {
+  /// Generates and returns a new reuse identifier if the given view differentiator has not been
+  /// previously registered as determined by its equality, else returns its existing reuse
+  /// identifier.
+  public func reuseID(byRegistering viewDifferentiator: ViewDifferentiator) -> String {
     if let existingReuseID = reuseIDsForViewDifferentiators[viewDifferentiator] {
       return existingReuseID
-    } else {
-      let viewType = viewDifferentiator.viewTypeDescription
-      let uniqueViewDifferentiatorCount = uniqueViewDifferentiatorCountsForViewTypes[viewType] ?? 0
-      uniqueViewDifferentiatorCountsForViewTypes[viewType] = uniqueViewDifferentiatorCount + 1
-
-      let reuseID = "\(viewType)_\(uniqueViewDifferentiatorCount)"
-      reuseIDsForViewDifferentiators[viewDifferentiator] = reuseID
-      return reuseID
     }
+
+    let viewType = viewDifferentiator.viewTypeDescription
+    let uniqueViewDifferentiatorCount = uniqueViewDifferentiatorCountsForViewTypes[viewType] ?? 0
+    uniqueViewDifferentiatorCountsForViewTypes[viewType] = uniqueViewDifferentiatorCount + 1
+
+    let reuseID = "\(viewType)_\(uniqueViewDifferentiatorCount)"
+    reuseIDsForViewDifferentiators[viewDifferentiator] = reuseID
+    return reuseID
+  }
+
+  /// Attempts to retrieve a previously generated reuse identifier for the given view differentiator
+  /// if it has been previously registered, else asserts and attempts to return a fallback reuse
+  /// identifier for a view of the same type if one could not be found, otherwise returns `nil`.
+  public func registeredReuseID(for viewDifferentiator: ViewDifferentiator) -> String? {
+    if let existingReuseID = reuseIDsForViewDifferentiators[viewDifferentiator] {
+      return existingReuseID
+    }
+
+    EpoxyLogger.shared.assertionFailure(
+      """
+      Unable to locate a reuse ID for \(viewDifferentiator.viewTypeDescription) with styleID \
+      \(viewDifferentiator.styleID?.base as Any) as it has an unstable implementation of Hashable. \
+      This is likely due to a styleID type with unstable comparability, e.g. a Style class that is \
+      mutated _after_ being set on a view, causing it to be unequal to the styleID that was \
+      originally registered. Attempting to dequeue another view of the same type. This is \
+      programmer error.
+      """)
+
+    return reuseIDsForViewDifferentiators
+      .filter { $0.key.viewTypeDescription == viewDifferentiator.viewTypeDescription }
+      .sorted(by: { $0.value < $1.value })
+      // Take the first item so it's stable over time in case more items are added later.
+      .first?
+      .value
   }
 
   // MARK: Private

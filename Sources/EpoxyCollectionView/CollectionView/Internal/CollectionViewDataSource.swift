@@ -137,7 +137,7 @@ final class CollectionViewDataSource: NSObject {
       return
     }
     for viewDifferentiator in newViewDifferentiators {
-      let reuseID = reuseIDStore.reuseID(for: viewDifferentiator)
+      let reuseID = reuseIDStore.reuseID(byRegistering: viewDifferentiator)
       collectionView.register(cellReuseID: reuseID)
     }
   }
@@ -152,7 +152,7 @@ final class CollectionViewDataSource: NSObject {
       return
     }
     for viewDifferentiator in newViewDifferentiators {
-      let reuseID = reuseIDStore.reuseID(for: viewDifferentiator)
+      let reuseID = reuseIDStore.reuseID(byRegistering: viewDifferentiator)
       collectionView.register(
         supplementaryViewReuseID: reuseID,
         forKind: elementKind)
@@ -186,15 +186,15 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
     cellForItemAt indexPath: IndexPath)
     -> UICollectionViewCell
   {
-    guard let item = data?.item(at: indexPath) else {
-      // The `item(…)` method asserts in this scenario.
+    guard
+      let item = data?.item(at: indexPath),
+      let reuseID = reuseIDStore.registeredReuseID(for: item.viewDifferentiator)
+    else {
+      // The `item(…)` or `registeredReuseID(…)` methods will assert in this scenario.
       return UICollectionViewCell()
     }
 
-    let reuseID = reuseIDStore.reuseID(for: item.viewDifferentiator)
-    let cell = collectionView.dequeueReusableCell(
-      withReuseIdentifier: reuseID,
-      for: indexPath)
+    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseID, for: indexPath)
 
     if let cell = cell as? CollectionViewCell {
       self.collectionView?.configure(cell: cell, with: item, animated: false)
@@ -211,12 +211,14 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
     at indexPath: IndexPath)
     -> UICollectionReusableView
   {
-    guard let model = data?.supplementaryItem(ofKind: kind, at: indexPath) else {
-      // The `supplementaryItem(…)` method asserts in this scenario.
+    guard
+      let item = data?.supplementaryItem(ofKind: kind, at: indexPath),
+      let reuseID = reuseIDStore.registeredReuseID(for: item.viewDifferentiator)
+    else {
+      // The `supplementaryItem(…)` or `registeredReuseID(…)` methods will assert in this scenario.
       return UICollectionReusableView()
     }
 
-    let reuseID = reuseIDStore.reuseID(for: model.viewDifferentiator)
     let supplementaryView = collectionView.dequeueReusableSupplementaryView(
       ofKind: kind,
       withReuseIdentifier: reuseID,
@@ -225,7 +227,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
     if let supplementaryView = supplementaryView as? CollectionViewReusableView {
       self.collectionView?.configure(
         supplementaryView: supplementaryView,
-        with: model,
+        with: item,
         animated: false)
     } else {
       EpoxyLogger.shared.assertionFailure(
