@@ -50,12 +50,12 @@ public final class ReuseIDStore {
 
     EpoxyLogger.shared.assertionFailure(
       """
-      Unable to dequeue reuse ID for \(viewDifferentiator.viewTypeDescription) styleID \
-      \(viewDifferentiator.styleID?.base as Any) as it has an unstable implementation of \
-      `Hashable`. This is likely due to a `styleID` instance that an has unstable hash value, \
-      e.g. a `Hashable` `class` that is mutated _after_ being set on a view, causing it to be \
-      unequal to the `styleID` that was originally registered. Attempting to dequeue another view \
-      of the same type. This is programmer error.
+      Unable to locate a reuse ID for \(viewDifferentiator.viewTypeDescription) with styleID \
+      \(viewDifferentiator.styleID?.base as Any) as it has an unstable implementation of Hashable. \
+      This is likely due to a styleID type with unstable comparability, e.g. a Style class that is \
+      mutated _after_ being set on a view, causing it to be unequal to the styleID that was \
+      originally registered. Attempting to dequeue another view of the same type. This is \
+      programmer error.
       """)
 
     return reuseIDsForViewDifferentiators
