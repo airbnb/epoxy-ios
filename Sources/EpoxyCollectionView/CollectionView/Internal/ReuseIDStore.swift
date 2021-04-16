@@ -23,9 +23,9 @@ public final class ReuseIDStore {
 
   // MARK: Public
 
-  /// Vends a new reuse identifier string for the given `ViewDifferentiator` by generating a
-  /// registering new reuse identifier whenever a new `ViewDifferentiator` is encountered as
-  /// determined by its equality.
+  /// Generates and returns a new reuse identifier if the given view differentiator has not been
+  /// previously registered as determined by its equality, else returns its existing reuse
+  /// identifier.
   public func reuseID(byRegistering viewDifferentiator: ViewDifferentiator) -> String {
     if let existingReuseID = reuseIDsForViewDifferentiators[viewDifferentiator] {
       return existingReuseID
@@ -40,9 +40,9 @@ public final class ReuseIDStore {
     return reuseID
   }
 
-  /// Attempts to retrieve a previously registered reuse identifier string for the given
-  /// `ViewDifferentiator`, else asserts and attempts to return a fallback reuse ID for a view
-  /// of the same type if one could not be found, and otherwise returns nil.
+  /// Attempts to retrieve a previously generated reuse identifier for the given view differentiator
+  /// if it has been previously registered, else asserts and attempts to return a fallback reuse
+  /// identifier for a view of the same type if one could not be found, otherwise returns `nil`.
   public func registeredReuseID(for viewDifferentiator: ViewDifferentiator) -> String? {
     if let existingReuseID = reuseIDsForViewDifferentiators[viewDifferentiator] {
       return existingReuseID
