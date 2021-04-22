@@ -9,8 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added support for `Array` and `Optional` expressions to model result builders
 - Added support for `Optional` expressions to `PresentationModel` result builders
-- Made `AnyItemModel` conform to `DidChangeStateProviding`, `DidChangeStateProviding` and `SetBehaviorsProviding`
-- Made `AnySupplementaryItemModel` conform to `DidChangeStateProviding`, and `SetBehaviorsProviding`
+- Made `AnyItemModel` and `AnySupplementaryItemModel` conform to `DidChangeStateProviding`,
+  `DidChangeStateProviding` and `SetBehaviorsProviding`
+- Made `AnyItemModel`, `AnySupplementaryItemModel`, and `AnyBarModel` conform to `StyleIDProviding`
 - Adds a `keyboardContentInsetAdjustment` property to `UIScrollView` with the amount that the that its `contentInset.bottom` has been adjusted to accommodate for the keyboard by a `KeyboardPositionWatcher`
 - Made `ItemSelectionStyle` conform to `Hashable`
 - `ReuseIDStore` has a new method to vend a previously registered reuse ID, `registeredReuseID(for:)`

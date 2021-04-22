@@ -55,6 +55,10 @@ extension AnySupplementaryItemModel: SetContentProviding {}
 
 extension AnySupplementaryItemModel: SetBehaviorsProviding {}
 
+// MARK: StyleIDProviding
+
+extension AnySupplementaryItemModel: StyleIDProviding {}
+
 // MARK: SupplementaryItemModeling
 
 extension AnySupplementaryItemModel: SupplementaryItemModeling {

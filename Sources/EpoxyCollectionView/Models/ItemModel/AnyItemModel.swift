@@ -57,6 +57,10 @@ extension AnyItemModel: DidChangeStateProviding {}
 
 extension AnyItemModel: SetBehaviorsProviding {}
 
+// MARK: StyleIDProviding
+
+extension AnyItemModel: StyleIDProviding {}
+
 // MARK: ItemModeling
 
 extension AnyItemModel: ItemModeling {
