@@ -131,7 +131,9 @@ class CounterViewController: CollectionViewController {
   }
 
   var count = 0 {
-    didSet { setItems(items, animated: true) }
+    didSet {
+      setItems(items, animated: true)
+    }
   }
 
   @ItemModelBuilder
@@ -226,7 +228,9 @@ class FormNavigationController: NavigationController {
   }
 
   var showStep2 = false {
-    didSet { setStack(stack, animated: true) }
+    didSet {
+      setStack(stack, animated: true)
+    }
   }
 
   @NavigationModelBuilder
@@ -287,7 +291,9 @@ class PresentationViewController: UIViewController {
   }
 
   var showDetail = true {
-    didSet { setPresentation(presentation, animated: true) }
+    didSet {
+      setPresentation(presentation, animated: true)
+    }
   }
 
   @PresentationModelBuilder
