@@ -10,6 +10,7 @@ enum Example: CaseIterable {
   case flowLayout
   case shuffle
   case customSelfSizing
+  case textField
 
   // MARK: Internal
 
@@ -29,6 +30,8 @@ enum Example: CaseIterable {
       return "Flow Layout demo"
     case .cardStack:
       return "Card Stack"
+    case .textField:
+      return "Text Field"
     }
   }
 
@@ -48,6 +51,8 @@ enum Example: CaseIterable {
       return "A CollectionView with a UICollectionViewFlowLayout"
     case .cardStack:
       return "A CollectionView with BarStackView items that have a card drawn around each stack"
+    case .textField:
+      return "An example that combines collections, bars, and text field"
     }
   }
 }

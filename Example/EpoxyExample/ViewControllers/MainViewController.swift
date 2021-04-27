@@ -96,6 +96,8 @@ final class MainViewController: NavigationController {
       viewController = FlowLayoutViewController()
     case .cardStack:
       viewController = CardStackViewController()
+    case .textField:
+      viewController = TextFieldViewController()
     }
     viewController.title = example.title
     return viewController
