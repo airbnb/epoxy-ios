@@ -131,10 +131,13 @@ class CounterViewController: CollectionViewController {
   }
 
   var count = 0 {
-    didSet { setItems(items, animated: true) }
+    didSet {
+      setItems(items, animated: true)
+    }
   }
 
-  @ItemModelBuilder var items: [ItemModeling] {
+  @ItemModelBuilder
+  var items: [ItemModeling] {
     TextRow.itemModel(
       dataID: DataID.row,
       content: .init(
@@ -180,7 +183,8 @@ class BottomButtonViewController: UIViewController {
     viewController: self,
     bars: bars)
 
-  @BarModelBuilder var bars: [BarModeling] {
+  @BarModelBuilder
+  var bars: [BarModeling] {
     ButtonRow.barModel(
       content: .init(text: "Click me!"),
       behaviors: .init(didTap: {
@@ -224,10 +228,13 @@ class FormNavigationController: NavigationController {
   }
 
   var showStep2 = false {
-    didSet { setStack(stack, animated: true) }
+    didSet {
+      setStack(stack, animated: true)
+    }
   }
 
-  @NavigationModelBuilder var stack: [NavigationModel] {
+  @NavigationModelBuilder
+  var stack: [NavigationModel] {
     .root(dataID: DataID.step1) { [weak self] in
       Step1ViewController(didTapNext: {
         self?.showStep2 = true
@@ -284,10 +291,13 @@ class PresentationViewController: UIViewController {
   }
 
   var showDetail = true {
-    didSet { setPresentation(presentation, animated: true) }
+    didSet {
+      setPresentation(presentation, animated: true)
+    }
   }
 
-  @PresentationModelBuilder var presentation: PresentationModel? {
+  @PresentationModelBuilder
+  var presentation: PresentationModel? {
     if showDetail {
       PresentationModel(
         dataID: DataID.detail,
