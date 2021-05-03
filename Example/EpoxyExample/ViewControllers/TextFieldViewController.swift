@@ -42,7 +42,7 @@ final class TextFieldViewController: CollectionViewController {
   private var buttonRowBar: BarModeling {
     ButtonRow.barModel(
       dataID: DataID.button,
-      content: .init(text: "Buy now"),
+      content: .init(text: "Submit"),
       behaviors: .init(didTap: { [weak self] in
         self?.view.endEditing(true)
     }))
