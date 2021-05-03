@@ -35,8 +35,7 @@ final class TextFieldViewController: CollectionViewController {
   private var textFieldRowItem: ItemModeling {
     TextFieldRow.itemModel(
       dataID: DataID.username,
-      content: .init(
-        placeholder: "Username"),
+      content: .init(placeholder: "Username"),
       style: .base)
   }
 
