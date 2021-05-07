@@ -36,10 +36,18 @@ end
 namespace :publish do
   task :podspec do
     # Topologically sorted by dependencies
-    podspecs = ['EpoxyCore', 'EpoxyCollectionView', 'EpoxyBars', 'EpoxyNavigationController', 'EpoxyPresentations', 'Epoxy']
+    podspecs = [
+      'EpoxyCore',
+      'EpoxyCollectionView',
+      'EpoxyBars',
+      'EpoxyNavigationController',
+      'EpoxyPresentations',
+      'Epoxy',
+    ]
 
     for podspec in podspecs
       sh "bundle exec pod trunk push #{podspec}.podspec --synchronous"
+      sh "bundle exec pod repo update"
     end
   end
 end
