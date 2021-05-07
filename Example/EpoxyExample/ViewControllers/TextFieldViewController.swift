@@ -45,7 +45,7 @@ final class TextFieldViewController: CollectionViewController {
       content: .init(text: "Submit"),
       behaviors: .init(didTap: { [weak self] in
         self?.view.endEditing(true)
-    }))
+      }))
   }
 
 }
