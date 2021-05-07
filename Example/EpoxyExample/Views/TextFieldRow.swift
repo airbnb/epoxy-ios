@@ -75,5 +75,4 @@ final class TextFieldRow: UIView, EpoxyableView {
       textField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
     ])
   }
-  
 }

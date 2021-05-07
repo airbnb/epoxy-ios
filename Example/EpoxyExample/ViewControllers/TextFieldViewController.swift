@@ -47,5 +47,4 @@ final class TextFieldViewController: CollectionViewController {
         self?.view.endEditing(true)
       }))
   }
-
 }
