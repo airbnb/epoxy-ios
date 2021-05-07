@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.3.0...HEAD)
 
+### Added
+- Added an example with text field to show how can we use `avoidsKeyboard` feature
+
 ## [0.3.0](https://github.com/airbnb/epoxy-ios/compare/0.2.0...0.3.0) - 2021-04-23
 
 ### Added
