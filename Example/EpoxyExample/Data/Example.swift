@@ -52,7 +52,7 @@ enum Example: CaseIterable {
     case .cardStack:
       return "A CollectionView with BarStackView items that have a card drawn around each stack"
     case .textField:
-      return "An example that combines collections, bars, and text field"
+      return "An example that combines collections, bars, and text field with keyboard avoidance"
     }
   }
 }
