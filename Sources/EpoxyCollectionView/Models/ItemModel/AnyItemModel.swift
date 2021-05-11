@@ -75,7 +75,7 @@ extension AnyItemModel: InternalItemModeling {
   }
 
   public var isSelectable: Bool {
-    model.isSelectable
+    model.isSelectable || didSelect != nil
   }
 
   public func configuredView(traitCollection: UITraitCollection) -> UIView {
