@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added an example with text field to show how can we use `avoidsKeyboard` feature
 
+### Fixed
+- `AnyItemModel` is selectable when there are no `DidSelect` callbacks on the underlying model
+
 ## [0.3.0](https://github.com/airbnb/epoxy-ios/compare/0.2.0...0.3.0) - 2021-04-23
 
 ### Added
