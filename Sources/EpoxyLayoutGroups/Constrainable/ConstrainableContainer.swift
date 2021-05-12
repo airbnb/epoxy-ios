@@ -10,26 +10,28 @@ import UIKit
 /// for extensions to be added such as alignment
 public struct ConstrainableContainer: Constrainable, AnchoringContainer, EpoxyModeled {
 
-  // MARK: Lifecycle
-
   public init(_ constrainable: Constrainable) {
     self.constrainable = constrainable
     if let container = constrainable as? ConstrainableContainer {
-      accessibilityAlignment = container.accessibilityAlignment
-      horizontalAlignment = container.horizontalAlignment
-      padding = container.padding
-      verticalAlignment = container.verticalAlignment
+      self.accessibilityAlignment = container.accessibilityAlignment
+      self.horizontalAlignment = container.horizontalAlignment
+      self.padding = container.padding
+      self.verticalAlignment = container.verticalAlignment
     }
   }
 
   // MARK: Public
 
-  public let constrainable: Constrainable
+  public private(set) var constrainable: Constrainable
 
   public var storage = EpoxyModelStorage()
-
+  
   public var owningView: UIView? {
     constrainable.owningView
+  }
+
+  public var layoutFrame: CGRect {
+    constrainable.layoutFrame
   }
 
   /// The underlying constrainable that this container contains
@@ -61,6 +63,15 @@ public struct ConstrainableContainer: Constrainable, AnchoringContainer, EpoxyMo
     return other.constrainable.isEqual(to: self.constrainable)
   }
 
+  // MARK: Internal
+
+  /// sets UIViews to have an alpha of 0 which is preferred to setting
+  /// isHidden as it allows for smoother animations
+  func setHiddenForAnimatedUpdates(_ isHidden: Bool) {
+    (wrapped as? UIView)?.alpha = isHidden ? 0 : 1
+    (wrapped as? InternalGroup)?.isHidden = isHidden
+  }
+
 }
 
 // MARK: AccessibilityAlignmentProviding
@@ -80,9 +91,6 @@ extension ConstrainableContainer: PaddingProviding { }
 extension ConstrainableContainer: VerticalAlignmentProviding { }
 
 extension Constrainable {
-
-  // MARK: Public
-
   /// Sets the horizontal alignment of this component in the group
   public func horizontalAlignment(_ alignment: VGroup.ItemAlignment?) -> Constrainable {
     var container = _containerOrSelf

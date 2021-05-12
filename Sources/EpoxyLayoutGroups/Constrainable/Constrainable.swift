@@ -24,6 +24,9 @@ public protocol Constrainable {
   var dataID: AnyHashable { get }
   /// View that owns this constrainable
   var owningView: UIView? { get }
+  /// The frame of the Constrainable in its owningView's coordinate system.
+  /// Valid by the time the owningView receives `layoutSubviews()`.
+  var layoutFrame: CGRect { get }
 
   /// install the Constrainable into the provided view
   func install(in view: UIView)
@@ -55,6 +58,10 @@ extension Constrainable {
 extension UIView: Constrainable {
   public var owningView: UIView? {
     superview
+  }
+
+  public var layoutFrame: CGRect {
+    frame
   }
 
   public func install(in view: UIView) {

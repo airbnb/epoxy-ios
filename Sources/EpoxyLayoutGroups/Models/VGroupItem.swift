@@ -4,12 +4,12 @@
 import EpoxyCore
 import UIKit
 
-// MARK: - VGroupItem
+// MARK: VGroupItem
 
 /// An item you can use inside of any Group to represent a nested `VGroup`
 public struct VGroupItem: EpoxyModeled {
 
-  // MARK: Lifecycle
+  public typealias Content = [GroupItemModeling]
 
   /// Initializer to create a VGroupItem that represents a nested VGroup
   /// - Parameters:
@@ -44,8 +44,6 @@ public struct VGroupItem: EpoxyModeled {
 
   // MARK: Public
 
-  public typealias Content = [GroupItemModeling]
-
   public var storage = EpoxyModelStorage()
   public var style: VGroup.Style
 }
@@ -74,8 +72,6 @@ extension VGroupItem: VerticalAlignmentProviding { }
 
 extension VGroupItem: GroupItemsProviding { }
 
-// MARK: GroupItemModeling
-
 extension VGroupItem: GroupItemModeling {
   public func eraseToAnyGroupItem() -> AnyGroupItem {
     .init(internalGroupItemModel: self)
@@ -85,16 +81,6 @@ extension VGroupItem: GroupItemModeling {
 // MARK: InternalGroupItemModeling
 
 extension VGroupItem: InternalGroupItemModeling {
-  public var diffIdentifier: AnyHashable {
-    DiffIdentifier(
-      dataID: dataID,
-      style: style,
-      accessibilityAlignment: accessibilityAlignment,
-      horizontalAlignment: horizontalAlignment,
-      padding: padding,
-      verticalAlignment: verticalAlignment)
-  }
-
   public func makeConstrainable() -> Constrainable {
     VGroup(
       alignment: style.alignment,
@@ -106,7 +92,7 @@ extension VGroupItem: InternalGroupItemModeling {
       .verticalAlignment(verticalAlignment)
   }
 
-  public func update(_ constrainable: Constrainable) {
+  public func update(_ constrainable: Constrainable, animated: Bool) {
     // Update can get called on containers as well, so we need to find
     // the wrapped constrainable to ensure we are passing in the proper value
     var toUpdate: Constrainable = constrainable
@@ -117,12 +103,22 @@ extension VGroupItem: InternalGroupItemModeling {
       EpoxyLogger.shared.assertionFailure("Attempt to update the wrong item type. This should never happen and is a failure of the system, please file a bug report")
       return
     }
-    group.setItems(groupItems)
+    group.setItems(groupItems, animated: animated)
   }
 
   public func setBehaviors(on constrainable: Constrainable) {
     // This shouldn't be necessary because we will always have `update()` called
     // on an HGroupItem and that will subsequently update our behaviors
+  }
+
+  public var diffIdentifier: AnyHashable {
+    DiffIdentifier(
+      dataID: dataID,
+      style: style,
+      accessibilityAlignment: accessibilityAlignment,
+      horizontalAlignment: horizontalAlignment,
+      padding: padding,
+      verticalAlignment: verticalAlignment)
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {

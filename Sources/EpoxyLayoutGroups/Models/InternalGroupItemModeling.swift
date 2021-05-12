@@ -11,7 +11,7 @@ protocol InternalGroupItemModeling: GroupItemModeling, EpoxyModeled {
   /// create a constrainable that this group item represents
   func makeConstrainable() -> Constrainable
   /// update the constrainable with the current content
-  func update(_ constrainable: Constrainable)
+  func update(_ constrainable: Constrainable, animated: Bool)
   /// set any behaviors on the constrainable (this is called more frequently than update)
   func setBehaviors(on constrainable: Constrainable)
 }

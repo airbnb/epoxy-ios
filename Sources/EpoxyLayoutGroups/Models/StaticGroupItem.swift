@@ -4,8 +4,6 @@
 import EpoxyCore
 import UIKit
 
-// MARK: - StaticGroupItem
-
 /// A group item that vends a static `Constrainable`.
 ///
 /// You can use this if you want to include a view in your group that has already been initialized.
@@ -44,11 +42,28 @@ public struct StaticGroupItem {
 // MARK: InternalGroupItemModeling
 
 extension StaticGroupItem: InternalGroupItemModeling {
-
-  // MARK: Public
-
   public var dataID: AnyHashable {
     constrainable.dataID
+  }
+
+  func makeConstrainable() -> Constrainable {
+    constrainable
+      .accessibilityAlignment(accessibilityAlignment)
+      .horizontalAlignment(horizontalAlignment)
+      .padding(padding)
+      .verticalAlignment(verticalAlignment)
+  }
+
+  func update(_ constrainable: Constrainable, animated: Bool) {
+    // no-op
+  }
+
+  func setBehaviors(on constrainable: Constrainable) {
+    // no-op
+  }
+
+  public func eraseToAnyGroupItem() -> AnyGroupItem {
+    .init(internalGroupItemModel: self)
   }
 
   public var diffIdentifier: AnyHashable {
@@ -60,35 +75,12 @@ extension StaticGroupItem: InternalGroupItemModeling {
       verticalAlignment: verticalAlignment)
   }
 
-  public func eraseToAnyGroupItem() -> AnyGroupItem {
-    .init(internalGroupItemModel: self)
-  }
-
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let other = otherDiffableItem as? StaticGroupItem else {
       return false
     }
     return other.constrainable.isEqual(to: constrainable)
   }
-
-  // MARK: Internal
-
-  func makeConstrainable() -> Constrainable {
-    constrainable
-      .accessibilityAlignment(accessibilityAlignment)
-      .horizontalAlignment(horizontalAlignment)
-      .padding(padding)
-      .verticalAlignment(verticalAlignment)
-  }
-
-  func update(_ constrainable: Constrainable) {
-    // no-op
-  }
-
-  func setBehaviors(on constrainable: Constrainable) {
-    // no-op
-  }
-
 }
 
 // MARK: AccessibilityAlignmentProviding

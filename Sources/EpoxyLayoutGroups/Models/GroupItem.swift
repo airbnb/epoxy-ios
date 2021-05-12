@@ -4,13 +4,8 @@
 import EpoxyCore
 import UIKit
 
-// MARK: - GroupItem
-
 @dynamicMemberLookup
 public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
-
-  // MARK: Lifecycle
-
   /// Create a GroupItem
   /// - Parameters:
   ///   - dataID: a unique identifier for this group item
@@ -71,10 +66,6 @@ public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
   }
 
   // MARK: Public
-
-  public var make: () -> ItemType
-
-  public var storage = EpoxyModelStorage()
 
   /// Set a value on this group item for the provided keypath. Note that this value will
   /// be set on any update to the group, so use this sparingly. Try to set values in the
@@ -139,6 +130,9 @@ public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
     }
   }
 
+  public var make: () -> ItemType
+
+  public var storage = EpoxyModelStorage()
 }
 
 // MARK: GroupItem + UIView extensions
@@ -153,7 +147,7 @@ extension GroupItem where ItemType: UIView {
   public func contentCompressionResistancePriority(
     _ priority: UILayoutPriority,
     for axis: NSLayoutConstraint.Axis)
-    -> Self
+  -> Self
   {
     setBehaviors { context in
       context.constrainable.setContentCompressionResistancePriority(priority, for: axis)
@@ -169,7 +163,7 @@ extension GroupItem where ItemType: UIView {
   public func contentHuggingPriority(
     _ priority: UILayoutPriority,
     for axis: NSLayoutConstraint.Axis)
-    -> Self
+  -> Self
   {
     setBehaviors { context in
       context.constrainable.setContentHuggingPriority(priority, for: axis)
@@ -214,9 +208,11 @@ extension GroupItem: VerticalAlignmentProviding { }
 extension GroupItem: CallbackContextEpoxyModeled {
   public struct CallbackContext {
     public let constrainable: ItemType
+    public let animated: Bool
 
-    public init(constrainable: ItemType) {
+    public init(constrainable: ItemType, animated: Bool) {
       self.constrainable = constrainable
+      self.animated = animated
     }
   }
 }
@@ -240,7 +236,7 @@ extension GroupItem: InternalGroupItemModeling {
       .verticalAlignment(verticalAlignment)
   }
 
-  public func update(_ constrainable: Constrainable) {
+  public func update(_ constrainable: Constrainable, animated: Bool) {
     // Update can get called on containers as well, so we need to find
     // the wrapped constrainable to ensure we are passing in the proper value
     var toUpdate: Constrainable = constrainable
@@ -251,7 +247,7 @@ extension GroupItem: InternalGroupItemModeling {
       EpoxyLogger.shared.assertionFailure("Attempt to update constrainable of the wrong type. This should never happen and is a failure of the system, please file a bug report.")
       return
     }
-    setContent?(.init(constrainable: item))
+    setContent?(.init(constrainable: item, animated: animated))
   }
 
   public func setBehaviors(on constrainable: Constrainable) {
@@ -265,7 +261,7 @@ extension GroupItem: InternalGroupItemModeling {
       EpoxyLogger.shared.assertionFailure("Attempt to update constrainable of the wrong type. This should never happen and is a failure of the system, please file a bug report.")
       return
     }
-    setBehaviors?(.init(constrainable: item))
+    setBehaviors?(.init(constrainable: item, animated: false))
   }
 }
 

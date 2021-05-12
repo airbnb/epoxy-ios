@@ -7,16 +7,15 @@ import UIKit
 /// A view backed version of HGroup that can also be used seamlessly with Epoxy
 public final class HGroupView: UIView, EpoxyableView {
 
-  // MARK: Lifecycle
-
   /// Creates an `HGroupView` that can be used to render an `HGroup` backed by a `UIView`.
   /// This view is also ready to be used directly in Epoxy's `CollectionView`
   /// - Parameter style: the style for the `HGroup`
   public init(style: Style) {
+    self.style = style
     hGroup = HGroup(style: style.hGroupStyle)
     super.init(frame: .zero)
-    layoutMargins = style.layoutMargins
     translatesAutoresizingMaskIntoConstraints = false
+    updateLayoutMargins()
     hGroup.install(in: self)
     hGroup.constrainToMarginsWithHighPriorityBottom()
   }
@@ -25,38 +24,28 @@ public final class HGroupView: UIView, EpoxyableView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  // MARK: Public
+  public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    super.traitCollectionDidChange(previousTraitCollection)
+    updateLayoutMargins()
+  }
 
   // MARK: Style
 
   public struct Style: Hashable {
-
-    // MARK: Lifecycle
-
     /// Creates a Style for the `HGroupView`
     /// - Parameters:
     ///   - hGroupStyle: the style for the nested `HGroup`
-    ///   - layoutMargins: layout margins to apply to this view
+    ///   - edgeInsets: the adaptive edge insets to use for this view
     public init(
       hGroupStyle: HGroup.Style = .init(),
-      layoutMargins: UIEdgeInsets = .zero)
+      edgeInsets: GroupEdgeInsets = .zero)
     {
       self.hGroupStyle = hGroupStyle
-      self.layoutMargins = layoutMargins
+      self.edgeInsets = edgeInsets
     }
-
-    // MARK: Public
 
     public var hGroupStyle: HGroup.Style
-    public var layoutMargins: UIEdgeInsets
-
-    public func hash(into hasher: inout Hasher) {
-      hasher.combine(hGroupStyle)
-      hasher.combine(layoutMargins.top)
-      hasher.combine(layoutMargins.left)
-      hasher.combine(layoutMargins.right)
-      hasher.combine(layoutMargins.bottom)
-    }
+    public var edgeInsets: GroupEdgeInsets
   }
 
   // MARK: Content
@@ -72,7 +61,7 @@ public final class HGroupView: UIView, EpoxyableView {
     /// Creates a Content model for the `HGroupView`
     /// - Parameter itemBuilder: a builder that builds the items for the `HGroup` to render
     public init(@GroupModelBuilder _ itemBuilder: () -> [GroupItemModeling]) {
-      items = itemBuilder().eraseToAnyGroupItems()
+      self.items = itemBuilder().eraseToAnyGroupItems()
     }
 
     public var items: [AnyGroupItem]
@@ -85,11 +74,16 @@ public final class HGroupView: UIView, EpoxyableView {
   }
 
   public func setContent(_ content: Content, animated: Bool) {
-    hGroup.setItems(content.items)
+    hGroup.setItems(content.items, animated: animated)
   }
 
   // MARK: Private
 
+  private let style: Style
   private let hGroup: HGroup
+
+  private func updateLayoutMargins() {
+    layoutMargins = style.edgeInsets.edgeInsets(with: traitCollection)
+  }
 
 }

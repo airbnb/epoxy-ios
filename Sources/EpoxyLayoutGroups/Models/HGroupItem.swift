@@ -4,12 +4,8 @@
 import EpoxyCore
 import UIKit
 
-// MARK: - HGroupItem
-
 /// An item you can use inside of any Group to represent a nested HGroup
 public struct HGroupItem: EpoxyModeled {
-
-  // MARK: Lifecycle
 
   /// Initializer to create a HGroupItem that represents a nested HGroup
   /// - Parameters:
@@ -87,17 +83,6 @@ extension HGroupItem: GroupItemModeling {
 // MARK: InternalGroupItemModeling
 
 extension HGroupItem: InternalGroupItemModeling {
-  public var diffIdentifier: AnyHashable {
-    DiffIdentifier(
-      dataID: dataID,
-      style: style,
-      reflowsForAccessibilityTypeSizes: reflowsForAccessibilityTypeSizes,
-      accessibilityAlignment: accessibilityAlignment,
-      horizontalAlignment: horizontalAlignment,
-      padding: padding,
-      verticalAlignment: verticalAlignment)
-  }
-
   public func makeConstrainable() -> Constrainable {
     HGroup(
       alignment: style.alignment,
@@ -111,7 +96,7 @@ extension HGroupItem: InternalGroupItemModeling {
       .verticalAlignment(verticalAlignment)
   }
 
-  public func update(_ constrainable: Constrainable) {
+  public func update(_ constrainable: Constrainable, animated: Bool) {
     // Update can get called on containers as well, so we need to find
     // the wrapped constrainable to ensure we are passing in the proper value
     var toUpdate: Constrainable = constrainable
@@ -122,12 +107,23 @@ extension HGroupItem: InternalGroupItemModeling {
       EpoxyLogger.shared.assertionFailure("Attempt to update the wrong item type. This should never happen and is a failure of the system, please file a bug report")
       return
     }
-    hGroup.setItems(groupItems)
+    hGroup.setItems(groupItems, animated: animated)
   }
 
   public func setBehaviors(on constrainable: Constrainable) {
     // This shouldn't be necessary because we will always have `update()` called
     // on an HGroupItem and that will subsequently update our behaviors
+  }
+
+  public var diffIdentifier: AnyHashable {
+    DiffIdentifier(
+      dataID: dataID,
+      style: style,
+      reflowsForAccessibilityTypeSizes: reflowsForAccessibilityTypeSizes,
+      accessibilityAlignment: accessibilityAlignment,
+      horizontalAlignment: horizontalAlignment,
+      padding: padding,
+      verticalAlignment: verticalAlignment)
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {

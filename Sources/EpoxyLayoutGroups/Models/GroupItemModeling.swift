@@ -4,8 +4,6 @@
 import EpoxyCore
 import Foundation
 
-// MARK: - GroupItemModeling
-
 /// A type-erased representation of an item in a group
 public protocol GroupItemModeling: Diffable {
   /// Returns this item model with its type erased to the `AnyGroupItem` type.

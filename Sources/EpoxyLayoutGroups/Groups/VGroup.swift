@@ -19,15 +19,16 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     items: [GroupItemModeling] = [])
   {
     let erasedItems = items.eraseToAnyGroupItems()
-    alignment = style.alignment
-    spacing = style.spacing
+    self.alignment = style.alignment
+    self.spacing = style.spacing
     self.items = erasedItems
-    constrainableContainers = erasedItems.map { item in
+    self.constrainableContainers = erasedItems.map { item in
       let constrainable = item.makeConstrainable()
-      item.update(constrainable)
+      item.update(constrainable, animated: false)
       return ConstrainableContainer(constrainable)
     }
     super.init()
+    resetIndexMap()
     assert(validateItems(items))
     assert(validateConstrainables(constrainableContainers))
   }
@@ -131,10 +132,8 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     ///     container: the parent container that should be constrained to
     ///     constrainable: the constrainable that this alignment is affecting
     case custom(
-      alignmentID: AnyHashable,
-      layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint])
-
-    // MARK: Public
+          alignmentID: AnyHashable,
+          layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint])
 
     // MARK: Hashable
 
@@ -155,8 +154,6 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
       }
     }
 
-    // MARK: Private
-
     private enum HashableAlignment {
       case fill, leading, trailing, center
     }
@@ -169,7 +166,11 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
 
   // MARK: Group
 
-  public internal(set) var items: [AnyGroupItem] = []
+  public internal(set) var items: [AnyGroupItem] = [] {
+    didSet {
+      resetIndexMap()
+    }
+  }
 
   /// The space between each element
   /// For custom spacing between elements, use Spacers
@@ -179,7 +180,7 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   }
 
   // MARK: Constrainable
-
+  
   public var firstBaselineAnchor: NSLayoutYAxisAnchor {
     constrainableContainers.first?.firstBaselineAnchor ?? topAnchor
   }
@@ -188,17 +189,20 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     constrainableContainers.last?.lastBaselineAnchor ?? bottomAnchor
   }
 
-  public func setItems(_ newItems: [GroupItemModeling]) {
-    _setItems(newItems.eraseToAnyGroupItems())
+  public func setItems(_ newItems: [GroupItemModeling], animated: Bool) {
+    _setItems(newItems, animated: animated)
   }
 
-  public func setItems(@GroupModelBuilder _ buildItems: () -> [GroupItemModeling]) {
-    setItems(buildItems())
+  public func setItems(@GroupModelBuilder _ buildItems: () -> [GroupItemModeling], animated: Bool = false) {
+    setItems(buildItems(), animated: animated)
   }
 
-  public func isEqual(to constrainable: Constrainable) -> Bool {
-    guard let other = constrainable as? VGroup else { return false }
-    return other == self
+  public func constrainable(with dataID: AnyHashable) -> Constrainable? {
+    _constrainable(with: dataID)
+  }
+
+  public func groupItem(with dataID: AnyHashable) -> AnyGroupItem? {
+    _groupItem(with: dataID)
   }
 
   public func install(in view: UIView) {
@@ -209,10 +213,28 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     _uninstall()
   }
 
+  public func isEqual(to constrainable: Constrainable) -> Bool {
+    guard let other = constrainable as? VGroup else { return false }
+    return other == self
+  }
+
+
   // MARK: Internal
 
-  var constraints: GroupConstraints? = nil
   var constrainableContainers: [ConstrainableContainer] = []
+  var dataIDIndexMap: [AnyHashable : Int] = [:]
+  var constraints: GroupConstraints? = nil
+
+  /// This is internal as it's only used for animated changes. If you want to remove
+  /// a subview from a group, you should call `setItems` with only the items you want
+  /// rendered instead.
+  var isHidden = false {
+    didSet {
+      for container in constrainableContainers {
+        container.setHiddenForAnimatedUpdates(isHidden)
+      }
+    }
+  }
 
   func generateConstraints() -> GroupConstraints? {
     VGroupConstraints.constraints(

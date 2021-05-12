@@ -45,10 +45,9 @@ public final class Spacer: UILayoutGuide, Constrainable {
 
   // MARK: Public
 
+  public let style: Style
+
   public struct Style: Hashable {
-
-    // MARK: Lifecycle
-
     public init(
       minHeight: CGFloat? = nil,
       minWidth: CGFloat? = nil,
@@ -65,8 +64,6 @@ public final class Spacer: UILayoutGuide, Constrainable {
       self.fixedWidth = fixedWidth
     }
 
-    // MARK: Public
-
     public var minHeight: CGFloat?
     public var minWidth: CGFloat?
     public var maxHeight: CGFloat?
@@ -75,8 +72,6 @@ public final class Spacer: UILayoutGuide, Constrainable {
     public var fixedWidth: CGFloat?
   }
 
-  public let style: Style
-
   // MARK: Constrainable
 
   public var firstBaselineAnchor: NSLayoutYAxisAnchor { topAnchor }
@@ -84,7 +79,7 @@ public final class Spacer: UILayoutGuide, Constrainable {
 
   public func install(in view: UIView) {
     view.addLayoutGuide(self)
-    installConstraintsIfNeeded()
+    installConstraints()
   }
 
   public func uninstall() {
@@ -100,7 +95,7 @@ public final class Spacer: UILayoutGuide, Constrainable {
 
   private var constraints: [NSLayoutConstraint] = []
 
-  private func installConstraintsIfNeeded() {
+  private func installConstraints() {
     NSLayoutConstraint.deactivate(constraints)
     constraints = []
 

@@ -4,7 +4,7 @@
 import EpoxyCore
 import Foundation
 
-// MARK: - AnyGroupItem
+// MARK: AnyGroupItem
 
 /// A concrete `GroupItemModeling` wrapping a type-erased `GroupItemModeling`.
 public struct AnyGroupItem: Diffable {
@@ -26,13 +26,6 @@ public struct AnyGroupItem: Diffable {
     model.diffIdentifier
   }
 
-  /// Implemented as a passthrough to the backing model's storage to allow custom model properties
-  /// to be accessed and modified through this type eraser.
-  public var storage: EpoxyModelStorage {
-    get { model.storage }
-    set { model.storage = newValue }
-  }
-
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     // If comparing to another `AnyGroupItem`, compare the underlying models to one another since
     // concrete models attempt to cast the `Diffable` to their type.
@@ -41,6 +34,13 @@ public struct AnyGroupItem: Diffable {
     }
 
     return model.isDiffableItemEqual(to: otherDiffableItem)
+  }
+
+  /// Implemented as a passthrough to the backing model's storage to allow custom model properties
+  /// to be accessed and modified through this type eraser.
+  public var storage: EpoxyModelStorage {
+    get { model.storage }
+    set { model.storage = newValue }
   }
 
   // MARK: Private
@@ -67,8 +67,8 @@ extension AnyGroupItem: InternalGroupItemModeling {
     model.makeConstrainable()
   }
 
-  public func update(_ constrainable: Constrainable) {
-    model.update(constrainable)
+  public func update(_ constrainable: Constrainable, animated: Bool) {
+    model.update(constrainable, animated: animated)
     setContent?(.init(constrainable: constrainable))
   }
 

@@ -19,16 +19,17 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     items: [GroupItemModeling] = [])
   {
     let erasedItems = items.eraseToAnyGroupItems()
-    alignment = style.alignment
-    accessibilityAlignment = style.accessibilityAlignment
-    spacing = style.spacing
+    self.alignment = style.alignment
+    self.accessibilityAlignment = style.accessibilityAlignment
+    self.spacing = style.spacing
     self.items = erasedItems
-    constrainableContainers = erasedItems.map { item in
+    self.constrainableContainers = erasedItems.map { item in
       let constrainable = item.makeConstrainable()
-      item.update(constrainable)
+      item.update(constrainable, animated: false)
       return ConstrainableContainer(constrainable)
     }
     super.init()
+    resetIndexMap()
     assert(validateItems(items))
     assert(validateConstrainables(constrainableContainers))
     observeContentSizeCategoryChanges()
@@ -106,9 +107,6 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
 
   /// Immutable style values for an HGroup
   public struct Style: Hashable {
-
-    // MARK: Lifecycle
-
     /// Creates a style for an HGroup
     /// - Parameters:
     ///   - alignment: The alignment used within the group. Individual item alignments will
@@ -128,8 +126,6 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
       self.accessibilityAlignment = accessibilityAlignment
       self.spacing = spacing
     }
-
-    // MARK: Internal
 
     let alignment: HGroup.ItemAlignment
     let accessibilityAlignment: VGroup.ItemAlignment
@@ -167,10 +163,8 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     ///     container: the parent container that should be constrained to
     ///     constrainable: the constrainable that this alignment is affecting
     case custom(
-      alignmentID: AnyHashable,
-      layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint])
-
-    // MARK: Public
+          alignmentID: AnyHashable,
+          layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint])
 
     // MARK: Hashable
 
@@ -191,8 +185,6 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
       }
     }
 
-    // MARK: Private
-
     private enum HashableAlignment {
       case fill, top, bottom, center
     }
@@ -209,7 +201,11 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
 
   // MARK: Group
 
-  public internal(set) var items: [AnyGroupItem] = []
+  public internal(set) var items: [AnyGroupItem] = [] {
+    didSet {
+      resetIndexMap()
+    }
+  }
 
   /// When this property is true, the HGroup will automatically relayout when
   /// accessibility type sizes are enabled to make the layout more accessible
@@ -254,12 +250,20 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     return self
   }
 
-  public func setItems(_ newItems: [GroupItemModeling]) {
-    _setItems(newItems)
+  public func setItems(_ newItems: [GroupItemModeling], animated: Bool) {
+    _setItems(newItems, animated: animated)
   }
 
-  public func setItems(@GroupModelBuilder _ buildItems: () -> [GroupItemModeling]) {
-    setItems(buildItems())
+  public func setItems(@GroupModelBuilder _ buildItems: () -> [GroupItemModeling], animated: Bool = false) {
+    setItems(buildItems(), animated: animated)
+  }
+
+  public func constrainable(with dataID: AnyHashable) -> Constrainable? {
+    _constrainable(with: dataID)
+  }
+
+  public func groupItem(with dataID: AnyHashable) -> AnyGroupItem? {
+    _groupItem(with: dataID)
   }
 
   public func install(in view: UIView) {
@@ -278,7 +282,19 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   // MARK: Internal
 
   var constrainableContainers: [ConstrainableContainer] = []
+  var dataIDIndexMap: [AnyHashable: Int] = [:]
   var constraints: GroupConstraints? = nil
+
+  /// This is internal as it's only used for animated changes. If you want to remove
+  /// a subview from a group, you should call `setItems` with only the items you want
+  /// rendered instead.
+  var isHidden = false {
+    didSet {
+      for container in constrainableContainers {
+        container.setHiddenForAnimatedUpdates(isHidden)
+      }
+    }
+  }
 
   func generateConstraints() -> GroupConstraints? {
     assert(owningView != nil, "There must be an owningView before generating constraints")
@@ -293,15 +309,6 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   // MARK: Private
 
   private var preferredContentSizeCategory = UITraitCollection.current.preferredContentSizeCategory
-
-  private var shouldUseAccessibilityLayout: Bool {
-    // If dynamic type is in the accessibility category, we
-    // reflow the HGroup to be vertical to improve usability
-    let shouldReflowForAccessibility = preferredContentSizeCategory.isAccessibilityCategory &&
-      reflowsForAccessibilityTypeSizes
-
-    return shouldReflowForAccessibility || forceVerticalAccessibilityLayout
-  }
 
   private func observeContentSizeCategoryChanges() {
     NotificationCenter.default.addObserver(
@@ -329,6 +336,15 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     if oldShouldUseAccessibilityLayout != newShouldUseAccessibilityLayout {
       installConstraintsIfNeeded()
     }
+  }
+
+  private var shouldUseAccessibilityLayout: Bool {
+    // If dynamic type is in the accessibility category, we
+    // reflow the HGroup to be vertical to improve usability
+    let shouldReflowForAccessibility = preferredContentSizeCategory.isAccessibilityCategory &&
+      reflowsForAccessibilityTypeSizes
+
+    return shouldReflowForAccessibility || forceVerticalAccessibilityLayout
   }
 
   private func standardConstraints() -> GroupConstraints {

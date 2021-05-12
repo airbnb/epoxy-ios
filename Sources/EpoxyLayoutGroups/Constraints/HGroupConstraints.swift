@@ -92,15 +92,6 @@ final class HGroupConstraints: GroupConstraints {
     }
   }
 
-  var allConstraints: [NSLayoutConstraint] {
-    var result = [NSLayoutConstraint]()
-    result.append(contentsOf: groupAlignmentConstraints.values.flatMap { $0 })
-    result.append(contentsOf: constraints.values.flatMap { $0 })
-    result.append(contentsOf: leadingSpacingConstraints.values)
-    result.append(contentsOf: trailingSpacingConstraints.values)
-    return result
-  }
-
   /// Generates a set of constraints for the HGroup layout
   /// - Parameters:
   ///   - items: a set of ConstrainableContainers to generate constraints for
@@ -132,11 +123,18 @@ final class HGroupConstraints: GroupConstraints {
     NSLayoutConstraint.deactivate(allConstraints)
   }
 
+  var allConstraints: [NSLayoutConstraint] {
+    var result = [NSLayoutConstraint]()
+    result.append(contentsOf: constraints.values.flatMap { $0 })
+    result.append(contentsOf: leadingSpacingConstraints.values)
+    result.append(contentsOf: trailingSpacingConstraints.values)
+    return result
+  }
+
   // MARK: Private
 
   private let groupAlignment: HGroup.ItemAlignment
   private var constraints: [AnyHashable: [NSLayoutConstraint]] = [:]
-  private var groupAlignmentConstraints: [AnyHashable: [NSLayoutConstraint]] = [:]
   private var leadingSpacingConstraints: [AnyHashable: NSLayoutConstraint] = [:]
   private var trailingSpacingConstraints: [AnyHashable: NSLayoutConstraint] = [:]
 
