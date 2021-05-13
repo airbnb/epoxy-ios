@@ -32,7 +32,7 @@ final class IconRow: BaseRow, EpoxyableView {
 
   // MARK: Private
 
-  private let imageView = ImageView(
+  private let imageView = IconView(
     image: nil,
     size: .init(width: 24, height: 24))
   private let titleLabel = Label(style: .style(with: .title2))

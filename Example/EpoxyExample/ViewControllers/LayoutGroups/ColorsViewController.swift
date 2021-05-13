@@ -2,9 +2,14 @@
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
 import EpoxyCollectionView
-import Foundation
+import UIKit
 
-struct ColorsContentProvider: ContentProvider {
+class ColorsViewController: CollectionViewController {
+
+  init() {
+    super.init(layout: UICollectionViewCompositionalLayout.list)
+    setItems(items, animated: false)
+  }
 
   enum DataID {
     case hGroupFill
@@ -17,7 +22,10 @@ struct ColorsContentProvider: ContentProvider {
     case vGroupTrailing
   }
 
-  var title: String { "Static sized squares" }
+  override var title: String? {
+    get { "Static sized squares" }
+    set { }
+  }
 
   var items: [ItemModeling] {
     [

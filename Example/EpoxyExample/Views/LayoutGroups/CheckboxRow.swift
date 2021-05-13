@@ -35,7 +35,7 @@ final class CheckboxRow: BaseRow, EpoxyableView {
 
   func setContent(_ content: Content, animated: Bool) {
     group.setItems {
-      ImageView.groupItem(
+      IconView.groupItem(
         dataID: DataID.checkbox,
         content: UIImage(systemName: content.isChecked ? "checkmark.square.fill" : "checkmark.square"),
         style: .init(

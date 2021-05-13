@@ -139,19 +139,19 @@ final class MainViewController: NavigationController {
   private func makeLayoutGroupsExampleViewController(_ example: LayoutGroupsExample) -> UIViewController {
     switch example {
     case .readmeExamples:
-      return CollectionViewController(contentProvider: ReadmeExamplesContentProvider())
+      return LayoutGroupsReadmeExamplesViewController()
     case .textRowExample:
-      return CollectionViewController(contentProvider: TextRowExampleContentProvider())
+      return TextRowExampleViewController()
     case .colors:
-      return CollectionViewController(contentProvider: ColorsContentProvider())
+      return ColorsViewController()
     case .messages:
-      return CollectionViewController(contentProvider: MessagesContentProvider())
+      return MessagesViewController()
     case .messagesUIStackView:
-      return CollectionViewController(contentProvider: MessagesUIStackViewContentProvider())
+      return MessagesUIStackViewViewController()
     case .todoList:
-      return CollectionViewController(contentProvider: TodoListContentProvider())
+      return TodoListViewController()
     case .entirelyInline:
-      return CollectionViewController(contentProvider: EntirelyInlineContentProvider())
+      return EntirelyInlineViewController()
     case .complex:
       return ComplexDeclarativeViewController()
     }

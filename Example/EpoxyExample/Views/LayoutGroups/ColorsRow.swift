@@ -23,20 +23,13 @@ final class ColorsRow: BaseRow, EpoxyableView {
 
   // MARK: EpoxyableView
 
-  struct Style: Hashable, StyleIDProviding {
-    enum Variant: Equatable {
+  struct Style: Hashable {
+    enum Variant: Equatable, Hashable {
       case hGroup(_ alignment: HGroup.ItemAlignment)
       case vGroup(_ alignment: VGroup.ItemAlignment)
     }
 
     var variant: Variant
-    var styleID: AnyHashable? {
-      "\(variant)"
-    }
-
-    func hash(into hasher: inout Hasher) {
-      hasher.combine(styleID)
-    }
   }
 
   // MARK: Private
@@ -52,6 +45,20 @@ final class ColorsRow: BaseRow, EpoxyableView {
     }
   }
 
+  private enum DataID {
+    case red
+    case orange
+    case yellow
+    case green
+    case blue
+    case purple
+
+    case hGroup
+    case vGroup
+
+    case title
+  }
+
   private func setUp() {
     // we set the outer group alignment to `.fill` for `VGroup` to show that the
     // contents of the inner VGroup will stretch when used outside of another `VGroup`
@@ -62,33 +69,33 @@ final class ColorsRow: BaseRow, EpoxyableView {
     switch style.variant {
     case .hGroup(let alignment):
       group = HGroupItem(
-        dataID: UUID(),
+        dataID: DataID.hGroup,
         style: .init(alignment: alignment, spacing: 8))
       {
         ColorView.groupItem(
-          dataID: UUID(),
+          dataID: DataID.red,
           style: .init(size: .init(width: 30, height: 30), color: .systemRed))
         ColorView.groupItem(
-          dataID: UUID(),
+          dataID: DataID.orange,
           style: .init(size: .init(width: 50, height: 50), color: .systemOrange))
         ColorView.groupItem(
-          dataID: UUID(),
+          dataID: DataID.yellow,
           style: .init(size: .init(width: 70, height: 70), color: .systemYellow))
       }
       outerGroupAlignment = .leading
     case .vGroup(let alignment):
       group = VGroupItem(
-        dataID: UUID(),
+        dataID: DataID.vGroup,
         style: .init(alignment: alignment, spacing: 8))
       {
         ColorView.groupItem(
-          dataID: UUID(),
+          dataID: DataID.green,
           style: .init(size: .init(width: 30, height: 30), color: .systemGreen))
         ColorView.groupItem(
-          dataID: UUID(),
+          dataID: DataID.blue,
           style: .init(size: .init(width: 50, height: 50), color: .systemBlue))
         ColorView.groupItem(
-          dataID: UUID(),
+          dataID: DataID.purple,
           style: .init(size: .init(width: 70, height: 70), color: .systemPurple))
       }
       outerGroupAlignment = .fill
@@ -96,7 +103,7 @@ final class ColorsRow: BaseRow, EpoxyableView {
 
     let outerGroup = VGroup(alignment: outerGroupAlignment) {
       Label.groupItem(
-        dataID: "title",
+        dataID: DataID.title,
         content: currentTitle,
         style: .style(with: .title2))
       group

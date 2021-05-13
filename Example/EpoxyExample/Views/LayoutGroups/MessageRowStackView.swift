@@ -5,6 +5,8 @@ import EpoxyCore
 import EpoxyLayoutGroups
 import UIKit
 
+/// A component created using UIStackView to compare API and performance
+/// to MessageRow which is created using LayoutGroups
 final class MessageRowStackView: BaseRow, EpoxyableView {
 
   // MARK: Lifecycle
@@ -49,7 +51,7 @@ final class MessageRowStackView: BaseRow, EpoxyableView {
   // MARK: Private
 
   private let style: Style
-  private let avatar = ImageView(
+  private let avatar = IconView(
     image: UIImage(systemName: "person.crop.circle"),
     size: .init(width: 48, height: 48))
   private let unreadIndicator = ColorView(
@@ -58,7 +60,7 @@ final class MessageRowStackView: BaseRow, EpoxyableView {
       color: .systemBlue))
   private let nameLabel = Label(style: .style(with: .title3))
   private let dateLabel = Label(style: .style(with: .subheadline))
-  private let disclosureIcon = ImageView(
+  private let disclosureIcon = IconView(
     image: UIImage(systemName: "chevron.right"),
     size: .init(width: 12, height: 16))
   private let messageLabel = Label(style: .style(with: .body))

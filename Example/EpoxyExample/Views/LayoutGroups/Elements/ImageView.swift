@@ -4,7 +4,7 @@
 import EpoxyCore
 import UIKit
 
-final class ImageView: UIImageView, EpoxyableView {
+final class IconView: UIImageView, EpoxyableView {
 
   // MARK: Lifecycle
 

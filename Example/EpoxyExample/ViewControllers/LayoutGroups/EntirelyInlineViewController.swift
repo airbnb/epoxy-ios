@@ -6,29 +6,37 @@ import EpoxyLayoutGroups
 import Foundation
 import UIKit
 
-/// This content provider shows how you can create entire components
+/// This view controller shows how you can create entire components
 /// inline using VGroupView and HGroupView inside of Epoxy
-struct EntirelyInlineContentProvider: ContentProvider {
+class EntirelyInlineViewController: CollectionViewController {
+
+  init() {
+    super.init(layout: UICollectionViewCompositionalLayout.list)
+    setItems(items, animated: false)
+  }
 
   // MARK: Internal
 
-  var title: String { "Entirely Inline" }
+  override var title: String? {
+    get { "Entirely Inline" }
+    set { }
+  }
 
   var items: [ItemModeling] {
     [
       VGroupView.itemModel(
         dataID: RowDataID.textRow,
         content: .init {
-          titleItem(title: "Here is a title of an inline row")
-          subtitleItem(subtitle: "Cras mattis consectetur purus sit amet fermentum. Etiam porta sem malesuada magna mollis euismod. Vestibulum id ligula porta felis euismod semper. Donec ullamcorper nulla non metus auctor fringilla. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.")
+          titleItem(title: BeloIpsum.sentence(count: 1))
+          subtitleItem(subtitle: BeloIpsum.paragraph(count: 1))
         },
         style: .init(
           vGroupStyle: .init(spacing: 8),
-          layoutMargins: .init(top: 16, left: 24, bottom: 16, right: 24))),
+          edgeInsets: .init(top: 16, leading: 24, bottom: 16, trailing: 24))),
       HGroupView.itemModel(
         dataID: RowDataID.imageRow,
         content: .init {
-          ImageView.groupItem(
+          IconView.groupItem(
             dataID: GroupDataID.image,
             content: UIImage(systemName: "folder"),
             style: .init(size: .init(width: 32, height: 32), tintColor: .systemGreen))
@@ -37,13 +45,13 @@ struct EntirelyInlineContentProvider: ContentProvider {
             dataID: GroupDataID.verticalGroup,
             style: .init(spacing: 8))
           {
-            titleItem(title: "Risus Elit Fringilla Vestibulum")
-            subtitleItem(subtitle: "Sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec ullamcorper nulla non metus auctor fringilla. Cras mattis consectetur purus sit amet fermentum.")
+            titleItem(title: BeloIpsum.sentence(count: 1))
+            subtitleItem(subtitle: BeloIpsum.paragraph(count: 1))
           }
         },
         style: .init(
           hGroupStyle: .init(spacing: 16),
-          layoutMargins: .init(top: 16, left: 24, bottom: 16, right: 24))),
+          edgeInsets: .init(top: 16, leading: 24, bottom: 16, trailing: 24))),
     ]
   }
 

@@ -25,17 +25,9 @@ final class AlignableTextRow: BaseRow, EpoxyableView {
 
   // MARK: EpoxyableView
 
-  struct Style: Hashable, StyleIDProviding {
-    let titleAlignment: VGroup.ItemAlignment
+  struct Style: Hashable {
+    var titleAlignment: VGroup.ItemAlignment = .leading
     var showLabelBackgrounds: Bool = false
-
-    var styleID: AnyHashable? {
-      "\(titleAlignment)\(showLabelBackgrounds)"
-    }
-
-    func hash(into hasher: inout Hasher) {
-      hasher.combine(styleID)
-    }
   }
 
   struct Content: Equatable {
@@ -86,32 +78,26 @@ final class AlignableTextRow: BaseRow, EpoxyableView {
 
 extension AlignableTextRow.Style {
   static var standard: AlignableTextRow.Style {
-    .init(
-      titleAlignment: .fill)
+    .init()
   }
 
   static var leadingTitle: AlignableTextRow.Style {
-    AlignableTextRow.Style(
-      titleAlignment: .leading)
-      .withLabelBackgrounds()
+    var style = standard
+    style.showLabelBackgrounds = true
+    return style
   }
 
   static var centerTitle: AlignableTextRow.Style {
-    AlignableTextRow.Style(
-      titleAlignment: .center)
-      .withLabelBackgrounds()
+    var style = standard
+    style.titleAlignment = .center
+    style.showLabelBackgrounds = true
+    return style
   }
 
   static var trailingTitle: AlignableTextRow.Style {
-    AlignableTextRow.Style(
-      titleAlignment: .trailing)
-      .withLabelBackgrounds()
+    var style = standard
+    style.titleAlignment = .trailing
+    style.showLabelBackgrounds = true
+    return style
   }
-
-  func withLabelBackgrounds() -> AlignableTextRow.Style {
-    .init(
-      titleAlignment: titleAlignment,
-      showLabelBackgrounds: true)
-  }
-
 }

@@ -2,13 +2,21 @@
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
 import EpoxyCollectionView
-import Foundation
+import UIKit
 
-struct MessagesUIStackViewContentProvider: ContentProvider {
+class MessagesUIStackViewViewController: CollectionViewController {
+
+  init() {
+    super.init(layout: UICollectionViewCompositionalLayout.list)
+    setItems(items, animated: false)
+  }
 
   // MARK: Internal
 
-  var title: String { "Message List (UIStackView)" }
+  override var title: String? {
+    get { "Message List (UIStackView)" }
+    set { }
+  }
 
   var items: [ItemModeling] {
     let sampleRows = [
@@ -17,7 +25,7 @@ struct MessagesUIStackViewContentProvider: ContentProvider {
         content: .init(
           name: "Sara Bareilles",
           date: "Jan 25, 2021",
-          messagePreview: "Sed posuere consectetur est at lobortis. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec ullamcorper nulla non metus auctor fringilla. Aenean lacinia bibendum nulla sed consectetur. Nullam quis risus eget urna mollis ornare vel eu leo. Cras mattis consectetur purus sit amet fermentum.",
+          messagePreview: BeloIpsum.sentence(count: 5),
           seenText: "Seen"),
         style: .init(showUnread: true)),
       MessageRowStackView.itemModel(
@@ -25,7 +33,7 @@ struct MessagesUIStackViewContentProvider: ContentProvider {
         content: .init(
           name: "Beyoncé Knowles",
           date: "Jan 22, 2021",
-          messagePreview: "Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Nulla vitae elit libero, a pharetra augue. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Donec id elit non mi porta gravida at eget metus. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.",
+          messagePreview: BeloIpsum.sentence(count: 2),
           seenText: "Unread"),
         style: .init(showUnread: false)),
       MessageRowStackView.itemModel(
@@ -33,11 +41,11 @@ struct MessagesUIStackViewContentProvider: ContentProvider {
         content: .init(
           name: "Taylor Swift",
           date: "Dec 21, 2020",
-          messagePreview: "Donec id elit non mi porta gravida at eget metus.",
+          messagePreview: BeloIpsum.sentence(count: 1),
           seenText: "Seen"),
         style: .init(showUnread: false)),
     ]
-    return sampleRows.duplicate(100)
+    return Array(repeating: sampleRows, count: 100).flatMap { $0 }
   }
 
   // MARK: Private

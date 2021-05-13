@@ -21,12 +21,8 @@ final class MessageRow: BaseRow, EpoxyableView {
 
   // MARK: Internal
 
-  struct Style: Hashable, StyleIDProviding {
-    let showUnread: Bool
-
-    var styleID: AnyHashable? {
-      "\(showUnread)"
-    }
+  struct Style: Hashable {
+    var showUnread: Bool
   }
 
   struct Content: Equatable {
@@ -53,13 +49,13 @@ final class MessageRow: BaseRow, EpoxyableView {
 
   func setContent(_ content: Content, animated: Bool) {
     group.setItems {
-      ImageView.groupItem(
+      IconView.groupItem(
         dataID: DataID.avatar,
         content: UIImage(systemName: "person.crop.circle"),
         style: .init(
           size: .init(width: 48, height: 48),
           tintColor: .black))
-        .set(\ImageView.layer.cornerRadius, value: 24)
+        .set(\IconView.layer.cornerRadius, value: 24)
       VGroupItem(
         dataID: DataID.contentGroup,
         style: .init(spacing: 8))
@@ -97,7 +93,7 @@ final class MessageRow: BaseRow, EpoxyableView {
               content: content.date,
               style: .style(with: .subheadline))
               .contentCompressionResistancePriority(.required, for: .horizontal)
-            ImageView.groupItem(
+            IconView.groupItem(
               dataID: DataID.disclosureArrow,
               content: UIImage(systemName: "chevron.right"),
               style: .init(

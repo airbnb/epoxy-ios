@@ -18,15 +18,14 @@
 		25B6766225AE898B00C00B20 /* ImageRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B6766125AE898B00C00B20 /* ImageRow.swift */; };
 		25B6766525AE8BEA00C00B20 /* UIImageView+RemoteImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B6766425AE8BEA00C00B20 /* UIImageView+RemoteImage.swift */; };
 		25B6766825AFA67100C00B20 /* ButtonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25B6766725AFA67100C00B20 /* ButtonRow.swift */; };
-		25D39B3226277F0D00B3DBF9 /* MessagesUIStackViewContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2726277F0D00B3DBF9 /* MessagesUIStackViewContentProvider.swift */; };
+		25D39B3226277F0D00B3DBF9 /* MessagesUIStackViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2726277F0D00B3DBF9 /* MessagesUIStackViewViewController.swift */; };
 		25D39B3426277F0D00B3DBF9 /* ComplexDeclarativeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2926277F0D00B3DBF9 /* ComplexDeclarativeViewController.swift */; };
-		25D39B3626277F0D00B3DBF9 /* ColorsContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2B26277F0D00B3DBF9 /* ColorsContentProvider.swift */; };
-		25D39B3726277F0D00B3DBF9 /* ReadmeExampleContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2C26277F0D00B3DBF9 /* ReadmeExampleContentProvider.swift */; };
-		25D39B3826277F0D00B3DBF9 /* TodoListContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2D26277F0D00B3DBF9 /* TodoListContentProvider.swift */; };
-		25D39B3926277F0D00B3DBF9 /* MessagesContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2E26277F0D00B3DBF9 /* MessagesContentProvider.swift */; };
-		25D39B3A26277F0D00B3DBF9 /* EntirelyInlineContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2F26277F0D00B3DBF9 /* EntirelyInlineContentProvider.swift */; };
-		25D39B3B26277F0D00B3DBF9 /* TextRowExampleContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B3026277F0D00B3DBF9 /* TextRowExampleContentProvider.swift */; };
-		25D39B3C26277F0D00B3DBF9 /* ContentProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B3126277F0D00B3DBF9 /* ContentProvider.swift */; };
+		25D39B3626277F0D00B3DBF9 /* ColorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2B26277F0D00B3DBF9 /* ColorsViewController.swift */; };
+		25D39B3726277F0D00B3DBF9 /* LayoutGroupsReadmeExamplesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2C26277F0D00B3DBF9 /* LayoutGroupsReadmeExamplesViewController.swift */; };
+		25D39B3826277F0D00B3DBF9 /* TodoListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2D26277F0D00B3DBF9 /* TodoListViewController.swift */; };
+		25D39B3926277F0D00B3DBF9 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2E26277F0D00B3DBF9 /* MessagesViewController.swift */; };
+		25D39B3A26277F0D00B3DBF9 /* EntirelyInlineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B2F26277F0D00B3DBF9 /* EntirelyInlineViewController.swift */; };
+		25D39B3B26277F0D00B3DBF9 /* TextRowExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B3026277F0D00B3DBF9 /* TextRowExampleViewController.swift */; };
 		25D39B4B2627809D00B3DBF9 /* MessageRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B3F2627809D00B3DBF9 /* MessageRow.swift */; };
 		25D39B4C2627809D00B3DBF9 /* ColorsRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B402627809D00B3DBF9 /* ColorsRow.swift */; };
 		25D39B4D2627809D00B3DBF9 /* IconRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B412627809D00B3DBF9 /* IconRow.swift */; };
@@ -37,7 +36,6 @@
 		25D39B532627809D00B3DBF9 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B482627809D00B3DBF9 /* Button.swift */; };
 		25D39B542627809D00B3DBF9 /* MessageRowStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B492627809D00B3DBF9 /* MessageRowStackView.swift */; };
 		25D39B552627809D00B3DBF9 /* ActionButtonRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B4A2627809D00B3DBF9 /* ActionButtonRow.swift */; };
-		25D39B592627896300B3DBF9 /* Array+Duplicate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B582627896300B3DBF9 /* Array+Duplicate.swift */; };
 		25D39B5C262789E000B3DBF9 /* AlignableTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B5B262789E000B3DBF9 /* AlignableTextRow.swift */; };
 		25D39B5F26278B1700B3DBF9 /* LayoutGroupsExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B5E26278B1700B3DBF9 /* LayoutGroupsExample.swift */; };
 		25D39B6426278DD900B3DBF9 /* LayoutGroupsExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B6326278DD900B3DBF9 /* LayoutGroupsExampleViewController.swift */; };
@@ -78,15 +76,14 @@
 		25B6766125AE898B00C00B20 /* ImageRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRow.swift; sourceTree = "<group>"; };
 		25B6766425AE8BEA00C00B20 /* UIImageView+RemoteImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+RemoteImage.swift"; sourceTree = "<group>"; };
 		25B6766725AFA67100C00B20 /* ButtonRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonRow.swift; sourceTree = "<group>"; };
-		25D39B2726277F0D00B3DBF9 /* MessagesUIStackViewContentProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesUIStackViewContentProvider.swift; sourceTree = "<group>"; };
+		25D39B2726277F0D00B3DBF9 /* MessagesUIStackViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesUIStackViewViewController.swift; sourceTree = "<group>"; };
 		25D39B2926277F0D00B3DBF9 /* ComplexDeclarativeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplexDeclarativeViewController.swift; sourceTree = "<group>"; };
-		25D39B2B26277F0D00B3DBF9 /* ColorsContentProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorsContentProvider.swift; sourceTree = "<group>"; };
-		25D39B2C26277F0D00B3DBF9 /* ReadmeExampleContentProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReadmeExampleContentProvider.swift; sourceTree = "<group>"; };
-		25D39B2D26277F0D00B3DBF9 /* TodoListContentProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListContentProvider.swift; sourceTree = "<group>"; };
-		25D39B2E26277F0D00B3DBF9 /* MessagesContentProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesContentProvider.swift; sourceTree = "<group>"; };
-		25D39B2F26277F0D00B3DBF9 /* EntirelyInlineContentProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntirelyInlineContentProvider.swift; sourceTree = "<group>"; };
-		25D39B3026277F0D00B3DBF9 /* TextRowExampleContentProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextRowExampleContentProvider.swift; sourceTree = "<group>"; };
-		25D39B3126277F0D00B3DBF9 /* ContentProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentProvider.swift; sourceTree = "<group>"; };
+		25D39B2B26277F0D00B3DBF9 /* ColorsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorsViewController.swift; sourceTree = "<group>"; };
+		25D39B2C26277F0D00B3DBF9 /* LayoutGroupsReadmeExamplesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LayoutGroupsReadmeExamplesViewController.swift; sourceTree = "<group>"; };
+		25D39B2D26277F0D00B3DBF9 /* TodoListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TodoListViewController.swift; sourceTree = "<group>"; };
+		25D39B2E26277F0D00B3DBF9 /* MessagesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
+		25D39B2F26277F0D00B3DBF9 /* EntirelyInlineViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EntirelyInlineViewController.swift; sourceTree = "<group>"; };
+		25D39B3026277F0D00B3DBF9 /* TextRowExampleViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextRowExampleViewController.swift; sourceTree = "<group>"; };
 		25D39B3F2627809D00B3DBF9 /* MessageRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageRow.swift; sourceTree = "<group>"; };
 		25D39B402627809D00B3DBF9 /* ColorsRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ColorsRow.swift; sourceTree = "<group>"; };
 		25D39B412627809D00B3DBF9 /* IconRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconRow.swift; sourceTree = "<group>"; };
@@ -97,7 +94,6 @@
 		25D39B482627809D00B3DBF9 /* Button.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		25D39B492627809D00B3DBF9 /* MessageRowStackView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageRowStackView.swift; sourceTree = "<group>"; };
 		25D39B4A2627809D00B3DBF9 /* ActionButtonRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionButtonRow.swift; sourceTree = "<group>"; };
-		25D39B582627896300B3DBF9 /* Array+Duplicate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Duplicate.swift"; sourceTree = "<group>"; };
 		25D39B5B262789E000B3DBF9 /* AlignableTextRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlignableTextRow.swift; sourceTree = "<group>"; };
 		25D39B5E26278B1700B3DBF9 /* LayoutGroupsExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutGroupsExample.swift; sourceTree = "<group>"; };
 		25D39B6326278DD900B3DBF9 /* LayoutGroupsExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutGroupsExampleViewController.swift; sourceTree = "<group>"; };
@@ -178,15 +174,14 @@
 		25D39B2626277F0D00B3DBF9 /* LayoutGroups */ = {
 			isa = PBXGroup;
 			children = (
-				25D39B2726277F0D00B3DBF9 /* MessagesUIStackViewContentProvider.swift */,
+				25D39B2726277F0D00B3DBF9 /* MessagesUIStackViewViewController.swift */,
 				25D39B2926277F0D00B3DBF9 /* ComplexDeclarativeViewController.swift */,
-				25D39B2B26277F0D00B3DBF9 /* ColorsContentProvider.swift */,
-				25D39B2C26277F0D00B3DBF9 /* ReadmeExampleContentProvider.swift */,
-				25D39B2D26277F0D00B3DBF9 /* TodoListContentProvider.swift */,
-				25D39B2E26277F0D00B3DBF9 /* MessagesContentProvider.swift */,
-				25D39B2F26277F0D00B3DBF9 /* EntirelyInlineContentProvider.swift */,
-				25D39B3026277F0D00B3DBF9 /* TextRowExampleContentProvider.swift */,
-				25D39B3126277F0D00B3DBF9 /* ContentProvider.swift */,
+				25D39B2B26277F0D00B3DBF9 /* ColorsViewController.swift */,
+				25D39B2C26277F0D00B3DBF9 /* LayoutGroupsReadmeExamplesViewController.swift */,
+				25D39B2D26277F0D00B3DBF9 /* TodoListViewController.swift */,
+				25D39B2E26277F0D00B3DBF9 /* MessagesViewController.swift */,
+				25D39B2F26277F0D00B3DBF9 /* EntirelyInlineViewController.swift */,
+				25D39B3026277F0D00B3DBF9 /* TextRowExampleViewController.swift */,
 			);
 			path = LayoutGroups;
 			sourceTree = "<group>";
@@ -273,7 +268,6 @@
 		25FEB79825AE441800F8EFBD /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				25D39B582627896300B3DBF9 /* Array+Duplicate.swift */,
 				259863A125AE47710065024B /* UICollectionViewCompositionalLayout+List.swift */,
 				25B6766425AE8BEA00C00B20 /* UIImageView+RemoteImage.swift */,
 			);
@@ -382,7 +376,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				25D39B3B26277F0D00B3DBF9 /* TextRowExampleContentProvider.swift in Sources */,
+				25D39B3B26277F0D00B3DBF9 /* TextRowExampleViewController.swift in Sources */,
 				A633B24625B6507A0095E464 /* ImageMarquee.swift in Sources */,
 				25D39B542627809D00B3DBF9 /* MessageRowStackView.swift in Sources */,
 				25627B95232ABF0F00D7327A /* CompositionalLayoutViewController.swift in Sources */,
@@ -391,13 +385,11 @@
 				25627B93232ABF0F00D7327A /* AppDelegate.swift in Sources */,
 				25B6766825AFA67100C00B20 /* ButtonRow.swift in Sources */,
 				A6F0929325B9ED0C007D902B /* CounterViewController.swift in Sources */,
-				25D39B592627896300B3DBF9 /* Array+Duplicate.swift in Sources */,
 				25D39B502627809D00B3DBF9 /* BaseRow.swift in Sources */,
 				25D39B4B2627809D00B3DBF9 /* MessageRow.swift in Sources */,
 				A61AFF5F2602B99E005356A8 /* TapMeViewController.swift in Sources */,
 				A6F0928B25B9E983007D902B /* TextRow.swift in Sources */,
 				25D39B522627809D00B3DBF9 /* ImageView.swift in Sources */,
-				25D39B3C26277F0D00B3DBF9 /* ContentProvider.swift in Sources */,
 				25D39B4C2627809D00B3DBF9 /* ColorsRow.swift in Sources */,
 				25D39B532627809D00B3DBF9 /* Button.swift in Sources */,
 				25D39B4F2627809D00B3DBF9 /* Label.swift in Sources */,
@@ -406,21 +398,21 @@
 				A6358A3A25C4E4AE007051D5 /* PresentationViewController.swift in Sources */,
 				2518441C25B8E38A000B801F /* ColorView.swift in Sources */,
 				2E8B007623F47E7E00D82A31 /* CustomSizingView.swift in Sources */,
-				25D39B3926277F0D00B3DBF9 /* MessagesContentProvider.swift in Sources */,
+				25D39B3926277F0D00B3DBF9 /* MessagesViewController.swift in Sources */,
 				25D39B5C262789E000B3DBF9 /* AlignableTextRow.swift in Sources */,
-				25D39B3626277F0D00B3DBF9 /* ColorsContentProvider.swift in Sources */,
+				25D39B3626277F0D00B3DBF9 /* ColorsViewController.swift in Sources */,
 				25B6765F25AE883700C00B20 /* ProductViewController.swift in Sources */,
 				A61AFF632602BA2B005356A8 /* NavigationWrapperViewController.swift in Sources */,
-				25D39B3726277F0D00B3DBF9 /* ReadmeExampleContentProvider.swift in Sources */,
-				25D39B3A26277F0D00B3DBF9 /* EntirelyInlineContentProvider.swift in Sources */,
+				25D39B3726277F0D00B3DBF9 /* LayoutGroupsReadmeExamplesViewController.swift in Sources */,
+				25D39B3A26277F0D00B3DBF9 /* EntirelyInlineViewController.swift in Sources */,
 				A6F0928F25B9ECC6007D902B /* ReadmeExamplesViewController.swift in Sources */,
 				25D39B4D2627809D00B3DBF9 /* IconRow.swift in Sources */,
-				25D39B3226277F0D00B3DBF9 /* MessagesUIStackViewContentProvider.swift in Sources */,
+				25D39B3226277F0D00B3DBF9 /* MessagesUIStackViewViewController.swift in Sources */,
 				25D39B5F26278B1700B3DBF9 /* LayoutGroupsExample.swift in Sources */,
 				25FEB79225AE431100F8EFBD /* MainViewController.swift in Sources */,
 				A667554425D3028D00AC4FC8 /* CardStackViewController.swift in Sources */,
 				25B6766225AE898B00C00B20 /* ImageRow.swift in Sources */,
-				25D39B3826277F0D00B3DBF9 /* TodoListContentProvider.swift in Sources */,
+				25D39B3826277F0D00B3DBF9 /* TodoListViewController.swift in Sources */,
 				A633B24025B6494D0095E464 /* BeloIpsum.swift in Sources */,
 				A6F0929D25B9EFB9007D902B /* FormNavigationController.swift in Sources */,
 				2E8B007823F4800000D82A31 /* CustomSelfSizingContentViewController.swift in Sources */,

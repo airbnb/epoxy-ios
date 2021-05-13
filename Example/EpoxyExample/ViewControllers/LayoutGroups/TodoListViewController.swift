@@ -2,7 +2,7 @@
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
 import EpoxyCollectionView
-import Foundation
+import UIKit
 
 // MARK: - TodoItem
 
@@ -15,11 +15,19 @@ struct TodoItem {
 
 // MARK: - TodoListContentProvider
 
-struct TodoListContentProvider: ContentProvider {
+class TodoListViewController: CollectionViewController {
+
+  init() {
+    super.init(layout: UICollectionViewCompositionalLayout.list)
+    setItems(items, animated: false)
+  }
 
   // MARK: Internal
 
-  var title: String { "Todo List" }
+  override var title: String? {
+    get { "Todo List" }
+    set { }
+  }
 
   var items: [ItemModeling] {
     demoItems.map { item in

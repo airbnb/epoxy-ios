@@ -21,16 +21,20 @@ final class ComplexDeclarativeViewController: UIViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
 
-    view.backgroundColor = .white
-    view.layoutMargins = UIEdgeInsets(top: 24, left: 24, bottom: 24, right: 24)
+    let scrollView = UIScrollView()
+    scrollView.translatesAutoresizingMaskIntoConstraints = false
+    scrollView.backgroundColor = .white
+    scrollView.layoutMargins = UIEdgeInsets(top: 24, left: 24, bottom: 24, right: 24)
+    view.addSubview(scrollView)
+    scrollView.constrainToSuperview()
 
-    group.install(in: view)
+    group.install(in: scrollView)
     NSLayoutConstraint.activate([
-      group.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
-      group.trailingAnchor.constraint(equalTo: view.layoutMarginsGuide.trailingAnchor),
-      group.topAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.topAnchor),
-      group.bottomAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.bottomAnchor),
-      group.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+      group.leadingAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.leadingAnchor),
+      group.trailingAnchor.constraint(equalTo: scrollView.layoutMarginsGuide.trailingAnchor),
+      group.topAnchor.constraint(greaterThanOrEqualTo: scrollView.layoutMarginsGuide.topAnchor),
+      group.bottomAnchor.constraint(lessThanOrEqualTo: scrollView.layoutMarginsGuide.bottomAnchor),
+      group.centerYAnchor.constraint(equalTo: scrollView.centerYAnchor),
     ])
 
     updateGroup()
@@ -47,7 +51,7 @@ final class ComplexDeclarativeViewController: UIViewController {
 
   @objc
   private func updateGroup() {
-    group.setItems {
+    group.setItems({
       Button.groupItem(
         dataID: DataID.button,
         content: .init(title: "Shuffle"),
@@ -56,7 +60,7 @@ final class ComplexDeclarativeViewController: UIViewController {
         },
         style: .init())
       randomColorItems()
-    }
+    }, animated: true)
   }
 
   private func randomColorItems() -> [GroupItemModeling] {

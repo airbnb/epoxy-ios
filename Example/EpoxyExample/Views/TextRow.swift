@@ -35,32 +35,32 @@ final class TextRow: UIView, EpoxyableView {
   }
 
   func setContent(_ content: Content, animated: Bool) {
-    let titleFont: UIFont
-    let bodyFont: UIFont
+    let titleStyle: UIFont.TextStyle
+    let bodyStyle: UIFont.TextStyle
 
     switch style {
     case .large:
-      titleFont = UIFont.preferredFont(forTextStyle: .headline)
-      bodyFont = UIFont.preferredFont(forTextStyle: .body)
+      titleStyle = .headline
+      bodyStyle = .body
     case .small:
-      titleFont = UIFont.preferredFont(forTextStyle: .body)
-      bodyFont = UIFont.preferredFont(forTextStyle: .caption1)
+      titleStyle = .body
+      bodyStyle = .caption1
     }
 
     group.setItems {
       if let title = content.title {
-        labelItem(
+        Label.groupItem(
           dataID: DataID.title,
-          text: title,
-          font: titleFont)
+          content: title,
+          style: .style(with: titleStyle))
           .adjustsFontForContentSizeCategory(true)
           .textColor(UIColor.label)
       }
       if let body = content.body {
-        labelItem(
+        Label.groupItem(
           dataID: DataID.body,
-          text: body,
-          font: bodyFont)
+          content: body,
+          style: .style(with: bodyStyle))
           .adjustsFontForContentSizeCategory(true)
           .numberOfLines(0)
           .textColor(UIColor.secondaryLabel)
@@ -77,27 +77,6 @@ final class TextRow: UIView, EpoxyableView {
 
   private let style: Style
   private let group = VGroup(spacing: 8)
-
-  private func labelItem(
-    dataID: AnyHashable,
-    text: String,
-    font: UIFont)
-    -> GroupItem<UILabel>
-  {
-    GroupItem<UILabel>(
-      dataID: dataID,
-      params: font,
-      content: text,
-      make: { font in
-        let label = UILabel(frame: .zero)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = font
-        return label
-      },
-      setContent: { context, content in
-        context.constrainable.text = content
-      })
-  }
 }
 
 // MARK: SelectableView

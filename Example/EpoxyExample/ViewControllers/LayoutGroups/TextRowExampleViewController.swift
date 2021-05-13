@@ -2,13 +2,22 @@
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
 import EpoxyCollectionView
-import Foundation
+import UIKit
 
-struct TextRowExampleContentProvider: ContentProvider {
+class TextRowExampleViewController: CollectionViewController {
+
+
+  init() {
+    super.init(layout: UICollectionViewCompositionalLayout.list)
+    setItems(items, animated: false)
+  }
 
   // MARK: Internal
 
-  var title: String { "Label alignment" }
+  override var title: String? {
+    get { "Label alignment" }
+    set { }
+  }
 
   var items: [ItemModeling] {
     [

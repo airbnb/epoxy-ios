@@ -4,11 +4,19 @@
 import EpoxyCollectionView
 import UIKit
 
-struct ReadmeExamplesContentProvider: ContentProvider {
+class LayoutGroupsReadmeExamplesViewController: CollectionViewController {
+
+  init() {
+    super.init(layout: UICollectionViewCompositionalLayout.list)
+    setItems(items, animated: false)
+  }
 
   // MARK: Internal
 
-  var title: String { "Readme Examples" }
+  override var title: String? {
+    get { "Readme Examples" }
+    set { }
+  }
 
   var items: [ItemModeling] {
     [
