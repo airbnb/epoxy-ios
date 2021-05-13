@@ -339,16 +339,30 @@ LayoutGroups are UIKit [Auto Layout](https://developer.apple.com/library/archive
 | ![ActionRow screenshot](docs/images/ActionRow.png) |
 
 ```swift
-// create any number of views you want to vertically group
-let titleLabel = UILabel(...)
-let subtitleLabel = UILabel(...)
-let actionButton = UIButton(...)
+// Set of dataIDs to have consistent and unique IDs
+enum DataID {
+  case title
+  case subtitle
+  case action
+}
 
-// add them to the group
+// Groups are created declaratively just like Epoxy ItemModels
 let group = VGroup(alignment: .leading, spacing: 8) {
-  titleLabel
-  subtitleLabel
-  actionButton
+  Label.groupItem(
+    dataID: DataID.title,
+    content: "Title text",
+    style: .title)
+  Label.groupItem(
+    dataID: DataID.subtitle,
+    content: "Subtitle text",
+    style: .subtitle)
+  Button.groupItem(
+    dataID: DataID.action,
+    content: "Perform action",
+    behaviors: .init { button in
+      print("Button tapped! \(button)")
+    },
+    style: .standard)
 }
 
 // install your group in a view
@@ -358,9 +372,7 @@ group.install(in: view)
 group.constrainToMargins()
 ```
 
-Note that we can use the same syntax as `SwiftUI`‘s `VStack` thanks to some result builder magic ✨. For the most part this is a lot like using regular views, the main difference being that `install(in: view)` call.
-
-Both `HGroup` and `VGroup` are written using [`UILayoutGuide`](https://developer.apple.com/documentation/uikit/uilayoutguide) which prevents having large nested view hierarchies. To account for this, we’ve added this `install` method to prevent the user from having to add subviews and the layout guide manually.
+As you can see, this is incredibly similar to the other APIs used in Epoxy. One important thing to note is that `install(in: view)` call at the bottom. Both `HGroup` and `VGroup` are written using [`UILayoutGuide`](https://developer.apple.com/documentation/uikit/uilayoutguide) which prevents having large nested view hierarchies. To account for this, we’ve added this `install` method to prevent the user from having to add subviews and the layout guide manually.
 
 Using `HGroup` is almost exactly the same as `VGroup` but the components are now horizontally laid out instead of vertically:
 
@@ -369,12 +381,19 @@ Using `HGroup` is almost exactly the same as `VGroup` but the components are now
 | ![IconRow screenshot](docs/images/IconRow.png) |
 
 ```swift
-let titleLabel = UILabel(...)
-let iconView = UIImageView(...)
+enum DataID {
+  case icon
+  case title
+}
 
 let group = HGroup(spacing: 8) {
-  iconView
-  subtitleLabel
+  ImageView.groupItem(
+    dataID: DataID.icon,
+    content: UIImage(systemName: "person.fill")!,
+    style: .init(size: .init(width: 24, height: 24)))
+  Label.groupItem(
+    dataID: DataID.title,
+    content: "This is an IconRow")
 }
 
 group.install(in: view)
