@@ -4,8 +4,12 @@
 import EpoxyCore
 import UIKit
 
+// MARK: - HGroupItem
+
 /// An item you can use inside of any Group to represent a nested HGroup
 public struct HGroupItem: EpoxyModeled {
+
+  // MARK: Lifecycle
 
   /// Initializer to create a HGroupItem that represents a nested HGroup
   /// - Parameters:
@@ -83,6 +87,17 @@ extension HGroupItem: GroupItemModeling {
 // MARK: InternalGroupItemModeling
 
 extension HGroupItem: InternalGroupItemModeling {
+  public var diffIdentifier: AnyHashable {
+    DiffIdentifier(
+      dataID: dataID,
+      style: style,
+      reflowsForAccessibilityTypeSizes: reflowsForAccessibilityTypeSizes,
+      accessibilityAlignment: accessibilityAlignment,
+      horizontalAlignment: horizontalAlignment,
+      padding: padding,
+      verticalAlignment: verticalAlignment)
+  }
+
   public func makeConstrainable() -> Constrainable {
     HGroup(
       alignment: style.alignment,
@@ -113,17 +128,6 @@ extension HGroupItem: InternalGroupItemModeling {
   public func setBehaviors(on constrainable: Constrainable) {
     // This shouldn't be necessary because we will always have `update()` called
     // on an HGroupItem and that will subsequently update our behaviors
-  }
-
-  public var diffIdentifier: AnyHashable {
-    DiffIdentifier(
-      dataID: dataID,
-      style: style,
-      reflowsForAccessibilityTypeSizes: reflowsForAccessibilityTypeSizes,
-      accessibilityAlignment: accessibilityAlignment,
-      horizontalAlignment: horizontalAlignment,
-      padding: padding,
-      verticalAlignment: verticalAlignment)
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {

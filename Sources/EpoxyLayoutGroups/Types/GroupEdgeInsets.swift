@@ -3,26 +3,11 @@
 
 import UIKit
 
+// MARK: - GroupEdgeInsets
+
 public struct GroupEdgeInsets: Hashable {
 
-  // MARK: AdaptiveFloat
-
-  // This type is nested to avoid conflicts with types like this that are common
-  // in other codebases
-  public enum AdaptiveFloat: Equatable, Hashable {
-    /// Holds a single style for both size classes
-    case fixed(CGFloat)
-    /// Holds a compact and a regular style
-    case adaptive(compact: CGFloat, regular: CGFloat)
-    /// Holds sizes for compact and regular size classes, as well as
-    /// compact and regular size classes when accessibility type sizes are enabled.
-    /// This is checked using traitCollection.preferredContentSizeCategory.isAccessibilityCategory
-    case adaptiveAccessibility(
-      compact: CGFloat,
-      compactAccessibilitySizes: CGFloat,
-      regular: CGFloat,
-      regularAccessibilitySizes: CGFloat)
-  }
+  // MARK: Lifecycle
 
   /// Creates a GroupEdgeInsets instance with the provided values
   /// - Parameters:
@@ -58,6 +43,27 @@ public struct GroupEdgeInsets: Hashable {
     self.leading = leading
     self.bottom = bottom
     self.trailing = trailing
+  }
+
+  // MARK: Public
+
+  // MARK: AdaptiveFloat
+
+  // This type is nested to avoid conflicts with types like this that are common
+  // in other codebases
+  public enum AdaptiveFloat: Equatable, Hashable {
+    /// Holds a single style for both size classes
+    case fixed(CGFloat)
+    /// Holds a compact and a regular style
+    case adaptive(compact: CGFloat, regular: CGFloat)
+    /// Holds sizes for compact and regular size classes, as well as
+    /// compact and regular size classes when accessibility type sizes are enabled.
+    /// This is checked using traitCollection.preferredContentSizeCategory.isAccessibilityCategory
+    case adaptiveAccessibility(
+      compact: CGFloat,
+      compactAccessibilitySizes: CGFloat,
+      regular: CGFloat,
+      regularAccessibilitySizes: CGFloat)
   }
 
   public let top: AdaptiveFloat
@@ -106,10 +112,10 @@ extension GroupEdgeInsets.AdaptiveFloat {
       }
 
     case let .adaptiveAccessibility(
-          compact: compact,
-          compactAccessibilitySizes: compactAccessibility,
-          regular: regular,
-          regularAccessibilitySizes: regularAccessibility):
+      compact: compact,
+      compactAccessibilitySizes: compactAccessibility,
+      regular: regular,
+      regularAccessibilitySizes: regularAccessibility):
       switch (traitCollection.horizontalSizeClass, traitCollection.preferredContentSizeCategory.isAccessibilityCategory) {
       case (.compact, false), (.unspecified, false):
         return compact

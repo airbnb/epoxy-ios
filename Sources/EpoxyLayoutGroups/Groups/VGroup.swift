@@ -19,10 +19,10 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     items: [GroupItemModeling] = [])
   {
     let erasedItems = items.eraseToAnyGroupItems()
-    self.alignment = style.alignment
-    self.spacing = style.spacing
+    alignment = style.alignment
+    spacing = style.spacing
     self.items = erasedItems
-    self.constrainableContainers = erasedItems.map { item in
+    constrainableContainers = erasedItems.map { item in
       let constrainable = item.makeConstrainable()
       item.update(constrainable, animated: false)
       return ConstrainableContainer(constrainable)
@@ -132,8 +132,10 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     ///     container: the parent container that should be constrained to
     ///     constrainable: the constrainable that this alignment is affecting
     case custom(
-          alignmentID: AnyHashable,
-          layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint])
+      alignmentID: AnyHashable,
+      layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint])
+
+    // MARK: Public
 
     // MARK: Hashable
 
@@ -153,6 +155,8 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
         hasher.combine(alignmentID)
       }
     }
+
+    // MARK: Private
 
     private enum HashableAlignment {
       case fill, leading, trailing, center
@@ -180,7 +184,7 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   }
 
   // MARK: Constrainable
-  
+
   public var firstBaselineAnchor: NSLayoutYAxisAnchor {
     constrainableContainers.first?.firstBaselineAnchor ?? topAnchor
   }
@@ -218,11 +222,10 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     return other == self
   }
 
-
   // MARK: Internal
 
   var constrainableContainers: [ConstrainableContainer] = []
-  var dataIDIndexMap: [AnyHashable : Int] = [:]
+  var dataIDIndexMap: [AnyHashable: Int] = [:]
   var constraints: GroupConstraints? = nil
 
   /// This is internal as it's only used for animated changes. If you want to remove

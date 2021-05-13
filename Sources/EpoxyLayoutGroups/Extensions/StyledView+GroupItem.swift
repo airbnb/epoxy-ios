@@ -17,7 +17,7 @@ extension StyledView where Self: EpoxyableView {
     content: Content,
     behaviors: Behaviors? = nil,
     style: Style)
-  -> GroupItem<Self>
+    -> GroupItem<Self>
   {
     GroupItem<Self>(
       dataID: dataID,
@@ -43,7 +43,7 @@ extension StyledView where Self: EpoxyableView, Style == Never {
     dataID: AnyHashable,
     content: Content,
     behaviors: Behaviors? = nil)
-  -> GroupItem<Self>
+    -> GroupItem<Self>
   {
     GroupItem<Self>(
       dataID: dataID,
@@ -69,7 +69,7 @@ extension StyledView where Self: EpoxyableView, Content == Never {
     dataID: AnyHashable,
     behaviors: Behaviors? = nil,
     style: Style)
-  -> GroupItem<Self>
+    -> GroupItem<Self>
   {
     GroupItem<Self>(
       dataID: dataID,
@@ -89,7 +89,7 @@ extension StyledView where Self: EpoxyableView, Content == Never, Style == Never
   public static func groupItem(
     dataID: AnyHashable,
     behaviors: Behaviors? = nil)
-  -> GroupItem<Self>
+    -> GroupItem<Self>
   {
     GroupItem<Self>(
       dataID: dataID,

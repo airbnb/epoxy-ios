@@ -4,12 +4,12 @@
 import EpoxyCore
 import UIKit
 
-// MARK: VGroupItem
+// MARK: - VGroupItem
 
 /// An item you can use inside of any Group to represent a nested `VGroup`
 public struct VGroupItem: EpoxyModeled {
 
-  public typealias Content = [GroupItemModeling]
+  // MARK: Lifecycle
 
   /// Initializer to create a VGroupItem that represents a nested VGroup
   /// - Parameters:
@@ -44,6 +44,8 @@ public struct VGroupItem: EpoxyModeled {
 
   // MARK: Public
 
+  public typealias Content = [GroupItemModeling]
+
   public var storage = EpoxyModelStorage()
   public var style: VGroup.Style
 }
@@ -72,6 +74,8 @@ extension VGroupItem: VerticalAlignmentProviding { }
 
 extension VGroupItem: GroupItemsProviding { }
 
+// MARK: GroupItemModeling
+
 extension VGroupItem: GroupItemModeling {
   public func eraseToAnyGroupItem() -> AnyGroupItem {
     .init(internalGroupItemModel: self)
@@ -81,6 +85,16 @@ extension VGroupItem: GroupItemModeling {
 // MARK: InternalGroupItemModeling
 
 extension VGroupItem: InternalGroupItemModeling {
+  public var diffIdentifier: AnyHashable {
+    DiffIdentifier(
+      dataID: dataID,
+      style: style,
+      accessibilityAlignment: accessibilityAlignment,
+      horizontalAlignment: horizontalAlignment,
+      padding: padding,
+      verticalAlignment: verticalAlignment)
+  }
+
   public func makeConstrainable() -> Constrainable {
     VGroup(
       alignment: style.alignment,
@@ -109,16 +123,6 @@ extension VGroupItem: InternalGroupItemModeling {
   public func setBehaviors(on constrainable: Constrainable) {
     // This shouldn't be necessary because we will always have `update()` called
     // on an HGroupItem and that will subsequently update our behaviors
-  }
-
-  public var diffIdentifier: AnyHashable {
-    DiffIdentifier(
-      dataID: dataID,
-      style: style,
-      accessibilityAlignment: accessibilityAlignment,
-      horizontalAlignment: horizontalAlignment,
-      padding: padding,
-      verticalAlignment: verticalAlignment)
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {

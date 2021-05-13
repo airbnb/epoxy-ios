@@ -6,10 +6,14 @@ import UIKit
 
 class ColorsViewController: CollectionViewController {
 
+  // MARK: Lifecycle
+
   init() {
     super.init(layout: UICollectionViewCompositionalLayout.list)
     setItems(items, animated: false)
   }
+
+  // MARK: Internal
 
   enum DataID {
     case hGroupFill

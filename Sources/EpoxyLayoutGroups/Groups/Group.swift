@@ -295,7 +295,7 @@ extension Constrainable where Self: InternalGroup {
 
   func resetIndexMap() {
     dataIDIndexMap.removeAll()
-    items.enumerated().forEach { (idx, item) in
+    items.enumerated().forEach { idx, item in
       dataIDIndexMap[item.dataID] = idx
     }
   }

@@ -10,13 +10,15 @@ import UIKit
 /// for extensions to be added such as alignment
 public struct ConstrainableContainer: Constrainable, AnchoringContainer, EpoxyModeled {
 
+  // MARK: Lifecycle
+
   public init(_ constrainable: Constrainable) {
     self.constrainable = constrainable
     if let container = constrainable as? ConstrainableContainer {
-      self.accessibilityAlignment = container.accessibilityAlignment
-      self.horizontalAlignment = container.horizontalAlignment
-      self.padding = container.padding
-      self.verticalAlignment = container.verticalAlignment
+      accessibilityAlignment = container.accessibilityAlignment
+      horizontalAlignment = container.horizontalAlignment
+      padding = container.padding
+      verticalAlignment = container.verticalAlignment
     }
   }
 
@@ -25,7 +27,7 @@ public struct ConstrainableContainer: Constrainable, AnchoringContainer, EpoxyMo
   public private(set) var constrainable: Constrainable
 
   public var storage = EpoxyModelStorage()
-  
+
   public var owningView: UIView? {
     constrainable.owningView
   }
@@ -91,6 +93,9 @@ extension ConstrainableContainer: PaddingProviding { }
 extension ConstrainableContainer: VerticalAlignmentProviding { }
 
 extension Constrainable {
+
+  // MARK: Public
+
   /// Sets the horizontal alignment of this component in the group
   public func horizontalAlignment(_ alignment: VGroup.ItemAlignment?) -> Constrainable {
     var container = _containerOrSelf

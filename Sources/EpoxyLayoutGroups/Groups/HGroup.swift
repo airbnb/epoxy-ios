@@ -19,11 +19,11 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     items: [GroupItemModeling] = [])
   {
     let erasedItems = items.eraseToAnyGroupItems()
-    self.alignment = style.alignment
-    self.accessibilityAlignment = style.accessibilityAlignment
-    self.spacing = style.spacing
+    alignment = style.alignment
+    accessibilityAlignment = style.accessibilityAlignment
+    spacing = style.spacing
     self.items = erasedItems
-    self.constrainableContainers = erasedItems.map { item in
+    constrainableContainers = erasedItems.map { item in
       let constrainable = item.makeConstrainable()
       item.update(constrainable, animated: false)
       return ConstrainableContainer(constrainable)
@@ -107,6 +107,9 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
 
   /// Immutable style values for an HGroup
   public struct Style: Hashable {
+
+    // MARK: Lifecycle
+
     /// Creates a style for an HGroup
     /// - Parameters:
     ///   - alignment: The alignment used within the group. Individual item alignments will
@@ -126,6 +129,8 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
       self.accessibilityAlignment = accessibilityAlignment
       self.spacing = spacing
     }
+
+    // MARK: Internal
 
     let alignment: HGroup.ItemAlignment
     let accessibilityAlignment: VGroup.ItemAlignment
@@ -163,8 +168,10 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     ///     container: the parent container that should be constrained to
     ///     constrainable: the constrainable that this alignment is affecting
     case custom(
-          alignmentID: AnyHashable,
-          layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint])
+      alignmentID: AnyHashable,
+      layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint])
+
+    // MARK: Public
 
     // MARK: Hashable
 
@@ -184,6 +191,8 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
         hasher.combine(alignmentID)
       }
     }
+
+    // MARK: Private
 
     private enum HashableAlignment {
       case fill, top, bottom, center
@@ -310,6 +319,15 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
 
   private var preferredContentSizeCategory = UITraitCollection.current.preferredContentSizeCategory
 
+  private var shouldUseAccessibilityLayout: Bool {
+    // If dynamic type is in the accessibility category, we
+    // reflow the HGroup to be vertical to improve usability
+    let shouldReflowForAccessibility = preferredContentSizeCategory.isAccessibilityCategory &&
+      reflowsForAccessibilityTypeSizes
+
+    return shouldReflowForAccessibility || forceVerticalAccessibilityLayout
+  }
+
   private func observeContentSizeCategoryChanges() {
     NotificationCenter.default.addObserver(
       self,
@@ -336,15 +354,6 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     if oldShouldUseAccessibilityLayout != newShouldUseAccessibilityLayout {
       installConstraintsIfNeeded()
     }
-  }
-
-  private var shouldUseAccessibilityLayout: Bool {
-    // If dynamic type is in the accessibility category, we
-    // reflow the HGroup to be vertical to improve usability
-    let shouldReflowForAccessibility = preferredContentSizeCategory.isAccessibilityCategory &&
-      reflowsForAccessibilityTypeSizes
-
-    return shouldReflowForAccessibility || forceVerticalAccessibilityLayout
   }
 
   private func standardConstraints() -> GroupConstraints {

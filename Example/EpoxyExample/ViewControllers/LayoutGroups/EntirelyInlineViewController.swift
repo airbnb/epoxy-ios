@@ -10,6 +10,8 @@ import UIKit
 /// inline using VGroupView and HGroupView inside of Epoxy
 class EntirelyInlineViewController: CollectionViewController {
 
+  // MARK: Lifecycle
+
   init() {
     super.init(layout: UICollectionViewCompositionalLayout.list)
     setItems(items, animated: false)

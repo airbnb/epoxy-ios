@@ -34,17 +34,6 @@ final class ColorsRow: BaseRow, EpoxyableView {
 
   // MARK: Private
 
-  private let style: Style
-
-  private var currentTitle: String {
-    switch style.variant {
-    case .hGroup(let alignment):
-      return "HGroup \(alignment)"
-    case .vGroup(let alignment):
-      return "VGroup \(alignment)"
-    }
-  }
-
   private enum DataID {
     case red
     case orange
@@ -57,6 +46,17 @@ final class ColorsRow: BaseRow, EpoxyableView {
     case vGroup
 
     case title
+  }
+
+  private let style: Style
+
+  private var currentTitle: String {
+    switch style.variant {
+    case .hGroup(let alignment):
+      return "HGroup \(alignment)"
+    case .vGroup(let alignment):
+      return "VGroup \(alignment)"
+    }
   }
 
   private func setUp() {

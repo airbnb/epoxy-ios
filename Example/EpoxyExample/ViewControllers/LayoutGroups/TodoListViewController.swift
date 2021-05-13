@@ -13,9 +13,11 @@ struct TodoItem {
   var isComplete: Bool
 }
 
-// MARK: - TodoListContentProvider
+// MARK: - TodoListViewController
 
 class TodoListViewController: CollectionViewController {
+
+  // MARK: Lifecycle
 
   init() {
     super.init(layout: UICollectionViewCompositionalLayout.list)

@@ -6,6 +6,7 @@ import UIKit
 
 class TextRowExampleViewController: CollectionViewController {
 
+  // MARK: Lifecycle
 
   init() {
     super.init(layout: UICollectionViewCompositionalLayout.list)

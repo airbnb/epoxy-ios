@@ -6,6 +6,8 @@ import UIKit
 
 class LayoutGroupsReadmeExamplesViewController: CollectionViewController {
 
+  // MARK: Lifecycle
+
   init() {
     super.init(layout: UICollectionViewCompositionalLayout.list)
     setItems(items, animated: false)
