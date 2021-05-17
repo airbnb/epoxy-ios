@@ -382,7 +382,7 @@ group.constrainToMargins()
 </td>
 <td>
 
-<img width="250" alt="ActionRow screenshot" src="docs/images/ActionRow.png">
+<img alt="ActionRow screenshot" src="docs/images/ActionRow.png">
 
 </td>
 </tr>
@@ -420,7 +420,7 @@ group.constrainToMargins()
 </td>
 <td>
 
-<img width="250" alt="IconRow screenshot" src="docs/images/IconRow.png">
+<img alt="IconRow screenshot" src="docs/images/IconRow.png">
 
 </td>
 </tr>
@@ -465,7 +465,7 @@ HGroup(spacing: 8) {
 </td>
 <td>
 
-<img width="250" alt="IconRow screenshot" src="docs/images/CheckboxRow.png">
+<img alt="IconRow screenshot" src="docs/images/CheckboxRow.png">
 
 </td>
 </tr>
