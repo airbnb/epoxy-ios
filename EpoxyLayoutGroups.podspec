@@ -4,6 +4,6 @@ Pod::Spec.new do |spec|
   configure(
     spec: spec,
     name: 'EpoxyLayoutGroups',
-    summary: 'Declarative API for driving the subviews of a UIView',
+    summary: 'Declarative API for building composable layouts in UIKit with a syntax similar to SwiftUI stack APIs',
     local_deps: ['EpoxyCore'])
 end

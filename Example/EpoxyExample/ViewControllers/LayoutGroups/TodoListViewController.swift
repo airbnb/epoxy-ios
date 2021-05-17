@@ -26,11 +26,6 @@ class TodoListViewController: CollectionViewController {
 
   // MARK: Internal
 
-  override var title: String? {
-    get { "Todo List" }
-    set { }
-  }
-
   var items: [ItemModeling] {
     demoItems.map { item in
       CheckboxRow.itemModel(
@@ -49,8 +44,8 @@ class TodoListViewController: CollectionViewController {
       .init(title: "Build iOS App", notes: "Using LayoutGroups to make my layout fun and easy!", isComplete: true),
     ]
   }
-
 }
+
 extension CheckboxRow.Content {
   static func with(todoItem: TodoItem) -> CheckboxRow.Content {
     .init(

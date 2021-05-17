@@ -137,68 +137,6 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     let spacing: CGFloat
   }
 
-  // MARK: Alignment
-
-  public enum ItemAlignment: Hashable {
-    /// Align top and bottom edges of the item tightly to the leading and trailing edges of the group.
-    /// Components shorter than the group's height will be stretched to the height of the group
-    case fill
-
-    /// Align the top edge of an item tightly to the top edge of the group.
-    /// Components shorter than the group's height will not be stretched.
-    case top
-
-    /// Align the bottom edge of an item tightly to the container's bottom edge.
-    /// Components shorter than the group's height will not be stretched.
-    case bottom
-
-    /// Align the center of the item to the center of the group vertically.
-    /// Components shorter than the group's height will not be stretched.
-    case center
-
-    /// Vertically center one item to another item. The other item does not need to be in
-    /// the same group, but it must share a common ancestor with the item it is centered to.
-    /// Components shorter than the group's height will not be stretched.
-    case centered(to: Constrainable)
-
-    /// Provide a block that returns a set of custom constraints.
-    ///
-    /// - Parameter alignmentID: a hashable identifier to uniquely identify this custom layout prvodier
-    /// - Parameter layoutProvider: a closure used to build a custom layout given a container and a constrainable
-    ///     container: the parent container that should be constrained to
-    ///     constrainable: the constrainable that this alignment is affecting
-    case custom(
-      alignmentID: AnyHashable,
-      layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint])
-
-    // MARK: Public
-
-    // MARK: Hashable
-
-    public func hash(into hasher: inout Hasher) {
-      switch self {
-      case .fill:
-        hasher.combine(HashableAlignment.fill)
-      case .top:
-        hasher.combine(HashableAlignment.top)
-      case .bottom:
-        hasher.combine(HashableAlignment.bottom)
-      case .center:
-        hasher.combine(HashableAlignment.center)
-      case .centered(to: let to):
-        hasher.combine(to.dataID)
-      case .custom(let alignmentID, _):
-        hasher.combine(alignmentID)
-      }
-    }
-
-    // MARK: Private
-
-    private enum HashableAlignment {
-      case fill, top, bottom, center
-    }
-  }
-
   /// Alignment set at the group level to apply to all constrainables.
   /// Individual alignments on a constrainable take precedence over the group's alignment.
   /// The default value is `.fill`

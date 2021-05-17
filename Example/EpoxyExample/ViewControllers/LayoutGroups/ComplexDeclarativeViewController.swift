@@ -23,7 +23,7 @@ final class ComplexDeclarativeViewController: UIViewController {
 
     let scrollView = UIScrollView()
     scrollView.translatesAutoresizingMaskIntoConstraints = false
-    scrollView.backgroundColor = .white
+    scrollView.backgroundColor = .systemBackground
     scrollView.layoutMargins = UIEdgeInsets(top: 24, left: 24, bottom: 24, right: 24)
     view.addSubview(scrollView)
     scrollView.constrainToSuperview()
@@ -49,7 +49,6 @@ final class ComplexDeclarativeViewController: UIViewController {
 
   private lazy var group = VGroup(alignment: .fill, spacing: 8)
 
-  @objc
   private func updateGroup() {
     group.setItems({
       Button.groupItem(

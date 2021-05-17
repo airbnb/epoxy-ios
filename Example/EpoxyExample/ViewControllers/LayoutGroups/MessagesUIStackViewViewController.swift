@@ -14,12 +14,7 @@ class MessagesUIStackViewViewController: CollectionViewController {
   }
 
   // MARK: Internal
-
-  override var title: String? {
-    get { "Message List (UIStackView)" }
-    set { }
-  }
-
+  
   var items: [ItemModeling] {
     let sampleRows = [
       MessageRowStackView.itemModel(

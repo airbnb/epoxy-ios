@@ -31,11 +31,6 @@ final class AlignableTextRow: BaseRow, EpoxyableView {
   }
 
   struct Content: Equatable {
-    public init(title: String, subtitle: String? = nil) {
-      self.title = title
-      self.subtitle = subtitle
-    }
-
     let title: String
     let subtitle: String?
   }

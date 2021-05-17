@@ -137,24 +137,27 @@ final class MainViewController: NavigationController {
   }
 
   private func makeLayoutGroupsExampleViewController(_ example: LayoutGroupsExample) -> UIViewController {
+    let viewController: UIViewController
     switch example {
     case .readmeExamples:
-      return LayoutGroupsReadmeExamplesViewController()
+      viewController = LayoutGroupsReadmeExamplesViewController()
     case .textRowExample:
-      return TextRowExampleViewController()
+      viewController = TextRowExampleViewController()
     case .colors:
-      return ColorsViewController()
+      viewController = ColorsViewController()
     case .messages:
-      return MessagesViewController()
+      viewController = MessagesViewController()
     case .messagesUIStackView:
-      return MessagesUIStackViewViewController()
+      viewController = MessagesUIStackViewViewController()
     case .todoList:
-      return TodoListViewController()
+      viewController = TodoListViewController()
     case .entirelyInline:
-      return EntirelyInlineViewController()
+      viewController = EntirelyInlineViewController()
     case .complex:
-      return ComplexDeclarativeViewController()
+      viewController = ComplexDeclarativeViewController()
     }
+    viewController.title = example.title
+    return viewController
   }
 
 }

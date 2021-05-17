@@ -19,42 +19,36 @@ class EntirelyInlineViewController: CollectionViewController {
 
   // MARK: Internal
 
-  override var title: String? {
-    get { "Entirely Inline" }
-    set { }
-  }
-
+  @ItemModelBuilder
   var items: [ItemModeling] {
-    [
-      VGroupView.itemModel(
-        dataID: RowDataID.textRow,
-        content: .init {
+    VGroupView.itemModel(
+      dataID: RowDataID.textRow,
+      content: .init {
+        titleItem(title: BeloIpsum.sentence(count: 1))
+        subtitleItem(subtitle: BeloIpsum.paragraph(count: 1))
+      },
+      style: .init(
+        vGroupStyle: .init(spacing: 8),
+        edgeInsets: .init(top: 16, leading: 24, bottom: 16, trailing: 24)))
+    HGroupView.itemModel(
+      dataID: RowDataID.imageRow,
+      content: .init {
+        IconView.groupItem(
+          dataID: GroupDataID.image,
+          content: UIImage(systemName: "folder"),
+          style: .init(size: .init(width: 32, height: 32), tintColor: .systemGreen))
+          .verticalAlignment(.top)
+        VGroupItem(
+          dataID: GroupDataID.verticalGroup,
+          style: .init(spacing: 8))
+        {
           titleItem(title: BeloIpsum.sentence(count: 1))
           subtitleItem(subtitle: BeloIpsum.paragraph(count: 1))
-        },
-        style: .init(
-          vGroupStyle: .init(spacing: 8),
-          edgeInsets: .init(top: 16, leading: 24, bottom: 16, trailing: 24))),
-      HGroupView.itemModel(
-        dataID: RowDataID.imageRow,
-        content: .init {
-          IconView.groupItem(
-            dataID: GroupDataID.image,
-            content: UIImage(systemName: "folder"),
-            style: .init(size: .init(width: 32, height: 32), tintColor: .systemGreen))
-            .verticalAlignment(.top)
-          VGroupItem(
-            dataID: GroupDataID.verticalGroup,
-            style: .init(spacing: 8))
-          {
-            titleItem(title: BeloIpsum.sentence(count: 1))
-            subtitleItem(subtitle: BeloIpsum.paragraph(count: 1))
-          }
-        },
-        style: .init(
-          hGroupStyle: .init(spacing: 16),
-          edgeInsets: .init(top: 16, leading: 24, bottom: 16, trailing: 24))),
-    ]
+        }
+      },
+      style: .init(
+        hGroupStyle: .init(spacing: 16),
+        edgeInsets: .init(top: 16, leading: 24, bottom: 16, trailing: 24)))
   }
 
   // MARK: Private

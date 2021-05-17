@@ -66,7 +66,7 @@ Epoxy has a modular architecture so you only have to include what you need for y
 | [`EpoxyNavigationController`](#EpoxyNavigationController) | Declarative API for driving the navigation stack of a [`UINavigationController`](https://developer.apple.com/documentation/uikit/uinavigationcontroller) |
 | [`EpoxyPresentations`](#EpoxyPresentations) | Declarative API for driving the modal presentations of a [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller) |
 | [`EpoxyBars`](#EpoxyBars) | Declarative API for adding fixed top/bottom bar stacks to a [`UIViewController`](https://developer.apple.com/documentation/uikit/uiviewcontroller) |
-| [`EpoxyLayoutGroups`](#EpoxyLayoutGroups) | Declarative API for driving the subviews of a UIView |
+| [`EpoxyLayoutGroups`](#EpoxyLayoutGroups) | Declarative API for building composable layouts in UIKit with a syntax similar to SwiftUI's stack APIs |
 | [`EpoxyCore`](https://github.com/airbnb/epoxy-ios/wiki/EpoxyCore) | Foundational APIs that are used to build all Epoxy declarative UI APIs |
 
 ## Getting Started
@@ -334,20 +334,26 @@ LayoutGroups are UIKit [Auto Layout](https://developer.apple.com/library/archive
 
 `VGroup` allows you to group components together vertically to create stacked components like this:
 
-| ActionRow |
-| --------- |
-| ![ActionRow screenshot](docs/images/ActionRow.png) |
+<table>
+<tr><td> Source </td> <td> Result </td></tr>
+<tr>
+<td>
 
 ```swift
-// Set of dataIDs to have consistent and unique IDs
+// Set of dataIDs to have consistent 
+// and unique IDs
 enum DataID {
   case title
   case subtitle
   case action
 }
 
-// Groups are created declaratively just like Epoxy ItemModels
-let group = VGroup(alignment: .leading, spacing: 8) {
+// Groups are created declaratively 
+// just like Epoxy ItemModels
+let group = VGroup(
+  alignment: .leading, 
+  spacing: 8) 
+{
   Label.groupItem(
     dataID: DataID.title,
     content: "Title text",
@@ -368,17 +374,28 @@ let group = VGroup(alignment: .leading, spacing: 8) {
 // install your group in a view
 group.install(in: view)
 
-// constrain the group like you would a normal subview
+// constrain the group like you 
+// would a normal subview
 group.constrainToMargins()
 ```
+
+</td>
+<td>
+
+<img width="250" alt="ActionRow screenshot" src="docs/images/ActionRow.png">
+
+</td>
+</tr>
+</table>
 
 As you can see, this is incredibly similar to the other APIs used in Epoxy. One important thing to note is that `install(in: view)` call at the bottom. Both `HGroup` and `VGroup` are written using [`UILayoutGuide`](https://developer.apple.com/documentation/uikit/uilayoutguide) which prevents having large nested view hierarchies. To account for this, we’ve added this `install` method to prevent the user from having to add subviews and the layout guide manually.
 
 Using `HGroup` is almost exactly the same as `VGroup` but the components are now horizontally laid out instead of vertically:
 
-| IconRow |
-| --------- |
-| ![IconRow screenshot](docs/images/IconRow.png) |
+<table>
+<tr><td> Source </td> <td> Result </td></tr>
+<tr>
+<td>
 
 ```swift
 enum DataID {
@@ -399,6 +416,60 @@ let group = HGroup(spacing: 8) {
 group.install(in: view)
 group.constrainToMargins()
 ```
+
+</td>
+<td>
+
+<img width="250" alt="IconRow screenshot" src="docs/images/IconRow.png">
+
+</td>
+</tr>
+</table>
+
+Groups support nesting too, so you can easily create complex layouts with multiple groups:
+
+<table>
+<tr><td> Source </td> <td> Result </td></tr>
+<tr>
+<td>
+
+```swift
+enum DataID {
+  case checkbox
+  case titleSubtitleGroup
+  case title
+  case subtitle
+}
+
+HGroup(spacing: 8) {
+  Checkbox.groupItem(
+    dataID: DataID.checkbox,
+    content: .init(isChecked: true),
+    style: .standard)
+  VGroupItem(
+    dataID: DataID.titleSubtitleGroup, 
+    style: .init(spacing: 4)) 
+  {
+    Label.groupItem(
+      dataID: DataID.title,
+      content: "Build iOS App",
+      style: .title)
+    Label.groupItem(
+      dataID: DataID.subtitle,
+      content: "Use EpoxyLayoutGroups",
+      style: .subtitle)
+  }
+}
+```
+
+</td>
+<td>
+
+<img width="250" alt="IconRow screenshot" src="docs/images/CheckboxRow.png">
+
+</td>
+</tr>
+</table>
 
 You can learn more about `EpoxyLayoutGroups` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyLayoutGruops).
 

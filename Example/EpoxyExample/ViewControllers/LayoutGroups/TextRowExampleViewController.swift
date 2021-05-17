@@ -15,26 +15,20 @@ class TextRowExampleViewController: CollectionViewController {
 
   // MARK: Internal
 
-  override var title: String? {
-    get { "Label alignment" }
-    set { }
-  }
-
+  @ItemModelBuilder
   var items: [ItemModeling] {
-    [
-      AlignableTextRow.itemModel(
-        dataID: DataID.leading,
-        content: .init(title: "Title Text", subtitle: "The title in this row uses .horizontalAlignment(.leading)"),
-        style: .leadingTitle),
-      AlignableTextRow.itemModel(
-        dataID: DataID.center,
-        content: .init(title: "Title Text", subtitle: "The title in this row uses .horizontalAlignment(.center)"),
-        style: .centerTitle),
-      AlignableTextRow.itemModel(
-        dataID: DataID.trailing,
-        content: .init(title: "Title Text", subtitle: "The title in this row uses .horizontalAlignment(.trailing)"),
-        style: .trailingTitle),
-    ]
+    AlignableTextRow.itemModel(
+      dataID: DataID.leading,
+      content: .init(title: "Title Text", subtitle: "The title in this row uses .horizontalAlignment(.leading)"),
+      style: .leadingTitle)
+    AlignableTextRow.itemModel(
+      dataID: DataID.center,
+      content: .init(title: "Title Text", subtitle: "The title in this row uses .horizontalAlignment(.center)"),
+      style: .centerTitle)
+    AlignableTextRow.itemModel(
+      dataID: DataID.trailing,
+      content: .init(title: "Title Text", subtitle: "The title in this row uses .horizontalAlignment(.trailing)"),
+      style: .trailingTitle)
   }
 
   // MARK: Private

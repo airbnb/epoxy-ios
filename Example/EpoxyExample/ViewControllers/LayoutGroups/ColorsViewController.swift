@@ -26,21 +26,15 @@ class ColorsViewController: CollectionViewController {
     case vGroupTrailing
   }
 
-  override var title: String? {
-    get { "Static sized squares" }
-    set { }
-  }
-
+  @ItemModelBuilder
   var items: [ItemModeling] {
-    [
-      ColorsRow.itemModel(dataID: DataID.hGroupFill, style: .init(variant: .hGroup(.fill))),
-      ColorsRow.itemModel(dataID: DataID.hGroupTop, style: .init(variant: .hGroup(.top))),
-      ColorsRow.itemModel(dataID: DataID.hGroupCenter, style: .init(variant: .hGroup(.center))),
-      ColorsRow.itemModel(dataID: DataID.hGroupBottom, style: .init(variant: .hGroup(.bottom))),
-      ColorsRow.itemModel(dataID: DataID.vGroupFill, style: .init(variant: .vGroup(.fill))),
-      ColorsRow.itemModel(dataID: DataID.vGroupLeading, style: .init(variant: .vGroup(.leading))),
-      ColorsRow.itemModel(dataID: DataID.vGroupCenter, style: .init(variant: .vGroup(.center))),
-      ColorsRow.itemModel(dataID: DataID.vGroupTrailing, style: .init(variant: .vGroup(.trailing))),
-    ]
+    ColorsRow.itemModel(dataID: DataID.hGroupFill, style: .init(variant: .hGroup(.fill)))
+    ColorsRow.itemModel(dataID: DataID.hGroupTop, style: .init(variant: .hGroup(.top)))
+    ColorsRow.itemModel(dataID: DataID.hGroupCenter, style: .init(variant: .hGroup(.center)))
+    ColorsRow.itemModel(dataID: DataID.hGroupBottom, style: .init(variant: .hGroup(.bottom)))
+    ColorsRow.itemModel(dataID: DataID.vGroupFill, style: .init(variant: .vGroup(.fill)))
+    ColorsRow.itemModel(dataID: DataID.vGroupLeading, style: .init(variant: .vGroup(.leading)))
+    ColorsRow.itemModel(dataID: DataID.vGroupCenter, style: .init(variant: .vGroup(.center)))
+    ColorsRow.itemModel(dataID: DataID.vGroupTrailing, style: .init(variant: .vGroup(.trailing)))
   }
 }

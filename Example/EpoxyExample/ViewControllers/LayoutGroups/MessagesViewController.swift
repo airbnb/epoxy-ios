@@ -15,11 +15,6 @@ class MessagesViewController: CollectionViewController {
 
   // MARK: Internal
 
-  override var title: String? {
-    get { "Message List (LayoutGroups)" }
-    set { }
-  }
-
   var items: [ItemModeling] {
     let sampleRows = [
       MessageRow.itemModel(
