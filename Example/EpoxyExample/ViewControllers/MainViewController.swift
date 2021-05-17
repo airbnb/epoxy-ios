@@ -19,11 +19,13 @@ final class MainViewController: NavigationController {
     case index
     case item(Example)
     case readme(ReadmeExample)
+    case layoutGroups(LayoutGroupsExample)
   }
 
   private struct State {
     var showExample: Example?
     var showReadmeExample: ReadmeExample?
+    var showLayoutGroupsExample: LayoutGroupsExample?
   }
 
   private var state = State() {
@@ -54,6 +56,17 @@ final class MainViewController: NavigationController {
         },
         remove: { [weak self] in
           self?.state.showReadmeExample = nil
+        })
+    }
+
+    if let example = state.showLayoutGroupsExample {
+      NavigationModel(
+        dataID: DataID.layoutGroups(example),
+        makeViewController: { [weak self] in
+          self?.makeLayoutGroupsExampleViewController(example)
+        },
+        remove: { [weak self] in
+          self?.state.showLayoutGroupsExample = nil
         })
     }
   }
@@ -98,6 +111,11 @@ final class MainViewController: NavigationController {
       viewController = CardStackViewController()
     case .textField:
       viewController = TextFieldViewController()
+    case .layoutGroups:
+      viewController = CollectionViewController.layoutGroupsExampleViewController(
+        didSelect: { [weak self] example in
+          self?.state.showLayoutGroupsExample = example
+        })
     }
     viewController.title = example.title
     return viewController
@@ -116,6 +134,30 @@ final class MainViewController: NavigationController {
     case .modalPresentation:
       return PresentationViewController()
     }
+  }
+
+  private func makeLayoutGroupsExampleViewController(_ example: LayoutGroupsExample) -> UIViewController {
+    let viewController: UIViewController
+    switch example {
+    case .readmeExamples:
+      viewController = LayoutGroupsReadmeExamplesViewController()
+    case .textRowExample:
+      viewController = TextRowExampleViewController()
+    case .colors:
+      viewController = ColorsViewController()
+    case .messages:
+      viewController = MessagesViewController()
+    case .messagesUIStackView:
+      viewController = MessagesUIStackViewViewController()
+    case .todoList:
+      viewController = TodoListViewController()
+    case .entirelyInline:
+      viewController = EntirelyInlineViewController()
+    case .complex:
+      viewController = ComplexDeclarativeViewController()
+    }
+    viewController.title = example.title
+    return viewController
   }
 
 }

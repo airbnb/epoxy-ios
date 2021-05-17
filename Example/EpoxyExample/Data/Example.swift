@@ -11,6 +11,7 @@ enum Example: CaseIterable {
   case shuffle
   case customSelfSizing
   case textField
+  case layoutGroups
 
   // MARK: Internal
 
@@ -32,6 +33,8 @@ enum Example: CaseIterable {
       return "Card Stack"
     case .textField:
       return "Text Field"
+    case .layoutGroups:
+      return "LayoutGroups"
     }
   }
 
@@ -53,6 +56,8 @@ enum Example: CaseIterable {
       return "A CollectionView with BarStackView items that have a card drawn around each stack"
     case .textField:
       return "An example that combines collections, bars, and text field with keyboard avoidance"
+    case .layoutGroups:
+      return "A set of examples written using EpoxyLayoutGroups"
     }
   }
 }

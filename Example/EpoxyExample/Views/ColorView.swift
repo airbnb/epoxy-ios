@@ -11,6 +11,7 @@ final class ColorView: UIView, EpoxyableView {
   // MARK: Lifecycle
 
   init(style: Style) {
+    size = style.size
     super.init(frame: .zero)
     translatesAutoresizingMaskIntoConstraints = false
     backgroundColor = style.color
@@ -23,8 +24,17 @@ final class ColorView: UIView, EpoxyableView {
   // MARK: Internal
 
   struct Style: Hashable {
+    var size: CGSize? = nil
     var color = UIColor.red
   }
+
+  override var intrinsicContentSize: CGSize {
+    size ?? super.intrinsicContentSize
+  }
+
+  // MARK: Private
+
+  private let size: CGSize?
 
 }
 

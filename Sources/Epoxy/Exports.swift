@@ -5,5 +5,6 @@
 @_exported import EpoxyBars
 @_exported import EpoxyCollectionView
 @_exported import EpoxyCore
+@_exported import EpoxyLayoutGroups
 @_exported import EpoxyNavigationController
 @_exported import EpoxyPresentations

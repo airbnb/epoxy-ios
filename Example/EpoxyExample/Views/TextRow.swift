@@ -14,8 +14,9 @@ final class TextRow: UIView, EpoxyableView {
     self.style = style
     super.init(frame: .zero)
     translatesAutoresizingMaskIntoConstraints = false
-    setUpViews()
-    setUpConstraints()
+    layoutMargins = UIEdgeInsets(top: 16, left: 24, bottom: 16, right: 24)
+    group.install(in: self)
+    group.constrainToMarginsWithHighPriorityBottom()
   }
 
   required init?(coder aDecoder: NSCoder) {
@@ -34,89 +35,48 @@ final class TextRow: UIView, EpoxyableView {
   }
 
   func setContent(_ content: Content, animated: Bool) {
-    title = content.title
-    body = content.body
+    let titleStyle: UIFont.TextStyle
+    let bodyStyle: UIFont.TextStyle
+
+    switch style {
+    case .large:
+      titleStyle = .headline
+      bodyStyle = .body
+    case .small:
+      titleStyle = .body
+      bodyStyle = .caption1
+    }
+
+    group.setItems {
+      if let title = content.title {
+        Label.groupItem(
+          dataID: DataID.title,
+          content: title,
+          style: .style(with: titleStyle))
+          .adjustsFontForContentSizeCategory(true)
+          .textColor(UIColor.label)
+      }
+      if let body = content.body {
+        Label.groupItem(
+          dataID: DataID.body,
+          content: body,
+          style: .style(with: bodyStyle))
+          .adjustsFontForContentSizeCategory(true)
+          .numberOfLines(0)
+          .textColor(UIColor.secondaryLabel)
+      }
+    }
   }
 
   // MARK: Private
 
+  private enum DataID {
+    case title
+    case body
+  }
+
   private let style: Style
-  private let titleLabel = UILabel()
-  private let bodyLabel = UILabel()
-  private let stackView = UIStackView()
-
-  private var title: String? {
-    get { titleLabel.text }
-    set {
-      guard titleLabel.text != newValue else { return }
-      titleLabel.text = newValue
-      titleLabel.isHidden = (newValue == nil)
-    }
-  }
-
-  private var body: String? {
-    get { bodyLabel.text }
-    set {
-      guard bodyLabel.text != newValue else { return }
-      bodyLabel.text = newValue
-      bodyLabel.isHidden = (newValue == nil)
-    }
-  }
-
-  private func setUpViews() {
-    setUpTitleLabel()
-    setUpBodyLabel()
-    setUpStackView()
-  }
-
-  private func setUpTitleLabel() {
-    titleLabel.textColor = UIColor.label
-    titleLabel.translatesAutoresizingMaskIntoConstraints = false
-    titleLabel.isHidden = true
-    titleLabel.adjustsFontForContentSizeCategory = true
-    switch style {
-    case .large:
-      titleLabel.font = UIFont.preferredFont(forTextStyle: .headline)
-    case .small:
-      titleLabel.font = UIFont.preferredFont(forTextStyle: .body)
-    }
-  }
-
-  private func setUpBodyLabel() {
-    bodyLabel.textColor = UIColor.secondaryLabel
-    bodyLabel.numberOfLines = 0
-    bodyLabel.translatesAutoresizingMaskIntoConstraints = false
-    bodyLabel.isHidden = true
-    bodyLabel.adjustsFontForContentSizeCategory = true
-    switch style {
-    case .large:
-      bodyLabel.font = UIFont.preferredFont(forTextStyle: .body)
-    case .small:
-      bodyLabel.font = UIFont.preferredFont(forTextStyle: .caption1)
-    }
-  }
-
-  private func setUpStackView() {
-    stackView.spacing = 8
-    stackView.axis = .vertical
-    stackView.alignment = .leading
-    stackView.isLayoutMarginsRelativeArrangement = true
-    stackView.layoutMargins = UIEdgeInsets(top: 16, left: 24, bottom: 16, right: 24)
-    stackView.insetsLayoutMarginsFromSafeArea = false
-    stackView.translatesAutoresizingMaskIntoConstraints = false
-    stackView.addArrangedSubview(titleLabel)
-    stackView.addArrangedSubview(bodyLabel)
-    addSubview(stackView)
-  }
-
-  private func setUpConstraints() {
-    NSLayoutConstraint.activate([
-      stackView.leadingAnchor.constraint(equalTo: leadingAnchor),
-      stackView.trailingAnchor.constraint(equalTo: trailingAnchor),
-      stackView.topAnchor.constraint(equalTo: topAnchor),
-      stackView.bottomAnchor.constraint(equalTo: bottomAnchor),
-    ])
-  }
+  private let group = VGroup(spacing: 8)
 }
 
 // MARK: SelectableView
