@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.3.0...HEAD)
 
+## [0.4.0](https://github.com/airbnb/epoxy-ios/compare/0.3.0...0.4.0) - 2021-05-17
+
 ### Added
 - Added an example with text field to show how can we use `avoidsKeyboard` feature
 - Add EpoxyLayoutGroups, a delcarative API for creating components
