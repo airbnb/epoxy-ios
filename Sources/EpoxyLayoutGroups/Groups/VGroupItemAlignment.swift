@@ -40,6 +40,26 @@ extension VGroup {
 
     // MARK: Public
 
+    // MARK: Equatable
+
+    public static func ==(lhs: ItemAlignment, rhs: ItemAlignment)
+      -> Bool
+    {
+      switch (lhs, rhs) {
+      case (.fill, .fill),
+           (.leading, .leading),
+           (.center, .center),
+           (.trailing, .trailing):
+        return true
+      case let (.centered(c1), .centered(c2)):
+        return c1.isEqual(to: c2)
+      case (.custom(let id1, _), .custom(let id2, _)):
+        return id1 == id2
+      default:
+        return false
+      }
+    }
+
     // MARK: Hashable
 
     public func hash(into hasher: inout Hasher) {
@@ -56,24 +76,6 @@ extension VGroup {
         hasher.combine(to.dataID)
       case .custom(let alignmentID, _):
         hasher.combine(alignmentID)
-      }
-    }
-
-    // MARK: Equatable
-
-    public static func ==(lhs: ItemAlignment, rhs: ItemAlignment) -> Bool {
-      switch (lhs, rhs) {
-      case (.fill, .fill),
-           (.leading, .leading),
-           (.center, .center),
-           (.trailing, .trailing):
-        return true
-      case let (.centered(c1), .centered(c2)):
-        return c1.isEqual(to: c2)
-      case (.custom(let id1, _), .custom(let id2, _)):
-        return id1 == id2
-      default:
-        return false
       }
     }
 

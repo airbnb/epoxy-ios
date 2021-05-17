@@ -5,16 +5,17 @@ import EpoxyCollectionView
 import UIKit
 
 class LayoutGroupsReadmeExamplesViewController: CollectionViewController {
-  
+
   // MARK: Lifecycle
-  
+
+
   init() {
     super.init(layout: UICollectionViewCompositionalLayout.list)
     setItems(items, animated: false)
   }
-  
+
   // MARK: Internal
-  
+
   @ItemModelBuilder
   var items: [ItemModeling] {
     ActionButtonRow.itemModel(
@@ -29,12 +30,12 @@ class LayoutGroupsReadmeExamplesViewController: CollectionViewController {
         title: "This is an IconRow",
         icon: UIImage(systemName: "person.fill")!))
   }
-  
+
   // MARK: Private
-  
+
   private enum DataID {
     case actionButtonRow
     case iconRow
   }
-  
+
 }

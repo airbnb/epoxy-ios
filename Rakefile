@@ -77,6 +77,11 @@ namespace :bootstrap do
   end
 end
 
+namespace :run do
+  desc 'Runs necessary checks before pushing a branch or commit'
+  task :pre_push => ['format:swift', 'lint:swift', 'test:package']
+end
+
 task :default do
   system 'rake -T'
 end

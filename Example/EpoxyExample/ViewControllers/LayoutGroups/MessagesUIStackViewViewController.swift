@@ -14,7 +14,7 @@ class MessagesUIStackViewViewController: CollectionViewController {
   }
 
   // MARK: Internal
-  
+
   var items: [ItemModeling] {
     let sampleRows = [
       MessageRowStackView.itemModel(
