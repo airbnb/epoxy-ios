@@ -88,7 +88,7 @@ final class FlowLayoutSpec: QuickSpec {
       beforeEach {
         let itemModel = itemModel.flowLayoutItemSize(.init(width: 5, height: 5))
         let section = SectionModel(items: [itemModel])
-          .flowLayoutItemSize(.init(width: 6, height: 6))
+          .flowLayoutItemSize(CGSize(width: 6, height: 6))
         collectionView.setSections([section], animated: false)
       }
 
@@ -97,14 +97,14 @@ final class FlowLayoutSpec: QuickSpec {
           collectionView,
           layout: collectionView.collectionViewLayout,
           sizeForItemAt: IndexPath(item: 0, section: 0))
-        expect(itemSize).to(equal(.init(width: 5, height: 5)))
+        expect(itemSize).to(equal(CGSize(width: 5, height: 5)))
       }
     }
 
     describe("when the section provides item sizes") {
       beforeEach {
         let section = SectionModel(items: [itemModel])
-          .flowLayoutItemSize(.init(width: 6, height: 6))
+          .flowLayoutItemSize(CGSize(width: 6, height: 6))
         collectionView.setSections([section], animated: false)
       }
 
@@ -113,7 +113,7 @@ final class FlowLayoutSpec: QuickSpec {
           collectionView,
           layout: collectionView.collectionViewLayout,
           sizeForItemAt: IndexPath(item: 0, section: 0))
-        expect(itemSize).to(equal(.init(width: 6, height: 6)))
+        expect(itemSize).to(equal(CGSize(width: 6, height: 6)))
       }
     }
 
@@ -123,8 +123,8 @@ final class FlowLayoutSpec: QuickSpec {
           .flowLayoutSectionInset(.init(top: 7, left: 7, bottom: 7, right: 7))
           .flowLayoutMinimumLineSpacing(8)
           .flowLayoutMinimumInteritemSpacing(9)
-          .flowLayoutHeaderReferenceSize(.init(width: 10, height: 10))
-          .flowLayoutFooterReferenceSize(.init(width: 11, height: 11))
+          .flowLayoutHeaderReferenceSize(CGSize(width: 10, height: 10))
+          .flowLayoutFooterReferenceSize(CGSize(width: 11, height: 11))
         collectionView.setSections([section], animated: false)
       }
 
@@ -133,7 +133,7 @@ final class FlowLayoutSpec: QuickSpec {
           collectionView,
           layout: collectionView.collectionViewLayout,
           insetForSectionAt: 0)
-        expect(sectionInset).to(equal(.init(top: 7, left: 7, bottom: 7, right: 7)))
+        expect(sectionInset).to(equal(UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)))
       }
 
       it("uses the minimumLineSpacing from the section model") {
@@ -157,7 +157,7 @@ final class FlowLayoutSpec: QuickSpec {
           collectionView,
           layout: collectionView.collectionViewLayout,
           referenceSizeForHeaderInSection: 0)
-        expect(headerSize).to(equal(.init(width: 10, height: 10)))
+        expect(headerSize).to(equal(CGSize(width: 10, height: 10)))
       }
 
       it("uses the footerSize from the section model") {
@@ -165,7 +165,7 @@ final class FlowLayoutSpec: QuickSpec {
           collectionView,
           layout: collectionView.collectionViewLayout,
           referenceSizeForFooterInSection: 0)
-        expect(footerSize).to(equal(.init(width: 11, height: 11)))
+        expect(footerSize).to(equal(CGSize(width: 11, height: 11)))
       }
     }
 
@@ -176,8 +176,8 @@ final class FlowLayoutSpec: QuickSpec {
           .flowLayoutSectionInset(.init(top: 7, left: 7, bottom: 7, right: 7))
           .flowLayoutMinimumLineSpacing(8)
           .flowLayoutMinimumInteritemSpacing(9)
-          .flowLayoutHeaderReferenceSize(.init(width: 10, height: 10))
-          .flowLayoutFooterReferenceSize(.init(width: 11, height: 11))
+          .flowLayoutHeaderReferenceSize(CGSize(width: 10, height: 10))
+          .flowLayoutFooterReferenceSize(CGSize(width: 11, height: 11))
         collectionView.setSections([section], animated: false)
         collectionView.layoutDelegate = layoutDelegate
       }
