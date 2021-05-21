@@ -67,11 +67,11 @@ open class CollectionView: UICollectionView {
     /// More performant than `reloadData`, as it does not recreate and reconfigure all visible
     /// cells.
     case nonanimatedBatchUpdates
-    /// Calls `reloadData`, resulting in a non-animated update that recreates and reconfigures all
-    /// visible cells.
+    /// Performs non-animated updates by calling `reloadData()`, which recreates and reconfigures
+    /// all visible cells.
     ///
-    /// Visible cells will be recreated. UIKit engineers have suggested that we should never call
-    /// `reloadData` ourselves, and instead, use batch updates for all content updates.
+    /// UIKit engineers have suggested that we should never need to call `reloadData` on updates,
+    /// and instead just use batch updates for all content updates.
     case reloadData
 
     // MARK: Internal
