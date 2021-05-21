@@ -74,6 +74,8 @@ open class CollectionView: UICollectionView {
     /// `reloadData` ourselves, and instead, use batch updates for all content updates.
     case reloadData
 
+    // MARK: Internal
+
     /// Whether this update is animated.
     var animated: Bool {
       switch self {
