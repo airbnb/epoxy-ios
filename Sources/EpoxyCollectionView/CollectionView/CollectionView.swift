@@ -540,7 +540,10 @@ open class CollectionView: UICollectionView {
       })
     }
 
-    switch strategy {
+    // The first update should always be a `.reloadData`.
+    let overrideStrategy = (epoxyDataSource.data == nil) ? .reloadData : strategy
+
+    switch overrideStrategy {
     case .animatedBatchUpdates:
       performUpdates()
     case .nonanimatedBatchUpdates:
