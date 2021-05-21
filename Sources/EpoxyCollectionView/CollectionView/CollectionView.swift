@@ -17,7 +17,7 @@ open class CollectionView: UICollectionView {
     layout: UICollectionViewLayout,
     configuration: CollectionViewConfiguration = .shared)
   {
-    epoxyDataSource = CollectionViewDataSource(configuration: configuration)
+    epoxyDataSource = CollectionViewDataSource()
     self.configuration = configuration
     super.init(frame: .zero, collectionViewLayout: layout)
     setUp()
@@ -56,6 +56,34 @@ open class CollectionView: UICollectionView {
   }
 
   // MARK: Public
+
+  /// The approaches for updating the content of a `CollectionView`.
+  public enum UpdateStrategy {
+    /// Performs animated batch updates by calling `performBatchUpdates(…)` with the new content.
+    case animatedBatchUpdates
+    /// Performs non-animated batch updates by wrapping a call to `performBatchUpdates(…)` with the
+    /// new content within a `UIView.performWithoutAnimation(…)` closure.
+    ///
+    /// More performant than `reloadData`, as it does not recreate and reconfigure all visible
+    /// cells.
+    case nonanimatedBatchUpdates
+    /// Performs non-animated updates by calling `reloadData()`, which recreates and reconfigures
+    /// all visible cells.
+    ///
+    /// UIKit engineers have suggested that we should never need to call `reloadData` on updates,
+    /// and instead just use batch updates for all content updates.
+    case reloadData
+
+    // MARK: Internal
+
+    /// Whether this update is animated.
+    var animated: Bool {
+      switch self {
+      case .animatedBatchUpdates: return true
+      case .nonanimatedBatchUpdates, .reloadData: return false
+      }
+    }
+  }
 
   /// A delegate for handling accessibility events.
   public weak var accessibilityDelegate: CollectionViewAccessibilityDelegate?
@@ -184,9 +212,21 @@ open class CollectionView: UICollectionView {
   /// Updates the sections of this collection view to the provided `sections`, optionally animating
   /// the differences from the current sections.
   public func setSections(_ sections: [SectionModel], animated: Bool) {
+    let strategy: UpdateStrategy
+    if configuration.usesBatchUpdatesForAllReloads {
+      strategy = animated ? .animatedBatchUpdates : .nonanimatedBatchUpdates
+    } else {
+      strategy = animated ? .animatedBatchUpdates : .reloadData
+    }
+    setSections(sections, strategy: strategy)
+  }
+
+  /// Updates the sections of this collection view to the provided `sections`, optionally animating
+  /// the differences from the current sections.
+  public func setSections(_ sections: [SectionModel], strategy: UpdateStrategy) {
     EpoxyLogger.shared.assert(Thread.isMainThread, "This method must be called on the main thread.")
     epoxyDataSource.registerSections(sections)
-    apply(.make(sections: sections), animated: animated)
+    apply(.make(sections: sections), strategy: strategy)
   }
 
   /// Scrolls to the item at the given `path`, optionally animating the content offset change.
@@ -344,7 +384,7 @@ open class CollectionView: UICollectionView {
   }
 
   /// Converts a section index to its `SectionModel`, asserting and returning `nil` if a section
-  /// does not exist at that idnex.
+  /// does not exist at that index.
   public func section(at index: Int) -> SectionModel? {
     epoxyDataSource.data?.section(at: index)
   }
@@ -421,13 +461,13 @@ open class CollectionView: UICollectionView {
       animated: animated)
   }
 
-  func apply(_ newData: CollectionViewData, animated: Bool) {
+  func apply(_ newData: CollectionViewData, strategy: UpdateStrategy) {
     guard !updateState.isUpdating else {
-      queuedUpdate = (newData: newData, animated: animated)
+      queuedUpdate = (newData: newData, strategy: strategy)
       return
     }
 
-    updateView(with: newData, animated: animated)
+    updateView(with: newData, strategy: strategy)
   }
 
   // MARK: Private
@@ -461,7 +501,7 @@ open class CollectionView: UICollectionView {
   private let epoxyDataSource: CollectionViewDataSource
   private let configuration: CollectionViewConfiguration
 
-  private var queuedUpdate: (newData: CollectionViewData, animated: Bool)?
+  private var queuedUpdate: (newData: CollectionViewData, strategy: UpdateStrategy)?
 
   private var updateState = UpdateState.notUpdating
   private var ephemeralStateCache = [AnyHashable: Any?]()
@@ -484,50 +524,42 @@ open class CollectionView: UICollectionView {
     translatesAutoresizingMaskIntoConstraints = false
   }
 
-  private func updateView(with data: CollectionViewData, animated: Bool) {
+  private func updateView(with data: CollectionViewData, strategy: UpdateStrategy) {
     updateState = .preparingUpdate
 
     let performUpdates = {
       self.performBatchUpdates({
-        self.performUpdates(data: data, animated: animated)
+        self.performUpdates(data: data, animated: strategy.animated)
       }, completion: { _ in
         if let nextUpdate = self.queuedUpdate, self.window != nil {
           self.queuedUpdate = nil
-          self.updateView(with: nextUpdate.newData, animated: nextUpdate.animated)
+          self.updateView(with: nextUpdate.newData, strategy: nextUpdate.strategy)
         } else {
           self.completeUpdates()
         }
       })
     }
 
-    if configuration.usesBatchUpdatesForAllReloads {
-      if animated {
-        performUpdates()
-      } else {
-        UIView.performWithoutAnimation {
-          performUpdates()
-        }
-      }
-    } else {
-      guard
-        animated,
-        let sectionCount = dataSource?.numberOfSections?(in: self),
-        sectionCount > 0
-      else {
-        if let result = epoxyDataSource.applyData(data) {
-          updateState = .updating(from: result.oldData)
-        }
-        reloadData()
-        completeUpdates()
-        return
-      }
+    // The first update should always be a `.reloadData`.
+    let overrideStrategy = (epoxyDataSource.data == nil) ? .reloadData : strategy
 
+    switch overrideStrategy {
+    case .animatedBatchUpdates:
       performUpdates()
+    case .nonanimatedBatchUpdates:
+      UIView.performWithoutAnimation {
+        performUpdates()
+      }
+    case .reloadData:
+      let result = epoxyDataSource.applyData(data)
+      updateState = .updating(from: result.oldData)
+      reloadData()
+      completeUpdates()
     }
   }
 
   private func performUpdates(data: CollectionViewData, animated: Bool) {
-    guard let result = epoxyDataSource.applyData(data) else { return }
+    let result = epoxyDataSource.applyData(data)
     updateState = .updating(from: result.oldData)
 
     for (fromIndexPath, toIndexPath) in result.changeset.itemChangeset.updates {
