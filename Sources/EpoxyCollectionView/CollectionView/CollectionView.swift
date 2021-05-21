@@ -546,16 +546,15 @@ open class CollectionView: UICollectionView {
         performUpdates()
       }
     case .reloadData:
-      if let result = epoxyDataSource.applyData(data) {
-        updateState = .updating(from: result.oldData)
-      }
+      let result = epoxyDataSource.applyData(data)
+      updateState = .updating(from: result.oldData)
       reloadData()
       completeUpdates()
     }
   }
 
   private func performUpdates(data: CollectionViewData, animated: Bool) {
-    guard let result = epoxyDataSource.applyData(data) else { return }
+    let result = epoxyDataSource.applyData(data)
     updateState = .updating(from: result.oldData)
 
     for (fromIndexPath, toIndexPath) in result.changeset.itemChangeset.updates {

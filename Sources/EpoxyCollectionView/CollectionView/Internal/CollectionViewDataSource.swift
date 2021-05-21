@@ -51,16 +51,10 @@ final class CollectionViewDataSource: NSObject {
 
   /// Applies the given new data to this data source, returning old data and the minimal changes
   /// necessary to get to the provided new data.
-  func applyData(_ newData: CollectionViewData) -> ApplyDataResult? {
-    let oldData = data
+  func applyData(_ newData: CollectionViewData) -> ApplyDataResult {
+    let oldData = data ?? .make(sections: [])
     data = newData
-    if configuration.usesBatchUpdatesForAllReloads {
-      let oldData = oldData ?? .make(sections: [])
-      return .init(changeset: newData.makeChangeset(from: oldData), oldData: oldData)
-    } else {
-      guard let oldData = oldData else { return nil }
-      return .init(changeset: newData.makeChangeset(from: oldData), oldData: oldData)
-    }
+    return .init(changeset: newData.makeChangeset(from: oldData), oldData: oldData)
   }
 
   /// Refreshes the internalData but does not trigger a UI update.
