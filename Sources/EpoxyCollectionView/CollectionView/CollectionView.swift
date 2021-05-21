@@ -17,7 +17,7 @@ open class CollectionView: UICollectionView {
     layout: UICollectionViewLayout,
     configuration: CollectionViewConfiguration = .shared)
   {
-    epoxyDataSource = CollectionViewDataSource(configuration: configuration)
+    epoxyDataSource = CollectionViewDataSource()
     self.configuration = configuration
     super.init(frame: .zero, collectionViewLayout: layout)
     setUp()

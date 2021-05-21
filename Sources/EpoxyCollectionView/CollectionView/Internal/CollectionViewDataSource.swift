@@ -9,12 +9,6 @@ import UIKit
 /// The internal `UICollectionViewDataSource` of `CollectionView`.
 final class CollectionViewDataSource: NSObject {
 
-  // MARK: Lifecycle
-
-  init(configuration: CollectionViewConfiguration) {
-    self.configuration = configuration
-  }
-
   // MARK: Internal
 
   /// The result of applying new data to this data source.
@@ -86,7 +80,6 @@ final class CollectionViewDataSource: NSObject {
 
   // MARK: Private
 
-  private let configuration: CollectionViewConfiguration
   private let reuseIDStore = ReuseIDStore()
 
   /// The set of cell ViewDifferentiators that have been registered on the collection view.
