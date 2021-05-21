@@ -6,11 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.3.0...HEAD)
 
+### Added
+- Added an `UpdateStrategy` to `CollectionView` to allow specifying that it should update using non-
+  animated `performBatchUpdates(…)`, which can be more performant and behave more predictably than
+  `reloadData()`.
+
 ## [0.4.0](https://github.com/airbnb/epoxy-ios/compare/0.3.0...0.4.0) - 2021-05-17
 
 ### Added
 - Added an example with text field to show how can we use `avoidsKeyboard` feature
-- Add EpoxyLayoutGroups, a delcarative API for creating components
+- Add EpoxyLayoutGroups, a declarative API for creating components
 
 ### Fixed
 - `AnyItemModel` is selectable when there are no `DidSelect` callbacks on the underlying model
@@ -23,9 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Made `AnyItemModel` and `AnySupplementaryItemModel` conform to `DidChangeStateProviding`,
   `DidChangeStateProviding` and `SetBehaviorsProviding`
 - Made `AnyItemModel`, `AnySupplementaryItemModel`, and `AnyBarModel` conform to `StyleIDProviding`
-- Adds a `keyboardContentInsetAdjustment` property to `UIScrollView` with the amount that the that its `contentInset.bottom` has been adjusted to accommodate for the keyboard by a `KeyboardPositionWatcher`
+- Adds a `keyboardContentInsetAdjustment` property to `UIScrollView` with the amount that the that
+  its `contentInset.bottom` has been adjusted to accommodate for the keyboard by a
+  `KeyboardPositionWatcher`
 - Made `ItemSelectionStyle` conform to `Hashable`
-- `ReuseIDStore` has a new method to vend a previously registered reuse ID, `registeredReuseID(for:)`
+- `ReuseIDStore` has a new method to vend a previously registered reuse ID,
+  `registeredReuseID(for:)`
 
 ### Fixed
 - Bar installers gracefully handle redundant calls to install/uninstall
