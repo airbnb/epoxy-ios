@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   animated `performBatchUpdates(…)`, which can be more performant and behave more predictably than
   `reloadData()`.
 
+### Fixed
+- Improve `CollectionView` logic for deciding when to `reloadData(…)` over `performBatchUpdates(…)`
+  in specific scenarios.
+
 ## [0.4.0](https://github.com/airbnb/epoxy-ios/compare/0.3.0...0.4.0) - 2021-05-17
 
 ### Added

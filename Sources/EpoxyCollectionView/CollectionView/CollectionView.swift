@@ -540,10 +540,14 @@ open class CollectionView: UICollectionView {
       })
     }
 
-    // The first update should always be a `.reloadData`.
-    let overrideStrategy = (epoxyDataSource.data == nil) ? .reloadData : strategy
+    // There's two cases in which we should always have a strategy of `.reloadData`:
+    // - The first update, since we're going from empty content to non-empty content, and we don't
+    //   want to animate that update.
+    // - Before the first layout of this collection view when `bounds.size` is still zero, since
+    //   there's no benefit to doing batch updates in that scenario.
+    let override = (epoxyDataSource.data == nil || bounds.size == .zero) ? .reloadData : strategy
 
-    switch overrideStrategy {
+    switch override {
     case .animatedBatchUpdates:
       performUpdates()
     case .nonanimatedBatchUpdates:
