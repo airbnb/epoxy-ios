@@ -22,6 +22,9 @@ import UIKit
 /// }
 /// ```
 public struct StaticGroupItem {
+
+  // MARK: Lifecycle
+
   public init(_ constrainable: Constrainable) {
     self.constrainable = constrainable
     if let accessibilityAlignmentProviding = constrainable as? AccessibilityAlignmentProviding {
