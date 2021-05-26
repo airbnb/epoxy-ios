@@ -22,6 +22,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     alignment = style.alignment
     accessibilityAlignment = style.accessibilityAlignment
     spacing = style.spacing
+    reflowsForAccessibilityTypeSizes = style.reflowsForAccessibilityTypeSizes
     self.items = erasedItems
     constrainableContainers = erasedItems.map { item in
       let constrainable = item.makeConstrainable()
@@ -120,14 +121,18 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     ///                              These will also be used if `forceVerticalAccessibilityLayout` is set to `true`.
     ///                              Individual item alignments will take precedence over this value
     ///   - spacing: the spacing between items of the group
+    ///   - reflowsForAccessibilityTypeSizes: whether or not this group should reflow when DynamicType
+    ///                                         is enabled and is an accessiblity size category
     public init(
       alignment: HGroup.ItemAlignment = .fill,
       accessibilityAlignment: VGroup.ItemAlignment = .leading,
-      spacing: CGFloat = 0)
+      spacing: CGFloat = 0,
+      reflowsForAccessibilityTypeSizes: Bool = true)
     {
       self.alignment = alignment
       self.accessibilityAlignment = accessibilityAlignment
       self.spacing = spacing
+      self.reflowsForAccessibilityTypeSizes = reflowsForAccessibilityTypeSizes
     }
 
     // MARK: Internal
@@ -135,6 +140,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     let alignment: HGroup.ItemAlignment
     let accessibilityAlignment: VGroup.ItemAlignment
     let spacing: CGFloat
+    let reflowsForAccessibilityTypeSizes: Bool
   }
 
   /// Alignment set at the group level to apply to all constrainables.
