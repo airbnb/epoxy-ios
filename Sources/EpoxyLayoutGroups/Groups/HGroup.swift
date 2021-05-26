@@ -23,6 +23,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     accessibilityAlignment = style.accessibilityAlignment
     spacing = style.spacing
     reflowsForAccessibilityTypeSizes = style.reflowsForAccessibilityTypeSizes
+    forceVerticalAccessibilityLayout = style.forceVerticalAccessibilityLayout
     self.items = erasedItems
     constrainableContainers = erasedItems.map { item in
       let constrainable = item.makeConstrainable()
@@ -122,17 +123,21 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     ///                              Individual item alignments will take precedence over this value
     ///   - spacing: the spacing between items of the group
     ///   - reflowsForAccessibilityTypeSizes: whether or not this group should reflow when DynamicType
-    ///                                         is enabled and is an accessiblity size category
+    ///                                         is enabled and is an accessiblity size category.
+    ///                                         The default value is `true`
+    ///   - forceVerticalAccessibilityLayout: force the group to use the the vertical accessibility layout
     public init(
       alignment: HGroup.ItemAlignment = .fill,
       accessibilityAlignment: VGroup.ItemAlignment = .leading,
       spacing: CGFloat = 0,
-      reflowsForAccessibilityTypeSizes: Bool = true)
+      reflowsForAccessibilityTypeSizes: Bool = true,
+      forceVerticalAccessibilityLayout: Bool = false)
     {
       self.alignment = alignment
       self.accessibilityAlignment = accessibilityAlignment
       self.spacing = spacing
       self.reflowsForAccessibilityTypeSizes = reflowsForAccessibilityTypeSizes
+      self.forceVerticalAccessibilityLayout = forceVerticalAccessibilityLayout
     }
 
     // MARK: Internal
@@ -141,6 +146,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     let accessibilityAlignment: VGroup.ItemAlignment
     let spacing: CGFloat
     let reflowsForAccessibilityTypeSizes: Bool
+    let forceVerticalAccessibilityLayout: Bool
   }
 
   /// Alignment set at the group level to apply to all constrainables.
@@ -163,14 +169,14 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   /// When this property is true, the HGroup will automatically relayout when
   /// accessibility type sizes are enabled to make the layout more accessible
   /// the default value of this property is `true`
-  public var reflowsForAccessibilityTypeSizes = true {
+  public var reflowsForAccessibilityTypeSizes: Bool {
     didSet { installConstraintsIfNeeded() }
   }
 
   /// When this property is true, HGroup will only use the vertical accessibility
   /// layout. This is useful if you need to toggle a horizontal and vertical layout
   /// manually instead of relying on the built-in support from `reflowsForAccessibilityTypeSizes`
-  public var forceVerticalAccessibilityLayout = false {
+  public var forceVerticalAccessibilityLayout: Bool {
     didSet { installConstraintsIfNeeded() }
   }
 
