@@ -14,7 +14,7 @@ final class ConstraniableContainerSpec: QuickSpec {
     beforeEach {
       constrainable = TestView()
         .accessibilityAlignment(.trailing)
-        .horizontalAlignment(.leading)
+        .horizontalAlignment(.center)
         .verticalAlignment(.top)
         .padding(5)
     }
@@ -23,7 +23,7 @@ final class ConstraniableContainerSpec: QuickSpec {
       it("inherits the values of the provided Constrainable") {
         let wrapper = ConstrainableContainer(constrainable)
         expect(wrapper.accessibilityAlignment).to(equal(.trailing))
-        expect(wrapper.horizontalAlignment).to(equal(.leading))
+        expect(wrapper.horizontalAlignment).to(equal(.center))
         expect(wrapper.verticalAlignment).to(equal(.top))
         expect(wrapper.padding).to(equal(NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)))
       }

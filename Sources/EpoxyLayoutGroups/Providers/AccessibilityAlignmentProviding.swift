@@ -37,6 +37,6 @@ extension EpoxyModeled where Self: AccessibilityAlignmentProviding {
   // MARK: Private
 
   private var accessibilityAlignmentProperty: EpoxyModelProperty<VGroup.ItemAlignment?> {
-    .init(keyPath: \Self.accessibilityAlignment, defaultValue: nil, updateStrategy: .replace)
+    .init(keyPath: \AccessibilityAlignmentProviding.accessibilityAlignment, defaultValue: nil, updateStrategy: .replace)
   }
 }

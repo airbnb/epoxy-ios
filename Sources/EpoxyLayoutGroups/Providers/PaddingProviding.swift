@@ -39,6 +39,6 @@ extension EpoxyModeled where Self: PaddingProviding {
   // MARK: Private
 
   private var paddingProperty: EpoxyModelProperty<NSDirectionalEdgeInsets> {
-    .init(keyPath: \Self.padding, defaultValue: .zero, updateStrategy: .replace)
+    .init(keyPath: \PaddingProviding.padding, defaultValue: .zero, updateStrategy: .replace)
   }
 }
