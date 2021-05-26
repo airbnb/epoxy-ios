@@ -19,8 +19,8 @@ final class ConstraniableContainerSpec: QuickSpec {
         .padding(5)
     }
 
-    describe("when initializing a ConstrainableContainer with another ConstrainableContainer") {
-      it("inherits the values of the provided ConstrainableContainer") {
+    describe("when initializing a ConstrainableContainer with another Constrainable") {
+      it("inherits the values of the provided Constrainable") {
         let wrapper = ConstrainableContainer(constrainable)
         expect(wrapper.accessibilityAlignment).to(equal(.trailing))
         expect(wrapper.horizontalAlignment).to(equal(.leading))
