@@ -14,11 +14,17 @@ public struct ConstrainableContainer: Constrainable, AnchoringContainer, EpoxyMo
 
   public init(_ constrainable: Constrainable) {
     self.constrainable = constrainable
-    if let container = constrainable as? ConstrainableContainer {
-      accessibilityAlignment = container.accessibilityAlignment
-      horizontalAlignment = container.horizontalAlignment
-      padding = container.padding
-      verticalAlignment = container.verticalAlignment
+    if let accessibilityAlignmentProviding = constrainable as? AccessibilityAlignmentProviding {
+      accessibilityAlignment = accessibilityAlignmentProviding.accessibilityAlignment
+    }
+    if let horizontalAlignmentProviding = constrainable as? HorizontalAlignmentProviding {
+      horizontalAlignment = horizontalAlignmentProviding.horizontalAlignment
+    }
+    if let paddingProviding = constrainable as? PaddingProviding {
+      padding = paddingProviding.padding
+    }
+    if let verticalAlignmentProviding = constrainable as? VerticalAlignmentProviding {
+      verticalAlignment = verticalAlignmentProviding.verticalAlignment
     }
   }
 
@@ -111,7 +117,7 @@ extension Constrainable {
   }
 
   /// Sets the accessibility alignment of this component in the group
-  public func accessibilityAlignment(_ alignment: VGroup.ItemAlignment) -> Constrainable {
+  public func accessibilityAlignment(_ alignment: VGroup.ItemAlignment?) -> Constrainable {
     var container = _containerOrSelf
     container.accessibilityAlignment = alignment
     return container

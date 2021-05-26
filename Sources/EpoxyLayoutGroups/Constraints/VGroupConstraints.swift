@@ -151,7 +151,7 @@ final class VGroupConstraints: GroupConstraints {
   {
     var alignment = constrainable.horizontalAlignment ?? groupAlignment
     if useAccessibilityAlignment {
-      alignment = constrainable.accessibilityAlignment
+      alignment = constrainable.accessibilityAlignment ?? alignment
     }
     switch alignment {
     case .fill:
@@ -201,7 +201,7 @@ final class VGroupConstraints: GroupConstraints {
   {
     var alignment = constrainable.horizontalAlignment ?? groupAlignment
     if useAccessibilityAlignment {
-      alignment = constrainable.accessibilityAlignment
+      alignment = constrainable.accessibilityAlignment ?? alignment
     }
     switch alignment {
     case .fill:
@@ -265,7 +265,7 @@ final class VGroupConstraints: GroupConstraints {
 
     var alignment = constrainable.horizontalAlignment ?? groupAlignment
     if useAccessibilityAlignment {
-      alignment = constrainable.accessibilityAlignment
+      alignment = constrainable.accessibilityAlignment ?? alignment
     }
     switch alignment {
     case .fill:
@@ -317,7 +317,7 @@ final class VGroupConstraints: GroupConstraints {
   {
     var alignment = constrainable.horizontalAlignment ?? groupAlignment
     if useAccessibilityAlignment {
-      alignment = constrainable.accessibilityAlignment
+      alignment = constrainable.accessibilityAlignment ?? alignment
     }
     switch alignment {
     case .fill, .leading, .trailing, .center, .centered:

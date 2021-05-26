@@ -24,11 +24,17 @@ import UIKit
 public struct StaticGroupItem {
   public init(_ constrainable: Constrainable) {
     self.constrainable = constrainable
-    if let container = constrainable as? ConstrainableContainer {
-      accessibilityAlignment = container.accessibilityAlignment
-      horizontalAlignment = container.horizontalAlignment
-      padding = container.padding
-      verticalAlignment = container.verticalAlignment
+    if let accessibilityAlignmentProviding = constrainable as? AccessibilityAlignmentProviding {
+      accessibilityAlignment = accessibilityAlignmentProviding.accessibilityAlignment
+    }
+    if let horizontalAlignmentProviding = constrainable as? HorizontalAlignmentProviding {
+      horizontalAlignment = horizontalAlignmentProviding.horizontalAlignment
+    }
+    if let paddingProviding = constrainable as? PaddingProviding {
+      padding = paddingProviding.padding
+    }
+    if let verticalAlignmentProviding = constrainable as? VerticalAlignmentProviding {
+      verticalAlignment = verticalAlignmentProviding.verticalAlignment
     }
   }
 
@@ -118,7 +124,7 @@ extension StaticGroupItem: VerticalAlignmentProviding { }
 /// removed and a new item view will be created and inserted in its place.
 private struct DiffIdentifier: Hashable {
   var dataID: AnyHashable
-  var accessibilityAlignment: VGroup.ItemAlignment
+  var accessibilityAlignment: VGroup.ItemAlignment?
   var horizontalAlignment: VGroup.ItemAlignment?
   var padding: NSDirectionalEdgeInsets
   var verticalAlignment: HGroup.ItemAlignment?
