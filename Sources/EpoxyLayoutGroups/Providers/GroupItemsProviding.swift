@@ -32,6 +32,6 @@ extension EpoxyModeled where Self: GroupItemsProviding {
   // MARK: Private
 
   private var groupItemsProperty: EpoxyModelProperty<[GroupItemModeling]> {
-    .init(keyPath: \Self.groupItems, defaultValue: [], updateStrategy: .replace)
+    .init(keyPath: \GroupItemsProviding.groupItems, defaultValue: [], updateStrategy: .replace)
   }
 }

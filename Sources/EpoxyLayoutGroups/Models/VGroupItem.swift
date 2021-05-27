@@ -138,7 +138,7 @@ extension VGroupItem: InternalGroupItemModeling {
 private struct DiffIdentifier: Hashable {
   var dataID: AnyHashable
   var style: VGroup.Style
-  var accessibilityAlignment: VGroup.ItemAlignment
+  var accessibilityAlignment: VGroup.ItemAlignment?
   var horizontalAlignment: VGroup.ItemAlignment?
   var padding: NSDirectionalEdgeInsets
   var verticalAlignment: HGroup.ItemAlignment?

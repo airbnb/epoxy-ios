@@ -301,7 +301,7 @@ extension GroupItem {
 /// removed and a new item view will be created and inserted in its place.
 private struct DiffIdentifier: Hashable {
   var dataID: AnyHashable
-  var accessibilityAlignment: VGroup.ItemAlignment
+  var accessibilityAlignment: VGroup.ItemAlignment?
   var horizontalAlignment: VGroup.ItemAlignment?
   var padding: NSDirectionalEdgeInsets
   var verticalAlignment: HGroup.ItemAlignment?

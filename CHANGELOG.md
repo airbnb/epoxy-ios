@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Improve `CollectionView` logic for deciding when to `reloadData(…)` over `performBatchUpdates(…)`
   in specific scenarios.
+- Fixed an issue where the `accessibilityAlignment` property of `HGroup` was not being respected.
+- Fixed an issue where `accessibilityAlignment` and `horizontalAlignment` would overwrite one another
 
 ## [0.4.0](https://github.com/airbnb/epoxy-ios/compare/0.3.0...0.4.0) - 2021-05-17
 

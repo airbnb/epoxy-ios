@@ -37,7 +37,7 @@ extension EpoxyModeled where Self: MakeConstrainableProviding {
 
   private var makeConstrainableProperty: EpoxyModelProperty<MakeConstrainable> {
     .init(
-      keyPath: \Self.makeConstrainable,
+      keyPath: \MakeConstrainableProviding.makeConstrainable,
       defaultValue: UIView.init,
       updateStrategy: .replace)
   }

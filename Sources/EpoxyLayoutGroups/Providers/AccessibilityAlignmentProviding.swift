@@ -12,8 +12,8 @@ public protocol AccessibilityAlignmentProviding {
   /// when the `preferredContentSizeCategory.isAccessibilityCategory` is `true`.
   /// That accessibility layout essentially converts the `HGroup` into a `VGroup` and
   /// uses the provided `accessibilityAlignment` value for each item to determine the layout.
-  /// The default value of this property is `.leading`.
-  var accessibilityAlignment: VGroup.ItemAlignment { get }
+  /// The default value of this property is `nil`.
+  var accessibilityAlignment: VGroup.ItemAlignment? { get }
 }
 
 // MARK: - EpoxyModeled + AccessibilityAlignmentProviding
@@ -23,20 +23,20 @@ extension EpoxyModeled where Self: AccessibilityAlignmentProviding {
   // MARK: Public
 
   /// The accessibilityAlignment value for this model
-  public var accessibilityAlignment: VGroup.ItemAlignment {
+  public var accessibilityAlignment: VGroup.ItemAlignment? {
     get { self[accessibilityAlignmentProperty] }
     set { self[accessibilityAlignmentProperty] = newValue }
   }
 
   /// Returns a copy of this model replacing the `accessibiltyAlignment` value
   /// with the one provided.
-  public func accessibilityAlignment(_ value: VGroup.ItemAlignment) -> Self {
+  public func accessibilityAlignment(_ value: VGroup.ItemAlignment?) -> Self {
     copy(updating: accessibilityAlignmentProperty, to: value)
   }
 
   // MARK: Private
 
-  private var accessibilityAlignmentProperty: EpoxyModelProperty<VGroup.ItemAlignment> {
-    .init(keyPath: \Self.accessibilityAlignment, defaultValue: .leading, updateStrategy: .replace)
+  private var accessibilityAlignmentProperty: EpoxyModelProperty<VGroup.ItemAlignment?> {
+    .init(keyPath: \AccessibilityAlignmentProviding.accessibilityAlignment, defaultValue: nil, updateStrategy: .replace)
   }
 }

@@ -120,7 +120,8 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     ///                              these will only be used when `reflowsForAccessibiltyTypeSizes` is `true`
     ///                              and when the `preferredContentSizeCategory.isAccessibilityCategory` is `true`.
     ///                              These will also be used if `forceVerticalAccessibilityLayout` is set to `true`.
-    ///                              Individual item alignments will take precedence over this value
+    ///                              Individual item alignments will take precedence over this value.
+    ///                              The default value of this property is `.leading`
     ///   - spacing: the spacing between items of the group
     ///   - reflowsForAccessibilityTypeSizes: whether or not this group should reflow when DynamicType
     ///                                         is enabled and is an accessiblity size category.

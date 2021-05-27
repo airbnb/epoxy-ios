@@ -35,6 +35,6 @@ extension EpoxyModeled where Self: VerticalAlignmentProviding {
   // MARK: Private
 
   private var verticalAlignmentProperty: EpoxyModelProperty<HGroup.ItemAlignment?> {
-    .init(keyPath: \Self.verticalAlignment, defaultValue: nil, updateStrategy: .replace)
+    .init(keyPath: \VerticalAlignmentProviding.verticalAlignment, defaultValue: nil, updateStrategy: .replace)
   }
 }
