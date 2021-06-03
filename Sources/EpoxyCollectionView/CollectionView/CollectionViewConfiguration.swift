@@ -6,12 +6,12 @@
 ///
 /// Can additionally be provided when initializing a `CollectionView` to customize the behavior of
 /// that specific instance.
-public final class CollectionViewConfiguration {
+public struct CollectionViewConfiguration {
 
   // MARK: Lifecycle
 
   public init(
-    usesBatchUpdatesForAllReloads: Bool = false,
+    usesBatchUpdatesForAllReloads: Bool = true,
     usesCellPrefetching: Bool = true,
     usesAccurateScrollToItem: Bool = true)
   {
@@ -31,8 +31,8 @@ public final class CollectionViewConfiguration {
   /// UIKit engineers have suggested that we should never call `reloadData` ourselves, and instead,
   /// use batch updates for all data changes.
   ///
-  /// Defaults to `false`.
-  public let usesBatchUpdatesForAllReloads: Bool
+  /// Defaults to `true`.
+  public var usesBatchUpdatesForAllReloads: Bool
 
   /// In the past, UICollectionView has crashed when prefetching was enabled. There were also some
   /// other issues:
@@ -46,13 +46,13 @@ public final class CollectionViewConfiguration {
   /// If this is set to `true`, then cell-prefetching will be turned on by default.
   ///
   /// Defaults to `true`.
-  public let usesCellPrefetching: Bool
+  public var usesCellPrefetching: Bool
 
   /// Collection view does not accurately scroll to items if they're self-sized, due to it using
   /// estimated heights to calculate the final offset. Setting this to true will cause
   /// `CollectionView` to use a custom scroll-to-item implementation which is more accurate.
   ///
   /// Defaults to `true`.
-  public let usesAccurateScrollToItem: Bool
+  public var usesAccurateScrollToItem: Bool
 
 }
