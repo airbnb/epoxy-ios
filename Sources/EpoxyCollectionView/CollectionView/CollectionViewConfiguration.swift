@@ -28,13 +28,23 @@ public struct CollectionViewConfiguration {
   /// Set this to a new instance to override the default configuration.
   public static var shared = CollectionViewConfiguration()
 
-  /// UIKit engineers have suggested that we should never call `reloadData` ourselves, and instead,
-  /// use batch updates for all data changes.
+  /// When `true`, `CollectionView` performs non-animated content updates by wrapping a call to
+  /// `performBatchUpdates(…)` with the new content within a `UIView.performWithoutAnimation(…)`
+  /// closure.
+  ///
+  /// UIKit engineers have suggested that we should never call `reloadData(…)` ourselves, and
+  /// instead, use batch updates for all data changes. `performBatchUpdates(…)` is more performant
+  /// and reliable than `reloadData(…)`, as it does not recreate and reconfigure all visible cells.
+  ///
+  /// When `false`, `CollectionView` performs non-animated updates by calling `reloadData(…)`, which
+  /// recreates and reconfigures all visible cells.
   ///
   /// Defaults to `true`.
+  ///
+  /// - SeeAlso: `CollectionView.UpdateStrategy`
   public var usesBatchUpdatesForAllReloads: Bool
 
-  /// In the past, UICollectionView has crashed when prefetching was enabled. There were also some
+  /// In the past, `UICollectionView` has crashed when prefetching was enabled. There were also some
   /// other issues:
   ///
   /// - Rendering issues on iOS 10, 11 and maybe newer versions when using self-sizing supplementary
@@ -48,11 +58,13 @@ public struct CollectionViewConfiguration {
   /// Defaults to `true`.
   public var usesCellPrefetching: Bool
 
-  /// Collection view does not accurately scroll to items if they're self-sized, due to it using
-  /// estimated heights to calculate the final offset. Setting this to true will cause
+  /// `UICollectionView` does not accurately scroll to items if they're self-sized, due to it using
+  /// estimated heights to calculate the final offset. Setting this to `true` will cause
   /// `CollectionView` to use a custom scroll-to-item implementation which is more accurate.
   ///
   /// Defaults to `true`.
+  ///
+  /// - SeeAlso: `CollectionViewScrollToItemHelper`
   public var usesAccurateScrollToItem: Bool
 
 }
