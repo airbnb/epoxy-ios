@@ -20,8 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - `CollectionViewConfiguration.usesBatchUpdatesForAllReloads` now defaults to `true`.
-- `CollectionViewConfiguration` was changed to a `struct` from an immutable `class` to make it
-  easier to modify an existing configuration.
+- Changed `CollectionViewConfiguration` from an immutable `class` to a `struct` to make it easier to
+  modify an existing configuration.
 
 ## [0.4.0](https://github.com/airbnb/epoxy-ios/compare/0.3.0...0.4.0) - 2021-05-17
 
