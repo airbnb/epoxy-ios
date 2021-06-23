@@ -290,10 +290,10 @@ extension PresentationModel.Presentation {
             forName: .init("\(UIPresentationController.self)DismissalTransitionDidEndNotification"),
             object: presented,
             queue: .main,
-            using: { _ in
+            using: { [didDismiss = context.didDismiss] _ in
               guard token != nil else { return }
               token = nil
-              context.didDismiss()
+              didDismiss()
             })
 
         context.presenting.present(
