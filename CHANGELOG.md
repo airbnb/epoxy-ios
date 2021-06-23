@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   in specific scenarios.
 - Fixed an issue where the `accessibilityAlignment` property of `HGroup` was not being respected.
 - Fixed an issue where `accessibilityAlignment` and `horizontalAlignment` would overwrite one another
+- Break a temporary retain cycle in `.system` presentation style
 
 ### Changed
 - `CollectionViewConfiguration.usesBatchUpdatesForAllReloads` now defaults to `true`.
