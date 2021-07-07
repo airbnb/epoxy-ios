@@ -73,7 +73,7 @@ struct CollectionViewData {
     guard indexPath.row < section.items.count else {
       EpoxyLogger.shared.assertionFailure(
         """
-        Item index \(indexPath.section) is out of bounds \(section.items.count). Make sure your \
+        Item index \(indexPath.item) is out of bounds \(section.items.count). Make sure your \
         section models and item models all have unique dataIDs.
         """)
       return nil
