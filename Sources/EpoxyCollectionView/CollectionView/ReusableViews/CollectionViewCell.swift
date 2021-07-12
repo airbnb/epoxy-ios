@@ -61,6 +61,12 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
     _ layoutAttributes: UICollectionViewLayoutAttributes)
     -> UICollectionViewLayoutAttributes
   {
+    // There's a downstream `EXC_BAD_ACCESS` crash that would indicate that `layoutAttributes` can
+    // sometimes be `null`, even though it's bridged as `nonnull`. This check guards against this.
+    guard (layoutAttributes as UICollectionViewLayoutAttributes?) != nil else {
+      return super.preferredLayoutAttributesFitting(layoutAttributes)
+    }
+
     guard let fittingPrioritiesProvider = layoutAttributes as? FittingPrioritiesProvidingLayoutAttributes else {
       return super.preferredLayoutAttributesFitting(layoutAttributes)
     }
