@@ -19,13 +19,17 @@ protocol BaseBarInstallerSpec {
 extension BaseBarInstallerSpec {
 
   func baseSpec() {
+    let defaultSafeAreaInset: CGFloat = 20
     var window: UIWindow!
     var viewController: UIViewController!
     var container: InternalBarContainer!
     var setBars: (([BarModeling]) -> Void)!
 
     beforeEach {
-      window = UIWindow(frame: .init(origin: CGPoint(x: 0, y: 100), size: CGSize(width: 300, height: 300)))
+      window = SafeAreaWindow(
+        frame: .init(origin: CGPoint(x: 0, y: 100), size: CGSize(width: 300, height: 300)),
+        safeAreaInsets: UIEdgeInsets(top: defaultSafeAreaInset, left: 0, bottom: defaultSafeAreaInset, right: 0))
+
       viewController = UIViewController()
       viewController.loadView()
       viewController.view.frame = window.bounds
@@ -47,22 +51,22 @@ extension BaseBarInstallerSpec {
       context("with a 100pt bar") {
         it("sets 100pt inset when using .barHeightSafeArea") {
           container.insetBehavior = .barHeightSafeArea
-          setBars([StaticHeightBar.barModel(style: .init(height: 100))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
           expect(viewController.additionalSafeAreaInsets[keyPath: container.position.inset]).toEventually(equal(100))
         }
 
         it("updates to 200pt inset when updating bar height") {
           container.insetBehavior = .barHeightSafeArea
-          setBars([StaticHeightBar.barModel(style: .init(height: 100))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
           expect(viewController.additionalSafeAreaInsets[keyPath: container.position.inset]).toEventually(equal(100))
 
-          setBars([StaticHeightBar.barModel(style: .init(height: 200))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 200 + defaultSafeAreaInset))])
           expect(viewController.additionalSafeAreaInsets[keyPath: container.position.inset]).toEventually(equal(200))
         }
 
         it("doesn't override custom inset when using .none") {
           container.insetBehavior = .none
-          setBars([StaticHeightBar.barModel(style: .init(height: 100))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
           expect(viewController.additionalSafeAreaInsets[keyPath: container.position.inset]).toEventually(equal(0))
 
           viewController.additionalSafeAreaInsets[keyPath: container.position.inset] = 50
@@ -71,11 +75,23 @@ extension BaseBarInstallerSpec {
 
         it("sets inset to 0 when changing from .barHeightSafeArea to .none") {
           container.insetBehavior = .barHeightSafeArea
-          setBars([StaticHeightBar.barModel(style: .init(height: 100))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
           expect(viewController.additionalSafeAreaInsets[keyPath: container.position.inset]).toEventually(equal(100))
 
           container.insetBehavior = .none
           expect(viewController.additionalSafeAreaInsets[keyPath: container.position.inset]).toEventually(equal(0))
+        }
+
+        it("sets layout margins when insetMargins=true") {
+          container.insetMargins = true
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
+          expect(container.layoutMargins[keyPath: container.position.inset]).toEventually(equal(defaultSafeAreaInset))
+        }
+
+        it("doesn't set layout margins when insetMargins=false") {
+          container.insetMargins = false
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
+          expect(container.layoutMargins[keyPath: container.position.inset]).toEventually(equal(0))
         }
       }
     }
