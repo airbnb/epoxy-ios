@@ -93,6 +93,15 @@ extension BaseBarInstallerSpec {
           setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
           expect(container.layoutMargins[keyPath: container.position.inset]).toEventually(equal(0))
         }
+
+        it("clears layout margins when changing from insetMargins=true to insetMargins=true") {
+          container.insetMargins = true
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
+          expect(container.layoutMargins[keyPath: container.position.inset]).toEventually(equal(defaultSafeAreaInset))
+
+          container.insetMargins = false
+          expect(container.layoutMargins[keyPath: container.position.inset]).toEventually(equal(0))
+        }
       }
     }
   }
