@@ -65,7 +65,7 @@ protocol InternalBarContainer: BarContainer {
   var needsSafeAreaInsetReset: Bool { get set }
 
   /// Whether or not this bar container should apply `layoutMargins`
-  /// derived from the `viewController`'s `safeAreaInsets`.
+  /// derived from the `viewController`'s `safeAreaInsets` to its bars.
   ///  - `true` by default.
   var insetMargins: Bool { get set }
 }
