@@ -63,6 +63,11 @@ protocol InternalBarContainer: BarContainer {
 
   /// Whether or not the additional safe area insets need to be reset to 0
   var needsSafeAreaInsetReset: Bool { get set }
+
+  /// Whether or not this bar container should apply `layoutMargins`
+  /// derived from the `viewController`'s `safeAreaInsets` to its bars.
+  ///  - `true` by default.
+  var insetMargins: Bool { get set }
 }
 
 // MARK: - BarContainerPosition
@@ -206,6 +211,11 @@ extension InternalBarContainer {
     EpoxyLogger.shared.assert(
       !(viewController.view is UIScrollView),
       "The view controller's view must not be a scroll view. Nest any scroll views in a container.")
+  }
+
+  /// Sets the `layoutMargin` corresponding to the container's `position`
+  func setLayoutMargin(_ margin: CGFloat) {
+    layoutMargins[keyPath: position.inset] = insetMargins ? margin : 0
   }
 
   // MARK: Private

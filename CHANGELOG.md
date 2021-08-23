@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.5.0...HEAD)
 
+### Added
+
+- Added an `insetMargins` property to `TopBarContainer` and `BottomBarContainer` that configures whether or not the container sets layout margins derived from the `safeAreaInsets` of its `viewController`.
+
 ### Fixed
 - Fixed incorrect assertion logging when accessing an item with an invalid index path.
 - Mitigated a `EXC_BAD_ACCESS` crash that caused by a bad `nonnull` bridge in `CollectionViewCell`.

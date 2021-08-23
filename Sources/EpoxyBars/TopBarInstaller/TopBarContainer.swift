@@ -48,6 +48,13 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
     didSet { updateInsetBehavior(from: oldValue) }
   }
 
+  public var insetMargins: Bool = true {
+    didSet {
+      guard insetMargins != oldValue else { return }
+      setNeedsLayout()
+    }
+  }
+
   /// The behavior of the status bar when it's hidden.
   ///
   /// Can be called from within an animation block to animate changes to the hiding behavior.
@@ -187,7 +194,7 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
 
     let margin = layoutMarginsTop + extraLayoutMarginsTop
     updateScrollViewInset(allScrollViews, margin: margin)
-    layoutMargins.top = margin
+    setLayoutMargin(margin)
 
     // Make sure to keep any scroll views at top/bottom when adjusting content/safe area insets.
     scrollToEdge(scrollViewsAtEdge)
