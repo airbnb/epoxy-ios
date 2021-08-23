@@ -47,6 +47,13 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
     didSet { verifyViewController() }
   }
 
+  public var insetMargins: Bool = true {
+    didSet {
+      guard insetMargins != oldValue else { return }
+      setNeedsLayout()
+    }
+  }
+
   /// An additional bottom offset that can be applied to this bar stack's position.
   ///
   /// Typically used to offset the bar stack to avoid the keyboard.
@@ -156,7 +163,7 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
     // as the safe area no longer overlaps the bar.
     let margin = (bottomOffset > 0) ? 0 : viewController?.originalSafeAreaInsetBottom ?? 0
     updateScrollViewInset(allScrollViews, margin: margin)
-    layoutMargins.bottom = margin
+    setLayoutMargin(margin)
   }
 
 }
