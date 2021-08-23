@@ -215,8 +215,7 @@ extension InternalBarContainer {
 
   /// Sets the `layoutMargin` corresponding to the container's `position`
   func setLayoutMargin(_ margin: CGFloat) {
-    guard insetMargins else { return }
-    layoutMargins[keyPath: position.inset] = margin
+    layoutMargins[keyPath: position.inset] = insetMargins ? margin : 0
   }
 
   // MARK: Private
