@@ -73,9 +73,15 @@ final class ComplexDeclarativeViewController: UIViewController {
     ]
     let numberOfItems = Int.random(in: 1..<possibleItems.count)
     let allIndicies = Array(0...numberOfItems).shuffled()
+    let textStyles: [UIFont.TextStyle] = [
+      .title2,
+      .title3,
+      .body,
+    ]
 
     return allIndicies.map { index in
       let color = possibleItems[index]
+      let textStyle = textStyles.randomElement() ?? .title3
       return HGroupItem(
         dataID: color.0,
         style: .init(spacing: 8))
@@ -83,7 +89,7 @@ final class ComplexDeclarativeViewController: UIViewController {
         Label.groupItem(
           dataID: color.0 + "label",
           content: color.0,
-          style: .style(with: .title3))
+          style: .style(with: textStyle))
         SpacerItem(dataID: DataID.spacer)
         ColorView.groupItem(
           dataID: color.1,

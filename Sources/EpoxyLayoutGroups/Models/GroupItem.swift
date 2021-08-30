@@ -62,6 +62,7 @@ public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
   {
     self.make = { make(params) }
     self.dataID = dataID
+    self.styleID = params
     erasedContent = content
     self.setContent = { setContent($0, content) }
     isErasedContentEqual = { otherModel in
@@ -205,6 +206,10 @@ extension GroupItem: SetBehaviorsProviding { }
 
 extension GroupItem: SetContentProviding { }
 
+// MARK: StyleIDProviding
+
+extension GroupItem: StyleIDProviding { }
+
 // MARK: VerticalAlignmentProviding
 
 extension GroupItem: VerticalAlignmentProviding { }
@@ -277,6 +282,7 @@ extension GroupItem {
   public var diffIdentifier: AnyHashable {
     DiffIdentifier(
       dataID: dataID,
+      styleID: styleID,
       accessibilityAlignment: accessibilityAlignment,
       horizontalAlignment: horizontalAlignment,
       padding: padding,
@@ -301,6 +307,7 @@ extension GroupItem {
 /// removed and a new item view will be created and inserted in its place.
 private struct DiffIdentifier: Hashable {
   var dataID: AnyHashable
+  var styleID: AnyHashable?
   var accessibilityAlignment: VGroup.ItemAlignment?
   var horizontalAlignment: VGroup.ItemAlignment?
   var padding: NSDirectionalEdgeInsets
@@ -308,6 +315,7 @@ private struct DiffIdentifier: Hashable {
 
   func hash(into hasher: inout Hasher) {
     hasher.combine(dataID)
+    hasher.combine(styleID)
     hasher.combine(accessibilityAlignment)
     hasher.combine(horizontalAlignment)
     hasher.combine(verticalAlignment)
