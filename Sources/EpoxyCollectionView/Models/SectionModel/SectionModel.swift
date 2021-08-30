@@ -80,12 +80,20 @@ extension SectionModel: CallbackContextEpoxyModeled {
 // MARK: Deprecations
 
 extension SectionModel {
-  @available(*, deprecated, renamed: "init(dataID:items:)", message: "SectionModels now require a dataID to make it harder to have sections with duplicated identities")
+  @available(
+    *,
+    deprecated,
+    renamed: "init(dataID:items:)",
+    message: "SectionModel requires an explicit dataID")
   public init(items: [ItemModeling]) {
     self.items = items
   }
 
-  @available(*, deprecated, renamed: "init(dataID:items:)", message: "SectionModels now require a dataID to make it harder to have sections with duplicated identities")
+  @available(
+    *,
+    deprecated,
+    renamed: "init(dataID:items:)",
+    message: "SectionModel requires an explicit dataID")
   public init(@ItemModelBuilder items: () -> [ItemModeling]) {
     self.items = items()
   }
