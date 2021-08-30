@@ -9,10 +9,13 @@ import UIKit
 final class GroupItemSpec: QuickSpec {
 
   override func spec() {
-    var groupItem: GroupItem<TestLabel>!
+    var groupItem: GroupItem<TestStyledLabel>!
 
     beforeEach {
-      groupItem = TestLabel.groupItem(dataID: 1, content: .init(text: "text"))
+      groupItem = TestStyledLabel.groupItem(
+        dataID: 1,
+        content: "text",
+        style: .init(textStyle: .body))
     }
 
     describe("when modifiers are applied") {
@@ -56,11 +59,50 @@ final class GroupItemSpec: QuickSpec {
     }
 
     it("uses content to calculate equality") {
-      let other = TestLabel.groupItem(dataID: 1, content: .init(text: "Different"))
+      let other = TestStyledLabel.groupItem(
+        dataID: 1,
+        content: "Different",
+        style: .init(textStyle: .body))
       expect(groupItem.isDiffableItemEqual(to: other)).to(beFalse())
 
-      let otherEqual = TestLabel.groupItem(dataID: 1, content: .init(text: "text"))
+      let otherEqual = TestStyledLabel.groupItem(
+        dataID: 1,
+        content: "text",
+        style: .init(textStyle: .body))
       expect(groupItem.isDiffableItemEqual(to: otherEqual)).to(beTrue())
+    }
+
+    describe("different styles") {
+      beforeEach {
+        groupItem = TestStyledLabel.groupItem(
+          dataID: "1",
+          content: "Hello",
+          style: .init(textStyle: .body))
+      }
+
+      it("has the same diffIdentifier with different content and the same style") {
+        let otherItem = TestStyledLabel.groupItem(
+          dataID: "1",
+          content: "Hello, other label",
+          style: .init(textStyle: .body))
+        expect(groupItem.diffIdentifier).to(equal(otherItem.diffIdentifier))
+      }
+
+      it("has the same diffIdentifier with the same content and same style") {
+        let otherItem = TestStyledLabel.groupItem(
+          dataID: "1",
+          content: "Hello",
+          style: .init(textStyle: .body))
+        expect(groupItem.diffIdentifier).to(equal(otherItem.diffIdentifier))
+      }
+
+      it("has a different diffIdentifier with the same content and a different style") {
+        let otherItem = TestStyledLabel.groupItem(
+          dataID: "1",
+          content: "Hello",
+          style: .init(textStyle: .title2))
+        expect(groupItem.diffIdentifier).toNot(equal(otherItem.diffIdentifier))
+      }
     }
   }
 

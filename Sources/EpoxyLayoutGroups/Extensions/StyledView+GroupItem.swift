@@ -21,8 +21,9 @@ extension StyledView where Self: EpoxyableView {
   {
     GroupItem<Self>(
       dataID: dataID,
+      params: style,
       content: content,
-      make: { Self(style: style) },
+      make: { Self(style: $0) },
       setContent: { context, content in
         context.constrainable.setContent(content, animated: context.animated)
       })

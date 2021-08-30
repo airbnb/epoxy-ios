@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed incorrect assertion logging when accessing an item with an invalid index path.
 - Mitigated a `EXC_BAD_ACCESS` crash that caused by a bad `nonnull` bridge in `CollectionViewCell`.
+- Fixed an issue where styles were not being used in the `diffIdentifier` calculation of `GroupItems`.
 
 ## [0.5.0](https://github.com/airbnb/epoxy-ios/compare/0.4.0...0.5.0) - 2021-06-23
 

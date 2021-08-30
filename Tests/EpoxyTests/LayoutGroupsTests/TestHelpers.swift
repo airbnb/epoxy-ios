@@ -48,6 +48,29 @@ final class TestLabel: UILabel, EpoxyableView {
   }
 }
 
+final class TestStyledLabel: UILabel, EpoxyableView {
+
+  init(style: Style) {
+    super.init(frame: .zero)
+    translatesAutoresizingMaskIntoConstraints = false
+    font = .preferredFont(forTextStyle: style.textStyle)
+  }
+
+  required init?(coder: NSCoder) {
+    fatalError("init(coder:) has not been implemented")
+  }
+
+  struct Style: Hashable {
+    let textStyle: UIFont.TextStyle
+  }
+
+  typealias Content = String
+
+  func setContent(_ content: String, animated: Bool) {
+    text = content
+  }
+}
+
 extension XCTestCase {
 
   // MARK: Internal
