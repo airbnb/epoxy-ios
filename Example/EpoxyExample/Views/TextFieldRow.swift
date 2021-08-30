@@ -31,15 +31,24 @@ final class TextFieldRow: UIView, EpoxyableView {
     var placeholder: String?
   }
 
+  struct Behaviors {
+    var didUpdateText: (String?) -> Void
+  }
+
   func setContent(_ content: Content, animated: Bool) {
     text = content.text
     placeholder = content.placeholder
+  }
+
+  func setBehaviors(_ behaviors: Behaviors?) {
+    didUpdateText = behaviors?.didUpdateText
   }
 
   // MARK: Private
 
   private let style: Style
   private let textField = UITextField()
+  private var didUpdateText: ((String?) -> Void)?
 
   private var text: String? {
     get { textField.text }
@@ -63,6 +72,7 @@ final class TextFieldRow: UIView, EpoxyableView {
 
   private func setUpTextField() {
     textField.translatesAutoresizingMaskIntoConstraints = false
+    textField.addTarget(self, action: #selector(didChangeText), for: .editingChanged)
     textField.borderStyle = .roundedRect
     addSubview(textField)
   }
@@ -74,5 +84,10 @@ final class TextFieldRow: UIView, EpoxyableView {
       textField.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
       textField.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -16),
     ])
+  }
+
+  @objc
+  private func didChangeText() {
+    didUpdateText?(textField.text)
   }
 }
