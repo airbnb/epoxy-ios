@@ -10,7 +10,7 @@ final class TextFieldViewController: CollectionViewController {
 
   init() {
     super.init(layout: UICollectionViewCompositionalLayout.listNoDividers)
-    setSections([.init(items: [textFieldRowItem])], animated: true)
+    setItems([textFieldRowItem], animated: false)
   }
 
   // MARK: Internal
@@ -32,10 +32,17 @@ final class TextFieldViewController: CollectionViewController {
     avoidsKeyboard: true,
     bars: [buttonRowBar])
 
+  private var username: String = "@airbnb" {
+    didSet { setItems([textFieldRowItem], animated: true) }
+  }
+
   private var textFieldRowItem: ItemModeling {
     TextFieldRow.itemModel(
       dataID: DataID.username,
-      content: .init(placeholder: "Username"),
+      content: .init(text: username, placeholder: "Username"),
+      behaviors: .init(didUpdateText: { [weak self] username in
+        self?.username = username ?? ""
+      }),
       style: .base)
   }
 
@@ -44,7 +51,9 @@ final class TextFieldViewController: CollectionViewController {
       dataID: DataID.button,
       content: .init(text: "Submit"),
       behaviors: .init(didTap: { [weak self] in
-        self?.view.endEditing(true)
+        guard let self = self else { return }
+        self.view.endEditing(true)
+        print("Submitted '\(self.username)'")
       }))
   }
 }
