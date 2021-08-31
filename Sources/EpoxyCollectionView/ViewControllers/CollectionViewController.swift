@@ -1,6 +1,7 @@
 //  Created by Laura Skelton on 6/30/17.
 //  Copyright © 2017 Airbnb. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 /// A subclassable collection view controller that manages its sections declarative via an array of
@@ -25,7 +26,8 @@ open class CollectionViewController: UIViewController {
   ///
   /// The `SectionModel` containing the items has a data ID of `DefaultDataID.noneProvided`.
   public convenience init(layout: UICollectionViewLayout, items: [ItemModeling]) {
-    self.init(layout: layout, sections: [SectionModel(items: items)])
+    let section = SectionModel(dataID: DefaultDataID.noneProvided, items: items)
+    self.init(layout: layout, sections: [section])
   }
 
   /// Initializes a collection view controller and configures its collection view with the provided
@@ -109,7 +111,8 @@ open class CollectionViewController: UIViewController {
   ///
   /// The `SectionModel` containing the items has a data ID of `DefaultDataID.noneProvided`.
   public func setItems(_ items: [ItemModeling], animated: Bool) {
-    setSections([SectionModel(items: items)], animated: animated)
+    let section = SectionModel(dataID: DefaultDataID.noneProvided, items: items)
+    setSections([section], animated: animated)
   }
 
   // MARK: Private
