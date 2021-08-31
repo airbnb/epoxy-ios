@@ -6,11 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.6.0...HEAD)
 
-## [0.6.0](https://github.com/airbnb/epoxy-ios/compare/0.4.0...0.5.0) - 2021-08-31
+## [0.6.0](https://github.com/airbnb/epoxy-ios/compare/0.5.0...0.6.0) - 2021-08-31
 
 ### Added
-
-- Added an `insetMargins` property to `TopBarContainer` and `BottomBarContainer` that configures whether or not the container sets layout margins derived from the `safeAreaInsets` of its `viewController`.
+- Added an `insetMargins` property to `TopBarContainer` and `BottomBarContainer` that configures
+  whether or not the container sets layout margins derived from the `safeAreaInsets` of its
+  `viewController`.
 
 ### Fixed
 - Fixed incorrect assertion logging when accessing an item with an invalid index path.
@@ -18,8 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed an issue where styles were not being used in the `diffIdentifier` calculation of `GroupItems`.
 
 ### Changed
-- The SectionModel initializer now requires a data ID to make it harder to have sections with
-  duplicate identity, resulting in a runtime warning and potentially unexpected diffing behavior.
+- The `SectionModel` initializer now requires a `dataID` to make it harder to have sections with
+  duplicate identity that causes a runtime warning and potentially unexpected diffing behavior.
 
 ## [0.5.0](https://github.com/airbnb/epoxy-ios/compare/0.4.0...0.5.0) - 2021-06-23
 
