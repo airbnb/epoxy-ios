@@ -9,9 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added a `BarInstallerConfiguration` type to allow both global and per-instance configuration of
   bar installers.
-- Added an `applyBarModels` closure to `BarInstallerConfiguration` to allow consumers to configure
-  _when_ bars are applied to the underlying `BarContainer` by a bar installer, e.g. to defer bar
-  model updates that might conflict with an in-flight shared element transition.
+- Added an `applyBars` closure to `BarInstallerConfiguration` to allow consumers to configure _when_
+  bars are applied to the underlying `BarContainer` by a bar installer, e.g. to defer bar model
+  updates that might conflict with an in-flight shared element transition.
 
 ### Changed
 - Removed the default bar installer behavior where bar model updates were deferred while a view

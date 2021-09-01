@@ -99,20 +99,18 @@ final class BarInstaller<Container: BarContainer> {
   private var storage = [BarCoordinatorPropertyKey: StoredCoordinatorProperty]()
 
   /// Updates the models to the given collection, installing the container if needed.
-  private func setBars(_ models: [BarModeling], animated: Bool, in view: UIView) {
-    bars = models
+  private func setBars(_ bars: [BarModeling], animated: Bool, in view: UIView) {
+    self.bars = bars
 
     guard let container = container else {
-      installContainer(in: view, with: models, animated: animated)
+      installContainer(in: view, with: bars, animated: animated)
       return
     }
 
-    if let apply = configuration.applyBarModels {
-      apply {
-        container.setBars(models, animated: animated)
-      }
+    if let applyBars = configuration.applyBars {
+      applyBars(container, bars, animated)
     } else {
-      container.setBars(models, animated: animated)
+      container.setBars(bars, animated: animated)
     }
   }
 

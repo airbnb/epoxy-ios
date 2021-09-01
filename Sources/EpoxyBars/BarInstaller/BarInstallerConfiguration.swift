@@ -10,8 +10,10 @@ public struct BarInstallerConfiguration {
 
   // MARK: Lifecycle
 
-  public init(applyBarModels: ((_ apply: () -> Void) -> Void)? = nil) {
-    self.applyBarModels = applyBarModels
+  public init(
+    applyBars: ((_ container: BarContainer, _ bars: [BarModeling], _ animated: Bool) -> Void)? = nil)
+  {
+    self.applyBars = applyBars
   }
 
   // MARK: Public
@@ -34,6 +36,6 @@ public struct BarInstallerConfiguration {
   /// `BarContainer`.
   ///
   /// Not calling the provided `apply` closure will result in skipped bar model updates.
-  public var applyBarModels: ((_ apply: () -> Void) -> Void)?
+  public var applyBars: ((_ container: BarContainer, _ bars: [BarModeling], _ animated: Bool) -> Void)?
 
 }

@@ -13,7 +13,7 @@ protocol BaseBarInstallerSpec {
   func installBarContainer(
     in viewController: UIViewController,
     configuration: BarInstallerConfiguration)
-    -> (container: InternalBarContainer, setBars: ([BarModeling]) -> Void)
+    -> (container: InternalBarContainer, setBars: ([BarModeling], Bool) -> Void)
 }
 
 // MARK: Spec implementation
@@ -26,7 +26,7 @@ extension BaseBarInstallerSpec {
     var viewController: UIViewController!
     var configuration: BarInstallerConfiguration!
     var container: InternalBarContainer!
-    var setBars: (([BarModeling]) -> Void)!
+    var setBars: (([BarModeling], Bool) -> Void)!
 
     beforeEach {
       window = SafeAreaWindow(
@@ -56,22 +56,22 @@ extension BaseBarInstallerSpec {
       context("with a 100pt bar") {
         it("sets 100pt inset when using .barHeightSafeArea") {
           container.insetBehavior = .barHeightSafeArea
-          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))], false)
           expect(viewController.additionalSafeAreaInsets[keyPath: container.position.inset]).toEventually(equal(100))
         }
 
         it("updates to 200pt inset when updating bar height") {
           container.insetBehavior = .barHeightSafeArea
-          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))], false)
           expect(viewController.additionalSafeAreaInsets[keyPath: container.position.inset]).toEventually(equal(100))
 
-          setBars([StaticHeightBar.barModel(style: .init(height: 200 + defaultSafeAreaInset))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 200 + defaultSafeAreaInset))], false)
           expect(viewController.additionalSafeAreaInsets[keyPath: container.position.inset]).toEventually(equal(200))
         }
 
         it("doesn't override custom inset when using .none") {
           container.insetBehavior = .none
-          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))], false)
           expect(viewController.additionalSafeAreaInsets[keyPath: container.position.inset]).toEventually(equal(0))
 
           viewController.additionalSafeAreaInsets[keyPath: container.position.inset] = 50
@@ -80,7 +80,7 @@ extension BaseBarInstallerSpec {
 
         it("sets inset to 0 when changing from .barHeightSafeArea to .none") {
           container.insetBehavior = .barHeightSafeArea
-          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))], false)
           expect(viewController.additionalSafeAreaInsets[keyPath: container.position.inset]).toEventually(equal(100))
 
           container.insetBehavior = .none
@@ -89,19 +89,19 @@ extension BaseBarInstallerSpec {
 
         it("sets layout margins when insetMargins=true") {
           container.insetMargins = true
-          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))], false)
           expect(container.layoutMargins[keyPath: container.position.inset]).toEventually(equal(defaultSafeAreaInset))
         }
 
         it("doesn't set layout margins when insetMargins=false") {
           container.insetMargins = false
-          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))], false)
           expect(container.layoutMargins[keyPath: container.position.inset]).toEventually(equal(0))
         }
 
         it("clears layout margins when changing from insetMargins=true to insetMargins=true") {
           container.insetMargins = true
-          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))])
+          setBars([StaticHeightBar.barModel(style: .init(height: 100 + defaultSafeAreaInset))], false)
           expect(container.layoutMargins[keyPath: container.position.inset]).toEventually(equal(defaultSafeAreaInset))
 
           container.insetMargins = false
@@ -111,37 +111,58 @@ extension BaseBarInstallerSpec {
     }
 
     describe("BarInstallerConfiguration") {
-      context("with a non-nil applyBarModels") {
-        var didApply: Bool!
+      context("with a non-nil applyBars") {
+        var applications: [(container: BarContainer, bars: [BarModeling], animated: Bool)]!
 
         beforeEach {
-          didApply = false
+          applications = []
 
-          configuration = BarInstallerConfiguration(applyBarModels: { apply in
-            didApply = true
-            apply()
+          configuration = BarInstallerConfiguration(applyBars: { container, bars, animated in
+            applications.append((container, bars, animated))
+            container.setBars(bars, animated: animated)
           })
 
           (container, setBars) = self.installBarContainer(in: viewController, configuration: configuration)
         }
 
         afterEach {
-          didApply = nil
+          applications = nil
         }
 
         context("with the initial bars") {
-          it("should not call the applyBarModels closure") {
-            expect(didApply) == false
+          it("should not call the applyBars closure") {
+            expect(applications).to(haveCount(0))
+          }
+
+          it("should not have applied any bars") {
+            expect(container.barViews).to(haveCount(0))
           }
         }
 
         context("when setting subsequent bars") {
+          let bars = [StaticHeightBar.barModel(style: .init(height: 100))]
+          let animated = false
+
           beforeEach {
-            setBars([StaticHeightBar.barModel(style: .init(height: 100))])
+            setBars(bars, animated)
           }
 
-          it("should call the applyBarModels closure") {
-            expect(didApply) == true
+          it("should call the applyBars closure") {
+            expect(applications).to(haveCount(1))
+          }
+
+          it("should call the applyBars closure with the container") {
+            expect(applications.first?.container) === container
+          }
+
+          it("should call the applyBars closure with the animated value") {
+            expect(applications.first?.animated) == animated
+          }
+
+          it("should call the applyBars closure with the bars value") {
+            let appliedBar = applications.first?.bars.first?.eraseToAnyBarModel()
+            let bar = bars.first
+            expect(appliedBar?.diffIdentifier) == bar?.diffIdentifier
           }
 
           it("should apply the bars") {
