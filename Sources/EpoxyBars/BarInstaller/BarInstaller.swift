@@ -11,8 +11,9 @@ final class BarInstaller<Container: BarContainer> {
 
   // MARK: Lifecycle
 
-  init(viewController: UIViewController?) {
+  init(viewController: UIViewController?, configuration: BarInstallerConfiguration = .shared) {
     self.viewController = viewController
+    self.configuration = configuration
   }
 
   // MARK: Internal
@@ -24,7 +25,7 @@ final class BarInstaller<Container: BarContainer> {
 
   /// Updates the bars to the given models, ordered from top to bottom.
   ///
-  /// If any model correponds to the same view as was previously set, the view will be reused and
+  /// If any model corresponds to the same view as was previously set, the view will be reused and
   /// updated with the new content, optionally animated.
   ///
   /// If any model corresponds to a new bar, a new bar view will be created and inserted,
@@ -79,7 +80,9 @@ final class BarInstaller<Container: BarContainer> {
     var updateCoordinator: (_ coordinator: AnyObject, _ value: Any) -> Void
   }
 
-  /// The bar models that will be set on the container once its visible.
+  private let configuration: BarInstallerConfiguration
+
+  /// The bar models that will be set on the container once it's visible.
   private var bars: [BarModeling] = []
 
   /// Closures that are called whenever the bar coordinator property changes.
@@ -104,17 +107,10 @@ final class BarInstaller<Container: BarContainer> {
       return
     }
 
-    // When the view controller is actively participating in a transition, we should wait until the
-    // transition is over before we update the bars to ensure shared elements remain constant over
-    // the course of the transition.
-    if
-      let viewController = viewController,
-      let coordinator = viewController.transitionCoordinator,
-      viewController.view.isDescendant(of: coordinator.containerView)
-    {
-      coordinator.animate(alongsideTransition: nil, completion: { _ in
+    if let apply = configuration.applyBarModels {
+      apply {
         container.setBars(models, animated: animated)
-      })
+      }
     } else {
       container.setBars(models, animated: animated)
     }

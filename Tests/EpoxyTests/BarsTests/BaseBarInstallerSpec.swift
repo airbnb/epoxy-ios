@@ -10,7 +10,9 @@ import UIKit
 // MARK: - BaseBarInstallerSpec
 
 protocol BaseBarInstallerSpec {
-  func installBarContainer(in viewController: UIViewController)
+  func installBarContainer(
+    in viewController: UIViewController,
+    configuration: BarInstallerConfiguration)
     -> (container: InternalBarContainer, setBars: ([BarModeling]) -> Void)
 }
 
@@ -22,6 +24,7 @@ extension BaseBarInstallerSpec {
     let defaultSafeAreaInset: CGFloat = 20
     var window: UIWindow!
     var viewController: UIViewController!
+    var configuration: BarInstallerConfiguration!
     var container: InternalBarContainer!
     var setBars: (([BarModeling]) -> Void)!
 
@@ -34,10 +37,12 @@ extension BaseBarInstallerSpec {
       viewController.loadView()
       viewController.view.frame = window.bounds
 
+      configuration = BarInstallerConfiguration()
+
       window.rootViewController = viewController
       window.makeKeyAndVisible()
 
-      (container, setBars) = self.installBarContainer(in: viewController)
+      (container, setBars) = self.installBarContainer(in: viewController, configuration: configuration)
     }
 
     afterEach {
@@ -101,6 +106,47 @@ extension BaseBarInstallerSpec {
 
           container.insetMargins = false
           expect(container.layoutMargins[keyPath: container.position.inset]).toEventually(equal(0))
+        }
+      }
+    }
+
+    describe("BarInstallerConfiguration") {
+      context("with a non-nil applyBarModels") {
+        var didApply: Bool!
+
+        beforeEach {
+          didApply = false
+
+          configuration = BarInstallerConfiguration(applyBarModels: { apply in
+            didApply = true
+            apply()
+          })
+
+          (container, setBars) = self.installBarContainer(in: viewController, configuration: configuration)
+        }
+
+        afterEach {
+          didApply = nil
+        }
+
+        context("with the initial bars") {
+          it("should not call the applyBarModels closure") {
+            expect(didApply) == false
+          }
+        }
+
+        context("when setting subsequent bars") {
+          beforeEach {
+            setBars([StaticHeightBar.barModel(style: .init(height: 100))])
+          }
+
+          it("should call the applyBarModels closure") {
+            expect(didApply) == true
+          }
+
+          it("should apply the bars") {
+            expect(container.barViews).to(haveCount(1))
+          }
         }
       }
     }

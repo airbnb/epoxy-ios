@@ -17,9 +17,13 @@ public final class TopBarInstaller: NSObject {
 
   // MARK: Lifecycle
 
-  public init(viewController: UIViewController, bars: [BarModeling] = []) {
+  public init(
+    viewController: UIViewController,
+    bars: [BarModeling] = [],
+    configuration: BarInstallerConfiguration = .shared)
+  {
     self.viewController = viewController
-    installer = .init(viewController: viewController)
+    installer = .init(viewController: viewController, configuration: configuration)
     super.init()
 
     // We don't call `setNeedsStatusBarAppearanceUpdate` through `self.setBars(...)` here since it

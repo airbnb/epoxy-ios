@@ -44,7 +44,7 @@ final class CollectionViewSpec: QuickSpec {
           erasedItemWillDisplay = []
           erasedItemDidEndDisplaying = []
 
-          let section = SectionModel(items: [item])
+          let section = SectionModel(dataID: DefaultDataID.noneProvided, items: [item])
           collectionView.setSections([section], animated: false)
         }
 
@@ -115,7 +115,7 @@ final class CollectionViewSpec: QuickSpec {
           erasedItemWillDisplay = []
           erasedItemDidEndDisplaying = []
 
-          let section = SectionModel(items: [ItemModel(dataID: "dataID")])
+          let section = SectionModel(dataID: DefaultDataID.noneProvided, items: [ItemModel(dataID: "dataID")])
             .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [item])
           collectionView.setSections([section], animated: false)
         }
@@ -176,7 +176,7 @@ final class CollectionViewSpec: QuickSpec {
           var sectionDidEndDisplaying: [SectionModel.CallbackContext]!
 
           beforeEach {
-            let section = SectionModel(items: [itemModel])
+            let section = SectionModel(dataID: DefaultDataID.noneProvided, items: [itemModel])
               .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItemModel])
               .willDisplay { sectionWillDisplay.append($0) }
               .didEndDisplaying { sectionDidEndDisplaying.append($0) }
@@ -309,7 +309,7 @@ final class CollectionViewSpec: QuickSpec {
             didSetBehaviors = []
             erasedItemDidSetBehaviors = []
 
-            section = SectionModel(items: [item])
+            section = SectionModel(dataID: DefaultDataID.noneProvided, items: [item])
               .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItemModel])
           }
 
@@ -356,7 +356,7 @@ final class CollectionViewSpec: QuickSpec {
             didSetBehaviorsSupplementary = []
             erasedItemDidSetBehaviorsSupplementary = []
 
-            section = SectionModel(items: [itemModel])
+            section = SectionModel(dataID: DefaultDataID.noneProvided, items: [itemModel])
               .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItem])
           }
 
@@ -407,7 +407,7 @@ final class CollectionViewSpec: QuickSpec {
             didSetContent = []
             erasedItemDidSetContent = []
 
-            let section = SectionModel(items: [item])
+            let section = SectionModel(dataID: DefaultDataID.noneProvided, items: [item])
               .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItemModel])
 
             collectionView.setSections([section], animated: false)
@@ -439,7 +439,7 @@ final class CollectionViewSpec: QuickSpec {
             didSetContentSupplementary = []
             erasedItemDidSetContentSupplementary = []
 
-            let section = SectionModel(items: [itemModel])
+            let section = SectionModel(dataID: DefaultDataID.noneProvided, items: [itemModel])
               .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItem])
 
             collectionView.setSections([section], animated: false)
@@ -474,7 +474,7 @@ final class CollectionViewSpec: QuickSpec {
           didChangeState = []
           erasedItemDidChangeState = []
 
-          section = SectionModel(items: [item])
+          section = SectionModel(dataID: DefaultDataID.noneProvided, items: [item])
             .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItemModel])
           collectionView.setSections([section], animated: false)
           // Required to prevent a index path out of bounds exception during selection.
@@ -523,7 +523,7 @@ final class CollectionViewSpec: QuickSpec {
         itemDidSelect = []
         erasedItemDidSelect = []
 
-        let section = SectionModel(items: [item])
+        let section = SectionModel(dataID: DefaultDataID.noneProvided, items: [item])
           .supplementaryItems(ofKind: UICollectionView.elementKindSectionHeader, [supplementaryItemModel])
         collectionView.setSections([section], animated: false)
         // Required to prevent a index path out of bounds exception during selection.

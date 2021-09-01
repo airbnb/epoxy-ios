@@ -9,10 +9,12 @@ import UIKit
 
 final class BottomBarInstallerSpec: QuickSpec, BaseBarInstallerSpec {
 
-  func installBarContainer(in viewController: UIViewController)
+  func installBarContainer(
+    in viewController: UIViewController,
+    configuration: BarInstallerConfiguration)
     -> (container: InternalBarContainer, setBars: ([BarModeling]) -> Void)
   {
-    let barInstaller = BottomBarInstaller(viewController: viewController)
+    let barInstaller = BottomBarInstaller(viewController: viewController, configuration: configuration)
     viewController.view.layoutIfNeeded()
     barInstaller.install()
 

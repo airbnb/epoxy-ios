@@ -33,7 +33,7 @@ final class FlowLayoutSpec: QuickSpec {
 
     describe("when the items provide no information") {
       beforeEach {
-        collectionView.setSections([SectionModel(items: [itemModel])], animated: false)
+        collectionView.setSections([SectionModel(dataID: DefaultDataID.noneProvided, items: [itemModel])], animated: false)
       }
       it("uses the itemSize from the UICollectionViewFlowLayout") {
         let itemSize = collectionView.collectionView(
@@ -87,7 +87,7 @@ final class FlowLayoutSpec: QuickSpec {
     describe("when the items and the sections provide item sizes") {
       beforeEach {
         let itemModel = itemModel.flowLayoutItemSize(.init(width: 5, height: 5))
-        let section = SectionModel(items: [itemModel])
+        let section = SectionModel(dataID: DefaultDataID.noneProvided, items: [itemModel])
           .flowLayoutItemSize(CGSize(width: 6, height: 6))
         collectionView.setSections([section], animated: false)
       }
@@ -103,7 +103,7 @@ final class FlowLayoutSpec: QuickSpec {
 
     describe("when the section provides item sizes") {
       beforeEach {
-        let section = SectionModel(items: [itemModel])
+        let section = SectionModel(dataID: DefaultDataID.noneProvided, items: [itemModel])
           .flowLayoutItemSize(CGSize(width: 6, height: 6))
         collectionView.setSections([section], animated: false)
       }
@@ -119,7 +119,7 @@ final class FlowLayoutSpec: QuickSpec {
 
     describe("when the section models provide values") {
       beforeEach {
-        let section = SectionModel(items: [itemModel])
+        let section = SectionModel(dataID: DefaultDataID.noneProvided, items: [itemModel])
           .flowLayoutSectionInset(.init(top: 7, left: 7, bottom: 7, right: 7))
           .flowLayoutMinimumLineSpacing(8)
           .flowLayoutMinimumInteritemSpacing(9)
@@ -172,7 +172,7 @@ final class FlowLayoutSpec: QuickSpec {
     describe("when the section models provide values and there is a delegate") {
       let layoutDelegate = ProxyDelegate()
       beforeEach {
-        let section = SectionModel(items: [itemModel])
+        let section = SectionModel(dataID: DefaultDataID.noneProvided, items: [itemModel])
           .flowLayoutSectionInset(.init(top: 7, left: 7, bottom: 7, right: 7))
           .flowLayoutMinimumLineSpacing(8)
           .flowLayoutMinimumInteritemSpacing(9)
@@ -228,7 +228,7 @@ final class FlowLayoutSpec: QuickSpec {
         layout = UICollectionViewFlowLayout()
         collectionView = CollectionView(layout: layout)
         collectionView.frame = CGRect(x: 0, y: 0, width: 350, height: 350)
-        collectionView.setSections([SectionModel(items: [itemModel])], animated: false)
+        collectionView.setSections([SectionModel(dataID: DefaultDataID.noneProvided, items: [itemModel])], animated: false)
       }
       it("uses the default sizes") {
         let itemSize = collectionView.collectionView(

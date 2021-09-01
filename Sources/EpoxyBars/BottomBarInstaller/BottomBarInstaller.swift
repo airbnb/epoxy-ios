@@ -21,11 +21,12 @@ public final class BottomBarInstaller: NSObject {
   public init(
     viewController: UIViewController,
     avoidsKeyboard: Bool = false,
-    bars: [BarModeling] = [])
+    bars: [BarModeling] = [],
+    configuration: BarInstallerConfiguration = .shared)
   {
     self.viewController = viewController
     keyboardPositionWatcher.enabled = avoidsKeyboard
-    installer = .init(viewController: viewController)
+    installer = .init(viewController: viewController, configuration: configuration)
     super.init()
     installer.setBars(bars, animated: false)
   }
