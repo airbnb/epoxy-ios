@@ -32,7 +32,7 @@ final class TextFieldViewController: CollectionViewController {
     avoidsKeyboard: true,
     bars: [buttonRowBar])
 
-  private var username: String = "@airbnb" {
+  private var username = "@airbnb" {
     didSet { setItems([textFieldRowItem], animated: true) }
   }
 

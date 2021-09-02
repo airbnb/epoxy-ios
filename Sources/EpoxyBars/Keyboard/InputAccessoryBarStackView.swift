@@ -43,8 +43,6 @@ public final class InputAccessoryBarStackView: UIView {
 
   public let barStack: BarStackView
 
-  // MARK: UIView
-
   public override var intrinsicContentSize: CGSize {
     barStack.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
   }

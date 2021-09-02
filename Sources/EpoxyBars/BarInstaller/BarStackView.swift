@@ -146,8 +146,8 @@ public class BarStackView: UIStackView, EpoxyableView {
 
   /// Updates the contents of this stack to the stack modeled by the given model array, inserting,
   /// removing, and updating any bars as needed.
-  public func setBars(_ models: [BarModeling], animated: Bool) {
-    let updates = updateModels(models, animated: animated)
+  public func setBars(_ bars: [BarModeling], animated: Bool) {
+    let updates = updateModels(bars, animated: animated)
 
     updateWrapperZOrder()
 
