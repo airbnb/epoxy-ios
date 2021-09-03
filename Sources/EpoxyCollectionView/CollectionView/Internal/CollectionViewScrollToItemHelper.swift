@@ -214,7 +214,7 @@ final class CollectionViewScrollToItemHelper {
     case .partiallyOrFullyVisible(let frame):
       let targetOrigin = targetOriginForVisibleItem(
         withFrame: frame,
-        inVisibleBounds: collectionView.bounds,
+        inVisibleBounds: collectionView.bounds.inset(by: collectionView.adjustedContentInset),
         targetScrollPosition: scrollToItemContext.targetScrollPosition,
         scrollAxis: scrollAxis)
       let targetPosition: CGFloat
