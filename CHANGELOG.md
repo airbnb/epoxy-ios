@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   bars are applied to the underlying `BarContainer` by a bar installer, e.g. to defer bar model
   updates that might conflict with an in-flight shared element transition.
 
+### Fixed
+- Fixes an issue that could cause `CollectionView` scroll animation frames to have an incorrect
+  content offset when paired with a non-zero `adjustedContentInset`.
+
 ### Changed
 - Removed the default bar installer behavior where bar model updates were deferred while a view
   controller transition is in progress.
