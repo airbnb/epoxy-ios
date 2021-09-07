@@ -212,34 +212,23 @@ final class CollectionViewScrollToItemHelper {
     // currently are to the target origin, then change our content offset based on how far away we
     // are from that target.
     case .partiallyOrFullyVisible(let frame):
-      let targetOrigin = targetOriginForVisibleItem(
+      let targetContentOffset = targetContentOffsetForVisibleItem(
         withFrame: frame,
-        inVisibleBounds: collectionView.bounds.inset(by: collectionView.adjustedContentInset),
+        inBounds: collectionView.bounds,
+        contentSize: collectionView.contentSize,
+        adjustedContentInset: collectionView.adjustedContentInset,
         targetScrollPosition: scrollToItemContext.targetScrollPosition,
         scrollAxis: scrollAxis)
-      let targetPosition: CGFloat
-      let currentPosition: CGFloat
-      switch scrollAxis {
-      case .vertical:
-        targetPosition = targetOrigin.y
-        currentPosition = frame.minY
-      case .horizontal:
-        targetPosition = targetOrigin.x
-        currentPosition = frame.minX
-      }
 
-      let distanceToTargetPosition = currentPosition - targetPosition
-      switch distanceToTargetPosition {
+      let targetOffset = targetContentOffset[scrollAxis]
+      let currentOffset = collectionView.contentOffset[scrollAxis]
+      let distanceToTargetOffset = targetOffset - currentOffset
+
+      switch distanceToTargetOffset {
       case ...(-1):
-        switch scrollAxis {
-        case .vertical: collectionView.contentOffset.y += max(-offset, distanceToTargetPosition)
-        case .horizontal: collectionView.contentOffset.x += max(-offset, distanceToTargetPosition)
-        }
+        collectionView.contentOffset[scrollAxis] += max(-offset, distanceToTargetOffset)
       case 1...:
-        switch scrollAxis {
-        case .vertical: collectionView.contentOffset.y += min(offset, distanceToTargetPosition)
-        case .horizontal: collectionView.contentOffset.x += min(offset, distanceToTargetPosition)
-        }
+        collectionView.contentOffset[scrollAxis] += min(offset, distanceToTargetOffset)
       default:
         finalizeScrollingTowardItem(for: scrollToItemContext, animated: false)
       }
@@ -333,21 +322,23 @@ final class CollectionViewScrollToItemHelper {
       forTargetItemIndexPath: targetIndexPath,
       collectionView: collectionView)
 
+    let insetBounds = collectionView.bounds.inset(by: collectionView.adjustedContentInset)
+
     switch (scrollAxis, positionRelativeToVisibleBounds) {
     case (.vertical, .before):
       return .top
     case (.vertical, .after):
       return .bottom
     case (.vertical, .partiallyOrFullyVisible(let itemFrame)):
-      guard !collectionView.bounds.contains(itemFrame) else { return nil }
-      return itemFrame.midY < collectionView.bounds.midY ? .top : .bottom
+      guard !insetBounds.contains(itemFrame) else { return nil }
+      return itemFrame.midY < insetBounds.midY ? .top : .bottom
     case (.horizontal, .before):
       return .left
     case (.horizontal, .after):
       return .right
     case (.horizontal, .partiallyOrFullyVisible(let itemFrame)):
-      guard !collectionView.bounds.contains(itemFrame) else { return nil }
-      return itemFrame.midX < collectionView.bounds.midX ? .left : .right
+      guard !insetBounds.contains(itemFrame) else { return nil }
+      return itemFrame.midX < insetBounds.midX ? .left : .right
     default:
       EpoxyLogger.shared.assertionFailure("Unsupported scroll position.")
       return nil
@@ -357,46 +348,52 @@ final class CollectionViewScrollToItemHelper {
   // Returns the correct resting position for a scroll-to-item action for the current viewport.
   // This will be used to determine how much farther we need to programmatically scroll on each
   // animation tick.
-  private func targetOriginForVisibleItem(
+  private func targetContentOffsetForVisibleItem(
     withFrame itemFrame: CGRect,
-    inVisibleBounds visibleBounds: CGRect,
+    inBounds bounds: CGRect,
+    contentSize: CGSize,
+    adjustedContentInset: UIEdgeInsets,
     targetScrollPosition: UICollectionView.ScrollPosition,
     scrollAxis: ScrollAxis)
     -> CGPoint
   {
-    let itemSize: CGFloat
-    let contentOffset: CGFloat
-    let viewportSize: CGFloat
+    let itemPosition, itemSize, contentOffset, viewportSize, minContentOffset, maxContentOffset: CGFloat
+    let visibleBounds = bounds.inset(by: adjustedContentInset)
     switch scrollAxis {
     case .vertical:
+      itemPosition = itemFrame.minY
       itemSize = itemFrame.height
-      contentOffset = visibleBounds.minY
+      contentOffset = bounds.minY
       viewportSize = visibleBounds.height
+      minContentOffset = -adjustedContentInset.top
+      maxContentOffset = -adjustedContentInset.top + contentSize.height - visibleBounds.height
     case .horizontal:
+      itemPosition = itemFrame.minX
       itemSize = itemFrame.width
-      contentOffset = visibleBounds.minX
+      contentOffset = bounds.minX
       viewportSize = visibleBounds.width
+      minContentOffset = -adjustedContentInset.left
+      maxContentOffset = -adjustedContentInset.left + contentSize.width - visibleBounds.width
     }
 
     let newOffset: CGFloat
     switch targetScrollPosition {
     case .top, .left:
-      newOffset = contentOffset
+      newOffset = itemPosition + minContentOffset
     case .bottom, .right:
-      newOffset = contentOffset + viewportSize - itemSize
+      newOffset = itemPosition + itemSize - viewportSize + minContentOffset
     case .centeredVertically, .centeredHorizontally:
-      newOffset = contentOffset + (viewportSize / 2) - (itemSize / 2)
-    case []:
-      newOffset = 0
+      newOffset = itemPosition + (itemSize / 2) - (viewportSize / 2) + minContentOffset
     default:
       EpoxyLogger.shared.assertionFailure("Unsupported scroll position.")
       return itemFrame.origin
     }
 
-    switch scrollAxis {
-    case .vertical: return CGPoint(x: itemFrame.origin.x, y: newOffset)
-    case .horizontal: return CGPoint(x: newOffset, y: itemFrame.origin.y)
-    }
+    let clampedOffset = min(max(newOffset, minContentOffset), maxContentOffset)
+
+    var targetOffset = itemFrame.origin
+    targetOffset[scrollAxis] = clampedOffset
+    return targetOffset
   }
 
 }
@@ -422,4 +419,23 @@ private enum PositionRelativeToVisibleBounds {
   case before
   case after
   case partiallyOrFullyVisible(frame: CGRect)
+}
+
+// MARK: - CGPoint
+
+extension CGPoint {
+  fileprivate subscript(_ axis: ScrollAxis) -> CGFloat {
+    get {
+      switch axis {
+      case .vertical: return y
+      case .horizontal: return x
+      }
+    }
+    set {
+      switch axis {
+      case .vertical: y = newValue
+      case .horizontal: x = newValue
+      }
+    }
+  }
 }
