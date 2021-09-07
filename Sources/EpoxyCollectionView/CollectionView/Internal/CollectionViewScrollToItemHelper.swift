@@ -137,8 +137,9 @@ final class CollectionViewScrollToItemHelper {
     self.scrollToItemDisplayLink = scrollToItemDisplayLink
   }
 
-  /// Removes our scroll-to-item context and finalizes our custom scroll-to-item by invoking the original function. This guarantees that
-  /// our last frame of animation ends us in the correct position.
+  /// Removes our scroll-to-item context and finalizes our custom scroll-to-item by invoking the
+  /// original function. This guarantees that our last frame of animation ends us in the correct
+  /// position.
   private func finalizeScrollingTowardItem(
     for scrollToItemContext: ScrollToItemContext,
     animated: Bool)
@@ -194,18 +195,13 @@ final class CollectionViewScrollToItemHelper {
     let positionBeforeLayout = positionRelativeToVisibleBounds(
       forTargetItemIndexPath: scrollToItemContext.targetIndexPath,
       collectionView: collectionView)
+
     switch positionBeforeLayout {
     case .before:
-      switch scrollAxis {
-      case .vertical: collectionView.contentOffset.y -= offset
-      case .horizontal: collectionView.contentOffset.x -= offset
-      }
+      collectionView.contentOffset[scrollAxis] -= offset
 
     case .after:
-      switch scrollAxis {
-      case .vertical: collectionView.contentOffset.y += offset
-      case .horizontal: collectionView.contentOffset.x += offset
-      }
+      collectionView.contentOffset[scrollAxis] += offset
 
     // If the target item is partially or fully visible, then we don't need to apply a full `offset`
     // adjustment of the content offset. Instead, we do some special logic to look at how close we
@@ -278,8 +274,8 @@ final class CollectionViewScrollToItemHelper {
     return offset * 1.5
   }
 
-  // Returns the position (before, after, visible) of an item relative to the current viewport.
-  // Note that the position (before, after, visible) is agnostic of scroll axis.
+  /// Returns the position (before, after, visible) of an item relative to the current viewport.
+  /// Note that the position (before, after, visible) is agnostic of scroll axis.
   private func positionRelativeToVisibleBounds(
     forTargetItemIndexPath targetIndexPath: IndexPath,
     collectionView: UICollectionView)
@@ -306,9 +302,9 @@ final class CollectionViewScrollToItemHelper {
     }
   }
 
-  // If a scroll position is not specified, this function is called to find the closest scroll
-  // position to make the item as visible as possible. If the item is already completely visible,
-  // this function returns `nil`.
+  /// If a scroll position is not specified, this function is called to find the closest scroll
+  /// position to make the item as visible as possible. If the item is already completely visible,
+  /// this function returns `nil`.
   private func closestRestingScrollPosition(
     forTargetItemIndexPath targetIndexPath: IndexPath,
     collectionView: UICollectionView)
@@ -345,9 +341,10 @@ final class CollectionViewScrollToItemHelper {
     }
   }
 
-  // Returns the correct resting position for a scroll-to-item action for the current viewport.
-  // This will be used to determine how much farther we need to programmatically scroll on each
-  // animation tick.
+  /// Returns the correct content offset for a scroll-to-item action for the current viewport.
+  ///
+  /// This will be used to determine how much farther we need to programmatically scroll on each
+  /// animation tick.
   private func targetContentOffsetForVisibleItem(
     withFrame itemFrame: CGRect,
     inBounds bounds: CGRect,
@@ -357,20 +354,18 @@ final class CollectionViewScrollToItemHelper {
     scrollAxis: ScrollAxis)
     -> CGPoint
   {
-    let itemPosition, itemSize, contentOffset, viewportSize, minContentOffset, maxContentOffset: CGFloat
+    let itemPosition, itemSize, viewportSize, minContentOffset, maxContentOffset: CGFloat
     let visibleBounds = bounds.inset(by: adjustedContentInset)
     switch scrollAxis {
     case .vertical:
       itemPosition = itemFrame.minY
       itemSize = itemFrame.height
-      contentOffset = bounds.minY
       viewportSize = visibleBounds.height
       minContentOffset = -adjustedContentInset.top
       maxContentOffset = -adjustedContentInset.top + contentSize.height - visibleBounds.height
     case .horizontal:
       itemPosition = itemFrame.minX
       itemSize = itemFrame.width
-      contentOffset = bounds.minX
       viewportSize = visibleBounds.width
       minContentOffset = -adjustedContentInset.left
       maxContentOffset = -adjustedContentInset.left + contentSize.width - visibleBounds.width
@@ -424,7 +419,7 @@ private enum PositionRelativeToVisibleBounds {
 // MARK: - CGPoint
 
 extension CGPoint {
-  fileprivate subscript(_ axis: ScrollAxis) -> CGFloat {
+  fileprivate subscript(axis: ScrollAxis) -> CGFloat {
     get {
       switch axis {
       case .vertical: return y
