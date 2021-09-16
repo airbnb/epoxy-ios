@@ -116,6 +116,10 @@ final class MainViewController: NavigationController {
         didSelect: { [weak self] example in
           self?.state.showLayoutGroupsExample = example
         })
+    case .swiftUIToEpoxy:
+      return SwiftUIToEpoxyViewController()
+    case .epoxyToSwiftUI:
+      return EpoxyToSwiftUIViewController()
     }
     viewController.title = example.title
     return viewController

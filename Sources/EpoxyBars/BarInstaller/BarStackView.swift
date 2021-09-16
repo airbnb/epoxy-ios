@@ -325,6 +325,7 @@ public class BarStackView: UIStackView, EpoxyableView {
 
       for view in updates.removed {
         view.removeFromSuperview()
+        view.handleDidEndDisplaying(animated: false)
       }
     }
   }
@@ -368,6 +369,7 @@ public class BarStackView: UIStackView, EpoxyableView {
   private func completeAnimatedWrapperUpdates(_ updates: WrapperUpdates) {
     for view in updates.removed {
       view.removeFromSuperview()
+      view.handleDidEndDisplaying(animated: true)
     }
   }
 
