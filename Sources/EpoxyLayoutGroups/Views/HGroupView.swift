@@ -19,7 +19,17 @@ public final class HGroupView: UIView, EpoxyableView {
     translatesAutoresizingMaskIntoConstraints = false
     updateLayoutMargins()
     hGroup.install(in: self)
-    hGroup.constrainToMarginsWithHighPriorityBottom()
+
+    let bottom = hGroup.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor)
+    // using a low priority allows the HGroup to hug closely to the content
+    // on the vertical axis which is how UIStackView behaves
+    bottom.priority = .defaultLow
+    NSLayoutConstraint.activate([
+      hGroup.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+      hGroup.leadingAnchor.constraint(equalTo: layoutMarginsGuide.leadingAnchor),
+      hGroup.trailingAnchor.constraint(equalTo: layoutMarginsGuide.trailingAnchor),
+      bottom,
+    ])
   }
 
   required init?(coder: NSCoder) {

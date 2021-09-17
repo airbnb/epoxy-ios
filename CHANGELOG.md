@@ -16,6 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixes an issue that could cause `CollectionView` scroll animation frames to have an incorrect
   content offset when paired with a non-zero `adjustedContentInset`.
+- Fixes an issue that could cause `VGroupView` and `HGroupView` to grow too tall when nested in
+  containers that give them a larger height than their natural height.
 
 ### Changed
 - Removed the default bar installer behavior where bar model updates were deferred while a view
