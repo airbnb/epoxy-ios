@@ -77,7 +77,7 @@ public final class SwiftUIHostingView<RootView: View>: UIView, EpoxyableView {
     public static func == (lhs: Style, rhs: Style) -> Bool {
       lhs.reuseID == rhs.reuseID
     }
-    
+
     public func hash(into hasher: inout Hasher) {
       hasher.combine(reuseID)
     }
@@ -272,6 +272,9 @@ extension UIResponder {
 // MARK: - UIHostingController
 
 extension UIHostingController {
+
+  // MARK: Lifecycle
+
   /// Creates a `UIHostingController` that optionally ignores the `safeAreaInsets` when laying out
   /// its contained `RootView`.
   convenience public init(rootView: Content, ignoreSafeArea: Bool) {
@@ -281,6 +284,8 @@ extension UIHostingController {
       disableSafeArea()
     }
   }
+
+  // MARK: Private
 
   /// Creates a dynamic subclass of this hosting controller's view that ignores its safe area
   /// insets by overriding `safeAreaInsets` and returning `.zero`.
