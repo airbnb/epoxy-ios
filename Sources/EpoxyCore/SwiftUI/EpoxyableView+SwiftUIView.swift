@@ -265,8 +265,8 @@ final class EpoxyableViewContainer<SwiftUIView: UIViewRepresentable, UIViewType:
   override var intrinsicContentSize: CGSize {
     uiView.systemLayoutSizeFitting(
       UIViewType.layoutFittingCompressedSize,
-      withHorizontalFittingPriority: .defaultLow,
-      verticalFittingPriority: .defaultLow)
+      withHorizontalFittingPriority: .fittingSizeLevel,
+      verticalFittingPriority: .fittingSizeLevel)
   }
 
   // MARK: Private
