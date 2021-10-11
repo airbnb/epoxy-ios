@@ -50,6 +50,9 @@ struct DemoView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding()
+    .border(Color.red)
+    .epoxyLayoutMargins()
+    .border(Color.blue)
     .onAppear(perform: { print("\(id) appeared") })
     .onDisappear(perform: { print("\(id) disappeared") })
   }

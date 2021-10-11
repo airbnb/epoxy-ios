@@ -1,17 +1,18 @@
 // Created by eric_horacek on 9/16/21.
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
+import Combine
 import SwiftUI
 
 // MARK: - SwiftUIHostingViewReuseID
 
-/// The ID that's dictates the reuse behavior of a `SwiftUIHostingView`.
+/// The ID that dictates the reuse behavior of a `EpoxySwiftUIHostingView`.
 public enum SwiftUIHostingViewReuseID: Hashable {
-  /// Instances of a `SwiftUIHostingView` with `RootView`s of same type can be reused within the
-  /// Epoxy container.
+  /// Instances of a `EpoxySwiftUIHostingView` with `RootView`s of same type can be reused within
+  /// the Epoxy container.
   case reusable
-  /// Instances of a `SwiftUIHostingView` with `RootView`s of same type can only reused within the
-  /// Epoxy container when they have identical `reuseID`s.
+  /// Instances of a `EpoxySwiftUIHostingView` with `RootView`s of same type can only reused within
+  /// the Epoxy container when they have identical `reuseID`s.
   case unique(reuseID: AnyHashable)
 }
 
@@ -22,14 +23,14 @@ extension CallbackContextEpoxyModeled
   Self: WillDisplayProviding & DidEndDisplayingProviding,
   CallbackContext: ViewProviding & AnimatedProviding
 {
-  /// Updates the appearance state of a `SwiftUIHostingView` in coordination with the `willDisplay`
-  /// and `didEndDisplaying` callbacks of this `EpoxyableModel`.
+  /// Updates the appearance state of a `EpoxySwiftUIHostingView` in coordination with the
+  /// `willDisplay` and `didEndDisplaying` callbacks of this `EpoxyableModel`.
   ///
   /// - Note: You should only need to call then from the implementation of a concrete
   ///   `EpoxyableModel` convenience vendor method, e.g. `SwiftUI.View.itemModel(…)`.
   public func linkDisplayLifecycle<RootView: View>() -> Self
     where
-    CallbackContext.View == SwiftUIHostingView<RootView>
+    CallbackContext.View == EpoxySwiftUIHostingView<RootView>
   {
     willDisplay { context in
       context.view.handleWillDisplay(animated: context.animated)
@@ -40,22 +41,34 @@ extension CallbackContextEpoxyModeled
   }
 }
 
-// MARK: - SwiftUIHostingView
+// MARK: - EpoxySwiftUIHostingView
 
-public final class SwiftUIHostingView<RootView: View>: UIView, EpoxyableView {
+/// A `UIView` that hosts a SwiftUI view within an Epoxy container, e.g. an Epoxy `CollectionView`.
+///
+/// Wraps an `EpoxySwiftUIHostingController` and adds it as a child view controller to the next
+/// ancestor view controller in the hierarchy.
+///
+/// There's a private API that accomplishes this same behavior without needing a `UIViewController`:
+/// `_UIHostingView`, but we can't safely use it as 1) the behavior may change out from under us, 2)
+/// the API is private and 3) the `_UIHostingView` doesn't not accept setting a new `View` instance.
+///
+/// - SeeAlso: `EpoxySwiftUIHostingController`
+public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableView {
 
   // MARK: Lifecycle
 
   public init(style: Style) {
     // Ignore the safe area to ensure the view isn't laid out incorrectly when being sized while
     // overlapping the safe area.
-    viewController = UIHostingController(
-      rootView: style.initialContent.rootView,
+    viewController = EpoxySwiftUIHostingController(
+      rootView: .init(environment: epoxyEnvironment, content: style.initialContent.rootView),
       ignoreSafeArea: true)
 
     dataID = style.initialContent.dataID ?? DefaultDataID.noneProvided as AnyHashable
 
     super.init(frame: .zero)
+
+    layoutMargins = .zero
   }
 
   @available(*, unavailable)
@@ -115,7 +128,7 @@ public final class SwiftUIHostingView<RootView: View>: UIView, EpoxyableView {
       addViewControllerIfNeeded()
     }
 
-    viewController.rootView = content.rootView
+    viewController.rootView = .init(environment: epoxyEnvironment, content: content.rootView)
     dataID = content.dataID ?? DefaultDataID.noneProvided as AnyHashable
 
     /// This is required to ensure that views with new content are properly resized.
@@ -125,7 +138,30 @@ public final class SwiftUIHostingView<RootView: View>: UIView, EpoxyableView {
   public override func layoutMarginsDidChange() {
     super.layoutMarginsDidChange()
 
-    // TODO: Pass through layout margins to the contained SwiftUI view.
+    let margins = layoutMargins
+    switch effectiveUserInterfaceLayoutDirection {
+    case .rightToLeft:
+      epoxyEnvironment.layoutMargins = .init(
+        top: margins.top,
+        leading: margins.right,
+        bottom: margins.bottom,
+        trailing: margins.left)
+    case .leftToRight:
+      fallthrough
+    @unknown default:
+      epoxyEnvironment.layoutMargins = .init(
+        top: margins.top,
+        leading: margins.left,
+        bottom: margins.bottom,
+        trailing: margins.right)
+    }
+
+    // Allow the layout margins update to fully propagate through to the SwiftUI View before
+    // invalidating the layout.
+    DispatchQueue.main.async {
+      print("size changed")
+      self.viewController.view.invalidateIntrinsicContentSize()
+    }
   }
 
   // MARK: Internal
@@ -144,7 +180,8 @@ public final class SwiftUIHostingView<RootView: View>: UIView, EpoxyableView {
 
   // MARK: Private
 
-  private let viewController: UIHostingController<RootView>
+  private let viewController: EpoxySwiftUIHostingController<EpoxyHostingView<RootView>>
+  private let epoxyEnvironment = EpoxyHostingEnvironment()
   private var dataID: AnyHashable
   private var state: AppearanceState = .disappeared
 
@@ -203,6 +240,11 @@ public final class SwiftUIHostingView<RootView: View>: UIView, EpoxyableView {
   }
 
   private func addViewControllerIfNeeded() {
+    // This isn't great, and means that we're going to add this view controller as a child view
+    // controller of a view controller somewhere else in the hierarchy, which the author of that
+    // view controller may not be expecting. However there's not really a better pathway forward
+    // here without requiring a view controller instance to be passed all the way through, which is
+    // both burdensome and error-prone.
     guard let nextViewController = superview?.next(UIViewController.self) else {
       EpoxyLogger.shared.assertionFailure(
         """
@@ -250,7 +292,8 @@ public final class SwiftUIHostingView<RootView: View>: UIView, EpoxyableView {
 
 // MARK: - AppearanceState
 
-/// The appearance state of a `UIHostingController` contained within a `SwiftUIHostingView`.
+/// The appearance state of a `EpoxySwiftUIHostingController` contained within a
+/// `EpoxySwiftUIHostingView`.
 private enum AppearanceState: Equatable {
   case appearing(animated: Bool)
   case appeared
@@ -269,68 +312,15 @@ extension UIResponder {
   }
 }
 
-// MARK: - UIHostingController
+final class EpoxyHostingEnvironment: ObservableObject {
+  @Published var layoutMargins = EdgeInsets()
+}
 
-extension UIHostingController {
+struct EpoxyHostingView<Content: View>: View {
+  @ObservedObject var environment: EpoxyHostingEnvironment
+  var content: Content
 
-  // MARK: Lifecycle
-
-  /// Creates a `UIHostingController` that optionally ignores the `safeAreaInsets` when laying out
-  /// its contained `RootView`.
-  convenience public init(rootView: Content, ignoreSafeArea: Bool) {
-    self.init(rootView: rootView)
-
-    if ignoreSafeArea {
-      disableSafeArea()
-    }
-  }
-
-  // MARK: Private
-
-  /// Creates a dynamic subclass of this hosting controller's view that ignores its safe area
-  /// insets by overriding `safeAreaInsets` and returning `.zero`.
-  ///
-  /// This isn't possible at compile time since we're can't override methods in a private view type.
-  private func disableSafeArea() {
-    guard let viewClass = object_getClass(view) else {
-      EpoxyLogger.shared.assertionFailure(
-        "Unable to determine class of \(String(describing: view))")
-      return
-    }
-
-    let viewClassName = class_getName(viewClass)
-    let viewSubclassName = String(cString: viewClassName).appending("_EpoxySafeAreaOverride")
-
-    // The subclass already exists, just set the class of `view` and return.
-    if let subclass = NSClassFromString(viewSubclassName) {
-      object_setClass(view, subclass)
-      return
-    }
-
-    guard let viewSubclassNameUTF8 = (viewSubclassName as NSString).utf8String else {
-      EpoxyLogger.shared.assertionFailure("Unable to get utf8String of \(viewSubclassName)")
-      return
-    }
-
-    guard let viewSubclass = objc_allocateClassPair(viewClass, viewSubclassNameUTF8, 0) else {
-      EpoxyLogger.shared.assertionFailure(
-        "Unable to subclass \(viewClass) with \(viewSubclassNameUTF8)")
-      return
-    }
-
-    let selector = #selector(getter: UIView.safeAreaInsets)
-    guard let method = class_getInstanceMethod(UIView.self, selector) else {
-      EpoxyLogger.shared.assertionFailure("Unable to locate method \(selector) on \(UIView.self)")
-      objc_disposeClassPair(viewSubclass)
-      return
-    }
-
-    let safeAreaInsetsOverride: @convention(block) (AnyObject) -> UIEdgeInsets = { _ in .zero }
-    let implementation = imp_implementationWithBlock(safeAreaInsetsOverride)
-    let typeEncoding = method_getTypeEncoding(method)
-    class_addMethod(viewSubclass, selector, implementation, typeEncoding)
-
-    objc_registerClassPair(viewSubclass)
-    object_setClass(view, viewSubclass)
+  var body: some View {
+    content.environment(\.epoxyLayoutMargins, environment.layoutMargins)
   }
 }

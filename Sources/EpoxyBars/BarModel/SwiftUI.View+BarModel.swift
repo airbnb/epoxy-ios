@@ -10,13 +10,13 @@ extension View {
   /// - Parameters:
   ///   - dataID: An ID that uniquely identifies this item relative to other items in the
   ///     same collection.
-  ///   - reuseID: The ID that's dictates the reuse behavior of the underlying `SwiftUIHostingView`.
+  ///   - reuseID: The ID that's dictates the reuse behavior of the `EpoxySwiftUIHostingView`.
   public func barModel(
     dataID: AnyHashable? = nil,
     reuseID: SwiftUIHostingViewReuseID = .reusable)
-    -> BarModel<SwiftUIHostingView<Self>>
+    -> BarModel<EpoxySwiftUIHostingView<Self>>
   {
-    SwiftUIHostingView<Self>.barModel(
+    EpoxySwiftUIHostingView<Self>.barModel(
       dataID: dataID,
       content: .init(rootView: self, dataID: dataID),
       style: .init(reuseID: reuseID, initialContent: .init(rootView: self, dataID: dataID)))
