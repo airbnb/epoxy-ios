@@ -28,29 +28,31 @@ final class SwiftUIToEpoxyViewController: CollectionViewController {
   private lazy var bottomBarInstaller = BottomBarInstaller(viewController: self, bars: bars)
 
   private var items: [ItemModeling] {
-    (1..<100).map { (dataID: Int) in
-      DemoView(id: dataID).itemModel(dataID: dataID)
+    (1...100).map { (index: Int) in
+      DemoView(id: "Row \(index) ", wordCount: index).itemModel(dataID: index)
     }
   }
 
   @BarModelBuilder
   private var bars: [BarModeling] {
-    DemoView(id: 15).barModel()
+    Divider().barModel()
+    DemoView(id: "Bottom Bar", wordCount: 20).barModel()
   }
 }
 
 // MARK: - DemoView
 
 struct DemoView: View {
-  var id: Int
+  var id: String
+  var wordCount: Int
 
   var body: some View {
     VStack(alignment: .leading) {
-      Text("\(id) \(BeloIpsum.sentence(count: 1, wordCount: id))")
+      Text("\(id) \(BeloIpsum.sentence(count: 1, wordCount: wordCount))")
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding()
-    // Ensure that the background color underlaps the bottom safe area in the bar installer.
+    // Ensure that the background color underlaps the bottom safe area in the bottom bar.
     .epoxyLayoutMargins()
     .onAppear { print("\(id) appeared") }
     .onDisappear { print("\(id) disappeared") }
