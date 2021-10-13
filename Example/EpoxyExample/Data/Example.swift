@@ -38,9 +38,9 @@ enum Example: CaseIterable {
     case .layoutGroups:
       return "LayoutGroups"
     case .swiftUIToEpoxy:
-      return "SwiftUI → Epoxy"
+      return "SwiftUI in Epoxy"
     case .epoxyToSwiftUI:
-      return  "Epoxy → SwiftUI"
+      return  "Epoxy in SwiftUI"
     }
   }
 
