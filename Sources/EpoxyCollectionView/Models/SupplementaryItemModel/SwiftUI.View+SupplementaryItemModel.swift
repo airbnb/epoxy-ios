@@ -10,16 +10,18 @@ extension View {
   /// - Parameters:
   ///   - dataID: An ID that uniquely identifies this item relative to other items in the
   ///     same collection.
-  ///   - reuseID: The ID that's dictates the reuse behavior of the `EpoxySwiftUIHostingView`.
+  ///   - reuseBehavior: The reuse behavior of the `EpoxySwiftUIHostingView`.
   public func supplementaryItemModel(
     dataID: AnyHashable,
-    reuseID: SwiftUIHostingViewReuseID = .reusable)
+    reuseBehavior: SwiftUIHostingViewReuseBehavior = .reusable)
     -> SupplementaryItemModel<EpoxySwiftUIHostingView<Self>>
   {
     EpoxySwiftUIHostingView<Self>.supplementaryItemModel(
       dataID: dataID,
       content: .init(rootView: self, dataID: dataID),
-      style: .init(reuseID: reuseID, initialContent: .init(rootView: self, dataID: dataID)))
+      style: .init(
+        reuseBehavior: reuseBehavior,
+        initialContent: .init(rootView: self, dataID: dataID)))
       .linkDisplayLifecycle()
   }
 }

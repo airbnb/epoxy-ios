@@ -4,12 +4,14 @@
 import Combine
 import SwiftUI
 
-// MARK: - SwiftUIHostingViewReuseID
+// MARK: - SwiftUIHostingViewReuseBehavior
 
-/// The ID that dictates the reuse behavior of a `EpoxySwiftUIHostingView`.
-public enum SwiftUIHostingViewReuseID: Hashable {
+/// The reuse behavior of an `EpoxySwiftUIHostingView`.
+public enum SwiftUIHostingViewReuseBehavior: Hashable {
   /// Instances of a `EpoxySwiftUIHostingView` with `RootView`s of same type can be reused within
   /// the Epoxy container.
+  ///
+  /// This is the default reuse behavior.
   case reusable
   /// Instances of a `EpoxySwiftUIHostingView` with `RootView`s of same type can only reused within
   /// the Epoxy container when they have identical `reuseID`s.
@@ -79,20 +81,20 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   // MARK: Public
 
   public struct Style: Hashable {
-    public init(reuseID: SwiftUIHostingViewReuseID, initialContent: Content) {
-      self.reuseID = reuseID
+    public init(reuseBehavior: SwiftUIHostingViewReuseBehavior, initialContent: Content) {
+      self.reuseBehavior = reuseBehavior
       self.initialContent = initialContent
     }
 
-    public var reuseID: SwiftUIHostingViewReuseID
+    public var reuseBehavior: SwiftUIHostingViewReuseBehavior
     public var initialContent: Content
 
     public static func == (lhs: Style, rhs: Style) -> Bool {
-      lhs.reuseID == rhs.reuseID
+      lhs.reuseBehavior == rhs.reuseBehavior
     }
 
     public func hash(into hasher: inout Hasher) {
-      hasher.combine(reuseID)
+      hasher.combine(reuseBehavior)
     }
   }
 
