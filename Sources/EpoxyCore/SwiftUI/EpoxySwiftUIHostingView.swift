@@ -123,13 +123,13 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   }
 
   public func setContent(_ content: Content, animated: Bool) {
+    viewController.rootView = .init(environment: epoxyEnvironment, content: content.rootView)
+    dataID = content.dataID ?? DefaultDataID.noneProvided as AnyHashable
+
     // The view controller must be added to the view controller hierarchy to measure its content.
     if window != nil {
       addViewControllerIfNeeded()
     }
-
-    viewController.rootView = .init(environment: epoxyEnvironment, content: content.rootView)
-    dataID = content.dataID ?? DefaultDataID.noneProvided as AnyHashable
 
     /// This is required to ensure that views with new content are properly resized.
     viewController.view.invalidateIntrinsicContentSize()
@@ -159,20 +159,17 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     // Allow the layout margins update to fully propagate through to the SwiftUI View before
     // invalidating the layout.
     DispatchQueue.main.async {
-      print("size changed")
       self.viewController.view.invalidateIntrinsicContentSize()
     }
   }
 
-  // MARK: Internal
-
-  func handleWillDisplay(animated: Bool) {
+  public func handleWillDisplay(animated: Bool) {
     guard state != .appeared, window != nil else { return }
     transition(to: .appearing(animated: animated))
     transition(to: .appeared)
   }
 
-  func handleDidEndDisplaying(animated: Bool) {
+  public func handleDidEndDisplaying(animated: Bool) {
     guard state != .disappeared else { return }
     transition(to: .disappearing(animated: animated))
     transition(to: .disappeared)
@@ -180,7 +177,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
 
   // MARK: Private
 
-  private let viewController: EpoxySwiftUIHostingController<EpoxyHostingView<RootView>>
+  private let viewController: EpoxySwiftUIHostingController<EpoxyHostingWrapper<RootView>>
   private let epoxyEnvironment = EpoxyHostingEnvironment()
   private var dataID: AnyHashable
   private var state: AppearanceState = .disappeared
@@ -199,20 +196,17 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
       viewController.beginAppearanceTransition(false, animated: animated)
     case (to: .disappeared, from: .disappearing):
       removeViewControllerIfNeeded()
-      viewController.endAppearanceTransition()
     case (to: .appeared, from: .appearing):
       viewController.endAppearanceTransition()
     case (to: .disappeared, from: .appeared):
       viewController.beginAppearanceTransition(false, animated: true)
       removeViewControllerIfNeeded()
-      viewController.endAppearanceTransition()
     case (to: .appeared, from: .disappearing(let animated)):
       viewController.beginAppearanceTransition(true, animated: animated)
       viewController.endAppearanceTransition()
     case (to: .disappeared, from: .appearing(let animated)):
       viewController.beginAppearanceTransition(false, animated: animated)
       removeViewControllerIfNeeded()
-      viewController.endAppearanceTransition()
     case (to: .appeared, from: .disappeared):
       viewController.beginAppearanceTransition(true, animated: false)
       addViewControllerIfNeeded()
@@ -312,11 +306,19 @@ extension UIResponder {
   }
 }
 
+// MARK: - EpoxyHostingEnvironment
+
+/// The object that is used to communicate values to SwiftUI views within an
+/// `EpoxySwiftUIHostingController`, e.g. layout margins.
 final class EpoxyHostingEnvironment: ObservableObject {
   @Published var layoutMargins = EdgeInsets()
 }
 
-struct EpoxyHostingView<Content: View>: View {
+// MARK: - EpoxyHostingWrapper
+
+/// The wrapper view that is used to communicate values to SwiftUI views within an
+/// `EpoxySwiftUIHostingController`, e.g. layout margins.
+struct EpoxyHostingWrapper<Content: View>: View {
   @ObservedObject var environment: EpoxyHostingEnvironment
   var content: Content
 

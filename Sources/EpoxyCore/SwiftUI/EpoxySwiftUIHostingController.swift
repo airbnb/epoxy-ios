@@ -12,13 +12,13 @@ import SwiftUI
 /// collection view cells out of automated view controller impression tracking.
 ///
 /// - SeeAlso: `EpoxySwiftUIHostingView`
-public final class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Content> {
+open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Content> {
 
   // MARK: Lifecycle
 
   /// Creates a `UIHostingController` that optionally ignores the `safeAreaInsets` when laying out
   /// its contained `RootView`.
-  convenience public init(rootView: Content, ignoreSafeArea: Bool) {
+  public convenience init(rootView: Content, ignoreSafeArea: Bool) {
     self.init(rootView: rootView)
 
     if ignoreSafeArea {
@@ -31,7 +31,7 @@ public final class EpoxySwiftUIHostingController<Content: View>: UIHostingContro
   /// Creates a dynamic subclass of this hosting controller's view that ignores its safe area
   /// insets by overriding `safeAreaInsets` and returning `.zero`.
   ///
-  /// This isn't possible at compile time since we're can't override methods in a private view type.
+  /// This isn't possible at compile time since we can't override methods in a private view type.
   ///
   /// There's a private API that accomplishes this: `_disableSafeArea`, but we can't safely override
   /// it as the behavior may change out from under us.

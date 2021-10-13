@@ -53,7 +53,7 @@ struct DemoView: View {
     .border(Color.red)
     .epoxyLayoutMargins()
     .border(Color.blue)
-    .onAppear(perform: { print("\(id) appeared") })
-    .onDisappear(perform: { print("\(id) disappeared") })
+    .onAppear { print("\(id) appeared") }
+    .onDisappear { print("\(id) disappeared") }
   }
 }

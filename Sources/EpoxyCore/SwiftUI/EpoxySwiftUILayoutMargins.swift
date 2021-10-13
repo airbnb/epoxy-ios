@@ -3,27 +3,45 @@
 
 import SwiftUI
 
-private struct EpoxyLayoutMargins: EnvironmentKey {
-  static let defaultValue = EdgeInsets()
-}
+// MARK: - View
 
-extension EnvironmentValues {
-  var epoxyLayoutMargins: EdgeInsets {
-    get { self[EpoxyLayoutMargins.self] }
-    set { self[EpoxyLayoutMargins.self] = newValue }
+extension View {
+  /// Applies the layout margins from the parent `EpoxySwiftUIHostingView` to this `View`, if there
+  /// are any.
+  ///
+  /// Can be used to have a background color in SwiftUI underlap the safe area within a bar
+  /// installer, for example.
+  ///
+  /// These margins are propagated via the `EnvironmentValues.epoxyLayoutMargins`.
+  public func epoxyLayoutMargins() -> some View {
+    modifier(EpoxyLayoutMarginsPadding())
   }
 }
 
-struct EpoxyLayoutMarginsPadding: ViewModifier {
+// MARK: - EnvironmentValues
+
+extension EnvironmentValues {
+  /// The layout margins of the parent `EpoxySwiftUIHostingView`, else zero if there is none.
+  public var epoxyLayoutMargins: EdgeInsets {
+    get { self[EpoxyLayoutMarginsKey.self] }
+    set { self[EpoxyLayoutMarginsKey.self] = newValue }
+  }
+}
+
+// MARK: - EpoxyLayoutMarginsKey
+
+private struct EpoxyLayoutMarginsKey: EnvironmentKey {
+  static let defaultValue = EdgeInsets()
+}
+
+// MARK: - EpoxyLayoutMarginsPadding
+
+/// A view modifier that applies the layout margins from an enclosing `EpoxySwiftUIHostingView` to
+/// the modified `View`.
+private struct EpoxyLayoutMarginsPadding: ViewModifier {
   @Environment(\.epoxyLayoutMargins) var epoxyLayoutMargins
 
   func body(content: Content) -> some View {
     content.padding(epoxyLayoutMargins)
-  }
-}
-
-extension View {
-  public func epoxyLayoutMargins() -> some View {
-    modifier(EpoxyLayoutMarginsPadding())
   }
 }
