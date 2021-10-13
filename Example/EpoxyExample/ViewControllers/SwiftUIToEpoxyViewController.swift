@@ -50,9 +50,8 @@ struct DemoView: View {
     }
     .frame(maxWidth: .infinity, alignment: .leading)
     .padding()
-    .border(Color.red)
+    // Ensure that the background color underlaps the bottom safe area in the bar installer.
     .epoxyLayoutMargins()
-    .border(Color.blue)
     .onAppear { print("\(id) appeared") }
     .onDisappear { print("\(id) disappeared") }
   }
