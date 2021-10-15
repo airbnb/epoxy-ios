@@ -274,6 +274,6 @@ extension BarModel: CallbackContextEpoxyModeled {
 /// removed and a new bar view will be created and inserted in its place.
 struct DiffIdentifier: Hashable {
   var dataID: AnyHashable
-  // The `View.Type` wrapped in `ObjectIdentifier` since `AnyClass` is not `Hashable`.
-  var viewClass: ObjectIdentifier
+  // The `View.Type` wrapped in a `ClassReference` since `AnyClass` is not `Hashable`.
+  var viewClass: ClassReference
 }

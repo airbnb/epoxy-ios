@@ -248,7 +248,7 @@ extension SupplementaryItemModel: CallbackContextEpoxyModeled {
 /// removed and a new item view will be created and inserted in its place.
 private struct DiffIdentifier: Hashable {
   var dataID: AnyHashable
-  // The `View.Type` wrapped in `ObjectIdentifier` since `AnyClass` is not `Hashable`.
-  var viewClass: ObjectIdentifier
+  // The `View.Type` wrapped in `ClassReference` since `AnyClass` is not `Hashable`.
+  var viewClass: ClassReference
   var styleID: AnyHashable?
 }
