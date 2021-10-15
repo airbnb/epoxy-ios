@@ -138,8 +138,8 @@ final class CollectionViewScrollToItemHelper {
         minimum: 80,
         maximum: 120,
         preferred: 120)
-      scrollToItemDisplayLink.add(to: .main, forMode: .common)
     }
+    scrollToItemDisplayLink.add(to: .main, forMode: .common)
     self.scrollToItemDisplayLink = scrollToItemDisplayLink
   }
 
