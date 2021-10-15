@@ -34,6 +34,6 @@ extension ClassReference: Hashable {
 
 extension ClassReference: CustomStringConvertible {
   public var description: String {
-    String(describing: ObjectIdentifier(`class`))
+    String(describing: `class`)
   }
 }
