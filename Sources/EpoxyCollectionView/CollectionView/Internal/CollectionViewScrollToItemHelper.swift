@@ -134,10 +134,12 @@ final class CollectionViewScrollToItemHelper {
       target: self,
       selector: #selector(scrollToItemDisplayLinkFired))
     if #available(iOS 15.0, *) {
+      #if swift(<5.5) // Proxy check for being built with the iOS 14 & below SDK, running on iOS 15.
       scrollToItemDisplayLink.preferredFrameRateRange = CAFrameRateRange(
         minimum: 80,
         maximum: 120,
         preferred: 120)
+      #endif
     }
     scrollToItemDisplayLink.add(to: .main, forMode: .common)
     self.scrollToItemDisplayLink = scrollToItemDisplayLink
