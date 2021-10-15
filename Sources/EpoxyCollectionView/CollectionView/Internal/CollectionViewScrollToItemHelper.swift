@@ -133,7 +133,13 @@ final class CollectionViewScrollToItemHelper {
     let scrollToItemDisplayLink = CADisplayLink(
       target: self,
       selector: #selector(scrollToItemDisplayLinkFired))
-    scrollToItemDisplayLink.add(to: .main, forMode: .common)
+    if #available(iOS 15.0, *) {
+      scrollToItemDisplayLink.preferredFrameRateRange = CAFrameRateRange(
+        minimum: 80,
+        maximum: 120,
+        preferred: 120)
+      scrollToItemDisplayLink.add(to: .main, forMode: .common)
+    }
     self.scrollToItemDisplayLink = scrollToItemDisplayLink
   }
 
