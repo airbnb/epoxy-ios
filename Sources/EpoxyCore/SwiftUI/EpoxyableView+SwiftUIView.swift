@@ -331,6 +331,14 @@ private final class EpoxyableViewContainer<SwiftUIView, UIViewType>: UILabel
     didSet { updateView(from: oldValue) }
   }
 
+  override var intrinsicContentSize: CGSize {
+    if let size = latestMeasuredSize {
+      return size
+    }
+
+    return measureView()
+  }
+
   override func layoutSubviews() {
     super.layoutSubviews()
 
@@ -341,17 +349,14 @@ private final class EpoxyableViewContainer<SwiftUIView, UIViewType>: UILabel
     }
   }
 
-  override var intrinsicContentSize: CGSize {
-    if let size = latestMeasuredSize {
-      return size
-    }
-
-    return measureView()
-  }
-
   // MARK: Private
 
   private let context: IdealHeightContainerContext
+
+  /// The bounds size at the time of the latest measurement.
+  ///
+  /// Used to ensure we don't do extraneous measurements if the bounds haven't changed.
+  private var latestMeasurementBoundsSize: CGSize?
 
   /// The most recently measured intrinsic content size of the `uiView`, else `nil` if it has not
   /// yet been measured.
@@ -361,11 +366,6 @@ private final class EpoxyableViewContainer<SwiftUIView, UIViewType>: UILabel
       invalidateIntrinsicContentSize()
     }
   }
-
-  /// The bounds size at the time of the latest measurement.
-  ///
-  /// Used to ensure we don't do extraneous measurements if the bounds haven't changed.
-  private var latestMeasurementBoundsSize: CGSize?
 
   private func updateView(from oldValue: UIViewType) {
     guard uiView !== oldValue else { return }
