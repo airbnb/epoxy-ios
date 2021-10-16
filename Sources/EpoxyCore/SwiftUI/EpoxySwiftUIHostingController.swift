@@ -34,7 +34,7 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
   /// This isn't possible at compile time since we can't override methods in a private view type.
   ///
   /// There's a private API that accomplishes this: `_disableSafeArea`, but we can't safely override
-  /// it as the behavior may change out from under us.
+  /// it as the behavior may change out from under us, and, well, it's a private API.
   private func disableSafeArea() {
     guard let viewClass = object_getClass(view) else {
       EpoxyLogger.shared.assertionFailure(

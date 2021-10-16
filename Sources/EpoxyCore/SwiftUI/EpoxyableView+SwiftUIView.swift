@@ -13,7 +13,13 @@ extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurable
     behaviors: Behaviors? = nil)
     -> some View
   {
-    SwiftUIEpoxyableView<Self>(content: content, style: style, behaviors: behaviors)
+    IdealHeightContainer { context in
+      SwiftUIEpoxyableView<Self>(
+        content: content,
+        style: style,
+        behaviors: behaviors,
+        context: context)
+    }
   }
 }
 
@@ -28,7 +34,9 @@ extension StyledView
     behaviors: Behaviors? = nil)
     -> some View
   {
-    SwiftUIStylelessEpoxyableView<Self>(content: content, behaviors: behaviors)
+    IdealHeightContainer { context in
+      SwiftUIStylelessEpoxyableView<Self>(content: content, behaviors: behaviors, context: context)
+    }
   }
 }
 
@@ -43,7 +51,9 @@ extension StyledView
     behaviors: Behaviors? = nil)
     -> some View
   {
-    SwiftUIContentlessEpoxyableView<Self>(style: style, behaviors: behaviors)
+    IdealHeightContainer { context in
+      SwiftUIContentlessEpoxyableView<Self>(style: style, behaviors: behaviors, context: context)
+    }
   }
 }
 
@@ -58,21 +68,57 @@ extension StyledView
     behaviors: Behaviors? = nil)
     -> some View
   {
-    SwiftUIStylelessContentlessEpoxyableView<Self>(behaviors: behaviors)
+    IdealHeightContainer { context in
+      SwiftUIStylelessContentlessEpoxyableView<Self>(behaviors: behaviors, context: context)
+    }
   }
+}
+
+// MARK: - IdealHeightContainer
+
+/// A container with content that dictates its ideal height given its geometry.
+///
+/// TODO: We can eventually expand this concept to support ideal widths if we'd like.
+private struct IdealHeightContainer<Content: View>: View {
+  var content: (IdealHeightContainerContext) -> Content
+
+  var body: some View {
+    GeometryReader { proxy in
+      content(.init(initialSize: proxy.size, idealHeight: $idealHeight))
+    }
+    .frame(idealHeight: idealHeight)
+  }
+
+  /// With start with 150 as our "estimated" size. We will resolve to a final size asynchronously
+  /// after measurement.
+  @State private var idealHeight: CGFloat = 150
+}
+
+// MARK: - IdealHeightContainerContext
+
+/// The context available to content of an `IdealHeightContainer`
+private struct IdealHeightContainerContext {
+  var initialSize: CGSize
+  var idealHeight: Binding<CGFloat>
 }
 
 // MARK: - SwiftUIEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView`.
-struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
+private struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
 
   // MARK: Lifecycle
 
-  init(content: View.Content, style: View.Style, behaviors: View.Behaviors? = nil) {
+  init(
+    content: View.Content,
+    style: View.Style,
+    behaviors: View.Behaviors? = nil,
+    context: IdealHeightContainerContext)
+  {
     self.content = content
     self.style = style
     self.behaviors = behaviors
+    self.context = context
   }
 
   // MARK: Internal
@@ -80,6 +126,7 @@ struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
   var content: View.Content
   var style: View.Style
   var behaviors: View.Behaviors?
+  var context: IdealHeightContainerContext
 
   func updateUIView(_ wrapper: EpoxyableViewContainer<Self, View>, context: Context) {
     let animated = context.transaction.animation != nil
@@ -114,26 +161,35 @@ struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
     let uiView = View(style: style)
     uiView.setContent(content, animated: false)
     uiView.setBehaviors(behaviors)
-    return EpoxyableViewContainer(view: self, uiView: uiView)
+    return EpoxyableViewContainer(view: self, uiView: uiView, context: self.context)
   }
 }
 
 // MARK: - SwiftUIStylelessEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with a `Never` `Style`.
-struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewRepresentable where View.Style == Never {
+private struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewRepresentable
+  where
+  View.Style == Never
+{
 
   // MARK: Lifecycle
 
-  init(content: View.Content, behaviors: View.Behaviors? = nil) {
+  init(
+    content: View.Content,
+    behaviors: View.Behaviors? = nil,
+    context: IdealHeightContainerContext)
+  {
     self.content = content
     self.behaviors = behaviors
+    self.context = context
   }
 
   // MARK: Internal
 
   var content: View.Content
   var behaviors: View.Behaviors?
+  var context: IdealHeightContainerContext
 
   func updateUIView(_ wrapper: EpoxyableViewContainer<Self, View>, context: Context) {
     let animated = context.transaction.animation != nil
@@ -159,26 +215,31 @@ struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewRepresentable w
     let uiView = View()
     uiView.setContent(content, animated: false)
     uiView.setBehaviors(behaviors)
-    return EpoxyableViewContainer(view: self, uiView: uiView)
+    return EpoxyableViewContainer(view: self, uiView: uiView, context: self.context)
   }
 }
 
 // MARK: - SwiftUIContentlessEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with a `Never` `Content`.
-struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepresentable where View.Content == Never {
+private struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepresentable
+  where
+  View.Content == Never
+{
 
   // MARK: Lifecycle
 
-  init(style: View.Style, behaviors: View.Behaviors? = nil) {
+  init(style: View.Style, behaviors: View.Behaviors? = nil, context: IdealHeightContainerContext) {
     self.style = style
     self.behaviors = behaviors
+    self.context = context
   }
 
   // MARK: Internal
 
   var style: View.Style
   var behaviors: View.Behaviors?
+  var context: IdealHeightContainerContext
 
   func updateUIView(_ wrapper: EpoxyableViewContainer<Self, View>, context: Context) {
     defer {
@@ -202,24 +263,27 @@ struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepresentable
   func makeUIView(context: Context) -> EpoxyableViewContainer<Self, View> {
     let uiView = View(style: style)
     uiView.setBehaviors(behaviors)
-    return EpoxyableViewContainer(view: self, uiView: uiView)
+    return EpoxyableViewContainer(view: self, uiView: uiView, context: self.context)
   }
 }
 
 // MARK: - SwiftUIStylelessContentlessEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with a `Never` `Style` and `Content`.
-struct SwiftUIStylelessContentlessEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
+private struct SwiftUIStylelessContentlessEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
 
   // MARK: Lifecycle
 
-  init(behaviors: View.Behaviors? = nil) {
+  init(behaviors: View.Behaviors? = nil, context: IdealHeightContainerContext) {
     self.behaviors = behaviors
+    self.context = context
+    self.context = context
   }
 
   // MARK: Internal
 
   var behaviors: View.Behaviors?
+  var context: IdealHeightContainerContext
 
   func updateUIView(_ wrapper: EpoxyableViewContainer<Self, View>, context: Context) {
     wrapper.view = self
@@ -229,21 +293,25 @@ struct SwiftUIStylelessContentlessEpoxyableView<View: EpoxyableView>: UIViewRepr
   func makeUIView(context: Context) -> EpoxyableViewContainer<Self, View> {
     let uiView = View()
     uiView.setBehaviors(behaviors)
-    return EpoxyableViewContainer(view: self, uiView: uiView)
+    return EpoxyableViewContainer(view: self, uiView: uiView, context: self.context)
   }
 }
 
 // MARK: - EpoxyableViewContainer
 
 /// A view that has an `intrinsicContentSize` of the `view`'s `systemLayoutSizeFitting(…)`.
-final class EpoxyableViewContainer<SwiftUIView: UIViewRepresentable, UIViewType: EpoxyableView>: UIView {
+private final class EpoxyableViewContainer<SwiftUIView, UIViewType>: UILabel
+  where
+  SwiftUIView: UIViewRepresentable,
+  UIViewType: EpoxyableView
+{
 
   // MARK: Lifecycle
 
-  init(view: SwiftUIView, uiView: UIViewType) {
+  init(view: SwiftUIView, uiView: UIViewType, context: IdealHeightContainerContext) {
     self.view = view
     self.uiView = uiView
-
+    self.context = context
     super.init(frame: .zero)
 
     addSubview(uiView)
@@ -263,21 +331,48 @@ final class EpoxyableViewContainer<SwiftUIView: UIViewRepresentable, UIViewType:
     didSet { updateView(from: oldValue) }
   }
 
+  override func layoutSubviews() {
+    super.layoutSubviews()
+
+    // We need to re-measure the view whenever the size of the bounds change, as the previous size
+    // will be incorrect.
+    if bounds.size != latestMeasurementBoundsSize {
+      measureView()
+    }
+  }
+
   override var intrinsicContentSize: CGSize {
-    uiView.systemLayoutSizeFitting(
-      UIViewType.layoutFittingCompressedSize,
-      withHorizontalFittingPriority: .fittingSizeLevel,
-      verticalFittingPriority: .fittingSizeLevel)
+    if let size = latestMeasuredSize {
+      return size
+    }
+
+    return measureView()
   }
 
   // MARK: Private
+
+  private let context: IdealHeightContainerContext
+
+  /// The most recently measured intrinsic content size of the `uiView`, else `nil` if it has not
+  /// yet been measured.
+  private var latestMeasuredSize: CGSize? = nil {
+    didSet {
+      guard oldValue != latestMeasuredSize else { return }
+      invalidateIntrinsicContentSize()
+    }
+  }
+
+  /// The bounds size at the time of the latest measurement.
+  ///
+  /// Used to ensure we don't do extraneous measurements if the bounds haven't changed.
+  private var latestMeasurementBoundsSize: CGSize?
 
   private func updateView(from oldValue: UIViewType) {
     guard uiView !== oldValue else { return }
     oldValue.removeFromSuperview()
     addSubview(uiView)
     setUpConstraints()
-    invalidateIntrinsicContentSize()
+    setNeedsLayout()
   }
 
   private func setUpConstraints() {
@@ -293,5 +388,36 @@ final class EpoxyableViewContainer<SwiftUIView: UIViewRepresentable, UIViewType:
     bottom.priority = .defaultHigh
 
     NSLayoutConstraint.activate([leading, top, trailing, bottom])
+  }
+
+  /// Measures the `uiView`, returning the resulting size and storing it in `latestMeasuredSize`.
+  @discardableResult
+  private func measureView() -> CGSize {
+    // On the first layout, use the `initialSize` to measure with a reasonable first attempt, as
+    // passing zero results in unusable sizes and also upsets SwiftUI.
+    let bounds = bounds.size == .zero ? context.initialSize : bounds.size
+    latestMeasurementBoundsSize = bounds
+
+    let targetSize = CGSize(
+      width: bounds.width,
+      height: UIViewType.layoutFittingCompressedSize.height)
+
+    let fittingSize = uiView.systemLayoutSizeFitting(
+      targetSize,
+      withHorizontalFittingPriority: .defaultHigh,
+      verticalFittingPriority: .fittingSizeLevel)
+
+    let size = CGSize(width: UIView.noIntrinsicMetric, height: fittingSize.height)
+
+    // We need to update the ideal height async otherwise we'll get the "Modifying state during view
+    // update, which will cause undefined behavior" runtime warning as the view's intrinsic content
+    // size is queried during the view update phase.
+    DispatchQueue.main.async { [idealHeight = context.idealHeight] in
+      idealHeight.wrappedValue = size.height
+    }
+
+    latestMeasuredSize = size
+
+    return size
   }
 }

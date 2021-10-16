@@ -9,8 +9,8 @@ extension View {
   /// Applies the layout margins from the parent `EpoxySwiftUIHostingView` to this `View`, if there
   /// are any.
   ///
-  /// Can be used to have a background color in SwiftUI underlap the safe area within a bar
-  /// installer, for example.
+  /// Can be used to have a background in SwiftUI underlap the safe area within a bar installer, for
+  /// example.
   ///
   /// These margins are propagated via the `EnvironmentValues.epoxyLayoutMargins`.
   public func epoxyLayoutMargins() -> some View {

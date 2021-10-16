@@ -51,8 +51,8 @@ final class MainViewController: NavigationController {
     if let example = state.showReadmeExample {
       NavigationModel(
         dataID: DataID.readme(example),
-        makeViewController: { [weak self] in
-          self?.makeReadmeExampleViewController(example)
+        makeViewController: {
+          UIViewController.makeReadmeExample(example)
         },
         remove: { [weak self] in
           self?.state.showReadmeExample = nil
@@ -62,8 +62,8 @@ final class MainViewController: NavigationController {
     if let example = state.showLayoutGroupsExample {
       NavigationModel(
         dataID: DataID.layoutGroups(example),
-        makeViewController: { [weak self] in
-          self?.makeLayoutGroupsExampleViewController(example)
+        makeViewController: {
+          UIViewController.makeLayoutGroupsExample(example)
         },
         remove: { [weak self] in
           self?.state.showLayoutGroupsExample = nil
@@ -117,51 +117,11 @@ final class MainViewController: NavigationController {
           self?.state.showLayoutGroupsExample = example
         })
     case .swiftUIToEpoxy:
-      return SwiftUIToEpoxyViewController()
+      return SwiftUIInEpoxyViewController()
     case .epoxyToSwiftUI:
-      return EpoxyToSwiftUIViewController()
+      return EpoxyInSwiftUIViewController()
     }
     viewController.title = example.title
     return viewController
   }
-
-  private func makeReadmeExampleViewController(_ example: ReadmeExample) -> UIViewController {
-    switch example {
-    case .tapMe:
-      return CollectionViewController.makeTapMeViewController()
-    case .counter:
-      return CounterViewController()
-    case .bottomButton:
-      return BottomButtonViewController()
-    case .formNavigation:
-      return FormNavigationController()
-    case .modalPresentation:
-      return PresentationViewController()
-    }
-  }
-
-  private func makeLayoutGroupsExampleViewController(_ example: LayoutGroupsExample) -> UIViewController {
-    let viewController: UIViewController
-    switch example {
-    case .readmeExamples:
-      viewController = LayoutGroupsReadmeExamplesViewController()
-    case .textRowExample:
-      viewController = TextRowExampleViewController()
-    case .colors:
-      viewController = ColorsViewController()
-    case .messages:
-      viewController = MessagesViewController()
-    case .messagesUIStackView:
-      viewController = MessagesUIStackViewViewController()
-    case .todoList:
-      viewController = TodoListViewController()
-    case .entirelyInline:
-      viewController = EntirelyInlineViewController()
-    case .complex:
-      viewController = ComplexDeclarativeViewController()
-    }
-    viewController.title = example.title
-    return viewController
-  }
-
 }
