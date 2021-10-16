@@ -395,11 +395,11 @@ private final class EpoxyableViewContainer<SwiftUIView, UIViewType>: UILabel
   private func measureView() -> CGSize {
     // On the first layout, use the `initialSize` to measure with a reasonable first attempt, as
     // passing zero results in unusable sizes and also upsets SwiftUI.
-    let bounds = bounds.size == .zero ? context.initialSize : bounds.size
-    latestMeasurementBoundsSize = bounds
+    let measurementBounds = bounds.size == .zero ? context.initialSize : bounds.size
+    latestMeasurementBoundsSize = measurementBounds
 
     let targetSize = CGSize(
-      width: bounds.width,
+      width: measurementBounds.width,
       height: UIViewType.layoutFittingCompressedSize.height)
 
     let fittingSize = uiView.systemLayoutSizeFitting(
@@ -407,17 +407,17 @@ private final class EpoxyableViewContainer<SwiftUIView, UIViewType>: UILabel
       withHorizontalFittingPriority: .defaultHigh,
       verticalFittingPriority: .fittingSizeLevel)
 
-    let size = CGSize(width: UIView.noIntrinsicMetric, height: fittingSize.height)
+    let measuredSize = CGSize(width: UIView.noIntrinsicMetric, height: fittingSize.height)
 
     // We need to update the ideal height async otherwise we'll get the "Modifying state during view
     // update, which will cause undefined behavior" runtime warning as the view's intrinsic content
     // size is queried during the view update phase.
     DispatchQueue.main.async { [idealHeight = context.idealHeight] in
-      idealHeight.wrappedValue = size.height
+      idealHeight.wrappedValue = measuredSize.height
     }
 
-    latestMeasuredSize = size
+    latestMeasuredSize = measuredSize
 
-    return size
+    return measuredSize
   }
 }
