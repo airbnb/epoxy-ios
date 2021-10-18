@@ -25,6 +25,9 @@ protocol InternalBarModeling: Diffable, EpoxyModeled, StyleIDProviding {
   /// Should inform consumers that this bar model has been displayed.
   func didDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool)
 
+  /// Should inform consumers that this bar model is no longer displayed.
+  func didEndDisplaying(_ view: UIView, traitCollection: UITraitCollection, animated: Bool)
+
   /// Should inform consumers that this bar model has been selected.
   func didSelect(_ view: UIView, traitCollection: UITraitCollection, animated: Bool)
 

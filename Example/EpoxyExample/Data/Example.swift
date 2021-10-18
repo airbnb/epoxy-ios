@@ -12,6 +12,8 @@ enum Example: CaseIterable {
   case customSelfSizing
   case textField
   case layoutGroups
+  case swiftUIToEpoxy
+  case epoxyToSwiftUI
 
   // MARK: Internal
 
@@ -35,6 +37,10 @@ enum Example: CaseIterable {
       return "Text Field"
     case .layoutGroups:
       return "LayoutGroups"
+    case .swiftUIToEpoxy:
+      return "SwiftUI in Epoxy"
+    case .epoxyToSwiftUI:
+      return  "Epoxy in SwiftUI"
     }
   }
 
@@ -58,6 +64,10 @@ enum Example: CaseIterable {
       return "An example that combines collections, bars, and text field with keyboard avoidance"
     case .layoutGroups:
       return "A set of examples written using EpoxyLayoutGroups"
+    case .swiftUIToEpoxy:
+      return "An example of SwiftUI views being embedded in Epoxy"
+    case .epoxyToSwiftUI:
+      return "An example of Epoxy views being embedded in SwiftUI"
     }
   }
 }

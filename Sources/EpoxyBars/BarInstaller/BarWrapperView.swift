@@ -131,6 +131,11 @@ public final class BarWrapperView: UIView {
     _model?.didSelect(view, traitCollection: traitCollection, animated: animated)
   }
 
+  func handleDidEndDisplaying(animated: Bool) {
+    guard let view = view else { return }
+    _model?.didEndDisplaying(view, traitCollection: traitCollection, animated: animated)
+  }
+
   // MARK: Private
 
   /// The current bar model.
