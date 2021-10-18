@@ -26,6 +26,18 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
     }
   }
 
+  // MARK: Open
+
+  open override func viewDidLoad() {
+    super.viewDidLoad()
+
+    // A `UIHostingController` has a system background color by default as it's typically used in
+    // full-screen use cases. Since we're using this view controller to place SwiftUI views within
+    // other view controllers we default the background color to clear so we can see the views
+    // below, e.g. to draw highlight states in a `CollectionView`.
+    view.backgroundColor = .clear
+  }
+
   // MARK: Private
 
   /// Creates a dynamic subclass of this hosting controller's view that ignores its safe area
