@@ -35,6 +35,9 @@ final class SwiftUIInEpoxyViewController: CollectionViewController {
         .onAppear { print("Row \(index) appeared") }
         .onDisappear { print("Row \(index) disappeared") }
         .itemModel(dataID: index)
+        .didSelect { context in
+          print("Row \(index) tapped!")
+        }
     }
   }
 
@@ -46,6 +49,7 @@ final class SwiftUIInEpoxyViewController: CollectionViewController {
       .onDisappear { print("Bottom bar disappeared") }
       // Ensure that the background color underlaps the bottom safe area in the bottom bar.
       .epoxyLayoutMargins()
+      .background(Color(.systemBackground))
       .barModel()
   }
 }
