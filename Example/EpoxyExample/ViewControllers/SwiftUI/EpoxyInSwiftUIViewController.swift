@@ -22,11 +22,14 @@ final class EpoxyInSwiftUIViewController: UIHostingController<EpoxyInSwiftUIView
 struct EpoxyInSwiftUIView: View {
   var body: some View {
     ScrollView {
-      LazyVStack(spacing: 10) {
+      LazyVStack(spacing: 0) {
         ForEach(1...100, id: \.self) { index in
           TextRow.swiftUIView(
             content: .init(title: "Row \(index)", body: BeloIpsum.sentence(count: 1, wordCount: index)),
             style: .small)
+            .onTapGesture {
+              print("Row \(index) tapped!")
+            }
         }
       }
     }

@@ -86,7 +86,8 @@ private struct IdealHeightContainer<Content: View>: View {
     GeometryReader { proxy in
       content(.init(initialSize: proxy.size, idealHeight: $idealHeight))
     }
-    .frame(idealHeight: idealHeight)
+    // Pass the ideal height as the max height to ensure this view doesn't get stretched vertically.
+    .frame(idealHeight: idealHeight, maxHeight: idealHeight)
   }
 
   /// With start with 150 as our "estimated" size. We will resolve to a final size asynchronously
@@ -300,7 +301,7 @@ private struct SwiftUIStylelessContentlessEpoxyableView<View: EpoxyableView>: UI
 // MARK: - EpoxyableViewContainer
 
 /// A view that has an `intrinsicContentSize` of the `view`'s `systemLayoutSizeFitting(…)`.
-private final class EpoxyableViewContainer<SwiftUIView, UIViewType>: UILabel
+private final class EpoxyableViewContainer<SwiftUIView, UIViewType>: UIView
   where
   SwiftUIView: UIViewRepresentable,
   UIViewType: EpoxyableView
