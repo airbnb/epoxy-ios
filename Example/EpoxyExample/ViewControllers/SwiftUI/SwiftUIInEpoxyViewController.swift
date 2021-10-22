@@ -35,7 +35,7 @@ final class SwiftUIInEpoxyViewController: CollectionViewController {
         .onAppear { print("Row \(index) appeared") }
         .onDisappear { print("Row \(index) disappeared") }
         .itemModel(dataID: index)
-        .didSelect { context in
+        .didSelect { _ in
           print("Row \(index) tapped!")
         }
     }
