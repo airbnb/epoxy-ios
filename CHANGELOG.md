@@ -13,9 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   bars are applied to the underlying `BarContainer` by a bar installer, e.g. to defer bar model
   updates that might conflict with an in-flight shared element transition.
 - Support for hitting 120 FPS on iPhone ProMotion displays when programmatically scrolling to an
-  item in a collection view. 
-- Added `swiftUIView(…)` to host a SwiftUI `View` within an Epoxy container and the `itemModel(…)`,
-  `barModel(…)`, etc. methods to host an `EpoxyableView` within a SwiftUI `View`
+  item in a collection view.
+- Added `itemModel(…)`, `barModel(…)` methods to host a SwiftUI `View` within an Epoxy container and
+  the `swiftUIView(…)` method to host an `EpoxyableView` within a SwiftUI `View`
 
 ### Fixed
 - Fixes an issue that could cause `CollectionView` scroll animation frames to have an incorrect
