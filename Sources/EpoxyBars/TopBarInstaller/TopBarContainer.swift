@@ -33,6 +33,9 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
     case hidden(roomToReappear: Bool)
   }
 
+  /// The `TopBarInstaller` that manages this `TopBarContainer`
+  public internal(set) weak var barInstaller: TopBarInstaller?
+
   public override var center: CGPoint {
     didSet {
       guard center != oldValue else { return }

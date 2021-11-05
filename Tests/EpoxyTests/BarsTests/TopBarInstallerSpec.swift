@@ -25,6 +25,20 @@ final class TopBarInstallerSpec: QuickSpec, BaseBarInstallerSpec {
 
   override func spec() {
     baseSpec()
+
+    describe("TopBarContainer") {
+      it("has a reference to the TopBarInstaller when installed") {
+        let viewController = UIViewController()
+        viewController.loadView()
+        let barInstaller = TopBarInstaller(viewController: viewController)
+
+        barInstaller.install()
+        expect(barInstaller.container?.barInstaller).toEventually(equal(barInstaller))
+
+        barInstaller.uninstall()
+        expect(barInstaller.container?.barInstaller).toEventually(beNil())
+      }
+    }
   }
 
 }

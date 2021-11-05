@@ -25,6 +25,20 @@ final class BottomBarInstallerSpec: QuickSpec, BaseBarInstallerSpec {
 
   override func spec() {
     baseSpec()
+
+    describe("BottomBarContainer") {
+      it("has a reference to the BottomBarInstaller when installed") {
+        let viewController = UIViewController()
+        viewController.loadView()
+        let barInstaller = BottomBarInstaller(viewController: viewController)
+
+        barInstaller.install()
+        expect(barInstaller.container?.barInstaller).toEventually(equal(barInstaller))
+
+        barInstaller.uninstall()
+        expect(barInstaller.container?.barInstaller).toEventually(beNil())
+      }
+    }
   }
 
 }

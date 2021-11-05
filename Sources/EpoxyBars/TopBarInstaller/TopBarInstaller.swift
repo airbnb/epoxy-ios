@@ -69,11 +69,13 @@ public final class TopBarInstaller: NSObject {
   /// installation or if a bar model was set prior to installation.
   public func install() {
     installer.install()
+    container?.barInstaller = self
   }
 
   /// Removes the bar stack from the associated view controller.
   public func uninstall() {
     installer.uninstall()
+    container?.barInstaller = nil
   }
 
   // MARK: Internal

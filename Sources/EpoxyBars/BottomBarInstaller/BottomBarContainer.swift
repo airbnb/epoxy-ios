@@ -28,6 +28,9 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
 
   // MARK: Public
 
+  /// The `BottomBarInstaller` that manages this `BottomBarContainer`
+  public internal(set) weak var barInstaller: BottomBarInstaller?
+
   public override var center: CGPoint {
     didSet {
       guard center != oldValue else { return }
