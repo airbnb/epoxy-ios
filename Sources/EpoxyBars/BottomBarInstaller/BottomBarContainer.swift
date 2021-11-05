@@ -28,6 +28,9 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
 
   // MARK: Public
 
+  /// The `BottomBarInstaller` that manages this `BottomBarContainer`
+  public internal(set) weak var barInstaller: BottomBarInstaller?
+
   public override var center: CGPoint {
     didSet {
       guard center != oldValue else { return }
@@ -65,9 +68,6 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
       viewController?.view.layoutIfNeeded()
     }
   }
-
-  /// The `BottomBarInstaller` that manages this `BottomBarContainer`
-  public internal(set) weak var barInstaller: BottomBarInstaller?
 
   public override func layoutSubviews() {
     super.layoutSubviews()
