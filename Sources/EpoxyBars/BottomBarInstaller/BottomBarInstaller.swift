@@ -75,12 +75,14 @@ public final class BottomBarInstaller: NSObject {
   /// installation or if a bar model was set prior to installation.
   public func install() {
     installer.install()
+    container?.barInstaller = self
     watchKeyboardPosition(true)
   }
 
   /// Removes the bar stack from the associated view controller.
   public func uninstall() {
     installer.uninstall()
+    container?.barInstaller = nil
     watchKeyboardPosition(false)
   }
 

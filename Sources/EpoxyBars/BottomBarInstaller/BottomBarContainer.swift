@@ -66,6 +66,9 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
     }
   }
 
+  /// The `BottomBarInstaller` that manages this `BottomBarContainer`
+  public internal(set) weak var barInstaller: BottomBarInstaller?
+
   public override func layoutSubviews() {
     super.layoutSubviews()
     updateInsets()
