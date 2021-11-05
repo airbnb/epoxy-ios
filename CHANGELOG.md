@@ -5,7 +5,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.6.0...HEAD)
-- Added a weak reference from `BottomBarContainer` to its parent `BottomBarInstaller`
+- Added a weak reference from `TopBarContainer` / `BottomBarContainer` to their parent bar installer
 
 ### Added
 - Added a `BarInstallerConfiguration` type to allow both global and per-instance configuration of
