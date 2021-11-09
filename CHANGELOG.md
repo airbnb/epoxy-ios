@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   content offset when paired with a non-zero `adjustedContentInset`.
 - Fixes an issue that could cause `VGroupView` and `HGroupView` to grow too tall when nested in
   containers that give them a larger height than their natural height.
+- Fixes a bug in the `KeyboardPositionWatcher` that would consider an even slightly offscreen view
+  as having a keyboard overlap when the keyboard is dismissed, resulting in incorrect keyboard
+  offsets.
 
 ### Changed
 - Removed the default bar installer behavior where bar model updates were deferred while a view

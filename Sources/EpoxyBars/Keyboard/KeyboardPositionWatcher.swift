@@ -130,7 +130,7 @@ public class KeyboardPositionWatcher {
       return
     }
 
-    let screen = UIScreen.main.coordinateSpace
+    let screen = UIScreen.main
 
     for (view, observer) in observers {
       let overlap = self.overlap(for: view, keyboardFrame: keyboardFrame, in: screen)
@@ -142,10 +142,14 @@ public class KeyboardPositionWatcher {
   private func overlap(
     for view: UIView,
     keyboardFrame: CGRect,
-    in coordinateSpace: UICoordinateSpace)
+    in screen: UIScreen)
     -> CGFloat
   {
-    let keyboardFrameInView = coordinateSpace.convert(keyboardFrame, to: view)
+    // If the keyboard is offscreen (hidden), always consider it to have a zero overlap to ensure we
+    // don't consider slightly offscreen views as still having keyboard overlap.
+    guard keyboardFrame.intersects(screen.bounds) else { return 0 }
+
+    let keyboardFrameInView = screen.coordinateSpace.convert(keyboardFrame, to: view)
     let viewBounds = view.bounds
     let intersection = viewBounds.intersection(keyboardFrameInView)
 
