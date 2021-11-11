@@ -38,45 +38,50 @@ final class DynamicRow: BaseRow, EpoxyableView {
   }
 
   func setContent(_ content: Content, animated: Bool) {
-    layout.setItems({
+    var items: [GroupItemModeling] = [
       Label.groupItem(
         dataID: DataID.title,
         content: content.title,
         style: Label.Style.style(with: .title2))
         // force text to hug tightly to avoid height changes during animation
-        .contentHuggingPriority(.required, for: .vertical)
+        .contentHuggingPriority(.required, for: .vertical),
       Label.groupItem(
         dataID: DataID.subtitle,
         content: content.subtitle,
         style: Label.Style.style(with: .body))
         // force text to hug tightly to avoid height changes during animation
-        .contentHuggingPriority(.required, for: .vertical)
+        .contentHuggingPriority(.required, for: .vertical),
+    ]
 
-      if let revealOptionsText = content.revealOptionsButton {
+    if let revealOptionsText = content.revealOptionsButton {
+      items.append(
         Button.groupItem(
           dataID: DataID.revealOptions,
           content: .init(title: revealOptionsText),
           behaviors: .init { [weak self] _ in
             self?.didTapRevealOptions?()
           },
-          style: .init())
-      } else if let options = content.options {
-        for option in options {
+          style: .init()))
+    } else if let options = content.options {
+      for option in options {
+        items.append(
           Button.groupItem(
             dataID: option,
             content: .init(title: option),
             behaviors: .init { [weak self] _ in
               self?.didTapOption?(option)
             },
-            style: .init())
-        }
+            style: .init()))
       }
+    }
 
+    items.append(
       Label.groupItem(
         dataID: DataID.footer,
         content: content.footer,
-        style: .style(with: .footnote))
-    }, animated: animated)
+        style: .style(with: .footnote)))
+
+    layout.setItems(items, animated: animated)
   }
 
   func setBehaviors(_ behaviors: Behaviors?) {

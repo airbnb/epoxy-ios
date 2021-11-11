@@ -23,26 +23,28 @@ final class DynamicLayoutGroupsViewController: CollectionViewController {
 
   private var openOptions: [AnyHashable: Bool] = [:]
 
-  @ItemModelBuilder
   private var items: [ItemModeling] {
+    var result = [ItemModeling]()
     for id in DataID.allCases {
-      DynamicRow.itemModel(
-        dataID: id,
-        content: .init(
-          title: "Want to know more?",
-          subtitle: "Tap below to reveal a set of options you can choose from",
-          revealOptionsButton: openOptions(id) ? nil : "Reveal options",
-          options: options(for: id),
-          footer: "Thank you"),
-        behaviors: .init(didTapRevealOptions: { [weak self] in
-          self?.openOptions[id] = true
-          self?.updateData()
-        }, didTapOption: { [weak self] option in
-          print("Selected option \(option)")
-          self?.openOptions[id] = false
-          self?.updateData()
-        }))
+      result.append(
+        DynamicRow.itemModel(
+          dataID: id,
+          content: .init(
+            title: "Want to know more?",
+            subtitle: "Tap below to reveal a set of options you can choose from",
+            revealOptionsButton: openOptions(id) ? nil : "Reveal options",
+            options: options(for: id),
+            footer: "Thank you"),
+          behaviors: .init(didTapRevealOptions: { [weak self] in
+            self?.openOptions[id] = true
+            self?.updateData()
+          }, didTapOption: { [weak self] option in
+            print("Selected option \(option)")
+            self?.openOptions[id] = false
+            self?.updateData()
+          })))
     }
+    return result
   }
 
   private func updateData() {
