@@ -11,6 +11,7 @@ enum LayoutGroupsExample: CaseIterable {
   case todoList
   case entirelyInline
   case complex
+  case dynamic
 
   // MARK: Internal
 
@@ -32,6 +33,8 @@ enum LayoutGroupsExample: CaseIterable {
       return "Inline components"
     case .complex:
       return "Shuffle"
+    case .dynamic:
+      return "Dynamic"
     }
   }
 
@@ -53,6 +56,8 @@ enum LayoutGroupsExample: CaseIterable {
       return "An example showcasing creating components inline in an EpoxyCollectionView ItemModel"
     case .complex:
       return "An example showing how groups handle updates to the contained items"
+    case .dynamic:
+      return "An example showcasing layout groups with dynamic subviews in a CollectionView"
     }
   }
 

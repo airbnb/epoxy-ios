@@ -23,6 +23,8 @@ extension UIViewController {
       viewController = EntirelyInlineViewController()
     case .complex:
       viewController = ComplexDeclarativeViewController()
+    case .dynamic:
+      viewController = DynamicLayoutGroupsViewController()
     }
     viewController.title = example.title
     return viewController

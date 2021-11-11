@@ -37,6 +37,8 @@
 		25D39B5C262789E000B3DBF9 /* AlignableTextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B5B262789E000B3DBF9 /* AlignableTextRow.swift */; };
 		25D39B5F26278B1700B3DBF9 /* LayoutGroupsExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B5E26278B1700B3DBF9 /* LayoutGroupsExample.swift */; };
 		25D39B6426278DD900B3DBF9 /* LayoutGroupsExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25D39B6326278DD900B3DBF9 /* LayoutGroupsExampleViewController.swift */; };
+		25F71A9C273D9855004D30CE /* DynamicLayoutGroupsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F71A9B273D9855004D30CE /* DynamicLayoutGroupsViewController.swift */; };
+		25F71A9E273D990E004D30CE /* DynamicRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F71A9D273D990E004D30CE /* DynamicRow.swift */; };
 		25FEB79225AE431100F8EFBD /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25FEB79125AE431100F8EFBD /* MainViewController.swift */; };
 		2E8B007623F47E7E00D82A31 /* CustomSizingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E8B007523F47E7E00D82A31 /* CustomSizingView.swift */; };
 		A5AD02A72637CBF9007261BC /* TextFieldRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5AD02A62637CBF9007261BC /* TextFieldRow.swift */; };
@@ -99,6 +101,8 @@
 		25D39B5B262789E000B3DBF9 /* AlignableTextRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlignableTextRow.swift; sourceTree = "<group>"; };
 		25D39B5E26278B1700B3DBF9 /* LayoutGroupsExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutGroupsExample.swift; sourceTree = "<group>"; };
 		25D39B6326278DD900B3DBF9 /* LayoutGroupsExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutGroupsExampleViewController.swift; sourceTree = "<group>"; };
+		25F71A9B273D9855004D30CE /* DynamicLayoutGroupsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicLayoutGroupsViewController.swift; sourceTree = "<group>"; };
+		25F71A9D273D990E004D30CE /* DynamicRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicRow.swift; sourceTree = "<group>"; };
 		25FEB79125AE431100F8EFBD /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		2E8B007523F47E7E00D82A31 /* CustomSizingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSizingView.swift; sourceTree = "<group>"; };
 		A5AD02A62637CBF9007261BC /* TextFieldRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldRow.swift; sourceTree = "<group>"; };
@@ -191,6 +195,7 @@
 				25D39B2F26277F0D00B3DBF9 /* EntirelyInlineViewController.swift */,
 				25D39B3026277F0D00B3DBF9 /* TextRowExampleViewController.swift */,
 				A67255712718C8E40085346B /* UIViewController+LayoutGroupsExample.swift */,
+				25F71A9B273D9855004D30CE /* DynamicLayoutGroupsViewController.swift */,
 			);
 			path = LayoutGroups;
 			sourceTree = "<group>";
@@ -206,6 +211,7 @@
 				25D39B432627809D00B3DBF9 /* Elements */,
 				25D39B492627809D00B3DBF9 /* MessageRowStackView.swift */,
 				25D39B4A2627809D00B3DBF9 /* ActionButtonRow.swift */,
+				25F71A9D273D990E004D30CE /* DynamicRow.swift */,
 			);
 			path = LayoutGroups;
 			sourceTree = "<group>";
@@ -414,11 +420,13 @@
 				A6F0929325B9ED0C007D902B /* CounterViewController.swift in Sources */,
 				25D39B502627809D00B3DBF9 /* BaseRow.swift in Sources */,
 				25D39B4B2627809D00B3DBF9 /* MessageRow.swift in Sources */,
+				25F71A9C273D9855004D30CE /* DynamicLayoutGroupsViewController.swift in Sources */,
 				A61AFF5F2602B99E005356A8 /* TapMeViewController.swift in Sources */,
 				A6F0928B25B9E983007D902B /* TextRow.swift in Sources */,
 				25D39B522627809D00B3DBF9 /* ImageView.swift in Sources */,
 				A67255722718C8E40085346B /* UIViewController+LayoutGroupsExample.swift in Sources */,
 				25D39B4C2627809D00B3DBF9 /* ColorsRow.swift in Sources */,
+				25F71A9E273D990E004D30CE /* DynamicRow.swift in Sources */,
 				25D39B532627809D00B3DBF9 /* Button.swift in Sources */,
 				25D39B4F2627809D00B3DBF9 /* Label.swift in Sources */,
 				25B6766525AE8BEA00C00B20 /* UIImageView+RemoteImage.swift in Sources */,
