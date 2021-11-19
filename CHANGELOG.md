@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   item in a collection view.
 - Added `itemModel(…)`, `barModel(…)` methods to host a SwiftUI `View` within an Epoxy container and
   the `swiftUIView(…)` method to host an `EpoxyableView` within a SwiftUI `View`
+- Added a SwiftUI environment value for requesting size invalidation of the containing Epoxy collection view cell.
 
 ### Fixed
 - Fixes an issue that could cause `CollectionView` scroll animation frames to have an incorrect
@@ -26,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixes a bug in the `KeyboardPositionWatcher` that would consider an even slightly offscreen view
   as having a keyboard overlap when the keyboard is dismissed, resulting in incorrect keyboard
   offsets.
+- Fixes an issue when mutating state synchronously does not pick up the current SwiftUI transaction.
 
 ### Changed
 - Removed the default bar installer behavior where bar model updates were deferred while a view
