@@ -62,14 +62,18 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   public init(style: Style) {
     // Ignore the safe area to ensure the view isn't laid out incorrectly when being sized while
     // overlapping the safe area.
+    epoxyContent = EpoxyHostingContent(rootView: style.initialContent.rootView)
     viewController = EpoxySwiftUIHostingController(
-      rootView: .init(environment: epoxyEnvironment, content: style.initialContent.rootView),
+      rootView: .init(content: epoxyContent, environment: epoxyEnvironment),
       ignoreSafeArea: true)
 
     dataID = style.initialContent.dataID ?? DefaultDataID.noneProvided as AnyHashable
 
     super.init(frame: .zero)
 
+    epoxyEnvironment.intrinsicContentSizeInvalidator = .init(invalidate: { [weak self] in
+      self?.viewController.view.invalidateIntrinsicContentSize()
+    })
     layoutMargins = .zero
   }
 
@@ -125,7 +129,9 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   }
 
   public func setContent(_ content: Content, animated: Bool) {
-    viewController.rootView = .init(environment: epoxyEnvironment, content: content.rootView)
+    /// This triggers a change in the observed `EpoxyHostingContent` object and allows the
+    /// propagation of the SwiftUI transaction, instead of just replacing the `rootView`.
+    epoxyContent.rootView = content.rootView
     dataID = content.dataID ?? DefaultDataID.noneProvided as AnyHashable
 
     // The view controller must be added to the view controller hierarchy to measure its content.
@@ -180,6 +186,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   // MARK: Private
 
   private let viewController: EpoxySwiftUIHostingController<EpoxyHostingWrapper<RootView>>
+  private let epoxyContent: EpoxyHostingContent<RootView>
   private let epoxyEnvironment = EpoxyHostingEnvironment()
   private var dataID: AnyHashable
   private var state: AppearanceState = .disappeared
@@ -308,12 +315,30 @@ extension UIResponder {
   }
 }
 
+// MARK: - EpoxyHostingContent
+
+/// The object that is used to communicate changes in the root view to the
+/// `EpoxySwiftUIHostingController`.
+final class EpoxyHostingContent<RootView: View>: ObservableObject {
+
+  // MARK: Lifecycle
+
+  init(rootView: RootView) {
+    _rootView = .init(wrappedValue: rootView)
+  }
+
+  // MARK: Internal
+
+  @Published var rootView: RootView
+}
+
 // MARK: - EpoxyHostingEnvironment
 
 /// The object that is used to communicate values to SwiftUI views within an
 /// `EpoxySwiftUIHostingController`, e.g. layout margins.
 final class EpoxyHostingEnvironment: ObservableObject {
   @Published var layoutMargins = EdgeInsets()
+  @Published var intrinsicContentSizeInvalidator = EpoxyIntrinsicContentSizeInvalidator(invalidate: {})
 }
 
 // MARK: - EpoxyHostingWrapper
@@ -321,10 +346,12 @@ final class EpoxyHostingEnvironment: ObservableObject {
 /// The wrapper view that is used to communicate values to SwiftUI views within an
 /// `EpoxySwiftUIHostingController`, e.g. layout margins.
 struct EpoxyHostingWrapper<Content: View>: View {
+  @ObservedObject var content: EpoxyHostingContent<Content>
   @ObservedObject var environment: EpoxyHostingEnvironment
-  var content: Content
 
   var body: some View {
-    content.environment(\.epoxyLayoutMargins, environment.layoutMargins)
+    content.rootView
+      .environment(\.epoxyLayoutMargins, environment.layoutMargins)
+      .environment(\.epoxyIntrinsicContentSizeInvalidator, environment.intrinsicContentSizeInvalidator)
   }
 }
