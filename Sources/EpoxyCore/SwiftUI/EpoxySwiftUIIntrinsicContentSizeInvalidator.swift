@@ -5,8 +5,8 @@ import SwiftUI
 
 // MARK: - EpoxyIntrinsicContentSizeInvalidator
 
-/// Allows the SwiftUI view contained in an Epoxy collection view cell to request
-/// invalidation of the cell's intrinsic content size.
+/// Allows the SwiftUI view contained in an Epoxy model to request the invalidation of
+/// the container's intrinsic content size.
 ///
 /// ```
 /// @Environment(\.epoxyIntrinsicContentSizeInvalidator) var invalidateIntrinsicContentSize

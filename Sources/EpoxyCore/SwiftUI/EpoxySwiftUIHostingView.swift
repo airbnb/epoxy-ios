@@ -71,8 +71,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
 
     super.init(frame: .zero)
 
-    epoxyEnvironment.epoxyIntrinsicContentSizeInvalidator = .init(invalidate: {
-      [weak self] in
+    epoxyEnvironment.intrinsicContentSizeInvalidator = .init(invalidate: { [weak self] in
       self?.viewController.view.invalidateIntrinsicContentSize()
     })
     layoutMargins = .zero
@@ -130,6 +129,8 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   }
 
   public func setContent(_ content: Content, animated: Bool) {
+    /// This triggers a change in the observed `EpoxyHostingContent` object and allows the
+    /// propagation of the SwiftUI transaction, instead of just replacing the `rootView`.
     epoxyContent.rootView = content.rootView
     dataID = content.dataID ?? DefaultDataID.noneProvided as AnyHashable
 
@@ -337,7 +338,7 @@ final class EpoxyHostingContent<RootView: View>: ObservableObject {
 /// `EpoxySwiftUIHostingController`, e.g. layout margins.
 final class EpoxyHostingEnvironment: ObservableObject {
   @Published var layoutMargins = EdgeInsets()
-  @Published var epoxyIntrinsicContentSizeInvalidator = EpoxyIntrinsicContentSizeInvalidator(invalidate: {})
+  @Published var intrinsicContentSizeInvalidator = EpoxyIntrinsicContentSizeInvalidator(invalidate: {})
 }
 
 // MARK: - EpoxyHostingWrapper
@@ -351,6 +352,6 @@ struct EpoxyHostingWrapper<Content: View>: View {
   var body: some View {
     content.rootView
       .environment(\.epoxyLayoutMargins, environment.layoutMargins)
-      .environment(\.epoxyIntrinsicContentSizeInvalidator, environment.epoxyIntrinsicContentSizeInvalidator)
+      .environment(\.epoxyIntrinsicContentSizeInvalidator, environment.intrinsicContentSizeInvalidator)
   }
 }
