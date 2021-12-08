@@ -64,7 +64,7 @@ end
 namespace :format do
   desc 'Runs SwiftFormat'
   task :swift do
-    sh 'mint run SwiftLint autocorrect Sources Example --config script/lint/swiftlint.yml'
+    sh 'mint run SwiftLint Sources Example --config script/lint/swiftlint.yml --fix'
     sh 'mint run SwiftFormat Sources Example --config script/lint/airbnb.swiftformat'
   end
 end
