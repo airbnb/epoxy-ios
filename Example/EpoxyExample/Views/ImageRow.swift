@@ -14,7 +14,7 @@ final class ImageRow: UIView, EpoxyableView {
     setUp()
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -26,7 +26,7 @@ final class ImageRow: UIView, EpoxyableView {
     let imageURL: URL
   }
 
-  func setContent(_ content: Content, animated: Bool) {
+  func setContent(_ content: Content, animated _: Bool) {
     titleLabel.text = content.title
     subtitleLabel.text = content.subtitle
     imageView.setURL(content.imageURL)

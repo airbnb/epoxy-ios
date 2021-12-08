@@ -28,6 +28,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   as having a keyboard overlap when the keyboard is dismissed, resulting in incorrect keyboard
   offsets.
 - Fixes an issue when mutating state synchronously does not pick up the current SwiftUI transaction.
+- Fixes a bug where the `avoidsKeyboard` parameter would be disregarded in a `BottomBarInstaller`
+  initializer.
 
 ### Changed
 - Removed the default bar installer behavior where bar model updates were deferred while a view

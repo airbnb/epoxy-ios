@@ -134,7 +134,9 @@ public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
   ///   style: .title)
   ///   .numberOfLines(2)
   /// ```
-  public subscript<Value: Equatable>(dynamicMember keypath: ReferenceWritableKeyPath<ItemType, Value>) -> ((_ value: Value) -> Self) {
+  public subscript<Value: Equatable>(dynamicMember keypath: ReferenceWritableKeyPath<ItemType, Value>)
+    -> ((_ value: Value) -> Self)
+  {
     return { value in
       set(keypath, value: value)
     }
@@ -255,7 +257,9 @@ extension GroupItem: InternalGroupItemModeling {
       toUpdate = container.wrapped
     }
     guard let item = toUpdate as? ItemType else {
-      EpoxyLogger.shared.assertionFailure("Attempt to update constrainable of the wrong type. This should never happen and is a failure of the system, please file a bug report.")
+      EpoxyLogger.shared
+        .assertionFailure(
+          "Attempt to update constrainable of the wrong type. This should never happen and is a failure of the system, please file a bug report.")
       return
     }
     setContent?(.init(constrainable: item, animated: animated))
@@ -269,7 +273,9 @@ extension GroupItem: InternalGroupItemModeling {
       toUpdate = container.wrapped
     }
     guard let item = toUpdate as? ItemType else {
-      EpoxyLogger.shared.assertionFailure("Attempt to update constrainable of the wrong type. This should never happen and is a failure of the system, please file a bug report.")
+      EpoxyLogger.shared
+        .assertionFailure(
+          "Attempt to update constrainable of the wrong type. This should never happen and is a failure of the system, please file a bug report.")
       return
     }
     setBehaviors?(.init(constrainable: item, animated: false))

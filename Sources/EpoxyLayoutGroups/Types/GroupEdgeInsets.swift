@@ -98,10 +98,10 @@ extension GroupEdgeInsets.AdaptiveFloat {
   /// Returns the appropriate CGFloat value for the provided traitCollection
   public func value(with traitCollection: UITraitCollection) -> CGFloat {
     switch self {
-    case let .fixed(value):
+    case .fixed(let value):
       return value
 
-    case let .adaptive(compact: compact, regular: regular):
+    case .adaptive(compact: let compact, regular: let regular):
       switch traitCollection.horizontalSizeClass {
       case .compact, .unspecified:
         return compact
@@ -111,11 +111,11 @@ extension GroupEdgeInsets.AdaptiveFloat {
         return compact
       }
 
-    case let .adaptiveAccessibility(
-      compact: compact,
-      compactAccessibilitySizes: compactAccessibility,
-      regular: regular,
-      regularAccessibilitySizes: regularAccessibility):
+    case .adaptiveAccessibility(
+      compact: let compact,
+      compactAccessibilitySizes: let compactAccessibility,
+      regular: let regular,
+      regularAccessibilitySizes: let regularAccessibility):
       switch (traitCollection.horizontalSizeClass, traitCollection.preferredContentSizeCategory.isAccessibilityCategory) {
       case (.compact, false), (.unspecified, false):
         return compact

@@ -24,6 +24,7 @@ final class CardStackViewController: CollectionViewController {
             content: .init(
               models: [
                 ImageMarquee.barModel(
+                  // swiftlint:disable:next force_unwrapping
                   content: .init(imageURL: URL(string: "https://picsum.photos/id/\(dataID + 310)/600/300")!),
                   style: .init(height: 150, contentMode: .scaleAspectFill))
                   .didSelect { _ in

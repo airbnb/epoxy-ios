@@ -35,6 +35,9 @@ extension EpoxyModeled where Self: ReflowsForAccessibilityTypeSizeProviding {
   // MARK: Private
 
   private var reflowsForAccessibilityTypeSizeProperty: EpoxyModelProperty<Bool> {
-    .init(keyPath: \ReflowsForAccessibilityTypeSizeProviding.reflowsForAccessibilityTypeSizes, defaultValue: true, updateStrategy: .replace)
+    .init(
+      keyPath: \ReflowsForAccessibilityTypeSizeProviding.reflowsForAccessibilityTypeSizes,
+      defaultValue: true,
+      updateStrategy: .replace)
   }
 }

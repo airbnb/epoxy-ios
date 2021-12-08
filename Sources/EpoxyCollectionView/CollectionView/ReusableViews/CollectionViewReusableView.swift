@@ -14,7 +14,7 @@ public final class CollectionViewReusableView: UICollectionReusableView {
   }
 
   @available(*, unavailable)
-  public required init?(coder aDecoder: NSCoder) {
+  public required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -39,7 +39,8 @@ public final class CollectionViewReusableView: UICollectionReusableView {
   }
 
   override public func preferredLayoutAttributesFitting(
-    _ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes
+    _ layoutAttributes: UICollectionViewLayoutAttributes)
+    -> UICollectionViewLayoutAttributes
   {
     guard let fittingPrioritiesProvider = layoutAttributes as? FittingPrioritiesProvidingLayoutAttributes else {
       return super.preferredLayoutAttributesFitting(layoutAttributes)

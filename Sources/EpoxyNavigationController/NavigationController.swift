@@ -26,7 +26,7 @@ open class NavigationController: UINavigationController {
   }
 
   @available(*, unavailable)
-  public required init?(coder: NSCoder) {
+  public required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -64,7 +64,7 @@ open class NavigationController: UINavigationController {
   }
 
   /// A method that can be overridden by subclasses to react to the navigation stack being updated.
-  open func didSetViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
+  open func didSetViewControllers(_: [UIViewController], animated _: Bool) {
     // Available to be overridden by subclasses.
   }
 
@@ -73,13 +73,13 @@ open class NavigationController: UINavigationController {
   // MARK: UINavigationController
 
   @available (*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
-  public final override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
+  public final override func setViewControllers(_: [UIViewController], animated _: Bool) {
     EpoxyLogger.shared.assertionFailure(
       "Manual management of view controllers is not allowed, use `setStack(...)`")
   }
 
   @available (*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
-  public final override func pushViewController(_ viewController: UIViewController, animated: Bool) {
+  public final override func pushViewController(_: UIViewController, animated _: Bool) {
     EpoxyLogger.shared.assertionFailure(
       "Manual management of view controllers is not allowed, use `setStack(...)`")
   }

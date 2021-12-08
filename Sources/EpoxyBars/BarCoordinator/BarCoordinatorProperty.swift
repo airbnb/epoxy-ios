@@ -46,7 +46,7 @@ public protocol BarCoordinatorPropertyConfigurable: AnyObject {
   var coordinators: [AnyBarCoordinating] { get }
 
   /// Gest or sets the subscripted property on all bars within this coordinator.
-  subscript<Property>(property: BarCoordinatorProperty<Property>) -> Property { get set }
+  subscript<Property>(_: BarCoordinatorProperty<Property>) -> Property { get set }
 
   /// Registers an observer to monitor changes to a bar coordinator property.
   ///

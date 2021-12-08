@@ -54,55 +54,55 @@ enum FlowLayoutDefaults {
 
 extension EpoxyCollectionViewDelegateFlowLayout {
   public func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    sizeForItemWith dataID: AnyHashable,
-    inSectionWith sectionDataID: AnyHashable)
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
+    sizeForItemWith _: AnyHashable,
+    inSectionWith _: AnyHashable)
     -> CGSize
   {
     FlowLayoutDefaults.itemSize
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    insetForSectionWith sectionDataID: AnyHashable)
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
+    insetForSectionWith _: AnyHashable)
     -> UIEdgeInsets
   {
     FlowLayoutDefaults.sectionInset
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    minimumLineSpacingForSectionWith sectionDataID: AnyHashable)
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
+    minimumLineSpacingForSectionWith _: AnyHashable)
     -> CGFloat
   {
     FlowLayoutDefaults.minimumLineSpacing
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    minimumInteritemSpacingForSectionWith sectionDataID: AnyHashable)
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
+    minimumInteritemSpacingForSectionWith _: AnyHashable)
     -> CGFloat
   {
     FlowLayoutDefaults.minimumInteritemSpacing
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    referenceSizeForHeaderInSectionWith sectionDataID: AnyHashable)
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
+    referenceSizeForHeaderInSectionWith _: AnyHashable)
     -> CGSize
   {
     FlowLayoutDefaults.headerReferenceSize
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    referenceSizeForFooterInSectionWith sectionDataID: AnyHashable)
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
+    referenceSizeForFooterInSectionWith _: AnyHashable)
     -> CGSize
   {
     FlowLayoutDefaults.footerReferenceSize
@@ -121,8 +121,8 @@ extension CollectionView: UICollectionViewDelegateFlowLayout {
     -> CGSize
   {
     guard
-      let item = self.item(at: indexPath),
-      let section = self.section(at: indexPath.section)
+      let item = item(at: indexPath),
+      let section = section(at: indexPath.section)
     else {
       return FlowLayoutDefaults.itemSize
     }

@@ -77,8 +77,9 @@ final class CollectionViewScrollToItemHelper {
       y: CGFloat.greatestFiniteMagnitude)
     var numberOfAttempts = 1
     while
-      (abs(collectionView.contentOffset.x - previousContentOffset.x) >= 1 ||
-        abs(collectionView.contentOffset.y - previousContentOffset.y) >= 1) &&
+      (
+        abs(collectionView.contentOffset.x - previousContentOffset.x) >= 1 ||
+          abs(collectionView.contentOffset.y - previousContentOffset.y) >= 1) &&
       numberOfAttempts <= 5
     {
       if numberOfAttempts > 1 {
@@ -110,8 +111,7 @@ final class CollectionViewScrollToItemHelper {
         let closestScrollPosition = closestRestingScrollPosition(
           forTargetItemIndexPath: itemIndexPath,
           collectionView: collectionView)
-      else
-      {
+      else {
         // If we can't find a closest-scroll-position, it's because the item is already fully
         // visible. In this situation, we can return early / do nothing.
         return
@@ -181,7 +181,7 @@ final class CollectionViewScrollToItemHelper {
     guard collectionView.bounds.width > 0 && collectionView.bounds.height > 0 else { return }
 
     // Figure out which axis to use for scrolling.
-    guard let scrollAxis = self.scrollAxis(for: collectionView) else {
+    guard let scrollAxis = scrollAxis(for: collectionView) else {
       // If we can't determine a scroll axis, it's either due to the collection view being too small
       // to be scrollable along either axis, or the collection view being scrollable along both
       // axes. In either scenario, we can just fall back to the default scroll-to-item behavior.
@@ -318,7 +318,7 @@ final class CollectionViewScrollToItemHelper {
     collectionView: UICollectionView)
     -> UICollectionView.ScrollPosition?
   {
-    guard let scrollAxis = self.scrollAxis(for: collectionView) else {
+    guard let scrollAxis = scrollAxis(for: collectionView) else {
       return nil
     }
 

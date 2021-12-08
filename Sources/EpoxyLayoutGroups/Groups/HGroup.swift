@@ -101,7 +101,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   }
 
   @available(*, unavailable)
-  public required init?(coder: NSCoder) {
+  public required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 

@@ -22,7 +22,7 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
   }
 
   @available(*, unavailable)
-  required public init(style: Style) {
+  required public init(style _: Style) {
     fatalError("init(style:) has not been implemented")
   }
 
@@ -50,7 +50,7 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
     didSet { verifyViewController() }
   }
 
-  public var insetMargins: Bool = true {
+  public var insetMargins = true {
     didSet {
       guard insetMargins != oldValue else { return }
       setNeedsLayout()

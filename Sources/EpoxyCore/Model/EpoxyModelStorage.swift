@@ -25,6 +25,7 @@ public struct EpoxyModelStorage {
 
       // This cast will never fail as the storage is only settable via this subscript and the
       // `KeyPath` key is unique for any provider and value type pair.
+      // swiftlint:disable:next force_cast
       return propertyStorage.value as! Property
     }
     set {
@@ -39,6 +40,7 @@ public struct EpoxyModelStorage {
 
       // This cast will never fail as the storage is only settable via this subscript and the
       // `KeyPath` key is unique for any provider and value type pair.
+      // swiftlint:disable:next force_cast
       replaced.value = property.updateStrategy.update(replaced.value as! Property, newValue)
 
       storage[property.keyPath] = replaced

@@ -90,11 +90,11 @@ extension StaticGroupItem: InternalGroupItemModeling {
       .verticalAlignment(verticalAlignment)
   }
 
-  func update(_ constrainable: Constrainable, animated: Bool) {
+  func update(_: Constrainable, animated _: Bool) {
     // no-op
   }
 
-  func setBehaviors(on constrainable: Constrainable) {
+  func setBehaviors(on _: Constrainable) {
     // no-op
   }
 

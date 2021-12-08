@@ -12,7 +12,7 @@ final class EpoxyInSwiftUIViewController: UIHostingController<EpoxyInSwiftUIView
     super.init(rootView: EpoxyInSwiftUIView())
   }
 
-  required init?(coder aDecoder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 }

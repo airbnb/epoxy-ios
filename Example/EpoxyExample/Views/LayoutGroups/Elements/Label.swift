@@ -20,7 +20,7 @@ final class Label: UILabel, EpoxyableView {
     }
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -38,7 +38,7 @@ final class Label: UILabel, EpoxyableView {
 
   typealias Content = String
 
-  func setContent(_ content: String, animated: Bool) {
+  func setContent(_ content: String, animated _: Bool) {
     text = content
   }
 

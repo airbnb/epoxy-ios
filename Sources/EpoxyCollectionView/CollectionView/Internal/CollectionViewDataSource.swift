@@ -152,14 +152,14 @@ final class CollectionViewDataSource: NSObject {
 
 extension CollectionViewDataSource: UICollectionViewDataSource {
 
-  func numberOfSections(in collectionView: UICollectionView) -> Int {
+  func numberOfSections(in _: UICollectionView) -> Int {
     guard let data = data else { return 0 }
 
     return data.sections.count
   }
 
   func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     numberOfItemsInSection section: Int)
     -> Int
   {
@@ -225,7 +225,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
   }
 
   func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     canMoveItemAt indexPath: IndexPath)
     -> Bool
   {
@@ -234,7 +234,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
   }
 
   func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     moveItemAt sourceIndexPath: IndexPath,
     to destinationIndexPath: IndexPath)
   {

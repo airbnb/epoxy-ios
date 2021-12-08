@@ -41,6 +41,7 @@ final class ProductViewController: CollectionViewController {
   @ItemModelBuilder private var items: [ItemModeling] {
     ImageMarquee.itemModel(
       dataID: DataID.Item.headerImage,
+      // swiftlint:disable:next force_unwrapping
       content: .init(imageURL: URL(string: "https://picsum.photos/id/350/500/500")!),
       style: .init(height: 250, contentMode: .scaleAspectFill))
     TextRow.itemModel(
@@ -52,6 +53,7 @@ final class ProductViewController: CollectionViewController {
       content: .init(
         title: "Here is our exciting product",
         subtitle: "We think you should buy it.",
+        // swiftlint:disable:next force_unwrapping
         imageURL: URL(string: "https://picsum.photos/id/350/500/500")!))
   }
 

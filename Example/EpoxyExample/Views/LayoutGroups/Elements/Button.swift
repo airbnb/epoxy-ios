@@ -19,7 +19,7 @@ final class Button: UIButton, EpoxyableView {
       for: .touchUpInside)
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -39,7 +39,7 @@ final class Button: UIButton, EpoxyableView {
     let didTap: (UIButton) -> Void
   }
 
-  func setContent(_ content: Content, animated: Bool) {
+  func setContent(_ content: Content, animated _: Bool) {
     setTitle(content.title, for: .normal)
   }
 

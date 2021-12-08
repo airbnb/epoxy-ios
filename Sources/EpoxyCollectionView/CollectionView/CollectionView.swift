@@ -24,7 +24,7 @@ open class CollectionView: UICollectionView {
   }
 
   @available(*, unavailable)
-  public required init?(coder aDecoder: NSCoder) {
+  public required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -753,7 +753,7 @@ extension CollectionView: UIScrollViewDelegate {
 extension CollectionView: UICollectionViewDelegate {
 
   public func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     willDisplay cell: UICollectionViewCell,
     forItemAt indexPath: IndexPath)
   {
@@ -781,7 +781,7 @@ extension CollectionView: UICollectionViewDelegate {
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     didEndDisplaying cell: UICollectionViewCell,
     forItemAt indexPath: IndexPath)
   {
@@ -818,7 +818,7 @@ extension CollectionView: UICollectionViewDelegate {
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     willDisplaySupplementaryView view: UICollectionReusableView,
     forElementKind elementKind: String,
     at indexPath: IndexPath)
@@ -855,7 +855,7 @@ extension CollectionView: UICollectionViewDelegate {
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     didEndDisplayingSupplementaryView view: UICollectionReusableView,
     forElementOfKind elementKind: String,
     at indexPath: IndexPath)
@@ -901,7 +901,7 @@ extension CollectionView: UICollectionViewDelegate {
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     shouldHighlightItemAt indexPath: IndexPath)
     -> Bool
   {
@@ -946,7 +946,7 @@ extension CollectionView: UICollectionViewDelegate {
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     shouldSelectItemAt indexPath: IndexPath)
     -> Bool
   {
@@ -992,7 +992,7 @@ extension CollectionView: UICollectionViewDelegate {
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     shouldDeselectItemAt indexPath: IndexPath)
     -> Bool
   {
@@ -1019,7 +1019,7 @@ extension CollectionView: UICollectionViewDelegate {
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     transitionLayoutForOldLayout fromLayout: UICollectionViewLayout,
     newLayout toLayout: UICollectionViewLayout)
     -> UICollectionViewTransitionLayout
@@ -1038,7 +1038,7 @@ extension CollectionView: UICollectionViewDelegate {
 
 extension CollectionView: UICollectionViewDataSourcePrefetching {
   public func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     prefetchItemsAt indexPaths: [IndexPath])
   {
     let models = indexPaths.compactMap { epoxyDataSource.data?.item(at: $0) }
@@ -1049,7 +1049,7 @@ extension CollectionView: UICollectionViewDataSourcePrefetching {
   }
 
   public func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     cancelPrefetchingForItemsAt indexPaths: [IndexPath])
   {
     let models = indexPaths.compactMap { epoxyDataSource.data?.item(at: $0) }
@@ -1064,7 +1064,7 @@ extension CollectionView: UICollectionViewDataSourcePrefetching {
 
 extension CollectionView: CollectionViewDataSourceReorderingDelegate {
   func dataSource(
-    _ dataSource: CollectionViewDataSource,
+    _: CollectionViewDataSource,
     moveItem sourceItem: AnyItemModel,
     inSection sourceSection: SectionModel,
     toDestinationItem destinationItem: AnyItemModel,
@@ -1119,23 +1119,43 @@ extension CollectionView: CollectionViewCellAccessibilityDelegate {
 // MARK: Unavailable Methods
 
 extension CollectionView {
-  @available(*, unavailable, message: "You shouldn't be registering cell classes on a CollectionView. The CollectionViewDataSource handles this for you.")
+  @available(
+    *,
+    unavailable,
+    message: "You shouldn't be registering cell classes on a CollectionView. The CollectionViewDataSource handles this for you.")
   final override public func register(_ cellClass: AnyClass?, forCellWithReuseIdentifier identifier: String) {
     super.register(cellClass, forCellWithReuseIdentifier: identifier)
   }
 
-  @available(*, unavailable, message: "You shouldn't be registering cell nibs on a CollectionView. The CollectionViewDataSource handles this for you.")
+  @available(
+    *,
+    unavailable,
+    message: "You shouldn't be registering cell nibs on a CollectionView. The CollectionViewDataSource handles this for you.")
   final override public func register(_ nib: UINib?, forCellWithReuseIdentifier identifier: String) {
     super.register(nib, forCellWithReuseIdentifier: identifier)
   }
 
-  @available(*, unavailable, message: "You shouldn't be registering supplementary view nibs on a CollectionView. The CollectionViewDataSource handles this for you.")
-  final override public func register(_ nib: UINib?, forSupplementaryViewOfKind kind: String, withReuseIdentifier identifier: String) {
+  @available(
+    *,
+    unavailable,
+    message: "You shouldn't be registering supplementary view nibs on a CollectionView. The CollectionViewDataSource handles this for you.")
+  final override public func register(
+    _ nib: UINib?,
+    forSupplementaryViewOfKind kind: String,
+    withReuseIdentifier identifier: String)
+  {
     super.register(nib, forSupplementaryViewOfKind: kind, withReuseIdentifier: identifier)
   }
 
-  @available(*, unavailable, message: "You shouldn't be registering supplementary view classes on a CollectionView. The CollectionViewDataSource handles this for you.")
-  final override public func register(_ viewClass: AnyClass?, forSupplementaryViewOfKind elementKind: String, withReuseIdentifier identifier: String) {
+  @available(
+    *,
+    unavailable,
+    message: "You shouldn't be registering supplementary view classes on a CollectionView. The CollectionViewDataSource handles this for you.")
+  final override public func register(
+    _ viewClass: AnyClass?,
+    forSupplementaryViewOfKind elementKind: String,
+    withReuseIdentifier identifier: String)
+  {
     super.register(viewClass, forSupplementaryViewOfKind: elementKind, withReuseIdentifier: identifier)
   }
 }

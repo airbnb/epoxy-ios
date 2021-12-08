@@ -77,7 +77,9 @@ extension Constrainable where Self: InternalGroup {
       return nil
     }
     guard index >= 0 && index < constrainableContainers.count else {
-      EpoxyLogger.shared.assertionFailure("Attempt to access a constrainable out of bounds. Make sure you've called this method only after updating the group, the view has rendered, and layoutSubviews has been called.")
+      EpoxyLogger.shared
+        .assertionFailure(
+          "Attempt to access a constrainable out of bounds. Make sure you've called this method only after updating the group, the view has rendered, and layoutSubviews has been called.")
       return nil
     }
     return constrainableContainers[index].wrapped
@@ -88,7 +90,9 @@ extension Constrainable where Self: InternalGroup {
       return nil
     }
     guard index >= 0 && index < items.count else {
-      EpoxyLogger.shared.assertionFailure("Attempt to access a group item out of bounds. Make sure you've called this method only after setting the items on the group.")
+      EpoxyLogger.shared
+        .assertionFailure(
+          "Attempt to access a group item out of bounds. Make sure you've called this method only after setting the items on the group.")
       return nil
     }
     return items[index]
@@ -218,7 +222,9 @@ extension Constrainable where Self: InternalGroup {
 
   func resetBehaviors() {
     guard constrainableContainers.count == items.count else {
-      EpoxyLogger.shared.assertionFailure("Containers and items are mismatched, this should never happen and is a failure of the system. Please file a bug report.")
+      EpoxyLogger.shared
+        .assertionFailure(
+          "Containers and items are mismatched, this should never happen and is a failure of the system. Please file a bug report.")
       return
     }
     zip(constrainableContainers, items).forEach { container, item in

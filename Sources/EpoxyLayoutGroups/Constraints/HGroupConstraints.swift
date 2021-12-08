@@ -149,35 +149,57 @@ final class HGroupConstraints: GroupConstraints {
     switch constrainable.verticalAlignment ?? groupAlignment {
     case .fill:
       return [
-        constrainable.leadingAnchor.constraint(equalTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
+        constrainable.leadingAnchor.constraint(
+          equalTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
         constrainable.topAnchor.constraint(equalTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
         constrainable.bottomAnchor.constraint(equalTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
       ]
     case .top:
       return [
-        constrainable.leadingAnchor.constraint(equalTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
+        constrainable.leadingAnchor.constraint(
+          equalTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
         constrainable.topAnchor.constraint(equalTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
-        constrainable.bottomAnchor.constraint(lessThanOrEqualTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
+        constrainable.bottomAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.bottomAnchor,
+          constant: -constrainable.padding.bottom),
       ] + heightAffectingBottomConstraint(for: constrainable, in: owningConstrainable)
     case .center:
       return [
-        constrainable.leadingAnchor.constraint(equalTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
+        constrainable.leadingAnchor.constraint(
+          equalTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
         constrainable.centerYAnchor.constraint(equalTo: owningConstrainable.centerYAnchor),
-        constrainable.topAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
-        constrainable.bottomAnchor.constraint(lessThanOrEqualTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
+        constrainable.topAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.topAnchor,
+          constant: constrainable.padding.top),
+        constrainable.bottomAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.bottomAnchor,
+          constant: -constrainable.padding.bottom),
       ] + heightAffectingTopAndBottomConstraints(for: constrainable, in: owningConstrainable)
     case .centered(let other):
       return [
-        constrainable.leadingAnchor.constraint(equalTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
+        constrainable.leadingAnchor.constraint(
+          equalTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
         constrainable.centerYAnchor.constraint(equalTo: other.centerYAnchor),
-        constrainable.topAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
-        constrainable.bottomAnchor.constraint(lessThanOrEqualTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
+        constrainable.topAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.topAnchor,
+          constant: constrainable.padding.top),
+        constrainable.bottomAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.bottomAnchor,
+          constant: -constrainable.padding.bottom),
       ] + heightAffectingTopAndBottomConstraints(for: constrainable, in: owningConstrainable)
     case .bottom:
       return [
-        constrainable.leadingAnchor.constraint(equalTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
+        constrainable.leadingAnchor.constraint(
+          equalTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
         constrainable.bottomAnchor.constraint(equalTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
-        constrainable.topAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
+        constrainable.topAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.topAnchor,
+          constant: constrainable.padding.top),
       ] + heightAffectingTopConstraint(for: constrainable, in: owningConstrainable)
     case .custom(_, let block):
       return block(owningConstrainable, constrainable)
@@ -195,35 +217,57 @@ final class HGroupConstraints: GroupConstraints {
     switch constrainable.verticalAlignment ?? groupAlignment {
     case .fill:
       return [
-        constrainable.trailingAnchor.constraint(equalTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.trailingAnchor.constraint(
+          equalTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.topAnchor.constraint(equalTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
         constrainable.bottomAnchor.constraint(equalTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
       ]
     case .top:
       return [
-        constrainable.trailingAnchor.constraint(equalTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.trailingAnchor.constraint(
+          equalTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.topAnchor.constraint(equalTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
-        constrainable.bottomAnchor.constraint(lessThanOrEqualTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
+        constrainable.bottomAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.bottomAnchor,
+          constant: -constrainable.padding.bottom),
       ] + heightAffectingBottomConstraint(for: constrainable, in: owningConstrainable)
     case .center:
       return [
-        constrainable.trailingAnchor.constraint(equalTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.trailingAnchor.constraint(
+          equalTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.centerYAnchor.constraint(equalTo: owningConstrainable.centerYAnchor),
-        constrainable.topAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
-        constrainable.bottomAnchor.constraint(lessThanOrEqualTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
+        constrainable.topAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.topAnchor,
+          constant: constrainable.padding.top),
+        constrainable.bottomAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.bottomAnchor,
+          constant: -constrainable.padding.bottom),
       ] + heightAffectingTopAndBottomConstraints(for: constrainable, in: owningConstrainable)
     case .centered(let other):
       return [
-        constrainable.trailingAnchor.constraint(equalTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.trailingAnchor.constraint(
+          equalTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.centerYAnchor.constraint(equalTo: other.centerYAnchor),
-        constrainable.topAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
-        constrainable.bottomAnchor.constraint(lessThanOrEqualTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
+        constrainable.topAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.topAnchor,
+          constant: constrainable.padding.top),
+        constrainable.bottomAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.bottomAnchor,
+          constant: -constrainable.padding.bottom),
       ] + heightAffectingTopAndBottomConstraints(for: constrainable, in: owningConstrainable)
     case .bottom:
       return [
-        constrainable.trailingAnchor.constraint(equalTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.trailingAnchor.constraint(
+          equalTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.bottomAnchor.constraint(equalTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
-        constrainable.topAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
+        constrainable.topAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.topAnchor,
+          constant: constrainable.padding.top),
       ] + heightAffectingTopConstraint(for: constrainable, in: owningConstrainable)
     case .custom(_, let block):
       return block(owningConstrainable, constrainable)
@@ -263,30 +307,42 @@ final class HGroupConstraints: GroupConstraints {
     case .top:
       return [
         constrainable.topAnchor.constraint(equalTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
-        constrainable.bottomAnchor.constraint(lessThanOrEqualTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
+        constrainable.bottomAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.bottomAnchor,
+          constant: -constrainable.padding.bottom),
         glueLeading,
         glueTrailing,
       ] + heightAffectingBottomConstraint(for: constrainable, in: owningConstrainable)
     case .center:
       return [
         constrainable.centerYAnchor.constraint(equalTo: owningConstrainable.centerYAnchor),
-        constrainable.topAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
-        constrainable.bottomAnchor.constraint(lessThanOrEqualTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
+        constrainable.topAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.topAnchor,
+          constant: constrainable.padding.top),
+        constrainable.bottomAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.bottomAnchor,
+          constant: -constrainable.padding.bottom),
         glueLeading,
         glueTrailing,
       ] + heightAffectingTopAndBottomConstraints(for: constrainable, in: owningConstrainable)
     case .centered(let other):
       return [
         constrainable.centerYAnchor.constraint(equalTo: other.centerYAnchor),
-        constrainable.topAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
-        constrainable.bottomAnchor.constraint(lessThanOrEqualTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
+        constrainable.topAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.topAnchor,
+          constant: constrainable.padding.top),
+        constrainable.bottomAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.bottomAnchor,
+          constant: -constrainable.padding.bottom),
         glueLeading,
         glueTrailing,
       ] + heightAffectingTopAndBottomConstraints(for: constrainable, in: owningConstrainable)
     case .bottom:
       return [
         constrainable.bottomAnchor.constraint(equalTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
-        constrainable.topAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
+        constrainable.topAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.topAnchor,
+          constant: constrainable.padding.top),
         glueLeading,
         glueTrailing,
       ] + heightAffectingTopConstraint(for: constrainable, in: owningConstrainable)
@@ -302,7 +358,9 @@ final class HGroupConstraints: GroupConstraints {
     in owningConstrainable: Constrainable)
     -> [NSLayoutConstraint]
   {
-    let constraint = constrainable.topAnchor.constraint(equalTo: owningConstrainable.topAnchor, constant: constrainable.padding.top)
+    let constraint = constrainable.topAnchor.constraint(
+      equalTo: owningConstrainable.topAnchor,
+      constant: constrainable.padding.top)
     // set this constraint's priority just above that of the fittingSizeLevel which will
     // ensure this constraint has just enough priority to ensure it affects the size of the component
     // while being below the priority of layout constraints. Any layout constraint with a priority below
@@ -318,7 +376,9 @@ final class HGroupConstraints: GroupConstraints {
     in owningConstrainable: Constrainable)
     -> [NSLayoutConstraint]
   {
-    let constraint = constrainable.bottomAnchor.constraint(equalTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom)
+    let constraint = constrainable.bottomAnchor.constraint(
+      equalTo: owningConstrainable.bottomAnchor,
+      constant: -constrainable.padding.bottom)
     // set this constraint's priority just above that of the fittingSizeLevel which will
     // ensure this constraint has just enough priority to ensure it affects the size of the component
     // while being below the priority of layout constraints. Any layout constraint with a priority below

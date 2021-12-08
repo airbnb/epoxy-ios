@@ -51,7 +51,7 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
     didSet { updateInsetBehavior(from: oldValue) }
   }
 
-  public var insetMargins: Bool = true {
+  public var insetMargins = true {
     didSet {
       guard insetMargins != oldValue else { return }
       setNeedsLayout()

@@ -36,7 +36,7 @@ public final class BottomBarInstaller: NSObject {
     avoidsKeyboard: Bool = false,
     @BarModelBuilder bars: () -> [BarModeling])
   {
-    self.init(viewController: viewController, bars: bars())
+    self.init(viewController: viewController, avoidsKeyboard: avoidsKeyboard, bars: bars())
   }
 
   // MARK: Public
