@@ -72,7 +72,6 @@ GEM
     public_suffix (4.0.6)
     rake (13.0.6)
     rexml (3.2.5)
-    rouge (2.0.7)
     ruby-macho (1.4.0)
     thread_safe (0.3.6)
     typhoeus (1.4.0)
@@ -86,8 +85,6 @@ GEM
       colored2 (~> 3.1)
       nanaimo (~> 0.3.0)
       rexml (~> 3.2.4)
-    xcpretty (0.3.0)
-      rouge (~> 2.0.7)
 
 PLATFORMS
   ruby
@@ -95,7 +92,6 @@ PLATFORMS
 DEPENDENCIES
   cocoapods (~> 1.10.0)!
   rake (~> 13.0.0)!
-  xcpretty!
 
 BUNDLED WITH
    2.2.6

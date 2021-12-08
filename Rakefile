@@ -1,16 +1,12 @@
-def xcpretty(cmd)
-  sh "#{cmd} | xcpretty && exit ${PIPESTATUS[0]}"
-end
-
 namespace :build do
   desc 'Builds the Epoxy package'
   task :package do
-    xcpretty 'xcodebuild build -scheme Epoxy -destination generic/platform=iOS'
+    sh 'xcodebuild build -scheme Epoxy -destination generic/platform=iOS'
   end
 
   desc 'Builds the EpoxyExample app'
   task :example do
-    xcpretty 'xcodebuild build -scheme EpoxyExample -destination "platform=iOS Simulator,name=iPhone 12"'
+    sh 'xcodebuild build -scheme EpoxyExample -destination "platform=iOS Simulator,name=iPhone 12"'
   end
 end
 
@@ -20,12 +16,12 @@ namespace :test do
 
   desc 'Runs unit tests'
   task :unit do
-    xcpretty 'xcodebuild test -scheme EpoxyTests -destination "platform=iOS Simulator,name=iPhone 12"'
+    sh 'xcodebuild test -scheme EpoxyTests -destination "platform=iOS Simulator,name=iPhone 12"'
   end
 
   desc 'Runs performance tests'
   task :performance do
-    xcpretty 'xcodebuild test -scheme PerformanceTests -destination "platform=iOS Simulator,name=iPhone 12"'
+    sh 'xcodebuild test -scheme PerformanceTests -destination "platform=iOS Simulator,name=iPhone 12"'
   end
 end
 
