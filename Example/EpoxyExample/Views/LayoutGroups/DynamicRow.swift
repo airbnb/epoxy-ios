@@ -14,7 +14,7 @@ final class DynamicRow: BaseRow, EpoxyableView {
     layout.constrainToMarginsWithHighPriorityBottom()
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -37,7 +37,7 @@ final class DynamicRow: BaseRow, EpoxyableView {
     let didTapOption: ((String) -> Void)?
   }
 
-  func setContent(_ content: Content, animated: Bool) {
+  func setContent(_ content: Content, animated _: Bool) {
     layout.setItems {
       Label.groupItem(
         dataID: DataID.title,
