@@ -168,6 +168,7 @@ struct CollectionViewData {
         EpoxyLogger.shared.warn({
           // `sectionIndexMap` is constructed from the same data as `itemIndexMap` so we can force
           // unwrap.
+          // swiftlint:disable:next force_unwrapping
           let sectionIndex = sectionIndexMap[sectionID]!
 
           return """
@@ -201,6 +202,7 @@ struct CollectionViewData {
       let lastSectionID = itemIndexMapBySectionID.max(by: { first, second in
         // `sectionIndexMap` is constructed from the same data as `itemIndexMap` so we can safely
         // force unwrap.
+        // swiftlint:disable:next force_unwrapping
         sectionIndexMap[first.key]!.last! < sectionIndexMap[second.key]!.last!
       })
 
@@ -308,6 +310,7 @@ struct CollectionViewData {
         message.append("- Duplicate section IDs:")
         for duplicateIndexes in changeset.sectionChangeset.duplicates {
           // Force unwrap is safe here since `duplicateIndexes` is never empty.
+          // swiftlint:disable:next force_unwrapping
           let duplicateID = sections[duplicateIndexes.first!].dataID
           message.append(
             "  - Section ID \(duplicateID) duplicated at indexes \(duplicateIndexes.map { $0 })")

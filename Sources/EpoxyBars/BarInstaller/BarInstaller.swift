@@ -163,6 +163,8 @@ extension BarInstaller: BarCoordinatorPropertyConfigurable {
     -> AnyObject
   {
     let uuid = UUID()
+    // We can safely force cast as all writes to observers flow through a generic setter above
+    // swiftlint:disable:next force_cast
     observers[property.key, default: [:]][uuid] = { observer($0 as! Property) }
     observer(storage[property.key]?.value as? Property ?? property.default())
     return Token { [weak self] in

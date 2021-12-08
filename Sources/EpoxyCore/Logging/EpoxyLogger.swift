@@ -12,6 +12,7 @@ public final class EpoxyLogger {
     assertionFailure: @escaping AssertionFailure = Swift.assertionFailure,
     warn: @escaping Warn = { message, _, _ in
       #if DEBUG
+      // swiftlint:disable:next no_direct_standard_out_logs
       print(message())
       #endif
     })

@@ -27,6 +27,7 @@ class LayoutGroupsReadmeExamplesViewController: CollectionViewController {
       dataID: DataID.iconRow,
       content: .init(
         title: "This is an IconRow",
+        // swiftlint:disable:next force_unwrapping
         icon: UIImage(systemName: "person.fill")!))
   }
 
