@@ -15,7 +15,7 @@ extension CallbackContextEpoxyModeled where Self: DidEndDisplayingProviding {
 
   /// A closure that's called when a view is no longer displayed following any disappearance
   /// animations and when it has been removed from the view hierarchy.
-  public typealias DidEndDisplaying = ((_ context: CallbackContext) -> Void)
+  public typealias DidEndDisplaying = (_ context: CallbackContext) -> Void
 
   /// A closure that's called when the view is no longer displayed following any disappearance
   /// animations and when it has been removed from the view hierarchy.

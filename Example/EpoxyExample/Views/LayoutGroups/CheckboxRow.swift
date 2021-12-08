@@ -14,7 +14,7 @@ final class CheckboxRow: BaseRow, EpoxyableView {
     setUp()
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -33,7 +33,7 @@ final class CheckboxRow: BaseRow, EpoxyableView {
     case subtitle
   }
 
-  func setContent(_ content: Content, animated: Bool) {
+  func setContent(_ content: Content, animated _: Bool) {
     group.setItems {
       IconView.groupItem(
         dataID: DataID.checkbox,

@@ -17,7 +17,7 @@ final class ColorView: UIView, EpoxyableView {
     backgroundColor = style.color
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 

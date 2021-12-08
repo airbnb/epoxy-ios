@@ -24,7 +24,7 @@ final class CardContainer<ContentView: EpoxyableView>: UIView, EpoxyableView {
     applyStyle()
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 

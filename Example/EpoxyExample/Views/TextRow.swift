@@ -19,7 +19,7 @@ final class TextRow: UIView, EpoxyableView {
     group.constrainToMarginsWithHighPriorityBottom()
   }
 
-  required init?(coder aDecoder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -34,7 +34,7 @@ final class TextRow: UIView, EpoxyableView {
     var body: String?
   }
 
-  func setContent(_ content: Content, animated: Bool) {
+  func setContent(_ content: Content, animated _: Bool) {
     let titleStyle: UIFont.TextStyle
     let bodyStyle: UIFont.TextStyle
 
@@ -101,7 +101,7 @@ extension TextRow: HighlightableView {
 // MARK: DisplayRespondingView
 
 extension TextRow: DisplayRespondingView {
-  func didDisplay(_ isDisplayed: Bool) {
+  func didDisplay(_: Bool) {
     // Handle this row being displayed.
   }
 }

@@ -15,7 +15,7 @@ final class CustomSizingView: UIView, EpoxyableView {
     setUpViews()
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -80,7 +80,7 @@ private class SizingLabel: UILabel {
     return contentSize?(constrainingWidth) ?? .zero
   }
 
-  override func draw(_ rect: CGRect) {
+  override func draw(_: CGRect) {
     // Do nothing here, the label is only used for sizing
   }
 }

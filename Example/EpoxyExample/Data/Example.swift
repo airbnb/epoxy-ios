@@ -40,7 +40,7 @@ enum Example: CaseIterable {
     case .swiftUIToEpoxy:
       return "SwiftUI in Epoxy"
     case .epoxyToSwiftUI:
-      return  "Epoxy in SwiftUI"
+      return "Epoxy in SwiftUI"
     }
   }
 

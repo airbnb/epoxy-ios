@@ -156,34 +156,54 @@ final class VGroupConstraints: GroupConstraints {
     switch alignment {
     case .fill:
       return [
-        constrainable.leadingAnchor.constraint(equalTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(equalTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          equalTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          equalTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.topAnchor.constraint(equalTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
       ]
     case .leading:
       return [
-        constrainable.leadingAnchor.constraint(equalTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(lessThanOrEqualTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          equalTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.topAnchor.constraint(equalTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
       ]
     case .center:
       return [
-        constrainable.leadingAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(lessThanOrEqualTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.topAnchor.constraint(equalTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
         constrainable.centerXAnchor.constraint(equalTo: owningConstrainable.centerXAnchor),
       ]
     case .centered(let other):
       return [
-        constrainable.leadingAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(lessThanOrEqualTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.topAnchor.constraint(equalTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
         constrainable.centerXAnchor.constraint(equalTo: other.centerXAnchor),
       ]
     case .trailing:
       return [
-        constrainable.leadingAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(equalTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          equalTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.topAnchor.constraint(equalTo: owningConstrainable.topAnchor, constant: constrainable.padding.top),
       ]
     case .custom(_, let block):
@@ -206,34 +226,54 @@ final class VGroupConstraints: GroupConstraints {
     switch alignment {
     case .fill:
       return [
-        constrainable.leadingAnchor.constraint(equalTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(equalTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          equalTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          equalTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.bottomAnchor.constraint(equalTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
       ]
     case .leading:
       return [
-        constrainable.leadingAnchor.constraint(equalTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(lessThanOrEqualTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          equalTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.bottomAnchor.constraint(equalTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
       ]
     case .center:
       return [
-        constrainable.leadingAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(lessThanOrEqualTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.bottomAnchor.constraint(equalTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
         constrainable.centerXAnchor.constraint(equalTo: owningConstrainable.centerXAnchor),
       ]
     case .centered(let other):
       return [
-        constrainable.leadingAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(lessThanOrEqualTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.bottomAnchor.constraint(equalTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
         constrainable.centerXAnchor.constraint(equalTo: other.centerXAnchor),
       ]
     case .trailing:
       return [
-        constrainable.leadingAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(equalTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          equalTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         constrainable.bottomAnchor.constraint(equalTo: owningConstrainable.bottomAnchor, constant: -constrainable.padding.bottom),
       ]
     case .custom(_, let block):
@@ -270,38 +310,58 @@ final class VGroupConstraints: GroupConstraints {
     switch alignment {
     case .fill:
       return [
-        constrainable.leadingAnchor.constraint(equalTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(equalTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          equalTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          equalTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         glueTop,
         glueBottom,
       ]
     case .leading:
       return [
-        constrainable.leadingAnchor.constraint(equalTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(lessThanOrEqualTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          equalTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         glueTop,
         glueBottom,
       ]
     case .center:
       return [
-        constrainable.leadingAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(lessThanOrEqualTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         glueTop,
         glueBottom,
         constrainable.centerXAnchor.constraint(equalTo: owningConstrainable.centerXAnchor),
       ]
     case .centered(let other):
       return [
-        constrainable.leadingAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(lessThanOrEqualTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          lessThanOrEqualTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         glueTop,
         glueBottom,
         constrainable.centerXAnchor.constraint(equalTo: other.centerXAnchor),
       ]
     case .trailing:
       return [
-        constrainable.leadingAnchor.constraint(greaterThanOrEqualTo: owningConstrainable.leadingAnchor, constant: constrainable.padding.leading),
-        constrainable.trailingAnchor.constraint(equalTo: owningConstrainable.trailingAnchor, constant: -constrainable.padding.trailing),
+        constrainable.leadingAnchor.constraint(
+          greaterThanOrEqualTo: owningConstrainable.leadingAnchor,
+          constant: constrainable.padding.leading),
+        constrainable.trailingAnchor.constraint(
+          equalTo: owningConstrainable.trailingAnchor,
+          constant: -constrainable.padding.trailing),
         glueTop,
         glueBottom,
       ]

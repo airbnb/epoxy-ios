@@ -119,18 +119,20 @@ extension HGroupItem: InternalGroupItemModeling {
       toUpdate = container.wrapped
     }
     guard let hGroup = toUpdate as? HGroup else {
-      EpoxyLogger.shared.assertionFailure("Attempt to update the wrong item type. This should never happen and is a failure of the system, please file a bug report")
+      EpoxyLogger.shared
+        .assertionFailure(
+          "Attempt to update the wrong item type. This should never happen and is a failure of the system, please file a bug report")
       return
     }
     hGroup.setItems(groupItems, animated: animated)
   }
 
-  public func setBehaviors(on constrainable: Constrainable) {
+  public func setBehaviors(on _: Constrainable) {
     // This shouldn't be necessary because we will always have `update()` called
     // on an HGroupItem and that will subsequently update our behaviors
   }
 
-  public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
+  public func isDiffableItemEqual(to _: Diffable) -> Bool {
     false
   }
 }

@@ -171,11 +171,11 @@ struct CollectionViewData {
           let sectionIndex = sectionIndexMap[sectionID]!
 
           return """
-          Warning! Attempted to locate item \(path.itemDataID) in section \(sectionID) at indexes \
-          \(sectionIndex.map { $0 }) when there are multiple items with that ID at the indexes \
-          \(indexPaths.map { $0.item }). Choosing the last index. Items should have unique data \
-          IDs within a section as duplicate data IDs cause undefined behavior.
-          """
+            Warning! Attempted to locate item \(path.itemDataID) in section \(sectionID) at indexes \
+            \(sectionIndex.map { $0 }) when there are multiple items with that ID at the indexes \
+            \(indexPaths.map { $0.item }). Choosing the last index. Items should have unique data \
+            IDs within a section as duplicate data IDs cause undefined behavior.
+            """
         }())
       }
 
@@ -205,15 +205,13 @@ struct CollectionViewData {
       })
 
       if let sectionID = lastSectionID {
-        EpoxyLogger.shared.warn({
-          """
+        EpoxyLogger.shared.warn("""
           Warning! Attempted to locate item \(path.itemDataID) when there are multiple sections that \
           contain it each with IDs \(itemIndexMapBySectionID.keys) at the indexes \
           \(itemIndexMapBySectionID.keys.map { sectionIndexMap[$0] }). Choosing the last section \
           \(sectionID.key). To fix this warning specify the desired section data ID when \
           constructing your `ItemPath`.
-          """
-        }())
+          """)
 
         return lastIndexPath(in: sectionID.value, sectionID: sectionID.key)
       }
@@ -233,13 +231,11 @@ struct CollectionViewData {
       return indexes.first
     }
 
-    EpoxyLogger.shared.warn({
-      """
+    EpoxyLogger.shared.warn("""
       Warning! Attempted to locate section \(dataID) when there are multiple sections with that ID \
       at the indexes \(indexes.map { $0 }). Choosing the last index. Sections should have unique \
       data IDs within a collection as duplicate data IDs can cause undefined behavior.
-      """
-    }())
+      """)
 
     return indexes.last
   }

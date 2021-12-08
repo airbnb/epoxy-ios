@@ -158,11 +158,11 @@ private struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
     // No updates required.
   }
 
-  func makeUIView(context: Context) -> EpoxyableViewContainer<Self, View> {
+  func makeUIView(context _: Context) -> EpoxyableViewContainer<Self, View> {
     let uiView = View(style: style)
     uiView.setContent(content, animated: false)
     uiView.setBehaviors(behaviors)
-    return EpoxyableViewContainer(view: self, uiView: uiView, context: self.context)
+    return EpoxyableViewContainer(view: self, uiView: uiView, context: context)
   }
 }
 
@@ -212,11 +212,11 @@ private struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewReprese
     // No updates required.
   }
 
-  func makeUIView(context: Context) -> EpoxyableViewContainer<Self, View> {
+  func makeUIView(context _: Context) -> EpoxyableViewContainer<Self, View> {
     let uiView = View()
     uiView.setContent(content, animated: false)
     uiView.setBehaviors(behaviors)
-    return EpoxyableViewContainer(view: self, uiView: uiView, context: self.context)
+    return EpoxyableViewContainer(view: self, uiView: uiView, context: context)
   }
 }
 
@@ -242,7 +242,7 @@ private struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepre
   var behaviors: View.Behaviors?
   var context: IdealHeightContainerContext
 
-  func updateUIView(_ wrapper: EpoxyableViewContainer<Self, View>, context: Context) {
+  func updateUIView(_ wrapper: EpoxyableViewContainer<Self, View>, context _: Context) {
     defer {
       wrapper.view = self
 
@@ -261,10 +261,10 @@ private struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepre
     // No updates required.
   }
 
-  func makeUIView(context: Context) -> EpoxyableViewContainer<Self, View> {
+  func makeUIView(context _: Context) -> EpoxyableViewContainer<Self, View> {
     let uiView = View(style: style)
     uiView.setBehaviors(behaviors)
-    return EpoxyableViewContainer(view: self, uiView: uiView, context: self.context)
+    return EpoxyableViewContainer(view: self, uiView: uiView, context: context)
   }
 }
 
@@ -286,15 +286,15 @@ private struct SwiftUIStylelessContentlessEpoxyableView<View: EpoxyableView>: UI
   var behaviors: View.Behaviors?
   var context: IdealHeightContainerContext
 
-  func updateUIView(_ wrapper: EpoxyableViewContainer<Self, View>, context: Context) {
+  func updateUIView(_ wrapper: EpoxyableViewContainer<Self, View>, context _: Context) {
     wrapper.view = self
     wrapper.uiView.setBehaviors(behaviors)
   }
 
-  func makeUIView(context: Context) -> EpoxyableViewContainer<Self, View> {
+  func makeUIView(context _: Context) -> EpoxyableViewContainer<Self, View> {
     let uiView = View()
     uiView.setBehaviors(behaviors)
-    return EpoxyableViewContainer(view: self, uiView: uiView, context: self.context)
+    return EpoxyableViewContainer(view: self, uiView: uiView, context: context)
   }
 }
 
@@ -320,7 +320,7 @@ private final class EpoxyableViewContainer<SwiftUIView, UIViewType>: UIView
   }
 
   @available(*, unavailable)
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 

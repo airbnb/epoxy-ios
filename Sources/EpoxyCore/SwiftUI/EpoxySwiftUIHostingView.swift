@@ -78,7 +78,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   }
 
   @available(*, unavailable)
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -111,7 +111,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     public var rootView: RootView
     public var dataID: AnyHashable?
 
-    public static func == (lhs: Content, rhs: Content) -> Bool {
+    public static func == (_: Content, _: Content) -> Bool {
       // The content should never be equal since we need the `rootView` to be updated on every
       // content change.
       false
@@ -128,7 +128,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     }
   }
 
-  public func setContent(_ content: Content, animated: Bool) {
+  public func setContent(_ content: Content, animated _: Bool) {
     /// This triggers a change in the observed `EpoxyHostingContent` object and allows the
     /// propagation of the SwiftUI transaction, instead of just replacing the `rootView`.
     epoxyContent.rootView = content.rootView

@@ -50,7 +50,7 @@ extension HGroup {
            (.center, .center),
            (.bottom, .bottom):
         return true
-      case let (.centered(c1), .centered(c2)):
+      case (.centered(let c1), .centered(let c2)):
         return c1.isEqual(to: c2)
       case (.custom(let id1, _), .custom(let id2, _)):
         return id1 == id2

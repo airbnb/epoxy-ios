@@ -24,7 +24,7 @@ final class IconView: UIImageView, EpoxyableView {
     setContent(image, animated: false)
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -47,7 +47,7 @@ final class IconView: UIImageView, EpoxyableView {
     size
   }
 
-  func setContent(_ content: UIImage?, animated: Bool) {
+  func setContent(_ content: UIImage?, animated _: Bool) {
     image = content
   }
 

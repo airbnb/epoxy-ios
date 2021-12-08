@@ -32,7 +32,7 @@ public final class HGroupView: UIView, EpoxyableView {
     ])
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -75,7 +75,7 @@ public final class HGroupView: UIView, EpoxyableView {
 
     public var items: [AnyGroupItem]
 
-    public static func ==(lhs: Content, rhs: Content) -> Bool {
+    public static func ==(_: Content, _: Content) -> Bool {
       // this intentionally always returns false as we want the setItems implementation
       // to handle diffing for us, and to ensure we always update behaviors
       false

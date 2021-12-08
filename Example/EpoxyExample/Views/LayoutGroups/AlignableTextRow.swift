@@ -17,7 +17,7 @@ final class AlignableTextRow: BaseRow, EpoxyableView {
     setUp()
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -27,7 +27,7 @@ final class AlignableTextRow: BaseRow, EpoxyableView {
 
   struct Style: Hashable {
     var titleAlignment: VGroup.ItemAlignment = .leading
-    var showLabelBackgrounds: Bool = false
+    var showLabelBackgrounds = false
   }
 
   struct Content: Equatable {
@@ -35,7 +35,7 @@ final class AlignableTextRow: BaseRow, EpoxyableView {
     let subtitle: String?
   }
 
-  func setContent(_ content: Content, animated: Bool) {
+  func setContent(_ content: Content, animated _: Bool) {
     let showLabelBackgrounds = style.showLabelBackgrounds
 
     group.setItems {

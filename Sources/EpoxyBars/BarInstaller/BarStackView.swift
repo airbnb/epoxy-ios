@@ -18,7 +18,7 @@ public class BarStackView: UIStackView, EpoxyableView {
   }
 
   @available(*, unavailable)
-  public required init(coder: NSCoder) {
+  public required init(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
@@ -490,7 +490,7 @@ extension BarStackView {
     /// The order that the bars are arranged on the Z axis.
     public var zOrder: ZOrder
 
-    public static func ==(lhs: Self, rhs: Self) -> Bool {
+    public static func ==(_: Self, _: Self) -> Bool {
       // The content should never be equal since we need the `models`'s behavior to be updated on
       // every content change.
       false
