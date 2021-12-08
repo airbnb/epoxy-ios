@@ -1,12 +1,12 @@
 namespace :build do
   desc 'Builds the Epoxy package'
   task :package do
-    sh 'xcodebuild build -scheme Epoxy -destination generic/platform=iOS | mint run xcbeautify'
+    xcodebuild 'build -scheme Epoxy -destination generic/platform=iOS'
   end
 
   desc 'Builds the EpoxyExample app'
   task :example do
-    sh 'xcodebuild build -scheme EpoxyExample -destination "platform=iOS Simulator,name=iPhone 12" | mint run xcbeautify'
+    xcodebuild 'build -scheme EpoxyExample -destination "platform=iOS Simulator,name=iPhone 12"'
   end
 end
 
@@ -16,12 +16,12 @@ namespace :test do
 
   desc 'Runs unit tests'
   task :unit do
-    sh 'xcodebuild test -scheme EpoxyTests -destination "platform=iOS Simulator,name=iPhone 12" | mint run xcbeautify'
+    xcodebuild 'test -scheme EpoxyTests -destination "platform=iOS Simulator,name=iPhone 12"'
   end
 
   desc 'Runs performance tests'
   task :performance do
-    sh 'xcodebuild test -scheme PerformanceTests -destination "platform=iOS Simulator,name=iPhone 12" | mint run xcbeautify'
+    xcodebuild 'test -scheme PerformanceTests -destination "platform=iOS Simulator,name=iPhone 12"'
   end
 end
 
@@ -76,4 +76,10 @@ end
 
 task :default do
   system 'rake -T'
+end
+
+private
+
+def xcodebuild(arguments)
+  sh "xcodebuild #{arguments} | mint run xcbeautify"
 end
