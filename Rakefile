@@ -80,6 +80,6 @@ end
 
 private
 
-def xcodebuild(arguments)
-  sh "xcodebuild #{arguments} | mint run xcbeautify"
+def xcodebuild(command)
+  sh "set -o pipefail && xcodebuild #{command} | mint run xcbeautify"
 end
