@@ -4,10 +4,12 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.6.0...HEAD)
-- Added a weak reference from `TopBarContainer` / `BottomBarContainer` to their parent bar installer
+## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.7.0...HEAD)
+
+## [0.7.0](https://github.com/airbnb/epoxy-ios/compare/0.6.0...0.7.0) - 2021-12-09
 
 ### Added
+- Added a weak reference from `TopBarContainer` / `BottomBarContainer` to their parent bar installer
 - Added a `BarInstallerConfiguration` type to allow both global and per-instance configuration of
   bar installers.
 - Added an `applyBars` closure to `BarInstallerConfiguration` to allow consumers to configure _when_
