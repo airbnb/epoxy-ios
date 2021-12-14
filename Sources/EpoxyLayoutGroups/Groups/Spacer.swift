@@ -8,10 +8,10 @@ import UIKit
 /// e.g.:
 /// let vGroup = VGroup {
 ///   titleLabel
-///   Spacer(fixedHeight: 16)
+///   LayoutSpacer(fixedHeight: 16)
 ///   subtitleLabel
 /// }
-public final class Spacer: UILayoutGuide, Constrainable {
+public final class LayoutSpacer: UILayoutGuide, Constrainable {
 
   // MARK: Lifecycle
 
@@ -92,7 +92,7 @@ public final class Spacer: UILayoutGuide, Constrainable {
   }
 
   public func isEqual(to constrainable: Constrainable) -> Bool {
-    guard let other = constrainable as? Spacer else { return false }
+    guard let other = constrainable as? LayoutSpacer else { return false }
     return other.style == style
   }
 
