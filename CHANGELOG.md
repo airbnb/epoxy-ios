@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.7.0...HEAD)
 
+### Changed
+- Updated name of `Spacer` to `LayoutSpacer` to avoid name conflict with SwiftUI's `Spacer`
+
 ## [0.7.0](https://github.com/airbnb/epoxy-ios/compare/0.6.0...0.7.0) - 2021-12-09
 
 ### Added

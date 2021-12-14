@@ -182,7 +182,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   }
 
   /// The space between elements.
-  /// If you need custom spacing between elements use Spacer instead
+  /// If you need custom spacing between elements use LayoutSpacer instead
   /// The default spacing value is 8
   public var spacing: CGFloat {
     didSet { constraints?.itemSpacing = spacing }

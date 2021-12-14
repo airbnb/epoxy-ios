@@ -6,12 +6,12 @@ import UIKit
 
 // MARK: - SpacerItem
 
-/// A `GroupItemModeling` implementation of `Spacer` to be used within groups
+/// A `GroupItemModeling` implementation of `LayoutSpacer` to be used within groups
 public struct SpacerItem {
 
   public init(
     dataID: AnyHashable,
-    style: Spacer.Style = .init())
+    style: LayoutSpacer.Style = .init())
   {
     self.dataID = dataID
     self.style = style
@@ -20,7 +20,7 @@ public struct SpacerItem {
   // MARK: Private
 
   public var dataID: AnyHashable
-  public var style: Spacer.Style
+  public var style: LayoutSpacer.Style
 }
 
 // MARK: GroupItemModeling
@@ -31,8 +31,8 @@ extension SpacerItem: GroupItemModeling {
   }
 
   public func eraseToAnyGroupItem() -> AnyGroupItem {
-    GroupItem<Spacer>(dataID: dataID) {
-      Spacer(style: style)
+    GroupItem<LayoutSpacer>(dataID: dataID) {
+      LayoutSpacer(style: style)
     }
     .eraseToAnyGroupItem()
   }
@@ -49,5 +49,5 @@ extension SpacerItem: GroupItemModeling {
 
 private struct DiffIdentifier: Hashable {
   let dataID: AnyHashable
-  let style: Spacer.Style
+  let style: LayoutSpacer.Style
 }
