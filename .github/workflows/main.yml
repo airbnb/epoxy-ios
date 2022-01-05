@@ -9,20 +9,41 @@ on:
 jobs:
   build-package:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        xcode:
+        - '12.5.1' # Swift 5.4
+        - '13.2' # Swift 5.5
     steps:
       - uses: actions/checkout@v2
+      - name: Select Xcode ${{ matrix.xcode }}
+        run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
       - name: Build Package
         run: brew install mint && bundle install && bundle exec rake build:package
   build-example:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        xcode:
+        - '12.5.1' # Swift 5.4
+        - '13.2' # Swift 5.5
     steps:
       - uses: actions/checkout@v2
+      - name: Select Xcode ${{ matrix.xcode }}
+        run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
       - name: Build Example
         run: brew install mint && bundle install && bundle exec rake build:example
   test-package:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        xcode:
+        - '12.5.1' # Swift 5.4
+        - '13.2' # Swift 5.5
     steps:
       - uses: actions/checkout@v2
+      - name: Select Xcode ${{ matrix.xcode }}
+        run: sudo xcode-select --switch /Applications/Xcode_${{ matrix.xcode }}.app
       - name: Test Package
         run: brew install mint && bundle install && bundle exec rake test:package
   lint-swift:
