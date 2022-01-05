@@ -173,8 +173,6 @@ final class PresentationModelBuilderSpec: QuickSpec {
       }
     }
 
-    // Result builders only work with for loops in Swift 5.4+
-    #if swift(>=5.4)
     context("with a for loop") {
       it("should build the first non-nil presentation") {
         let builder = TestBuilder {
@@ -189,7 +187,6 @@ final class PresentationModelBuilderSpec: QuickSpec {
         expect(builder.model?.dataID as? Int) == 2
       }
     }
-    #endif
 
     context("with no presentation models") {
       it("should build a nil model") {

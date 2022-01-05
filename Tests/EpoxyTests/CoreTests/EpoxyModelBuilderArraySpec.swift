@@ -142,8 +142,6 @@ final class EpoxyModelBuilderArraySpec: QuickSpec {
       }
     }
 
-    // Result builders only work with for loops in Swift 5.4+
-    #if swift(>=5.4)
     context("with a for loop") {
       it("should include the models in the loop") {
         let builder = BuilderTest {
@@ -154,7 +152,6 @@ final class EpoxyModelBuilderArraySpec: QuickSpec {
         expect(builder.models) == [2, 4, 6, 8, 10]
       }
     }
-    #endif
 
     context("with no models") {
       it("should build an empty array") {
