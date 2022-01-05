@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.4
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -16,7 +16,7 @@ let package = Package(
     .library(name: "EpoxyLayoutGroups", targets: ["EpoxyLayoutGroups"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/Quick/Quick.git", .upToNextMajor(from: "3.0.0")),
+    .package(url: "https://github.com/Quick/Quick.git", .upToNextMajor(from: "4.0.0")),
     .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "9.0.0")),
   ],
   targets: [

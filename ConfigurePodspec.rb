@@ -14,7 +14,7 @@ def configure(spec:, name:, summary:, local_deps: [])
   spec.source = { git: 'https://github.com/airbnb/epoxy-ios.git', tag: version }
   spec.source_files = "Sources/#{name}/**/*.swift"
   spec.ios.deployment_target = '13.0'
-  spec.swift_versions = ['5.3']
+  spec.swift_versions = ['5.4']
 
   local_deps.each do |dep|
     spec.dependency dep, version
