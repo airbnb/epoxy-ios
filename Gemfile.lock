@@ -90,8 +90,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  cocoapods (~> 1.10.0)!
-  rake (~> 13.0.0)!
+  cocoapods (~> 1.10.0)
+  rake (~> 13.0.0)
 
 BUNDLED WITH
    2.2.6
