@@ -6,7 +6,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-  - uses: actions/checkout@v2
   - name: Select Xcode ${{ inputs.xcode }}
     run: sudo xcode-select --switch /Applications/Xcode_${{ inputs.xcode }}.app
     if: ${{ inputs.xcode }}

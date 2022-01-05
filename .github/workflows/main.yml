@@ -15,6 +15,7 @@ jobs:
         - '12.5.1' # Swift 5.4
         - '13.2' # Swift 5.5
     steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
         with:
           xcode: ${{ matrix.xcode }}
@@ -29,6 +30,7 @@ jobs:
         - '12.5.1' # Swift 5.4
         - '13.2' # Swift 5.5
     steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
         with:
           xcode: ${{ matrix.xcode }}
@@ -43,6 +45,7 @@ jobs:
         - '12.5.1' # Swift 5.4
         - '13.2' # Swift 5.5
     steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
         with:
           xcode: ${{ matrix.xcode }}
@@ -52,6 +55,7 @@ jobs:
   lint-swift:
     runs-on: macos-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
       - name: Lint Swift
         run: bundle exec rake lint:swift
@@ -59,6 +63,7 @@ jobs:
   lint-podspec:
     runs-on: macos-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
       - name: Lint Podspec
         run: bundle exec rake lint:podspec
