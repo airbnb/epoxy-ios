@@ -9,7 +9,12 @@ runs:
   - name: Select Xcode ${{ inputs.xcode }}
     run: sudo xcode-select --switch /Applications/Xcode_${{ inputs.xcode }}.app
     if: ${{ inputs.xcode }}
+    shell: bash
+
   - name: Install Mint via Homebrew
     run: brew install mint
+    shell: bash
+
   - name: Install Ruby Gems
     run: bundle install
+    shell: bash
