@@ -1,10 +1,10 @@
-name: 'Setup'
-description: 'Setup the Epoxy iOS CI Environment'
+name: Setup
+description: Setup the Epoxy iOS CI Environment
 inputs:
   xcode:
-    description: 'The version of Xcode to select'
+    description: The version of Xcode to select
 runs:
-  using: "composite"
+  using: composite
   steps:
   - name: Select Xcode ${{ inputs.xcode }}
     run: sudo xcode-select --switch /Applications/Xcode_${{ inputs.xcode }}.app
