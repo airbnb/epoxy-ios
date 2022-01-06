@@ -9,31 +9,61 @@ on:
 jobs:
   build-package:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        xcode:
+        - '12.5.1' # Swift 5.4
+        - '13.2' # Swift 5.5
     steps:
       - uses: actions/checkout@v2
+      - uses: ./.github/actions/setup
+        with:
+          xcode: ${{ matrix.xcode }}
       - name: Build Package
-        run: brew install mint && bundle install && bundle exec rake build:package
+        run: bundle exec rake build:package
+
   build-example:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        xcode:
+        - '12.5.1' # Swift 5.4
+        - '13.2' # Swift 5.5
     steps:
       - uses: actions/checkout@v2
+      - uses: ./.github/actions/setup
+        with:
+          xcode: ${{ matrix.xcode }}
       - name: Build Example
-        run: brew install mint && bundle install && bundle exec rake build:example
+        run: bundle exec rake build:example
+
   test-package:
     runs-on: macos-latest
+    strategy:
+      matrix:
+        xcode:
+        - '12.5.1' # Swift 5.4
+        - '13.2' # Swift 5.5
     steps:
       - uses: actions/checkout@v2
+      - uses: ./.github/actions/setup
+        with:
+          xcode: ${{ matrix.xcode }}
       - name: Test Package
-        run: brew install mint && bundle install && bundle exec rake test:package
+        run: bundle exec rake test:package
+
   lint-swift:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: ./.github/actions/setup
       - name: Lint Swift
-        run: brew install mint && bundle install && bundle exec rake lint:swift
+        run: bundle exec rake lint:swift
+
   lint-podspec:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: ./.github/actions/setup
       - name: Lint Podspec
-        run: brew install mint && bundle install && bundle exec rake lint:podspec
+        run: bundle exec rake lint:podspec
