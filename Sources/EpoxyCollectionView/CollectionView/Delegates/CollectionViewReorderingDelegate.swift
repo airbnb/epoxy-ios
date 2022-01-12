@@ -13,11 +13,13 @@ import UIKit
 /// - SeeAlso: `IsMovableProviding`
 public protocol CollectionViewReorderingDelegate: AnyObject {
 
-  /// Check whether the destination is allowed to move the source item to.
-  /// If `false`, the destination item will be pinned and the interactive item cannot be moved to the destination position.
-  /// Default `true`.
+  /// Returns whether the source item is allowed to move to the proposed destination.
   ///
-  /// Corresponds to `UICollectionViewDelegate.collectionView(_:targetIndexPathForMoveFromItemAt:toProposedIndexPath:) -> IndexPath`
+  /// If `false`, the destination item will be pinned and the interactive item cannot be moved to 
+  /// the destination position. Defaults to `true`.
+  ///
+  /// Corresponds to 
+  /// `UICollectionViewDelegate.collectionView(_:targetIndexPathForMoveFromItemAt:toProposedIndexPath:)`
   func collectionView(
     _ collectionView: CollectionView,
     shouldMoveItem sourceItem: AnyItemModel,
