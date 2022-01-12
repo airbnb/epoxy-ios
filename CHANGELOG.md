@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.7.0...HEAD)
 
+### Added
+- Added a method to `CollectionViewReorderingDelegate` to check the reordering destination is expected.
+
 ### Changed
 - Updated name of `Spacer` to `LayoutSpacer` to avoid name conflict with SwiftUI's `Spacer`
 - Updated to have Swift 5.4 as the minimum supported Swift version (previously Swift 5.3).

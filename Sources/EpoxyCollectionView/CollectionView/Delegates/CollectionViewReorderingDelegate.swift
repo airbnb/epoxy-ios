@@ -12,6 +12,19 @@ import UIKit
 ///
 /// - SeeAlso: `IsMovableProviding`
 public protocol CollectionViewReorderingDelegate: AnyObject {
+
+  /// Check whether the destination is allowed to move the source item to.
+  /// If `false`, the destination item will be pinned and the interactive item cannot be moved to the destination position.
+  /// Default `true`.
+  ///
+  /// Corresponds to `UICollectionViewDelegate.collectionView(_:targetIndexPathForMoveFromItemAt:toProposedIndexPath:) -> IndexPath`
+  func collectionView(
+    _ collectionView: CollectionView,
+    shouldMoveItem sourceItem: AnyItemModel,
+    inSection sourceSection: SectionModel,
+    toDestinationItem destinationItem: AnyItemModel,
+    inSection destinationSection: SectionModel) -> Bool
+
   /// Move the specified item to the given new location.
   ///
   /// Corresponds to `UICollectionViewDataSource.collectionView(_:moveItemAt:to:)`.
@@ -21,4 +34,17 @@ public protocol CollectionViewReorderingDelegate: AnyObject {
     inSection sourceSection: SectionModel,
     toDestinationItem destinationItem: AnyItemModel,
     inSection destinationSection: SectionModel)
+}
+
+extension CollectionViewReorderingDelegate {
+
+  public func collectionView(
+    _ collectionView: CollectionView,
+    shouldMoveItem sourceItem: AnyItemModel,
+    inSection sourceSection: SectionModel,
+    toDestinationItem destinationItem: AnyItemModel,
+    inSection destinationSection: SectionModel) -> Bool
+  {
+    true
+  }
 }
