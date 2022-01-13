@@ -3,6 +3,8 @@
 
 import UIKit
 
+// MARK: - CollectionViewReorderingDelegate
+
 /// A delegate that's invoked when the items in a `CollectionView` are moved using the legacy
 /// drag/drop system.
 ///
@@ -15,10 +17,10 @@ public protocol CollectionViewReorderingDelegate: AnyObject {
 
   /// Returns whether the source item is allowed to move to the proposed destination.
   ///
-  /// If `false`, the destination item will be pinned and the interactive item cannot be moved to 
+  /// If `false`, the destination item will be pinned and the interactive item cannot be moved to
   /// the destination position. Defaults to `true`.
   ///
-  /// Corresponds to 
+  /// Corresponds to
   /// `UICollectionViewDelegate.collectionView(_:targetIndexPathForMoveFromItemAt:toProposedIndexPath:)`
   func collectionView(
     _ collectionView: CollectionView,
@@ -41,11 +43,12 @@ public protocol CollectionViewReorderingDelegate: AnyObject {
 extension CollectionViewReorderingDelegate {
 
   public func collectionView(
-    _ collectionView: CollectionView,
-    shouldMoveItem sourceItem: AnyItemModel,
-    inSection sourceSection: SectionModel,
-    toDestinationItem destinationItem: AnyItemModel,
-    inSection destinationSection: SectionModel) -> Bool
+    _: CollectionView,
+    shouldMoveItem _: AnyItemModel,
+    inSection _: SectionModel,
+    toDestinationItem _: AnyItemModel,
+    inSection _: SectionModel)
+    -> Bool
   {
     true
   }

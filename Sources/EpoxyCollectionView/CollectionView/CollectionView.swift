@@ -753,7 +753,7 @@ extension CollectionView: UIScrollViewDelegate {
 extension CollectionView: UICollectionViewDelegate {
 
   public func collectionView(
-    _ collectionView: UICollectionView,
+    _: UICollectionView,
     targetIndexPathForMoveFromItemAt originalIndexPath: IndexPath,
     toProposedIndexPath proposedIndexPath: IndexPath)
     -> IndexPath
@@ -764,15 +764,18 @@ extension CollectionView: UICollectionViewDelegate {
       let originalSection = epoxyDataSource.data?.section(at: originalIndexPath.section),
       let proposedItem = epoxyDataSource.data?.item(at: proposedIndexPath),
       let proposedSection = epoxyDataSource.data?.section(at: proposedIndexPath.section)
-    else { return proposedIndexPath }
+    else {
+      return proposedIndexPath
+    }
 
-    return reorderingDelegate.collectionView(
+    let shouldMove = reorderingDelegate.collectionView(
       self,
       shouldMoveItem: originalItem,
       inSection: originalSection,
       toDestinationItem: proposedItem,
       inSection: proposedSection)
-    ? proposedIndexPath : originalIndexPath
+
+    return shouldMove ? proposedIndexPath : originalIndexPath
   }
 
   public func collectionView(
