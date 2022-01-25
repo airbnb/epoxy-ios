@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.7.0...HEAD)
 
 ### Added
+- Exposing generalized SwiftUI layout helpers for wrapping UIKit views.
+
+### Added
 - Added a method to `CollectionViewReorderingDelegate` to check the reordering destination is expected.
 
 ### Changed
