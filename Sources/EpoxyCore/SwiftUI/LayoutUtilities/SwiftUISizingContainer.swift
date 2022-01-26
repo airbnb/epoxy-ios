@@ -3,27 +3,29 @@
 
 import SwiftUI
 
-// MARK: - SizingContainer
+// MARK: - SwiftUISizingContainer
 
-/// A container which reads the proposed SwiftUI layout and passes it a `SizingContext`. This stores
-/// ideal size as state in order to configure the view layout as the ideal size is updated via the
-/// `SizingContext`.
-public struct SizingContainer<Content: View>: View {
+/// A container which reads the proposed SwiftUI layout and passes it a `SwiftUISizingContext`. This
+/// stores ideal size as state in order to configure the view layout as the ideal size is updated
+/// via the `SwiftUISizingContext`.
+public struct SwiftUISizingContainer<Content: View>: View {
 
   // MARK: Lifecycle
 
-  /// Constructs a `SizingContainer` view
+  /// Constructs a `SwiftUISizingContainer` view
   /// - Parameters:
   ///   - estimatedSize: An estimated size used as a placeholder ideal size until view measurement
   ///     occurs. Pass `nil` for this parameter if this container is only used for reading the
   ///     proposed size and an ideal size will never be provided.
-  ///   - content: The view content to wrap and provide a `SizingContext` to.
+  ///   - content: The view content to wrap and provide a `SwiftUISizingContext` to.
   public init(
-    estimatedSize: CGSize? = CGSize(width: 375, height: 150),
-    content: @escaping (SizingContext) -> Content)
+    estimatedWidth: CGFloat? = 375,
+    estimatedHeight: CGFloat? = 150,
+    content: @escaping (SwiftUISizingContext) -> Content)
   {
     self.content = content
-    self.estimatedSize = estimatedSize
+    self.estimatedWidth = estimatedWidth
+    self.estimatedHeight = estimatedHeight
   }
 
   // MARK: Public
@@ -38,23 +40,24 @@ public struct SizingContainer<Content: View>: View {
     }
     // Pass the ideal size as the max size to ensure this view doesn't get stretched.
     .frame(
-      idealWidth: idealWidth ?? estimatedSize?.width,
+      idealWidth: idealWidth ?? estimatedWidth,
       maxWidth: idealWidth,
-      idealHeight: idealHeight ?? estimatedSize?.height,
+      idealHeight: idealHeight ?? estimatedHeight,
       maxHeight: idealHeight)
   }
 
   // MARK: Private
 
-  private let content: (SizingContext) -> Content
-  private let estimatedSize: CGSize?
+  private let content: (SwiftUISizingContext) -> Content
+  private let estimatedWidth: CGFloat?
+  private let estimatedHeight: CGFloat?
   @State private var idealWidth: CGFloat?
   @State private var idealHeight: CGFloat?
 }
 
-// MARK: - SizingContext
+// MARK: - SwiftUISizingContext
 
-public struct SizingContext {
+public struct SwiftUISizingContext {
 
   // MARK: Lifecycle
 

@@ -13,7 +13,7 @@ extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurable
     behaviors: Behaviors? = nil)
     -> some View
   {
-    SizingContainer { context in
+    SwiftUISizingContainer { context in
       SwiftUIEpoxyableView<Self>(
         content: content,
         style: style,
@@ -34,7 +34,7 @@ extension StyledView
     behaviors: Behaviors? = nil)
     -> some View
   {
-    SizingContainer { context in
+    SwiftUISizingContainer { context in
       SwiftUIStylelessEpoxyableView<Self>(content: content, behaviors: behaviors, context: context)
     }
   }
@@ -51,7 +51,7 @@ extension StyledView
     behaviors: Behaviors? = nil)
     -> some View
   {
-    SizingContainer { context in
+    SwiftUISizingContainer { context in
       SwiftUIContentlessEpoxyableView<Self>(style: style, behaviors: behaviors, context: context)
     }
   }
@@ -68,7 +68,7 @@ extension StyledView
     behaviors: Behaviors? = nil)
     -> some View
   {
-    SizingContainer { context in
+    SwiftUISizingContainer { context in
       SwiftUIStylelessContentlessEpoxyableView<Self>(behaviors: behaviors, context: context)
     }
   }
@@ -85,7 +85,7 @@ private struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
     content: View.Content,
     style: View.Style,
     behaviors: View.Behaviors? = nil,
-    context: SizingContext)
+    context: SwiftUISizingContext)
   {
     self.content = content
     self.style = style
@@ -98,9 +98,9 @@ private struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
   var content: View.Content
   var style: View.Style
   var behaviors: View.Behaviors?
-  var context: SizingContext
+  var context: SwiftUISizingContext
 
-  func updateUIView(_ wrapper: IdealHeightMeasurementContainer<Self, View>, context: Context) {
+  func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context: Context) {
     let animated = context.transaction.animation != nil
 
     defer {
@@ -129,11 +129,11 @@ private struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
     // No updates required.
   }
 
-  func makeUIView(context _: Context) -> IdealHeightMeasurementContainer<Self, View> {
+  func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     let uiView = View(style: style)
     uiView.setContent(content, animated: false)
     uiView.setBehaviors(behaviors)
-    return IdealHeightMeasurementContainer(view: self, uiView: uiView, context: context)
+    return SwiftUIMeasurementContainer(view: self, uiView: uiView, context: context)
   }
 }
 
@@ -150,7 +150,7 @@ private struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewReprese
   init(
     content: View.Content,
     behaviors: View.Behaviors? = nil,
-    context: SizingContext)
+    context: SwiftUISizingContext)
   {
     self.content = content
     self.behaviors = behaviors
@@ -161,9 +161,9 @@ private struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewReprese
 
   var content: View.Content
   var behaviors: View.Behaviors?
-  var context: SizingContext
+  var context: SwiftUISizingContext
 
-  func updateUIView(_ wrapper: IdealHeightMeasurementContainer<Self, View>, context: Context) {
+  func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context: Context) {
     let animated = context.transaction.animation != nil
 
     defer {
@@ -183,11 +183,11 @@ private struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewReprese
     // No updates required.
   }
 
-  func makeUIView(context _: Context) -> IdealHeightMeasurementContainer<Self, View> {
+  func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     let uiView = View()
     uiView.setContent(content, animated: false)
     uiView.setBehaviors(behaviors)
-    return IdealHeightMeasurementContainer(view: self, uiView: uiView, context: context)
+    return SwiftUIMeasurementContainer(view: self, uiView: uiView, context: context)
   }
 }
 
@@ -201,7 +201,7 @@ private struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepre
 
   // MARK: Lifecycle
 
-  init(style: View.Style, behaviors: View.Behaviors? = nil, context: SizingContext) {
+  init(style: View.Style, behaviors: View.Behaviors? = nil, context: SwiftUISizingContext) {
     self.style = style
     self.behaviors = behaviors
     self.context = context
@@ -211,9 +211,9 @@ private struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepre
 
   var style: View.Style
   var behaviors: View.Behaviors?
-  var context: SizingContext
+  var context: SwiftUISizingContext
 
-  func updateUIView(_ wrapper: IdealHeightMeasurementContainer<Self, View>, context _: Context) {
+  func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
     defer {
       wrapper.view = self
 
@@ -232,10 +232,10 @@ private struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepre
     // No updates required.
   }
 
-  func makeUIView(context _: Context) -> IdealHeightMeasurementContainer<Self, View> {
+  func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     let uiView = View(style: style)
     uiView.setBehaviors(behaviors)
-    return IdealHeightMeasurementContainer(view: self, uiView: uiView, context: context)
+    return SwiftUIMeasurementContainer(view: self, uiView: uiView, context: context)
   }
 }
 
@@ -246,7 +246,7 @@ private struct SwiftUIStylelessContentlessEpoxyableView<View: EpoxyableView>: UI
 
   // MARK: Lifecycle
 
-  init(behaviors: View.Behaviors? = nil, context: SizingContext) {
+  init(behaviors: View.Behaviors? = nil, context: SwiftUISizingContext) {
     self.behaviors = behaviors
     self.context = context
     self.context = context
@@ -255,16 +255,16 @@ private struct SwiftUIStylelessContentlessEpoxyableView<View: EpoxyableView>: UI
   // MARK: Internal
 
   var behaviors: View.Behaviors?
-  var context: SizingContext
+  var context: SwiftUISizingContext
 
-  func updateUIView(_ wrapper: IdealHeightMeasurementContainer<Self, View>, context _: Context) {
+  func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
     wrapper.view = self
     wrapper.uiView.setBehaviors(behaviors)
   }
 
-  func makeUIView(context _: Context) -> IdealHeightMeasurementContainer<Self, View> {
+  func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     let uiView = View()
     uiView.setBehaviors(behaviors)
-    return IdealHeightMeasurementContainer(view: self, uiView: uiView, context: context)
+    return SwiftUIMeasurementContainer(view: self, uiView: uiView, context: context)
   }
 }

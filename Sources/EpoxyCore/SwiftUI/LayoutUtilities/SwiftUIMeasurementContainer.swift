@@ -3,20 +3,20 @@
 
 import SwiftUI
 
-// MARK: - IdealHeightMeasurementContainer
+// MARK: - SwiftUIMeasurementContainer
 
 /// A view that has an `intrinsicContentSize` of the `view`'s `systemLayoutSizeFitting(…)` and
 /// supports double layout pass sizing and content size category changes.
 /// This container view uses an injected proposed width to measure the view and return its ideal
-/// height through the `SizingContext` binding.
-public final class IdealHeightMeasurementContainer<SwiftUIView, UIViewType>: UIView
+/// height through the `SwiftUISizingContext` binding.
+public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType>: UIView
   where
   UIViewType: UIView
 {
 
   // MARK: Lifecycle
 
-  public init(view: SwiftUIView, uiView: UIViewType, context: SizingContext) {
+  public init(view: SwiftUIView, uiView: UIViewType, context: SwiftUISizingContext) {
     self.view = view
     self.uiView = uiView
     self.context = context
@@ -64,7 +64,7 @@ public final class IdealHeightMeasurementContainer<SwiftUIView, UIViewType>: UIV
 
   // MARK: Private
 
-  private let context: SizingContext
+  private let context: SwiftUISizingContext
 
   /// The bounds size at the time of the latest measurement.
   ///
@@ -130,6 +130,7 @@ public final class IdealHeightMeasurementContainer<SwiftUIView, UIViewType>: UIV
 
     if latestMeasuredSize != measuredSize {
       latestMeasuredSize = measuredSize
+      // We call super directly here so we don't keep measuring in an infinite loop
       super.invalidateIntrinsicContentSize()
     }
 
