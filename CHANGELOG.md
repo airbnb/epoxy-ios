@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.7.0...HEAD)
 
 ### Added
+- Added `SwiftUIMeasurementContainer` for calculating the ideal height of a `UIView` for wrapping
+  for SwiftUI usage.
+- Added `SwiftUISizingContainer` for handling ideal size and proposed size for a wrapped `UIView`.
+
+### Added
 - Added a method to `CollectionViewReorderingDelegate` to check the reordering destination is expected.
 
 ### Changed
