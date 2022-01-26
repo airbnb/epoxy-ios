@@ -129,8 +129,8 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   }
 
   public func setContent(_ content: Content, animated _: Bool) {
-    /// This triggers a change in the observed `EpoxyHostingContent` object and allows the
-    /// propagation of the SwiftUI transaction, instead of just replacing the `rootView`.
+    // This triggers a change in the observed `EpoxyHostingContent` object and allows the
+    // propagation of the SwiftUI transaction, instead of just replacing the `rootView`.
     epoxyContent.rootView = content.rootView
     dataID = content.dataID ?? DefaultDataID.noneProvided as AnyHashable
 
@@ -139,7 +139,14 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
       addViewControllerIfNeeded()
     }
 
-    /// This is required to ensure that views with new content are properly resized.
+    // As of iOS 15.2, `UIHostingController` now renders updated content asynchronously, and as such
+    // this view will get sized incorrectly with the previous content when reused unless we invoke
+    // this semi-private API. We couldn't find any other method to get the view to resize
+    // synchronously after updating `rootView`, but hopefully this will become a public API soon so
+    // we can remove this call.
+    viewController._render(seconds: 0)
+
+    // This is required to ensure that views with new content are properly resized.
     viewController.view.invalidateIntrinsicContentSize()
   }
 
@@ -271,8 +278,15 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
 
   private func addViewController(to parent: UIViewController) {
     viewController.willMove(toParent: parent)
+
     parent.addChild(viewController)
+
     addSubview(viewController.view)
+
+    // Get the view controller's view to be sized correctly so that we don't have to wait for
+    // autolayout to perform a pass to do so.
+    viewController.view.frame = bounds
+
     viewController.view.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       viewController.view.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -280,6 +294,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
       viewController.view.trailingAnchor.constraint(equalTo: trailingAnchor),
       viewController.view.bottomAnchor.constraint(equalTo: bottomAnchor),
     ])
+
     viewController.didMove(toParent: parent)
   }
 
