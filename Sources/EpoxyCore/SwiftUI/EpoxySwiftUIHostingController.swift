@@ -21,9 +21,12 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
   public convenience init(rootView: Content, ignoreSafeArea: Bool) {
     self.init(rootView: rootView)
 
-    if ignoreSafeArea {
-      disableSafeArea()
-    }
+    // We unfortunately need to call a private API to disable the safe area. We can also accomplish
+    // this by dynamically subclassing this view controller's view at runtime and overriding its
+    // `safeAreaInsets` property and returning `.zero`. An implementation of that logic is
+    // available in this file in the `2d28b3181cca50b89618b54836f7a9b6e36ea78e` commit if this API
+    // no longer functions in future SwiftUI versions.
+    _disableSafeArea = ignoreSafeArea
   }
 
   // MARK: Open
@@ -36,57 +39,5 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
     // other view controllers we default the background color to clear so we can see the views
     // below, e.g. to draw highlight states in a `CollectionView`.
     view.backgroundColor = .clear
-  }
-
-  // MARK: Private
-
-  /// Creates a dynamic subclass of this hosting controller's view that ignores its safe area
-  /// insets by overriding `safeAreaInsets` and returning `.zero`.
-  ///
-  /// This isn't possible at compile time since we can't override methods in a private view type.
-  ///
-  /// There's a private API that accomplishes this: `_disableSafeArea`, but we can't safely override
-  /// it as the behavior may change out from under us, and, well, it's a private API.
-  private func disableSafeArea() {
-    guard let viewClass = object_getClass(view) else {
-      EpoxyLogger.shared.assertionFailure(
-        "Unable to determine class of \(String(describing: view))")
-      return
-    }
-
-    let viewClassName = class_getName(viewClass)
-    let viewSubclassName = String(cString: viewClassName).appending("_EpoxySafeAreaOverride")
-
-    // The subclass already exists, just set the class of `view` and return.
-    if let subclass = NSClassFromString(viewSubclassName) {
-      object_setClass(view, subclass)
-      return
-    }
-
-    guard let viewSubclassNameUTF8 = (viewSubclassName as NSString).utf8String else {
-      EpoxyLogger.shared.assertionFailure("Unable to get utf8String of \(viewSubclassName)")
-      return
-    }
-
-    guard let viewSubclass = objc_allocateClassPair(viewClass, viewSubclassNameUTF8, 0) else {
-      EpoxyLogger.shared.assertionFailure(
-        "Unable to subclass \(viewClass) with \(viewSubclassNameUTF8)")
-      return
-    }
-
-    let selector = #selector(getter: UIView.safeAreaInsets)
-    guard let method = class_getInstanceMethod(UIView.self, selector) else {
-      EpoxyLogger.shared.assertionFailure("Unable to locate method \(selector) on \(UIView.self)")
-      objc_disposeClassPair(viewSubclass)
-      return
-    }
-
-    let safeAreaInsetsOverride: @convention(block) (AnyObject) -> UIEdgeInsets = { _ in .zero }
-    let implementation = imp_implementationWithBlock(safeAreaInsetsOverride)
-    let typeEncoding = method_getTypeEncoding(method)
-    class_addMethod(viewSubclass, selector, implementation, typeEncoding)
-
-    objc_registerClassPair(viewSubclass)
-    object_setClass(view, viewSubclass)
   }
 }

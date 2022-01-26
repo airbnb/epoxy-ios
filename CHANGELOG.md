@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added a method to `CollectionViewReorderingDelegate` to check the reordering destination is expected.
 
+### Fixed
+- Fixed sizing of reused `EpoxySwiftUIHostingController`s on iOS 15.2+.
+
 ### Changed
 - Updated name of `Spacer` to `LayoutSpacer` to avoid name conflict with SwiftUI's `Spacer`
 - Updated to have Swift 5.4 as the minimum supported Swift version (previously Swift 5.3).
