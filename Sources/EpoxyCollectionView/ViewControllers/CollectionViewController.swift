@@ -15,9 +15,14 @@ open class CollectionViewController: UIViewController {
 
   /// Initializes a collection view controller and configures its collection view with the provided
   /// layout and sections once the view loads.
-  public init(layout: UICollectionViewLayout, sections: [SectionModel]? = nil) {
+  public init(
+    layout: UICollectionViewLayout,
+    sections: [SectionModel]? = nil,
+    configuration: CollectionViewConfiguration = .shared)
+  {
     self.layout = layout
     initialSections = sections
+    self.configuration = configuration
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -25,18 +30,23 @@ open class CollectionViewController: UIViewController {
   /// layout and a single section containing the given items once the view loads.
   ///
   /// The `SectionModel` containing the items has a data ID of `DefaultDataID.noneProvided`.
-  public convenience init(layout: UICollectionViewLayout, items: [ItemModeling]) {
+  public convenience init(
+    layout: UICollectionViewLayout,
+    items: [ItemModeling],
+    configuration: CollectionViewConfiguration = .shared)
+  {
     let section = SectionModel(dataID: DefaultDataID.noneProvided, items: items)
-    self.init(layout: layout, sections: [section])
+    self.init(layout: layout, sections: [section], configuration: configuration)
   }
 
   /// Initializes a collection view controller and configures its collection view with the provided
   /// layout and sections once the view loads.
   public convenience init(
     layout: UICollectionViewLayout,
-    @SectionModelBuilder sections: () -> [SectionModel])
+    @SectionModelBuilder sections: () -> [SectionModel],
+    configuration: CollectionViewConfiguration = .shared)
   {
-    self.init(layout: layout, sections: sections())
+    self.init(layout: layout, sections: sections(), configuration: configuration)
   }
 
   /// Initializes a collection view controller and configures its collection view with the provided
@@ -45,9 +55,10 @@ open class CollectionViewController: UIViewController {
   /// The `SectionModel` containing the items has a data ID of `DefaultDataID.noneProvided`.
   public convenience init(
     layout: UICollectionViewLayout,
-    @ItemModelBuilder items: () -> [ItemModeling])
+    @ItemModelBuilder items: () -> [ItemModeling],
+    configuration: CollectionViewConfiguration = .shared)
   {
-    self.init(layout: layout, items: items())
+    self.init(layout: layout, items: items(), configuration: configuration)
   }
 
   @available(*, unavailable)
@@ -68,7 +79,7 @@ open class CollectionViewController: UIViewController {
   ///
   /// Returns a `CollectionView` with `layout` by default.
   open func makeCollectionView() -> CollectionView {
-    CollectionView(layout: layout)
+    CollectionView(layout: layout, configuration: configuration)
   }
 
   // MARK: Public
@@ -116,6 +127,9 @@ open class CollectionViewController: UIViewController {
   }
 
   // MARK: Private
+
+  /// The configuration used when initializing the `CollectionView`.
+  private let configuration: CollectionViewConfiguration
 
   /// The sections that should be set on the collection view when it loads, else `nil`.
   private var initialSections: [SectionModel]?
