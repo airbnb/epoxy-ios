@@ -77,7 +77,7 @@ open class CollectionViewController: UIViewController {
   /// A method that can be overridden by subclasses to initialize a custom `CollectionView` for this
   /// view controller.
   ///
-  /// Returns a `CollectionView` with `layout` by default.
+  /// Returns a `CollectionView` with `layout` and `configuration` by default.
   open func makeCollectionView() -> CollectionView {
     CollectionView(layout: layout, configuration: configuration)
   }
