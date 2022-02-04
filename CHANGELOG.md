@@ -10,9 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `SwiftUIMeasurementContainer` for calculating the ideal height of a `UIView` for wrapping
   for SwiftUI usage.
 - Added `SwiftUISizingContainer` for handling ideal size and proposed size for a wrapped `UIView`.
-
-### Added
 - Added a method to `CollectionViewReorderingDelegate` to check the reordering destination is expected.
+- Added the ability to pass a `CollectionViewConfiguration` to the `CollectionViewController` initializers.
 
 ### Fixed
 - Fixed sizing of reused `EpoxySwiftUIHostingController`s on iOS 15.2+.
