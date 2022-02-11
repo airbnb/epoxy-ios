@@ -115,7 +115,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType>: UIView
   }
 
   /// Measures the `uiView`, returning the resulting size and whether it changed from the previously
-  /// measured size stored it in `latestMeasuredSize`.
+  /// measured size stored in `latestMeasuredSize`.
   @discardableResult
   private func measureView() -> (size: CGSize, changed: Bool) {
     // On the first layout, use the `initialSize` to measure with a reasonable first attempt, as
@@ -185,6 +185,6 @@ public enum SwiftUIMeasurementContainerSizingBehavior {
   /// The `uiView` is sized with its intrinsic width and expands vertically to fill the bounds
   /// offered by its parent.
   case intrinsicWidthBoundsHeight
-  /// The `uiView` is sized to with its intrinsic width and height.
+  /// The `uiView` is sized to its intrinsic width and height.
   case intrinsicSize
 }
