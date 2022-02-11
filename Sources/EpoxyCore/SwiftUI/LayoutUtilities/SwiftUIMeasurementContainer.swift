@@ -57,16 +57,18 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType>: UIView
     latestMeasuredSize = nil
     super.invalidateIntrinsicContentSize()
   }
-
   public override func layoutSubviews() {
     super.layoutSubviews()
 
-    // We need to re-measure the view whenever the size of the bounds change, as the previous size
-    // will be incorrect.
-    if bounds.size != latestMeasurementBoundsSize {
-      if measureView().changed {
+    switch sizingBehavior {
+    case .intrinsicHeightBoundsWidth, .intrinsicWidthBoundsHeight:
+      // We need to re-measure the view whenever the size of the bounds change and the view is
+      // sized to the bounds size, as the previous size will now be incorrect.
+      if bounds.size != latestMeasurementBoundsSize, measureView().changed {
         super.invalidateIntrinsicContentSize()
       }
+    case .intrinsicSize:
+      break
     }
   }
 
