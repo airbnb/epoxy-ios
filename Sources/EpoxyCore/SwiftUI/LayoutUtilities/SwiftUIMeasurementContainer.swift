@@ -16,10 +16,16 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType>: UIView
 
   // MARK: Lifecycle
 
-  public init(view: SwiftUIView, uiView: UIViewType, context: SwiftUISizingContext) {
+  public init(
+    view: SwiftUIView,
+    uiView: UIViewType,
+    context: SwiftUISizingContext,
+    sizingBehavior: SwiftUIMeasurementContainerSizingBehavior)
+  {
     self.view = view
     self.uiView = uiView
     self.context = context
+    self.sizingBehavior = sizingBehavior
     super.init(frame: .zero)
 
     addSubview(uiView)
@@ -44,7 +50,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType>: UIView
       return size
     }
 
-    return measureView()
+    return measureView().size
   }
 
   public override func invalidateIntrinsicContentSize() {
@@ -58,13 +64,17 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType>: UIView
     // We need to re-measure the view whenever the size of the bounds change, as the previous size
     // will be incorrect.
     if bounds.size != latestMeasurementBoundsSize {
-      measureView()
+      if measureView().changed {
+        super.invalidateIntrinsicContentSize()
+      }
     }
   }
 
   // MARK: Private
 
   private let context: SwiftUISizingContext
+
+  private let sizingBehavior: SwiftUIMeasurementContainerSizingBehavior
 
   /// The bounds size at the time of the latest measurement.
   ///
@@ -102,38 +112,77 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType>: UIView
     NSLayoutConstraint.activate([leading, top, trailing, bottom])
   }
 
-  /// Measures the `uiView`, returning the resulting size and storing it in `latestMeasuredSize`.
+  /// Measures the `uiView`, returning the resulting size and whether it changed from the previously
+  /// measured size stored it in `latestMeasuredSize`.
   @discardableResult
-  private func measureView() -> CGSize {
+  private func measureView() -> (size: CGSize, changed: Bool) {
     // On the first layout, use the `initialSize` to measure with a reasonable first attempt, as
     // passing zero results in unusable sizes and also upsets SwiftUI.
     let measurementBounds = bounds.size == .zero ? context.proposedSize : bounds.size
     latestMeasurementBoundsSize = measurementBounds
 
-    let targetSize = CGSize(
-      width: measurementBounds.width,
-      height: UIViewType.layoutFittingCompressedSize.height)
+    let targetSize, measuredSize: CGSize
+    switch sizingBehavior {
+    case .intrinsicHeightBoundsWidth:
+      targetSize = CGSize(
+        width: measurementBounds.width,
+        height: UIViewType.layoutFittingCompressedSize.height)
 
-    let fittingSize = uiView.systemLayoutSizeFitting(
-      targetSize,
-      withHorizontalFittingPriority: .defaultHigh,
-      verticalFittingPriority: .fittingSizeLevel)
+      let fittingSize = uiView.systemLayoutSizeFitting(
+        targetSize,
+        withHorizontalFittingPriority: .defaultHigh,
+        verticalFittingPriority: .fittingSizeLevel)
 
-    let measuredSize = CGSize(width: UIView.noIntrinsicMetric, height: fittingSize.height)
+      measuredSize = CGSize(width: UIView.noIntrinsicMetric, height: fittingSize.height)
 
-    // We need to update the ideal size async otherwise we'll get the "Modifying state during view
-    // update, which will cause undefined behavior" runtime warning as the view's intrinsic content
-    // size is queried during the view update phase.
-    DispatchQueue.main.async { [idealHeight = context.idealHeight] in
-      idealHeight.wrappedValue = measuredSize.height
+      context.idealSize = (width: nil, height: measuredSize.height)
+
+    case .intrinsicWidthBoundsHeight:
+      targetSize = CGSize(
+        width: UIViewType.layoutFittingCompressedSize.width,
+        height: measurementBounds.height)
+
+      let fittingSize = uiView.systemLayoutSizeFitting(
+        targetSize,
+        withHorizontalFittingPriority: .fittingSizeLevel,
+        verticalFittingPriority: .defaultHigh)
+
+      measuredSize = CGSize(width: fittingSize.width, height: UIView.noIntrinsicMetric)
+
+      context.idealSize = (width: measuredSize.width, height: measuredSize.height)
+
+    case .intrinsicSize:
+      targetSize = CGSize(
+        width: UIViewType.layoutFittingCompressedSize.height,
+        height: UIViewType.layoutFittingCompressedSize.height)
+
+      measuredSize = uiView.systemLayoutSizeFitting(
+        targetSize,
+        withHorizontalFittingPriority: .fittingSizeLevel,
+        verticalFittingPriority: .fittingSizeLevel)
+
+      context.idealSize = (width: measuredSize.width, height: measuredSize.height)
     }
 
-    if latestMeasuredSize != measuredSize {
+    let changed = (latestMeasuredSize != measuredSize)
+    if changed {
       latestMeasuredSize = measuredSize
-      // We call super directly here so we don't keep measuring in an infinite loop
-      super.invalidateIntrinsicContentSize()
     }
 
-    return measuredSize
+    return (size: measuredSize, changed: changed)
   }
+}
+
+// MARK: - SwiftUIMeasurementContainerSizingBehavior
+
+/// The sizing behavior of a `SwiftUIMeasurementContainer`.
+public enum SwiftUIMeasurementContainerSizingBehavior {
+  /// The `uiView` is sized with its intrinsic height and expands horizontally to fill the bounds
+  /// offered by its parent.
+  case intrinsicHeightBoundsWidth
+  /// The `uiView` is sized with its intrinsic width and expands vertically to fill the bounds
+  /// offered by its parent.
+  case intrinsicWidthBoundsHeight
+  /// The `uiView` is sized to with its intrinsic width and height.
+  case intrinsicSize
 }

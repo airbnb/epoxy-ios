@@ -24,47 +24,45 @@ public struct SwiftUISizingContainer<Content: View>: View {
     content: @escaping (SwiftUISizingContext) -> Content)
   {
     self.content = content
-    self.estimatedWidth = estimatedWidth
-    self.estimatedHeight = estimatedHeight
+    estimatedSize = (width: estimatedWidth, height: estimatedHeight)
   }
 
   // MARK: Public
 
   public var body: some View {
     GeometryReader { proxy in
-      content(
-        .init(
-          proposedSize: proxy.size,
-          idealWidth: $idealWidth,
-          idealHeight: $idealHeight))
+      content(.init(proposedSize: proxy.size, idealSize: $idealSize.value))
     }
     // Pass the ideal size as the max size to ensure this view doesn't get stretched.
     .frame(
-      idealWidth: idealWidth ?? estimatedWidth,
-      maxWidth: idealWidth,
-      idealHeight: idealHeight ?? estimatedHeight,
-      maxHeight: idealHeight)
+      idealWidth: idealSize.value.width ?? estimatedSize.width,
+      maxWidth: idealSize.value.width,
+      idealHeight: idealSize.value.height ?? estimatedSize.height,
+      maxHeight: idealSize.value.height)
   }
 
   // MARK: Private
 
+  private final class IdealSize: ObservableObject {
+    @Published var value: (width: CGFloat?, height: CGFloat?)
+  }
+
   private let content: (SwiftUISizingContext) -> Content
-  private let estimatedWidth: CGFloat?
-  private let estimatedHeight: CGFloat?
-  @State private var idealWidth: CGFloat?
-  @State private var idealHeight: CGFloat?
+  private let estimatedSize: (width: CGFloat?, height: CGFloat?)
+  @StateObject private var idealSize = IdealSize()
 }
 
 // MARK: - SwiftUISizingContext
 
+/// The context available to the `Content` of a `SwiftUISizingContainer`, used communicate the ideal
+/// size to the container.
 public struct SwiftUISizingContext {
 
   // MARK: Lifecycle
 
-  public init(proposedSize: CGSize, idealWidth: Binding<CGFloat?>, idealHeight: Binding<CGFloat?>) {
+  public init(proposedSize: CGSize, idealSize: Binding<(width: CGFloat?, height: CGFloat?)>) {
     self.proposedSize = proposedSize
-    self.idealWidth = idealWidth
-    self.idealHeight = idealHeight
+    _idealSize = idealSize
   }
 
   // MARK: Public
@@ -72,9 +70,6 @@ public struct SwiftUISizingContext {
   /// The proposed layout size for the view
   public let proposedSize: CGSize
 
-  /// The ideal or intrinsic width for the view after measurement
-  public var idealWidth: Binding<CGFloat?>
-
-  /// The ideal or intrinsic height for the view after measurement
-  public var idealHeight: Binding<CGFloat?>
+  /// The ideal or intrinsic size for the content view; updated after its measurement.
+  @Binding public var idealSize: (width: CGFloat?, height: CGFloat?)
 }
