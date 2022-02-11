@@ -63,7 +63,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
     switch sizing {
     case .intrinsicHeightBoundsWidth, .intrinsicWidthBoundsHeight:
-      // We need to re-measure the view whenever the size of the bounds change and the view is
+      // We need to re-measure the view whenever the size of the bounds changes and the view is
       // sized to the bounds size, as the previous size will now be incorrect.
       if bounds.size != latestMeasurementBoundsSize, measureView().changed {
         super.invalidateIntrinsicContentSize()
