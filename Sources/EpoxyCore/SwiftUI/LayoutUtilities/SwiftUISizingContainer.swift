@@ -5,14 +5,17 @@ import SwiftUI
 
 // MARK: - SwiftUISizingContainer
 
-/// A container which reads the proposed SwiftUI layout and passes it a `SwiftUISizingContext`. This
-/// stores ideal size as state in order to configure the view layout as the ideal size is updated
-/// via the `SwiftUISizingContext`.
+/// A container which reads the proposed SwiftUI layout size and passes it via a
+/// ``SwiftUISizingContext`` to its `Content`, which then dictates the ideal size of this view by
+/// updating the context's `idealSize`.
+///
+/// - SeeAlso: ``SwiftUIMeasurementContainer``
 public struct SwiftUISizingContainer<Content: View>: View {
 
   // MARK: Lifecycle
 
-  /// Constructs a `SwiftUISizingContainer` view
+  /// Constructs a `SwiftUISizingContainer` view.
+  ///
   /// - Parameters:
   ///   - estimatedSize: An estimated size used as a placeholder ideal size until view measurement
   ///     occurs. Pass `nil` for this parameter if this container is only used for reading the
@@ -54,8 +57,8 @@ public struct SwiftUISizingContainer<Content: View>: View {
 
 // MARK: - SwiftUISizingContext
 
-/// The context available to the `Content` of a `SwiftUISizingContainer`, used communicate the ideal
-/// size to the container.
+/// The context available to the `Content` of a `SwiftUISizingContainer`, used communicate the
+/// proposed size to the content and the ideal size back to the container.
 public struct SwiftUISizingContext {
 
   // MARK: Lifecycle

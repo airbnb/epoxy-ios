@@ -5,14 +5,14 @@ import SwiftUI
 
 // MARK: - SwiftUIMeasurementContainer
 
-/// A view that has an `intrinsicContentSize` of the `view`'s `systemLayoutSizeFitting(…)` and
+/// A view that has an `intrinsicContentSize` of the `uiView`'s `systemLayoutSizeFitting(…)` and
 /// supports double layout pass sizing and content size category changes.
+///
 /// This container view uses an injected proposed width to measure the view and return its ideal
 /// height through the `SwiftUISizingContext` binding.
-public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType>: UIView
-  where
-  UIViewType: UIView
-{
+///
+/// - SeeAlso: ``SwiftUISizingContainer``
+public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>: UIView {
 
   // MARK: Lifecycle
 
