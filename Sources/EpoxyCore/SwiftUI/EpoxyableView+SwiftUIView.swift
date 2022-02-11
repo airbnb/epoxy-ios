@@ -11,7 +11,7 @@ extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurable
     content: Content,
     style: Style,
     behaviors: Behaviors? = nil,
-    sizingBehavior: SwiftUIMeasurementContainerSizingBehavior = .intrinsicHeightBoundsWidth)
+    sizing: SwiftUIMeasurementContainerSizing = .intrinsicHeightBoundsWidth)
     -> some View
   {
     SwiftUISizingContainer { context in
@@ -20,7 +20,7 @@ extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurable
         style: style,
         behaviors: behaviors,
         context: context,
-        sizingBehavior: sizingBehavior)
+        sizing: sizing)
     }
   }
 }
@@ -34,7 +34,7 @@ extension StyledView
   public static func swiftUIView(
     content: Content,
     behaviors: Behaviors? = nil,
-    sizingBehavior: SwiftUIMeasurementContainerSizingBehavior = .intrinsicHeightBoundsWidth)
+    sizing: SwiftUIMeasurementContainerSizing = .intrinsicHeightBoundsWidth)
     -> some View
   {
     SwiftUISizingContainer { context in
@@ -42,7 +42,7 @@ extension StyledView
         content: content,
         behaviors: behaviors,
         context: context,
-        sizingBehavior: sizingBehavior)
+        sizing: sizing)
     }
   }
 }
@@ -56,7 +56,7 @@ extension StyledView
   public static func swiftUIView(
     style: Style,
     behaviors: Behaviors? = nil,
-    sizingBehavior: SwiftUIMeasurementContainerSizingBehavior = .intrinsicHeightBoundsWidth)
+    sizing: SwiftUIMeasurementContainerSizing = .intrinsicHeightBoundsWidth)
     -> some View
   {
     SwiftUISizingContainer { context in
@@ -64,7 +64,7 @@ extension StyledView
         style: style,
         behaviors: behaviors,
         context: context,
-        sizingBehavior: sizingBehavior)
+        sizing: sizing)
     }
   }
 }
@@ -78,14 +78,14 @@ extension StyledView
   /// Returns a SwiftUI `View` representing this `EpoxyableView`.
   public static func swiftUIView(
     behaviors: Behaviors? = nil,
-    sizingBehavior: SwiftUIMeasurementContainerSizingBehavior = .intrinsicHeightBoundsWidth)
+    sizing: SwiftUIMeasurementContainerSizing = .intrinsicHeightBoundsWidth)
     -> some View
   {
     SwiftUISizingContainer { context in
       SwiftUIStylelessContentlessEpoxyableView<Self>(
         behaviors: behaviors,
         context: context,
-        sizingBehavior: sizingBehavior)
+        sizing: sizing)
     }
   }
 }
@@ -98,7 +98,7 @@ private struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
   var style: View.Style
   var behaviors: View.Behaviors?
   var context: SwiftUISizingContext
-  var sizingBehavior: SwiftUIMeasurementContainerSizingBehavior
+  var sizing: SwiftUIMeasurementContainerSizing
 
   func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context: Context) {
     let animated = context.transaction.animation != nil
@@ -137,7 +137,7 @@ private struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
       view: self,
       uiView: uiView,
       context: context,
-      sizingBehavior: sizingBehavior)
+      sizing: sizing)
   }
 }
 
@@ -151,7 +151,7 @@ private struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewReprese
   var content: View.Content
   var behaviors: View.Behaviors?
   var context: SwiftUISizingContext
-  var sizingBehavior: SwiftUIMeasurementContainerSizingBehavior
+  var sizing: SwiftUIMeasurementContainerSizing
 
   func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context: Context) {
     let animated = context.transaction.animation != nil
@@ -181,7 +181,7 @@ private struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewReprese
       view: self,
       uiView: uiView,
       context: context,
-      sizingBehavior: sizingBehavior)
+      sizing: sizing)
   }
 }
 
@@ -195,7 +195,7 @@ private struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepre
   var style: View.Style
   var behaviors: View.Behaviors?
   var context: SwiftUISizingContext
-  var sizingBehavior: SwiftUIMeasurementContainerSizingBehavior
+  var sizing: SwiftUIMeasurementContainerSizing
 
   func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
     defer {
@@ -223,7 +223,7 @@ private struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepre
       view: self,
       uiView: uiView,
       context: context,
-      sizingBehavior: sizingBehavior)
+      sizing: sizing)
   }
 }
 
@@ -233,7 +233,7 @@ private struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepre
 private struct SwiftUIStylelessContentlessEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
   var behaviors: View.Behaviors?
   var context: SwiftUISizingContext
-  var sizingBehavior: SwiftUIMeasurementContainerSizingBehavior
+  var sizing: SwiftUIMeasurementContainerSizing
 
   func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
     wrapper.view = self
@@ -247,6 +247,6 @@ private struct SwiftUIStylelessContentlessEpoxyableView<View: EpoxyableView>: UI
       view: self,
       uiView: uiView,
       context: context,
-      sizingBehavior: sizingBehavior)
+      sizing: sizing)
   }
 }

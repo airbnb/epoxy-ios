@@ -20,12 +20,12 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     view: SwiftUIView,
     uiView: UIViewType,
     context: SwiftUISizingContext,
-    sizingBehavior: SwiftUIMeasurementContainerSizingBehavior)
+    sizing: SwiftUIMeasurementContainerSizing)
   {
     self.view = view
     self.uiView = uiView
     self.context = context
-    self.sizingBehavior = sizingBehavior
+    self.sizing = sizing
     super.init(frame: .zero)
 
     addSubview(uiView)
@@ -57,10 +57,11 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     latestMeasuredSize = nil
     super.invalidateIntrinsicContentSize()
   }
+
   public override func layoutSubviews() {
     super.layoutSubviews()
 
-    switch sizingBehavior {
+    switch sizing {
     case .intrinsicHeightBoundsWidth, .intrinsicWidthBoundsHeight:
       // We need to re-measure the view whenever the size of the bounds change and the view is
       // sized to the bounds size, as the previous size will now be incorrect.
@@ -76,7 +77,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
   private let context: SwiftUISizingContext
 
-  private let sizingBehavior: SwiftUIMeasurementContainerSizingBehavior
+  private let sizing: SwiftUIMeasurementContainerSizing
 
   /// The bounds size at the time of the latest measurement.
   ///
@@ -124,7 +125,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     latestMeasurementBoundsSize = measurementBounds
 
     let targetSize, measuredSize: CGSize
-    switch sizingBehavior {
+    switch sizing {
     case .intrinsicHeightBoundsWidth:
       targetSize = CGSize(
         width: measurementBounds.width,
@@ -175,10 +176,10 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
   }
 }
 
-// MARK: - SwiftUIMeasurementContainerSizingBehavior
+// MARK: - SwiftUIMeasurementContainerSizing
 
 /// The sizing behavior of a `SwiftUIMeasurementContainer`.
-public enum SwiftUIMeasurementContainerSizingBehavior {
+public enum SwiftUIMeasurementContainerSizing {
   /// The `uiView` is sized with its intrinsic height and expands horizontally to fill the bounds
   /// offered by its parent.
   case intrinsicHeightBoundsWidth
