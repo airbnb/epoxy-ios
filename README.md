@@ -2,8 +2,8 @@
 
 [![Build Status](https://github.com/airbnb/epoxy-ios/workflows/CI/badge.svg?branch=master)](https://github.com/airbnb/epoxy-ios/actions?query=branch%3Amaster+workflow%3ACI)
 [![Swift Package Manager compatible](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager)
-[![Version](https://img.shields.io/cocoapods/v/Epoxy.svg)](https://cocoapods.org/pods/Epoxy)
-[![Platform](https://img.shields.io/badge/platform-ios-lightgrey.svg?style=flat)](https://cocoapods.org/pods/Epoxy)
+[![Platform](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fairbnb%2Fepoxy-ios%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/airbnb/epoxy-ios)
+[![Swift Versions](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fairbnb%2Fepoxy-ios%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/airbnb/epoxy-ios)
 
 Epoxy is a suite of declarative UI APIs for building [UIKit](https://developer.apple.com/documentation/uikit) applications in Swift. Epoxy is inspired and influenced by the wonderful [Epoxy framework on Android](https://github.com/airbnb/epoxy), as well as other declarative UI frameworks in Swift such as [SwiftUI](https://developer.apple.com/documentation/swiftui).
 
@@ -340,7 +340,7 @@ LayoutGroups are UIKit [Auto Layout](https://developer.apple.com/library/archive
 <td>
 
 ```swift
-// Set of dataIDs to have consistent 
+// Set of dataIDs to have consistent
 // and unique IDs
 enum DataID {
   case title
@@ -348,11 +348,11 @@ enum DataID {
   case action
 }
 
-// Groups are created declaratively 
+// Groups are created declaratively
 // just like Epoxy ItemModels
 let group = VGroup(
-  alignment: .leading, 
-  spacing: 8) 
+  alignment: .leading,
+  spacing: 8)
 {
   Label.groupItem(
     dataID: DataID.title,
@@ -374,7 +374,7 @@ let group = VGroup(
 // install your group in a view
 group.install(in: view)
 
-// constrain the group like you 
+// constrain the group like you
 // would a normal subview
 group.constrainToMargins()
 ```
@@ -447,8 +447,8 @@ HGroup(spacing: 8) {
     content: .init(isChecked: true),
     style: .standard)
   VGroupItem(
-    dataID: DataID.titleSubtitleGroup, 
-    style: .init(spacing: 4)) 
+    dataID: DataID.titleSubtitleGroup,
+    style: .init(spacing: 4))
   {
     Label.groupItem(
       dataID: DataID.title,
