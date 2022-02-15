@@ -370,7 +370,8 @@ struct EpoxyHostingWrapper<Content: View>: View {
     content.rootView
       .environment(\.epoxyHostingController, environment.hostingController)
       .environment(\.epoxyIntrinsicContentSizeInvalidator, environment.intrinsicContentSizeInvalidator)
-      .environment(\.epoxyLayoutMargins, environment.layoutMargins)  }
+      .environment(\.epoxyLayoutMargins, environment.layoutMargins)
+  }
 }
 
 // MARK: - EnvironmentValues
