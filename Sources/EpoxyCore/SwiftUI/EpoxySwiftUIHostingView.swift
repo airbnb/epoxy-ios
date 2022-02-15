@@ -71,6 +71,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
 
     super.init(frame: .zero)
 
+    epoxyEnvironment.hostingController = viewController
     epoxyEnvironment.intrinsicContentSizeInvalidator = .init(invalidate: { [weak self] in
       self?.viewController.view.invalidateIntrinsicContentSize()
     })
@@ -352,8 +353,9 @@ final class EpoxyHostingContent<RootView: View>: ObservableObject {
 /// The object that is used to communicate values to SwiftUI views within an
 /// `EpoxySwiftUIHostingController`, e.g. layout margins.
 final class EpoxyHostingEnvironment: ObservableObject {
-  @Published var layoutMargins = EdgeInsets()
+  @Published var hostingController: UIViewController? = nil
   @Published var intrinsicContentSizeInvalidator = EpoxyIntrinsicContentSizeInvalidator(invalidate: {})
+  @Published var layoutMargins = EdgeInsets()
 }
 
 // MARK: - EpoxyHostingWrapper
@@ -366,7 +368,22 @@ struct EpoxyHostingWrapper<Content: View>: View {
 
   var body: some View {
     content.rootView
-      .environment(\.epoxyLayoutMargins, environment.layoutMargins)
+      .environment(\.epoxyHostingController, environment.hostingController)
       .environment(\.epoxyIntrinsicContentSizeInvalidator, environment.intrinsicContentSizeInvalidator)
+      .environment(\.epoxyLayoutMargins, environment.layoutMargins)  }
+}
+
+// MARK: - EnvironmentValues
+
+extension EnvironmentValues {
+  public var epoxyHostingController: UIViewController? {
+    get { self[EpoxyHostingControllerKey.self] }
+    set { self[EpoxyHostingControllerKey.self] = newValue }
   }
+}
+
+// MARK: - EpoxyHostingControllerKey
+
+private struct EpoxyHostingControllerKey: EnvironmentKey {
+  static let defaultValue: UIViewController? = nil
 }

@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the ability to pass a `CollectionViewConfiguration` to the `CollectionViewController` initializers.
 - Added additional sizing behaviors to `SwiftUIMeasurementContainer` for sizing `UIView`s hosted in 
   a  SwiftUI `View`.
+- Added `hostingController` property in `EpoxyHostingEnvironment` to access a view's containing `UIViewController`.
 
 ### Fixed
 - Fixed sizing of reused `EpoxySwiftUIHostingController`s on iOS 15.2+.
