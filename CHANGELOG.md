@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed sizing of reused `EpoxySwiftUIHostingController`s on iOS 15.2+.
 - Fixed crash in `ScrollToItemHelper` caused by `preferredFrameRateRanges` on devices running iOS 15.0 (this issue is not present in devices on 15.1+)
+- Fixed an ambiguous layout issue when using `LayoutSpacer` without a `fixedWidth` or `fixedHeight`.
 
 ### Changed
 - Updated name of `Spacer` to `LayoutSpacer` to avoid name conflict with SwiftUI's `Spacer`

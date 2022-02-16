@@ -104,24 +104,53 @@ public final class LayoutSpacer: UILayoutGuide, Constrainable {
     NSLayoutConstraint.deactivate(constraints)
     constraints = []
 
-    if let minHeight = style.minHeight {
-      constraints.append(heightAnchor.constraint(greaterThanOrEqualToConstant: minHeight))
-    }
-    if let minWidth = style.minWidth {
-      constraints.append(widthAnchor.constraint(greaterThanOrEqualToConstant: minWidth))
-    }
-    if let maxHeight = style.maxHeight {
-      constraints.append(heightAnchor.constraint(lessThanOrEqualToConstant: maxHeight))
-    }
-    if let maxWidth = style.maxWidth {
-      constraints.append(widthAnchor.constraint(lessThanOrEqualToConstant: maxWidth))
-    }
+    // Equality constraints
     if let fixedHeight = style.fixedHeight {
       constraints.append(heightAnchor.constraint(equalToConstant: fixedHeight))
     }
     if let fixedWidth = style.fixedWidth {
       constraints.append(widthAnchor.constraint(equalToConstant: fixedWidth))
     }
+
+    // Inequality constraints
+    var height: CGFloat?
+    var width: CGFloat?
+    if let minHeight = style.minHeight {
+      constraints.append(heightAnchor.constraint(greaterThanOrEqualToConstant: minHeight))
+      height = minHeight
+    }
+    if let minWidth = style.minWidth {
+      constraints.append(widthAnchor.constraint(greaterThanOrEqualToConstant: minWidth))
+      width = minWidth
+    }
+    if let maxHeight = style.maxHeight {
+      constraints.append(heightAnchor.constraint(lessThanOrEqualToConstant: maxHeight))
+      height = height ?? maxHeight
+    }
+    if let maxWidth = style.maxWidth {
+      constraints.append(widthAnchor.constraint(lessThanOrEqualToConstant: maxWidth))
+      width = width ?? maxWidth
+    }
+
+    // Inequality constraints, by themselves, result in ambiguous layouts due to the Auto Layout
+    // engine not knowing what value to use in the range of possible values. To disambiguate the
+    // layout, we can set a low-priority equality constraint.
+    //
+    // Example:
+    // The height anchor is >= 50 and <= 100. Which value between 50 and 100
+    // should the Auto Layout engine use? To answer this question, we need to pick a value like 50,
+    // but give it a lower priority than the >= and <= inequality constraints.
+    if let height = height {
+      let heightConstraint = heightAnchor.constraint(equalToConstant: height)
+      heightConstraint.priority = UILayoutPriority(rawValue: 1)
+      constraints.append(heightConstraint)
+    }
+    if let width = width {
+      let widthConstraint = widthAnchor.constraint(equalToConstant: width)
+      widthConstraint.priority = UILayoutPriority(rawValue: 1)
+      constraints.append(widthConstraint)
+    }
+
     NSLayoutConstraint.activate(constraints)
   }
 

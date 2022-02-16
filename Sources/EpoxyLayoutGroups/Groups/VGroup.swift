@@ -12,8 +12,8 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
 
   /// Creates a new VGroup
   /// - Parameters:
-  ///   - style: the style for this HGroup that will only be set one time
-  ///   - items: the items that this HGroup will render. These can be set later with setItems()
+  ///   - style: the style for this VGroup that will only be set one time
+  ///   - items: the items that this VGroup will render. These can be set later with setItems()
   public init(
     style: Style = .init(),
     items: [GroupItemModeling] = [])
