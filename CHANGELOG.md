@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added the ability to pass a `CollectionViewConfiguration` to the `CollectionViewController` initializers.
 - Added additional sizing behaviors to `SwiftUIMeasurementContainer` for sizing `UIView`s hosted in 
   a  SwiftUI `View`.
+- Added a workaround for an iOS 15 collection view layout recursion crash (disabled by default).
 
 ### Fixed
 - Fixed sizing of reused `EpoxySwiftUIHostingController`s on iOS 15.2+.

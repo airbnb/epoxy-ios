@@ -444,6 +444,8 @@ open class CollectionView: UICollectionView {
     cell.ephemeralViewCachedStateProvider = { [weak self] state in
       self?.ephemeralStateCache[item.dataID] = state
     }
+
+    cell.resetSelfSizingLayoutRecursionPreventionState()
   }
 
   func configure(
