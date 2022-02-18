@@ -1,6 +1,7 @@
 //  Created by Laura Skelton on 5/19/17.
 //  Copyright © 2017 Airbnb. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 // MARK: - CollectionViewCell
@@ -124,17 +125,17 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
     // layout and we simply return the last computed size for the remainder of the component's life.
     // We reset the count on cell reuse and when the cell is reconfigured in `CollectionView`'s
     // `configure` function.
-    if
-      CollectionViewConfiguration.shared.enableLayoutRecursionWorkaround,
-      let previousComputedSize = previousComputedSize,
-      numberOfNewComputedSizes >= 5
-    {
-      preferredAttributes.size = previousComputedSize
-    }
+    if CollectionViewConfiguration.shared.enableLayoutRecursionWorkaround {
+      if let previousComputedSize = previousComputedSize, numberOfNewComputedSizes >= 5 {
+        EpoxyLogger.shared.assertionFailure(
+          "Layout recursion detected. View: \(view?.description ?? "nil view"). Size: \(preferredAttributes.size).")
+        preferredAttributes.size = previousComputedSize
+      }
 
-    if preferredAttributes.size != previousComputedSize {
-      numberOfNewComputedSizes += 1
-      previousComputedSize = preferredAttributes.size
+      if preferredAttributes.size != previousComputedSize {
+        numberOfNewComputedSizes += 1
+        previousComputedSize = preferredAttributes.size
+      }
     }
 
     return preferredAttributes
@@ -152,6 +153,7 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
   var ephemeralViewCachedStateProvider: ((Any?) -> Void)?
 
   func resetSelfSizingLayoutRecursionPreventionState() {
+    guard CollectionViewConfiguration.shared.enableLayoutRecursionWorkaround else { return }
     numberOfNewComputedSizes = 0
     previousComputedSize = nil
   }
