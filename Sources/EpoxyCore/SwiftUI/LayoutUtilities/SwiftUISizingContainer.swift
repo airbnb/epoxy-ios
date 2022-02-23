@@ -99,7 +99,7 @@ public struct SwiftUIMeasurementContainerContentSize {
 
   // MARK: Lifecycle
 
-  internal init(width: CGFloat? = nil, height: CGFloat? = nil) {
+  public init(width: CGFloat? = nil, height: CGFloat? = nil) {
     self.width = width
     self.height = height
   }
