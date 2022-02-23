@@ -11,7 +11,7 @@ public struct SwiftUISizingContainerConfiguration {
   // MARK: Lifecycle
 
   public init(
-    estimate: SwiftUIMeasurementContainerContentSize = .defaultEstimatedSize,
+    estimate: SwiftUISizingContainerContentSize = .defaultEstimatedSize,
     strategy: SwiftUIMeasurementContainerStrategy = .intrinsicHeightBoundsWidth,
     storage: SwiftUISizingContainerStorage = .init())
   {
@@ -27,7 +27,7 @@ public struct SwiftUISizingContainerConfiguration {
   ///
   /// Pass `nil` for either `width` or `height` if this container is only used for reading the
   /// proposed size and an ideal size will never be provided.
-  public var estimate: SwiftUIMeasurementContainerContentSize
+  public var estimate: SwiftUISizingContainerContentSize
 
   /// The measurement strategy of a `SwiftUIMeasurementContainer`.
   ///
@@ -88,14 +88,14 @@ public struct SwiftUISizingContainer<Content: View>: View {
   // MARK: Private
 
   private let content: (SwiftUISizingContext) -> Content
-  private let estimate: SwiftUIMeasurementContainerContentSize
+  private let estimate: SwiftUISizingContainerContentSize
   private let strategy: SwiftUIMeasurementContainerStrategy
   @ObservedObject private var storage: SwiftUISizingContainerStorage
 }
 
-// MARK: - SwiftUIMeasurementContainerContentSize
+// MARK: - SwiftUISizingContainerContentSize
 
-public struct SwiftUIMeasurementContainerContentSize {
+public struct SwiftUISizingContainerContentSize {
 
   // MARK: Lifecycle
 
@@ -108,8 +108,14 @@ public struct SwiftUIMeasurementContainerContentSize {
 
   /// The default estimated size used as a placeholder ideal size until `UIView` measurement is able
   /// to occur.
-  public static var defaultEstimatedSize: SwiftUIMeasurementContainerContentSize {
+  public static var defaultEstimatedSize: SwiftUISizingContainerContentSize {
     .init(width: 375, height: 150)
+  }
+
+  /// A nil `height` and `width`, indicating content with no intrinsic height or width, or no
+  /// estimated size.
+  public static var none: SwiftUISizingContainerContentSize {
+    .init(width: nil, height: nil)
   }
 
   /// The width of the content, else `nil` if the content has no intrinsic width.
@@ -135,7 +141,7 @@ public final class SwiftUISizingContainerStorage: ObservableObject {
 
   // MARK: Fileprivate
 
-  @Published fileprivate var ideal = SwiftUIMeasurementContainerContentSize()
+  @Published fileprivate var ideal = SwiftUISizingContainerContentSize()
 }
 
 // MARK: - SwiftUISizingContext
@@ -149,7 +155,7 @@ public struct SwiftUISizingContext {
   public init(
     strategy: SwiftUIMeasurementContainerStrategy,
     proposedSize: CGSize,
-    idealSize: Binding<SwiftUIMeasurementContainerContentSize>)
+    idealSize: Binding<SwiftUISizingContainerContentSize>)
   {
     self.strategy = strategy
     self.proposedSize = proposedSize
@@ -165,5 +171,5 @@ public struct SwiftUISizingContext {
   public var proposedSize: CGSize
 
   /// The ideal or intrinsic size for the content view; updated after its measurement.
-  @Binding public var idealSize: SwiftUIMeasurementContainerContentSize
+  @Binding public var idealSize: SwiftUISizingContainerContentSize
 }
