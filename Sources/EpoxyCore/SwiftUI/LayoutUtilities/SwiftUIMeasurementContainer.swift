@@ -16,16 +16,10 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
   // MARK: Lifecycle
 
-  public init(
-    view: SwiftUIView,
-    uiView: UIViewType,
-    context: SwiftUISizingContext,
-    sizing: SwiftUIMeasurementContainerSizing)
-  {
+  public init(view: SwiftUIView, uiView: UIViewType, context: SwiftUISizingContext) {
     self.view = view
     self.uiView = uiView
     self.context = context
-    self.sizing = sizing
     super.init(frame: .zero)
 
     addSubview(uiView)
@@ -61,7 +55,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
   public override func layoutSubviews() {
     super.layoutSubviews()
 
-    switch sizing {
+    switch context.strategy {
     case .intrinsicHeightBoundsWidth, .intrinsicWidthBoundsHeight:
       // We need to re-measure the view whenever the size of the bounds changes and the view is
       // sized to the bounds size, as the previous size will now be incorrect.
@@ -76,8 +70,6 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
   // MARK: Private
 
   private let context: SwiftUISizingContext
-
-  private let sizing: SwiftUIMeasurementContainerSizing
 
   /// The bounds size at the time of the latest measurement.
   ///
@@ -125,7 +117,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     latestMeasurementBoundsSize = measurementBounds
 
     let targetSize, measuredSize: CGSize
-    switch sizing {
+    switch context.strategy {
     case .intrinsicHeightBoundsWidth:
       targetSize = CGSize(
         width: measurementBounds.width,
@@ -138,7 +130,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
       measuredSize = CGSize(width: UIView.noIntrinsicMetric, height: fittingSize.height)
 
-      context.idealSize = (width: nil, height: measuredSize.height)
+      context.idealSize = .init(width: nil, height: measuredSize.height)
 
     case .intrinsicWidthBoundsHeight:
       targetSize = CGSize(
@@ -152,7 +144,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
       measuredSize = CGSize(width: fittingSize.width, height: UIView.noIntrinsicMetric)
 
-      context.idealSize = (width: measuredSize.width, height: measuredSize.height)
+      context.idealSize = .init(width: measuredSize.width, height: measuredSize.height)
 
     case .intrinsicSize:
       targetSize = CGSize(
@@ -164,7 +156,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
         withHorizontalFittingPriority: .fittingSizeLevel,
         verticalFittingPriority: .fittingSizeLevel)
 
-      context.idealSize = (width: measuredSize.width, height: measuredSize.height)
+      context.idealSize = .init(width: measuredSize.width, height: measuredSize.height)
     }
 
     let changed = (latestMeasuredSize != measuredSize)
@@ -176,10 +168,10 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
   }
 }
 
-// MARK: - SwiftUIMeasurementContainerSizing
+// MARK: - SwiftUIMeasurementContainerStrategy
 
-/// The sizing behavior of a `SwiftUIMeasurementContainer`.
-public enum SwiftUIMeasurementContainerSizing {
+/// The measurement strategy of a `SwiftUIMeasurementContainer`.
+public enum SwiftUIMeasurementContainerStrategy {
   /// The `uiView` is sized with its intrinsic height and expands horizontally to fill the bounds
   /// offered by its parent.
   case intrinsicHeightBoundsWidth
