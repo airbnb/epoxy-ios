@@ -62,7 +62,7 @@ public struct SwiftUISizingContainer<Content: View>: View {
   ///   - content: The view content rendered using a `SwiftUISizingContext`, typically returning a
   ///     `SwiftUIMeasurementContainer` wrapping a `UIView`.
   public init(
-    configuration: SwiftUISizingContainerConfiguration,
+    configuration: SwiftUISizingContainerConfiguration = .init(),
     content: @escaping (SwiftUISizingContext) -> Content)
   {
     estimate = configuration.estimate
