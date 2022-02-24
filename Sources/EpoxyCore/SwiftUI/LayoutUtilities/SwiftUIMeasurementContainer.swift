@@ -121,7 +121,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     case .intrinsicHeightBoundsWidth:
       targetSize = CGSize(
         width: measurementBounds.width,
-        height: UIViewType.layoutFittingCompressedSize.height)
+        height: UIView.layoutFittingCompressedSize.height)
 
       let fittingSize = uiView.systemLayoutSizeFitting(
         targetSize,
@@ -134,7 +134,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
     case .intrinsicWidthBoundsHeight:
       targetSize = CGSize(
-        width: UIViewType.layoutFittingCompressedSize.width,
+        width: UIView.layoutFittingCompressedSize.width,
         height: measurementBounds.height)
 
       let fittingSize = uiView.systemLayoutSizeFitting(
@@ -144,12 +144,10 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
       measuredSize = CGSize(width: fittingSize.width, height: UIView.noIntrinsicMetric)
 
-      context.idealSize = .init(width: measuredSize.width, height: measuredSize.height)
+      context.idealSize = .init(width: measuredSize.width, height: nil)
 
     case .intrinsicSize:
-      targetSize = CGSize(
-        width: UIViewType.layoutFittingCompressedSize.height,
-        height: UIViewType.layoutFittingCompressedSize.height)
+      targetSize = UIView.layoutFittingCompressedSize
 
       measuredSize = uiView.systemLayoutSizeFitting(
         targetSize,
