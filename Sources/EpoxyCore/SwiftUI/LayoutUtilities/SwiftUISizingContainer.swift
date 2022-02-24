@@ -74,15 +74,20 @@ public struct SwiftUISizingContainer<Content: View>: View {
   // MARK: Public
 
   public var body: some View {
+    // Use the estimated size if the ideal size has not yet been computed.
+    let size = storage.ideal ?? estimate
+
     GeometryReader { proxy in
       content(.init(strategy: strategy, proposedSize: proxy.size, idealSize: $storage.ideal))
     }
-    // Pass the ideal size as the max size to ensure this view doesn't get stretched.
+    // Pass the ideal size as the min/max to ensure this view doesn't get stretched/compressed.
     .frame(
-      idealWidth: storage.ideal.width ?? estimate.width,
-      maxWidth: storage.ideal.width,
-      idealHeight: storage.ideal.height ?? estimate.height,
-      maxHeight: storage.ideal.height)
+      minWidth: size.width,
+      idealWidth: size.width,
+      maxWidth: size.width,
+      minHeight: size.height,
+      idealHeight: size.height,
+      maxHeight: size.height)
   }
 
   // MARK: Private
@@ -123,7 +128,6 @@ public struct SwiftUISizingContainerContentSize {
 
   /// The height of the content, else `nil` if the content has no intrinsic height.
   public var height: CGFloat?
-
 }
 
 // MARK: - SwiftUISizingContainerStorage
@@ -141,7 +145,9 @@ public final class SwiftUISizingContainerStorage: ObservableObject {
 
   // MARK: Fileprivate
 
-  @Published fileprivate var ideal = SwiftUISizingContainerContentSize()
+  /// The ideal size computed by the `SwiftUIMeasurementContainer`, else `nil` if not yet
+  /// determined.
+  @Published fileprivate var ideal: SwiftUISizingContainerContentSize?
 }
 
 // MARK: - SwiftUISizingContext
@@ -155,7 +161,7 @@ public struct SwiftUISizingContext {
   public init(
     strategy: SwiftUIMeasurementContainerStrategy,
     proposedSize: CGSize,
-    idealSize: Binding<SwiftUISizingContainerContentSize>)
+    idealSize: Binding<SwiftUISizingContainerContentSize?>)
   {
     self.strategy = strategy
     self.proposedSize = proposedSize
@@ -170,6 +176,7 @@ public struct SwiftUISizingContext {
   /// The proposed layout size for the view.
   public var proposedSize: CGSize
 
-  /// The ideal or intrinsic size for the content view; updated after its measurement.
-  @Binding public var idealSize: SwiftUISizingContainerContentSize
+  /// The ideal or intrinsic size for the content view; updated after its measurement, else `nil`
+  /// if it has not yet been determined.
+  @Binding public var idealSize: SwiftUISizingContainerContentSize?
 }
