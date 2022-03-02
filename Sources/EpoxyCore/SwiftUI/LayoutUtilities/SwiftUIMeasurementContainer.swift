@@ -55,15 +55,10 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
   public override func layoutSubviews() {
     super.layoutSubviews()
 
-    switch context.strategy {
-    case .intrinsicHeightBoundsWidth, .intrinsicWidthBoundsHeight:
-      // We need to re-measure the view whenever the size of the bounds changes and the view is
-      // sized to the bounds size, as the previous size will now be incorrect.
-      if bounds.size != latestMeasurementBoundsSize, measureView().changed {
-        super.invalidateIntrinsicContentSize()
-      }
-    case .intrinsicSize:
-      break
+    // We need to re-measure the view whenever the size of the bounds changes and the view is
+    // sized to the bounds size, as the previous size will now be incorrect.
+    if bounds.size != latestMeasurementBoundsSize, measureView().changed {
+      super.invalidateIntrinsicContentSize()
     }
   }
 
@@ -116,45 +111,61 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     let measurementBounds = bounds.size == .zero ? context.proposedSize : bounds.size
     latestMeasurementBoundsSize = measurementBounds
 
-    let targetSize, measuredSize: CGSize
+    var measuredSize: CGSize
     switch context.strategy {
     case .intrinsicHeightBoundsWidth:
-      targetSize = CGSize(
+      let targetSize = CGSize(
         width: measurementBounds.width,
         height: UIView.layoutFittingCompressedSize.height)
 
-      let fittingSize = uiView.systemLayoutSizeFitting(
+      measuredSize = uiView.systemLayoutSizeFitting(
         targetSize,
         withHorizontalFittingPriority: .defaultHigh,
         verticalFittingPriority: .fittingSizeLevel)
 
-      measuredSize = CGSize(width: UIView.noIntrinsicMetric, height: fittingSize.height)
-
+      measuredSize.width = UIView.noIntrinsicMetric
       context.idealSize = .init(width: nil, height: measuredSize.height)
 
     case .intrinsicWidthBoundsHeight:
-      targetSize = CGSize(
+      let targetSize = CGSize(
         width: UIView.layoutFittingCompressedSize.width,
         height: measurementBounds.height)
-
-      let fittingSize = uiView.systemLayoutSizeFitting(
-        targetSize,
-        withHorizontalFittingPriority: .fittingSizeLevel,
-        verticalFittingPriority: .defaultHigh)
-
-      measuredSize = CGSize(width: fittingSize.width, height: UIView.noIntrinsicMetric)
-
-      context.idealSize = .init(width: measuredSize.width, height: nil)
-
-    case .intrinsicSize:
-      targetSize = UIView.layoutFittingCompressedSize
 
       measuredSize = uiView.systemLayoutSizeFitting(
         targetSize,
         withHorizontalFittingPriority: .fittingSizeLevel,
+        verticalFittingPriority: .defaultHigh)
+
+      measuredSize.height = UIView.noIntrinsicMetric
+      context.idealSize = .init(width: measuredSize.width, height: nil)
+
+    case .intrinsicSize:
+      measuredSize = uiView.systemLayoutSizeFitting(
+        UIView.layoutFittingCompressedSize,
+        withHorizontalFittingPriority: .fittingSizeLevel,
         verticalFittingPriority: .fittingSizeLevel)
 
-      context.idealSize = .init(width: measuredSize.width, height: measuredSize.height)
+      var idealSize = SwiftUISizingContainerContentSize(measuredSize)
+
+      // If the measured size exceeds the available width or height, set the measured size to
+      // `noIntrinsicMetric` to ensure that the component can be compressed, otherwise it will
+      // overflow beyond the proposed size.
+      if
+        measuredSize.width > measurementBounds.width,
+        latestMeasuredSize == nil || latestMeasuredSize?.width == UIView.noIntrinsicMetric
+      {
+        measuredSize.width = UIView.noIntrinsicMetric
+        idealSize.width = nil
+      }
+      if
+        measuredSize.height > measurementBounds.height,
+        latestMeasuredSize == nil || latestMeasuredSize?.height == UIView.noIntrinsicMetric
+      {
+        measuredSize.height = UIView.noIntrinsicMetric
+        idealSize.height = nil
+      }
+
+      context.idealSize = idealSize
     }
 
     let changed = (latestMeasuredSize != measuredSize)
