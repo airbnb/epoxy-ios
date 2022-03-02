@@ -109,6 +109,11 @@ public struct SwiftUISizingContainerContentSize {
     self.height = height
   }
 
+  public init(_ size: CGSize) {
+    width = size.width
+    height = size.height
+  }
+
   // MARK: Public
 
   /// The default estimated size used as a placeholder ideal size until `UIView` measurement is able
