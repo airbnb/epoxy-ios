@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated name of `Spacer` to `LayoutSpacer` to avoid name conflict with SwiftUI's `Spacer`
 - Updated to have Swift 5.4 as the minimum supported Swift version (previously Swift 5.3).
+- Removed the iOS 15 layout recursion workaround, and replaced it with better, side-effect-free logging.
 
 ## [0.7.0](https://github.com/airbnb/epoxy-ios/compare/0.6.0...0.7.0) - 2021-12-09
 
