@@ -121,8 +121,8 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
     // root cause of these crashes is likely an ambiguous layout due to misconfigured constraints.
     // Unfortunately, finding each and every one of these ambiguous layouts can be challenging. This
     // code tries to detect these layout issues and logs a warning when one is detected: if a
-    // component size is unstable for at least 50 sizing attempts in less than 2 seconds, we log a
-    // warning.
+    // component size is unstable for at least 50 sizing attempts in less than 2s, we assert since
+    // collection view is about to crash anyways.
 
     let sizingAttemptTime = CACurrentMediaTime()
     let wasFirstSizingAttemptRecent: Bool
@@ -139,8 +139,8 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
     }
 
     if wasFirstSizingAttemptRecent, previousComputedSizes.count >= 50 {
-      EpoxyLogger.shared.warn(
-        "Layout recursion detected. View: \(view?.description ?? "nil view"). Sizes: \(previousComputedSizes).")
+      EpoxyLogger.shared.assertionFailure(
+        "Layout recursion detected. View: \(view?.invertedHierarchyString ?? "nil view"). Sizes: \(previousComputedSizes).")
     }
 
     if preferredAttributes.size != previousComputedSizes.last {
@@ -171,7 +171,7 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
   private var normalViewBackgroundColor: UIColor?
 
   private var previousComputedSizes = [CGSize]()
-  private var firstSizingAttemptTime: TimeInterval?
+  private var firstSizingAttemptTime: CFTimeInterval?
 
   private func updateVisualHighlightState(_ isVisuallyHighlighted: Bool) {
     if selectedBackgroundColor == nil { return }
@@ -218,4 +218,38 @@ extension CollectionViewCell {
     super.accessibilityElementDidLoseFocus()
     accessibilityDelegate?.collectionViewCellDidLoseFocus(cell: self)
   }
+}
+
+// MARK: Layout Recursion Debug Helpers
+
+extension UIView {
+
+  // MARK: Fileprivate
+
+  fileprivate var invertedHierarchyString: String {
+    var viewDescriptions = [description]
+    var next = superview
+    while next != nil {
+      if let desc = next?.description {
+        viewDescriptions.append(desc)
+      }
+      next = next?.superview
+    }
+    return hierarchyString(from: viewDescriptions.reversed())
+  }
+
+  // MARK: Private
+
+  private func hierarchyString(from viewDescriptions: [String]) -> String {
+    var result = ""
+    for (idx, desc) in viewDescriptions.enumerated() {
+      var prefix = ""
+      if idx > 0 {
+        prefix = String(repeating: " ", count: 4 * idx) + "├─ "
+      }
+      result += "\(prefix)\(desc)\n"
+    }
+    return result
+  }
+
 }

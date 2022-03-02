@@ -16,9 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   initializers.
 - Added additional sizing behaviors to `SwiftUIMeasurementContainer` for sizing `UIView`s hosted in 
   a  SwiftUI `View`.
-- Added a workaround for an iOS 15 collection view layout recursion crash (disabled by default).
 - Added `SwiftUISizingContainerStorage` for hoisting measured ideal size state in view hierarchy to 
   mitigate jumpiness when a `SwiftUISizingContainer` is hosted within lazy stacks.
+- Added an assert and log when we detect an iOS 15 collection view layout recursion crash is about to happen.
 
 ### Fixed
 - Fixed sizing of reused `EpoxySwiftUIHostingController`s on iOS 15.2+.
@@ -32,7 +32,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated name of `Spacer` to `LayoutSpacer` to avoid name conflict with SwiftUI's `Spacer`
 - Updated to have Swift 5.4 as the minimum supported Swift version (previously Swift 5.3).
-- Removed the iOS 15 layout recursion workaround, and replaced it with better, side-effect-free logging.
 
 ## [0.7.0](https://github.com/airbnb/epoxy-ios/compare/0.6.0...0.7.0) - 2021-12-09
 
