@@ -110,8 +110,8 @@ public struct SwiftUISizingContainerContentSize {
   }
 
   public init(_ size: CGSize) {
-    self.width = size.width
-    self.height = size.height
+    width = size.width
+    height = size.height
   }
 
   // MARK: Public
