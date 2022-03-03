@@ -22,6 +22,30 @@ public struct SwiftUISizingContainerConfiguration {
 
   // MARK: Public
 
+  /// The `content` view is sized to fill the bounds offered by its parent.
+  public static var boundsSize: Self {
+    .init(strategy: .boundsSize)
+  }
+
+  /// The `content` view is sized with its intrinsic height and expands horizontally to fill the
+  /// bounds offered by its parent
+  ///
+  /// This is the default configuration.
+  public static var intrinsicHeightBoundsWidth: Self {
+    .init()
+  }
+
+  /// The `content` view is sized with its intrinsic width and expands vertically to fill the bounds
+  /// offered by its parent.
+  public static var intrinsicWidthBoundsHeight: Self {
+    .init(strategy: .intrinsicWidthBoundsHeight)
+  }
+
+  /// The `content` view is sized to its intrinsic width and height.
+  public static var intrinsicSize: Self {
+    .init(strategy: .intrinsicSize)
+  }
+
   /// An estimated size used as a placeholder ideal size until `UIView` measurement is able to
   /// occur.
   ///
