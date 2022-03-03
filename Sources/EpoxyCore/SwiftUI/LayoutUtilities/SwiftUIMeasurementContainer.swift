@@ -113,6 +113,13 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
     var measuredSize: CGSize
     switch context.strategy {
+    case .boundsSize:
+      measuredSize = .init(
+        width: UIView.noIntrinsicMetric,
+        height: UIView.noIntrinsicMetric)
+
+      context.idealSize = .init(width: nil, height: nil)
+
     case .intrinsicHeightBoundsWidth:
       let targetSize = CGSize(
         width: measurementBounds.width,
@@ -181,6 +188,8 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
 /// The measurement strategy of a `SwiftUIMeasurementContainer`.
 public enum SwiftUIMeasurementContainerStrategy {
+  /// The `uiView` is sized to fill the bounds offered by its parent.
+  case boundsSize
   /// The `uiView` is sized with its intrinsic height and expands horizontally to fill the bounds
   /// offered by its parent.
   case intrinsicHeightBoundsWidth
