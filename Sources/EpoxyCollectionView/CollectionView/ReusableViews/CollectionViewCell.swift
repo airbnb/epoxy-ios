@@ -140,7 +140,7 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
 
     if wasFirstSizingAttemptRecent, previousComputedSizes.count >= 50 {
       EpoxyLogger.shared.assertionFailure(
-        "Layout recursion detected. View: \(view?.invertedHierarchyString ?? "nil view"). Sizes: \(previousComputedSizes).")
+        "Layout recursion detected. View: \(view?.description ?? "nil view"). VC: \(view?.parentViewController?.description ?? "no parent VC"). Sizes: \(previousComputedSizes).")
     }
 
     if preferredAttributes.size != previousComputedSizes.last {
@@ -222,34 +222,18 @@ extension CollectionViewCell {
 
 // MARK: Layout Recursion Debug Helpers
 
-extension UIView {
+extension UIResponder {
 
-  // MARK: Fileprivate
-
-  fileprivate var invertedHierarchyString: String {
-    var viewDescriptions = [description]
-    var next = superview
-    while next != nil {
-      if let desc = next?.description {
-        viewDescriptions.append(desc)
+  fileprivate var parentViewController: UIViewController? {
+    if next is UIViewController {
+      return next as? UIViewController
+    } else {
+      if let next = next {
+        return next.parentViewController
+      } else {
+        return nil
       }
-      next = next?.superview
     }
-    return hierarchyString(from: viewDescriptions.reversed())
-  }
-
-  // MARK: Private
-
-  private func hierarchyString(from viewDescriptions: [String]) -> String {
-    var result = ""
-    for (idx, desc) in viewDescriptions.enumerated() {
-      var prefix = ""
-      if idx > 0 {
-        prefix = String(repeating: " ", count: 4 * idx) + "├─ "
-      }
-      result += "\(prefix)\(desc)\n"
-    }
-    return result
   }
 
 }
