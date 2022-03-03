@@ -13,13 +13,11 @@ public struct CollectionViewConfiguration {
   public init(
     usesBatchUpdatesForAllReloads: Bool = true,
     usesCellPrefetching: Bool = true,
-    usesAccurateScrollToItem: Bool = true,
-    enableLayoutRecursionWorkaround: Bool = false)
+    usesAccurateScrollToItem: Bool = true)
   {
     self.usesBatchUpdatesForAllReloads = usesBatchUpdatesForAllReloads
     self.usesCellPrefetching = usesCellPrefetching
     self.usesAccurateScrollToItem = usesAccurateScrollToItem
-    self.enableLayoutRecursionWorkaround = enableLayoutRecursionWorkaround
   }
 
   // MARK: Public
@@ -68,10 +66,5 @@ public struct CollectionViewConfiguration {
   ///
   /// - SeeAlso: `CollectionViewScrollToItemHelper`
   public var usesAccurateScrollToItem: Bool
-
-  /// `UICollectionView` in iOS 15 will crash if a cell continuously returns an unstable size when self-sizing. Although this is a
-  /// product-code issue, finding the root cause of the ambiguous layouts that cause this crash can be difficult. Setting this to `true`
-  /// will cause self-sizing to short circuit after a few sizing attempts, preventing the layout recursion crash.
-  public var enableLayoutRecursionWorkaround: Bool
 
 }

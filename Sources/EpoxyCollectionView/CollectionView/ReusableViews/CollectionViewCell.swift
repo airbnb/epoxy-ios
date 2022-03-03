@@ -120,22 +120,31 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
     // On iOS 15, cells that return an unstable size can result in a layout recursion crash. The
     // root cause of these crashes is likely an ambiguous layout due to misconfigured constraints.
     // Unfortunately, finding each and every one of these ambiguous layouts can be challenging. This
-    // code works around this new behavior / crash by giving up on self-sizing after 5 attempts.
-    // Once a component has been sized differently 5 times, we assume that it has an ambiguous
-    // layout and we simply return the last computed size for the remainder of the component's life.
-    // We reset the count on cell reuse and when the cell is reconfigured in `CollectionView`'s
-    // `configure` function.
-    if CollectionViewConfiguration.shared.enableLayoutRecursionWorkaround {
-      if let previousComputedSize = previousComputedSize, numberOfNewComputedSizes >= 5 {
-        EpoxyLogger.shared.assertionFailure(
-          "Layout recursion detected. View: \(view?.description ?? "nil view"). Size: \(preferredAttributes.size).")
-        preferredAttributes.size = previousComputedSize
-      }
+    // code tries to detect these layout issues and logs a warning when one is detected: if a
+    // component size is unstable for at least 50 sizing attempts in less than 2s, we assert since
+    // collection view is about to crash anyways.
 
-      if preferredAttributes.size != previousComputedSize {
-        numberOfNewComputedSizes += 1
-        previousComputedSize = preferredAttributes.size
+    let sizingAttemptTime = CACurrentMediaTime()
+    let wasFirstSizingAttemptRecent: Bool
+    if let firstSizingAttemptTime = firstSizingAttemptTime {
+      wasFirstSizingAttemptRecent = sizingAttemptTime - firstSizingAttemptTime < 2
+      if !wasFirstSizingAttemptRecent {
+        // If the last sizing attempt was not nil, but also more than the 2s threshold, reset all
+        // self-sizing-layout-recursion-tracking state.
+        resetSelfSizingLayoutRecursionTrackingState()
       }
+    } else {
+      firstSizingAttemptTime = sizingAttemptTime
+      wasFirstSizingAttemptRecent = false
+    }
+
+    if wasFirstSizingAttemptRecent, previousComputedSizes.count >= 50 {
+      EpoxyLogger.shared.assertionFailure(
+        "Layout recursion detected. View: \(view?.invertedHierarchyString ?? "nil view"). Sizes: \(previousComputedSizes).")
+    }
+
+    if preferredAttributes.size != previousComputedSizes.last {
+      previousComputedSizes.append(preferredAttributes.size)
     }
 
     return preferredAttributes
@@ -144,7 +153,7 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
   public override func prepareForReuse() {
     super.prepareForReuse()
     ephemeralViewCachedStateProvider?(cachedEphemeralState)
-    resetSelfSizingLayoutRecursionPreventionState()
+    resetSelfSizingLayoutRecursionTrackingState()
   }
 
   // MARK: Internal
@@ -152,18 +161,17 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
   weak var accessibilityDelegate: CollectionViewCellAccessibilityDelegate?
   var ephemeralViewCachedStateProvider: ((Any?) -> Void)?
 
-  func resetSelfSizingLayoutRecursionPreventionState() {
-    guard CollectionViewConfiguration.shared.enableLayoutRecursionWorkaround else { return }
-    numberOfNewComputedSizes = 0
-    previousComputedSize = nil
+  func resetSelfSizingLayoutRecursionTrackingState() {
+    previousComputedSizes.removeAll()
+    firstSizingAttemptTime = nil
   }
 
   // MARK: Private
 
   private var normalViewBackgroundColor: UIColor?
 
-  private var numberOfNewComputedSizes = 0
-  private var previousComputedSize: CGSize?
+  private var previousComputedSizes = [CGSize]()
+  private var firstSizingAttemptTime: CFTimeInterval?
 
   private func updateVisualHighlightState(_ isVisuallyHighlighted: Bool) {
     if selectedBackgroundColor == nil { return }
@@ -210,4 +218,38 @@ extension CollectionViewCell {
     super.accessibilityElementDidLoseFocus()
     accessibilityDelegate?.collectionViewCellDidLoseFocus(cell: self)
   }
+}
+
+// MARK: Layout Recursion Debug Helpers
+
+extension UIView {
+
+  // MARK: Fileprivate
+
+  fileprivate var invertedHierarchyString: String {
+    var viewDescriptions = [description]
+    var next = superview
+    while next != nil {
+      if let desc = next?.description {
+        viewDescriptions.append(desc)
+      }
+      next = next?.superview
+    }
+    return hierarchyString(from: viewDescriptions.reversed())
+  }
+
+  // MARK: Private
+
+  private func hierarchyString(from viewDescriptions: [String]) -> String {
+    var result = ""
+    for (idx, desc) in viewDescriptions.enumerated() {
+      var prefix = ""
+      if idx > 0 {
+        prefix = String(repeating: " ", count: 4 * idx) + "├─ "
+      }
+      result += "\(prefix)\(desc)\n"
+    }
+    return result
+  }
+
 }

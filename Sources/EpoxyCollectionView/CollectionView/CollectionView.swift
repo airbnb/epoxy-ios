@@ -445,7 +445,7 @@ open class CollectionView: UICollectionView {
       self?.ephemeralStateCache[item.dataID] = state
     }
 
-    cell.resetSelfSizingLayoutRecursionPreventionState()
+    cell.resetSelfSizingLayoutRecursionTrackingState()
   }
 
   func configure(
