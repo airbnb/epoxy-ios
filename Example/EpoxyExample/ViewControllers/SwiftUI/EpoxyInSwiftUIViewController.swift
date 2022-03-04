@@ -27,6 +27,9 @@ struct EpoxyInSwiftUIView: View {
           TextRow.swiftUIView(
             content: .init(title: "Row \(index)", body: BeloIpsum.sentence(count: 1, wordCount: index)),
             style: .small)
+            .configure { row in
+              print("Configuring \(row)")
+            }
             .onTapGesture {
               print("Row \(index) tapped!")
             }

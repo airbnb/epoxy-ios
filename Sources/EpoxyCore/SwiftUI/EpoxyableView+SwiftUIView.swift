@@ -7,12 +7,21 @@ import SwiftUI
 
 extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurableView {
   /// Returns a SwiftUI `View` representing this `EpoxyableView`.
+  ///
+  /// To perform additional configuration of the `EpoxyableView` instance, call `configure` on the
+  /// returned SwiftUI `View`:
+  /// ```
+  /// MyView.swiftUIView(…)
+  ///   .configure { (view: MyView) in
+  ///     …
+  ///   }
+  /// ```
   public static func swiftUIView(
     content: Content,
     style: Style,
     behaviors: Behaviors? = nil,
     sizing: SwiftUISizingContainerConfiguration = .init())
-    -> some View
+    -> SwiftUISizingContainer<SwiftUIEpoxyableView<Self>>
   {
     SwiftUISizingContainer(configuration: sizing) { context in
       SwiftUIEpoxyableView<Self>(
@@ -30,11 +39,20 @@ extension StyledView
   Style == Never
 {
   /// Returns a SwiftUI `View` representing this `EpoxyableView`.
+  ///
+  /// To perform additional configuration of the `EpoxyableView` instance, call `configure` on the
+  /// returned SwiftUI `View`:
+  /// ```
+  /// MyView.swiftUIView(…)
+  ///   .configure { (view: MyView) in
+  ///     …
+  ///   }
+  /// ```
   public static func swiftUIView(
     content: Content,
     behaviors: Behaviors? = nil,
     sizing: SwiftUISizingContainerConfiguration = .init())
-    -> some View
+    -> SwiftUISizingContainer<SwiftUIStylelessEpoxyableView<Self>>
   {
     SwiftUISizingContainer(configuration: sizing) { context in
       SwiftUIStylelessEpoxyableView<Self>(
@@ -51,11 +69,20 @@ extension StyledView
   Content == Never
 {
   /// Returns a SwiftUI `View` representing this `EpoxyableView`.
+  ///
+  /// To perform additional configuration of the `EpoxyableView` instance, call `configure` on the
+  /// returned SwiftUI `View`:
+  /// ```
+  /// MyView.swiftUIView(…)
+  ///   .configure { (view: MyView) in
+  ///     …
+  ///   }
+  /// ```
   public static func swiftUIView(
     style: Style,
     behaviors: Behaviors? = nil,
     sizing: SwiftUISizingContainerConfiguration = .init())
-    -> some View
+    -> SwiftUISizingContainer<SwiftUIContentlessEpoxyableView<Self>>
   {
     SwiftUISizingContainer(configuration: sizing) { context in
       SwiftUIContentlessEpoxyableView<Self>(
@@ -73,10 +100,19 @@ extension StyledView
   Style == Never
 {
   /// Returns a SwiftUI `View` representing this `EpoxyableView`.
+  ///
+  /// To perform additional configuration of the `EpoxyableView` instance, call `configure` on the
+  /// returned SwiftUI `View`:
+  /// ```
+  /// MyView.swiftUIView(…)
+  ///   .configure { (view: MyView) in
+  ///     …
+  ///   }
+  /// ```
   public static func swiftUIView(
     behaviors: Behaviors? = nil,
     sizing: SwiftUISizingContainerConfiguration = .init())
-    -> some View
+    -> SwiftUISizingContainer<SwiftUIStylelessContentlessEpoxyableView<Self>>
   {
     SwiftUISizingContainer(configuration: sizing) { context in
       SwiftUIStylelessContentlessEpoxyableView<Self>(behaviors: behaviors, context: context)
@@ -86,14 +122,18 @@ extension StyledView
 
 // MARK: - SwiftUIEpoxyableView
 
-/// A SwiftUI `View` representing an `EpoxyableView`.
-private struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
+/// A SwiftUI `View` representing an `EpoxyableView` with content, behaviors, and style.
+public struct SwiftUIEpoxyableView<View>: UIViewRepresentable, UIViewConfiguringSwiftUIView
+  where
+  View: EpoxyableView
+{
   var content: View.Content
   var style: View.Style
   var behaviors: View.Behaviors?
   var context: SwiftUISizingContext
+  public var configurations: [(View) -> Void] = []
 
-  func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context: Context) {
+  public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context: Context) {
     let animated = context.transaction.animation != nil
 
     defer {
@@ -101,6 +141,10 @@ private struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
 
       // We always update the view behaviors on every view update.
       wrapper.uiView.setBehaviors(behaviors)
+
+      for configuration in configurations {
+        configuration(wrapper.uiView)
+      }
     }
 
     // We need to create a new view instance when the style is updated.
@@ -122,10 +166,10 @@ private struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
     // No updates required.
   }
 
-  func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
+  public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     let uiView = View(style: style)
     uiView.setContent(content, animated: false)
-    uiView.setBehaviors(behaviors)
+    // No need to set behaviors as `updateUIView` is called immediately after construction.
     return SwiftUIMeasurementContainer(view: self, uiView: uiView, context: context)
   }
 }
@@ -133,15 +177,17 @@ private struct SwiftUIEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
 // MARK: - SwiftUIStylelessEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with a `Never` `Style`.
-private struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewRepresentable
+public struct SwiftUIStylelessEpoxyableView<View>: UIViewRepresentable, UIViewConfiguringSwiftUIView
   where
+  View: EpoxyableView,
   View.Style == Never
 {
   var content: View.Content
   var behaviors: View.Behaviors?
   var context: SwiftUISizingContext
+  public var configurations: [(View) -> Void] = []
 
-  func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context: Context) {
+  public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context: Context) {
     let animated = context.transaction.animation != nil
 
     defer {
@@ -149,6 +195,10 @@ private struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewReprese
 
       // We always update the view behaviors on every view update.
       wrapper.uiView.setBehaviors(behaviors)
+
+      for configuration in configurations {
+        configuration(wrapper.uiView)
+      }
     }
 
     // We need to update the content of the existing view when the content is updated.
@@ -161,10 +211,10 @@ private struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewReprese
     // No updates required.
   }
 
-  func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
+  public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     let uiView = View()
     uiView.setContent(content, animated: false)
-    uiView.setBehaviors(behaviors)
+    // No need to set behaviors as `updateUIView` is called immediately after construction.
     return SwiftUIMeasurementContainer(view: self, uiView: uiView, context: context)
   }
 }
@@ -172,20 +222,26 @@ private struct SwiftUIStylelessEpoxyableView<View: EpoxyableView>: UIViewReprese
 // MARK: - SwiftUIContentlessEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with a `Never` `Content`.
-private struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepresentable
+public struct SwiftUIContentlessEpoxyableView<View>: UIViewRepresentable, UIViewConfiguringSwiftUIView
   where
+  View: EpoxyableView,
   View.Content == Never
 {
   var style: View.Style
   var behaviors: View.Behaviors?
   var context: SwiftUISizingContext
+  public var configurations: [(View) -> Void] = []
 
-  func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
+  public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
     defer {
       wrapper.view = self
 
       // We always update the view behaviors on every view update.
       wrapper.uiView.setBehaviors(behaviors)
+
+      for configuration in configurations {
+        configuration(wrapper.uiView)
+      }
     }
 
     // We need to create a new view instance when the style is updated.
@@ -199,9 +255,9 @@ private struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepre
     // No updates required.
   }
 
-  func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
+  public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     let uiView = View(style: style)
-    uiView.setBehaviors(behaviors)
+    // No need to set behaviors as `updateUIView` is called immediately after construction.
     return SwiftUIMeasurementContainer(view: self, uiView: uiView, context: context)
   }
 }
@@ -209,18 +265,28 @@ private struct SwiftUIContentlessEpoxyableView<View: EpoxyableView>: UIViewRepre
 // MARK: - SwiftUIStylelessContentlessEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with a `Never` `Style` and `Content`.
-private struct SwiftUIStylelessContentlessEpoxyableView<View: EpoxyableView>: UIViewRepresentable {
+public struct SwiftUIStylelessContentlessEpoxyableView<View>: UIViewRepresentable, UIViewConfiguringSwiftUIView
+  where
+  View: EpoxyableView,
+  View.Content == Never,
+  View.Style == Never
+{
+  public var configurations: [(View) -> Void] = []
   var behaviors: View.Behaviors?
   var context: SwiftUISizingContext
 
-  func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
+  public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
     wrapper.view = self
     wrapper.uiView.setBehaviors(behaviors)
+
+    for configuration in configurations {
+      configuration(wrapper.uiView)
+    }
   }
 
-  func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
+  public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     let uiView = View()
-    uiView.setBehaviors(behaviors)
+    // No need to set behaviors as `updateUIView` is called immediately after construction.
     return SwiftUIMeasurementContainer(view: self, uiView: uiView, context: context)
   }
 }
