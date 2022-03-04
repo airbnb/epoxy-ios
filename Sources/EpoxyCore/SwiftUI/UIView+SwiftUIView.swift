@@ -33,20 +33,12 @@ extension UIViewProtocol {
 /// A `UIViewRepresentable` SwiftUI `View` that wraps its `Content` `UIView` within a
 /// `SwiftUIMeasurementContainer`, expected to be provided a `SwiftUISizingContext` by a parent
 /// `SwiftUISizingContainer`, used to size a UIKit view correctly within a SwiftUI view hierarchy.
-public struct SwiftUIUIView<View: UIView>: UIViewRepresentable, SwiftUISizingContainerContent {
+public struct SwiftUIUIView<View: UIView>: UIViewRepresentable, UIViewConfiguringSwiftUIView {
 
   // MARK: Public
 
   /// An array of closures that are invoked to configure the represented view.
   public var configurations: [(View) -> Void] = []
-
-  /// Returns a copy of this view updated to have the given closure applied to its represented view
-  /// whenever it is updated via the `updateUIView` method.
-  public func configure(_ configure: @escaping (View) -> Void) -> Self {
-    var copy = self
-    copy.configurations.append(configure)
-    return copy
-  }
 
   public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     SwiftUIMeasurementContainer(view: self, uiView: makeView(), context: context)

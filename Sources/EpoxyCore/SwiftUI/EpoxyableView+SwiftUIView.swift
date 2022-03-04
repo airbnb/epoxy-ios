@@ -123,7 +123,7 @@ extension StyledView
 // MARK: - SwiftUIEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with content, behaviors, and style.
-public struct SwiftUIEpoxyableView<View>: UIViewRepresentable, SwiftUISizingContainerContent
+public struct SwiftUIEpoxyableView<View>: UIViewRepresentable, UIViewConfiguringSwiftUIView
   where
   View: EpoxyableView
 {
@@ -177,7 +177,7 @@ public struct SwiftUIEpoxyableView<View>: UIViewRepresentable, SwiftUISizingCont
 // MARK: - SwiftUIStylelessEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with a `Never` `Style`.
-public struct SwiftUIStylelessEpoxyableView<View>: UIViewRepresentable, SwiftUISizingContainerContent
+public struct SwiftUIStylelessEpoxyableView<View>: UIViewRepresentable, UIViewConfiguringSwiftUIView
   where
   View: EpoxyableView,
   View.Style == Never
@@ -222,7 +222,7 @@ public struct SwiftUIStylelessEpoxyableView<View>: UIViewRepresentable, SwiftUIS
 // MARK: - SwiftUIContentlessEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with a `Never` `Content`.
-public struct SwiftUIContentlessEpoxyableView<View>: UIViewRepresentable, SwiftUISizingContainerContent
+public struct SwiftUIContentlessEpoxyableView<View>: UIViewRepresentable, UIViewConfiguringSwiftUIView
   where
   View: EpoxyableView,
   View.Content == Never
@@ -265,7 +265,7 @@ public struct SwiftUIContentlessEpoxyableView<View>: UIViewRepresentable, SwiftU
 // MARK: - SwiftUIStylelessContentlessEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with a `Never` `Style` and `Content`.
-public struct SwiftUIStylelessContentlessEpoxyableView<View>: UIViewRepresentable, SwiftUISizingContainerContent
+public struct SwiftUIStylelessContentlessEpoxyableView<View>: UIViewRepresentable, UIViewConfiguringSwiftUIView
   where
   View: EpoxyableView,
   View.Content == Never,
