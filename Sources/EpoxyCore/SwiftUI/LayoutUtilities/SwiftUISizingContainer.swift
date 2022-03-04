@@ -101,18 +101,30 @@ public struct SwiftUISizingContainer<Content: View>: View {
     // Use the estimated size if the ideal size has not yet been computed.
     let size = storage.ideal ?? estimate
 
-    GeometryReader { proxy in
-      content(.init(strategy: strategy, proposedSize: proxy.size, idealSize: $storage.ideal))
+    // Inlining this closure doesn't work as it won't compile as a view builder.
+    let render: (GeometryProxy) -> Content = { proxy in
+      var result = content(
+        .init(strategy: strategy, proposedSize: proxy.size, idealSize: $storage.ideal))
+      for configuration in configurations {
+        configuration(&result)
+      }
+      return result
     }
-    // Pass the ideal size as the min/max to ensure this view doesn't get stretched/compressed.
-    .frame(
-      minWidth: size.width,
-      idealWidth: size.width,
-      maxWidth: size.width,
-      minHeight: size.height,
-      idealHeight: size.height,
-      maxHeight: size.height)
+
+    GeometryReader(content: render)
+      // Pass the ideal size as the min/max to ensure this view doesn't get stretched/compressed.
+      .frame(
+        minWidth: size.width,
+        idealWidth: size.width,
+        maxWidth: size.width,
+        minHeight: size.height,
+        idealHeight: size.height,
+        maxHeight: size.height)
   }
+
+  // MARK: Internal
+
+  var configurations = [(inout Content) -> Void]()
 
   // MARK: Private
 
@@ -208,4 +220,34 @@ public struct SwiftUISizingContext {
   /// The ideal or intrinsic size for the content view; updated after its measurement, else `nil`
   /// if it has not yet been determined.
   @Binding public var idealSize: SwiftUISizingContainerContentSize?
+}
+
+// MARK: - SwiftUISizingContainerContent
+
+/// A protocol describing a SwiftUI `View` that can configure its `UIView` contents via an array of
+/// `configuration` closures.
+public protocol SwiftUISizingContainerContent: View {
+  /// The `UIView` represented by this view.
+  associatedtype View: UIView
+
+  /// A mutable array of configuration closures that should each be invoked with the represented
+  /// `UIView` whenever `updateUIView` is called in a `UIViewRepresentable`.
+  var configurations: [(View) -> Void] { get set }
+}
+
+// MARK: - SwiftUISizingContainer
+
+extension SwiftUISizingContainer where Content: SwiftUISizingContainerContent {
+  /// Configures the `View` contents of this sizing container whenever it is updated via
+  /// `UIViewRepresentable.updateUIView`.
+  ///
+  /// You can use this closure to perform additional configuration of the view beyond the
+  /// configuration specified at initialization or in its contents, behaviors, or style.
+  public func configure(_ configure: @escaping (Content.View) -> Void) -> Self {
+    var copy = self
+    copy.configurations.append { content in
+      content.configurations.append(configure)
+    }
+    return copy
+  }
 }

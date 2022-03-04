@@ -18,7 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a  SwiftUI `View`.
 - Added `SwiftUISizingContainerStorage` for hoisting measured ideal size state in view hierarchy to 
   mitigate jumpiness when a `SwiftUISizingContainer` is hosted within lazy stacks.
-- Added an assert and log when we detect an iOS 15 collection view layout recursion crash is about to happen.
+- Added an assert and log when we detect an iOS 15 collection view layout recursion crash is about 
+  to happen.
+- Added a static `swiftUIView(…)` method to `UIView` for hosting UIKit views that aren't 
+  `EpoxyableView`s while still leveraging the layout helpers.
+- Added support for calling `configure { _ in }` on the SwiftUI `View` resulting from a 
+  `swiftUIView(…)` invocation to perform additional configuration of the `UIView` instance.
 
 ### Fixed
 - Fixed sizing of reused `EpoxySwiftUIHostingController`s on iOS 15.2+.
