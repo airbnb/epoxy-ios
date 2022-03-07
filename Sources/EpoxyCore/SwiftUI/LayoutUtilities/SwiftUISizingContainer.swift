@@ -11,8 +11,8 @@ public struct SwiftUISizingContainerConfiguration {
   // MARK: Lifecycle
 
   public init(
-    estimate: SwiftUISizingContainerContentSize = .defaultEstimatedSize,
-    strategy: SwiftUIMeasurementContainerStrategy = .intrinsicHeightBoundsWidth,
+    estimate: SwiftUISizingContainerContentSize,
+    strategy: SwiftUIMeasurementContainerStrategy,
     storage: SwiftUISizingContainerStorage = .init())
   {
     self.estimate = estimate
@@ -24,7 +24,9 @@ public struct SwiftUISizingContainerConfiguration {
 
   /// The `content` view is sized to fill the bounds offered by its parent.
   public static var boundsSize: Self {
-    .init(strategy: .boundsSize)
+    // No estimated size is needed in the case of a bounds-sized component it is always sized to fit
+    // the area offered by its parent.
+    .init(estimate: .none, strategy: .boundsSize)
   }
 
   /// The `content` view is sized with its intrinsic height and expands horizontally to fill the
@@ -32,18 +34,20 @@ public struct SwiftUISizingContainerConfiguration {
   ///
   /// This is the default configuration.
   public static var intrinsicHeightBoundsWidth: Self {
-    .init()
+    .init(estimate: .defaultEstimatedSize, strategy: .intrinsicHeightBoundsWidth)
   }
 
   /// The `content` view is sized with its intrinsic width and expands vertically to fill the bounds
   /// offered by its parent.
   public static var intrinsicWidthBoundsHeight: Self {
-    .init(strategy: .intrinsicWidthBoundsHeight)
+    .init(estimate: .defaultEstimatedSize, strategy: .intrinsicWidthBoundsHeight)
   }
 
   /// The `content` view is sized to its intrinsic width and height.
   public static var intrinsicSize: Self {
-    .init(strategy: .intrinsicSize)
+    // No estimated size is needed in the case of intrinsically sized components since they don't
+    // require a two-phase layout with an estimated size.
+    .init(estimate: .none, strategy: .intrinsicSize)
   }
 
   /// An estimated size used as a placeholder ideal size until `UIView` measurement is able to
@@ -86,7 +90,7 @@ public struct SwiftUISizingContainer<Content: View>: View {
   ///   - content: The view content rendered using a `SwiftUISizingContext`, typically returning a
   ///     `SwiftUIMeasurementContainer` wrapping a `UIView`.
   public init(
-    configuration: SwiftUISizingContainerConfiguration = .init(),
+    configuration: SwiftUISizingContainerConfiguration,
     content: @escaping (SwiftUISizingContext) -> Content)
   {
     estimate = configuration.estimate

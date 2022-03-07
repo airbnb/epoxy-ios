@@ -18,7 +18,7 @@ extension UIViewProtocol {
   ///   }
   /// ```
   public static func swiftUIView(
-    sizing: SwiftUISizingContainerConfiguration = .init(),
+    sizing: SwiftUISizingContainerConfiguration = .intrinsicHeightBoundsWidth,
     makeView: @escaping () -> Self)
     -> SwiftUISizingContainer<SwiftUIUIView<Self>>
   {

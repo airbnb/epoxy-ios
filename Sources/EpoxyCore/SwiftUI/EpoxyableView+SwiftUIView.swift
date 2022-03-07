@@ -20,7 +20,7 @@ extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurable
     content: Content,
     style: Style,
     behaviors: Behaviors? = nil,
-    sizing: SwiftUISizingContainerConfiguration = .init())
+    sizing: SwiftUISizingContainerConfiguration = .intrinsicHeightBoundsWidth)
     -> SwiftUISizingContainer<SwiftUIEpoxyableView<Self>>
   {
     SwiftUISizingContainer(configuration: sizing) { context in
@@ -51,7 +51,7 @@ extension StyledView
   public static func swiftUIView(
     content: Content,
     behaviors: Behaviors? = nil,
-    sizing: SwiftUISizingContainerConfiguration = .init())
+    sizing: SwiftUISizingContainerConfiguration = .intrinsicHeightBoundsWidth)
     -> SwiftUISizingContainer<SwiftUIStylelessEpoxyableView<Self>>
   {
     SwiftUISizingContainer(configuration: sizing) { context in
@@ -81,7 +81,7 @@ extension StyledView
   public static func swiftUIView(
     style: Style,
     behaviors: Behaviors? = nil,
-    sizing: SwiftUISizingContainerConfiguration = .init())
+    sizing: SwiftUISizingContainerConfiguration = .intrinsicHeightBoundsWidth)
     -> SwiftUISizingContainer<SwiftUIContentlessEpoxyableView<Self>>
   {
     SwiftUISizingContainer(configuration: sizing) { context in
@@ -111,7 +111,7 @@ extension StyledView
   /// ```
   public static func swiftUIView(
     behaviors: Behaviors? = nil,
-    sizing: SwiftUISizingContainerConfiguration = .init())
+    sizing: SwiftUISizingContainerConfiguration = .intrinsicHeightBoundsWidth)
     -> SwiftUISizingContainer<SwiftUIStylelessContentlessEpoxyableView<Self>>
   {
     SwiftUISizingContainer(configuration: sizing) { context in
