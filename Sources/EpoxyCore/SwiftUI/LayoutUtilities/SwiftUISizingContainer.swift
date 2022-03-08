@@ -13,7 +13,7 @@ public struct SwiftUISizingContainerConfiguration {
   public init(
     estimate: SwiftUISizingContainerContentSize,
     strategy: SwiftUIMeasurementContainerStrategy,
-    storage: SwiftUISizingContainerStorage = .init())
+    storage: SwiftUISizingContainerStorage? = nil)
   {
     self.estimate = estimate
     self.strategy = strategy
@@ -62,13 +62,14 @@ public struct SwiftUISizingContainerConfiguration {
   /// Defaults to `.intrinsicHeightBoundsWidth`.
   public var strategy: SwiftUIMeasurementContainerStrategy
 
-  /// The storage used for maintaining the ideal size of a `SwiftUISizingContainer`.
+  /// The storage used for maintaining the ideal size of a `SwiftUISizingContainer`, else nil if
+  /// it should be allocated lazily.
   ///
   /// Available to be passed into a `SwiftUISizingContainer` since there are configurations where
   /// `StateObject`s are deallocated when offscreen (e.g. deeply nested views within a
   /// `LazyVStack`), and hoisting the sizing storage to the top-level content of the `ForEach` can
   /// mitigate this issue.
-  public var storage: SwiftUISizingContainerStorage
+  public var storage: SwiftUISizingContainerStorage?
 }
 
 // MARK: - SwiftUISizingContainer
@@ -93,46 +94,46 @@ public struct SwiftUISizingContainer<Content: View>: View {
     configuration: SwiftUISizingContainerConfiguration,
     content: @escaping (SwiftUISizingContext) -> Content)
   {
-    estimate = configuration.estimate
-    strategy = configuration.strategy
-    storage = configuration.storage
+    self.configuration = configuration
     self.content = content
   }
 
   // MARK: Public
 
   public var body: some View {
-    // Use the estimated size if the ideal size has not yet been computed.
-    let size = storage.ideal ?? estimate
-
-    // Inlining this closure doesn't work as it won't compile as a view builder.
-    let render: (GeometryProxy) -> Content = { proxy in
-      content(
-        .init(strategy: strategy, proposedSize: proxy.size, idealSize: $storage.ideal))
+    if #available(iOS 14, *) {
+      StorageView_iOS14(storage: configuration.storage, content: content(ideal:))
+    } else {
+      StorageView_iOS13(storage: configuration.storage, content: content(ideal:))
     }
-
-    GeometryReader(content: render)
-      // Pass the ideal size as the min/max to ensure this view doesn't get stretched/compressed.
-      .frame(
-        minWidth: size.width,
-        idealWidth: size.width,
-        maxWidth: size.width,
-        minHeight: size.height,
-        idealHeight: size.height,
-        maxHeight: size.height)
   }
 
   // MARK: Private
 
   private var content: (SwiftUISizingContext) -> Content
-  private var estimate: SwiftUISizingContainerContentSize
-  private var strategy: SwiftUIMeasurementContainerStrategy
-  @ObservedObject private var storage: SwiftUISizingContainerStorage
+  private var configuration: SwiftUISizingContainerConfiguration
+
+  private func content(ideal: Binding<SwiftUISizingContainerContentSize?>) -> some View {
+    // Use the estimated size if the ideal size has not yet been computed.
+    let size = ideal.wrappedValue ?? configuration.estimate
+
+    return GeometryReader { proxy in
+      content(.init(strategy: configuration.strategy, proposedSize: proxy.size, idealSize: ideal))
+    }
+    // Pass the ideal size as the min/max to ensure this view doesn't get stretched/compressed.
+    .frame(
+      minWidth: size.width,
+      idealWidth: size.width,
+      maxWidth: size.width,
+      minHeight: size.height,
+      idealHeight: size.height,
+      maxHeight: size.height)
+  }
 }
 
 // MARK: - SwiftUISizingContainerContentSize
 
-public struct SwiftUISizingContainerContentSize {
+public struct SwiftUISizingContainerContentSize: Equatable {
 
   // MARK: Lifecycle
 
@@ -142,8 +143,8 @@ public struct SwiftUISizingContainerContentSize {
   }
 
   public init(_ size: CGSize) {
-    width = size.width
-    height = size.height
+    width = (size.width == UIView.noIntrinsicMetric) ? nil : size.width
+    height = (size.height == UIView.noIntrinsicMetric) ? nil : size.height
   }
 
   // MARK: Public
@@ -246,4 +247,45 @@ extension SwiftUISizingContainer where Content: UIViewConfiguringSwiftUIView {
     }
     return copy
   }
+}
+
+// MARK: - StorageView_iOS14
+
+/// Hosts the `SwiftUISizingContainerStorage` state on iOS 14+ where `StateObject` is available.
+@available(iOS 14, *)
+private struct StorageView_iOS14<Content: View>: View {
+  init(
+    storage: SwiftUISizingContainerStorage?,
+    content: @escaping (Binding<SwiftUISizingContainerContentSize?>) -> Content)
+  {
+    _storage = .init(wrappedValue: storage ?? .init())
+    self.content = content
+  }
+
+  var body: some View {
+    content($storage.ideal)
+  }
+
+  @StateObject private var storage: SwiftUISizingContainerStorage
+  private var content: (Binding<SwiftUISizingContainerContentSize?>) -> Content
+}
+
+// MARK: - StorageView_iOS13
+
+/// Hosts the `SwiftUISizingContainerStorage` state on iOS 13 where `StateObject` is not available.
+private struct StorageView_iOS13<Content: View>: View {
+  init(
+    storage: SwiftUISizingContainerStorage?,
+    content: @escaping (Binding<SwiftUISizingContainerContentSize?>) -> Content)
+  {
+    _storage = .init(wrappedValue: storage ?? .init())
+    self.content = content
+  }
+
+  var body: some View {
+    content($storage.ideal)
+  }
+
+  @ObservedObject private var storage: SwiftUISizingContainerStorage
+  private var content: (Binding<SwiftUISizingContainerContentSize?>) -> Content
 }

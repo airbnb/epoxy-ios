@@ -114,11 +114,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     var measuredSize: CGSize
     switch context.strategy {
     case .boundsSize:
-      measuredSize = .init(
-        width: UIView.noIntrinsicMetric,
-        height: UIView.noIntrinsicMetric)
-
-      context.idealSize = .init(width: nil, height: nil)
+      measuredSize = .init(width: UIView.noIntrinsicMetric, height: UIView.noIntrinsicMetric)
 
     case .intrinsicHeightBoundsWidth:
       let targetSize = CGSize(
@@ -131,7 +127,6 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
         verticalFittingPriority: .fittingSizeLevel)
 
       measuredSize.width = UIView.noIntrinsicMetric
-      context.idealSize = .init(width: nil, height: measuredSize.height)
 
     case .intrinsicWidthBoundsHeight:
       let targetSize = CGSize(
@@ -144,15 +139,12 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
         verticalFittingPriority: .defaultHigh)
 
       measuredSize.height = UIView.noIntrinsicMetric
-      context.idealSize = .init(width: measuredSize.width, height: nil)
 
     case .intrinsicSize:
       measuredSize = uiView.systemLayoutSizeFitting(
         UIView.layoutFittingCompressedSize,
         withHorizontalFittingPriority: .fittingSizeLevel,
         verticalFittingPriority: .fittingSizeLevel)
-
-      var idealSize = SwiftUISizingContainerContentSize(measuredSize)
 
       // If the measured size exceeds the available width or height, set the measured size to
       // `noIntrinsicMetric` to ensure that the component can be compressed, otherwise it will
@@ -162,22 +154,19 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
         latestMeasuredSize == nil || latestMeasuredSize?.width == UIView.noIntrinsicMetric
       {
         measuredSize.width = UIView.noIntrinsicMetric
-        idealSize.width = nil
       }
       if
         measuredSize.height > measurementBounds.height,
         latestMeasuredSize == nil || latestMeasuredSize?.height == UIView.noIntrinsicMetric
       {
         measuredSize.height = UIView.noIntrinsicMetric
-        idealSize.height = nil
       }
-
-      context.idealSize = idealSize
     }
 
     let changed = (latestMeasuredSize != measuredSize)
     if changed {
       latestMeasuredSize = measuredSize
+      context.idealSize = .init(measuredSize)
     }
 
     return (size: measuredSize, changed: changed)
