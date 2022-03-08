@@ -102,9 +102,9 @@ public struct SwiftUISizingContainer<Content: View>: View {
 
   public var body: some View {
     if #available(iOS 14, *) {
-      StorageView_iOS14(storage: configuration.storage, content: content(ideal:))
+      StorageView14(storage: configuration.storage, content: content(ideal:))
     } else {
-      StorageView_iOS13(storage: configuration.storage, content: content(ideal:))
+      StorageView13(storage: configuration.storage, content: content(ideal:))
     }
   }
 
@@ -249,11 +249,11 @@ extension SwiftUISizingContainer where Content: UIViewConfiguringSwiftUIView {
   }
 }
 
-// MARK: - StorageView_iOS14
+// MARK: - StorageView14
 
 /// Hosts the `SwiftUISizingContainerStorage` state on iOS 14+ where `StateObject` is available.
 @available(iOS 14, *)
-private struct StorageView_iOS14<Content: View>: View {
+private struct StorageView14<Content: View>: View {
   init(
     storage: SwiftUISizingContainerStorage?,
     content: @escaping (Binding<SwiftUISizingContainerContentSize?>) -> Content)
@@ -270,10 +270,10 @@ private struct StorageView_iOS14<Content: View>: View {
   private var content: (Binding<SwiftUISizingContainerContentSize?>) -> Content
 }
 
-// MARK: - StorageView_iOS13
+// MARK: - StorageView13
 
 /// Hosts the `SwiftUISizingContainerStorage` state on iOS 13 where `StateObject` is not available.
-private struct StorageView_iOS13<Content: View>: View {
+private struct StorageView13<Content: View>: View {
   init(
     storage: SwiftUISizingContainerStorage?,
     content: @escaping (Binding<SwiftUISizingContainerContentSize?>) -> Content)

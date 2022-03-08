@@ -20,7 +20,9 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     self.view = view
     self.uiView = uiView
     self.context = context
-    super.init(frame: .zero)
+    // On the first layout, use the `proposedSize` to measure with a reasonable first attempt, as
+    // passing zero results in unusable sizes and also upsets SwiftUI.
+    super.init(frame: .init(origin: .zero, size: context.proposedSize))
 
     addSubview(uiView)
     setUpConstraints()
@@ -88,16 +90,23 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
     let leading = uiView.leadingAnchor.constraint(equalTo: leadingAnchor)
     let top = uiView.topAnchor.constraint(equalTo: topAnchor)
-
-    // These constraints won't be fulfilled when resizing, but it should be higher than any other
-    // layout priorities.
-    let constraintPriority = UILayoutPriority(rawValue: UILayoutPriority.required.rawValue - 1)
-
     let trailing = uiView.trailingAnchor.constraint(equalTo: trailingAnchor)
-    trailing.priority = constraintPriority
-
     let bottom = uiView.bottomAnchor.constraint(equalTo: bottomAnchor)
-    bottom.priority = constraintPriority
+
+    let almostRequiredPriority = UILayoutPriority(rawValue: UILayoutPriority.required.rawValue - 1)
+
+    // Give a required constraint in the dimensions that are fixed to the bounds, otherwise almost
+    // required.
+    switch context.strategy {
+    case .boundsSize:
+      (trailing.priority, bottom.priority) = (.required, .required)
+    case .intrinsicHeightBoundsWidth:
+      (trailing.priority, bottom.priority) = (.required, almostRequiredPriority)
+    case .intrinsicWidthBoundsHeight:
+      (trailing.priority, bottom.priority) = (almostRequiredPriority, .required)
+    case .intrinsicSize:
+      (trailing.priority, bottom.priority) = (almostRequiredPriority, almostRequiredPriority)
+    }
 
     NSLayoutConstraint.activate([leading, top, trailing, bottom])
   }
@@ -106,10 +115,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
   /// measured size stored in `latestMeasuredSize`.
   @discardableResult
   private func measureView() -> (size: CGSize, changed: Bool) {
-    // On the first layout, use the `initialSize` to measure with a reasonable first attempt, as
-    // passing zero results in unusable sizes and also upsets SwiftUI.
-    let measurementBounds = bounds.size == .zero ? context.proposedSize : bounds.size
-    latestMeasurementBoundsSize = measurementBounds
+    latestMeasurementBoundsSize = bounds.size
 
     var measuredSize: CGSize
     switch context.strategy {
@@ -118,12 +124,12 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
     case .intrinsicHeightBoundsWidth:
       let targetSize = CGSize(
-        width: measurementBounds.width,
+        width: bounds.width,
         height: UIView.layoutFittingCompressedSize.height)
 
       measuredSize = uiView.systemLayoutSizeFitting(
         targetSize,
-        withHorizontalFittingPriority: .defaultHigh,
+        withHorizontalFittingPriority: .required,
         verticalFittingPriority: .fittingSizeLevel)
 
       measuredSize.width = UIView.noIntrinsicMetric
@@ -131,12 +137,12 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     case .intrinsicWidthBoundsHeight:
       let targetSize = CGSize(
         width: UIView.layoutFittingCompressedSize.width,
-        height: measurementBounds.height)
+        height: bounds.height)
 
       measuredSize = uiView.systemLayoutSizeFitting(
         targetSize,
         withHorizontalFittingPriority: .fittingSizeLevel,
-        verticalFittingPriority: .defaultHigh)
+        verticalFittingPriority: .required)
 
       measuredSize.height = UIView.noIntrinsicMetric
 
@@ -150,13 +156,13 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
       // `noIntrinsicMetric` to ensure that the component can be compressed, otherwise it will
       // overflow beyond the proposed size.
       if
-        measuredSize.width > measurementBounds.width,
+        measuredSize.width > bounds.width,
         latestMeasuredSize == nil || latestMeasuredSize?.width == UIView.noIntrinsicMetric
       {
         measuredSize.width = UIView.noIntrinsicMetric
       }
       if
-        measuredSize.height > measurementBounds.height,
+        measuredSize.height > bounds.height,
         latestMeasuredSize == nil || latestMeasuredSize?.height == UIView.noIntrinsicMetric
       {
         measuredSize.height = UIView.noIntrinsicMetric
