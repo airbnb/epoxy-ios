@@ -121,13 +121,13 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
     // root cause of these crashes is likely an ambiguous layout due to misconfigured constraints.
     // Unfortunately, finding each and every one of these ambiguous layouts can be challenging. This
     // code tries to detect these layout issues and logs a warning when one is detected: if a
-    // component size is unstable for at least 50 sizing attempts in less than 2s, we assert since
+    // component size is unstable for at least 10 sizing attempts in less than 0.1s, we assert since
     // collection view is about to crash anyways.
 
     let sizingAttemptTime = CACurrentMediaTime()
     let wasFirstSizingAttemptRecent: Bool
     if let firstSizingAttemptTime = firstSizingAttemptTime {
-      wasFirstSizingAttemptRecent = sizingAttemptTime - firstSizingAttemptTime < 2
+      wasFirstSizingAttemptRecent = sizingAttemptTime - firstSizingAttemptTime < 0.1
       if !wasFirstSizingAttemptRecent {
         // If the last sizing attempt was not nil, but also more than the 2s threshold, reset all
         // self-sizing-layout-recursion-tracking state.
@@ -138,7 +138,7 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
       wasFirstSizingAttemptRecent = false
     }
 
-    if wasFirstSizingAttemptRecent, previousComputedSizes.count >= 50 {
+    if wasFirstSizingAttemptRecent, previousComputedSizes.count >= 10 {
       EpoxyLogger.shared.assertionFailure(
         "Layout recursion detected. View: \(view?.description ?? "nil view"). VC: \(view?.parentViewController?.description ?? "no parent VC"). Sizes: \(previousComputedSizes).")
     }
