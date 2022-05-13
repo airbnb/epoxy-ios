@@ -98,10 +98,11 @@ extension Constrainable where Self: InternalGroup {
     return items[index]
   }
 
-  /// Shared implementation of `setItems(_ newItems:)`
-  func _setItems(_ newItems: [GroupItemModeling], animated: Bool) {
+  /// Shared implementation of `_setItems` is used across different groups
+  /// - parameters
+  ///   - newItems: items to be updated in the group
+  func _setItems(_ newItems: [GroupItemModeling], animation: GroupItemAnimation) {
     assert(validateItems(newItems))
-
     let oldItems = items
     let newItemsErased = newItems.eraseToAnyGroupItems()
     items = newItemsErased
@@ -127,12 +128,12 @@ extension Constrainable where Self: InternalGroup {
 
     for (from, to) in changeset.updates {
       let toItem = newItemsErased[to]
-      toItem.update(newConstrainableContainers[from].wrapped, animated: animated)
+      toItem.update(newConstrainableContainers[from].wrapped, animated: animation.isAnimated)
     }
 
     for index in changeset.deletes.reversed() {
       let constrainable = newConstrainableContainers.remove(at: index)
-      if animated {
+      if animation.isAnimated {
         toRemove.append(constrainable)
       } else {
         constrainable.uninstall()
@@ -143,7 +144,7 @@ extension Constrainable where Self: InternalGroup {
       let item = newItemsErased[index]
       let constrainable = item.makeConstrainable()
       let container = ConstrainableContainer(constrainable)
-      item.update(constrainable, animated: animated)
+      item.update(constrainable, animated: animation.isAnimated)
       newConstrainableContainers.insert(container, at: index)
       if let owningView = owningView {
         container.install(in: owningView)
@@ -160,7 +161,7 @@ extension Constrainable where Self: InternalGroup {
     // to 0, and creating an intermediate layout which includes all items
     // that have been inserted and removed. This allows us to have a smooth
     // transition between layouts by forcing this view to layout incoming subviews
-    if animated && owningView != nil {
+    if animation.isAnimated && owningView != nil {
       for container in added {
         container.setHiddenForAnimatedUpdates(true)
       }
@@ -181,13 +182,12 @@ extension Constrainable where Self: InternalGroup {
       let oldConstraints = constraints
       let newConstraints = generateConstraints()
       constraints = newConstraints
-
-      if animated {
+      if let animationParameters = animation.parameters {
         UIView.animate(
-          withDuration: 0.5,
-          delay: 0,
-          usingSpringWithDamping: 1.0,
-          initialSpringVelocity: 0,
+          withDuration: animationParameters.duration,
+          delay: animationParameters.delay,
+          usingSpringWithDamping: animationParameters.dampingRatio,
+          initialSpringVelocity: animationParameters.initialSpringVelocity,
           options: [.beginFromCurrentState, .allowUserInteraction],
           animations: {
             // Remove the old constraints but keep all of the items we are going to

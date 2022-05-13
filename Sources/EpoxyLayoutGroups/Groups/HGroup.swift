@@ -19,6 +19,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     items: [GroupItemModeling] = [])
   {
     let erasedItems = items.eraseToAnyGroupItems()
+    springAnimationParameters = style.springAnimationParameters
     alignment = style.alignment
     accessibilityAlignment = style.accessibilityAlignment
     spacing = style.spacing
@@ -132,13 +133,15 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
       accessibilityAlignment: VGroup.ItemAlignment = .leading,
       spacing: CGFloat = 0,
       reflowsForAccessibilityTypeSizes: Bool = true,
-      forceVerticalAccessibilityLayout: Bool = false)
+      forceVerticalAccessibilityLayout: Bool = false,
+      springAnimationParameters: SpringAnimationParameters = SpringAnimationParameters())
     {
       self.alignment = alignment
       self.accessibilityAlignment = accessibilityAlignment
       self.spacing = spacing
       self.reflowsForAccessibilityTypeSizes = reflowsForAccessibilityTypeSizes
       self.forceVerticalAccessibilityLayout = forceVerticalAccessibilityLayout
+      self.springAnimationParameters = springAnimationParameters
     }
 
     // MARK: Internal
@@ -148,6 +151,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     let spacing: CGFloat
     let reflowsForAccessibilityTypeSizes: Bool
     let forceVerticalAccessibilityLayout: Bool
+    let springAnimationParameters: SpringAnimationParameters
   }
 
   /// Alignment set at the group level to apply to all constrainables.
@@ -158,6 +162,14 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   /// Alignment used for accessibility layouts at the group level.
   /// The default value is `.leading`
   public let accessibilityAlignment: VGroup.ItemAlignment
+
+  /// Layout Animation Parameters are used to determine the animation duration, delay, spring damping ratio, and initial velocity of newly added or removed constrainables
+  /// The default values are:
+  /// duration: `500 ms`,
+  /// delay: `0 ms` delay,
+  /// dampening ratio:`1.0`,
+  /// initial velocity of `0.0`.
+  public let springAnimationParameters: SpringAnimationParameters
 
   // MARK: Group
 
@@ -211,7 +223,8 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   }
 
   public func setItems(_ newItems: [GroupItemModeling], animated: Bool) {
-    _setItems(newItems, animated: animated)
+    let animation: GroupItemAnimation = animated ? .animation(springAnimationParameters) : .noAnimation
+    _setItems(newItems, animation: animation)
   }
 
   public func setItems(@GroupModelBuilder _ buildItems: () -> [GroupItemModeling], animated: Bool = false) {
