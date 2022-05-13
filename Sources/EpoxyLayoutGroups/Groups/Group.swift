@@ -99,8 +99,9 @@ extension Constrainable where Self: InternalGroup {
   }
 
   /// Shared implementation of `_setItems` is used across different groups
-  /// - parameters
-  ///   - newItems: items to be updated in the group
+  /// - Parameters:
+  ///   - newItems: the new set of items to set on the group
+  ///   - animation: enumeration to animate or not, with `SpringAnimationParameters` available for animation
   func _setItems(_ newItems: [GroupItemModeling], animation: GroupItemAnimation) {
     assert(validateItems(newItems))
     let oldItems = items
