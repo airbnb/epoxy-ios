@@ -152,20 +152,24 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
         withHorizontalFittingPriority: .fittingSizeLevel,
         verticalFittingPriority: .fittingSizeLevel)
 
-      // If the measured size exceeds the available width or height, set the measured size to
-      // `noIntrinsicMetric` to ensure that the component can be compressed, otherwise it will
-      // overflow beyond the proposed size.
-      if
-        measuredSize.width > bounds.width,
-        latestMeasuredSize == nil || latestMeasuredSize?.width == UIView.noIntrinsicMetric
-      {
-        measuredSize.width = UIView.noIntrinsicMetric
-      }
-      if
-        measuredSize.height > bounds.height,
-        latestMeasuredSize == nil || latestMeasuredSize?.height == UIView.noIntrinsicMetric
-      {
-        measuredSize.height = UIView.noIntrinsicMetric
+      // Once we've set the ideal size after the first measurement pass where we communicate the
+      // ideal size up to the enclosing `SwiftUISizingContainer`:
+      if context.idealSize != nil {
+        // If the measured size exceeds the available width or height, set the measured size to
+        // `noIntrinsicMetric` to ensure that the component can be compressed, otherwise it will
+        // overflow beyond the proposed size.
+        if
+          measuredSize.width > bounds.width,
+          latestMeasuredSize == nil || latestMeasuredSize?.width == UIView.noIntrinsicMetric
+        {
+          measuredSize.width = UIView.noIntrinsicMetric
+        }
+        if
+          measuredSize.height > bounds.height,
+          latestMeasuredSize == nil || latestMeasuredSize?.height == UIView.noIntrinsicMetric
+        {
+          measuredSize.height = UIView.noIntrinsicMetric
+        }
       }
     }
 
