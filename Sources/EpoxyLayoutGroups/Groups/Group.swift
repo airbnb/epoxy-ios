@@ -101,8 +101,8 @@ extension Constrainable where Self: InternalGroup {
   /// Shared implementation of `_setItems` is used across different groups
   /// - Parameters:
   ///   - newItems: the new set of items to set on the group
-  ///   - animation: enumeration to animate or not, with `SpringAnimationParameters` available for animation
-  func _setItems(_ newItems: [GroupItemModeling], animation: GroupItemAnimation) {
+  ///   - animation: enumeration to animate or not, with `LayoutGroupUpdateAnimation` available for animation
+  func _setItems(_ newItems: [GroupItemModeling], animationStyle: GroupAnimationStyle) {
     assert(validateItems(newItems))
     let oldItems = items
     let newItemsErased = newItems.eraseToAnyGroupItems()
@@ -129,12 +129,12 @@ extension Constrainable where Self: InternalGroup {
 
     for (from, to) in changeset.updates {
       let toItem = newItemsErased[to]
-      toItem.update(newConstrainableContainers[from].wrapped, animated: animation.isAnimated)
+      toItem.update(newConstrainableContainers[from].wrapped, animated: animationStyle.isAnimated)
     }
 
     for index in changeset.deletes.reversed() {
       let constrainable = newConstrainableContainers.remove(at: index)
-      if animation.isAnimated {
+      if animationStyle.isAnimated {
         toRemove.append(constrainable)
       } else {
         constrainable.uninstall()
@@ -145,7 +145,7 @@ extension Constrainable where Self: InternalGroup {
       let item = newItemsErased[index]
       let constrainable = item.makeConstrainable()
       let container = ConstrainableContainer(constrainable)
-      item.update(constrainable, animated: animation.isAnimated)
+      item.update(constrainable, animated: animationStyle.isAnimated)
       newConstrainableContainers.insert(container, at: index)
       if let owningView = owningView {
         container.install(in: owningView)
@@ -162,7 +162,7 @@ extension Constrainable where Self: InternalGroup {
     // to 0, and creating an intermediate layout which includes all items
     // that have been inserted and removed. This allows us to have a smooth
     // transition between layouts by forcing this view to layout incoming subviews
-    if animation.isAnimated && owningView != nil {
+    if animationStyle.isAnimated && owningView != nil {
       for container in added {
         container.setHiddenForAnimatedUpdates(true)
       }
@@ -183,37 +183,31 @@ extension Constrainable where Self: InternalGroup {
       let oldConstraints = constraints
       let newConstraints = generateConstraints()
       constraints = newConstraints
-      if let animationParameters = animation.parameters {
-        UIView.animate(
-          withDuration: animationParameters.duration,
-          delay: animationParameters.delay,
-          usingSpringWithDamping: animationParameters.dampingRatio,
-          initialSpringVelocity: animationParameters.initialSpringVelocity,
-          options: [.beginFromCurrentState, .allowUserInteraction],
-          animations: {
-            // Remove the old constraints but keep all of the items we are going to
-            // remove in place for smooth animations
-            oldConstraints?.uninstall()
-            self.constrainAllItemsInPlace(toRemove)
+      if animationStyle.isAnimated {
+        let animationBlock = {
+          // Remove the old constraints but keep all of the items we are going to
+          // remove in place for smooth animations
+          oldConstraints?.uninstall()
+          self.constrainAllItemsInPlace(toRemove)
 
-            // hide all of the items we are going to remove which fades them out
-            // during the animation
-            for container in toRemove {
-              container.setHiddenForAnimatedUpdates(true)
-            }
-            // unhide all of the new items to fade them in
-            for container in added {
-              container.setHiddenForAnimatedUpdates(false)
-            }
-            // install the new constraints in the animation block which will
-            // handle moving elements as appropriate
-            newConstraints?.install()
-            owningView.layoutIfNeeded()
-          },
+          // hide all of the items we are going to remove which fades them out
+          // during the animation
+          for container in toRemove {
+            container.setHiddenForAnimatedUpdates(true)
+          }
+          // unhide all of the new items to fade them in
+          for container in added {
+            container.setHiddenForAnimatedUpdates(false)
+          }
+          // install the new constraints in the animation block which will
+          // handle moving elements as appropriate
+          newConstraints?.install()
+          owningView.layoutIfNeeded()
+        }
 
-          completion: { _ in
-            self.finalizeAnimationsWithRemovedItems(toRemove)
-          })
+        animationStyle.animate?(animationBlock) { [weak self] _ in
+          self?.finalizeAnimationsWithRemovedItems(toRemove)
+        }
       } else {
         oldConstraints?.uninstall()
         newConstraints?.install()

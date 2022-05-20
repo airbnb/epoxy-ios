@@ -19,7 +19,7 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     items: [GroupItemModeling] = [])
   {
     let erasedItems = items.eraseToAnyGroupItems()
-    springAnimationParameters = style.springAnimationParameters
+    animation = style.animation
     alignment = style.alignment
     spacing = style.spacing
     self.items = erasedItems
@@ -91,16 +91,16 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     public init(
       alignment: VGroup.ItemAlignment = .fill,
       spacing: CGFloat = 0,
-      springAnimationParameters: SpringAnimationParameters = SpringAnimationParameters())
+      animation: LayoutGroupUpdateAnimation = .spring())
     {
       self.alignment = alignment
       self.spacing = spacing
-      self.springAnimationParameters = springAnimationParameters
+      self.animation = animation
     }
 
     let alignment: VGroup.ItemAlignment
     let spacing: CGFloat
-    let springAnimationParameters: SpringAnimationParameters
+    let animation: LayoutGroupUpdateAnimation
   }
 
   /// Alignment set at the group level to apply to all constrainables
@@ -114,7 +114,7 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   /// delay: `0 ms` delay,
   /// dampening ratio:`1.0`,
   /// initial velocity of `0.0`.
-  public let springAnimationParameters: SpringAnimationParameters
+  public let animation: LayoutGroupUpdateAnimation
 
   // MARK: Group
 
@@ -142,8 +142,8 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   }
 
   public func setItems(_ newItems: [GroupItemModeling], animated: Bool) {
-    let animation: GroupItemAnimation = animated ? .animation(springAnimationParameters) : .noAnimation
-    _setItems(newItems, animation: animation)
+    let animationStyle: GroupAnimationStyle = animated ? .animation(animation) : .noAnimation
+    _setItems(newItems, animationStyle: animationStyle)
   }
 
   public func setItems(@GroupModelBuilder _ buildItems: () -> [GroupItemModeling], animated: Bool = false) {
