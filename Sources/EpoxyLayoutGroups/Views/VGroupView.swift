@@ -17,6 +17,7 @@ public final class VGroupView: UIView, EpoxyableView {
     vGroup = VGroup(style: style.vGroupStyle)
     super.init(frame: .zero)
     translatesAutoresizingMaskIntoConstraints = false
+    insetsLayoutMarginsFromSafeArea = false
     updateLayoutMargins()
     vGroup.install(in: self)
 

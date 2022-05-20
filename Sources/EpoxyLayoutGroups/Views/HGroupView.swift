@@ -17,6 +17,7 @@ public final class HGroupView: UIView, EpoxyableView {
     hGroup = HGroup(style: style.hGroupStyle)
     super.init(frame: .zero)
     translatesAutoresizingMaskIntoConstraints = false
+    insetsLayoutMarginsFromSafeArea = false
     updateLayoutMargins()
     hGroup.install(in: self)
 
