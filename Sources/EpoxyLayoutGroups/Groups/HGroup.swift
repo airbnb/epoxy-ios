@@ -223,8 +223,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   }
 
   public func setItems(_ newItems: [GroupItemModeling], animated: Bool) {
-    let animation: GroupAnimationStyle = animated ? .animation(animation) : .noAnimation
-    _setItems(newItems, animationStyle: animation)
+    _setItems(newItems, animated: animated, animation: animation)
   }
 
   public func setItems(@GroupModelBuilder _ buildItems: () -> [GroupItemModeling], animated: Bool = false) {

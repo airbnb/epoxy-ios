@@ -102,7 +102,7 @@ extension Constrainable where Self: InternalGroup {
   /// - Parameters:
   ///   - newItems: the new set of items to set on the group
   ///   - animation: enumeration to animate or not, with `LayoutGroupUpdateAnimation` available for animation
-  func _setItems(_ newItems: [GroupItemModeling], animationStyle: GroupAnimationStyle) {
+  func _setItems(_ newItems: [GroupItemModeling], animated: Bool, animation: LayoutGroupUpdateAnimation?) {
     assert(validateItems(newItems))
     let oldItems = items
     let newItemsErased = newItems.eraseToAnyGroupItems()
@@ -129,12 +129,12 @@ extension Constrainable where Self: InternalGroup {
 
     for (from, to) in changeset.updates {
       let toItem = newItemsErased[to]
-      toItem.update(newConstrainableContainers[from].wrapped, animated: animationStyle.isAnimated)
+      toItem.update(newConstrainableContainers[from].wrapped, animated: animated)
     }
 
     for index in changeset.deletes.reversed() {
       let constrainable = newConstrainableContainers.remove(at: index)
-      if animationStyle.isAnimated {
+      if animated {
         toRemove.append(constrainable)
       } else {
         constrainable.uninstall()
@@ -145,7 +145,7 @@ extension Constrainable where Self: InternalGroup {
       let item = newItemsErased[index]
       let constrainable = item.makeConstrainable()
       let container = ConstrainableContainer(constrainable)
-      item.update(constrainable, animated: animationStyle.isAnimated)
+      item.update(constrainable, animated: animated)
       newConstrainableContainers.insert(container, at: index)
       if let owningView = owningView {
         container.install(in: owningView)
@@ -162,7 +162,7 @@ extension Constrainable where Self: InternalGroup {
     // to 0, and creating an intermediate layout which includes all items
     // that have been inserted and removed. This allows us to have a smooth
     // transition between layouts by forcing this view to layout incoming subviews
-    if animationStyle.isAnimated && owningView != nil {
+    if animated && owningView != nil {
       for container in added {
         container.setHiddenForAnimatedUpdates(true)
       }
@@ -183,7 +183,7 @@ extension Constrainable where Self: InternalGroup {
       let oldConstraints = constraints
       let newConstraints = generateConstraints()
       constraints = newConstraints
-      if animationStyle.isAnimated {
+      if animated {
         let animationBlock = {
           // Remove the old constraints but keep all of the items we are going to
           // remove in place for smooth animations
@@ -205,7 +205,7 @@ extension Constrainable where Self: InternalGroup {
           owningView.layoutIfNeeded()
         }
 
-        animationStyle.animate?(animationBlock) { [weak self] _ in
+        animation?.animate(animationBlock) { [weak self] _ in
           self?.finalizeAnimationsWithRemovedItems(toRemove)
         }
       } else {

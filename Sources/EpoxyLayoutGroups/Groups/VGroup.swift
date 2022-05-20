@@ -142,8 +142,7 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   }
 
   public func setItems(_ newItems: [GroupItemModeling], animated: Bool) {
-    let animationStyle: GroupAnimationStyle = animated ? .animation(animation) : .noAnimation
-    _setItems(newItems, animationStyle: animationStyle)
+    _setItems(newItems, animated: animated, animation: animation)
   }
 
   public func setItems(@GroupModelBuilder _ buildItems: () -> [GroupItemModeling], animated: Bool = false) {
