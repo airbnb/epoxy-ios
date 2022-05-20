@@ -10,8 +10,8 @@ public struct LayoutGroupUpdateAnimation {
   public init(id: AnyHashable, animate: @escaping GroupAnimationClosure) {
     self.id = id
     self.animate = animate
-
   }
+
   public var id: AnyHashable
   public var animate: GroupAnimationClosure
 }
@@ -48,8 +48,6 @@ extension LayoutGroupUpdateAnimation {
   }
 }
 
-
-
 extension LayoutGroupUpdateAnimation: Hashable {
   public static func == (lhs: LayoutGroupUpdateAnimation, rhs: LayoutGroupUpdateAnimation) -> Bool {
     lhs.id == rhs.id
@@ -59,8 +57,6 @@ extension LayoutGroupUpdateAnimation: Hashable {
     hasher.combine(id)
   }
 }
-
-
 
 private struct SpringAnimationParameters: Hashable {
   let duration: TimeInterval
