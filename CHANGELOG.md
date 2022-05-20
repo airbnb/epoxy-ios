@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `EpoxyableView`s while still leveraging the layout helpers.
 - Added support for calling `configure { _ in }` on the SwiftUI `View` resulting from a 
   `swiftUIView(…)` invocation to perform additional configuration of the `UIView` instance.
-- Added `SpringAnimationParameters` for customizing `Group` animated updates.
+- Added `LayoutGroupUpdateAnimation` for customizing `Group` animated updates.
 
 ### Fixed
 - Fixed sizing of reused `EpoxySwiftUIHostingController`s on iOS 15.2+.

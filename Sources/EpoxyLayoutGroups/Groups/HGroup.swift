@@ -163,11 +163,11 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   /// The default value is `.leading`
   public let accessibilityAlignment: VGroup.ItemAlignment
 
-  /// Layout Animation Parameters are used to determine the animation duration, delay, spring damping ratio, and initial velocity of newly added or removed constrainables
+  /// LayoutGroupUpdateAnimation is used to customize the layout group's animation. Hgroup uses a default spring with the following values:
   /// The default values are:
   /// duration: `500 ms`,
   /// delay: `0 ms` delay,
-  /// dampening ratio:`1.0`,
+  /// spring dampening ratio:`1.0`,
   /// initial velocity of `0.0`.
   public let animation: LayoutGroupUpdateAnimation
 
