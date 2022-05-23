@@ -2,6 +2,7 @@
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
 import EpoxyCore
+import UIKit
 
 // MARK: - AnyBarModel
 
@@ -47,6 +48,42 @@ extension AnyBarModel: StyleIDProviding {}
 
 extension AnyBarModel: CallbackContextEpoxyModeled {
   public typealias CallbackContext = Void
+}
+
+extension AnyBarModel: InternalBarModeling {
+    func makeConfiguredView(traitCollection: UITraitCollection) -> UIView {
+        UIView()
+    }
+    
+    func configureContent(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+        // no-op
+    }
+    
+    func configureBehavior(_ view: UIView, traitCollection: UITraitCollection) {
+        // no-op
+    }
+    
+    func willDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+        willDisplay?(())
+    }
+    
+    func didDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+        // no-op
+    }
+    
+    func didEndDisplaying(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+        // no-op
+    }
+    
+    func didSelect(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+        // no-op
+    }
+    
+    var isSelectable: Bool {
+        false
+    }
+    
+    
 }
 
 // MARK: WillDisplayProviding

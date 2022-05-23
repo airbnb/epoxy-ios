@@ -69,6 +69,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		01438E74283C1BCC004D32B3 /* epoxy-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "epoxy-ios"; path = ..; sourceTree = "<group>"; };
 		2518441B25B8E38A000B801F /* ColorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorView.swift; sourceTree = "<group>"; };
 		25627B8F232ABF0E00D7327A /* EpoxyExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EpoxyExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25627B92232ABF0E00D7327A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -143,6 +144,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01438E73283C1BCC004D32B3 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				01438E74283C1BCC004D32B3 /* epoxy-ios */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
 		25023CBA25AE281F0055B94B /* Assets */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,6 +165,7 @@
 		25627B86232ABF0E00D7327A = {
 			isa = PBXGroup;
 			children = (
+				01438E73283C1BCC004D32B3 /* Packages */,
 				25627B91232ABF0E00D7327A /* EpoxyExample */,
 				25627B90232ABF0E00D7327A /* Products */,
 				A6990DBE25633C8C00689965 /* Frameworks */,
