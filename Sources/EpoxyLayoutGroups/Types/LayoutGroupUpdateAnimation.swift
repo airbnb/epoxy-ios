@@ -3,28 +3,28 @@
 
 import UIKit
 
-/// A closure that's invoked to perform an animated update to the items in a layout group,
-/// passed an animations closure containing the updates to animate and a completion closure
-/// to be invoked when the animations complete with a parameter of whether the animations
-/// finished.
-public typealias GroupAnimation = (
-  _ animations: @escaping () -> Void,
-  _ completion: @escaping (_ completed: Bool) -> Void)
-  -> Void
-
 // MARK: - LayoutGroupUpdateAnimation
 
 /// Provides parameter values, which can be passed to the initializer of a Group's style.
 public struct LayoutGroupUpdateAnimation {
-  public init(id: AnyHashable, animate: @escaping GroupAnimationClosure) {
+  public init(id: AnyHashable, animate: @escaping Animate) {
     self.id = id
     self.animate = animate
   }
 
+  /// A closure that's invoked to perform an animated update to the items in a layout group,
+  /// passed an animations closure containing the updates to animate and a completion closure
+  /// to be invoked when the animations complete with a parameter of whether the animations
+  /// finished.
+  public typealias Animate = (
+    _ animations: @escaping () -> Void,
+    _ completion: @escaping (_ completed: Bool) -> Void)
+    -> Void
+
   /// An identifier that uniquely identifies this update animation.
   public var id: AnyHashable
   /// A closure that's called to perform the update animations.
-  public var animate: GroupAnimationClosure
+  public var animate: Animate
 }
 
 extension LayoutGroupUpdateAnimation {
