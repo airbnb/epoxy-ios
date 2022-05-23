@@ -43,6 +43,16 @@ extension AnyBarModel: DataIDProviding {}
 
 extension AnyBarModel: StyleIDProviding {}
 
+// MARK: CallbackContextEpoxyModeled
+
+extension AnyBarModel: CallbackContextEpoxyModeled {
+  public typealias CallbackContext = Void
+}
+
+// MARK: WillDisplayProviding
+
+extension AnyBarModel: WillDisplayProviding {}
+
 // MARK: Diffable
 
 extension AnyBarModel: Diffable {
