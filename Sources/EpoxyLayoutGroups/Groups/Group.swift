@@ -101,8 +101,9 @@ extension Constrainable where Self: InternalGroup {
   /// Shared implementation of `_setItems` is used across different groups
   /// - Parameters:
   ///   - newItems: the new set of items to set on the group
-  ///   - animation: enumeration to animate or not, with `LayoutGroupUpdateAnimation` available for animation
-  func _setItems(_ newItems: [GroupItemModeling], animated: Bool, animation: LayoutGroupUpdateAnimation?) {
+  ///   - animated: `Bool` indicating whether the update should be animated or not
+  ///   - animation: `LayoutGroupUpdateAnimation` with animation customization
+  func _setItems(_ newItems: [GroupItemModeling], animated: Bool, animation: LayoutGroupUpdateAnimation) {
     assert(validateItems(newItems))
     let oldItems = items
     let newItemsErased = newItems.eraseToAnyGroupItems()
@@ -205,7 +206,7 @@ extension Constrainable where Self: InternalGroup {
           owningView.layoutIfNeeded()
         }
 
-        animation?.animate(animationBlock) { [weak self] _ in
+        animation.animate(animationBlock) { [weak self] _ in
           self?.finalizeAnimationsWithRemovedItems(toRemove)
         }
       } else {
