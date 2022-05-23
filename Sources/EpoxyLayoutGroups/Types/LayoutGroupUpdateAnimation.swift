@@ -3,7 +3,14 @@
 
 import UIKit
 
-public typealias GroupAnimationClosure = (_ animations: @escaping () -> Void, _ completion: @escaping (_ completed: Bool) -> Void) -> Void
+/// A closure that's invoked to perform an animated update to the items in a layout group,
+/// passed an animations closure containing the updates to animate and a completion closure
+/// to be invoked when the animations complete with a parameter of whether the animations
+/// finished.
+public typealias GroupAnimation = (
+  _ animations: @escaping () -> Void, 
+  _ completion: @escaping (_ completed: Bool) -> Void) 
+  -> Void
 
 /// Provides parameter values, which can be passed to the initializer of a Group's style.
 public struct LayoutGroupUpdateAnimation {
