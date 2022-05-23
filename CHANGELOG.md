@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `EpoxyableView`s while still leveraging the layout helpers.
 - Added support for calling `configure { _ in }` on the SwiftUI `View` resulting from a 
   `swiftUIView(…)` invocation to perform additional configuration of the `UIView` instance.
+- Added `CallbackContextEpoxyModeled` and `WillDisplayProviding` conformance to `AnyBarModel`, allowing epoxy model storage to be used on the type-erased `AnyBarModel` while not erasing any callbacks on the underlying `BarModel`.
 
 ### Fixed
 - Fixed sizing of reused `EpoxySwiftUIHostingController`s on iOS 15.2+.
