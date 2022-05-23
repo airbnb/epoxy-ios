@@ -21,6 +21,7 @@ public struct LayoutGroupUpdateAnimation {
 
   /// An identifier that uniquely identifies this update animation.
   public var id: AnyHashable
+  /// A closure that's called to perform the update animations.
   public var animate: GroupAnimationClosure
 }
 
