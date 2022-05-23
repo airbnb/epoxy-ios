@@ -5,7 +5,7 @@ import UIKit
 
 public typealias GroupAnimationClosure = (_ animations: @escaping () -> Void, _ completion: @escaping (_ completed: Bool) -> Void) -> Void
 
-/// Provides parameter values, which can be passed to customize the animation on an Group's animated update (`_setItems(::)`).
+/// Provides parameter values, which can be passed to the initializer of a Group's style.
 public struct LayoutGroupUpdateAnimation {
   public init(id: AnyHashable, animate: @escaping GroupAnimationClosure) {
     self.id = id
