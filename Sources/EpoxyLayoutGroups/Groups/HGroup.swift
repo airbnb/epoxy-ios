@@ -128,6 +128,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     ///                                         is enabled and is an accessiblity size category.
     ///                                         The default value is `true`
     ///   - forceVerticalAccessibilityLayout: force the group to use the the vertical accessibility layout
+    ///   - animation: define style properties for animated group updates, with a default `spring` animation curve.
     public init(
       alignment: HGroup.ItemAlignment = .fill,
       accessibilityAlignment: VGroup.ItemAlignment = .leading,
