@@ -108,7 +108,7 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   /// The default value is `.fill`
   public let alignment: ItemAlignment
 
-  /// LayoutGroupUpdateAnimation is used to customize the layout group's animation. Hgroup uses a default spring with the following values
+  /// LayoutGroupUpdateAnimation is used to customize the layout group's animation. Vgroup uses a default spring with the following values
   /// The default values are:
   /// duration: `500 ms`,
   /// delay: `0 ms` delay,
