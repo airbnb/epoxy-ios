@@ -19,6 +19,7 @@ public struct LayoutGroupUpdateAnimation {
     self.animate = animate
   }
 
+  /// An identifier that uniquely identifies this update animation.
   public var id: AnyHashable
   public var animate: GroupAnimationClosure
 }
