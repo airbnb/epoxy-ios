@@ -8,9 +8,11 @@ import UIKit
 /// to be invoked when the animations complete with a parameter of whether the animations
 /// finished.
 public typealias GroupAnimation = (
-  _ animations: @escaping () -> Void, 
-  _ completion: @escaping (_ completed: Bool) -> Void) 
+  _ animations: @escaping () -> Void,
+  _ completion: @escaping (_ completed: Bool) -> Void)
   -> Void
+
+// MARK: - LayoutGroupUpdateAnimation
 
 /// Provides parameter values, which can be passed to the initializer of a Group's style.
 public struct LayoutGroupUpdateAnimation {
@@ -38,24 +40,27 @@ extension LayoutGroupUpdateAnimation {
     delay: TimeInterval = 0.0,
     dampingRatio: CGFloat = 1.0,
     initialSpringVelocity: CGFloat = 0.0)
-  -> LayoutGroupUpdateAnimation
+    -> LayoutGroupUpdateAnimation
   {
     .init(id: SpringAnimationParameters(
       duration: duration,
       delay: delay,
       dampingRatio: dampingRatio,
-      initialSpringVelocity: initialSpringVelocity)) { animations, completion in
-        UIView.animate(
-          withDuration: duration,
-          delay: delay,
-          usingSpringWithDamping: dampingRatio,
-          initialSpringVelocity: initialSpringVelocity,
-          options: [.beginFromCurrentState, .allowUserInteraction],
-          animations: animations,
-          completion: completion)
-      }
+      initialSpringVelocity: initialSpringVelocity))
+    { animations, completion in
+      UIView.animate(
+        withDuration: duration,
+        delay: delay,
+        usingSpringWithDamping: dampingRatio,
+        initialSpringVelocity: initialSpringVelocity,
+        options: [.beginFromCurrentState, .allowUserInteraction],
+        animations: animations,
+        completion: completion)
+    }
   }
 }
+
+// MARK: Hashable
 
 extension LayoutGroupUpdateAnimation: Hashable {
   public static func == (lhs: LayoutGroupUpdateAnimation, rhs: LayoutGroupUpdateAnimation) -> Bool {
@@ -66,6 +71,8 @@ extension LayoutGroupUpdateAnimation: Hashable {
     hasher.combine(id)
   }
 }
+
+// MARK: - SpringAnimationParameters
 
 private struct SpringAnimationParameters: Hashable {
   let duration: TimeInterval
