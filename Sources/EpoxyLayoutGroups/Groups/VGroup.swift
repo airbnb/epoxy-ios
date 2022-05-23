@@ -19,6 +19,7 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     items: [GroupItemModeling] = [])
   {
     let erasedItems = items.eraseToAnyGroupItems()
+    animation = style.animation
     alignment = style.alignment
     spacing = style.spacing
     self.items = erasedItems
@@ -89,20 +90,31 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   public struct Style: Hashable {
     public init(
       alignment: VGroup.ItemAlignment = .fill,
-      spacing: CGFloat = 0)
+      spacing: CGFloat = 0,
+      animation: LayoutGroupUpdateAnimation = .spring())
     {
       self.alignment = alignment
       self.spacing = spacing
+      self.animation = animation
     }
 
     let alignment: VGroup.ItemAlignment
     let spacing: CGFloat
+    let animation: LayoutGroupUpdateAnimation
   }
 
   /// Alignment set at the group level to apply to all constrainables
   /// Individual alignments on a constrainable take precedence over the group's alignment.
   /// The default value is `.fill`
   public let alignment: ItemAlignment
+
+  /// LayoutGroupUpdateAnimation is used to customize the layout group's animation. Vgroup uses a default spring with the following values
+  /// The default values are:
+  /// duration: `500 ms`,
+  /// delay: `0 ms` delay,
+  /// spring dampening ratio:`1.0`,
+  /// initial velocity of `0.0`.
+  public let animation: LayoutGroupUpdateAnimation
 
   // MARK: Group
 
@@ -130,7 +142,7 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   }
 
   public func setItems(_ newItems: [GroupItemModeling], animated: Bool) {
-    _setItems(newItems, animated: animated)
+    _setItems(newItems, animated: animated, animation: animation)
   }
 
   public func setItems(@GroupModelBuilder _ buildItems: () -> [GroupItemModeling], animated: Bool = false) {

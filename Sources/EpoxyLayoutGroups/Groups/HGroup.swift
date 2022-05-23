@@ -19,6 +19,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     items: [GroupItemModeling] = [])
   {
     let erasedItems = items.eraseToAnyGroupItems()
+    animation = style.animation
     alignment = style.alignment
     accessibilityAlignment = style.accessibilityAlignment
     spacing = style.spacing
@@ -127,18 +128,21 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     ///                                         is enabled and is an accessiblity size category.
     ///                                         The default value is `true`
     ///   - forceVerticalAccessibilityLayout: force the group to use the the vertical accessibility layout
+    ///   - animation: define style properties for animated group updates, with a default `spring` animation curve.
     public init(
       alignment: HGroup.ItemAlignment = .fill,
       accessibilityAlignment: VGroup.ItemAlignment = .leading,
       spacing: CGFloat = 0,
       reflowsForAccessibilityTypeSizes: Bool = true,
-      forceVerticalAccessibilityLayout: Bool = false)
+      forceVerticalAccessibilityLayout: Bool = false,
+      animation: LayoutGroupUpdateAnimation = .spring())
     {
       self.alignment = alignment
       self.accessibilityAlignment = accessibilityAlignment
       self.spacing = spacing
       self.reflowsForAccessibilityTypeSizes = reflowsForAccessibilityTypeSizes
       self.forceVerticalAccessibilityLayout = forceVerticalAccessibilityLayout
+      self.animation = animation
     }
 
     // MARK: Internal
@@ -148,6 +152,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     let spacing: CGFloat
     let reflowsForAccessibilityTypeSizes: Bool
     let forceVerticalAccessibilityLayout: Bool
+    let animation: LayoutGroupUpdateAnimation
   }
 
   /// Alignment set at the group level to apply to all constrainables.
@@ -158,6 +163,14 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   /// Alignment used for accessibility layouts at the group level.
   /// The default value is `.leading`
   public let accessibilityAlignment: VGroup.ItemAlignment
+
+  /// LayoutGroupUpdateAnimation is used to customize the layout group's animation. Hgroup uses a default spring with the following values:
+  /// The default values are:
+  /// duration: `500 ms`,
+  /// delay: `0 ms` delay,
+  /// spring dampening ratio:`1.0`,
+  /// initial velocity of `0.0`.
+  public let animation: LayoutGroupUpdateAnimation
 
   // MARK: Group
 
@@ -211,7 +224,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   }
 
   public func setItems(_ newItems: [GroupItemModeling], animated: Bool) {
-    _setItems(newItems, animated: animated)
+    _setItems(newItems, animated: animated, animation: animation)
   }
 
   public func setItems(@GroupModelBuilder _ buildItems: () -> [GroupItemModeling], animated: Bool = false) {
