@@ -49,7 +49,7 @@ public final class BarWrapperView: UIView {
   /// Updates the bar model the given bar model.
   public func setModel(_ model: BarModeling?, animated: Bool) {
     self.model = model
-    setModel(model?.internalBarModel, animated: animated)
+    _setModel(model, animated: animated)
   }
 
   // MARK: UIView
@@ -156,22 +156,22 @@ public final class BarWrapperView: UIView {
     }
   }
 
-  private func setModel(_ model: InternalBarCoordinating?, animated: Bool) {
+  private func _setModel(_ originalModel: BarModeling?, animated: Bool) {
     let oldValue = _model
 
-    guard let originalModel = model else {
+		guard let underlyingBarModel = originalModel?.internalBarModel else {
       view?.removeFromSuperview()
       view = nil
       _coordinator = nil
       return
     }
 
-    let coordinator = self.coordinator(for: originalModel)
+    let coordinator = self.coordinator(for: underlyingBarModel)
 
-    guard let model = originalModel.barModel(for: coordinator).internalBarModel as? InternalBarModeling else {
+    guard let model = underlyingBarModel.barModel(for: coordinator).internalBarModel as? InternalBarModeling else {
       EpoxyLogger.shared.assertionFailure(
         """
-        Unable to extract an InternalBarModeling from \(originalModel), nesting BarModeling models \
+        Unable to extract an InternalBarModeling from \(underlyingBarModel), nesting BarModeling models \
         deeper than two layers is not supported
         """)
       return
@@ -222,12 +222,10 @@ public final class BarWrapperView: UIView {
     -> UIView
     {
     let view = model.makeConfiguredView(traitCollection: traitCollection)
-    willDisplayBar?(view)
-    model.willDisplay(view, traitCollection: traitCollection, animated: animated)
     
-		if !(originalModel?.isDiffableItemEqual(to: model) ?? false) {
-			originalModel?.willDisplay(view, traitCollection: traitCollection, animated: animated)
-    }
+		willDisplayBar?(view)
+    model.willDisplay(view, traitCollection: traitCollection, animated: animated)
+		originalModel?.willDisplay(view, traitCollection: traitCollection, animated: animated)
 
     originalViewLayoutMargins = nil
     return view
