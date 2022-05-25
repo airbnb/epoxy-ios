@@ -69,37 +69,37 @@ extension AnyBarModel: CallbackContextEpoxyModeled {
 extension AnyBarModel: WillDisplayProviding {}
 
 extension AnyBarModel: InternalBarModeling {
-	func makeConfiguredView(traitCollection: UITraitCollection) -> UIView {
-		UIView()
-	}
-	
-	func configureContent(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
-		// no-op
-	}
-	
-	func configureBehavior(_ view: UIView, traitCollection: UITraitCollection) {
-		// no-op
-	}
-	
-	func willDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
-		willDisplay?(())
-	}
-	
-	func didDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
-		// no-op
-	}
-	
-	func didEndDisplaying(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
-		// no-op
-	}
-	
-	func didSelect(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
-		// no-op
-	}
-	
-	var isSelectable: Bool {
-		false
-	}
-	
-	
+  func makeConfiguredView(traitCollection: UITraitCollection) -> UIView {
+    UIView()
+  }
+  
+  func configureContent(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+    // no-op
+  }
+  
+  func configureBehavior(_ view: UIView, traitCollection: UITraitCollection) {
+    // no-op
+  }
+  
+  func willDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+    willDisplay?(())
+  }
+  
+  func didDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+    // no-op
+  }
+  
+  func didEndDisplaying(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+    // no-op
+  }
+  
+  func didSelect(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+    // no-op
+  }
+  
+  var isSelectable: Bool {
+    false
+  }
+  
+  
 }
