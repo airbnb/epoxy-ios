@@ -65,7 +65,7 @@ extension AnyBarModel: Diffable {
 // MARK: CallbackContextEpoxyModeled
 
 extension AnyBarModel: CallbackContextEpoxyModeled {
-	public typealias CallbackContext = Void
+  public typealias CallbackContext = Void
 }
 
 // MARK: WillDisplayProviding
