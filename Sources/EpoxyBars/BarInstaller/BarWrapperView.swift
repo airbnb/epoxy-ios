@@ -191,7 +191,10 @@ public final class BarWrapperView: UIView {
       // The behavior is configured regardless of content equality sice behavior is not equatable.
       model.configureBehavior(view, traitCollection: traitCollection)
     } else {
-      let view = makeView(from: model, animated: animated)
+      let view = makeView(
+        from: model,
+        originalModel: originalModel as? InternalBarModeling,
+        animated: animated)
       let animations = { self.view = view }
       if animated {
         // We do not allow consumers to pass in this duration as they can configure it by wrapping
@@ -212,10 +215,20 @@ public final class BarWrapperView: UIView {
     }
   }
 
-  private func makeView(from model: InternalBarModeling, animated: Bool) -> UIView {
+  private func makeView(
+    from model: InternalBarModeling,
+    originalModel: InternalBarModeling?,
+    animated: Bool)
+    -> UIView
+    {
     let view = model.makeConfiguredView(traitCollection: traitCollection)
     willDisplayBar?(view)
     model.willDisplay(view, traitCollection: traitCollection, animated: animated)
+    
+		if !(originalModel?.isDiffableItemEqual(to: model) ?? false) {
+			originalModel?.willDisplay(view, traitCollection: traitCollection, animated: animated)
+    }
+
     originalViewLayoutMargins = nil
     return view
   }
