@@ -62,11 +62,17 @@ extension AnyBarModel: Diffable {
   }
 }
 
+// MARK: CallbackContextEpoxyModeled
+
 extension AnyBarModel: CallbackContextEpoxyModeled {
 	public typealias CallbackContext = Void
 }
 
+// MARK: WillDisplayProviding
+
 extension AnyBarModel: WillDisplayProviding {}
+
+// MARK: InternalBarModeling
 
 extension AnyBarModel: InternalBarModeling {
   func makeConfiguredView(traitCollection: UITraitCollection) -> UIView {
