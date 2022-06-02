@@ -158,16 +158,16 @@ public final class BarWrapperView: UIView {
 
   private func _setModel(_ originalModel: BarModeling?, animated: Bool) {
     let oldValue = _model
-    
+
     guard let underlyingBarModel = originalModel?.internalBarModel else {
       view?.removeFromSuperview()
       view = nil
       _coordinator = nil
       return
     }
-    
+
     let coordinator = self.coordinator(for: underlyingBarModel)
-    
+
     guard let model = underlyingBarModel.barModel(for: coordinator).internalBarModel as? InternalBarModeling else {
       EpoxyLogger.shared.assertionFailure(
         """
@@ -176,9 +176,9 @@ public final class BarWrapperView: UIView {
         """)
       return
     }
-    
+
     _model = model
-    
+
     if
       let oldValue = oldValue,
       let view = view,
@@ -219,14 +219,14 @@ public final class BarWrapperView: UIView {
     from model: InternalBarModeling,
     originalModel: InternalBarModeling?,
     animated: Bool)
-  -> UIView
+    -> UIView
   {
     let view = model.makeConfiguredView(traitCollection: traitCollection)
-    
+
     willDisplayBar?(view)
     model.willDisplay(view, traitCollection: traitCollection, animated: animated)
     originalModel?.willDisplay(view, traitCollection: traitCollection, animated: animated)
-    
+
     originalViewLayoutMargins = nil
     return view
   }

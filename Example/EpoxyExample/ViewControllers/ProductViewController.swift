@@ -61,6 +61,9 @@ final class ProductViewController: CollectionViewController {
     ButtonRow.barModel(content: .init(text: "Buy now"), behaviors: .init(didTap: { [weak self] in
       self?.showBuy = true
     }))
+    .willDisplay { _ in
+      print("test")
+    }
   }
 
   @PresentationModelBuilder private var presentation: PresentationModel? {
