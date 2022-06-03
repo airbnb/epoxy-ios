@@ -32,16 +32,7 @@ final class ProductViewController: CollectionViewController {
     }
   }
 
-  private lazy var bottomBarInstaller: BottomBarInstaller = {
-    let newBars = bars.map { bar in
-      bar
-        .eraseToAnyBarModel()
-        .willDisplay { _ in
-          print("test")
-        }
-    }
-    return BottomBarInstaller(viewController: self, bars: newBars)
-  }()
+  private lazy var bottomBarInstaller = BottomBarInstaller(viewController: self, bars: bars)
 
   private var showBuy = false {
     didSet { setPresentation(presentation, animated: true) }
@@ -70,9 +61,6 @@ final class ProductViewController: CollectionViewController {
     ButtonRow.barModel(content: .init(text: "Buy now"), behaviors: .init(didTap: { [weak self] in
       self?.showBuy = true
     }))
-    .willDisplay { _ in
-      print("test")
-    }
   }
 
   @PresentationModelBuilder private var presentation: PresentationModel? {

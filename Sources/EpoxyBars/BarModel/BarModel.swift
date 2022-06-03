@@ -168,9 +168,7 @@ extension BarModel: DidSelectProviding {}
 // MARK: BarModeling
 
 extension BarModel: BarModeling {
-  public func eraseToAnyBarModel() -> AnyBarModel {
-    .init(self)
-  }
+  public func eraseToAnyBarModel() -> AnyBarModel { .init(self) }
 }
 
 // MARK: InternalBarModeling

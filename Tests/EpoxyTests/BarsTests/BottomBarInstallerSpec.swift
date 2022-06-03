@@ -6,7 +6,6 @@ import Quick
 import UIKit
 
 @testable import EpoxyBars
-import XCTest
 
 final class BottomBarInstallerSpec: QuickSpec, BaseBarInstallerSpec {
 
@@ -34,7 +33,6 @@ final class BottomBarInstallerSpec: QuickSpec, BaseBarInstallerSpec {
         let barInstaller = BottomBarInstaller(viewController: viewController)
 
         barInstaller.install()
-
         expect(barInstaller.container?.barInstaller).toEventually(equal(barInstaller))
 
         barInstaller.uninstall()
@@ -42,4 +40,5 @@ final class BottomBarInstallerSpec: QuickSpec, BaseBarInstallerSpec {
       }
     }
   }
+
 }
