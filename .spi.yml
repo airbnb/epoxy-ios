@@ -1,0 +1,11 @@
+version: 1
+builder:
+  configs:
+    - platform: ios
+      documentation_targets:
+      - EpoxyCore
+      - EpoxyCollectionView
+      - EpoxyBars
+      - EpoxyNavigationController
+      - EpoxyPresentations
+      - EpoxyLayoutGroups
