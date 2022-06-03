@@ -29,7 +29,11 @@ final class BottomBarInstallerSpec: QuickSpec, BaseBarInstallerSpec {
 
     describe("BottomBarContainer") {
       it("has a reference to the BottomBarInstaller when installed") {
-        let barInstaller = self.installedBar()
+        let viewController = UIViewController()
+        viewController.loadView()
+        let barInstaller = BottomBarInstaller(viewController: viewController)
+
+        barInstaller.install()
 
         expect(barInstaller.container?.barInstaller).toEventually(equal(barInstaller))
 
@@ -37,36 +41,5 @@ final class BottomBarInstallerSpec: QuickSpec, BaseBarInstallerSpec {
         expect(barInstaller.container?.barInstaller).toEventually(beNil())
       }
     }
-
-    describe("visibility") {
-      it("of a bar and erased bar type") {
-        let barModelWillDisplayExpectation = XCTestExpectation(description: "willDisplay should be called on the underlying bar model")
-        let barModel = TestView
-          .barModel()
-          .willDisplay { _ in
-            barModelWillDisplayExpectation.fulfill()
-          }
-
-        let anyBarModelWillDisplayExpectation = XCTestExpectation(description: "willDisplay should be called on AnyBarModel")
-        let anyBarModel = AnyBarModel(barModel)
-          .willDisplay { _ in
-            anyBarModelWillDisplayExpectation.fulfill()
-          }
-
-        let barInstaller = self.installedBar()
-        barInstaller.setBars([anyBarModel], animated: false)
-        self.wait(for: [barModelWillDisplayExpectation, anyBarModelWillDisplayExpectation], timeout: 1.0)
-      }
-    }
   }
-
-  private func installedBar() -> BottomBarInstaller {
-    let viewController = UIViewController()
-    viewController.loadView()
-    let barInstaller = BottomBarInstaller(viewController: viewController)
-
-    barInstaller.install()
-    return barInstaller
-  }
-
 }
