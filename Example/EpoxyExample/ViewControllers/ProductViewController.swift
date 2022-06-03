@@ -32,7 +32,16 @@ final class ProductViewController: CollectionViewController {
     }
   }
 
-  private lazy var bottomBarInstaller = BottomBarInstaller(viewController: self, bars: bars)
+  private lazy var bottomBarInstaller: BottomBarInstaller = {
+    let newBars = bars.map { bar in
+      bar
+        .eraseToAnyBarModel()
+        .willDisplay { _ in
+          print("test")
+        }
+    }
+    return BottomBarInstaller(viewController: self, bars: newBars)
+  }()
 
   private var showBuy = false {
     didSet { setPresentation(presentation, animated: true) }
