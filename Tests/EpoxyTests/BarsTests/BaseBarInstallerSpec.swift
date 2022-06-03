@@ -110,6 +110,43 @@ extension BaseBarInstallerSpec {
       }
     }
 
+    describe("BarModel and AnyBarModel visibility") {
+      context("with willDisplay on BarModel and AnyBarModel") {
+        it("calls willDisplay for both internal and erased types") {
+          var barModelWillDisplayCount = 0
+          let barModel = TestView
+            .barModel()
+            .willDisplay { _ in
+              barModelWillDisplayCount += 1
+            }
+
+          var anyBarModelWillDisplayCount = 0
+          let anyBarModel = AnyBarModel(barModel)
+            .willDisplay { _ in
+              anyBarModelWillDisplayCount += 1
+            }
+
+          setBars([anyBarModel], false)
+          expect(barModelWillDisplayCount).toEventually(equal(1))
+          expect(anyBarModelWillDisplayCount).toEventually(equal(1))
+        }
+      }
+
+      context("with willDisplay only on BarModel") {
+        it("only calls willDisplay once") {
+          var barModelWillDisplayCount = 0
+          let barModel = TestView
+            .barModel()
+            .willDisplay { _ in
+              barModelWillDisplayCount += 1
+            }
+
+          setBars([barModel], false)
+          expect(barModelWillDisplayCount).toEventually(equal(1))
+        }
+      }
+    }
+
     describe("BarInstallerConfiguration") {
       context("with a non-nil applyBars") {
         var applications: [(container: BarContainer, bars: [BarModeling], animated: Bool)]!

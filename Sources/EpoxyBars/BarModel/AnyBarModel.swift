@@ -2,6 +2,7 @@
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
 import EpoxyCore
+import UIKit
 
 // MARK: - AnyBarModel
 
@@ -58,5 +59,70 @@ extension AnyBarModel: Diffable {
     }
 
     return model.isDiffableItemEqual(to: otherDiffableItem)
+  }
+}
+
+// MARK: CallbackContextEpoxyModeled
+
+extension AnyBarModel: CallbackContextEpoxyModeled {
+  public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {
+    public init(
+      view: UIView,
+      traitCollection: UITraitCollection,
+      animated: Bool)
+    {
+      self.view = view
+      self.traitCollection = traitCollection
+      self.animated = animated
+    }
+
+    // MARK: Public
+
+    public let view: UIView
+    public let traitCollection: UITraitCollection
+    public let animated: Bool
+  }
+}
+
+// MARK: WillDisplayProviding
+
+extension AnyBarModel: WillDisplayProviding {}
+
+// MARK: InternalBarModeling
+
+extension AnyBarModel: InternalBarModeling {
+
+  var isSelectable: Bool {
+    EpoxyLogger.shared.assertionFailure("isSelectable is unimplemented on AnyBarModel and should never be called")
+    return false
+  }
+
+  func makeConfiguredView(traitCollection _: UITraitCollection) -> UIView {
+    EpoxyLogger.shared.assertionFailure("makeConfiguredView is unimplemented on AnyBarModel and should never be called")
+    return UIView()
+  }
+
+  func configureContent(_: UIView, traitCollection _: UITraitCollection, animated _: Bool) {
+    EpoxyLogger.shared.assertionFailure("configureContent is unimplemented on AnyBarModel and should never be called")
+  }
+
+  func configureBehavior(_: UIView, traitCollection _: UITraitCollection) {
+    EpoxyLogger.shared.assertionFailure("configureBehavior is unimplemented on AnyBarModel and should never be called")
+  }
+
+  func willDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
+    willDisplay?(.init(view: view, traitCollection: traitCollection, animated: animated))
+  }
+
+  func didDisplay(_: UIView, traitCollection _: UITraitCollection, animated _: Bool) {
+    EpoxyLogger.shared.assertionFailure("didDisplay is unimplemented on AnyBarModel and should never be called")
+  }
+
+  func didEndDisplaying(_: UIView, traitCollection _: UITraitCollection, animated _: Bool) {
+    EpoxyLogger.shared.assertionFailure("didEndDisplaying is unimplemented on AnyBarModel and should never be called")
+  }
+
+  func didSelect(_: UIView, traitCollection _: UITraitCollection, animated _: Bool) {
+    EpoxyLogger.shared.assertionFailure("didSelect is unimplemented on AnyBarModel and should never be called")
   }
 }

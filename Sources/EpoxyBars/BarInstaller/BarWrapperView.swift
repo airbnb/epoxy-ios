@@ -49,7 +49,7 @@ public final class BarWrapperView: UIView {
   /// Updates the bar model the given bar model.
   public func setModel(_ model: BarModeling?, animated: Bool) {
     self.model = model
-    setModel(model?.internalBarModel, animated: animated)
+    _setModel(model, animated: animated)
   }
 
   // MARK: UIView
@@ -156,22 +156,22 @@ public final class BarWrapperView: UIView {
     }
   }
 
-  private func setModel(_ model: InternalBarCoordinating?, animated: Bool) {
+  private func _setModel(_ originalModel: BarModeling?, animated: Bool) {
     let oldValue = _model
 
-    guard let originalModel = model else {
+    guard let underlyingBarModel = originalModel?.internalBarModel else {
       view?.removeFromSuperview()
       view = nil
       _coordinator = nil
       return
     }
 
-    let coordinator = self.coordinator(for: originalModel)
+    let coordinator = self.coordinator(for: underlyingBarModel)
 
-    guard let model = originalModel.barModel(for: coordinator).internalBarModel as? InternalBarModeling else {
+    guard let model = underlyingBarModel.barModel(for: coordinator).internalBarModel as? InternalBarModeling else {
       EpoxyLogger.shared.assertionFailure(
         """
-        Unable to extract an InternalBarModeling from \(originalModel), nesting BarModeling models \
+        Unable to extract an InternalBarModeling from \(underlyingBarModel), nesting BarModeling models \
         deeper than two layers is not supported
         """)
       return
@@ -191,7 +191,10 @@ public final class BarWrapperView: UIView {
       // The behavior is configured regardless of content equality sice behavior is not equatable.
       model.configureBehavior(view, traitCollection: traitCollection)
     } else {
-      let view = makeView(from: model, animated: animated)
+      let view = makeView(
+        from: model,
+        originalModel: originalModel as? InternalBarModeling,
+        animated: animated)
       let animations = { self.view = view }
       if animated {
         // We do not allow consumers to pass in this duration as they can configure it by wrapping
@@ -212,10 +215,18 @@ public final class BarWrapperView: UIView {
     }
   }
 
-  private func makeView(from model: InternalBarModeling, animated: Bool) -> UIView {
+  private func makeView(
+    from model: InternalBarModeling,
+    originalModel: InternalBarModeling?,
+    animated: Bool)
+    -> UIView
+  {
     let view = model.makeConfiguredView(traitCollection: traitCollection)
+
     willDisplayBar?(view)
     model.willDisplay(view, traitCollection: traitCollection, animated: animated)
+    originalModel?.willDisplay(view, traitCollection: traitCollection, animated: animated)
+
     originalViewLayoutMargins = nil
     return view
   }
