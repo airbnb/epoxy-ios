@@ -18,8 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   a  SwiftUI `View`.
 - Added `SwiftUISizingContainerStorage` for hoisting measured ideal size state in view hierarchy to 
   mitigate jumpiness when a `SwiftUISizingContainer` is hosted within lazy stacks.
-- Added an assert and log when we detect an iOS 15 collection view layout recursion crash is about 
-  to happen.
 - Added a static `swiftUIView(…)` method to `UIView` for hosting UIKit views that aren't 
   `EpoxyableView`s while still leveraging the layout helpers.
 - Added support for calling `configure { _ in }` on the SwiftUI `View` resulting from a 
@@ -40,6 +38,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated name of `Spacer` to `LayoutSpacer` to avoid name conflict with SwiftUI's `Spacer`
 - Updated to have Swift 5.4 as the minimum supported Swift version (previously Swift 5.3).
 - Updated `HGroupView` and `VGroupView` to have `insetsLayoutMarginsFromSafeArea = false` by default
+- Gated an old autoresizing-mask-related bug workaround to only run on iOS versions 13 and below
 
 ## [0.7.0](https://github.com/airbnb/epoxy-ios/compare/0.6.0...0.7.0) - 2021-12-09
 
