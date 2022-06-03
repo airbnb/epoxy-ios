@@ -74,7 +74,9 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
       let horizontalFittingPriority = fittingPrioritiesProvider.horizontalFittingPriority
       let verticalFittingPriority = fittingPrioritiesProvider.verticalFittingPriority
 
-      if #unavailable(iOS 14.0) {
+      if #available(iOS 14, *) {
+        // Issue is fixed in iOS 14+.
+      } else {
         // In some cases, `contentView`'s required width and height constraints
         // (created from its auto-resizing mask) will not have the correct constants before invoking
         // `systemLayoutSizeFitting(...)`, causing the cell to size incorrectly. This seems to be a
@@ -83,7 +85,6 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
         // The issue seems most common when the collection view's bounds change (on rotation).
         // We correct for this by updating `contentView.bounds`, which updates the constants used by
         // the width and height constraints created by the `contentView`'s auto-resizing mask.
-        // Issue is fixed in iOS 14+.
         if
           horizontalFittingPriority == .required &&
           contentView.bounds.width != layoutAttributes.size.width
