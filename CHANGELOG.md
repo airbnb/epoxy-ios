@@ -25,6 +25,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added support for calling `configure { _ in }` on the SwiftUI `View` resulting from a 
   `swiftUIView(…)` invocation to perform additional configuration of the `UIView` instance.
 - Added `LayoutGroupUpdateAnimation` for customizing `Group` animated updates.
+- Added support for `WillDisplay` callbacks to be added to type-erased `AnyBarModel` types.
 
 ### Fixed
 - Fixed sizing of reused `EpoxySwiftUIHostingController`s on iOS 15.2+.
