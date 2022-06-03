@@ -107,7 +107,7 @@ extension AnyBarModel: InternalBarModeling {
   func willDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
     willDisplay?(.init(view: view, traitCollection: traitCollection, animated: animated))
   }
-  
+
   func didDisplay(_ view: UIView, traitCollection: UITraitCollection, animated: Bool) {
     EpoxyLogger.shared.assertionFailure("didDisplay is unimplemented on AnyBarModel and should never be called")
   }
