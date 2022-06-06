@@ -161,7 +161,7 @@ class CounterViewController: CollectionViewController {
 </tr>
 </table>
 
-You can learn more about `EpoxyCollectionView` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyCollectionView).
+You can learn more about `EpoxyCollectionView` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyCollectionView), or by browsing the [code documentation](https://swiftpackageindex.com/airbnb/epoxy-ios/master/documentation/epoxycollectionview).
 
 ### EpoxyBars
 
@@ -205,7 +205,7 @@ class BottomButtonViewController: UIViewController {
 </tr>
 </table>
 
-You can learn more about `EpoxyBars` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyBars).
+You can learn more about `EpoxyBars` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyBars), or by browsing the [code documentation](https://swiftpackageindex.com/airbnb/epoxy-ios/master/documentation/epoxybars).
 
 ### EpoxyNavigationController
 
@@ -268,7 +268,7 @@ class FormNavigationController: NavigationController {
 </tr>
 </table>
 
-You can learn more about `EpoxyNavigationController` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyNavigationController).
+You can learn more about `EpoxyNavigationController` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyNavigationController), or by browsing the [code documentation](https://swiftpackageindex.com/airbnb/epoxy-ios/master/documentation/epoxynavigationcontroller).
 
 ### EpoxyPresentations
 
@@ -326,7 +326,7 @@ class PresentationViewController: UIViewController {
 </tr>
 </table>
 
-You can learn more about `EpoxyPresentations` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyPresentations).
+You can learn more about `EpoxyPresentations` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyPresentations), or by browsing the [code documentation](https://swiftpackageindex.com/airbnb/epoxy-ios/master/documentation/epoxypresentations).
 
 ## EpoxyLayoutGroups
 
@@ -471,7 +471,7 @@ HGroup(spacing: 8) {
 </tr>
 </table>
 
-You can learn more about `EpoxyLayoutGroups` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyLayoutGruops).
+You can learn more about `EpoxyLayoutGroups` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyLayoutGruops), or by browsing the [code documentation](https://swiftpackageindex.com/airbnb/epoxy-ios/master/documentation/epoxylayoutgroups).
 
 ## Documentation and Tutorials
 
