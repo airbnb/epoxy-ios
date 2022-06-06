@@ -20,13 +20,13 @@ Below are a few sample screens from the Airbnb app that we've built using Epoxy.
     * [CocoaPods](#cocoapods)
     * [Swift Package Manager (SPM)](#swift-package-manager-spm)
 * [Modules](#modules)
-* [Getting Started](#getting-started)
+* [Documentation and tutorials](#documentation-and-tutorials)
+* [Getting started](#getting-started)
     * [EpoxyCollectionView](#epoxycollectionview)
     * [EpoxyBars](#epoxybars)
     * [EpoxyNavigationController](#epoxynavigationcontroller)
     * [EpoxyPresentations](#epoxypresentations)
     * [EpoxyLayoutGroups](#epoxylayoutgroups)
-* [Documentation and Tutorials](#documentation-and-tutorials)
 * [FAQ](#faq)
 * [Contributing](#contributing)
 * [License](#license)
@@ -69,7 +69,15 @@ Epoxy has a modular architecture so you only have to include what you need for y
 | [`EpoxyLayoutGroups`](#EpoxyLayoutGroups) | Declarative API for building composable layouts in UIKit with a syntax similar to SwiftUI's stack APIs |
 | [`EpoxyCore`](https://github.com/airbnb/epoxy-ios/wiki/EpoxyCore) | Foundational APIs that are used to build all Epoxy declarative UI APIs |
 
-## Getting Started
+## Documentation and tutorials
+
+For full documentation and step-by-step tutorials please check the [wiki](https://github.com/airbnb/epoxy-ios/wiki). For type-level documentation, see the [Epoxy DocC documentation](https://swiftpackageindex.com/airbnb/epoxy-ios/master/documentation/epoxycore) hosted on the [Swift Package Index](https://swiftpackageindex.com/).
+
+There's also a full sample app with a lot of examples that you can either run via the `EpoxyExample` scheme in `Epoxy.xcworkspace` or browse its [source](https://github.com/airbnb/epoxy-ios/tree/master/Example).
+
+If you still have questions, feel free to create a new [issue](https://github.com/airbnb/epoxy-ios/issues).
+
+## Getting started
 
 ### EpoxyCollectionView
 
@@ -472,14 +480,6 @@ HGroup(spacing: 8) {
 </table>
 
 You can learn more about `EpoxyLayoutGroups` in its [wiki entry](https://github.com/airbnb/epoxy-ios/wiki/EpoxyLayoutGruops), or by browsing the [code documentation](https://swiftpackageindex.com/airbnb/epoxy-ios/master/documentation/epoxylayoutgroups).
-
-## Documentation and Tutorials
-
-For full documentation and step-by-step tutorials please check the [wiki](https://github.com/airbnb/epoxy-ios/wiki).
-
-There's also a full sample app with a lot of examples that you can either run via the `EpoxyExample` scheme in `Epoxy.xcworkspace` or browse its [source](https://github.com/airbnb/epoxy-ios/tree/master/Example).
-
-If you still have questions, feel free to create a new [issue](https://github.com/airbnb/epoxy-ios/issues).
 
 ## FAQ
 
