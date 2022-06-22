@@ -18,22 +18,20 @@ extension UIViewProtocol {
   ///   }
   /// ```
   public static func swiftUIView(
-    sizing: SwiftUISizingContainerConfiguration = .intrinsicHeightBoundsWidth,
+    sizing: SwiftUIMeasurementContainerStrategy = .intrinsicHeightBoundsWidth,
     makeView: @escaping () -> Self)
-    -> SwiftUISizingContainer<SwiftUIUIView<Self>>
+    -> SwiftUIUIView<Self>
   {
-    SwiftUISizingContainer(configuration: sizing) { context in
-      SwiftUIUIView(context: context, makeView: makeView)
-    }
+    SwiftUIUIView(sizing: sizing, makeView: makeView)
   }
 }
 
 // MARK: - SwiftUIUIView
 
 /// A `UIViewRepresentable` SwiftUI `View` that wraps its `Content` `UIView` within a
-/// `SwiftUIMeasurementContainer`, expected to be provided a `SwiftUISizingContext` by a parent
-/// `SwiftUISizingContainer`, used to size a UIKit view correctly within a SwiftUI view hierarchy.
-public struct SwiftUIUIView<View: UIView>: UIViewRepresentable, UIViewConfiguringSwiftUIView {
+/// `SwiftUIMeasurementContainer`, used to size a UIKit view correctly within a SwiftUI view
+/// hierarchy.
+public struct SwiftUIUIView<View: UIView>: MeasuringUIViewRepresentable, UIViewConfiguringSwiftUIView {
 
   // MARK: Public
 
@@ -41,10 +39,13 @@ public struct SwiftUIUIView<View: UIView>: UIViewRepresentable, UIViewConfigurin
   public var configurations: [(View) -> Void] = []
 
   public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
-    SwiftUIMeasurementContainer(view: self, uiView: makeView(), context: context)
+    SwiftUIMeasurementContainer(
+      view: self,
+      uiView: makeView(),
+      strategy: sizing)
   }
 
-  public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
+  public func updateUIView(_ wrapper: UIViewType, context _: Context) {
     wrapper.view = self
 
     for configuration in configurations {
@@ -55,7 +56,7 @@ public struct SwiftUIUIView<View: UIView>: UIViewRepresentable, UIViewConfigurin
   // MARK: Internal
 
   /// The sizing context used to size the represented view.
-  var context: SwiftUISizingContext
+  var sizing: SwiftUIMeasurementContainerStrategy
 
   /// A closure that's invoked to construct the represented view.
   var makeView: () -> View
