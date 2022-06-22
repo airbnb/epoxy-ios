@@ -5,7 +5,7 @@ import EpoxyCore
 
 // MARK: - StyledView
 
-extension StyledView where Self: EpoxyableView {
+extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurableView {
   /// Constructs an `ItemModel` with an instance of this view as its item view.
   ///
   /// - Parameters:
@@ -40,7 +40,7 @@ extension StyledView where Self: EpoxyableView {
 
 // MARK: Style == Never
 
-extension StyledView where Self: EpoxyableView, Style == Never {
+extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurableView, Style == Never {
   /// Constructs an `ItemModel` with an instance of this view as its item view.
   ///
   /// - Parameters:
@@ -71,7 +71,7 @@ extension StyledView where Self: EpoxyableView, Style == Never {
 
 // MARK: Content == Never
 
-extension StyledView where Self: EpoxyableView, Content == Never {
+extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurableView, Content == Never {
   /// Constructs an `ItemModel` with an instance of this view as its item view.
   ///
   /// - Parameters:
@@ -98,7 +98,12 @@ extension StyledView where Self: EpoxyableView, Content == Never {
 
 // MARK: Style == Never, Content == Never
 
-extension StyledView where Self: EpoxyableView, Style == Never, Content == Never {
+extension StyledView
+  where
+  Self: BehaviorsConfigurableView & ContentConfigurableView,
+  Style == Never,
+  Content == Never
+{
   /// Constructs an `ItemModel` with an instance of this view as its item view.
   ///
   /// - Parameters:
