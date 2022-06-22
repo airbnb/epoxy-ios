@@ -191,7 +191,7 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
   ///
   /// Additionally keeps the scroll views pinned to their current offsets during the inset changes.
   private func updateInsets() {
-    let scrollViewsAtEdge = self.scrollViewsAtEdge
+    let scrollViewsAtEdge = scrollViewsAtEdge
 
     updateAdditionalSafeAreaInset(additionalSafeAreaInsetsTop)
 

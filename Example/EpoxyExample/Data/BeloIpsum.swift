@@ -3,7 +3,7 @@
 
 // MARK: - BeloIpsum
 
-final class BeloIpsum {
+enum BeloIpsum {
 
   // MARK: Internal
 

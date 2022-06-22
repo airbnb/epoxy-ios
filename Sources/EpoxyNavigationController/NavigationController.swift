@@ -72,13 +72,13 @@ open class NavigationController: UINavigationController {
 
   // MARK: UINavigationController
 
-  @available (*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
+  @available(*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
   public final override func setViewControllers(_: [UIViewController], animated _: Bool) {
     EpoxyLogger.shared.assertionFailure(
       "Manual management of view controllers is not allowed, use `setStack(...)`")
   }
 
-  @available (*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
+  @available(*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
   public final override func pushViewController(_: UIViewController, animated _: Bool) {
     EpoxyLogger.shared.assertionFailure(
       "Manual management of view controllers is not allowed, use `setStack(...)`")
