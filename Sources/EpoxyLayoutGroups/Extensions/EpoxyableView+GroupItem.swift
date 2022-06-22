@@ -4,7 +4,7 @@
 import EpoxyCore
 import UIKit
 
-extension StyledView where Self: EpoxyableView {
+extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurableView {
   /// Produces an item to be used within a Group
   /// - Parameters:
   ///   - dataID: the unique identifier for this item
@@ -33,7 +33,7 @@ extension StyledView where Self: EpoxyableView {
   }
 }
 
-extension StyledView where Self: EpoxyableView, Style == Never {
+extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurableView, Style == Never {
   /// Produces an item to be used within a Group
   /// - Parameters:
   ///   - dataID: the unique identifier for this item
@@ -59,7 +59,7 @@ extension StyledView where Self: EpoxyableView, Style == Never {
   }
 }
 
-extension StyledView where Self: EpoxyableView, Content == Never {
+extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurableView, Content == Never {
   /// Produces an item to be used within a Group
   /// - Parameters:
   ///   - dataID: the unique identifier for this item
@@ -81,7 +81,12 @@ extension StyledView where Self: EpoxyableView, Content == Never {
   }
 }
 
-extension StyledView where Self: EpoxyableView, Content == Never, Style == Never {
+extension StyledView
+  where
+  Self: BehaviorsConfigurableView & ContentConfigurableView,
+  Content == Never,
+  Style == Never
+{
   /// Produces an item to be used within a Group
   /// - Parameters:
   ///   - dataID: the unique identifier for this item
