@@ -133,7 +133,7 @@ public class KeyboardPositionWatcher {
     let screen = UIScreen.main
 
     for (view, observer) in observers {
-      let overlap = self.overlap(for: view, keyboardFrame: keyboardFrame, in: screen)
+      let overlap = overlap(for: view, keyboardFrame: keyboardFrame, in: screen)
       observer(overlap)
     }
   }

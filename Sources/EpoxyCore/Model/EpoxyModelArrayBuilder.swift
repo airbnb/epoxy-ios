@@ -3,7 +3,7 @@
 
 /// A generic result builder that enables a DSL for building arrays of Epoxy models.
 @resultBuilder
-public struct EpoxyModelArrayBuilder<Model> {
+public enum EpoxyModelArrayBuilder<Model> {
   public typealias Expression = Model
   public typealias Component = [Model]
 

@@ -189,7 +189,7 @@ final class CollectionViewScrollToItemHelper {
       return
     }
 
-    let maximumPerAnimationTickOffset = self.maximumPerAnimationTickOffset(
+    let maximumPerAnimationTickOffset = maximumPerAnimationTickOffset(
       for: scrollAxis,
       collectionView: collectionView)
 
@@ -322,7 +322,7 @@ final class CollectionViewScrollToItemHelper {
       return nil
     }
 
-    let positionRelativeToVisibleBounds = self.positionRelativeToVisibleBounds(
+    let positionRelativeToVisibleBounds = positionRelativeToVisibleBounds(
       forTargetItemIndexPath: targetIndexPath,
       collectionView: collectionView)
 

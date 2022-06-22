@@ -166,7 +166,7 @@ public final class BarWrapperView: UIView {
       return
     }
 
-    let coordinator = self.coordinator(for: underlyingBarModel)
+    let coordinator = coordinator(for: underlyingBarModel)
 
     guard let model = underlyingBarModel.barModel(for: coordinator).internalBarModel as? InternalBarModeling else {
       EpoxyLogger.shared.assertionFailure(

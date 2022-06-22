@@ -18,7 +18,7 @@
 /// Will return a `nil` presentation model if `showA` and `showB` are false, else will return the
 /// first non-`nil` presentation model.
 @resultBuilder
-public struct PresentationModelBuilder {
+public enum PresentationModelBuilder {
   public typealias Expression = PresentationModel
   public typealias Component = PresentationModel?
 
