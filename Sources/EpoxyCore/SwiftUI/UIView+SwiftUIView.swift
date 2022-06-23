@@ -17,12 +17,15 @@ extension UIViewProtocol {
   ///     …
   ///   }
   /// ```
-  public static func swiftUIView(
-    sizing: SwiftUIMeasurementContainerStrategy = .intrinsicHeightBoundsWidth,
-    makeView: @escaping () -> Self)
-    -> SwiftUIUIView<Self>
-  {
-    SwiftUIUIView(sizing: sizing, makeView: makeView)
+  ///
+  /// To configure the sizing behavior of the `UIView` instance, call `sizing` on the returned
+  /// SwiftUI `View`:
+  /// ```
+  /// MyView.swiftUIView(…).sizing(.intrinsicSize)
+  /// ```
+  /// The sizing defaults to `.intrinsicHeightBoundsWidth`.
+  public static func swiftUIView(makeView: @escaping () -> Self) -> SwiftUIUIView<Self> {
+    SwiftUIUIView(makeView: makeView)
   }
 }
 
@@ -37,6 +40,9 @@ public struct SwiftUIUIView<View: UIView>: MeasuringUIViewRepresentable, UIViewC
 
   /// An array of closures that are invoked to configure the represented view.
   public var configurations: [(View) -> Void] = []
+
+  /// The sizing context used to size the represented view.
+  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightBoundsWidth
 
   public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     SwiftUIMeasurementContainer(
@@ -54,9 +60,6 @@ public struct SwiftUIUIView<View: UIView>: MeasuringUIViewRepresentable, UIViewC
   }
 
   // MARK: Internal
-
-  /// The sizing context used to size the represented view.
-  var sizing: SwiftUIMeasurementContainerStrategy
 
   /// A closure that's invoked to construct the represented view.
   var makeView: () -> View

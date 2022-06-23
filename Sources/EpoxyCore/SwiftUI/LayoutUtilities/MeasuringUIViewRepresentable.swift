@@ -16,7 +16,27 @@ public protocol MeasuringUIViewRepresentable: UIViewRepresentable
   where
   UIViewType == SwiftUIMeasurementContainer<Self, View>
 {
+  /// The `UIView` that's being measured by the enclosing `SwiftUIMeasurementContainer`.
   associatedtype View: UIView
+
+  /// The sizing strategy of the represented view.
+  ///
+  /// To configure the sizing behavior of the `View` instance, call `sizing` on this `View`, e.g.:
+  /// ```
+  /// myView.sizing(.intrinsicSize)
+  /// ```
+  var sizing: SwiftUIMeasurementContainerStrategy { get set }
+}
+
+// MARK: Extensions
+
+extension MeasuringUIViewRepresentable {
+  /// Returns a copy of this view with its sizing strategy updated to the given `sizing` value.
+  public func sizing(_ strategy: SwiftUIMeasurementContainerStrategy) -> Self {
+    var copy = self
+    copy.sizing = strategy
+    return copy
+  }
 }
 
 // MARK: Defaults
@@ -27,6 +47,8 @@ extension MeasuringUIViewRepresentable {
     in proposedSize: _ProposedSize,
     uiView: UIViewType)
   {
+    uiView.strategy = sizing
+
     // Note: this method is not double-called on iOS 16, so we don't need to do anything to prevent
     // extra work here.
     let children = Mirror(reflecting: proposedSize).children
@@ -47,6 +69,8 @@ extension MeasuringUIViewRepresentable {
     context _: Context)
     -> CGSize?
   {
+    uiView.strategy = sizing
+
     // Creates a size by replacing `nil`s with `UIView.noIntrinsicMetric`
     uiView.proposedSize = .init(
       width: proposal.width ?? UIView.noIntrinsicMetric,
