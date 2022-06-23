@@ -94,7 +94,21 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     measuredIntrinsicContentSize
   }
 
+  public override func layoutSubviews() {
+    super.layoutSubviews()
+
+    // We need to re-measure the view whenever the size of the bounds changes, as the previous size
+    // will now be incorrect.
+    if latestMeasurementBoundsSize != nil, bounds.size != latestMeasurementBoundsSize {
+      // This will trigger SwiftUI to re-measure the view.
+      invalidateIntrinsicContentSize()
+    }
+  }
+
   // MARK: Private
+
+  /// The bounds size at the time of the latest measurement.
+  private var latestMeasurementBoundsSize: CGSize?
 
   /// The most recently updated set of constraints constraining `uiView` to `self`.
   private var uiViewConstraints = [NSLayoutConstraint]()
@@ -127,6 +141,8 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
   /// Measures the `uiView`, storing the resulting size in `measuredIntrinsicContentSize`.
   private func measureView() {
+    latestMeasurementBoundsSize = bounds.size
+
     var measuredSize: CGSize
     let proposedSizeElseBounds = proposedSize.replacingNoIntrinsicMetric(with: bounds.size)
 
