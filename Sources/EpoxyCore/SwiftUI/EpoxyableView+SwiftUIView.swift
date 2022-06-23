@@ -83,7 +83,7 @@ extension StyledView
   /// ```
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
-  /// The sizing defaults to `.intrinsicHeightBoundsWidth`.
+  /// The sizing defaults to `.intrinsicHeightProposedWidth`.
   public static func swiftUIView(
     style: Style,
     behaviors: Behaviors? = nil)
@@ -115,10 +115,10 @@ extension StyledView
   /// ```
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
-  /// The sizing defaults to `.intrinsicHeightBoundsWidth`.
+  /// The sizing defaults to `.intrinsicHeightProposedWidth`.
   public static func swiftUIView(
     behaviors: Behaviors? = nil,
-    sizing: SwiftUIMeasurementContainerStrategy = .intrinsicHeightBoundsWidth)
+    sizing: SwiftUIMeasurementContainerStrategy = .intrinsicHeightProposedWidth)
     -> SwiftUIStylelessContentlessEpoxyableView<Self>
   {
     .init(behaviors: behaviors, sizing: sizing)
@@ -135,7 +135,7 @@ public struct SwiftUIEpoxyableView<View>: MeasuringUIViewRepresentable, UIViewCo
   var content: View.Content
   var style: View.Style
   var behaviors: View.Behaviors?
-  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightBoundsWidth
+  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightProposedWidth
   public var configurations: [(View) -> Void] = []
 
   public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context: Context) {
@@ -189,7 +189,7 @@ public struct SwiftUIStylelessEpoxyableView<View>: MeasuringUIViewRepresentable,
 {
   var content: View.Content
   var behaviors: View.Behaviors?
-  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightBoundsWidth
+  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightProposedWidth
   public var configurations: [(View) -> Void] = []
 
   public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context: Context) {
@@ -234,7 +234,7 @@ public struct SwiftUIContentlessEpoxyableView<View>: MeasuringUIViewRepresentabl
 {
   var style: View.Style
   var behaviors: View.Behaviors?
-  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightBoundsWidth
+  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightProposedWidth
   public var configurations: [(View) -> Void] = []
 
   public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
@@ -278,7 +278,7 @@ public struct SwiftUIStylelessContentlessEpoxyableView<View>: MeasuringUIViewRep
 {
   public var configurations: [(View) -> Void] = []
   var behaviors: View.Behaviors?
-  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightBoundsWidth
+  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightProposedWidth
 
   public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
     wrapper.view = self

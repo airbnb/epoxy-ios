@@ -124,13 +124,13 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     // Give a required constraint in the dimensions that are fixed to the bounds, otherwise almost
     // required.
     switch strategy {
-    case .boundsSize:
+    case .proposed:
       (trailing.priority, bottom.priority) = (.required, .required)
-    case .intrinsicHeightBoundsWidth:
+    case .intrinsicHeightProposedWidth:
       (trailing.priority, bottom.priority) = (.required, .almostRequired)
-    case .intrinsicWidthBoundsHeight:
+    case .intrinsicWidthProposedHeight:
       (trailing.priority, bottom.priority) = (.almostRequired, .required)
-    case .intrinsicSize:
+    case .intrinsic:
       (trailing.priority, bottom.priority) = (.almostRequired, .almostRequired)
     }
 
@@ -147,10 +147,10 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     let proposedSizeElseBounds = proposedSize.replacingNoIntrinsicMetric(with: bounds.size)
 
     switch strategy {
-    case .boundsSize:
+    case .proposed:
       measuredSize = .noIntrinsicMetric
 
-    case .intrinsicHeightBoundsWidth:
+    case .intrinsicHeightProposedWidth:
       let targetSize = CGSize(
         width: proposedSizeElseBounds.width,
         height: UIView.layoutFittingCompressedSize.height)
@@ -162,7 +162,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
       measuredSize.width = UIView.noIntrinsicMetric
 
-    case .intrinsicWidthBoundsHeight:
+    case .intrinsicWidthProposedHeight:
       let targetSize = CGSize(
         width: UIView.layoutFittingCompressedSize.width,
         height: proposedSizeElseBounds.height)
@@ -174,7 +174,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
       measuredSize.height = UIView.noIntrinsicMetric
 
-    case .intrinsicSize:
+    case .intrinsic:
       measuredSize = uiView.systemLayoutSizeFitting(
         UIView.layoutFittingCompressedSize,
         withHorizontalFittingPriority: .fittingSizeLevel,
@@ -200,16 +200,30 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
 /// The measurement strategy of a `SwiftUIMeasurementContainer`.
 public enum SwiftUIMeasurementContainerStrategy {
-  /// The `uiView` is sized to fill the bounds proposed by its parent.
-  case boundsSize
-  /// The `uiView` is sized with its intrinsic height and expands horizontally to fill the bounds
+  /// The `uiView` is sized to fill the area proposed by its parent.
+  ///
+  /// Typically used for views that should expand greedily in both axes, e.g. a background view.
+  case proposed
+
+  /// The `uiView` is sized with its intrinsic height and expands horizontally to fill the width
   /// proposed by its parent.
-  case intrinsicHeightBoundsWidth
-  /// The `uiView` is sized with its intrinsic width and expands vertically to fill the bounds
+  ///
+  /// Typically used for views that have a height that's a function of their width, e.g. a row with
+  /// text that can wrap to multiple lines.
+  case intrinsicHeightProposedWidth
+
+  /// The `uiView` is sized with its intrinsic width and expands vertically to fill the height
   /// proposed by its parent.
-  case intrinsicWidthBoundsHeight
+  ///
+  /// Typically used for views that are free to grow vertically but have a fixed width, e.g. a view
+  /// in a horizontal carousel.
+  case intrinsicWidthProposedHeight
+
   /// The `uiView` is sized to its intrinsic width and height.
-  case intrinsicSize
+  ///
+  /// Typically used for components with a specific intrinsic size in both axes, e.g. controls or
+  /// inputs.
+  case intrinsic
 }
 
 // MARK: - UILayoutPriority
