@@ -45,7 +45,7 @@ public struct SwiftUIUIView<View: UIView>: MeasuringUIViewRepresentable, UIViewC
       strategy: sizing)
   }
 
-  public func updateUIView(_ wrapper: UIViewType, context _: Context) {
+  public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
     wrapper.view = self
 
     for configuration in configurations {
