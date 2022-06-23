@@ -51,13 +51,11 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
   /// The  most recently measured fitting size of the `uiView` that fits within the current
   /// `proposedSize`, else `zero` if it has not yet been measured.
-  public private(set) var measuredFittingSize = CGSize.zero
-
-  /// The most recently measured intrinsic content size of the `uiView`, else `noIntrinsicMetric` if
-  /// it has not yet been measured.
   ///
-  /// Contains `UIView.noIntrinsicMetric` fields for dimensions with no intrinsic size.
-  public private(set) var measuredIntrinsicContentSize = CGSize.noIntrinsicMetric
+  /// Contains `proposedSize`/`bounds.size` fallbacks for dimensions with no intrinsic size, as
+  /// compared to `intrinsicContentSize` which has `UIView.noIntrinsicMetric` fields in the case of
+  /// no intrinsic size.
+  public private(set) var measuredFittingSize = CGSize.zero
 
   /// The `UIView` that's being measured by this container.
   public var uiView: UIViewType {
@@ -91,7 +89,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
   }
 
   public override var intrinsicContentSize: CGSize {
-    measuredIntrinsicContentSize
+    _intrinsicContentSize
   }
 
   public override func layoutSubviews() {
@@ -106,6 +104,13 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
   }
 
   // MARK: Private
+
+  /// The most recently measured intrinsic content size of the `uiView`, else `noIntrinsicMetric` if
+  /// it has not yet been measured.
+  ///
+  /// Contains `UIView.noIntrinsicMetric` fallbacks for dimensions with no intrinsic size,
+  /// as compared to `measuredFittingSize` which has `proposedSize`/`bounds.size` fallbacks.
+  private var _intrinsicContentSize = CGSize.noIntrinsicMetric
 
   /// The bounds size at the time of the latest measurement.
   private var latestMeasurementBoundsSize: CGSize?
@@ -191,7 +196,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
       }
     }
 
-    measuredIntrinsicContentSize = measuredSize
+    _intrinsicContentSize = measuredSize
     measuredFittingSize = measuredSize.replacingNoIntrinsicMetric(with: proposedSizeElseBounds)
   }
 }
