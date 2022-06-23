@@ -16,20 +16,19 @@ extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurable
   ///     …
   ///   }
   /// ```
+  ///
+  /// To configure the sizing behavior of the `EpoxyableView` instance, call `sizing` on the
+  /// returned SwiftUI `View`:
+  /// ```
+  /// MyView.swiftUIView(…).sizing(.intrinsicSize)
+  /// ```
   public static func swiftUIView(
     content: Content,
     style: Style,
-    behaviors: Behaviors? = nil,
-    sizing: SwiftUISizingContainerConfiguration = .intrinsicHeightBoundsWidth)
-    -> SwiftUISizingContainer<SwiftUIEpoxyableView<Self>>
+    behaviors: Behaviors? = nil)
+    -> SwiftUIEpoxyableView<Self>
   {
-    SwiftUISizingContainer(configuration: sizing) { context in
-      SwiftUIEpoxyableView<Self>(
-        content: content,
-        style: style,
-        behaviors: behaviors,
-        context: context)
-    }
+    .init(content: content, style: style, behaviors: behaviors)
   }
 }
 
@@ -48,18 +47,18 @@ extension StyledView
   ///     …
   ///   }
   /// ```
+  ///
+  /// To configure the sizing behavior of the `EpoxyableView` instance, call `sizing` on the
+  /// returned SwiftUI `View`:
+  /// ```
+  /// MyView.swiftUIView(…).sizing(.intrinsicSize)
+  /// ```
   public static func swiftUIView(
     content: Content,
-    behaviors: Behaviors? = nil,
-    sizing: SwiftUISizingContainerConfiguration = .intrinsicHeightBoundsWidth)
-    -> SwiftUISizingContainer<SwiftUIStylelessEpoxyableView<Self>>
+    behaviors: Behaviors? = nil)
+    -> SwiftUIStylelessEpoxyableView<Self>
   {
-    SwiftUISizingContainer(configuration: sizing) { context in
-      SwiftUIStylelessEpoxyableView<Self>(
-        content: content,
-        behaviors: behaviors,
-        context: context)
-    }
+    .init(content: content, behaviors: behaviors)
   }
 }
 
@@ -78,18 +77,19 @@ extension StyledView
   ///     …
   ///   }
   /// ```
+  ///
+  /// To configure the sizing behavior of the `EpoxyableView` instance, call `sizing` on the
+  /// returned SwiftUI `View`:
+  /// ```
+  /// MyView.swiftUIView(…).sizing(.intrinsicSize)
+  /// ```
+  /// The sizing defaults to `.intrinsicHeightProposedWidth`.
   public static func swiftUIView(
     style: Style,
-    behaviors: Behaviors? = nil,
-    sizing: SwiftUISizingContainerConfiguration = .intrinsicHeightBoundsWidth)
-    -> SwiftUISizingContainer<SwiftUIContentlessEpoxyableView<Self>>
+    behaviors: Behaviors? = nil)
+    -> SwiftUIContentlessEpoxyableView<Self>
   {
-    SwiftUISizingContainer(configuration: sizing) { context in
-      SwiftUIContentlessEpoxyableView<Self>(
-        style: style,
-        behaviors: behaviors,
-        context: context)
-    }
+    .init(style: style, behaviors: behaviors)
   }
 }
 
@@ -109,28 +109,33 @@ extension StyledView
   ///     …
   ///   }
   /// ```
+  ///
+  /// To configure the sizing behavior of the `EpoxyableView` instance, call `sizing` on the
+  /// returned SwiftUI `View`:
+  /// ```
+  /// MyView.swiftUIView(…).sizing(.intrinsicSize)
+  /// ```
+  /// The sizing defaults to `.intrinsicHeightProposedWidth`.
   public static func swiftUIView(
     behaviors: Behaviors? = nil,
-    sizing: SwiftUISizingContainerConfiguration = .intrinsicHeightBoundsWidth)
-    -> SwiftUISizingContainer<SwiftUIStylelessContentlessEpoxyableView<Self>>
+    sizing: SwiftUIMeasurementContainerStrategy = .intrinsicHeightProposedWidth)
+    -> SwiftUIStylelessContentlessEpoxyableView<Self>
   {
-    SwiftUISizingContainer(configuration: sizing) { context in
-      SwiftUIStylelessContentlessEpoxyableView<Self>(behaviors: behaviors, context: context)
-    }
+    .init(behaviors: behaviors, sizing: sizing)
   }
 }
 
 // MARK: - SwiftUIEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with content, behaviors, and style.
-public struct SwiftUIEpoxyableView<View>: UIViewRepresentable, UIViewConfiguringSwiftUIView
+public struct SwiftUIEpoxyableView<View>: MeasuringUIViewRepresentable, UIViewConfiguringSwiftUIView
   where
   View: EpoxyableView
 {
   var content: View.Content
   var style: View.Style
   var behaviors: View.Behaviors?
-  var context: SwiftUISizingContext
+  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightProposedWidth
   public var configurations: [(View) -> Void] = []
 
   public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context: Context) {
@@ -170,21 +175,21 @@ public struct SwiftUIEpoxyableView<View>: UIViewRepresentable, UIViewConfiguring
     let uiView = View(style: style)
     uiView.setContent(content, animated: false)
     // No need to set behaviors as `updateUIView` is called immediately after construction.
-    return SwiftUIMeasurementContainer(view: self, uiView: uiView, context: context)
+    return SwiftUIMeasurementContainer(view: self, uiView: uiView, strategy: sizing)
   }
 }
 
 // MARK: - SwiftUIStylelessEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with a `Never` `Style`.
-public struct SwiftUIStylelessEpoxyableView<View>: UIViewRepresentable, UIViewConfiguringSwiftUIView
+public struct SwiftUIStylelessEpoxyableView<View>: MeasuringUIViewRepresentable, UIViewConfiguringSwiftUIView
   where
   View: EpoxyableView,
   View.Style == Never
 {
   var content: View.Content
   var behaviors: View.Behaviors?
-  var context: SwiftUISizingContext
+  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightProposedWidth
   public var configurations: [(View) -> Void] = []
 
   public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context: Context) {
@@ -215,21 +220,21 @@ public struct SwiftUIStylelessEpoxyableView<View>: UIViewRepresentable, UIViewCo
     let uiView = View()
     uiView.setContent(content, animated: false)
     // No need to set behaviors as `updateUIView` is called immediately after construction.
-    return SwiftUIMeasurementContainer(view: self, uiView: uiView, context: context)
+    return SwiftUIMeasurementContainer(view: self, uiView: uiView, strategy: sizing)
   }
 }
 
 // MARK: - SwiftUIContentlessEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with a `Never` `Content`.
-public struct SwiftUIContentlessEpoxyableView<View>: UIViewRepresentable, UIViewConfiguringSwiftUIView
+public struct SwiftUIContentlessEpoxyableView<View>: MeasuringUIViewRepresentable, UIViewConfiguringSwiftUIView
   where
   View: EpoxyableView,
   View.Content == Never
 {
   var style: View.Style
   var behaviors: View.Behaviors?
-  var context: SwiftUISizingContext
+  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightProposedWidth
   public var configurations: [(View) -> Void] = []
 
   public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
@@ -258,14 +263,14 @@ public struct SwiftUIContentlessEpoxyableView<View>: UIViewRepresentable, UIView
   public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     let uiView = View(style: style)
     // No need to set behaviors as `updateUIView` is called immediately after construction.
-    return SwiftUIMeasurementContainer(view: self, uiView: uiView, context: context)
+    return SwiftUIMeasurementContainer(view: self, uiView: uiView, strategy: sizing)
   }
 }
 
 // MARK: - SwiftUIStylelessContentlessEpoxyableView
 
 /// A SwiftUI `View` representing an `EpoxyableView` with a `Never` `Style` and `Content`.
-public struct SwiftUIStylelessContentlessEpoxyableView<View>: UIViewRepresentable, UIViewConfiguringSwiftUIView
+public struct SwiftUIStylelessContentlessEpoxyableView<View>: MeasuringUIViewRepresentable, UIViewConfiguringSwiftUIView
   where
   View: EpoxyableView,
   View.Content == Never,
@@ -273,7 +278,7 @@ public struct SwiftUIStylelessContentlessEpoxyableView<View>: UIViewRepresentabl
 {
   public var configurations: [(View) -> Void] = []
   var behaviors: View.Behaviors?
-  var context: SwiftUISizingContext
+  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightProposedWidth
 
   public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
     wrapper.view = self
@@ -287,6 +292,6 @@ public struct SwiftUIStylelessContentlessEpoxyableView<View>: UIViewRepresentabl
   public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     let uiView = View()
     // No need to set behaviors as `updateUIView` is called immediately after construction.
-    return SwiftUIMeasurementContainer(view: self, uiView: uiView, context: context)
+    return SwiftUIMeasurementContainer(view: self, uiView: uiView, strategy: sizing)
   }
 }

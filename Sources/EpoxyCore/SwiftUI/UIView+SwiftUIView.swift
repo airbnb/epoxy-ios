@@ -17,31 +17,38 @@ extension UIViewProtocol {
   ///     …
   ///   }
   /// ```
-  public static func swiftUIView(
-    sizing: SwiftUISizingContainerConfiguration = .intrinsicHeightBoundsWidth,
-    makeView: @escaping () -> Self)
-    -> SwiftUISizingContainer<SwiftUIUIView<Self>>
-  {
-    SwiftUISizingContainer(configuration: sizing) { context in
-      SwiftUIUIView(context: context, makeView: makeView)
-    }
+  ///
+  /// To configure the sizing behavior of the `UIView` instance, call `sizing` on the returned
+  /// SwiftUI `View`:
+  /// ```
+  /// MyView.swiftUIView(…).sizing(.intrinsicSize)
+  /// ```
+  /// The sizing defaults to `.intrinsicHeightProposedWidth`.
+  public static func swiftUIView(makeView: @escaping () -> Self) -> SwiftUIUIView<Self> {
+    SwiftUIUIView(makeView: makeView)
   }
 }
 
 // MARK: - SwiftUIUIView
 
 /// A `UIViewRepresentable` SwiftUI `View` that wraps its `Content` `UIView` within a
-/// `SwiftUIMeasurementContainer`, expected to be provided a `SwiftUISizingContext` by a parent
-/// `SwiftUISizingContainer`, used to size a UIKit view correctly within a SwiftUI view hierarchy.
-public struct SwiftUIUIView<View: UIView>: UIViewRepresentable, UIViewConfiguringSwiftUIView {
+/// `SwiftUIMeasurementContainer`, used to size a UIKit view correctly within a SwiftUI view
+/// hierarchy.
+public struct SwiftUIUIView<View: UIView>: MeasuringUIViewRepresentable, UIViewConfiguringSwiftUIView {
 
   // MARK: Public
 
   /// An array of closures that are invoked to configure the represented view.
   public var configurations: [(View) -> Void] = []
 
+  /// The sizing context used to size the represented view.
+  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightProposedWidth
+
   public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
-    SwiftUIMeasurementContainer(view: self, uiView: makeView(), context: context)
+    SwiftUIMeasurementContainer(
+      view: self,
+      uiView: makeView(),
+      strategy: sizing)
   }
 
   public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
@@ -53,9 +60,6 @@ public struct SwiftUIUIView<View: UIView>: UIViewRepresentable, UIViewConfigurin
   }
 
   // MARK: Internal
-
-  /// The sizing context used to size the represented view.
-  var context: SwiftUISizingContext
 
   /// A closure that's invoked to construct the represented view.
   var makeView: () -> View

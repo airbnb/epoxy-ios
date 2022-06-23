@@ -9,29 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added `SwiftUIMeasurementContainer` for calculating the ideal height of a `UIView` for wrapping
   for SwiftUI usage.
-- Added `SwiftUISizingContainer` for handling ideal size and proposed size for a wrapped `UIView`.
-- Added a method to `CollectionViewReorderingDelegate` to check the reordering destination is 
+- Added `MeasuringUIViewRepresentable` as a convenience API for measuring a `UIView` within a
+  `UIViewRepresentable` using an enclosing `SwiftUIMeasurementContainer`.
+- Added a method to `CollectionViewReorderingDelegate` to check the reordering destination is
   expected.
-- Added the ability to pass a `CollectionViewConfiguration` to the `CollectionViewController` 
+- Added the ability to pass a `CollectionViewConfiguration` to the `CollectionViewController`
   initializers.
-- Added additional sizing behaviors to `SwiftUIMeasurementContainer` for sizing `UIView`s hosted in 
+- Added additional sizing behaviors to `SwiftUIMeasurementContainer` for sizing `UIView`s hosted in
   a  SwiftUI `View`.
-- Added `SwiftUISizingContainerStorage` for hoisting measured ideal size state in view hierarchy to 
-  mitigate jumpiness when a `SwiftUISizingContainer` is hosted within lazy stacks.
-- Added a static `swiftUIView(…)` method to `UIView` for hosting UIKit views that aren't 
+- Added a static `swiftUIView(…)` method to `UIView` for hosting UIKit views that aren't
   `EpoxyableView`s while still leveraging the layout helpers.
-- Added support for calling `configure { _ in }` on the SwiftUI `View` resulting from a 
+- Added support for calling `configure { _ in }` on the SwiftUI `View` resulting from a
   `swiftUIView(…)` invocation to perform additional configuration of the `UIView` instance.
 - Added `LayoutGroupUpdateAnimation` for customizing `Group` animated updates.
 - Added support for `WillDisplay` callbacks to be added to type-erased `AnyBarModel` types.
 
 ### Fixed
 - Fixed sizing of reused `EpoxySwiftUIHostingController`s on iOS 15.2+.
-- Fixed crash in `ScrollToItemHelper` caused by `preferredFrameRateRanges` on devices running iOS 
+- Fixed crash in `ScrollToItemHelper` caused by `preferredFrameRateRanges` on devices running iOS
   15.0 (this issue is not present in devices on 15.1+)
 - Fixed an ambiguous layout issue when using `LayoutSpacer` without a `fixedWidth` or `fixedHeight`.
 - Gracefully support cases where a `SwiftUIMeasurementContainer` with an `intrinsicSize`
-  `SwiftUIMeasurementContainerStrategy` has an intrinsic size that exceeds the proposed size by 
+  `SwiftUIMeasurementContainerStrategy` has an intrinsic size that exceeds the proposed size by
   compressing rather than overflowing, which could result in broken layouts.
 
 ### Changed
@@ -53,7 +52,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   item in a collection view.
 - Added `itemModel(…)`, `barModel(…)` methods to host a SwiftUI `View` within an Epoxy container and
   the `swiftUIView(…)` method to host an `EpoxyableView` within a SwiftUI `View`
-- Added a SwiftUI environment value for requesting size invalidation of the containing Epoxy 
+- Added a SwiftUI environment value for requesting size invalidation of the containing Epoxy
   collection view cell.
 
 ### Fixed
@@ -82,7 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed incorrect assertion logging when accessing an item with an invalid index path.
 - Mitigated a `EXC_BAD_ACCESS` crash that caused by a bad `nonnull` bridge in `CollectionViewCell`.
-- Fixed an issue where styles were not being used in the `diffIdentifier` calculation of 
+- Fixed an issue where styles were not being used in the `diffIdentifier` calculation of
   `GroupItems`.
 
 ### Changed
@@ -95,14 +94,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added an `UpdateStrategy` to `CollectionView` to allow specifying that it should update using non-
   animated `performBatchUpdates(…)`, which can be more performant and behave more predictably than
   `reloadData()`.
-- Added `reflowsForAccessibilityTypeSizes` and `forceVerticalAccessibilityLayout` properties to 
+- Added `reflowsForAccessibilityTypeSizes` and `forceVerticalAccessibilityLayout` properties to
   `HGroup.Style`.
 
 ### Fixed
 - Improved `CollectionView` logic for deciding when to `reloadData(…)` over `performBatchUpdates(…)`
   in specific scenarios.
 - Fixed an issue where the `accessibilityAlignment` property of `HGroup` was not being respected.
-- Fixed an issue where `accessibilityAlignment` and `horizontalAlignment` would overwrite one 
+- Fixed an issue where `accessibilityAlignment` and `horizontalAlignment` would overwrite one
   another.
 - Break a temporary retain cycle in `.system` presentation style
 
