@@ -31,7 +31,7 @@ final class SwiftUIInEpoxyResizingViewController: CollectionViewController {
 
 // MARK: - SwiftUIExpandableRow
 
-/// An implementation of `TextRow` in SwiftUI.
+/// An implementation of an expandable row in SwiftUI, which has a local isExpanded state.
 struct SwiftUIExpandableRow: View {
   var title: String
   var subtitle: String
