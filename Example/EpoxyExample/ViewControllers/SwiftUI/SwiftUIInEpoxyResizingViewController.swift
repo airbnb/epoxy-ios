@@ -5,7 +5,7 @@ import Epoxy
 import SwiftUI
 import UIKit
 
-// MARK: - SwiftUIInEpoxyViewController
+// MARK: - SwiftUIInEpoxyResizingViewController
 
 /// An example view controller that renders an scrollable list of SwiftUI text rows in an Epoxy
 /// container that can expand on tap.
@@ -29,7 +29,7 @@ final class SwiftUIInEpoxyResizingViewController: CollectionViewController {
   }
 }
 
-// MARK: - SwiftUITextRow
+// MARK: - SwiftUIExpandableRow
 
 /// An implementation of `TextRow` in SwiftUI.
 struct SwiftUIExpandableRow: View {
