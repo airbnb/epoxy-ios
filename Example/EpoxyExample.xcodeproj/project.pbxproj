@@ -60,6 +60,7 @@
 		A67255722718C8E40085346B /* UIViewController+LayoutGroupsExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67255712718C8E40085346B /* UIViewController+LayoutGroupsExample.swift */; };
 		A67255782718DAFA0085346B /* UIViewController+ReadmeExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67255772718DAFA0085346B /* UIViewController+ReadmeExample.swift */; };
 		A6990DCC25633D8600689965 /* Epoxy in Frameworks */ = {isa = PBXBuildFile; productRef = A6990DCB25633D8600689965 /* Epoxy */; };
+		A6BABA752874B6E6004C49E3 /* SwiftUIInEpoxyResizingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6BABA742874B6E6004C49E3 /* SwiftUIInEpoxyResizingViewController.swift */; };
 		A6F0928B25B9E983007D902B /* TextRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F0928A25B9E983007D902B /* TextRow.swift */; };
 		A6F0928F25B9ECC6007D902B /* ReadmeExamplesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F0928E25B9ECC6007D902B /* ReadmeExamplesViewController.swift */; };
 		A6F0929325B9ED0C007D902B /* CounterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F0929225B9ED0C007D902B /* CounterViewController.swift */; };
@@ -123,6 +124,7 @@
 		A672556A271788210085346B /* CompositionalLayoutViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CompositionalLayoutViewController.swift; sourceTree = "<group>"; };
 		A67255712718C8E40085346B /* UIViewController+LayoutGroupsExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+LayoutGroupsExample.swift"; sourceTree = "<group>"; };
 		A67255772718DAFA0085346B /* UIViewController+ReadmeExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ReadmeExample.swift"; sourceTree = "<group>"; };
+		A6BABA742874B6E6004C49E3 /* SwiftUIInEpoxyResizingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIInEpoxyResizingViewController.swift; sourceTree = "<group>"; };
 		A6F0928A25B9E983007D902B /* TextRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextRow.swift; sourceTree = "<group>"; };
 		A6F0928E25B9ECC6007D902B /* ReadmeExamplesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadmeExamplesViewController.swift; sourceTree = "<group>"; };
 		A6F0929225B9ED0C007D902B /* CounterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterViewController.swift; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 			children = (
 				A67255602717874A0085346B /* EpoxyInSwiftUIViewController.swift */,
 				A67255612717874A0085346B /* SwiftUIInEpoxyViewController.swift */,
+				A6BABA742874B6E6004C49E3 /* SwiftUIInEpoxyResizingViewController.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -438,6 +441,7 @@
 				25D39B3926277F0D00B3DBF9 /* MessagesViewController.swift in Sources */,
 				A672556B271788210085346B /* FlowLayoutViewController.swift in Sources */,
 				25D39B5C262789E000B3DBF9 /* AlignableTextRow.swift in Sources */,
+				A6BABA752874B6E6004C49E3 /* SwiftUIInEpoxyResizingViewController.swift in Sources */,
 				25D39B3626277F0D00B3DBF9 /* ColorsViewController.swift in Sources */,
 				25B6765F25AE883700C00B20 /* ProductViewController.swift in Sources */,
 				A61AFF632602BA2B005356A8 /* NavigationWrapperViewController.swift in Sources */,

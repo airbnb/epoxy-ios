@@ -73,6 +73,16 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
 
     epoxyEnvironment.intrinsicContentSizeInvalidator = .init(invalidate: { [weak self] in
       self?.viewController.view.invalidateIntrinsicContentSize()
+
+      // Inform the enclosing collection view that the size has changed, if we're contained in one,
+      // allowing the cell to resize.
+      //
+      // On iOS 16+, we could call `invalidateIntrinsicContentSize()` on the enclosing collection
+      // view cell instead, but that currently causes visual artifacts with `MagazineLayout`. The
+      // better long term fix is likely to switch to `UIHostingConfiguration` on iOS 16+ anyways.
+      if let enclosingCollectionView = self?.superview?.superview?.superview as? UICollectionView {
+        enclosingCollectionView.collectionViewLayout.invalidateLayout()
+      }
     })
     layoutMargins = .zero
   }
