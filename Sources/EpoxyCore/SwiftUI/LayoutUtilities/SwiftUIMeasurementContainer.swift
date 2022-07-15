@@ -129,6 +129,8 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     // Give a required constraint in the dimensions that are fixed to the bounds, otherwise almost
     // required.
     switch strategy {
+    case .automatic:
+      (trailing.priority, bottom.priority) = (.almostRequired, .almostRequired)
     case .proposed:
       (trailing.priority, bottom.priority) = (.required, .required)
     case .intrinsicHeightProposedWidth:
@@ -152,6 +154,23 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     let proposedSizeElseBounds = proposedSize.replacingNoIntrinsicMetric(with: bounds.size)
 
     switch strategy {
+    case .automatic:
+      measuredSize = uiView.systemLayoutSizeFitting(
+        UIView.layoutFittingCompressedSize,
+        withHorizontalFittingPriority: .fittingSizeLevel,
+        verticalFittingPriority: .fittingSizeLevel)
+
+      switch (measuredSize.width, measuredSize.height) {
+      case (...0, ...0): // zero or negative size
+        measuredSize = .noIntrinsicMetric
+      case (...0, 1...): // no intrinsic width, intrinsic height
+        measuredSize.width = UIView.noIntrinsicMetric
+      case (1..., ...0):
+        measuredSize.height = UIView.noIntrinsicMetric
+      default:
+        break
+      }
+      
     case .proposed:
       measuredSize = .noIntrinsicMetric
 
@@ -184,16 +203,16 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
         UIView.layoutFittingCompressedSize,
         withHorizontalFittingPriority: .fittingSizeLevel,
         verticalFittingPriority: .fittingSizeLevel)
+    }
 
-      // If the measured size exceeds the available width or height, set the measured size to
-      // `noIntrinsicMetric` to ensure that the component can be compressed, otherwise it will
-      // overflow beyond the proposed size.
-      if measuredSize.width > proposedSizeElseBounds.width {
-        measuredSize.width = UIView.noIntrinsicMetric
-      }
-      if measuredSize.height > proposedSizeElseBounds.height {
-        measuredSize.height = UIView.noIntrinsicMetric
-      }
+    // If the measured size exceeds the available width or height, set the measured size to
+    // `noIntrinsicMetric` to ensure that the component can be compressed, otherwise it will
+    // overflow beyond the proposed size.
+    if measuredSize.width > proposedSizeElseBounds.width {
+      measuredSize.width = UIView.noIntrinsicMetric
+    }
+    if measuredSize.height > proposedSizeElseBounds.height {
+      measuredSize.height = UIView.noIntrinsicMetric
     }
 
     _intrinsicContentSize = measuredSize
@@ -205,6 +224,12 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
 /// The measurement strategy of a `SwiftUIMeasurementContainer`.
 public enum SwiftUIMeasurementContainerStrategy {
+
+  /// The `uiView` will be given its intrinsic width and/or height when measurement provides a
+  /// positive value. Zero and negative values will result in that dimension receiving the available
+  /// space proposed by the parent.
+  case automatic
+
   /// The `uiView` is sized to fill the area proposed by its parent.
   ///
   /// Typically used for views that should expand greedily in both axes, e.g. a background view.
