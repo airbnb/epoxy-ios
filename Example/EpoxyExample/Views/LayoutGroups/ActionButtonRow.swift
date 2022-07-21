@@ -46,6 +46,7 @@ final class ActionButtonRow: BaseRow, EpoxyableView {
         dataID: DataID.action,
         content: .init(title: content.actionText),
         behaviors: .init { button in
+          // swiftlint:disable:next no_direct_standard_out_logs
           print("Tapped the button \(button)")
         },
         style: .init())

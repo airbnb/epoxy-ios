@@ -37,6 +37,7 @@ final class DynamicLayoutGroupsViewController: CollectionViewController {
           self?.openOptions[id] = true
           self?.updateData()
         }, didTapOption: { [weak self] option in
+          // swiftlint:disable:next no_direct_standard_out_logs
           print("Selected option \(option)")
           self?.openOptions[id] = false
           self?.updateData()

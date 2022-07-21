@@ -27,9 +27,11 @@ final class CompositionalLayoutViewController: CollectionViewController {
           content: .init(title: "Page \(dataID)"),
           style: .small)
           .didSelect { _ in
+            // swiftlint:disable:next no_direct_standard_out_logs
             print("Carousel page \(dataID) did select")
           }
           .willDisplay { _ in
+            // swiftlint:disable:next no_direct_standard_out_logs
             print("Carousel page \(dataID) will display")
           }
       }
@@ -46,9 +48,11 @@ final class CompositionalLayoutViewController: CollectionViewController {
           content: .init(title: "Row \(dataID)", body: BeloIpsum.paragraph(count: 1, seed: dataID)),
           style: .small)
           .didSelect { _ in
+            // swiftlint:disable:next no_direct_standard_out_logs
             print("List row \(dataID) selected")
           }
           .willDisplay { _ in
+            // swiftlint:disable:next no_direct_standard_out_logs
             print("List row \(dataID) will display")
           }
       }

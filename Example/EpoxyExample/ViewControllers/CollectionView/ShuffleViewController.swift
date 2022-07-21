@@ -54,6 +54,7 @@ final class ShuffleViewController: CollectionViewController {
               body: BeloIpsum.paragraph(count: 1, seed: itemID)),
             style: .small)
             .didSelect { _ in
+              // swiftlint:disable:next no_direct_standard_out_logs
               print("Selected section \(section.id), Row \(itemID)")
             }
         })
