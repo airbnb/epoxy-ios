@@ -363,7 +363,7 @@ final class EpoxyHostingContent<RootView: View>: ObservableObject {
 /// `EpoxySwiftUIHostingController`, e.g. layout margins.
 final class EpoxyHostingEnvironment: ObservableObject {
   @Published var layoutMargins = EdgeInsets()
-  @Published var intrinsicContentSizeInvalidator = EpoxyIntrinsicContentSizeInvalidator(invalidate: {})
+  @Published var intrinsicContentSizeInvalidator = EpoxyIntrinsicContentSizeInvalidator(invalidate: { })
 }
 
 // MARK: - EpoxyHostingWrapper

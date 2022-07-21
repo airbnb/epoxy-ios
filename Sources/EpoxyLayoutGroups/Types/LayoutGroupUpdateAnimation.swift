@@ -46,17 +46,16 @@ extension LayoutGroupUpdateAnimation {
       duration: duration,
       delay: delay,
       dampingRatio: dampingRatio,
-      initialSpringVelocity: initialSpringVelocity))
-    { animations, completion in
-      UIView.animate(
-        withDuration: duration,
-        delay: delay,
-        usingSpringWithDamping: dampingRatio,
-        initialSpringVelocity: initialSpringVelocity,
-        options: [.beginFromCurrentState, .allowUserInteraction],
-        animations: animations,
-        completion: completion)
-    }
+      initialSpringVelocity: initialSpringVelocity)) { animations, completion in
+        UIView.animate(
+          withDuration: duration,
+          delay: delay,
+          usingSpringWithDamping: dampingRatio,
+          initialSpringVelocity: initialSpringVelocity,
+          options: [.beginFromCurrentState, .allowUserInteraction],
+          animations: animations,
+          completion: completion)
+      }
   }
 }
 

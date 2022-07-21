@@ -220,7 +220,7 @@ private final class Entry {
     newIndices.append(index)
 
     // We've encountered a duplicate, return true so we can track it.
-    if !previouslyEmpty && newIndices.count == 2 {
+    if !previouslyEmpty, newIndices.count == 2 {
       return true
     }
 

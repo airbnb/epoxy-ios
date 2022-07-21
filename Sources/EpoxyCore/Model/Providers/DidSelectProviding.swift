@@ -5,7 +5,7 @@
 
 /// A sentinel protocol for enabling an `CallbackContextEpoxyModeled` to provide a `didSelect`
 /// closure property.
-public protocol DidSelectProviding {}
+public protocol DidSelectProviding { }
 
 // MARK: - CallbackContextEpoxyModeled
 

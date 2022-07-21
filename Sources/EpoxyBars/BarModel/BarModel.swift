@@ -127,43 +127,43 @@ public struct BarModel<View: UIView>: ViewEpoxyModeled {
 
 // MARK: SetContentProviding
 
-extension BarModel: SetContentProviding {}
+extension BarModel: SetContentProviding { }
 
 // MARK: ErasedContentProviding
 
-extension BarModel: ErasedContentProviding {}
+extension BarModel: ErasedContentProviding { }
 
 // MARK: DataIDProviding
 
-extension BarModel: DataIDProviding {}
+extension BarModel: DataIDProviding { }
 
 // MARK: DidDisplayProviding
 
-extension BarModel: DidDisplayProviding {}
+extension BarModel: DidDisplayProviding { }
 
 // MARK: DidEndDisplayingProviding
 
-extension BarModel: DidEndDisplayingProviding {}
+extension BarModel: DidEndDisplayingProviding { }
 
 // MARK: MakeViewProviding
 
-extension BarModel: MakeViewProviding {}
+extension BarModel: MakeViewProviding { }
 
 // MARK: SetBehaviorsProviding
 
-extension BarModel: SetBehaviorsProviding {}
+extension BarModel: SetBehaviorsProviding { }
 
 // MARK: StyleIDProviding
 
-extension BarModel: StyleIDProviding {}
+extension BarModel: StyleIDProviding { }
 
 // MARK: WillDisplayProviding
 
-extension BarModel: WillDisplayProviding {}
+extension BarModel: WillDisplayProviding { }
 
 // MARK: DidSelectProviding
 
-extension BarModel: DidSelectProviding {}
+extension BarModel: DidSelectProviding { }
 
 // MARK: BarModeling
 

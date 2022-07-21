@@ -86,14 +86,14 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
         // We correct for this by updating `contentView.bounds`, which updates the constants used by
         // the width and height constraints created by the `contentView`'s auto-resizing mask.
         if
-          horizontalFittingPriority == .required &&
+          horizontalFittingPriority == .required,
           contentView.bounds.width != layoutAttributes.size.width
         {
           contentView.bounds.size.width = layoutAttributes.size.width
         }
 
         if
-          verticalFittingPriority == .required &&
+          verticalFittingPriority == .required,
           contentView.bounds.height != layoutAttributes.size.height
         {
           contentView.bounds.size.height = layoutAttributes.size.height

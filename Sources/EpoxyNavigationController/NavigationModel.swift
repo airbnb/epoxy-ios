@@ -97,7 +97,7 @@ public struct NavigationModel {
     makeViewController: @escaping () -> UIViewController?)
     -> NavigationModel
   {
-    .init(dataID: dataID, makeViewController: makeViewController, remove: {})
+    .init(dataID: dataID, makeViewController: makeViewController, remove: { })
   }
 
   /// Calls the given closure when this model's view controller becomes visible at the top of a

@@ -24,8 +24,8 @@ final class CustomSizingView: UIView, EpoxyableView {
   override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
     super.traitCollectionDidChange(previousTraitCollection)
     if
-      traitCollection.preferredContentSizeCategory != .unspecified
-      && previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory
+      traitCollection.preferredContentSizeCategory != .unspecified,
+      previousTraitCollection?.preferredContentSizeCategory != traitCollection.preferredContentSizeCategory
     {
       sizingLabel.invalidateIntrinsicContentSize()
     }

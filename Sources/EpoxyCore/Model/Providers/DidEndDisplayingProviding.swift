@@ -5,7 +5,7 @@
 
 /// A sentinel protocol for enabling an `CallbackContextEpoxyModeled` to provide a
 /// `didEndDisplaying` closure property.
-public protocol DidEndDisplayingProviding {}
+public protocol DidEndDisplayingProviding { }
 
 // MARK: - CallbackContextEpoxyModeled
 

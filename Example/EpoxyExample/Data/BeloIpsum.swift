@@ -117,7 +117,7 @@ enum BeloIpsum {
       var cost = word.split(separator: " ").count
       while cost > availableSpace {
         let index = i + 1
-        if index >= 0 && index < propertyTypes.count {
+        if index >= 0, index < propertyTypes.count {
           let value = propertyTypes[index]
           word = value
           cost = value.split(separator: " ").count

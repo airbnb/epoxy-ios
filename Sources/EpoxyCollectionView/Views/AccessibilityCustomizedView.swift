@@ -9,4 +9,4 @@ import UIKit
 /// `accessibilityElementsHidden`) override the `CollectionView` default.
 ///
 /// For now, this just supports ``accessibilityElementsHidden`.
-public protocol AccessibilityCustomizedView: UIView {}
+public protocol AccessibilityCustomizedView: UIView { }

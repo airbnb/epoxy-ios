@@ -116,35 +116,35 @@ public struct SupplementaryItemModel<View: UIView>: ViewEpoxyModeled {
 
 // MARK: SetContentProviding
 
-extension SupplementaryItemModel: SetContentProviding {}
+extension SupplementaryItemModel: SetContentProviding { }
 
 // MARK: ErasedContentProviding
 
-extension SupplementaryItemModel: ErasedContentProviding {}
+extension SupplementaryItemModel: ErasedContentProviding { }
 
 // MARK: DataIDProviding
 
-extension SupplementaryItemModel: DataIDProviding {}
+extension SupplementaryItemModel: DataIDProviding { }
 
 // MARK: DidEndDisplayingProviding
 
-extension SupplementaryItemModel: DidEndDisplayingProviding {}
+extension SupplementaryItemModel: DidEndDisplayingProviding { }
 
 // MARK: MakeViewProviding
 
-extension SupplementaryItemModel: MakeViewProviding {}
+extension SupplementaryItemModel: MakeViewProviding { }
 
 // MARK: SetBehaviorsProviding
 
-extension SupplementaryItemModel: SetBehaviorsProviding {}
+extension SupplementaryItemModel: SetBehaviorsProviding { }
 
 // MARK: StyleIDProviding
 
-extension SupplementaryItemModel: StyleIDProviding {}
+extension SupplementaryItemModel: StyleIDProviding { }
 
 // MARK: WillDisplayProviding
 
-extension SupplementaryItemModel: WillDisplayProviding {}
+extension SupplementaryItemModel: WillDisplayProviding { }
 
 // MARK: SupplementaryItemModeling
 

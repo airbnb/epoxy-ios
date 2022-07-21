@@ -19,13 +19,15 @@ final class CardStackViewController: CollectionViewController {
     (0..<10).map { (dataID: Int) in
       SectionModel(dataID: dataID) {
         (0..<10).map { (dataID: Int) in
-          CardContainer<BarStackView>.itemModel(
+          // Inlining this URL initializer causes SwiftLint to error for some reason
+          let imageURL = URL(string: "https://picsum.photos/id/\(dataID + 310)/600/300")!
+          return CardContainer<BarStackView>.itemModel(
             dataID: dataID,
             content: .init(
               models: [
                 ImageMarquee.barModel(
                   // swiftlint:disable:next force_unwrapping
-                  content: .init(imageURL: URL(string: "https://picsum.photos/id/\(dataID + 310)/600/300")!),
+                  content: .init(imageURL: imageURL),
                   style: .init(height: 150, contentMode: .scaleAspectFill))
                   .didSelect { _ in
                     print("Selected Image Marquee \(dataID)")

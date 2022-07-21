@@ -5,7 +5,7 @@
 
 /// A sentinel protocol for enabling an `CallbackContextEpoxyModeled` to provide a `setBehaviors`
 /// closure property.
-public protocol SetBehaviorsProviding {}
+public protocol SetBehaviorsProviding { }
 
 // MARK: - CallbackContextEpoxyModeled
 

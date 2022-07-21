@@ -8,7 +8,7 @@ import UIKit
 
 /// A sentinel protocol for enabling a `CallbackContextEpoxyModeled` to provide a `didChangeState`
 /// closure property.
-public protocol DidChangeStateProviding {}
+public protocol DidChangeStateProviding { }
 
 // MARK: - CallbackContextEpoxyModeled
 
