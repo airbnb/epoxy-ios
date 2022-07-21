@@ -39,3 +39,8 @@ let package = Package(
     .testTarget(name: "EpoxyTests", dependencies: ["Epoxy", "Quick", "Nimble"]),
     .testTarget(name: "PerformanceTests", dependencies: ["EpoxyCore"]),
   ])
+
+#if swift(>=5.6)
+// Add the Airbnb Swift formatting plugin if possible
+package.dependencies.append(.package(url: "https://github.com/airbnb/swift", .branch("master")))
+#endif
