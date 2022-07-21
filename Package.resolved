@@ -50,8 +50,8 @@
         "package": "AirbnbSwift",
         "repositoryURL": "https://github.com/airbnb/swift",
         "state": {
-          "branch": "master",
-          "revision": "640b1eef2f3b775cc8375f97f6cbb74eee0eafeb",
+          "branch": "cal--error-improvements",
+          "revision": "8cc4325e8260a26aea426d0775501b46b2fd51f6",
           "version": null
         }
       },
