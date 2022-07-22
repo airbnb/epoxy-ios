@@ -50,8 +50,8 @@
         "package": "AirbnbSwift",
         "repositoryURL": "https://github.com/airbnb/swift",
         "state": {
-          "branch": "cal--epoxy-integration-wip-branch",
-          "revision": "279b8506a967ee3a1f08605a0e4f346f4d90d464",
+          "branch": "master",
+          "revision": "503c5bc2e27a3a230b65ce8e2ae9cc2cf31d1d3a",
           "version": null
         }
       },
