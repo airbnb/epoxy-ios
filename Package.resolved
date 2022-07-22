@@ -50,8 +50,8 @@
         "package": "AirbnbSwift",
         "repositoryURL": "https://github.com/airbnb/swift",
         "state": {
-          "branch": "cal--bump-swiftlint-version",
-          "revision": "d9e606a844ea110d7ceee538305cd18ff8a78674",
+          "branch": "cal--epoxy-integration-wip-branch",
+          "revision": "279b8506a967ee3a1f08605a0e4f346f4d90d464",
           "version": null
         }
       },
