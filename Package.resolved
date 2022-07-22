@@ -50,8 +50,8 @@
         "package": "AirbnbSwift",
         "repositoryURL": "https://github.com/airbnb/swift",
         "state": {
-          "branch": "cal--error-improvements",
-          "revision": "8cc4325e8260a26aea426d0775501b46b2fd51f6",
+          "branch": "cal--bump-swiftlint-version",
+          "revision": "d9e606a844ea110d7ceee538305cd18ff8a78674",
           "version": null
         }
       },
@@ -86,8 +86,8 @@
         "package": "SwiftLint",
         "repositoryURL": "https://github.com/realm/SwiftLint",
         "state": {
-          "branch": "e497f1f",
-          "revision": "e497f1f5b161af96ba439049d21970c6204d06c6",
+          "branch": "c5aa806",
+          "revision": "c5aa8065d1acf0400443b110a339e79e0df5667c",
           "version": null
         }
       },
