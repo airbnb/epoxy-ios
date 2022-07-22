@@ -113,7 +113,6 @@ final class CollectionViewDataSource: NSObject {
         forKind: elementKind)
       registeredSupplementaryViewDifferentiators[elementKind] = existingViewDifferentiators
         .union(newElementViewDifferentiators)
-
     }
   }
 

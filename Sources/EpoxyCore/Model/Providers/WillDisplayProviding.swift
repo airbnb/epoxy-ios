@@ -8,7 +8,7 @@
 ///
 /// - SeeAlso: `DidDisplayProviding`
 /// - SeeAlso: `DidEndDisplayingProviding`
-public protocol WillDisplayProviding {}
+public protocol WillDisplayProviding { }
 
 // MARK: - CallbackContextEpoxyModeled
 

@@ -77,7 +77,7 @@ final class DefaultBarCoordinator<BarModel: BarModeling>: BarCoordinating {
 
   // MARK: Lifecycle
 
-  init() {}
+  init() { }
 
   // MARK: Internal
 

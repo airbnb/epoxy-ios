@@ -149,7 +149,7 @@ public final class BarWrapperView: UIView {
   private var originalViewLayoutMargins: UIEdgeInsets?
 
   private func updateSelected() {
-    if isSelected && _model?.isSelectable == true {
+    if isSelected, _model?.isSelectable == true {
       backgroundColor = selectedBackgroundColor
     } else {
       backgroundColor = nil

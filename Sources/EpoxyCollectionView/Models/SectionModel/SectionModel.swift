@@ -27,23 +27,23 @@ public struct SectionModel: EpoxyModeled {
 
 // MARK: DataIDProviding
 
-extension SectionModel: DataIDProviding {}
+extension SectionModel: DataIDProviding { }
 
 // MARK: DidEndDisplayingProviding
 
-extension SectionModel: DidEndDisplayingProviding {}
+extension SectionModel: DidEndDisplayingProviding { }
 
 // MARK: ItemsProviding
 
-extension SectionModel: ItemsProviding {}
+extension SectionModel: ItemsProviding { }
 
 // MARK: SupplementaryItemsProviding
 
-extension SectionModel: SupplementaryItemsProviding {}
+extension SectionModel: SupplementaryItemsProviding { }
 
 // MARK: WillDisplayProviding
 
-extension SectionModel: WillDisplayProviding {}
+extension SectionModel: WillDisplayProviding { }
 
 // MARK: Diffable
 

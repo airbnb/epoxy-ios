@@ -12,7 +12,7 @@ public struct EpoxyModelStorage {
 
   // MARK: Lifecycle
 
-  public init() {}
+  public init() { }
 
   // MARK: Public
 

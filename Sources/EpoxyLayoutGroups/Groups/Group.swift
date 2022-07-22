@@ -76,7 +76,7 @@ extension Constrainable where Self: InternalGroup {
     guard let index = dataIDIndexMap[dataID] else {
       return nil
     }
-    guard index >= 0 && index < constrainableContainers.count else {
+    guard index >= 0, index < constrainableContainers.count else {
       EpoxyLogger.shared
         .assertionFailure(
           "Attempt to access a constrainable out of bounds. Make sure you've called this method only after updating the group, the view has rendered, and layoutSubviews has been called.")
@@ -89,7 +89,7 @@ extension Constrainable where Self: InternalGroup {
     guard let index = dataIDIndexMap[dataID] else {
       return nil
     }
-    guard index >= 0 && index < items.count else {
+    guard index >= 0, index < items.count else {
       EpoxyLogger.shared
         .assertionFailure(
           "Attempt to access a group item out of bounds. Make sure you've called this method only after setting the items on the group.")
@@ -163,7 +163,7 @@ extension Constrainable where Self: InternalGroup {
     // to 0, and creating an intermediate layout which includes all items
     // that have been inserted and removed. This allows us to have a smooth
     // transition between layouts by forcing this view to layout incoming subviews
-    if animated && owningView != nil {
+    if animated, owningView != nil {
       for container in added {
         container.setHiddenForAnimatedUpdates(true)
       }

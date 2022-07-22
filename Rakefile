@@ -35,8 +35,7 @@ namespace :lint do
 
   desc 'Lints swift files'
   task :swift do
-    sh 'mint run SwiftLint lint Sources Example --config script/lint/swiftlint.yml --strict'
-    sh 'mint run SwiftFormat Sources Example --config script/lint/airbnb.swiftformat --lint'
+    sh 'swift package --allow-writing-to-package-directory format --lint --exclude Tests'
   end
 end
 
@@ -62,10 +61,9 @@ namespace :publish do
 end
 
 namespace :format do
-  desc 'Runs SwiftFormat'
+  desc 'Runs AirbnbSwiftFormatTool'
   task :swift do
-    sh 'mint run SwiftLint Sources Example --config script/lint/swiftlint.yml --fix'
-    sh 'mint run SwiftFormat Sources Example --config script/lint/airbnb.swiftformat'
+    sh 'swift package --allow-writing-to-package-directory format --exclude Tests'
   end
 end
 
@@ -81,5 +79,12 @@ end
 private
 
 def xcodebuild(command)
-  sh "set -o pipefail && xcodebuild #{command} | mint run xcbeautify"
+  # Check if the mint tool is installed -- if so, pipe the xcodebuild output through xcbeautify
+  `which mint`
+
+  if $?.success?
+    sh "set -o pipefail && xcodebuild #{command} | mint run thii/xcbeautify@0.10.2"
+  else
+    sh "xcodebuild #{command}"
+  end
 end

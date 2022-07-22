@@ -53,7 +53,9 @@ jobs:
         run: bundle exec rake test:package
 
   lint-swift:
-    runs-on: macos-latest
+    # As of 7/21/22, macos-latest (macos-11) doesn't include Xcode 13.3,
+    # which is required to run the linter package plugin.
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup

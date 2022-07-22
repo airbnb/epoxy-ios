@@ -77,9 +77,9 @@ final class CollectionViewScrollToItemHelper {
       y: CGFloat.greatestFiniteMagnitude)
     var numberOfAttempts = 1
     while
-      (
-        abs(collectionView.contentOffset.x - previousContentOffset.x) >= 1 ||
-          abs(collectionView.contentOffset.y - previousContentOffset.y) >= 1) &&
+
+      abs(collectionView.contentOffset.x - previousContentOffset.x) >= 1 ||
+      abs(collectionView.contentOffset.y - previousContentOffset.y) >= 1,
       numberOfAttempts <= 5
     {
       if numberOfAttempts > 1 {
@@ -178,7 +178,7 @@ final class CollectionViewScrollToItemHelper {
 
     // Don't start programmatically scrolling until we have a greater-than`.zero` `bounds.size`.
     // This might happen if `scrollToItem` is called before the collection view has been laid out.
-    guard collectionView.bounds.width > 0 && collectionView.bounds.height > 0 else { return }
+    guard collectionView.bounds.width > 0, collectionView.bounds.height > 0 else { return }
 
     // Figure out which axis to use for scrolling.
     guard let scrollAxis = scrollAxis(for: collectionView) else {

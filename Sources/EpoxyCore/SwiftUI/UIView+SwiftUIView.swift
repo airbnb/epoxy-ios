@@ -68,8 +68,8 @@ public struct SwiftUIUIView<View: UIView>: MeasuringUIViewRepresentable, UIViewC
 // MARK: - UIViewProtocol
 
 /// A protocol that all `UIView`s conform to, enabling extensions that have a `Self` reference.
-public protocol UIViewProtocol: UIView {}
+public protocol UIViewProtocol: UIView { }
 
 // MARK: - UIView + UIViewProtocol
 
-extension UIView: UIViewProtocol {}
+extension UIView: UIViewProtocol { }

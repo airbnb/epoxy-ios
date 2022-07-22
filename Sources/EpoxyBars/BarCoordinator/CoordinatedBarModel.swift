@@ -72,11 +72,11 @@ public struct CoordinatedBarModel {
 
 // MARK: DataIDProviding
 
-extension CoordinatedBarModel: DataIDProviding {}
+extension CoordinatedBarModel: DataIDProviding { }
 
 // MARK: StyleIDProviding
 
-extension CoordinatedBarModel: StyleIDProviding {}
+extension CoordinatedBarModel: StyleIDProviding { }
 
 // MARK: BarModeling
 

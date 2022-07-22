@@ -39,5 +39,5 @@ extension EnvironmentValues {
 // MARK: - EpoxyIntrinsicContentSizeInvalidatorKey
 
 private struct EpoxyIntrinsicContentSizeInvalidatorKey: EnvironmentKey {
-  static let defaultValue = EpoxyIntrinsicContentSizeInvalidator(invalidate: {})
+  static let defaultValue = EpoxyIntrinsicContentSizeInvalidator(invalidate: { })
 }

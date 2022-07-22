@@ -36,15 +36,15 @@ extension EpoxyModeled where Self: UICollectionViewFlowLayoutItemSizeProvider {
 
 // MARK: - ItemModel + UICollectionViewFlowLayoutItemSizeProvider
 
-extension ItemModel: UICollectionViewFlowLayoutItemSizeProvider {}
+extension ItemModel: UICollectionViewFlowLayoutItemSizeProvider { }
 
 // MARK: - AnyItemModel + UICollectionViewFlowLayoutItemSizeProvider
 
-extension AnyItemModel: UICollectionViewFlowLayoutItemSizeProvider {}
+extension AnyItemModel: UICollectionViewFlowLayoutItemSizeProvider { }
 
 // MARK: - SectionModel + UICollectionViewFlowLayoutItemSizeProvider
 
-extension SectionModel: UICollectionViewFlowLayoutItemSizeProvider {}
+extension SectionModel: UICollectionViewFlowLayoutItemSizeProvider { }
 
 // MARK: - UICollectionViewFlowLayoutSectionInsetProvider
 
@@ -78,7 +78,7 @@ extension EpoxyModeled where Self: UICollectionViewFlowLayoutSectionInsetProvide
 
 // MARK: - SectionModel + UICollectionViewFlowLayoutSectionInsetProvider
 
-extension SectionModel: UICollectionViewFlowLayoutSectionInsetProvider {}
+extension SectionModel: UICollectionViewFlowLayoutSectionInsetProvider { }
 
 // MARK: - UICollectionViewFlowLayoutMinimumLineSpacingProvider
 
@@ -112,7 +112,7 @@ extension EpoxyModeled where Self: UICollectionViewFlowLayoutMinimumLineSpacingP
 
 // MARK: - SectionModel + UICollectionViewFlowLayoutMinimumLineSpacingProvider
 
-extension SectionModel: UICollectionViewFlowLayoutMinimumLineSpacingProvider {}
+extension SectionModel: UICollectionViewFlowLayoutMinimumLineSpacingProvider { }
 
 // MARK: - UICollectionViewFlowLayoutMinimumInteritemSpacing
 
@@ -146,7 +146,7 @@ extension EpoxyModeled where Self: UICollectionViewFlowLayoutMinimumInteritemSpa
 
 // MARK: - SectionModel + UICollectionViewFlowLayoutMinimumInteritemSpacing
 
-extension SectionModel: UICollectionViewFlowLayoutMinimumInteritemSpacing {}
+extension SectionModel: UICollectionViewFlowLayoutMinimumInteritemSpacing { }
 
 // MARK: - UICollectionViewFlowLayoutHeaderReferenceSizeProvider
 
@@ -180,7 +180,7 @@ extension EpoxyModeled where Self: UICollectionViewFlowLayoutHeaderReferenceSize
 
 // MARK: - SectionModel + UICollectionViewFlowLayoutHeaderReferenceSizeProvider
 
-extension SectionModel: UICollectionViewFlowLayoutHeaderReferenceSizeProvider {}
+extension SectionModel: UICollectionViewFlowLayoutHeaderReferenceSizeProvider { }
 
 // MARK: - UICollectionViewFlowLayoutFooterReferenceSizeProvider
 
@@ -214,4 +214,4 @@ extension EpoxyModeled where Self: UICollectionViewFlowLayoutFooterReferenceSize
 
 // MARK: - SectionModel + UICollectionViewFlowLayoutFooterReferenceSizeProvider
 
-extension SectionModel: UICollectionViewFlowLayoutFooterReferenceSizeProvider {}
+extension SectionModel: UICollectionViewFlowLayoutFooterReferenceSizeProvider { }

@@ -35,31 +35,31 @@ public struct AnyItemModel: EpoxyModeled {
 
 // MARK: WillDisplayProviding
 
-extension AnyItemModel: WillDisplayProviding {}
+extension AnyItemModel: WillDisplayProviding { }
 
 // MARK: DidEndDisplayingProviding
 
-extension AnyItemModel: DidEndDisplayingProviding {}
+extension AnyItemModel: DidEndDisplayingProviding { }
 
 // MARK: DidSelectProviding
 
-extension AnyItemModel: DidSelectProviding {}
+extension AnyItemModel: DidSelectProviding { }
 
 // MARK: SetContentProviding
 
-extension AnyItemModel: SetContentProviding {}
+extension AnyItemModel: SetContentProviding { }
 
 // MARK: DidChangeStateProviding
 
-extension AnyItemModel: DidChangeStateProviding {}
+extension AnyItemModel: DidChangeStateProviding { }
 
 // MARK: SetBehaviorsProviding
 
-extension AnyItemModel: SetBehaviorsProviding {}
+extension AnyItemModel: SetBehaviorsProviding { }
 
 // MARK: StyleIDProviding
 
-extension AnyItemModel: StyleIDProviding {}
+extension AnyItemModel: StyleIDProviding { }
 
 // MARK: ItemModeling
 

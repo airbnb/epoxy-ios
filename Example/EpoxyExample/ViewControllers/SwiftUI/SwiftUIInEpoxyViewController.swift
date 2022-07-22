@@ -32,10 +32,13 @@ final class SwiftUIInEpoxyViewController: CollectionViewController {
   private var items: [ItemModeling] {
     (1...100).map { (index: Int) in
       SwiftUITextRow(title: "Row \(index)", subtitle: BeloIpsum.sentence(count: 1, wordCount: index))
+        // swiftlint:disable:next no_direct_standard_out_logs
         .onAppear { print("Row \(index) appeared") }
+        // swiftlint:disable:next no_direct_standard_out_logs
         .onDisappear { print("Row \(index) disappeared") }
         .itemModel(dataID: index)
         .didSelect { _ in
+          // swiftlint:disable:next no_direct_standard_out_logs
           print("Row \(index) tapped!")
         }
     }
@@ -45,7 +48,9 @@ final class SwiftUIInEpoxyViewController: CollectionViewController {
   private var bars: [BarModeling] {
     Divider().barModel()
     SwiftUITextRow(title: "Bottom Bar", subtitle: BeloIpsum.sentence(count: 1, wordCount: 20))
+      // swiftlint:disable:next no_direct_standard_out_logs
       .onAppear { print("Bottom bar appeared") }
+      // swiftlint:disable:next no_direct_standard_out_logs
       .onDisappear { print("Bottom bar disappeared") }
       // Ensure that the background color underlaps the bottom safe area in the bottom bar.
       .epoxyLayoutMargins()

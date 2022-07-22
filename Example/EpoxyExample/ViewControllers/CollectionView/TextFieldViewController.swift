@@ -53,6 +53,7 @@ final class TextFieldViewController: CollectionViewController {
       behaviors: .init(didTap: { [weak self] in
         guard let self = self else { return }
         self.view.endEditing(true)
+        // swiftlint:disable:next no_direct_standard_out_logs
         print("Submitted '\(self.username)'")
       }))
   }

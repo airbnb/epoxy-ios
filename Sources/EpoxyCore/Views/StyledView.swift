@@ -39,6 +39,6 @@ extension StyledView where Style == Never {
   public init(style: Never) {
     // An empty switch is required to silence the "'self.init' isn't called on all paths before
     // returning from initializer" error.
-    switch style {}
+    switch style { }
   }
 }

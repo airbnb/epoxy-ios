@@ -34,5 +34,5 @@ public protocol ContentConfigurableView: UIView {
 // MARK: Defaults
 
 extension ContentConfigurableView where Content == Never {
-  public func setContent(_: Never, animated _: Bool) {}
+  public func setContent(_: Never, animated _: Bool) { }
 }

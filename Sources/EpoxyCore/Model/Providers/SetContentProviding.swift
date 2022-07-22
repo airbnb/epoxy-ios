@@ -5,7 +5,7 @@
 
 /// A sentinel protocol for enabling an `CallbackContextEpoxyModeled` to provide a `setContent`
 /// closure property.
-public protocol SetContentProviding {}
+public protocol SetContentProviding { }
 
 // MARK: - CallbackContextEpoxyModeled
 

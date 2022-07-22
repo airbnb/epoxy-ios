@@ -37,27 +37,27 @@ public struct AnySupplementaryItemModel: EpoxyModeled {
 
 // MARK: DataIDProviding
 
-extension AnySupplementaryItemModel: DataIDProviding {}
+extension AnySupplementaryItemModel: DataIDProviding { }
 
 // MARK: WillDisplayProviding
 
-extension AnySupplementaryItemModel: WillDisplayProviding {}
+extension AnySupplementaryItemModel: WillDisplayProviding { }
 
 // MARK: DidEndDisplayingProviding
 
-extension AnySupplementaryItemModel: DidEndDisplayingProviding {}
+extension AnySupplementaryItemModel: DidEndDisplayingProviding { }
 
 // MARK: SetContentProviding
 
-extension AnySupplementaryItemModel: SetContentProviding {}
+extension AnySupplementaryItemModel: SetContentProviding { }
 
 // MARK: SetBehaviorsProviding
 
-extension AnySupplementaryItemModel: SetBehaviorsProviding {}
+extension AnySupplementaryItemModel: SetBehaviorsProviding { }
 
 // MARK: StyleIDProviding
 
-extension AnySupplementaryItemModel: StyleIDProviding {}
+extension AnySupplementaryItemModel: StyleIDProviding { }
 
 // MARK: SupplementaryItemModeling
 

@@ -116,51 +116,51 @@ public struct ItemModel<View: UIView>: ViewEpoxyModeled {
 
 // MARK: SetContentProviding
 
-extension ItemModel: SetContentProviding {}
+extension ItemModel: SetContentProviding { }
 
 // MARK: ErasedContentProviding
 
-extension ItemModel: ErasedContentProviding {}
+extension ItemModel: ErasedContentProviding { }
 
 // MARK: DataIDProviding
 
-extension ItemModel: DataIDProviding {}
+extension ItemModel: DataIDProviding { }
 
 // MARK: DidChangeStateProviding
 
-extension ItemModel: DidChangeStateProviding {}
+extension ItemModel: DidChangeStateProviding { }
 
 // MARK: DidEndDisplayingProviding
 
-extension ItemModel: DidEndDisplayingProviding {}
+extension ItemModel: DidEndDisplayingProviding { }
 
 // MARK: DidSelectProviding
 
-extension ItemModel: DidSelectProviding {}
+extension ItemModel: DidSelectProviding { }
 
 // MARK: IsMovableProviding
 
-extension ItemModel: IsMovableProviding {}
+extension ItemModel: IsMovableProviding { }
 
 // MARK: MakeViewProviding
 
-extension ItemModel: MakeViewProviding {}
+extension ItemModel: MakeViewProviding { }
 
 // MARK: SelectionStyleProviding
 
-extension ItemModel: SelectionStyleProviding {}
+extension ItemModel: SelectionStyleProviding { }
 
 // MARK: SetBehaviorsProviding
 
-extension ItemModel: SetBehaviorsProviding {}
+extension ItemModel: SetBehaviorsProviding { }
 
 // MARK: StyleIDProviding
 
-extension ItemModel: StyleIDProviding {}
+extension ItemModel: StyleIDProviding { }
 
 // MARK: WillDisplayProviding
 
-extension ItemModel: WillDisplayProviding {}
+extension ItemModel: WillDisplayProviding { }
 
 // MARK: ItemModeling
 

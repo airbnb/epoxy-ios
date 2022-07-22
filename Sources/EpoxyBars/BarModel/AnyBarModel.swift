@@ -38,11 +38,11 @@ extension AnyBarModel: BarModeling {
 
 // MARK: DataIDProviding
 
-extension AnyBarModel: DataIDProviding {}
+extension AnyBarModel: DataIDProviding { }
 
 // MARK: StyleIDProviding
 
-extension AnyBarModel: StyleIDProviding {}
+extension AnyBarModel: StyleIDProviding { }
 
 // MARK: Diffable
 
@@ -86,7 +86,7 @@ extension AnyBarModel: CallbackContextEpoxyModeled {
 
 // MARK: WillDisplayProviding
 
-extension AnyBarModel: WillDisplayProviding {}
+extension AnyBarModel: WillDisplayProviding { }
 
 // MARK: InternalBarModeling
 
