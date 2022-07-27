@@ -13,55 +13,55 @@ class ProxyDelegate: EpoxyCollectionViewDelegateFlowLayout {
   let footerSize = CGSize(width: 12, height: 12)
 
   func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    sizeForItemWith dataID: AnyHashable,
-    inSectionWith sectionDataID: AnyHashable)
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
+    sizeForItemWith _: AnyHashable,
+    inSectionWith _: AnyHashable)
     -> CGSize
   {
     size
   }
 
   func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    insetForSectionWith sectionDataID: AnyHashable)
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
+    insetForSectionWith _: AnyHashable)
     -> UIEdgeInsets
   {
     sectionInset
   }
 
   func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    minimumLineSpacingForSectionWith sectionDataID: AnyHashable)
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
+    minimumLineSpacingForSectionWith _: AnyHashable)
     -> CGFloat
   {
     minimumLineSpacing
   }
 
   func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    minimumInteritemSpacingForSectionWith sectionDataID: AnyHashable)
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
+    minimumInteritemSpacingForSectionWith _: AnyHashable)
     -> CGFloat
   {
     minimumInteritemSpacing
   }
 
   func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    referenceSizeForHeaderInSectionWith sectionDataID: AnyHashable)
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
+    referenceSizeForHeaderInSectionWith _: AnyHashable)
     -> CGSize
   {
     headerSize
   }
 
   func collectionView(
-    _ collectionView: UICollectionView,
-    layout collectionViewLayout: UICollectionViewLayout,
-    referenceSizeForFooterInSectionWith sectionDataID: AnyHashable)
+    _: UICollectionView,
+    layout _: UICollectionViewLayout,
+    referenceSizeForFooterInSectionWith _: AnyHashable)
     -> CGSize
   {
     footerSize

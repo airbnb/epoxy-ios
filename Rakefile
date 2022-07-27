@@ -35,7 +35,7 @@ namespace :lint do
 
   desc 'Lints swift files'
   task :swift do
-    sh 'swift package --allow-writing-to-package-directory format --lint --exclude Tests'
+    sh 'swift package --allow-writing-to-package-directory format --lint'
   end
 end
 
@@ -63,7 +63,7 @@ end
 namespace :format do
   desc 'Runs AirbnbSwiftFormatTool'
   task :swift do
-    sh 'swift package --allow-writing-to-package-directory format --exclude Tests'
+    sh 'swift package --allow-writing-to-package-directory format'
   end
 end
 

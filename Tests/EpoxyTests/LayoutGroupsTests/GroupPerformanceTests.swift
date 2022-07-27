@@ -44,7 +44,7 @@ class GroupPerformanceTests: XCTestCase {
     }
 
     // allow a half-frame worth of difference to account for flakiness
-    let epsilon: Double = 1.0 / 120.0
+    let epsilon = 1.0 / 120.0
     XCTAssertLessThanOrEqual(vGroupPerformance, stackViewPerformance + epsilon)
   }
 
@@ -76,7 +76,7 @@ class GroupPerformanceTests: XCTestCase {
     }
 
     // allow a half-frame worth of difference to account for flakiness
-    let epsilon: Double = 1.0 / 120.0
+    let epsilon = 1.0 / 120.0
     XCTAssertLessThanOrEqual(hGroupPerformance, stackViewPerformance + epsilon)
   }
 

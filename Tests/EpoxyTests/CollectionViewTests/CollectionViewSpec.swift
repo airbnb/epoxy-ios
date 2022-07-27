@@ -10,6 +10,18 @@ import UIKit
 // MARK: - CollectionViewSpec
 
 final class CollectionViewSpec: QuickSpec {
+  final class TestView: UIView, EpoxyableView {
+    init() {
+      super.init(frame: .zero)
+      widthAnchor.constraint(equalToConstant: 50).isActive = true
+      heightAnchor.constraint(equalToConstant: 50).isActive = true
+    }
+
+    required init?(coder _: NSCoder) {
+      fatalError("init(coder:) has not been implemented")
+    }
+  }
+
   override func spec() {
     let itemModel = ItemModel<TestView>(dataID: DefaultDataID.noneProvided)
     let supplementaryItemModel = SupplementaryItemModel<TestView>(dataID: DefaultDataID.noneProvided)
@@ -295,7 +307,7 @@ final class CollectionViewSpec: QuickSpec {
         context("ItemModel") {
           var didSetBehaviors: [ItemModel<TestView>.CallbackContext]!
           var erasedItemDidSetBehaviors: [AnyItemModel.CallbackContext]!
-          
+
           beforeEach {
             let item = itemModel
               .setBehaviors {
@@ -678,15 +690,4 @@ final class CollectionViewSpec: QuickSpec {
     }
   }
 
-  final class TestView: UIView, EpoxyableView {
-    init() {
-      super.init(frame: .zero)
-      widthAnchor.constraint(equalToConstant: 50).isActive = true
-      heightAnchor.constraint(equalToConstant: 50).isActive = true
-    }
-
-    required init?(coder: NSCoder) {
-      fatalError("init(coder:) has not been implemented")
-    }
-  }
 }

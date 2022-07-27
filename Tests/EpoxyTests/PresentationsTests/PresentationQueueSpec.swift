@@ -626,7 +626,7 @@ final class MockPresentingViewController: UIViewController {
   }
 
   func completeTransition() {
-    let coordinator = self.coordinator
+    let coordinator = coordinator
     self.coordinator = nil
     coordinator?.complete()
   }

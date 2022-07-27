@@ -419,24 +419,24 @@ private struct TestModel: EpoxyModeled {
 
 // MARK: TestStringProviding
 
-extension TestModel: TestStringProviding {}
+extension TestModel: TestStringProviding { }
 
 // MARK: TestArity0ClosureProviding
 
-extension TestModel: TestArity0ClosureProviding {}
+extension TestModel: TestArity0ClosureProviding { }
 
 // MARK: TestArity1ClosureProviding
 
-extension TestModel: TestArity1ClosureProviding {}
+extension TestModel: TestArity1ClosureProviding { }
 
 // MARK: TestArity2ClosureProviding
 
-extension TestModel: TestArity2ClosureProviding {}
+extension TestModel: TestArity2ClosureProviding { }
 
 // MARK: TestArity3ClosureProviding
 
-extension TestModel: TestArity3ClosureProviding {}
+extension TestModel: TestArity3ClosureProviding { }
 
 // MARK: TestArity4ClosureProviding
 
-extension TestModel: TestArity4ClosureProviding {}
+extension TestModel: TestArity4ClosureProviding { }

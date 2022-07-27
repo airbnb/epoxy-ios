@@ -3,8 +3,8 @@
 
 import Nimble
 import Quick
-@testable import EpoxyLayoutGroups
 import UIKit
+@testable import EpoxyLayoutGroups
 
 final class ConstraniableContainerSpec: QuickSpec {
 
@@ -28,7 +28,6 @@ final class ConstraniableContainerSpec: QuickSpec {
         expect(wrapper.padding).to(equal(NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)))
       }
     }
-
   }
 
 }

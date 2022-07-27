@@ -3,8 +3,8 @@
 
 import Nimble
 import Quick
-@testable import EpoxyLayoutGroups
 import UIKit
+@testable import EpoxyLayoutGroups
 
 final class GroupItemSpec: QuickSpec {
 

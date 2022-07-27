@@ -3,15 +3,15 @@
 
 import Nimble
 import Quick
-@testable import EpoxyLayoutGroups
 import UIKit
+@testable import EpoxyLayoutGroups
 
 final class HGroupSpec: QuickSpec {
 
   override func spec() {
     let initialItems = [
       TestView.groupItem(dataID: 1),
-      TestView.groupItem(dataID: 2)
+      TestView.groupItem(dataID: 2),
     ]
     var group: HGroup!
 
@@ -94,7 +94,7 @@ final class HGroupSpec: QuickSpec {
 
     describe("when setItems is called with the items that have content changes") {
       beforeEach {
-        group = HGroup() {
+        group = HGroup {
           TestLabel.groupItem(dataID: 1, content: .init(text: "Title"))
         }
       }
@@ -176,7 +176,6 @@ final class HGroupSpec: QuickSpec {
         }
       }
     }
-
   }
 
 }

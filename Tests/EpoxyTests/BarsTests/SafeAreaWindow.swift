@@ -13,11 +13,11 @@ final class SafeAreaWindow: UIWindow {
     frame: CGRect,
     safeAreaInsets: UIEdgeInsets)
   {
-    self.customSafeAreaInsets = safeAreaInsets
+    customSafeAreaInsets = safeAreaInsets
     super.init(frame: frame)
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 
