@@ -9,6 +9,8 @@ import UIKit
 
 // MARK: - PresentationQueueSpec
 
+// swiftlint:disable implicitly_unwrapped_optional
+
 final class PresentationQueueSpec: QuickSpec {
 
   override func spec() {

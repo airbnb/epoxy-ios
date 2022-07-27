@@ -4,7 +4,10 @@
 import Nimble
 import Quick
 import UIKit
+
 @testable import EpoxyLayoutGroups
+
+// swiftlint:disable implicitly_unwrapped_optional
 
 final class VGroupItemSpec: QuickSpec {
 

@@ -1,14 +1,16 @@
 // Created by Cal Stephens on 11/30/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
+import EpoxyCore
 import Nimble
 import Quick
 import UIKit
 
-import EpoxyCore
 @testable import EpoxyBars
 
 // MARK: - BarStackViewSpec
+
+// swiftlint:disable implicitly_unwrapped_optional
 
 final class BarStackViewSpec: QuickSpec {
   enum StyleID {

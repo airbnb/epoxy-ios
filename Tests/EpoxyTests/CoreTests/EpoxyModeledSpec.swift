@@ -7,6 +7,8 @@ import Quick
 
 // MARK: - EpoxyModeledSpec
 
+// swiftlint:disable implicitly_unwrapped_optional
+
 final class EpoxyModeledSpec: QuickSpec {
   override func spec() {
     var model: TestModel!

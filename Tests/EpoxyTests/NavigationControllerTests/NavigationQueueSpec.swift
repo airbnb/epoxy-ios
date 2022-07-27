@@ -9,6 +9,8 @@ import UIKit
 
 // MARK: - NavigationQueueSpec
 
+// swiftlint:disable implicitly_unwrapped_optional
+
 final class NavigationQueueSpec: QuickSpec {
 
   override func spec() {

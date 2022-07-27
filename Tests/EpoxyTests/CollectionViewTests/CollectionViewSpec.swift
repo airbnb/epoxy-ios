@@ -7,6 +7,8 @@ import Nimble
 import Quick
 import UIKit
 
+// swiftlint:disable implicitly_unwrapped_optional
+
 // MARK: - CollectionViewSpec
 
 final class CollectionViewSpec: QuickSpec {
