@@ -32,8 +32,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Gracefully support cases where a `SwiftUIMeasurementContainer` with an `intrinsicSize`
   `SwiftUIMeasurementContainerStrategy` has an intrinsic size that exceeds the proposed size by
   compressing rather than overflowing, which could result in broken layouts.
-- Fixed intrinsic size invalidation triggered by a SwiftUI view from within a collection view 
+- Fixed intrinsic size invalidation triggered by a SwiftUI view from within a collection view
   cell by invalidating the enclosing collection view layout.
+- Fixed an issue where `EpoxyLogger.shared.assertionFailure` and `EpoxyLogger.shared.assert` would
+  unexpectedly crash in release builds.
 
 ### Changed
 - Updated name of `Spacer` to `LayoutSpacer` to avoid name conflict with SwiftUI's `Spacer`
