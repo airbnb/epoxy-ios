@@ -9,6 +9,8 @@ import UIKit
 
 // MARK: - NavigationQueueSpec
 
+// swiftlint:disable implicitly_unwrapped_optional
+
 final class NavigationQueueSpec: QuickSpec {
 
   override func spec() {
@@ -905,7 +907,7 @@ final class MockNavigationController: NavigationInterface {
   }
 
   func completeTransition() {
-    let coordinator = self.coordinator
+    let coordinator = coordinator
     self.coordinator = nil
     coordinator?.complete()
   }

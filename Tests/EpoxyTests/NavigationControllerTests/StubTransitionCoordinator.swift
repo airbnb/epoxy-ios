@@ -56,22 +56,23 @@ extension StubTransitionCoordinator: UIViewControllerTransitionCoordinator {
 
   // swiftlint:disable unavailable_function
   func animateAlongsideTransition(
-    in view: UIView?,
-    animation: ((UIViewControllerTransitionCoordinatorContext) -> Void)?,
-    completion: ((UIViewControllerTransitionCoordinatorContext) -> Void)? = nil) -> Bool
+    in _: UIView?,
+    animation _: ((UIViewControllerTransitionCoordinatorContext) -> Void)?,
+    completion _: ((UIViewControllerTransitionCoordinatorContext) -> Void)? = nil)
+    -> Bool
   {
     fatalError("Not implemented")
   }
 
   // swiftlint:disable unavailable_function
   func notifyWhenInteractionEnds(
-    _ handler: @escaping (UIViewControllerTransitionCoordinatorContext) -> Void)
+    _: @escaping (UIViewControllerTransitionCoordinatorContext) -> Void)
   {
     fatalError("Not implemented")
   }
 
   // swiftlint:disable unavailable_function
-  func notifyWhenInteractionChanges(_ handler: @escaping (UIViewControllerTransitionCoordinatorContext) -> Void) {
+  func notifyWhenInteractionChanges(_: @escaping (UIViewControllerTransitionCoordinatorContext) -> Void) {
     fatalError("Not implmented")
   }
 
@@ -83,7 +84,7 @@ extension StubTransitionCoordinator: UIViewControllerTransitionCoordinator {
     }
   }
 
-  func view(forKey key: UITransitionContextViewKey) -> UIView? {
+  func view(forKey _: UITransitionContextViewKey) -> UIView? {
     fatalError("Not implemented")
   }
 

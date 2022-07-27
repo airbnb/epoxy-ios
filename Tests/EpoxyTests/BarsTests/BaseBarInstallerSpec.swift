@@ -9,6 +9,8 @@ import UIKit
 
 // MARK: - BaseBarInstallerSpec
 
+// swiftlint:disable implicitly_unwrapped_optional
+
 protocol BaseBarInstallerSpec {
   func installBarContainer(
     in viewController: UIViewController,

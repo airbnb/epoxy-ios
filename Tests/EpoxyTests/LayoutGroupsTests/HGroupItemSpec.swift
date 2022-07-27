@@ -3,8 +3,11 @@
 
 import Nimble
 import Quick
-@testable import EpoxyLayoutGroups
 import UIKit
+
+@testable import EpoxyLayoutGroups
+
+// swiftlint:disable implicitly_unwrapped_optional
 
 final class HGroupItemSpec: QuickSpec {
 

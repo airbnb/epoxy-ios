@@ -9,6 +9,8 @@ import UIKit
 
 // MARK: - PresentationQueueSpec
 
+// swiftlint:disable implicitly_unwrapped_optional
+
 final class PresentationQueueSpec: QuickSpec {
 
   override func spec() {
@@ -626,7 +628,7 @@ final class MockPresentingViewController: UIViewController {
   }
 
   func completeTransition() {
-    let coordinator = self.coordinator
+    let coordinator = coordinator
     self.coordinator = nil
     coordinator?.complete()
   }

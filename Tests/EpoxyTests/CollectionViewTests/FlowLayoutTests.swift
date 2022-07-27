@@ -7,6 +7,8 @@ import Nimble
 import Quick
 import XCTest
 
+// swiftlint:disable implicitly_unwrapped_optional
+
 final class FlowLayoutSpec: QuickSpec {
 
   override func spec() {

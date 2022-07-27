@@ -13,6 +13,7 @@ final class EpoxyModelBuilderArraySpec: QuickSpec {
     init(@TestBuilder _ build: @escaping () -> [Int]) {
       models = build()
     }
+
     var models: [Int]
   }
 
@@ -155,7 +156,7 @@ final class EpoxyModelBuilderArraySpec: QuickSpec {
 
     context("with no models") {
       it("should build an empty array") {
-        let builder = BuilderTest {}
+        let builder = BuilderTest { }
         expect(builder.models) == []
       }
     }

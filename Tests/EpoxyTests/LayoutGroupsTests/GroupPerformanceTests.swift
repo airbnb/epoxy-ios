@@ -4,6 +4,8 @@
 import EpoxyLayoutGroups
 import XCTest
 
+// swiftlint:disable implicitly_unwrapped_optional
+
 class GroupPerformanceTests: XCTestCase {
 
   let window = UIWindow(frame: .init(x: 0, y: 0, width: 375, height: 667))
@@ -44,7 +46,7 @@ class GroupPerformanceTests: XCTestCase {
     }
 
     // allow a half-frame worth of difference to account for flakiness
-    let epsilon: Double = 1.0 / 120.0
+    let epsilon = 1.0 / 120.0
     XCTAssertLessThanOrEqual(vGroupPerformance, stackViewPerformance + epsilon)
   }
 
@@ -76,7 +78,7 @@ class GroupPerformanceTests: XCTestCase {
     }
 
     // allow a half-frame worth of difference to account for flakiness
-    let epsilon: Double = 1.0 / 120.0
+    let epsilon = 1.0 / 120.0
     XCTAssertLessThanOrEqual(hGroupPerformance, stackViewPerformance + epsilon)
   }
 

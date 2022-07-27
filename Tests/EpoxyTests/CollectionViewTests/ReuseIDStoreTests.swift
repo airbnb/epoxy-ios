@@ -7,6 +7,8 @@ import XCTest
 
 // MARK: - ReuseIDStoreTests
 
+// swiftlint:disable implicitly_unwrapped_optional
+
 final class ReuseIDStoreTests: XCTestCase {
 
   // MARK: Internal
@@ -17,10 +19,10 @@ final class ReuseIDStoreTests: XCTestCase {
     reuseIDStore = ReuseIDStore()
     assertionFailures = []
     EpoxyLogger.shared = .init(
-      assert: { (_, _, _, _) in },
-      assertionFailure: { [weak self] (message, fileID, line) in
+      assert: { _, _, _, _ in },
+      assertionFailure: { [weak self] message, fileID, line in
         self?.assertionFailures.append((message(), fileID, line))
-      }, warn: { (_, _, _) in })
+      }, warn: { _, _, _ in })
   }
 
   override func tearDown() {
@@ -135,11 +137,11 @@ final class ReuseIDStoreTests: XCTestCase {
 // MARK: - MyFirstView
 
 private class MyFirstView {
-  init() {}
+  init() { }
 }
 
 // MARK: - MySecondView
 
 private class MySecondView {
-  init() {}
+  init() { }
 }

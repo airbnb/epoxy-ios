@@ -15,6 +15,8 @@ extension UILabel {
   }
 }
 
+// MARK: - TestView
+
 final class TestView: UIView, EpoxyableView {
   init() {
     super.init(frame: .zero)
@@ -23,32 +25,42 @@ final class TestView: UIView, EpoxyableView {
     heightAnchor.constraint(equalToConstant: 50).isActive = true
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 }
 
+// MARK: - TestLabel
+
 final class TestLabel: UILabel, EpoxyableView {
-  
+
+  // MARK: Lifecycle
+
   init() {
     super.init(frame: .zero)
     translatesAutoresizingMaskIntoConstraints = false
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
+  // MARK: Internal
 
   struct Content: Equatable {
     let text: String
   }
 
-  func setContent(_ content: Content, animated: Bool) {
+  func setContent(_ content: Content, animated _: Bool) {
     text = content.text
   }
 }
 
+// MARK: - TestStyledLabel
+
 final class TestStyledLabel: UILabel, EpoxyableView {
+
+  // MARK: Lifecycle
 
   init(style: Style) {
     super.init(frame: .zero)
@@ -56,9 +68,11 @@ final class TestStyledLabel: UILabel, EpoxyableView {
     font = .preferredFont(forTextStyle: style.textStyle)
   }
 
-  required init?(coder: NSCoder) {
+  required init?(coder _: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
+
+  // MARK: Internal
 
   struct Style: Hashable {
     let textStyle: UIFont.TextStyle
@@ -66,7 +80,7 @@ final class TestStyledLabel: UILabel, EpoxyableView {
 
   typealias Content = String
 
-  func setContent(_ content: String, animated: Bool) {
+  func setContent(_ content: String, animated _: Bool) {
     text = content
   }
 }
