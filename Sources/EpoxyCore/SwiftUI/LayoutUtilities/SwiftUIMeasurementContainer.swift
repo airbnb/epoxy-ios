@@ -138,17 +138,12 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
       return resolvedStrategy
     }
 
-    lazy var intrinsicSize = uiView.systemLayoutSizeFitting(
-      UIView.layoutFittingCompressedSize,
-      withHorizontalFittingPriority: .fittingSizeLevel,
-      verticalFittingPriority: .fittingSizeLevel)
-
     let resolved: ResolvedSwiftUIMeasurementContainerStrategy
     switch strategy {
     case .automatic:
       // Perform an intrinsic size measurement pass, which gives us valid values for
       // `UILabel.preferredMaxLayoutWidth`.
-      _ = intrinsicSize
+      let intrinsicSize = uiView.systemLayoutFittingIntrinsicSize()
 
       if uiView.containsDoubleLayoutPassSubviews() {
         resolved = .intrinsicHeightProposedWidth
@@ -171,7 +166,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     case .intrinsicWidthProposedHeight:
       resolved = .intrinsicWidthProposedHeight
     case .intrinsic:
-      resolved = .intrinsic(intrinsicSize)
+      resolved = .intrinsic(uiView.systemLayoutFittingIntrinsicSize())
     }
     _resolvedStrategy = resolved
     return resolved
@@ -185,7 +180,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     let trailing = uiView.trailingAnchor.constraint(equalTo: trailingAnchor)
     let bottom = uiView.bottomAnchor.constraint(equalTo: bottomAnchor)
     let newConstraints: [NSLayoutConstraint.Attribute: NSLayoutConstraint] = [
-      .leading: leading, .top: top, .trailing: trailing, .bottom: bottom
+      .leading: leading, .top: top, .trailing: trailing, .bottom: bottom,
     ]
     prioritizeConstraints(newConstraints, strategy: resolvedStrategy)
 
@@ -196,7 +191,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
   /// Prioritizes the given constraints based on the provided resolved strategy.
   private func prioritizeConstraints(
-    _ constraints: [NSLayoutConstraint.Attribute : NSLayoutConstraint],
+    _ constraints: [NSLayoutConstraint.Attribute: NSLayoutConstraint],
     strategy: ResolvedSwiftUIMeasurementContainerStrategy)
   {
     // Give a required constraint in the dimensions that are fixed to the bounds, otherwise almost
@@ -230,27 +225,11 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
       measuredSize = .noIntrinsicMetric
 
     case .intrinsicHeightProposedWidth:
-      let targetSize = CGSize(
-        width: proposedSizeElseBounds.width,
-        height: UIView.layoutFittingCompressedSize.height)
-
-      measuredSize = uiView.systemLayoutSizeFitting(
-        targetSize,
-        withHorizontalFittingPriority: .almostRequired,
-        verticalFittingPriority: .fittingSizeLevel)
-
+      measuredSize = uiView.systemLayoutFittingIntrinsicHeightFixedWidth(proposedSizeElseBounds.width)
       measuredSize.width = UIView.noIntrinsicMetric
 
     case .intrinsicWidthProposedHeight:
-      let targetSize = CGSize(
-        width: UIView.layoutFittingCompressedSize.width,
-        height: proposedSizeElseBounds.height)
-
-      measuredSize = uiView.systemLayoutSizeFitting(
-        targetSize,
-        withHorizontalFittingPriority: .fittingSizeLevel,
-        verticalFittingPriority: .almostRequired)
-
+      measuredSize = uiView.systemLayoutFittingIntrinsicWidthFixedHeight(proposedSizeElseBounds.height)
       measuredSize.height = UIView.noIntrinsicMetric
 
     case .intrinsic(let size):
@@ -337,6 +316,47 @@ extension UILayoutPriority {
 // MARK: - UIView
 
 extension UIView {
+  /// The `systemLayoutSizeFitting(…)` of this view with a compressed size and fitting priorities.
+  @nonobjc
+  fileprivate func systemLayoutFittingIntrinsicSize() -> CGSize {
+    systemLayoutSizeFitting(
+      UIView.layoutFittingCompressedSize,
+      withHorizontalFittingPriority: .fittingSizeLevel,
+      verticalFittingPriority: .fittingSizeLevel)
+  }
+
+  /// The `systemLayoutSizeFitting(…)` of this view with a compressed height with a fitting size
+  /// priority and with the given fixed width and fitting priority.
+  @nonobjc
+  fileprivate func systemLayoutFittingIntrinsicHeightFixedWidth(
+    _ width: CGFloat,
+    priority: UILayoutPriority = .almostRequired)
+    -> CGSize
+  {
+    let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
+
+    return systemLayoutSizeFitting(
+      targetSize,
+      withHorizontalFittingPriority: priority,
+      verticalFittingPriority: .fittingSizeLevel)
+  }
+
+  /// The `systemLayoutSizeFitting(…)` of this view with a compressed width with a fitting size
+  /// priority and with the given fixed height and fitting priority.
+  @nonobjc
+  fileprivate func systemLayoutFittingIntrinsicWidthFixedHeight(
+    _ height: CGFloat,
+    priority: UILayoutPriority = .almostRequired)
+    -> CGSize
+  {
+    let targetSize = CGSize(width: UIView.layoutFittingCompressedSize.width, height: height)
+
+    return systemLayoutSizeFitting(
+      targetSize,
+      withHorizontalFittingPriority: .fittingSizeLevel,
+      verticalFittingPriority: priority)
+  }
+
   /// Whether this view or any of its subviews has a subview that has a double layout pass `UILabel`
   /// as determined by a non-zero `preferredMaxLayoutWidth`, which implies that it should get a
   /// `intrinsicHeightProposedWidth` sizing strategy to allow the label to wrap and grow.
