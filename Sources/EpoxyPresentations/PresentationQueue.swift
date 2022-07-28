@@ -196,7 +196,7 @@ final class PresentationQueue {
 
 }
 
-// MARK: - PresentationQueue.Changes
+// MARK: PresentationQueue.Changes
 
 extension PresentationQueue {
   /// The changes that need to occur to reconcile the current presentation with a pending
