@@ -23,7 +23,7 @@ extension UIViewProtocol {
   /// ```
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
-  /// The sizing defaults to `.intrinsicHeightProposedWidth`.
+  /// The sizing defaults to `.automatic`.
   public static func swiftUIView(makeView: @escaping () -> Self) -> SwiftUIUIView<Self> {
     SwiftUIUIView(makeView: makeView)
   }
@@ -42,7 +42,7 @@ public struct SwiftUIUIView<View: UIView>: MeasuringUIViewRepresentable, UIViewC
   public var configurations: [(View) -> Void] = []
 
   /// The sizing context used to size the represented view.
-  public var sizing = SwiftUIMeasurementContainerStrategy.intrinsicHeightProposedWidth
+  public var sizing = SwiftUIMeasurementContainerStrategy.automatic
 
   public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
     SwiftUIMeasurementContainer(

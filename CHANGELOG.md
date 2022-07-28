@@ -42,6 +42,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated to have Swift 5.4 as the minimum supported Swift version (previously Swift 5.3).
 - Updated `HGroupView` and `VGroupView` to have `insetsLayoutMarginsFromSafeArea = false` by default
 - Gated an old autoresizing-mask-related bug workaround to only run on iOS versions 13 and below
+- The `swiftUIView(…)` methods now default to an automatic sizing behavior that makes a best effort
+  at sizing the view based on heuristics, rather than defaulting to intrinsic height and proposed 
+  width.
 
 ## [0.7.0](https://github.com/airbnb/epoxy-ios/compare/0.6.0...0.7.0) - 2021-12-09
 
