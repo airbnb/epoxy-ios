@@ -161,12 +161,13 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
       if intrinsicSize.width > 0, uiView.containsDoubleLayoutPassSubviews() {
         resolved = .intrinsicHeightProposedWidth
       } else {
+        let zero = CGFloat(0)
         switch (width: intrinsicSize.width, height: intrinsicSize.height) {
-        case (width: ...0, height: ...0):
+        case (width: ...zero, height: ...zero):
           resolved = .proposed
-        case (width: ...0, height: 0.nextUp...):
+        case (width: ...zero, height: zero.nextUp...):
           resolved = .intrinsicHeightProposedWidth
-        case (width: 0.nextUp..., height: ...0):
+        case (width: zero.nextUp..., height: ...zero):
           resolved = .intrinsicWidthProposedHeight
         default:
           resolved = .intrinsic(intrinsicSize)
