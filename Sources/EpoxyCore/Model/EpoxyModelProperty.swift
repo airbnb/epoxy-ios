@@ -62,7 +62,7 @@ public struct EpoxyModelProperty<Value> {
 
 }
 
-// MARK: - EpoxyModelProperty.UpdateStrategy
+// MARK: EpoxyModelProperty.UpdateStrategy
 
 extension EpoxyModelProperty {
   /// A closure used to update an `EpoxyModelProperty` from an old value to a new value.

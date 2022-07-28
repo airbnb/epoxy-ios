@@ -347,7 +347,7 @@ private struct NavigationStack {
 
 }
 
-// MARK: - NavigationStack.Added
+// MARK: NavigationStack.Added
 
 extension NavigationStack {
   /// A model that has been added to the navigation stack and its corresponding view controller.
@@ -373,7 +373,7 @@ extension NavigationStack {
   }
 }
 
-// MARK: - NavigationStack.ViewController
+// MARK: NavigationStack.ViewController
 
 extension NavigationStack {
   /// A view controller that can be pushed within a `NavigationStack`.

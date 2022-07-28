@@ -455,7 +455,7 @@ extension BarStackView {
   }
 }
 
-// MARK: - BarStackView.Content
+// MARK: BarStackView.Content
 
 extension BarStackView {
   /// The content of a `BarStackView`.
