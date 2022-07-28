@@ -156,8 +156,8 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
       // `UILabel.preferredMaxLayoutWidth`.
       let intrinsicSize = uiView.systemLayoutFittingIntrinsicSize()
 
-      // If the view has a intrinsic width and contains a double layout pass subview, allow it to
-      // fill the proposed width to allow the label content to wrap to multiple lines.
+      // If the view has a intrinsic width and contains a double layout pass subview, give it the
+      // proposed width to allow the label content to gracefully wrap to multiple lines.
       if intrinsicSize.width > 0, uiView.containsDoubleLayoutPassSubviews() {
         resolved = .intrinsicHeightProposedWidth
       } else {
