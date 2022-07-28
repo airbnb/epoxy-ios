@@ -20,7 +20,7 @@ public struct CollectionViewVisibilityMetadata {
   public private(set) weak var collectionView: CollectionView?
 }
 
-// MARK: - CollectionViewVisibleMetadata.Section
+// MARK: CollectionViewVisibilityMetadata.Section
 
 extension CollectionViewVisibilityMetadata {
   /// Metadata about the items that are visible in a `CollectionView` section.
@@ -48,7 +48,7 @@ extension CollectionViewVisibilityMetadata {
   }
 }
 
-// MARK: - CollectionViewVisibleMetadata.Item
+// MARK: CollectionViewVisibilityMetadata.Item
 
 extension CollectionViewVisibilityMetadata {
   /// Metadata about an item that's visible in a `CollectionView` section.
@@ -67,7 +67,7 @@ extension CollectionViewVisibilityMetadata {
   }
 }
 
-// MARK: - CollectionViewVisibleMetadata.SupplementaryItem
+// MARK: CollectionViewVisibilityMetadata.SupplementaryItem
 
 extension CollectionViewVisibilityMetadata {
   /// Metadata about a supplementary item that's visible in a `CollectionView` section.
