@@ -50,12 +50,14 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
   public var view: SwiftUIView
 
   /// The  most recently measured fitting size of the `uiView` that fits within the current
-  /// `proposedSize`, else `zero` if it has not yet been measured.
+  /// `proposedSize`.
   ///
   /// Contains `proposedSize`/`bounds.size` fallbacks for dimensions with no intrinsic size, as
   /// compared to `intrinsicContentSize` which has `UIView.noIntrinsicMetric` fields in the case of
   /// no intrinsic size.
-  public private(set) var measuredFittingSize = CGSize.zero
+  public var measuredFittingSize: CGSize {
+    _measuredFittingSize ?? measureView()
+  }
 
   /// The `UIView` that's being measured by this container.
   public var uiView: UIViewType {
@@ -63,28 +65,36 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
       guard uiView !== oldValue else { return }
       oldValue.removeFromSuperview()
       addSubview(uiView)
+      // Invalidate the strategy since it's derived from this view.
+      _resolvedStrategy = nil
+      // Re-configure the constraints since they depend on the resolved strategy.
       setUpConstraints()
-      measureView()
+      // Finally, we need to re-measure the view.
+      _measuredFittingSize = nil
     }
   }
 
   /// The proposed size at the time of the latest measurement.
   ///
-  /// Has a side-effect of updating the measuredIntrinsicContentSize if it's changed.
+  /// Has a side-effect of updating the `measuredIntrinsicContentSize` if it's changed.
   public var proposedSize = CGSize.noIntrinsicMetric {
     didSet {
       guard oldValue != proposedSize else { return }
-      measureView()
+      // The proposed size is only used by the measurement, so just re-measure.
+      _measuredFittingSize = nil
     }
   }
 
+  /// The measurement strategy of this container.
+  ///
+  /// Has a side-effect of updating the `measuredIntrinsicContentSize` if it's changed.
   public var strategy: SwiftUIMeasurementContainerStrategy {
     didSet {
       guard oldValue != strategy else { return }
-      // We need to first re-configure the constraints since they depend on the strategy.
-      setUpConstraints()
-      // Then, we need to re-measure the view.
-      measureView()
+      // Invalidate the resolved strategy since it's derived from this strategy.
+      _resolvedStrategy = nil
+      // Then, re-measure the view.
+      _measuredFittingSize = nil
     }
   }
 
@@ -99,19 +109,17 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     // may now be incorrect.
     if latestMeasurementBoundsSize != nil, bounds.size != latestMeasurementBoundsSize {
       // This will trigger SwiftUI to re-measure the view.
-      invalidateIntrinsicContentSize()
+      super.invalidateIntrinsicContentSize()
     }
   }
 
   public override func invalidateIntrinsicContentSize() {
     super.invalidateIntrinsicContentSize()
 
-    // Invalidate the resolved strategy in case it changes with the re-measurement.
+    // Invalidate the resolved strategy in case it changes with the re-measurement as it relies on
+    // the intrinsic size.
     _resolvedStrategy = nil
-
-    // Whenever the intrinsic size is invalidated, we need to re-measure to report the new
-    // `measuredFittingSize` to SwiftUI if it's changed.
-    measureView()
+    _measuredFittingSize = nil
   }
 
   // MARK: Private
@@ -131,6 +139,9 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
   /// The cached `resolvedStrategy` to prevent unnecessary re-measurements.
   private var _resolvedStrategy: ResolvedSwiftUIMeasurementContainerStrategy?
+
+  /// The cached `measuredFittingSize` to prevent unnecessary re-measurements.
+  private var _measuredFittingSize: CGSize?
 
   /// The resolved measurement strategy.
   private var resolvedStrategy: ResolvedSwiftUIMeasurementContainerStrategy {
@@ -182,7 +193,9 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     let newConstraints: [NSLayoutConstraint.Attribute: NSLayoutConstraint] = [
       .leading: leading, .top: top, .trailing: trailing, .bottom: bottom,
     ]
-    prioritizeConstraints(newConstraints, strategy: resolvedStrategy)
+    // Start with the lowest priority constraints so we aren't measuring the view too early, the
+    // priorities will be updated later on.
+    prioritizeConstraints(newConstraints, strategy: .intrinsic(.zero))
 
     NSLayoutConstraint.deactivate(Array(uiViewConstraints.values))
     uiViewConstraints = newConstraints
@@ -213,7 +226,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
   }
 
   /// Measures the `uiView`, storing the resulting size in `measuredIntrinsicContentSize`.
-  private func measureView() {
+  private func measureView() -> CGSize {
     latestMeasurementBoundsSize = bounds.size
     prioritizeConstraints(uiViewConstraints, strategy: resolvedStrategy)
 
@@ -247,7 +260,10 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     }
 
     _intrinsicContentSize = measuredSize
-    measuredFittingSize = measuredSize.replacingNoIntrinsicMetric(with: proposedSizeElseBounds)
+
+    let measuredFittingSize = measuredSize.replacingNoIntrinsicMetric(with: proposedSizeElseBounds)
+    _measuredFittingSize = measuredFittingSize
+    return measuredFittingSize
   }
 }
 
@@ -255,19 +271,18 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
 
 /// The measurement strategy of a `SwiftUIMeasurementContainer`.
 public enum SwiftUIMeasurementContainerStrategy {
-  /// The container makes a best effort to correctly choose the measurement strategy of the view
-  /// based on a number of heuristics, which may change down the line.
+  /// The container makes a best effort to correctly choose the measurement strategy of the view.
   ///
-  /// The `uiView` will be given its intrinsic width and/or height when measurement in that
-  /// dimension produces a positive value, while zero/negative values will result in that dimension
-  /// receiving the available space proposed by the parent.
-  ///
-  /// If the view contains `UILabel` subviews that require a double layout pass as determined by
-  /// a `preferredMaxLayoutWidth` that's greater than zero after a layout, then the view will
-  /// default to `intrinsicHeightProposedWidth` to allow the labels to wrap.
+  /// The best effort is based on a number of heuristics:
+  /// - The `uiView` will be given its intrinsic width and/or height when measurement in that
+  ///   dimension produces a positive value, while zero/negative values will result in that
+  ///   dimension receiving the available space proposed by the parent.
+  /// - If the view contains `UILabel` subviews that require a double layout pass as determined by
+  ///   a `preferredMaxLayoutWidth` that's greater than zero after a layout, then the view will
+  ///   default to `intrinsicHeightProposedWidth` to allow the labels to wrap.
   ///
   /// If you would like to opt out of automatic sizing for performance or to override the default
-  /// behavior, choose another option.
+  /// behavior, choose another strategy.
   case automatic
 
   /// The `uiView` is sized to fill the area proposed by its parent.
