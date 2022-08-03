@@ -100,9 +100,7 @@ extension HGroupItem: InternalGroupItemModeling {
 
   public func makeConstrainable() -> Constrainable {
     HGroup(
-      alignment: style.alignment,
-      accessibilityAlignment: style.accessibilityAlignment,
-      spacing: style.spacing,
+      style: style,
       items: groupItems)
       .reflowsForAccessibilityTypeSizes(reflowsForAccessibilityTypeSizes)
       .accessibilityAlignment(accessibilityAlignment)
