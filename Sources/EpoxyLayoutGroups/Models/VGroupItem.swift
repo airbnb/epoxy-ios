@@ -97,8 +97,7 @@ extension VGroupItem: InternalGroupItemModeling {
 
   public func makeConstrainable() -> Constrainable {
     VGroup(
-      alignment: style.alignment,
-      spacing: style.spacing,
+      style: style,
       items: groupItems)
       .accessibilityAlignment(accessibilityAlignment)
       .horizontalAlignment(horizontalAlignment)
