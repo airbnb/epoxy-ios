@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.8.0...HEAD)
 
 ### Fixed
-- Improve double layout pass heuristics for views that have intrinsic size dimensions below 1 or for
-  views that have double layout pass subviews that aren't horizontally constrained to the edges.
+- Improved double layout pass heuristics for views that have intrinsic size dimensions below 1 or 
+  for views that have double layout pass subviews that aren't horizontally constrained to the edges.
 - Fixed HGroupItem and VGroupItem not respecting some properties of the style that is passed in.
+- Improved sizing of intrinsically sized UIViews in SwiftUI with no intrinsic metric size proposals.
 
 ## [0.8.0](https://github.com/airbnb/epoxy-ios/compare/0.7.0...0.8.0) - 2022-07-28
 

@@ -251,13 +251,19 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     case .intrinsic(let size):
       measuredSize = size
 
-      // If the measured size exceeds the available width or height, set the measured size to
+      // If the measured size exceeds an available width or height, set the measured size to
       // `noIntrinsicMetric` to ensure that the component can be compressed, otherwise it will
       // overflow beyond the proposed size.
-      if measuredSize.width > proposedSizeElseBounds.width {
+      if
+        proposedSize.width != UIView.noIntrinsicMetric,
+        measuredSize.width > proposedSizeElseBounds.width
+      {
         measuredSize.width = UIView.noIntrinsicMetric
       }
-      if measuredSize.height > proposedSizeElseBounds.height {
+      if
+        proposedSize.height != UIView.noIntrinsicMetric,
+        measuredSize.height > proposedSizeElseBounds.height
+      {
         measuredSize.height = UIView.noIntrinsicMetric
       }
     }
