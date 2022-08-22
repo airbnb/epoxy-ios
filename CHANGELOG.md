@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   for views that have double layout pass subviews that aren't horizontally constrained to the edges.
 - Fixed HGroupItem and VGroupItem not respecting some properties of the style that is passed in.
 - Improved sizing of intrinsically sized UIViews in SwiftUI with no intrinsic metric size proposals.
+- Add extra logic for mitigating proposed sizes that match previous intrinsic size for hosted 
+  UIViews in SwiftUI.
 
 ## [0.8.0](https://github.com/airbnb/epoxy-ios/compare/0.7.0...0.8.0) - 2022-07-28
 
