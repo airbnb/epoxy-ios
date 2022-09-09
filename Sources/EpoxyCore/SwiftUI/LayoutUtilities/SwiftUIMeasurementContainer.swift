@@ -12,13 +12,12 @@ import SwiftUI
 /// height through the `SwiftUISizingContext` binding.
 ///
 /// - SeeAlso: ``MeasuringUIViewRepresentable``
-public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>: UIView {
+public final class SwiftUIMeasurementContainer<Content: UIView>: UIView {
 
   // MARK: Lifecycle
 
-  public init(view: SwiftUIView, uiView: UIViewType, strategy: SwiftUIMeasurementContainerStrategy) {
-    self.view = view
-    self.uiView = uiView
+  public init(content: Content, strategy: SwiftUIMeasurementContainerStrategy) {
+    self.content = content
     self.strategy = strategy
 
     // On iOS 15 and below, passing zero can result in a constraint failure the first time a view
@@ -32,7 +31,7 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     }
     super.init(frame: .init(origin: .zero, size: initialSize))
 
-    addSubview(uiView)
+    addSubview(content)
     setUpConstraints()
   }
 
@@ -42,12 +41,6 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
   }
 
   // MARK: Public
-
-  /// The most recently updated SwiftUI `View` that constructed this measurement container, used to
-  /// perform comparisons with the previous fields, if needed.
-  ///
-  /// Has no side-effects when updated; purely available as a convenience.
-  public var view: SwiftUIView
 
   /// The  most recently measured fitting size of the `uiView` that fits within the current
   /// `proposedSize`.
@@ -59,12 +52,12 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     _measuredFittingSize ?? measureView()
   }
 
-  /// The `UIView` that's being measured by this container.
-  public var uiView: UIViewType {
+  /// The `UIView` content that's being measured by this container.
+  public var content: Content {
     didSet {
-      guard uiView !== oldValue else { return }
+      guard content !== oldValue else { return }
       oldValue.removeFromSuperview()
-      addSubview(uiView)
+      addSubview(content)
       // Invalidate the strategy since it's derived from this view.
       _resolvedStrategy = nil
       // Re-configure the constraints since they depend on the resolved strategy.
@@ -154,11 +147,11 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     case .automatic:
       // Perform an intrinsic size measurement pass, which gives us valid values for
       // `UILabel.preferredMaxLayoutWidth`.
-      let intrinsicSize = uiView.systemLayoutFittingIntrinsicSize()
+      let intrinsicSize = content.systemLayoutFittingIntrinsicSize()
 
       // If the view has a intrinsic width and contains a double layout pass subview, give it the
       // proposed width to allow the label content to gracefully wrap to multiple lines.
-      if intrinsicSize.width > 0, uiView.containsDoubleLayoutPassSubviews() {
+      if intrinsicSize.width > 0, content.containsDoubleLayoutPassSubviews() {
         resolved = .intrinsicHeightProposedWidth
       } else {
         let zero = CGFloat(0)
@@ -180,19 +173,19 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
     case .intrinsicWidthProposedHeight:
       resolved = .intrinsicWidthProposedHeight
     case .intrinsic:
-      resolved = .intrinsic(uiView.systemLayoutFittingIntrinsicSize())
+      resolved = .intrinsic(content.systemLayoutFittingIntrinsicSize())
     }
     _resolvedStrategy = resolved
     return resolved
   }
 
   private func setUpConstraints() {
-    uiView.translatesAutoresizingMaskIntoConstraints = false
+    content.translatesAutoresizingMaskIntoConstraints = false
 
-    let leading = uiView.leadingAnchor.constraint(equalTo: leadingAnchor)
-    let top = uiView.topAnchor.constraint(equalTo: topAnchor)
-    let trailing = uiView.trailingAnchor.constraint(equalTo: trailingAnchor)
-    let bottom = uiView.bottomAnchor.constraint(equalTo: bottomAnchor)
+    let leading = content.leadingAnchor.constraint(equalTo: leadingAnchor)
+    let top = content.topAnchor.constraint(equalTo: topAnchor)
+    let trailing = content.trailingAnchor.constraint(equalTo: trailingAnchor)
+    let bottom = content.bottomAnchor.constraint(equalTo: bottomAnchor)
     let newConstraints: [NSLayoutConstraint.Attribute: NSLayoutConstraint] = [
       .leading: leading, .top: top, .trailing: trailing, .bottom: bottom,
     ]
@@ -241,11 +234,11 @@ public final class SwiftUIMeasurementContainer<SwiftUIView, UIViewType: UIView>:
       measuredSize = .noIntrinsicMetric
 
     case .intrinsicHeightProposedWidth:
-      measuredSize = uiView.systemLayoutFittingIntrinsicHeightFixedWidth(proposedSizeElseBounds.width)
+      measuredSize = content.systemLayoutFittingIntrinsicHeightFixedWidth(proposedSizeElseBounds.width)
       measuredSize.width = UIView.noIntrinsicMetric
 
     case .intrinsicWidthProposedHeight:
-      measuredSize = uiView.systemLayoutFittingIntrinsicWidthFixedHeight(proposedSizeElseBounds.height)
+      measuredSize = content.systemLayoutFittingIntrinsicWidthFixedHeight(proposedSizeElseBounds.height)
       measuredSize.height = UIView.noIntrinsicMetric
 
     case .intrinsic(let size):

@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.8.0...HEAD)
 
+### Changed
+- Remove all of the `EpoxyableView` flavors of `MeasuringUIViewRepresentable` in favor of a 
+  single shared `SwiftUIUIView` that supports a generic `Storage`, which has the added benefit of 
+  fixing some Xcode preview crashes.
+
 ### Fixed
 - Improved double layout pass heuristics for views that have intrinsic size dimensions below 1 or 
   for views that have double layout pass subviews that aren't horizontally constrained to the edges.
