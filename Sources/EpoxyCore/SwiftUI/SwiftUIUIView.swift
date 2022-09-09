@@ -42,7 +42,8 @@ public struct SwiftUIUIView<Content: UIView, Storage>: MeasuringUIViewRepresenta
     let oldStorage = context.coordinator.storage
     context.coordinator.storage = storage
 
-    let configurationContext = ConfigurationContext(oldStorage: oldStorage,
+    let configurationContext = ConfigurationContext(
+      oldStorage: oldStorage,
       viewRepresentableContext: context,
       container: uiView)
 
@@ -61,12 +62,22 @@ public struct SwiftUIUIView<Content: UIView, Storage>: MeasuringUIViewRepresenta
   var makeContent: () -> Content
 }
 
-// MARK: - SwiftUIUIView.ConfigurationContext
+// MARK: SwiftUIUIView.ConfigurationContext
 
 extension SwiftUIUIView {
   /// The configuration context that's available to configure the `Content` view whenever the
   /// `updateUIView()` method is invoked via a configuration closure.
   public struct ConfigurationContext: ViewProviding {
+    /// The previous value for the `Storage` of this `SwiftUIUIView`, which can be used to store
+    /// values across state changes to prevent redundant view updates.
+    public var oldStorage: Storage
+
+    /// The `UIViewRepresentable.Context`, with information about the transaction and environment.
+    public var viewRepresentableContext: Context
+
+    /// The backing measurement container that contains the `Content`.
+    public var container: SwiftUIMeasurementContainer<Content>
+
     /// The `UIView` that's being configured.
     ///
     /// Setting this to a new value updates the backing measurement container's `content`.
@@ -75,24 +86,15 @@ extension SwiftUIUIView {
       nonmutating set { container.content = newValue }
     }
 
-    /// The previous value for the `Storage` of this `SwiftUIUIView`, which can be used to store
-    /// values across state changes to prevent redundant view updates.
-    public var oldStorage: Storage
-
-    /// The `UIViewRepresentable.Context`, with information about the transaction and environment.
-    public var viewRepresentableContext: Context
-
     /// A convenience accessor indicating whether this content update was animated.
     public var animated: Bool {
       viewRepresentableContext.transaction.animation != nil
     }
 
-    /// The backing measurement container that contains the `Content`.
-    public var container: SwiftUIMeasurementContainer<Content>
   }
 }
 
-// MARK: - SwiftUIUIView.Coordinator
+// MARK: SwiftUIUIView.Coordinator
 
 extension SwiftUIUIView {
   /// A coordinator that stores the `storage` associated with this view.
