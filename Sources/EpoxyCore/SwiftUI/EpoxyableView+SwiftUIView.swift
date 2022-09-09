@@ -12,8 +12,8 @@ extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurable
   /// returned SwiftUI `View`:
   /// ```
   /// MyView.swiftUIView(…)
-  ///   .configure { (view: MyView) in
-  ///     …
+  ///   .configure { context in
+  ///     context.view.doSomething()
   ///   }
   /// ```
   ///
@@ -42,6 +42,7 @@ extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurable
       // Otherwise, if the just the content changes, we need to update it.
       else if context.oldStorage.content != content {
         context.view.setContent(content, animated: context.animated)
+        context.container.invalidateIntrinsicContentSize()
       }
 
       context.view.setBehaviors(behaviors)
@@ -60,8 +61,8 @@ extension StyledView
   /// returned SwiftUI `View`:
   /// ```
   /// MyView.swiftUIView(…)
-  ///   .configure { (view: MyView) in
-  ///     …
+  ///   .configure { context in
+  ///     context.view.doSomething()
   ///   }
   /// ```
   ///
@@ -81,13 +82,13 @@ extension StyledView
       return view
     }
     .configure { context in
-      context.view.setBehaviors(behaviors)
-
       // We need to update the content of the existing view when the content is updated.
       if context.oldStorage != content {
         context.view.setContent(content, animated: context.animated)
-        context.view.superview?.invalidateIntrinsicContentSize()
+        context.container.invalidateIntrinsicContentSize()
       }
+
+      context.view.setBehaviors(behaviors)
     }
   }
 }
@@ -103,8 +104,8 @@ extension StyledView
   /// returned SwiftUI `View`:
   /// ```
   /// MyView.swiftUIView(…)
-  ///   .configure { (view: MyView) in
-  ///     …
+  ///   .configure { context in
+  ///     context.view.doSomething()
   ///   }
   /// ```
   ///
@@ -145,8 +146,8 @@ extension StyledView
   /// returned SwiftUI `View`:
   /// ```
   /// MyView.swiftUIView(…)
-  ///   .configure { (view: MyView) in
-  ///     …
+  ///   .configure { context in
+  ///     context.view.doSomething()
   ///   }
   /// ```
   ///
@@ -156,11 +157,7 @@ extension StyledView
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
   /// The sizing defaults to `.automatic`.
-  public static func swiftUIView(
-    behaviors: Behaviors? = nil,
-    sizing _: SwiftUIMeasurementContainerStrategy = .automatic)
-    -> SwiftUIUIView<Self, Void>
-  {
+  public static func swiftUIView(behaviors: Behaviors? = nil) -> SwiftUIUIView<Self, Void> {
     SwiftUIUIView {
       Self()
     }

@@ -8,15 +8,24 @@ import SwiftUI
 /// A `UIViewRepresentable` SwiftUI `View` that wraps its `Content` `UIView` within a
 /// `SwiftUIMeasurementContainer`, used to size a UIKit view correctly within a SwiftUI view
 /// hierarchy.
-public struct SwiftUIUIView<Content: UIView, Storage>: MeasuringUIViewRepresentable, UIViewConfiguringSwiftUIView {
+///
+/// Includes an optional generic `Storage` value, which can be used to compare old and new values
+/// across state changes to prevent redundant view updates.
+public struct SwiftUIUIView<Content: UIView, Storage>: MeasuringUIViewRepresentable,
+  UIViewConfiguringSwiftUIView
+{
 
   // MARK: Lifecycle
 
+  /// Creates a SwiftUI representation of the content view with the given storage and the provided
+  /// `makeContent` closure to construct the content whenever `makeUIView(…)` is invoked.
   init(storage: Storage, makeContent: @escaping () -> Content) {
     self.storage = storage
     self.makeContent = makeContent
   }
 
+  /// Creates a SwiftUI representation of the content view with the provided `makeContent` closure
+  /// to construct it whenever `makeUIView(…)` is invoked.
   init(makeContent: @escaping () -> Content) where Storage == Void {
     storage = ()
     self.makeContent = makeContent
@@ -24,12 +33,23 @@ public struct SwiftUIUIView<Content: UIView, Storage>: MeasuringUIViewRepresenta
 
   // MARK: Public
 
-  /// An array of closures that are invoked to configure the represented view.
-  public var configurations: [(ConfigurationContext) -> Void] = []
+  public var configurations: [Configuration] = []
 
-  /// The sizing context used to size the represented view.
-  public var sizing = SwiftUIMeasurementContainerStrategy.automatic
+  public var sizing: SwiftUIMeasurementContainerStrategy = .automatic
 
+  // MARK: Private
+
+  /// The current stored value, with the previous value provided to the configuration closure as
+  /// the `oldStorage`.
+  private var storage: Storage
+
+  /// A closure that's invoked to construct the represented content view.
+  private var makeContent: () -> Content
+}
+
+// MARK: UIViewRepresentable
+
+extension SwiftUIUIView {
   public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Content> {
     SwiftUIMeasurementContainer(content: makeContent(), strategy: sizing)
   }
@@ -51,15 +71,6 @@ public struct SwiftUIUIView<Content: UIView, Storage>: MeasuringUIViewRepresenta
       configuration(configurationContext)
     }
   }
-
-  // MARK: Internal
-
-  /// The current stored value, with the previous value provided to the configuration closure as
-  /// the `oldStorage`.
-  var storage: Storage
-
-  /// A closure that's invoked to construct the represented view.
-  var makeContent: () -> Content
 }
 
 // MARK: SwiftUIUIView.ConfigurationContext
@@ -78,7 +89,7 @@ extension SwiftUIUIView {
     /// The backing measurement container that contains the `Content`.
     public var container: SwiftUIMeasurementContainer<Content>
 
-    /// The `UIView` that's being configured.
+    /// The `UIView` content that's being configured.
     ///
     /// Setting this to a new value updates the backing measurement container's `content`.
     public var view: Content {
@@ -86,28 +97,28 @@ extension SwiftUIUIView {
       nonmutating set { container.content = newValue }
     }
 
-    /// A convenience accessor indicating whether this content update was animated.
+    /// A convenience accessor indicating whether this content update should be animated.
     public var animated: Bool {
       viewRepresentableContext.transaction.animation != nil
     }
-
   }
 }
 
 // MARK: SwiftUIUIView.Coordinator
 
 extension SwiftUIUIView {
-  /// A coordinator that stores the `storage` associated with this view.
+  /// A coordinator that stores the `storage` associated with this view, enabling the old storage
+  /// value to be accessed during the `updateUIView(…)`.
   public final class Coordinator {
 
     // MARK: Lifecycle
 
-    init(storage: Storage) {
+    fileprivate init(storage: Storage) {
       self.storage = storage
     }
 
     // MARK: Internal
 
-    var storage: Storage
+    fileprivate(set) var storage: Storage
   }
 }

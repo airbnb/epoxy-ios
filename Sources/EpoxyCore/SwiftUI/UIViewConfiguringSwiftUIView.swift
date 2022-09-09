@@ -5,15 +5,19 @@ import SwiftUI
 
 // MARK: - UIViewConfiguringSwiftUIView
 
-/// A protocol describing a SwiftUI `View` that can configure its `UIView` contents via an array of
+/// A protocol describing a SwiftUI `View` that can configure its `UIView` content via an array of
 /// `configuration` closures.
 public protocol UIViewConfiguringSwiftUIView: View {
-  /// The context available to this configuration.
+  /// The context available to this configuration, which provides the `UIView` instance at a minimum
+  /// but can include additional context as needed.
   associatedtype ConfigurationContext: ViewProviding
 
-  /// A mutable array of configuration closures that should each be invoked with the represented
-  /// `UIView` whenever `updateUIView` is called in a `UIViewRepresentable`.
-  var configurations: [(ConfigurationContext) -> Void] { get set }
+  /// A closure that is invoked to configure the represented content view.
+  typealias Configuration = (ConfigurationContext) -> Void
+
+  /// A mutable array of configuration closures that should each be invoked with the
+  /// `ConfigurationContext` whenever `updateUIView` is called in a `UIViewRepresentable`.
+  var configurations: [Configuration] { get set }
 }
 
 // MARK: Extensions
@@ -21,7 +25,7 @@ public protocol UIViewConfiguringSwiftUIView: View {
 extension UIViewConfiguringSwiftUIView {
   /// Returns a copy of this view updated to have the given closure applied to its represented view
   /// whenever it is updated via the `updateUIView(…)` method.
-  public func configure(_ configure: @escaping (ConfigurationContext) -> Void) -> Self {
+  public func configure(_ configure: @escaping Configuration) -> Self {
     var copy = self
     copy.configurations.append(configure)
     return copy
@@ -29,7 +33,7 @@ extension UIViewConfiguringSwiftUIView {
 
   /// Returns a copy of this view updated to have the given closures applied to its represented view
   /// whenever it is updated via the `updateUIView(…)` method.
-  public func configurations(_ configurations: [(ConfigurationContext) -> Void]) -> Self {
+  public func configurations(_ configurations: [Configuration]) -> Self {
     var copy = self
     copy.configurations.append(contentsOf: configurations)
     return copy

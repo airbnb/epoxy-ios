@@ -13,8 +13,8 @@ extension UIViewProtocol {
   /// returned SwiftUI `View`:
   /// ```
   /// MyUIView.swiftUIView(…)
-  ///   .configure { (view: MyUIView) in
-  ///     …
+  ///   .configure { context in
+  ///     context.view.doSomething()
   ///   }
   /// ```
   ///
