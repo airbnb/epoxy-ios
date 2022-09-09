@@ -13,8 +13,8 @@ extension UIViewProtocol {
   /// returned SwiftUI `View`:
   /// ```
   /// MyUIView.swiftUIView(…)
-  ///   .configure { (view: MyUIView) in
-  ///     …
+  ///   .configure { context in
+  ///     context.view.doSomething()
   ///   }
   /// ```
   ///
@@ -24,45 +24,9 @@ extension UIViewProtocol {
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
   /// The sizing defaults to `.automatic`.
-  public static func swiftUIView(makeView: @escaping () -> Self) -> SwiftUIUIView<Self> {
-    SwiftUIUIView(makeView: makeView)
+  public static func swiftUIView(makeView: @escaping () -> Self) -> SwiftUIUIView<Self, Void> {
+    SwiftUIUIView(makeContent: makeView)
   }
-}
-
-// MARK: - SwiftUIUIView
-
-/// A `UIViewRepresentable` SwiftUI `View` that wraps its `Content` `UIView` within a
-/// `SwiftUIMeasurementContainer`, used to size a UIKit view correctly within a SwiftUI view
-/// hierarchy.
-public struct SwiftUIUIView<View: UIView>: MeasuringUIViewRepresentable, UIViewConfiguringSwiftUIView {
-
-  // MARK: Public
-
-  /// An array of closures that are invoked to configure the represented view.
-  public var configurations: [(View) -> Void] = []
-
-  /// The sizing context used to size the represented view.
-  public var sizing = SwiftUIMeasurementContainerStrategy.automatic
-
-  public func makeUIView(context _: Context) -> SwiftUIMeasurementContainer<Self, View> {
-    SwiftUIMeasurementContainer(
-      view: self,
-      uiView: makeView(),
-      strategy: sizing)
-  }
-
-  public func updateUIView(_ wrapper: SwiftUIMeasurementContainer<Self, View>, context _: Context) {
-    wrapper.view = self
-
-    for configuration in configurations {
-      configuration(wrapper.uiView)
-    }
-  }
-
-  // MARK: Internal
-
-  /// A closure that's invoked to construct the represented view.
-  var makeView: () -> View
 }
 
 // MARK: - UIViewProtocol

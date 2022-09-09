@@ -14,10 +14,10 @@ import SwiftUI
 /// - SeeAlso: ``SwiftUIMeasurementContainer``
 public protocol MeasuringUIViewRepresentable: UIViewRepresentable
   where
-  UIViewType == SwiftUIMeasurementContainer<Self, View>
+  UIViewType == SwiftUIMeasurementContainer<Content>
 {
-  /// The `UIView` that's being measured by the enclosing `SwiftUIMeasurementContainer`.
-  associatedtype View: UIView
+  /// The `UIView` content that's being measured by the enclosing `SwiftUIMeasurementContainer`.
+  associatedtype Content: UIView
 
   /// The sizing strategy of the represented view.
   ///
