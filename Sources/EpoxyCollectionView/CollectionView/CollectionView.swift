@@ -186,22 +186,22 @@ open class CollectionView: UICollectionView {
         }
 
         let supplementaryItems = visibleSupplementaryItems.reduce(
-          into: [String: [CollectionViewVisibilityMetadata.SupplementaryItem]](),
-          { result, element in
-            result[element.key] = element.value.compactMap { indexPath in
-              guard
-                indexPath.section == sectionIndex,
-                let item = epoxyDataSource.data?.supplementaryItem(
-                  ofKind: element.key,
-                  at: indexPath)
-              else { return nil }
-              let supplementaryView = self.supplementaryView(
-                forElementKind: element.key,
+          into: [String: [CollectionViewVisibilityMetadata.SupplementaryItem]]())
+        { result, element in
+          result[element.key] = element.value.compactMap { indexPath in
+            guard
+              indexPath.section == sectionIndex,
+              let item = epoxyDataSource.data?.supplementaryItem(
+                ofKind: element.key,
                 at: indexPath)
-              let view = (supplementaryView as? CollectionViewReusableView)?.view
-              return CollectionViewVisibilityMetadata.SupplementaryItem(model: item, view: view)
-            }
-          })
+            else { return nil }
+            let supplementaryView = self.supplementaryView(
+              forElementKind: element.key,
+              at: indexPath)
+            let view = (supplementaryView as? CollectionViewReusableView)?.view
+            return CollectionViewVisibilityMetadata.SupplementaryItem(model: item, view: view)
+          }
+        }
 
         return .init(model: section, items: items, supplementaryItems: supplementaryItems)
       }

@@ -247,7 +247,7 @@ public class BarStackView: UIStackView, EpoxyableView {
       let wrapper = makeWrapper(self.models[index])
       wrappers.insert(wrapper, at: index)
       // Account for wrappers that have yet to be removed
-      let adjustmentsToIndex = changeset.deletes.reduce(into: 0, { $0 += $1 < index ? 1 : 0 })
+      let adjustmentsToIndex = changeset.deletes.reduce(into: 0) { $0 += $1 < index ? 1 : 0 }
       // Add one since we always have the `Spacer` to keep the size sensible.
       insertArrangedSubview(wrapper, at: index + 1 + adjustmentsToIndex)
       update.added.append(wrapper)

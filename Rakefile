@@ -99,7 +99,7 @@ def formatTool(command)
 
   packageDefinitionWithFormatDependency = packageDefinition +
   <<~EOC
-  
+
   #if swift(>=5.6)
   // Add the Airbnb Swift formatting plugin if possible
   package.dependencies.append(
@@ -107,7 +107,7 @@ def formatTool(command)
       url: "https://github.com/airbnb/swift",
       // Since we don't have a Package.resolved entry for this, we need to reference a specific commit
       // so changes to the style guide don't cause this repo's checks to start failing.
-      .revision("cec29280c35dd6eccba415fa3bfc24c819eae887")))
+      .revision("7884f265499752cc5eccaa9eba08b4a2f8b73357")))
   #endif
   EOC
 
