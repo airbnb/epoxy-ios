@@ -91,8 +91,15 @@ public final class BottomBarInstaller: NSObject {
   /// The distance that the keyboard overlaps with `viewController.view` from its bottom edge.
   var keyboardOverlap: CGFloat = 0 {
     didSet {
-      guard keyboardOverlap != oldValue else { return }
-      container?.bottomOffset = keyboardOverlap
+      guard keyboardOverlap != oldValue, let container = container else { return }
+
+      // If keyboardAdjustsBottomBarOffset changes on a visible scroll view the keyboard overlap
+      // will have to change for us to clear it out.
+      if container.allScrollViews.allSatisfy({ $0.keyboardAdjustsBottomBarOffset }) {
+        container.bottomOffset = keyboardOverlap
+      } else {
+        container.bottomOffset = 0
+      }
     }
   }
 
@@ -144,4 +151,28 @@ extension BottomBarInstaller: BarCoordinatorPropertyConfigurable {
   {
     installer.observe(property, observer: observer)
   }
+}
+
+// MARK: - UIScrollView
+
+extension UIScrollView {
+  /// Whether a `BottomBarInstaller` can adjust this scroll view's bottom content inset.
+  ///
+  /// Defaults to `true`.
+  @nonobjc
+  public var keyboardAdjustsBottomBarOffset: Bool {
+    get {
+      objc_getAssociatedObject(self, &Keys.keyboardAdjustsBottomBarOffset) as? Bool ?? true
+    }
+    set {
+      objc_setAssociatedObject(self, &Keys.keyboardAdjustsBottomBarOffset, newValue, .OBJC_ASSOCIATION_COPY_NONATOMIC)
+    }
+  }
+}
+
+// MARK: - Keys
+
+/// Associated object keys.
+private enum Keys {
+  static var keyboardAdjustsBottomBarOffset = 0
 }
