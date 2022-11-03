@@ -1,6 +1,7 @@
 // Created by eric_horacek on 10/26/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
+import EpoxyCore
 import Nimble
 import Quick
 import UIKit
@@ -864,15 +865,29 @@ final class NavigationQueueSpec: QuickSpec {
             }
 
             it("should throw an assertion") {
-              expect(queue.didPop([UIViewController()], animated: true, from: presenter))
-                .to(throwAssertion())
+              let previous = EpoxyLogger.shared
+              defer { EpoxyLogger.shared = previous }
+              var failures = [String]()
+              let stub = EpoxyLogger(assertionFailure: { message, _, _ in failures.append(message()) })
+              EpoxyLogger.shared = stub
+
+              expect(failures).to(beEmpty())
+              queue.didPop([UIViewController()], animated: true, from: presenter)
+              expect(failures).to(haveCount(1))
             }
           }
 
           context("with no model at the top") {
             it("should throw an assertion") {
-              expect(queue.didPop([UIViewController()], animated: true, from: presenter))
-                .to(throwAssertion())
+              let previous = EpoxyLogger.shared
+              defer { EpoxyLogger.shared = previous }
+              var failures = [String]()
+              let stub = EpoxyLogger(assertionFailure: { message, _, _ in failures.append(message()) })
+              EpoxyLogger.shared = stub
+
+              expect(failures).to(beEmpty())
+              queue.didPop([UIViewController()], animated: true, from: presenter)
+              expect(failures).to(haveCount(1))
             }
           }
         }
