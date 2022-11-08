@@ -36,6 +36,13 @@ protocol InternalSupplementaryItemModeling: SupplementaryItemModeling,
     traitCollection: UITraitCollection,
     animated: Bool)
 
+  /// Creates view for this supplementary item. This should only be used to create a view outside of a collection
+  /// view.
+  ///
+  /// - Parameter traitCollection: The trait collection to create the view for
+  /// - Returns: The configured view for this supplementary item model.
+  func configuredView(traitCollection: UITraitCollection) -> UIView
+
   /// Set behaviors needed by the view.
   ///
   /// Called before presentation and when cells are reordered.

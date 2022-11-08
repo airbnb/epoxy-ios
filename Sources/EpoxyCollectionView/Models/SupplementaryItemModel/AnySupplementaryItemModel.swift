@@ -79,6 +79,10 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
     model.dataID
   }
 
+  public func configuredView(traitCollection: UITraitCollection) -> UIView {
+    model.configuredView(traitCollection: traitCollection)
+  }
+
   // MARK: Internal
 
   func configure(

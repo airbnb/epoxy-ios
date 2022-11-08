@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `UIScrollView.keyboardAdjustsBottomBarOffset` escape hatch to disable bottom bar keyboard
   avoidance for cases where the keyboard is avoided at a higher level (e.g. a
   `UIPresentationController` subclass)
+- Added `configuredView(traitCollection:)` API to `SupplementaryItemModeling`
 
 ## [0.9.0](https://github.com/airbnb/epoxy-ios/compare/0.8.0...0.9.0) - 2022-10-25
 
