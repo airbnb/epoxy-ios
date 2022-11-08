@@ -92,6 +92,10 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
     }
   }
 
+  public func configuredView(traitCollection: UITraitCollection) -> UIView {
+    model.configuredView(traitCollection: traitCollection)
+  }
+
   func handleWillDisplay(
     _ view: CollectionViewReusableView,
     traitCollection: UITraitCollection,

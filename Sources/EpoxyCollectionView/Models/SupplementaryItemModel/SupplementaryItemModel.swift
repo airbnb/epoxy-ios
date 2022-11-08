@@ -175,6 +175,17 @@ extension SupplementaryItemModel: InternalSupplementaryItemModeling {
     setContent?(.init(view: view, traitCollection: traitCollection, animated: animated))
   }
 
+  public func configuredView(traitCollection: UITraitCollection) -> UIView {
+    let view = makeView()
+    let context = CallbackContext(
+      view: view,
+      traitCollection: traitCollection,
+      animated: false)
+    setContent?(context)
+    setBehaviors?(context)
+    return view
+  }
+
   public func setBehavior(
     reusableView: CollectionViewReusableView,
     traitCollection: UITraitCollection,
