@@ -40,7 +40,7 @@ protocol InternalSupplementaryItemModeling: SupplementaryItemModeling,
   /// view.
   ///
   /// - Parameter traitCollection: The trait collection to create the view for
-  /// - Returns: The configured view for this item model.
+  /// - Returns: The configured view for this supplementary item model.
   func configuredView(traitCollection: UITraitCollection) -> UIView
 
   /// Set behaviors needed by the view.
