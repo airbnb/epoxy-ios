@@ -79,6 +79,10 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
     model.dataID
   }
 
+  public func configuredView(traitCollection: UITraitCollection) -> UIView {
+    model.configuredView(traitCollection: traitCollection)
+  }
+
   // MARK: Internal
 
   func configure(
@@ -90,10 +94,6 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
     if let view = reusableView.view {
       setContent?(.init(view: view, traitCollection: traitCollection, animated: animated))
     }
-  }
-
-  public func configuredView(traitCollection: UITraitCollection) -> UIView {
-    model.configuredView(traitCollection: traitCollection)
   }
 
   func handleWillDisplay(
