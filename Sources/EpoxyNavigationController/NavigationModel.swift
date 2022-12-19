@@ -150,6 +150,11 @@ public struct NavigationModel {
     return copy
   }
 
+  /// Updates the underlying state backing this model to remove it.
+  public func remove() {
+    _remove()
+  }
+
   // MARK: Internal
 
   /// The identifier of this stack element that distinguishes it from other stack elements.
@@ -183,11 +188,6 @@ public struct NavigationModel {
   /// stack.
   func handleDidRemove() {
     _didRemove?()
-  }
-
-  /// Updates the underlying state backing this model to remove it.
-  func remove() {
-    _remove()
   }
 
   // MARK: Private
