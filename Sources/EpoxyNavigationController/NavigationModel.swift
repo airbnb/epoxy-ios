@@ -150,6 +150,12 @@ public struct NavigationModel {
     return copy
   }
 
+  /// Informs consumers of this model that its view controller has been removed from the navigation
+  /// stack.
+  public func handleDidRemove() {
+    _didRemove?()
+  }
+
   /// Updates the underlying state backing this model to remove it.
   public func remove() {
     _remove()
@@ -182,12 +188,6 @@ public struct NavigationModel {
   /// stack.
   func handleDidAdd(_ viewController: UIViewController) {
     _didAdd?(viewController)
-  }
-
-  /// Informs consumers of this model that its view controller has been removed from the navigation
-  /// stack.
-  func handleDidRemove() {
-    _didRemove?()
   }
 
   // MARK: Private
