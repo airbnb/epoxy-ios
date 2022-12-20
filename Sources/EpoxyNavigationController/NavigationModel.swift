@@ -106,7 +106,7 @@ public struct NavigationModel {
   /// Any previously added `didShow` closures are called prior to the given closure.
   public func didShow(_ didShow: @escaping ((UIViewController) -> Void)) -> NavigationModel {
     var copy = self
-    copy._didShow = { [oldDidShow = self._didShow] viewController in
+    copy._didShow = { [oldDidShow = _didShow] viewController in
       oldDidShow?(viewController)
       didShow(viewController)
     }
@@ -119,7 +119,7 @@ public struct NavigationModel {
   /// Any previously added `didHide` closures are called prior to the given closure.
   public func didHide(_ didHide: @escaping (() -> Void)) -> NavigationModel {
     var copy = self
-    copy._didHide = { [oldDidHide = self._didHide] in
+    copy._didHide = { [oldDidHide = _didHide] in
       oldDidHide?()
       didHide()
     }
@@ -131,7 +131,7 @@ public struct NavigationModel {
   /// Any previously added `didAdd` closures are called prior to the given closure.
   public func didAdd(_ didAdd: @escaping ((UIViewController) -> Void)) -> NavigationModel {
     var copy = self
-    copy._didAdd = { [oldDidAdd = self._didAdd] viewController in
+    copy._didAdd = { [oldDidAdd = _didAdd] viewController in
       oldDidAdd?(viewController)
       didAdd(viewController)
     }
@@ -143,7 +143,7 @@ public struct NavigationModel {
   /// Any previously added `didRemove` closures are called prior to the given closure.
   public func didRemove(_ didRemove: @escaping (() -> Void)) -> NavigationModel {
     var copy = self
-    copy._didRemove = { [oldDidRemove = self._didRemove] in
+    copy._didRemove = { [oldDidRemove = _didRemove] in
       oldDidRemove?()
       didRemove()
     }
