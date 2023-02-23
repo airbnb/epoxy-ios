@@ -191,6 +191,10 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
   ///
   /// Additionally keeps the scroll views pinned to their current offsets during the inset changes.
   private func updateInsets() {
+    // If any view in the hierarchy has a 3D transform, it's not valid to apply the insets as they
+    // may be incorrect; we should wait until there is no transform to so do.
+    guard !hasHierarchy3DTransform() else { return }
+
     let scrollViewsAtEdge = scrollViewsAtEdge
 
     updateAdditionalSafeAreaInset(additionalSafeAreaInsetsTop)
@@ -237,29 +241,4 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
     viewController?.view.layoutIfNeeded()
   }
 
-}
-
-// MARK: - UIViewController
-
-extension UIViewController {
-  @nonobjc
-  fileprivate var originalSafeAreaInsetTop: CGFloat {
-    view.safeAreaInsets.top - additionalSafeAreaInsets.top
-  }
-}
-
-// MARK: - UIScrollView
-
-extension UIScrollView {
-  /// The content offset at which this scroll view is scrolled to its top.
-  @nonobjc
-  fileprivate var topContentOffset: CGFloat {
-    -adjustedContentInset.top
-  }
-
-  /// The content offset at which this scroll view is scrolled to its bottom.
-  @nonobjc
-  fileprivate var bottomContentOffset: CGFloat {
-    max(contentSize.height - bounds.height + adjustedContentInset.bottom, topContentOffset)
-  }
 }
