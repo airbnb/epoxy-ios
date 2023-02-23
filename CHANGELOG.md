@@ -10,10 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Dropped support for Swift 5.4.
 - Added `UIScrollView.keyboardAdjustsBottomBarOffset` escape hatch to disable bottom bar keyboard
   avoidance for cases where the keyboard is avoided at a higher level (e.g. a
-  `UIPresentationController` subclass)
-- Added `configuredView(traitCollection:)` API to `SupplementaryItemModeling`
+  `UIPresentationController` subclass).
+- Added `configuredView(traitCollection:)` API to `SupplementaryItemModeling`.
 - Changed `NavigationModel`'s `remove()` method access modifier to public (previously internal).
-- Changed `NavigationModel`'s `handleDidRemove()` method access modifier to public (previously internal).
+- Changed `NavigationModel`'s `handleDidRemove()` method access modifier to public (previously 
+  internal).
+
+### Fixed
+- For top and bottom bars, if any view in the hierarchy has a 3D transform, wait to apply the insets 
+  as they may be incorrect.
 
 ## [0.9.0](https://github.com/airbnb/epoxy-ios/compare/0.8.0...0.9.0) - 2022-10-25
 
