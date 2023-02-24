@@ -17,8 +17,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   internal).
 
 ### Fixed
-- For top and bottom bars, if any view in the hierarchy has a 3D transform, wait to apply the insets 
-  as they may be incorrect.
+- For top and bottom bars, if any view in the hierarchy has a scale transform, wait to apply the 
+  insets as they may be incorrect.
 
 ## [0.9.0](https://github.com/airbnb/epoxy-ios/compare/0.8.0...0.9.0) - 2022-10-25
 

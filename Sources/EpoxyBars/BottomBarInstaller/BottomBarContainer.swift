@@ -162,7 +162,7 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
   private func updateInsets() {
     // If any view in the hierarchy has a 3D transform, it's not valid to apply the insets as they
     // may be incorrect; we should wait until there is no transform to so do.
-    guard !hasHierarchy3DTransform() else { return }
+    guard !hasHierarchyScaleTransform() else { return }
 
     updateAdditionalSafeAreaInset(additionalSafeAreaInsetsBottom)
 
