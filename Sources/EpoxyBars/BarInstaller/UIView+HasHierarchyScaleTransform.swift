@@ -16,7 +16,7 @@ extension UIView {
 
     guard CATransform3DEqualToTransform(transform3D, CATransform3DIdentity) else {
       // m11, m22, and m33 correspond to x, y, and z scale respectively.
-      return transform3D.m11 != 1.0 || transform3D.m22 != 1.0 || transform3D.m33 != 1.0 
+      return transform3D.m11 != 1.0 || transform3D.m22 != 1.0 || transform3D.m33 != 1.0
     }
 
     return superview?.hasHierarchyScaleTransform(below: ancestor - 1) ?? false
