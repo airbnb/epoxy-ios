@@ -19,7 +19,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - For top and bottom bars, if any view in the hierarchy has a scale transform, wait to apply the 
   insets as they may be incorrect.
-- Pass initial size to `CollectionViewCell` content view to better load embedded SwiftUI views.
+- Pass item initial size from `CollectionViewCell`'s content view to better load embedded 
+  SwiftUI views.
 
 ## [0.9.0](https://github.com/airbnb/epoxy-ios/compare/0.8.0...0.9.0) - 2022-10-25
 

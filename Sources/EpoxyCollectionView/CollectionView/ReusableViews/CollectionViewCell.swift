@@ -51,7 +51,7 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
     view.translatesAutoresizingMaskIntoConstraints = false
     // Use the existing content view size so that we don't have to wait for auto layout to give this
     // view an initial size.
-    view.bounds = contentView.bounds
+    view.frame = contentView.bounds
     contentView.addSubview(view)
     NSLayoutConstraint.activate([
       view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
