@@ -14,12 +14,12 @@ public struct CollectionViewConfiguration {
     usesBatchUpdatesForAllReloads: Bool = true,
     usesCellPrefetching: Bool = true,
     usesAccurateScrollToItem: Bool = true,
-    usesOptimisticCollectionViewCellItemSizing: Bool = true)
+    usesOptimisticCollectionViewItemSizing: Bool = true)
   {
     self.usesBatchUpdatesForAllReloads = usesBatchUpdatesForAllReloads
     self.usesCellPrefetching = usesCellPrefetching
     self.usesAccurateScrollToItem = usesAccurateScrollToItem
-    self.usesOptimisticCollectionViewCellItemSizing = usesOptimisticCollectionViewCellItemSizing
+    self.usesOptimisticCollectionViewItemSizing = usesOptimisticCollectionViewItemSizing
   }
 
   // MARK: Public
@@ -75,5 +75,5 @@ public struct CollectionViewConfiguration {
   ///
   /// Defaults to `true`.
   ///
-  public var usesOptimisticCollectionViewCellItemSizing: Bool
+  public var usesOptimisticCollectionViewItemSizing: Bool
 }
