@@ -133,7 +133,7 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
 
   weak var accessibilityDelegate: CollectionViewCellAccessibilityDelegate?
   var ephemeralViewCachedStateProvider: ((Any?) -> Void)?
-  var usesOptimisticCollectionViewItemSizing: Bool = false
+  var usesOptimisticCollectionViewItemSizing = false
 
   // MARK: Private
 
