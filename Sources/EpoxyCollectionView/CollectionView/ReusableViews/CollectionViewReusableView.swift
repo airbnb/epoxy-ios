@@ -73,6 +73,6 @@ public final class CollectionViewReusableView: UICollectionReusableView {
 
   // MARK: Internal
 
-  var usesOptimisticCollectionViewItemSizing: Bool = false
+  var usesOptimisticCollectionViewItemSizing = false
 
 }
