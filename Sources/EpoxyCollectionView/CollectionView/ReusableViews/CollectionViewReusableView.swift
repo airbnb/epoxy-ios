@@ -28,6 +28,11 @@ public final class CollectionViewReusableView: UICollectionReusableView {
       return
     }
     view.translatesAutoresizingMaskIntoConstraints = false
+    if usesOptimisticCollectionViewItemSizing {
+      // Use the existing view size so that we don't have to wait for auto layout to give this
+      // wrapped view an initial size.
+      view.frame = bounds
+    }
     addSubview(view)
     NSLayoutConstraint.activate([
       view.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -65,4 +70,9 @@ public final class CollectionViewReusableView: UICollectionReusableView {
 
     return layoutAttributes
   }
+
+  // MARK: Internal
+
+  var usesOptimisticCollectionViewItemSizing = false
+
 }
