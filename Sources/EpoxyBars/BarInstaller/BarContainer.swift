@@ -190,11 +190,21 @@ extension InternalBarContainer {
   }
 
   // Adjusts the additional safe area inset of the view controller based on the `insetBehavior`.
-  func updateAdditionalSafeAreaInset(_ inset: CGFloat?) {
+  func updateAdditionalSafeAreaInset(_ inset: CGFloat?, hasHierarchyScaleTransform: Bool) {
+    guard let viewController = viewController else { return }
+
     if let inset = inset {
-      viewController?.additionalSafeAreaInsets[keyPath: position.inset] = inset
+      // If any view in the hierarchy has a 3D transform, it's not valid to lessen the insets as
+      // they may be too short; we should wait until there is no transform to so do.
+      if hasHierarchyScaleTransform {
+        if inset > viewController.additionalSafeAreaInsets[keyPath: position.inset] {
+          viewController.additionalSafeAreaInsets[keyPath: position.inset] = inset
+        }
+      } else {
+        viewController.additionalSafeAreaInsets[keyPath: position.inset] = inset
+      }
     } else if needsSafeAreaInsetReset {
-      viewController?.additionalSafeAreaInsets[keyPath: position.inset] = 0
+      viewController.additionalSafeAreaInsets[keyPath: position.inset] = 0
       needsSafeAreaInsetReset = false
     }
   }
@@ -214,8 +224,16 @@ extension InternalBarContainer {
   }
 
   /// Sets the `layoutMargin` corresponding to the container's `position`
-  func setLayoutMargin(_ margin: CGFloat) {
-    layoutMargins[keyPath: position.inset] = insetMargins ? margin : 0
+  func setLayoutMargin(_ margin: CGFloat, hasHierarchyScaleTransform: Bool) {
+    // If any view in the hierarchy has a 3D transform, it's not valid to lessen the insets as
+    // they may be too short; we should wait until there is no transform to so do.
+    if hasHierarchyScaleTransform {
+      if margin > layoutMargins[keyPath: position.inset] {
+        layoutMargins[keyPath: position.inset] = insetMargins ? margin : 0
+      }
+    } else {
+      layoutMargins[keyPath: position.inset] = insetMargins ? margin : 0
+    }
   }
 
   // MARK: Private
