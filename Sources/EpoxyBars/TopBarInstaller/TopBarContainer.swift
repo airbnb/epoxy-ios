@@ -191,10 +191,6 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
   ///
   /// Additionally keeps the scroll views pinned to their current offsets during the inset changes.
   private func updateInsets() {
-    // If any view in the hierarchy has a 3D transform, it's not valid to apply the insets as they
-    // may be incorrect; we should wait until there is no transform to so do.
-    guard !hasHierarchyScaleTransform() else { return }
-
     let scrollViewsAtEdge = scrollViewsAtEdge
 
     updateAdditionalSafeAreaInset(additionalSafeAreaInsetsTop)
