@@ -428,7 +428,6 @@ open class CollectionView: UICollectionView {
       cell.selectedBackgroundColor = selectionColor
     }
 
-    cell.usesOptimisticCollectionViewItemSizing = configuration.usesOptimisticCollectionViewItemSizing
     cell.accessibilityDelegate = self
 
     let metadata = ItemCellMetadata(
@@ -452,7 +451,6 @@ open class CollectionView: UICollectionView {
     with model: AnySupplementaryItemModel,
     animated: Bool)
   {
-    supplementaryView.usesOptimisticCollectionViewItemSizing = configuration.usesOptimisticCollectionViewItemSizing
     model.configure(
       reusableView: supplementaryView,
       traitCollection: traitCollection,
