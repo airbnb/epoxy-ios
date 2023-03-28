@@ -13,13 +13,11 @@ public struct CollectionViewConfiguration {
   public init(
     usesBatchUpdatesForAllReloads: Bool = true,
     usesCellPrefetching: Bool = true,
-    usesAccurateScrollToItem: Bool = true,
-    usesOptimisticCollectionViewItemSizing: Bool = true)
+    usesAccurateScrollToItem: Bool = true)
   {
     self.usesBatchUpdatesForAllReloads = usesBatchUpdatesForAllReloads
     self.usesCellPrefetching = usesCellPrefetching
     self.usesAccurateScrollToItem = usesAccurateScrollToItem
-    self.usesOptimisticCollectionViewItemSizing = usesOptimisticCollectionViewItemSizing
   }
 
   // MARK: Public
@@ -68,12 +66,4 @@ public struct CollectionViewConfiguration {
   ///
   /// - SeeAlso: `CollectionViewScrollToItemHelper`
   public var usesAccurateScrollToItem: Bool
-
-  /// When `true`, `CollectionViewCell` will give an embedded item its content view size before the initial Auto Layout layout
-  /// pass occurs. This is necessary to avoid an initial layout of embedded SwiftUI views with an incorrect size. After ensuring stability
-  /// this flag will be removed.
-  ///
-  /// Defaults to `true`.
-  ///
-  public var usesOptimisticCollectionViewItemSizing: Bool
 }
