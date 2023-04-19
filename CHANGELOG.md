@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   insets as they may be incorrect.
 - Pass initial size to embedded view from `CollectionViewCell`/`CollectionViewReusableView` to 
   better load embedded SwiftUI views.
+- Guard against a UIKit crash caused by attempting to scroll to an item that no longer exists.
 
 ## [0.9.0](https://github.com/airbnb/epoxy-ios/compare/0.8.0...0.9.0) - 2022-10-25
 
