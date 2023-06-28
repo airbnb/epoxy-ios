@@ -43,9 +43,9 @@
 		08E2E9632A4CD54A00B47A18 /* UIViewConfiguringSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E9372A4CD54A00B47A18 /* UIViewConfiguringSwiftUIView.swift */; };
 		08E2E9642A4CD54A00B47A18 /* EpoxySwiftUILayoutMargins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E9382A4CD54A00B47A18 /* EpoxySwiftUILayoutMargins.swift */; };
 		08E2E9652A4CD54A00B47A18 /* EpoxySwiftUIIntrinsicContentSizeInvalidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E9392A4CD54A00B47A18 /* EpoxySwiftUIIntrinsicContentSizeInvalidator.swift */; };
-		08E2E9662A4CD54A00B47A18 /* SwiftUIUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E93A2A4CD54A00B47A18 /* SwiftUIUIView.swift */; };
+		08E2E9662A4CD54A00B47A18 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E93A2A4CD54A00B47A18 /* SwiftUIView.swift */; };
 		08E2E9672A4CD54A00B47A18 /* EpoxyableView+SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E93B2A4CD54A00B47A18 /* EpoxyableView+SwiftUIView.swift */; };
-		08E2E9682A4CD54A00B47A18 /* MeasuringUIViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E93D2A4CD54A00B47A18 /* MeasuringUIViewRepresentable.swift */; };
+		08E2E9682A4CD54A00B47A18 /* MeasuringViewRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E93D2A4CD54A00B47A18 /* MeasuringViewRepresentable.swift */; };
 		08E2E9692A4CD54A00B47A18 /* SwiftUIMeasurementContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E93E2A4CD54A00B47A18 /* SwiftUIMeasurementContainer.swift */; };
 		08E2E96A2A4CD54A00B47A18 /* EpoxySwiftUIHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E93F2A4CD54A00B47A18 /* EpoxySwiftUIHostingController.swift */; };
 		08E2E96B2A4CD54A00B47A18 /* UIView+SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E9402A4CD54A00B47A18 /* UIView+SwiftUIView.swift */; };
@@ -90,9 +90,9 @@
 		08E2E9372A4CD54A00B47A18 /* UIViewConfiguringSwiftUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewConfiguringSwiftUIView.swift; sourceTree = "<group>"; };
 		08E2E9382A4CD54A00B47A18 /* EpoxySwiftUILayoutMargins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpoxySwiftUILayoutMargins.swift; sourceTree = "<group>"; };
 		08E2E9392A4CD54A00B47A18 /* EpoxySwiftUIIntrinsicContentSizeInvalidator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpoxySwiftUIIntrinsicContentSizeInvalidator.swift; sourceTree = "<group>"; };
-		08E2E93A2A4CD54A00B47A18 /* SwiftUIUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIUIView.swift; sourceTree = "<group>"; };
+		08E2E93A2A4CD54A00B47A18 /* SwiftUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		08E2E93B2A4CD54A00B47A18 /* EpoxyableView+SwiftUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EpoxyableView+SwiftUIView.swift"; sourceTree = "<group>"; };
-		08E2E93D2A4CD54A00B47A18 /* MeasuringUIViewRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasuringUIViewRepresentable.swift; sourceTree = "<group>"; };
+		08E2E93D2A4CD54A00B47A18 /* MeasuringViewRepresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MeasuringViewRepresentable.swift; sourceTree = "<group>"; };
 		08E2E93E2A4CD54A00B47A18 /* SwiftUIMeasurementContainer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIMeasurementContainer.swift; sourceTree = "<group>"; };
 		08E2E93F2A4CD54A00B47A18 /* EpoxySwiftUIHostingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpoxySwiftUIHostingController.swift; sourceTree = "<group>"; };
 		08E2E9402A4CD54A00B47A18 /* UIView+SwiftUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+SwiftUIView.swift"; sourceTree = "<group>"; };
@@ -213,7 +213,7 @@
 				08E2E9372A4CD54A00B47A18 /* UIViewConfiguringSwiftUIView.swift */,
 				08E2E9382A4CD54A00B47A18 /* EpoxySwiftUILayoutMargins.swift */,
 				08E2E9392A4CD54A00B47A18 /* EpoxySwiftUIIntrinsicContentSizeInvalidator.swift */,
-				08E2E93A2A4CD54A00B47A18 /* SwiftUIUIView.swift */,
+				08E2E93A2A4CD54A00B47A18 /* SwiftUIView.swift */,
 				08E2E93B2A4CD54A00B47A18 /* EpoxyableView+SwiftUIView.swift */,
 				08E2E93C2A4CD54A00B47A18 /* LayoutUtilities */,
 				08E2E93F2A4CD54A00B47A18 /* EpoxySwiftUIHostingController.swift */,
@@ -226,7 +226,7 @@
 		08E2E93C2A4CD54A00B47A18 /* LayoutUtilities */ = {
 			isa = PBXGroup;
 			children = (
-				08E2E93D2A4CD54A00B47A18 /* MeasuringUIViewRepresentable.swift */,
+				08E2E93D2A4CD54A00B47A18 /* MeasuringViewRepresentable.swift */,
 				08E2E93E2A4CD54A00B47A18 /* SwiftUIMeasurementContainer.swift */,
 			);
 			path = LayoutUtilities;
@@ -323,7 +323,7 @@
 				08E2E94E2A4CD54A00B47A18 /* SetBehaviorsProviding.swift in Sources */,
 				08E2E95D2A4CD54A00B47A18 /* Diffable.swift in Sources */,
 				08E2E95E2A4CD54A00B47A18 /* StyledView.swift in Sources */,
-				08E2E9682A4CD54A00B47A18 /* MeasuringUIViewRepresentable.swift in Sources */,
+				08E2E9682A4CD54A00B47A18 /* MeasuringViewRepresentable.swift in Sources */,
 				08E2E9612A4CD54A00B47A18 /* ViewType.swift in Sources */,
 				08E2E96C2A4CD54A00B47A18 /* EpoxySwiftUIHostingView.swift in Sources */,
 				08E2E9432A4CD54A00B47A18 /* EpoxyModelStorage.swift in Sources */,
@@ -339,7 +339,7 @@
 				08E2E9642A4CD54A00B47A18 /* EpoxySwiftUILayoutMargins.swift in Sources */,
 				08E2E94D2A4CD54A00B47A18 /* ViewProviding.swift in Sources */,
 				08E2E9632A4CD54A00B47A18 /* UIViewConfiguringSwiftUIView.swift in Sources */,
-				08E2E9662A4CD54A00B47A18 /* SwiftUIUIView.swift in Sources */,
+				08E2E9662A4CD54A00B47A18 /* SwiftUIView.swift in Sources */,
 				08E2E96A2A4CD54A00B47A18 /* EpoxySwiftUIHostingController.swift in Sources */,
 				08E2E94F2A4CD54A00B47A18 /* StyleIDProviding.swift in Sources */,
 				08E2E9502A4CD54A00B47A18 /* DidDisplayProviding.swift in Sources */,

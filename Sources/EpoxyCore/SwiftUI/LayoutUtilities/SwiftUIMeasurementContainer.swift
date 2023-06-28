@@ -11,7 +11,7 @@ import SwiftUI
 /// This container view uses an injected proposed width to measure the view and return its ideal
 /// height through the `SwiftUISizingContext` binding.
 ///
-/// - SeeAlso: ``MeasuringUIViewRepresentable``
+/// - SeeAlso: ``MeasuringViewRepresentable``
 public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
 
   // MARK: Lifecycle
@@ -24,7 +24,7 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
     // is displayed, but the system gracefully recovers afterwards. On iOS 16, it's fine to pass
     // zero.
     let initialSize: CGSize
-    if #available(iOS 16, *) {
+    if #available(iOS 16, tvOS 16, macOS 13, *) {
       initialSize = .zero
     } else {
       initialSize = .init(width: 375, height: 150)

@@ -26,8 +26,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0](https://github.com/airbnb/epoxy-ios/compare/0.8.0...0.9.0) - 2022-10-25
 
 ### Changed
-- Remove all of the `EpoxyableView` flavors of `MeasuringUIViewRepresentable` in favor of a
-  single shared `SwiftUIUIView` that supports a generic `Storage`, which has the added benefit of
+- Remove all of the `EpoxyableView` flavors of `MeasuringViewRepresentable` in favor of a
+  single shared `SwiftUIView` that supports a generic `Storage`, which has the added benefit of
   fixing some Xcode preview crashes.
 
 ### Fixed
@@ -43,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added `SwiftUIMeasurementContainer` for calculating the ideal height of a `UIView` for wrapping
   for SwiftUI usage.
-- Added `MeasuringUIViewRepresentable` as a convenience API for measuring a `UIView` within a
+- Added `MeasuringViewRepresentable` as a convenience API for measuring a `UIView` within a
   `UIViewRepresentable` using an enclosing `SwiftUIMeasurementContainer`.
 - Added a method to `CollectionViewReorderingDelegate` to check the reordering destination is
   expected.

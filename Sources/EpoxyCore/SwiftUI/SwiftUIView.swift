@@ -3,7 +3,7 @@
 
 import SwiftUI
 
-// MARK: - SwiftUIUIView
+// MARK: - SwiftUIView
 
 /// A `UIViewRepresentable` SwiftUI `View` that wraps its `Content` `UIView` within a
 /// `SwiftUIMeasurementContainer`, used to size a UIKit view correctly within a SwiftUI view
@@ -11,7 +11,7 @@ import SwiftUI
 ///
 /// Includes an optional generic `Storage` value, which can be used to compare old and new values
 /// across state changes to prevent redundant view updates.
-public struct SwiftUIUIView<Content: UIViewOrNSView, Storage>: MeasuringUIViewRepresentable,
+public struct SwiftUIView<Content: ViewType, Storage>: MeasuringViewRepresentable,
   UIViewConfiguringSwiftUIView
 {
 
@@ -49,7 +49,7 @@ public struct SwiftUIUIView<Content: UIViewOrNSView, Storage>: MeasuringUIViewRe
 
 // MARK: UIViewRepresentable
 
-extension SwiftUIUIView {
+extension SwiftUIView {
   public func makeCoordinator() -> Coordinator {
     Coordinator(storage: storage)
   }
@@ -93,13 +93,13 @@ extension SwiftUIUIView {
   #endif
 }
 
-// MARK: SwiftUIUIView.ConfigurationContext
+// MARK: SwiftUIView.ConfigurationContext
 
-extension SwiftUIUIView {
+extension SwiftUIView {
   /// The configuration context that's available to configure the `Content` view whenever the
   /// `updateUIView()` method is invoked via a configuration closure.
   public struct ConfigurationContext: ViewProviding {
-    /// The previous value for the `Storage` of this `SwiftUIUIView`, which can be used to store
+    /// The previous value for the `Storage` of this `SwiftUIView`, which can be used to store
     /// values across state changes to prevent redundant view updates.
     public var oldStorage: Storage
 
@@ -124,9 +124,9 @@ extension SwiftUIUIView {
   }
 }
 
-// MARK: SwiftUIUIView.Coordinator
+// MARK: SwiftUIView.Coordinator
 
-extension SwiftUIUIView {
+extension SwiftUIView {
   /// A coordinator that stores the `storage` associated with this view, enabling the old storage
   /// value to be accessed during the `updateUIView(…)`.
   public final class Coordinator {

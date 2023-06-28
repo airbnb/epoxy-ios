@@ -3,7 +3,7 @@
 
 import SwiftUI
 
-// MARK: - MeasuringUIViewRepresentable
+// MARK: - MeasuringViewRepresentable
 
 /// A `UIViewRepresentable` that uses a `SwiftUIMeasurementContainer` wrapping its represented
 /// `UIView` to report its size that fits a proposed size to SwiftUI.
@@ -12,7 +12,7 @@ import SwiftUI
 /// `sizeThatFits(…)` method.
 ///
 /// - SeeAlso: ``SwiftUIMeasurementContainer``
-public protocol MeasuringUIViewRepresentable: ViewRepresentableType
+public protocol MeasuringViewRepresentable: ViewRepresentableType
   where
   RepresentableViewType == SwiftUIMeasurementContainer<Content>
 {
@@ -30,7 +30,7 @@ public protocol MeasuringUIViewRepresentable: ViewRepresentableType
 
 // MARK: Extensions
 
-extension MeasuringUIViewRepresentable {
+extension MeasuringViewRepresentable {
   /// Returns a copy of this view with its sizing strategy updated to the given `sizing` value.
   public func sizing(_ strategy: SwiftUIMeasurementContainerStrategy) -> Self {
     var copy = self
@@ -42,7 +42,7 @@ extension MeasuringUIViewRepresentable {
 // MARK: Defaults
 
 #if os(iOS) || os(tvOS)
-extension MeasuringUIViewRepresentable {
+extension MeasuringViewRepresentable {
   public func _overrideSizeThatFits(
     _ size: inout CGSize,
     in proposedSize: _ProposedSize,
@@ -63,7 +63,7 @@ extension MeasuringUIViewRepresentable {
   }
 
   #if swift(>=5.7) // Proxy check for being built with the iOS 15 SDK
-  @available(iOS 16.0, tvOS 16.0, *)
+  @available(iOS 16.0, tvOS 16.0, macOS 13.0, *)
   public func sizeThatFits(
     _ proposal: ProposedViewSize,
     uiView: UIViewType,
@@ -84,7 +84,7 @@ extension MeasuringUIViewRepresentable {
 
 #elseif os(macOS)
 @available(macOS 10.15, *)
-extension MeasuringUIViewRepresentable {
+extension MeasuringViewRepresentable {
   public func _overrideSizeThatFits(
     _ size: inout CGSize,
     in proposedSize: _ProposedSize,
@@ -92,8 +92,6 @@ extension MeasuringUIViewRepresentable {
   {
     nsView.strategy = sizing
 
-    // Note: this method is not double-called on iOS 16, so we don't need to do anything to prevent
-    // extra work here.
     let children = Mirror(reflecting: proposedSize).children
 
     // Creates a `CGSize` by replacing `nil`s with `UIView.noIntrinsicMetric`
