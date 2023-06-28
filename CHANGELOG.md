@@ -4,10 +4,21 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.9.0...HEAD)
+## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.10.0...HEAD)
+
+### Changed
+- ...
+
+### Fixed
+- ...
+
+## [0.10.0](https://github.com/airbnb/epoxy-ios/compare/0.9.0...0.10.0) - 2023-06-28
 
 ### Changed
 - Dropped support for Swift 5.4.
+- EpoxyCore now supports macOS and tvOS.
+- Renamed EpoxyCore's `SwiftUIUIView` to `SwiftUIView`.
+- Renamed EpoxyCore's `MeasuringUIViewRepresentable` to `MeasuringViewRepresentable`.
 - Added `UIScrollView.keyboardAdjustsBottomBarOffset` escape hatch to disable bottom bar keyboard
   avoidance for cases where the keyboard is avoided at a higher level (e.g. a
   `UIPresentationController` subclass).
@@ -26,8 +37,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.9.0](https://github.com/airbnb/epoxy-ios/compare/0.8.0...0.9.0) - 2022-10-25
 
 ### Changed
-- Remove all of the `EpoxyableView` flavors of `MeasuringViewRepresentable` in favor of a
-  single shared `SwiftUIView` that supports a generic `Storage`, which has the added benefit of
+- Remove all of the `EpoxyableView` flavors of `MeasuringUIViewRepresentable` in favor of a
+  single shared `SwiftUIUIView` that supports a generic `Storage`, which has the added benefit of
   fixing some Xcode preview crashes.
 
 ### Fixed
@@ -43,7 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Added `SwiftUIMeasurementContainer` for calculating the ideal height of a `UIView` for wrapping
   for SwiftUI usage.
-- Added `MeasuringViewRepresentable` as a convenience API for measuring a `UIView` within a
+- Added `MeasuringUIViewRepresentable` as a convenience API for measuring a `UIView` within a
   `UIViewRepresentable` using an enclosing `SwiftUIMeasurementContainer`.
 - Added a method to `CollectionViewReorderingDelegate` to check the reordering destination is
   expected.
