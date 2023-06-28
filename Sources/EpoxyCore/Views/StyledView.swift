@@ -21,7 +21,7 @@
 /// - SeeAlso: `ContentConfigurableView`
 /// - SeeAlso: `BehaviorsConfigurableView`
 /// - SeeAlso: `EpoxyableView`
-public protocol StyledView: UIViewOrNSView {
+public protocol StyledView: ViewType {
   /// The style type of this view, passed into its initializer to configure the resulting instance.
   ///
   /// Defaults to `Never` for views that do not have a `Style`.

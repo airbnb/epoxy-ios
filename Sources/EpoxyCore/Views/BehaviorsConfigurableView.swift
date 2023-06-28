@@ -18,7 +18,7 @@
 /// - SeeAlso: `ContentConfigurableView`
 /// - SeeAlso: `StyledView`
 /// - SeeAlso: `EpoxyableView`
-public protocol BehaviorsConfigurableView: UIViewOrNSView {
+public protocol BehaviorsConfigurableView: ViewType {
   /// The non-`Equatable` properties that can be changed over of the lifecycle this View's
   /// instances, e.g. callback closures or delegates.
   ///

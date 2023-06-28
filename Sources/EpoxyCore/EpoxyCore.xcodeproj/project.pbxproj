@@ -38,7 +38,7 @@
 		08E2E95E2A4CD54A00B47A18 /* StyledView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E9312A4CD54A00B47A18 /* StyledView.swift */; };
 		08E2E95F2A4CD54A00B47A18 /* ContentConfigurableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E9322A4CD54A00B47A18 /* ContentConfigurableView.swift */; };
 		08E2E9602A4CD54A00B47A18 /* EpoxyableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E9332A4CD54A00B47A18 /* EpoxyableView.swift */; };
-		08E2E9612A4CD54A00B47A18 /* PlatformView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E9342A4CD54A00B47A18 /* PlatformView.swift */; };
+		08E2E9612A4CD54A00B47A18 /* ViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E9342A4CD54A00B47A18 /* ViewType.swift */; };
 		08E2E9622A4CD54A00B47A18 /* BehaviorsConfigurableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E9352A4CD54A00B47A18 /* BehaviorsConfigurableView.swift */; };
 		08E2E9632A4CD54A00B47A18 /* UIViewConfiguringSwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E9372A4CD54A00B47A18 /* UIViewConfiguringSwiftUIView.swift */; };
 		08E2E9642A4CD54A00B47A18 /* EpoxySwiftUILayoutMargins.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08E2E9382A4CD54A00B47A18 /* EpoxySwiftUILayoutMargins.swift */; };
@@ -85,7 +85,7 @@
 		08E2E9312A4CD54A00B47A18 /* StyledView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StyledView.swift; sourceTree = "<group>"; };
 		08E2E9322A4CD54A00B47A18 /* ContentConfigurableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentConfigurableView.swift; sourceTree = "<group>"; };
 		08E2E9332A4CD54A00B47A18 /* EpoxyableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpoxyableView.swift; sourceTree = "<group>"; };
-		08E2E9342A4CD54A00B47A18 /* PlatformView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlatformView.swift; sourceTree = "<group>"; };
+		08E2E9342A4CD54A00B47A18 /* ViewType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewType.swift; sourceTree = "<group>"; };
 		08E2E9352A4CD54A00B47A18 /* BehaviorsConfigurableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BehaviorsConfigurableView.swift; sourceTree = "<group>"; };
 		08E2E9372A4CD54A00B47A18 /* UIViewConfiguringSwiftUIView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIViewConfiguringSwiftUIView.swift; sourceTree = "<group>"; };
 		08E2E9382A4CD54A00B47A18 /* EpoxySwiftUILayoutMargins.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EpoxySwiftUILayoutMargins.swift; sourceTree = "<group>"; };
@@ -201,7 +201,7 @@
 				08E2E9312A4CD54A00B47A18 /* StyledView.swift */,
 				08E2E9322A4CD54A00B47A18 /* ContentConfigurableView.swift */,
 				08E2E9332A4CD54A00B47A18 /* EpoxyableView.swift */,
-				08E2E9342A4CD54A00B47A18 /* PlatformView.swift */,
+				08E2E9342A4CD54A00B47A18 /* ViewType.swift */,
 				08E2E9352A4CD54A00B47A18 /* BehaviorsConfigurableView.swift */,
 			);
 			path = Views;
@@ -324,7 +324,7 @@
 				08E2E95D2A4CD54A00B47A18 /* Diffable.swift in Sources */,
 				08E2E95E2A4CD54A00B47A18 /* StyledView.swift in Sources */,
 				08E2E9682A4CD54A00B47A18 /* MeasuringUIViewRepresentable.swift in Sources */,
-				08E2E9612A4CD54A00B47A18 /* PlatformView.swift in Sources */,
+				08E2E9612A4CD54A00B47A18 /* ViewType.swift in Sources */,
 				08E2E96C2A4CD54A00B47A18 /* EpoxySwiftUIHostingView.swift in Sources */,
 				08E2E9432A4CD54A00B47A18 /* EpoxyModelStorage.swift in Sources */,
 				08E2E9492A4CD54A00B47A18 /* WillDisplayProviding.swift in Sources */,

@@ -6,7 +6,7 @@
 /// The capability of constructing a `UIView`.
 public protocol MakeViewProviding {
   /// The view constructed when the `MakeView` closure is called.
-  associatedtype View: UIViewOrNSView
+  associatedtype View: ViewType
 
   /// A closure that's called to construct an instance of `View`.
   typealias MakeView = () -> View

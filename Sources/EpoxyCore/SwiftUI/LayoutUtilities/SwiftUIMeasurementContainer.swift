@@ -12,7 +12,7 @@ import SwiftUI
 /// height through the `SwiftUISizingContext` binding.
 ///
 /// - SeeAlso: ``MeasuringUIViewRepresentable``
-public final class SwiftUIMeasurementContainer<Content: UIViewOrNSView>: UIViewOrNSView {
+public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
 
   // MARK: Lifecycle
 
@@ -256,11 +256,11 @@ public final class SwiftUIMeasurementContainer<Content: UIViewOrNSView>: UIViewO
 
     case .intrinsicHeightProposedWidth:
       measuredSize = content.systemLayoutFittingIntrinsicHeightFixedWidth(proposedSizeElseBounds.width)
-      measuredSize.width = UIViewOrNSView.noIntrinsicMetric
+      measuredSize.width = ViewType.noIntrinsicMetric
 
     case .intrinsicWidthProposedHeight:
       measuredSize = content.systemLayoutFittingIntrinsicWidthFixedHeight(proposedSizeElseBounds.height)
-      measuredSize.height = UIViewOrNSView.noIntrinsicMetric
+      measuredSize.height = ViewType.noIntrinsicMetric
 
     case .intrinsic(let size):
       measuredSize = size
@@ -273,18 +273,18 @@ public final class SwiftUIMeasurementContainer<Content: UIViewOrNSView>: UIViewO
       //   we don't want that scenario to prevent size changes when there is actually more space
       //   available.
       if
-        proposedSize.width != UIViewOrNSView.noIntrinsicMetric,
+        proposedSize.width != ViewType.noIntrinsicMetric,
         measuredSize.width > proposedSizeElseBounds.width,
         _intrinsicContentSize.width != proposedSize.width
       {
-        measuredSize.width = UIViewOrNSView.noIntrinsicMetric
+        measuredSize.width = ViewType.noIntrinsicMetric
       }
       if
-        proposedSize.height != UIViewOrNSView.noIntrinsicMetric,
+        proposedSize.height != ViewType.noIntrinsicMetric,
         measuredSize.height > proposedSizeElseBounds.height,
         _intrinsicContentSize.height != proposedSize.height
       {
-        measuredSize.height = UIViewOrNSView.noIntrinsicMetric
+        measuredSize.height = ViewType.noIntrinsicMetric
       }
     }
 
@@ -350,16 +350,16 @@ private enum ResolvedSwiftUIMeasurementContainerStrategy {
 
 // MARK: - UILayoutPriority
 
-extension UILayoutPriorityOrNSLayoutConstraintPriority {
+extension LayoutPriorityType {
   /// An "almost required" constraint, useful for creating near-required constraints that don't
   /// error when unable to be satisfied.
   @nonobjc
-  fileprivate static var almostRequired: UILayoutPriorityOrNSLayoutConstraintPriority { .init(rawValue: required.rawValue - 1) }
+  fileprivate static var almostRequired: LayoutPriorityType { .init(rawValue: required.rawValue - 1) }
 }
 
 // MARK: - UIView
 
-extension UIViewOrNSView {
+extension ViewType {
   /// The `systemLayoutSizeFitting(…)` of this view with a compressed size and fitting priorities.
   @nonobjc
   fileprivate func systemLayoutFittingIntrinsicSize() -> CGSize {
@@ -378,7 +378,7 @@ extension UIViewOrNSView {
   @nonobjc
   fileprivate func systemLayoutFittingIntrinsicHeightFixedWidth(
     _ width: CGFloat,
-    priority: UILayoutPriorityOrNSLayoutConstraintPriority = .almostRequired)
+    priority: LayoutPriorityType = .almostRequired)
     -> CGSize
   {
     #if os(macOS)
@@ -398,7 +398,7 @@ extension UIViewOrNSView {
   @nonobjc
   fileprivate func systemLayoutFittingIntrinsicWidthFixedHeight(
     _ height: CGFloat,
-    priority: UILayoutPriorityOrNSLayoutConstraintPriority = .almostRequired)
+    priority: LayoutPriorityType = .almostRequired)
     -> CGSize
   {
     #if os(macOS)
@@ -438,14 +438,14 @@ extension UIViewOrNSView {
 extension CGSize {
   /// A `CGSize` with `noIntrinsicMetric` for both its width and height.
   fileprivate static var noIntrinsicMetric: CGSize {
-    .init(width: UIViewOrNSView.noIntrinsicMetric, height: UIViewOrNSView.noIntrinsicMetric)
+    .init(width: ViewType.noIntrinsicMetric, height: ViewType.noIntrinsicMetric)
   }
 
   /// Returns a `CGSize` with its width and/or height replaced with the corresponding field of the
   /// provided `fallback` size if they are `UIView.noIntrinsicMetric`.
   fileprivate func replacingNoIntrinsicMetric(with fallback: CGSize) -> CGSize {
     .init(
-      width: width == UIViewOrNSView.noIntrinsicMetric ? fallback.width : width,
-      height: height == UIViewOrNSView.noIntrinsicMetric ? fallback.height : height)
+      width: width == ViewType.noIntrinsicMetric ? fallback.width : width,
+      height: height == ViewType.noIntrinsicMetric ? fallback.height : height)
   }
 }
