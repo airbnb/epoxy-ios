@@ -1,8 +1,6 @@
 //  Created by Laura Skelton on 5/30/17.
 //  Copyright © 2017 Airbnb. All rights reserved.
 
-import UIKit
-
 // MARK: - ContentConfigurableView
 
 /// A view that can be configured with a `Content` instance that contains the view's `Equatable`
@@ -19,7 +17,7 @@ import UIKit
 /// - SeeAlso: `BehaviorsConfigurableView`
 /// - SeeAlso: `StyledView`
 /// - SeeAlso: `EpoxyableView`
-public protocol ContentConfigurableView: UIView {
+public protocol ContentConfigurableView: UIViewOrNSView {
   /// The `Equatable` properties that can be updated on instances of this view, e.g. text `String`s
   /// or image `URL`s.
   ///

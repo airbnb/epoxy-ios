@@ -4,6 +4,8 @@
 import Combine
 import SwiftUI
 
+#if !os(macOS)
+
 // MARK: - SwiftUIHostingViewReuseBehavior
 
 /// The reuse behavior of an `EpoxySwiftUIHostingView`.
@@ -380,3 +382,5 @@ struct EpoxyHostingWrapper<Content: View>: View {
       .environment(\.epoxyIntrinsicContentSizeInvalidator, environment.intrinsicContentSizeInvalidator)
   }
 }
+
+#endif

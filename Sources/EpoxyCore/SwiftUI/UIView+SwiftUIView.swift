@@ -3,9 +3,9 @@
 
 import SwiftUI
 
-// MARK: - UIViewProtocol + swiftUIView
+// MARK: - UIViewOrNSViewProtocol + swiftUIView
 
-extension UIViewProtocol {
+extension UIViewOrNSViewProtocol {
   /// Returns a SwiftUI `View` representing this `UIView`, constructed with the given `makeView`
   /// closure and sized with the given sizing configuration.
   ///
@@ -29,11 +29,15 @@ extension UIViewProtocol {
   }
 }
 
-// MARK: - UIViewProtocol
+// MARK: - UIViewOrNSViewProtocol
 
 /// A protocol that all `UIView`s conform to, enabling extensions that have a `Self` reference.
-public protocol UIViewProtocol: UIView { }
+public protocol UIViewOrNSViewProtocol: UIViewOrNSView { }
 
 // MARK: - UIView + UIViewProtocol
 
-extension UIView: UIViewProtocol { }
+#if canImport(UIKit)
+extension UIView: UIViewOrNSViewProtocol { }
+#elseif canImport(AppKit)
+extension NSView: UIViewOrNSViewProtocol { }
+#endif

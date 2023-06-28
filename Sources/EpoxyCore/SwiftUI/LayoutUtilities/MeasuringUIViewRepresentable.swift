@@ -12,12 +12,12 @@ import SwiftUI
 /// `sizeThatFits(…)` method.
 ///
 /// - SeeAlso: ``SwiftUIMeasurementContainer``
-public protocol MeasuringUIViewRepresentable: UIViewRepresentable
+public protocol MeasuringUIViewRepresentable: UIViewRepresentableOrNSViewRepresentable
   where
-  UIViewType == SwiftUIMeasurementContainer<Content>
+  UIViewTypeOrNSViewType == SwiftUIMeasurementContainer<Content>
 {
   /// The `UIView` content that's being measured by the enclosing `SwiftUIMeasurementContainer`.
-  associatedtype Content: UIView
+  associatedtype Content: UIViewOrNSView
 
   /// The sizing strategy of the represented view.
   ///
@@ -41,11 +41,12 @@ extension MeasuringUIViewRepresentable {
 
 // MARK: Defaults
 
+#if os(iOS) || os(tvOS)
 extension MeasuringUIViewRepresentable {
   public func _overrideSizeThatFits(
     _ size: inout CGSize,
     in proposedSize: _ProposedSize,
-    uiView: UIViewType)
+    uiView: UIViewTypeOrNSViewType)
   {
     uiView.strategy = sizing
 
@@ -55,17 +56,17 @@ extension MeasuringUIViewRepresentable {
 
     // Creates a `CGSize` by replacing `nil`s with `UIView.noIntrinsicMetric`
     uiView.proposedSize = .init(
-      width: children.first { $0.label == "width" }?.value as? CGFloat ?? UIView.noIntrinsicMetric,
-      height: children.first { $0.label == "height" }?.value as? CGFloat ?? UIView.noIntrinsicMetric)
+      width: children.first { $0.label == "width" }?.value as? CGFloat ?? UIViewOrNSView.noIntrinsicMetric,
+      height: children.first { $0.label == "height" }?.value as? CGFloat ?? UIViewOrNSView.noIntrinsicMetric)
 
     size = uiView.measuredFittingSize
   }
 
   #if swift(>=5.7) // Proxy check for being built with the iOS 15 SDK
-  @available(iOS 16.0, *)
+  @available(iOS 16.0, tvOS 16.0, *)
   public func sizeThatFits(
     _ proposal: ProposedViewSize,
-    uiView: UIViewType,
+    uiView: UIViewTypeOrNSViewType,
     context _: Context)
     -> CGSize?
   {
@@ -73,10 +74,53 @@ extension MeasuringUIViewRepresentable {
 
     // Creates a size by replacing `nil`s with `UIView.noIntrinsicMetric`
     uiView.proposedSize = .init(
-      width: proposal.width ?? UIView.noIntrinsicMetric,
-      height: proposal.height ?? UIView.noIntrinsicMetric)
+      width: proposal.width ?? UIViewOrNSView.noIntrinsicMetric,
+      height: proposal.height ?? UIViewOrNSView.noIntrinsicMetric)
 
     return uiView.measuredFittingSize
   }
   #endif
 }
+
+#elseif os(macOS)
+@available(macOS 10.15, *)
+extension MeasuringUIViewRepresentable {
+  public func _overrideSizeThatFits(
+    _ size: inout CGSize,
+    in proposedSize: _ProposedSize,
+    nsView: UIViewTypeOrNSViewType)
+  {
+    nsView.strategy = sizing
+
+    // Note: this method is not double-called on iOS 16, so we don't need to do anything to prevent
+    // extra work here.
+    let children = Mirror(reflecting: proposedSize).children
+
+    // Creates a `CGSize` by replacing `nil`s with `UIView.noIntrinsicMetric`
+    nsView.proposedSize = .init(
+      width: children.first { $0.label == "width" }?.value as? CGFloat ?? UIViewOrNSView.noIntrinsicMetric,
+      height: children.first { $0.label == "height" }?.value as? CGFloat ?? UIViewOrNSView.noIntrinsicMetric)
+
+    size = nsView.measuredFittingSize
+  }
+
+  #if swift(>=5.7) // Proxy check for being built with the iOS 15 SDK
+  @available(macOS 13.0, *)
+  public func sizeThatFits(
+    _ proposal: ProposedViewSize,
+    nsView: UIViewTypeOrNSViewType,
+    context _: Context)
+    -> CGSize?
+  {
+    nsView.strategy = sizing
+
+    // Creates a size by replacing `nil`s with `UIView.noIntrinsicMetric`
+    nsView.proposedSize = .init(
+      width: proposal.width ?? UIViewOrNSView.noIntrinsicMetric,
+      height: proposal.height ?? UIViewOrNSView.noIntrinsicMetric)
+
+    return nsView.measuredFittingSize
+  }
+  #endif
+}
+#endif

@@ -1,8 +1,6 @@
 //  Created by Laura Skelton on 4/14/16.
 //  Copyright © 2016 Airbnb. All rights reserved.
 
-import UIKit
-
 // MARK: - StyledView
 
 /// A view that can be initialized with a `Style` instance that contains the view's invariant
@@ -23,7 +21,7 @@ import UIKit
 /// - SeeAlso: `ContentConfigurableView`
 /// - SeeAlso: `BehaviorsConfigurableView`
 /// - SeeAlso: `EpoxyableView`
-public protocol StyledView: UIView {
+public protocol StyledView: UIViewOrNSView {
   /// The style type of this view, passed into its initializer to configure the resulting instance.
   ///
   /// Defaults to `Never` for views that do not have a `Style`.
