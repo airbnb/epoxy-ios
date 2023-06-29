@@ -103,9 +103,7 @@ extension MeasuringViewRepresentable {
   }
 
   // Proxy check for being built with the macOS 13 SDK.
-  // https://forums.swift.org/t/introduce-if-stdlib-or-clarify-if-swift/62703/21
-  #if swift(>=5.7)
-  #if canImport(Swift, _version: 5.7)
+  #if swift(>=5.7.1)
   @available(macOS 13.0, *)
   public func sizeThatFits(
     _ proposal: ProposedViewSize,
@@ -122,7 +120,6 @@ extension MeasuringViewRepresentable {
 
     return nsView.measuredFittingSize
   }
-  #endif
   #endif
 }
 #endif
