@@ -27,7 +27,6 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '13.2.1' # Swift 5.5 (lowest)
         - '14.0.1' # Swift 5.7 (highest)
     steps:
       - uses: actions/checkout@v2
