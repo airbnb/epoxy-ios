@@ -102,7 +102,9 @@ extension MeasuringViewRepresentable {
     size = nsView.measuredFittingSize
   }
 
-  #if swift(>=5.7) // Proxy check for being built with the iOS 15 SDK
+  // Proxy check for being built with the macOS 13 SDK.
+  // https://forums.swift.org/t/introduce-if-stdlib-or-clarify-if-swift/62703/21
+  #if canImport(Swift, _version: 5.7)
   @available(macOS 13.0, *)
   public func sizeThatFits(
     _ proposal: ProposedViewSize,
