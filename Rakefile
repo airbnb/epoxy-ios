@@ -7,8 +7,10 @@ namespace :build do
   desc 'Builds the EpoxyCore package for iOS, macOS, and tvOS'
   task :EpoxyCore do
     xcodebuild 'build -scheme EpoxyCore -destination generic/platform=iOS'
-    xcodebuild 'build -scheme EpoxyCore -destination generic/platform=tvOS'
-    xcodebuild 'build -scheme EpoxyCore -destination generic/platform=macOS'
+    # Even though the deployment targets are configured in the .xcodeproj, xcodebuild doesn't respect that properly in CI for some reason.
+    # As a workaround we can specify it manually here.
+    xcodebuild 'build -scheme EpoxyCore -destination generic/platform=tvOS TVOS_DEPLOYMENT_TARGET=13.0'
+    xcodebuild 'build -scheme EpoxyCore -destination generic/platform=macOS MACOSX_DEPLOYMENT_TARGET=10.15'
   end
 
   desc 'Builds the EpoxyExample app'
