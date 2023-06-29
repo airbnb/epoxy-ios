@@ -27,7 +27,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '14.0.1' # Swift 5.7
+        - '14.3.1' # Swift 5.8
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
