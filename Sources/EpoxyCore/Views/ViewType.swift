@@ -23,6 +23,7 @@ extension ViewRepresentableType {
   /// Either `UIViewType` on iOS/tvOS or `NSViewType` on macOS.
   public typealias RepresentableViewType = UIViewType
 }
+
 #elseif os(macOS)
 import AppKit
 

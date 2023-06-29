@@ -23,11 +23,12 @@ jobs:
         run: bundle exec rake build:package
 
   build-epoxy-core:
-    runs-on: macos-13
+    runs-on: macos-latest
     strategy:
       matrix:
         xcode:
-        - '14.3.1' # Swift 5.8
+        - '13.2.1' # Swift 5.5 (lowest)
+        - '14.0.1' # Swift 5.7 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup

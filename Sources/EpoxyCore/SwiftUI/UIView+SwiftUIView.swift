@@ -34,6 +34,6 @@ extension ViewTypeProtocol {
 /// A protocol that all `UIView`s conform to, enabling extensions that have a `Self` reference.
 public protocol ViewTypeProtocol: ViewType { }
 
-// MARK: - ViewType + UIViewProtocol
+// MARK: - ViewType + ViewTypeProtocol
 
 extension ViewType: ViewTypeProtocol { }
