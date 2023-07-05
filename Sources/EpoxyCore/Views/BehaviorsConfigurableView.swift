@@ -1,8 +1,6 @@
 // Created by Tyler Hedrick on 5/26/20.
 // Copyright © 2020 Airbnb Inc. All rights reserved.
 
-import UIKit
-
 // MARK: - BehaviorsConfigurableView
 
 /// A view that can be configured with a `Behaviors` instance that contains the view's non-
@@ -20,7 +18,7 @@ import UIKit
 /// - SeeAlso: `ContentConfigurableView`
 /// - SeeAlso: `StyledView`
 /// - SeeAlso: `EpoxyableView`
-public protocol BehaviorsConfigurableView: UIView {
+public protocol BehaviorsConfigurableView: ViewType {
   /// The non-`Equatable` properties that can be changed over of the lifecycle this View's
   /// instances, e.g. callback closures or delegates.
   ///

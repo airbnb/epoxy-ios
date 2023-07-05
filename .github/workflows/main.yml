@@ -22,6 +22,20 @@ jobs:
       - name: Build Package
         run: bundle exec rake build:package
 
+  build-epoxy-core:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        xcode:
+        - '14.0.1' # Swift 5.7 (highest)
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/setup
+        with:
+          xcode: ${{ matrix.xcode }}
+      - name: Build EpoxyCore
+        run: bundle exec rake build:EpoxyCore
+
   build-example:
     runs-on: macos-latest
     strategy:

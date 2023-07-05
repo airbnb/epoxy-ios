@@ -3,6 +3,7 @@
 
 import SwiftUI
 
+#if !os(macOS)
 // MARK: - EpoxySwiftUIUIHostingController
 
 /// A `UIHostingController` that hosts SwiftUI views within an Epoxy container, e.g. an Epoxy
@@ -41,3 +42,4 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
     view.backgroundColor = .clear
   }
 }
+#endif
