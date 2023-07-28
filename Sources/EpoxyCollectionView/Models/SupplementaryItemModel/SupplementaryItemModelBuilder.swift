@@ -7,7 +7,7 @@ import EpoxyCore
 ///
 /// For example:
 /// ```
-/// @SupplementaryItemModelBuilder var items: [SupplementaryItemModeling] {
+/// @SupplementaryItemModelBuilder var supplementaryItems: [SupplementaryItemModeling] {
 ///    MyView.supplementaryItemModel(…)
 ///    MyOtherView.supplementaryItemModel(…)
 /// }
