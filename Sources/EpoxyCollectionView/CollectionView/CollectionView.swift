@@ -393,12 +393,17 @@ open class CollectionView: UICollectionView {
   public func reloadItem(at indexPath: IndexPath, animated: Bool) {
     guard
       let cell = cellForItem(at: indexPath as IndexPath) as? CollectionViewCell,
-      let item = epoxyDataSource.data?.item(at: indexPath)
+      let item = epoxyDataSource.data?.item(at: indexPath),
+      let section = epoxyDataSource.data?.section(at: indexPath.section)
     else {
       return
     }
 
-    configure(cell: cell, with: item, animated: animated)
+    configure(
+      cell: cell,
+      with: item,
+      at: .init(itemDataID: item.dataID, section: .dataID(section.dataID)),
+      animated: animated)
   }
 
   /// Invalidates the layout of this collection view's underlying `collectionViewLayout`.
@@ -419,7 +424,12 @@ open class CollectionView: UICollectionView {
       withReuseIdentifier: supplementaryViewReuseID)
   }
 
-  func configure(cell: CollectionViewCell, with item: AnyItemModel, animated: Bool) {
+  func configure(
+    cell: CollectionViewCell,
+    with item: AnyItemModel,
+    at itemPath: ItemPath,
+    animated: Bool)
+  {
     let cellSelectionStyle = item.selectionStyle ?? selectionStyle
     switch cellSelectionStyle {
     case .noBackground:
@@ -429,6 +439,7 @@ open class CollectionView: UICollectionView {
     }
 
     cell.accessibilityDelegate = self
+    cell.itemPath = itemPath
 
     let metadata = ItemCellMetadata(
       traitCollection: traitCollection,
@@ -661,6 +672,33 @@ open class CollectionView: UICollectionView {
     }
   }
 
+  /// Helper function which provides the correct data for a given cell at an index path taking into account the current update state of the
+  /// collection view.
+  ///
+  /// This is used in cases where the collection view might be mid-update and we need to find the underlying item for a cell and index
+  /// path, but there is no guarantee of whether the cell is from the pre-update data or post-update data (so we check both).
+  private func data(for cell: CollectionViewCell, at indexPath: IndexPath) -> CollectionViewData? {
+    guard let itemPath = cell.itemPath else {
+      EpoxyLogger.shared.assertionFailure("Cell is missing item path.")
+      return nil
+    }
+
+    switch updateState {
+    case .notUpdating, .preparingUpdate:
+      return epoxyDataSource.data
+    case .updating(from: let oldData):
+      if oldData.indexPathForItem(at: itemPath) == indexPath {
+        return oldData
+      } else if epoxyDataSource.data?.indexPathForItem(at: itemPath) == indexPath {
+        return epoxyDataSource.data
+      } else {
+        EpoxyLogger.shared.assertionFailure(
+          "Cell not found in either old or new data during an update.")
+        return nil
+      }
+    }
+  }
+
   private func itemForCell(_ cell: CollectionViewCell) -> AnyItemModel? {
     guard
       let indexPath = indexPath(for: cell),
@@ -783,19 +821,21 @@ extension CollectionView: UICollectionViewDelegate {
     willDisplay cell: UICollectionViewCell,
     forItemAt indexPath: IndexPath)
   {
+    guard let cell = cell as? CollectionViewCell else {
+      EpoxyLogger.shared.assertionFailure("Cell does not match expected type CollectionViewCell.")
+      return
+    }
+
+    let data = data(for: cell, at: indexPath)
+
     guard
-      let item = epoxyDataSource.data?.item(at: indexPath),
-      let section = epoxyDataSource.data?.section(at: indexPath.section)
+      let item = data?.item(at: indexPath),
+      let section = data?.section(at: indexPath.section)
     else {
       return
     }
 
     handleSection(section, itemWillDisplay: .item(dataID: item.dataID))
-
-    guard let cell = cell as? CollectionViewCell else {
-      EpoxyLogger.shared.assertionFailure("Cell does not match expected type CollectionViewCell.")
-      return
-    }
 
     item.handleWillDisplay(
       cell,
@@ -811,28 +851,21 @@ extension CollectionView: UICollectionViewDelegate {
     didEndDisplaying cell: UICollectionViewCell,
     forItemAt indexPath: IndexPath)
   {
-    // When updating, items ending display correspond to items in the old data.
-    let data: CollectionViewData?
-    switch updateState {
-    case .notUpdating, .preparingUpdate:
-      data = epoxyDataSource.data
-    case .updating(from: let oldData):
-      data = oldData
+    guard let cell = cell as? CollectionViewCell else {
+      EpoxyLogger.shared.assertionFailure("Cell does not match expected type CollectionViewCell.")
+      return
     }
 
+    let data = data(for: cell, at: indexPath)
+
     guard
-      let item = data?.itemIfPresent(at: indexPath),
-      let section = data?.sectionIfPresent(at: indexPath.section)
+      let item = data?.item(at: indexPath),
+      let section = data?.section(at: indexPath.section)
     else {
       return
     }
 
     handleSection(section, itemDidEndDisplaying: .item(dataID: item.dataID))
-
-    guard let cell = cell as? CollectionViewCell else {
-      EpoxyLogger.shared.assertionFailure("Cell does not match expected type CollectionViewCell.")
-      return
-    }
 
     item.handleDidEndDisplaying(
       cell,

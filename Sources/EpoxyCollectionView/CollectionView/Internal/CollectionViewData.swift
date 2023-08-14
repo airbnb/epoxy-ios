@@ -82,16 +82,6 @@ struct CollectionViewData {
     return section.items[indexPath.row].eraseToAnyItemModel()
   }
 
-  /// Returns the erased item model at the given index path, otherwise `nil` if it does not exist.
-  func itemIfPresent(at indexPath: IndexPath) -> AnyItemModel? {
-    guard indexPath.section < sections.count else { return nil }
-
-    let section = sections[indexPath.section]
-    guard indexPath.row < section.items.count else { return nil }
-
-    return section.items[indexPath.row].eraseToAnyItemModel()
-  }
-
   /// Returns the section model at the given index, asserting if it does not exist.
   func section(at index: Int) -> SectionModel? {
     guard index < sections.count else {
