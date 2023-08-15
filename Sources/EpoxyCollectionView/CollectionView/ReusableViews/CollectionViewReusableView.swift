@@ -71,7 +71,7 @@ public final class CollectionViewReusableView: UICollectionReusableView {
 
   // MARK: Internal
 
-  /// The item path of the cell from its last configuration update. Used to associate the view with the underlying data. When collection
+  /// The item path of the supplementary view from its last configuration update. Used to associate the view with the underlying data. When collection
   /// view provides view display callbacks, if it is mid update, we need this to see if the view came from pre-update data or
   /// post-update data.
   var itemPath: SupplementaryItemPath?
