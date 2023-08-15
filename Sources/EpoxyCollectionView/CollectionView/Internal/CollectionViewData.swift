@@ -46,14 +46,14 @@ struct CollectionViewData {
 
       let sectionSupplementaryItems = section.supplementaryItems
       for (elementKind, supplementaryItems) in sectionSupplementaryItems {
-        var itemIndexMap = ItemIndexMap()
+        var indexMapForElementKind = supplementaryItemIndexMap[elementKind] ?? ItemIndexMap()
         for itemIndex in supplementaryItems.indices {
           let item = supplementaryItems[itemIndex]
           let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
-          itemIndexMap[item.internalItemModel.dataID, default: [:]][sectionDataID, default: []]
+          indexMapForElementKind[item.internalItemModel.dataID, default: [:]][sectionDataID, default: []]
             .append(indexPath)
         }
-        supplementaryItemIndexMap[elementKind] = itemIndexMap
+        supplementaryItemIndexMap[elementKind] = indexMapForElementKind
       }
     }
 
