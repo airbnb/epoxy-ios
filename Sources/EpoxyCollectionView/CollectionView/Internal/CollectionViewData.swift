@@ -14,11 +14,13 @@ struct CollectionViewData {
   private init(
     sections: [SectionModel],
     sectionIndexMap: SectionIndexMap,
-    itemIndexMap: ItemIndexMap)
+    itemIndexMap: ItemIndexMap,
+    supplementaryItemIndexMap: SupplementaryItemIndexMap)
   {
     self.sections = sections
     self.sectionIndexMap = sectionIndexMap
     self.itemIndexMap = itemIndexMap
+    self.supplementaryItemIndexMap = supplementaryItemIndexMap
   }
 
   // MARK: Internal
@@ -28,6 +30,7 @@ struct CollectionViewData {
   static func make(sections: [SectionModel]) -> Self {
     var sectionIndexMap = SectionIndexMap()
     var itemIndexMap = ItemIndexMap()
+    var supplementaryItemIndexMap = SupplementaryItemIndexMap()
 
     for sectionIndex in sections.indices {
       let section = sections[sectionIndex]
@@ -40,9 +43,25 @@ struct CollectionViewData {
         let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
         itemIndexMap[item.dataID, default: [:]][sectionDataID, default: []].append(indexPath)
       }
+
+      let sectionSupplementaryItems = section.supplementaryItems
+      for (elementKind, supplementaryItems) in sectionSupplementaryItems {
+        var itemIndexMap = ItemIndexMap()
+        for itemIndex in supplementaryItems.indices {
+          let item = supplementaryItems[itemIndex]
+          let indexPath = IndexPath(item: itemIndex, section: sectionIndex)
+          itemIndexMap[item.internalItemModel.dataID, default: [:]][sectionDataID, default: []]
+            .append(indexPath)
+        }
+        supplementaryItemIndexMap[elementKind] = itemIndexMap
+      }
     }
 
-    return .init(sections: sections, sectionIndexMap: sectionIndexMap, itemIndexMap: itemIndexMap)
+    return .init(
+      sections: sections,
+      sectionIndexMap: sectionIndexMap,
+      itemIndexMap: itemIndexMap,
+      supplementaryItemIndexMap: supplementaryItemIndexMap)
   }
 
   func makeChangeset(from otherData: Self) -> CollectionViewChangeset {
@@ -96,30 +115,6 @@ struct CollectionViewData {
     return sections[index]
   }
 
-  /// Returns the section model at the given index, otherwise `nil` if it does not exist.
-  func sectionIfPresent(at index: Int) -> SectionModel? {
-    guard index < sections.count else { return nil }
-
-    return sections[index]
-  }
-
-  /// Returns the supplementary item model of the provided kind at the given index, otherwise `nil`
-  /// if it does not exist.
-  func supplementaryItemIfPresent(
-    ofKind elementKind: String,
-    at indexPath: IndexPath)
-    -> AnySupplementaryItemModel?
-  {
-    guard indexPath.section < sections.count else { return nil }
-
-    let section = sections[indexPath.section]
-
-    guard let models = section.supplementaryItems[elementKind] else { return nil }
-    guard indexPath.item < models.count else { return nil }
-
-    return models[indexPath.item].eraseToAnySupplementaryItemModel()
-  }
-
   /// Returns the supplementary item model of the provided kind at the given index, asserting if it
   /// does not exist.
   func supplementaryItem(
@@ -146,70 +141,20 @@ struct CollectionViewData {
     return model.eraseToAnySupplementaryItemModel()
   }
 
+  /// Returns the `IndexPath` corresponding to the given `SupplementaryItemPath`, logging a warning if the
+  /// `SupplementaryItemPath` corresponds to multiple supplementary items due to duplicate data IDs.
+  func indexPathForSupplementaryItem(at path: SupplementaryItemPath) -> IndexPath? {
+    guard let itemIndexMap = supplementaryItemIndexMap[path.elementKind] else {
+      return nil
+    }
+
+    return indexPath(from: itemIndexMap, for: path.itemDataID, in: path.section)
+  }
+
   /// Returns the `IndexPath` corresponding to the given `ItemPath`, logging a warning if the
   /// `ItemPath` corresponds to multiple items due to duplicate data IDs.
   func indexPathForItem(at path: ItemPath) -> IndexPath? {
-    guard let itemIndexMapBySectionID = itemIndexMap[path.itemDataID] else {
-      return nil
-    }
-
-    func lastIndexPath(in indexPaths: [IndexPath], sectionID: AnyHashable) -> IndexPath? {
-      if indexPaths.count > 1 {
-        EpoxyLogger.shared.warn({
-          // `sectionIndexMap` is constructed from the same data as `itemIndexMap` so we can force
-          // unwrap.
-          // swiftlint:disable:next force_unwrapping
-          let sectionIndex = sectionIndexMap[sectionID]!
-
-          return """
-            Warning! Attempted to locate item \(path.itemDataID) in section \(sectionID) at indexes \
-            \(sectionIndex.map { $0 }) when there are multiple items with that ID at the indexes \
-            \(indexPaths.map { $0.item }). Choosing the last index. Items should have unique data \
-            IDs within a section as duplicate data IDs cause undefined behavior.
-            """
-        }())
-      }
-
-      return indexPaths.last
-    }
-
-    switch path.section {
-    case .dataID(let sectionID):
-      if let indexPaths = itemIndexMapBySectionID[sectionID] {
-        // If the section ID is specified, just look up the indexes for that section.
-        return lastIndexPath(in: indexPaths, sectionID: sectionID)
-      }
-      return nil
-
-    case .lastWithItemDataID:
-      // If the section ID is unspecified but there's only one section with this data ID:
-      if itemIndexMapBySectionID.count == 1, let idAndIndexes = itemIndexMapBySectionID.first {
-        return lastIndexPath(in: idAndIndexes.value, sectionID: idAndIndexes.key)
-      }
-
-      // Otherwise there's multiple sections with the same data ID so we pick the last section so
-      // that it's stable.
-      let lastSectionID = itemIndexMapBySectionID.max(by: { first, second in
-        // `sectionIndexMap` is constructed from the same data as `itemIndexMap` so we can safely
-        // force unwrap.
-        // swiftlint:disable:next force_unwrapping
-        sectionIndexMap[first.key]!.last! < sectionIndexMap[second.key]!.last!
-      })
-
-      if let sectionID = lastSectionID {
-        EpoxyLogger.shared.warn("""
-          Warning! Attempted to locate item \(path.itemDataID) when there are multiple sections that \
-          contain it each with IDs \(itemIndexMapBySectionID.keys) at the indexes \
-          \(itemIndexMapBySectionID.keys.map { sectionIndexMap[$0] }). Choosing the last section \
-          \(sectionID.key). To fix this warning specify the desired section data ID when \
-          constructing your `ItemPath`.
-          """)
-
-        return lastIndexPath(in: sectionID.value, sectionID: sectionID.key)
-      }
-
-      return nil
-    }
+    indexPath(from: itemIndexMap, for: path.itemDataID, in: path.section)
   }
 
   /// Returns the `Int` index corresponding to the given section `dataID`, logging a warning if the
@@ -245,8 +190,12 @@ struct CollectionViewData {
   /// `IndexPath`s with both the item and section `dataID`.
   private typealias ItemIndexMap = [AnyHashable: [AnyHashable: [IndexPath]]]
 
+  /// The item index map for supplementary views keyed by their element kind.
+  private typealias SupplementaryItemIndexMap = [String: ItemIndexMap]
+
   private let sectionIndexMap: SectionIndexMap
   private let itemIndexMap: ItemIndexMap
+  private let supplementaryItemIndexMap: SupplementaryItemIndexMap
 
   private func supplementaryItemChangeset(
     from otherData: Self,
@@ -347,6 +296,74 @@ struct CollectionViewData {
 
       return message.joined(separator: "\n")
     }())
+  }
+
+  private func indexPath(
+    from itemIndexMapBySectionID: ItemIndexMap,
+    for itemDataID: AnyHashable,
+    in section: ItemSectionPath)
+    -> IndexPath?
+  {
+    guard let itemIndexMapBySectionID = itemIndexMapBySectionID[itemDataID] else {
+      return nil
+    }
+    func lastIndexPath(in indexPaths: [IndexPath], sectionID: AnyHashable) -> IndexPath? {
+      if indexPaths.count > 1 {
+        EpoxyLogger.shared.warn({
+          // `sectionIndexMap` is constructed from the same data as `itemIndexMap` so we can force
+          // unwrap.
+          // swiftlint:disable:next force_unwrapping
+          let sectionIndex = sectionIndexMap[sectionID]!
+
+          return """
+            Warning! Attempted to locate item \(itemDataID) in section \(sectionID) at indexes \
+            \(sectionIndex.map { $0 }) when there are multiple items with that ID at the indexes \
+            \(indexPaths.map { $0.item }). Choosing the last index. Items should have unique data \
+            IDs within a section as duplicate data IDs cause undefined behavior.
+            """
+        }())
+      }
+
+      return indexPaths.last
+    }
+
+    switch section {
+    case .dataID(let sectionID):
+      if let indexPaths = itemIndexMapBySectionID[sectionID] {
+        // If the section ID is specified, just look up the indexes for that section.
+        return lastIndexPath(in: indexPaths, sectionID: sectionID)
+      }
+      return nil
+
+    case .lastWithItemDataID:
+      // If the section ID is unspecified but there's only one section with this data ID:
+      if itemIndexMapBySectionID.count == 1, let idAndIndexes = itemIndexMapBySectionID.first {
+        return lastIndexPath(in: idAndIndexes.value, sectionID: idAndIndexes.key)
+      }
+
+      // Otherwise there's multiple sections with the same data ID so we pick the last section so
+      // that it's stable.
+      let lastSectionID = itemIndexMapBySectionID.max(by: { first, second in
+        // `sectionIndexMap` is constructed from the same data as `itemIndexMap` so we can safely
+        // force unwrap.
+        // swiftlint:disable:next force_unwrapping
+        sectionIndexMap[first.key]!.last! < sectionIndexMap[second.key]!.last!
+      })
+
+      if let sectionID = lastSectionID {
+        EpoxyLogger.shared.warn("""
+          Warning! Attempted to locate item \(itemDataID) when there are multiple sections that \
+          contain it each with IDs \(itemIndexMapBySectionID.keys) at the indexes \
+          \(itemIndexMapBySectionID.keys.map { sectionIndexMap[$0] }). Choosing the last section \
+          \(sectionID.key). To fix this warning specify the desired section data ID when \
+          constructing your `ItemPath`.
+          """)
+
+        return lastIndexPath(in: sectionID.value, sectionID: sectionID.key)
+      }
+
+      return nil
+    }
   }
 
 }

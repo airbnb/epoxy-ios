@@ -8,29 +8,17 @@ public struct ItemPath: Hashable {
 
   // MARK: Lifecycle
 
-  public init(itemDataID: AnyHashable, section: Section) {
+  public init(itemDataID: AnyHashable, section: ItemSectionPath) {
     self.itemDataID = itemDataID
     self.section = section
   }
 
   // MARK: Public
 
-  /// The section in which the item referenced by an `ItemPath` is located.
-  public enum Section: Hashable {
-    /// The section identified by the `dataID` on its corresponding `SectionModel`.
-    case dataID(AnyHashable)
-
-    /// The last section that contains an item with `itemDataID` as its `dataID`.
-    ///
-    /// If there are multiple sections with an items that have the same `dataID`, it is not
-    /// recommended use this case, as the located item may be unstable over time.
-    case lastWithItemDataID
-  }
-
   /// The item identified by the `dataID` on its corresponding `ItemModel`.
   public var itemDataID: AnyHashable
 
   /// The section in which the item referenced by this path located.
-  public var section: Section
+  public var section: ItemSectionPath
 
 }

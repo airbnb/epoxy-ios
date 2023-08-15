@@ -204,6 +204,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
   {
     guard
       let item = data?.supplementaryItem(ofKind: kind, at: indexPath),
+      let section = data?.section(at: indexPath.section),
       let reuseID = reuseIDStore.registeredReuseID(for: item.viewDifferentiator)
     else {
       // The `supplementaryItem(…)` or `registeredReuseID(…)` methods will assert in this scenario.
@@ -219,6 +220,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
       self.collectionView?.configure(
         supplementaryView: supplementaryView,
         with: item,
+        at: .init(elementKind: kind, itemDataID: item.dataID, section: .dataID(section.dataID)),
         animated: false)
     } else {
       EpoxyLogger.shared.assertionFailure(

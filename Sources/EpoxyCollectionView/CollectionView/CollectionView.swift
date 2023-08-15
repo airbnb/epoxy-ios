@@ -460,8 +460,10 @@ open class CollectionView: UICollectionView {
   func configure(
     supplementaryView: CollectionViewReusableView,
     with model: AnySupplementaryItemModel,
+    at itemPath: SupplementaryItemPath,
     animated: Bool)
   {
+    supplementaryView.itemPath = itemPath
     model.configure(
       reusableView: supplementaryView,
       traitCollection: traitCollection,
@@ -699,6 +701,38 @@ open class CollectionView: UICollectionView {
     }
   }
 
+  /// Helper function which provides the correct data for a given reusable view at an index path taking into account the current update
+  /// state of the collection view.
+  ///
+  /// This is used in cases where the collection view might be mid-update and we need to find the underlying supplementary item for a
+  /// view and index path, but there is no guarantee of whether the view is from the pre-update data or post-update
+  /// data (so we check both).
+  private func data(
+    for view: CollectionViewReusableView,
+    at indexPath: IndexPath)
+    -> CollectionViewData?
+  {
+    guard let itemPath = view.itemPath else {
+      EpoxyLogger.shared.assertionFailure("View is missing item path.")
+      return nil
+    }
+
+    switch updateState {
+    case .notUpdating, .preparingUpdate:
+      return epoxyDataSource.data
+    case .updating(from: let oldData):
+      if oldData.indexPathForSupplementaryItem(at: itemPath) == indexPath {
+        return oldData
+      } else if epoxyDataSource.data?.indexPathForSupplementaryItem(at: itemPath) == indexPath {
+        return epoxyDataSource.data
+      } else {
+        EpoxyLogger.shared.assertionFailure(
+          "View not found in either old or new data during an update.")
+        return nil
+      }
+    }
+  }
+
   private func itemForCell(_ cell: CollectionViewCell) -> AnyItemModel? {
     guard
       let indexPath = indexPath(for: cell),
@@ -882,11 +916,17 @@ extension CollectionView: UICollectionViewDelegate {
     forElementKind elementKind: String,
     at indexPath: IndexPath)
   {
-    // We don't assert since `UICollectionViewCompositionalLayout` can create and configure its own
-    // supplementary views e.g. with a `.list(using: .init(appearance: .plain))` config.
+    guard let view = view as? CollectionViewReusableView else {
+      // We don't assert since `UICollectionViewCompositionalLayout` can create and configure its
+      // own supplementary views e.g. with a `.list(using: .init(appearance: .plain))` config.
+      return
+    }
+
+    let data = data(for: view, at: indexPath)
+
     guard
-      let section = epoxyDataSource.data?.sectionIfPresent(at: indexPath.section),
-      let item = epoxyDataSource.data?.supplementaryItemIfPresent(ofKind: elementKind, at: indexPath)
+      let section = data?.section(at: indexPath.section),
+      let item = data?.supplementaryItem(ofKind: elementKind, at: indexPath)
     else {
       return
     }
@@ -894,12 +934,6 @@ extension CollectionView: UICollectionViewDelegate {
     handleSection(
       section,
       itemWillDisplay: .supplementaryItem(elementKind: elementKind, dataID: item.dataID))
-
-    guard let view = view as? CollectionViewReusableView else {
-      EpoxyLogger.shared.assertionFailure(
-        "Supplementary view does not match expected type CollectionViewReusableView.")
-      return
-    }
 
     item.handleWillDisplay(view, traitCollection: traitCollection, animated: false)
 
@@ -919,20 +953,17 @@ extension CollectionView: UICollectionViewDelegate {
     forElementOfKind elementKind: String,
     at indexPath: IndexPath)
   {
-    // When updating, items ending display correspond to items in the old data.
-    let data: CollectionViewData?
-    switch updateState {
-    case .notUpdating, .preparingUpdate:
-      data = epoxyDataSource.data
-    case .updating(from: let oldData):
-      data = oldData
+    guard let view = view as? CollectionViewReusableView else {
+      // We don't assert since `UICollectionViewCompositionalLayout` can create and configure its
+      // own supplementary views e.g. with a `.list(using: .init(appearance: .plain))` config.
+      return
     }
 
-    // We don't assert since `UICollectionViewCompositionalLayout` can create and configure its own
-    // supplementary views e.g. with a `.list(using: .init(appearance: .plain))` config.
+    let data = data(for: view, at: indexPath)
+
     guard
-      let section = data?.sectionIfPresent(at: indexPath.section),
-      let item = data?.supplementaryItemIfPresent(ofKind: elementKind, at: indexPath)
+      let section = data?.section(at: indexPath.section),
+      let item = data?.supplementaryItem(ofKind: elementKind, at: indexPath)
     else {
       return
     }
@@ -940,12 +971,6 @@ extension CollectionView: UICollectionViewDelegate {
     handleSection(
       section,
       itemDidEndDisplaying: .supplementaryItem(elementKind: elementKind, dataID: item.dataID))
-
-    guard let view = view as? CollectionViewReusableView else {
-      EpoxyLogger.shared.assertionFailure(
-        "Supplementary view does not match expected type CollectionViewReusableView.")
-      return
-    }
 
     item.handleDidEndDisplaying(view, traitCollection: traitCollection, animated: false)
 
