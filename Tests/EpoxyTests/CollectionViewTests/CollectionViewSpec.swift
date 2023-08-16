@@ -33,6 +33,15 @@ final class CollectionViewSpec: QuickSpec {
     return cell
   }
 
+  var mockHeaderView: CollectionViewReusableView {
+    let cell = CollectionViewReusableView(frame: .zero)
+    cell.itemPath = .init(
+      elementKind: UICollectionView.elementKindSectionHeader,
+      itemDataID: DefaultDataID.noneProvided,
+      section: .dataID(DefaultDataID.noneProvided))
+    return cell
+  }
+
   override func spec() {
     let itemModel = ItemModel<TestView>(dataID: DefaultDataID.noneProvided)
     let supplementaryItemModel = SupplementaryItemModel<TestView>(dataID: DefaultDataID.noneProvided)
@@ -166,7 +175,7 @@ final class CollectionViewSpec: QuickSpec {
           beforeEach {
             collectionView.delegate?.collectionView?(
               collectionView,
-              willDisplaySupplementaryView: CollectionViewReusableView(),
+              willDisplaySupplementaryView: self.mockHeaderView,
               forElementKind: UICollectionView.elementKindSectionHeader,
               at: IndexPath(item: 0, section: 0))
           }
@@ -181,7 +190,7 @@ final class CollectionViewSpec: QuickSpec {
           beforeEach {
             collectionView.delegate?.collectionView?(
               collectionView,
-              didEndDisplayingSupplementaryView: CollectionViewReusableView(),
+              didEndDisplayingSupplementaryView: self.mockHeaderView,
               forElementOfKind: UICollectionView.elementKindSectionHeader,
               at: IndexPath(item: 0, section: 0))
           }
@@ -275,7 +284,7 @@ final class CollectionViewSpec: QuickSpec {
               beforeEach {
                 collectionView.delegate?.collectionView?(
                   collectionView,
-                  willDisplaySupplementaryView: CollectionViewReusableView(),
+                  willDisplaySupplementaryView: self.mockHeaderView,
                   forElementKind: UICollectionView.elementKindSectionHeader,
                   at: IndexPath(item: 0, section: 0))
               }
@@ -292,7 +301,7 @@ final class CollectionViewSpec: QuickSpec {
                     forItemAt: IndexPath(item: 0, section: 0))
                   collectionView.delegate?.collectionView?(
                     collectionView,
-                    didEndDisplayingSupplementaryView: CollectionViewReusableView(),
+                    didEndDisplayingSupplementaryView: self.mockHeaderView,
                     forElementOfKind: UICollectionView.elementKindSectionHeader,
                     at: IndexPath(item: 0, section: 0))
                 }
