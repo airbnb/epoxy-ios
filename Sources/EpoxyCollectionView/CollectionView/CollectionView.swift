@@ -168,7 +168,7 @@ open class CollectionView: UICollectionView {
     // `scrollViewDidScroll` callback
     if
       let (indexPaths, visibilityMetadata) = cachedVisibilityMetadataForVisibleIndexPaths,
-        indexPaths == visibleItems
+      indexPaths == visibleItems
     {
       return visibilityMetadata
     }
