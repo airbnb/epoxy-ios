@@ -129,7 +129,6 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
 
   // MARK: Internal
 
-  weak var accessibilityDelegate: CollectionViewCellAccessibilityDelegate?
   var ephemeralViewCachedStateProvider: ((Any?) -> Void)?
 
   /// The item path of the cell from its last configuration update. Used to associate the view with the underlying data. When collection
@@ -175,15 +174,5 @@ extension CollectionViewCell {
       return super.accessibilityElementsHidden
     }
     set { super.accessibilityElementsHidden = newValue }
-  }
-
-  public override func accessibilityElementDidBecomeFocused() {
-    super.accessibilityElementDidBecomeFocused()
-    accessibilityDelegate?.collectionViewCellDidBecomeFocused(cell: self)
-  }
-
-  public override func accessibilityElementDidLoseFocus() {
-    super.accessibilityElementDidLoseFocus()
-    accessibilityDelegate?.collectionViewCellDidLoseFocus(cell: self)
   }
 }

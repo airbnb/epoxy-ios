@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Fixed an issue causing incorrect view callbacks and a corresponding assertion when a view 
   disappears during a collection view update and is only in the post-update data.
+- Removed non-functioning `accessibilityDelegate` and associated code.
 
 ## [0.10.0](https://github.com/airbnb/epoxy-ios/compare/0.9.0...0.10.0) - 2023-06-29
 
