@@ -288,15 +288,6 @@ open class CollectionView: UICollectionView {
     UIAccessibility.post(notification: notification, argument: cell)
   }
 
-  /// Moves accessibility focus to item that was most previously focused.
-  ///
-  /// The item view must be visible at the time this method is called, else this method will have
-  /// no effect.
-  public func moveAccessibilityFocusToLastFocusedElement() {
-    guard let lastFocusedDataID = lastFocusedDataID else { return }
-    moveAccessibilityFocusToItem(at: lastFocusedDataID)
-  }
-
   public func selectItem(at path: ItemPath, animated: Bool) {
     guard let indexPath = indexPathForItem(at: path) else {
       EpoxyLogger.shared.assertionFailure("item not found")
@@ -438,7 +429,6 @@ open class CollectionView: UICollectionView {
       cell.selectedBackgroundColor = selectionColor
     }
 
-    cell.accessibilityDelegate = self
     cell.itemPath = itemPath
 
     let metadata = ItemCellMetadata(
@@ -518,7 +508,6 @@ open class CollectionView: UICollectionView {
 
   private var updateState = UpdateState.notUpdating
   private var ephemeralStateCache = [AnyHashable: Any?]()
-  private var lastFocusedDataID: ItemPath?
 
   /// A dictionary used to track visible sections, keyed by `SectionModel.dataID` and with a value
   /// of the `Set` of visible items in that section, else an empty `Set` or `nil` if there are none.
@@ -1156,32 +1145,6 @@ extension CollectionView: CollectionViewDataSourceReorderingDelegate {
         inSection: sourceSection,
         toDestinationItem: destinationItem,
         inSection: destinationSection)
-  }
-}
-
-// MARK: CollectionViewCellAccessibilityDelegate
-
-extension CollectionView: CollectionViewCellAccessibilityDelegate {
-  func collectionViewCellDidBecomeFocused(cell: CollectionViewCell) {
-    guard let (item, section) = itemAndSectionModel(for: cell) else { return }
-
-    lastFocusedDataID = .init(itemDataID: item.dataID, section: .dataID(section.dataID))
-
-    accessibilityDelegate?.collectionView(
-      self,
-      itemDidBecomeFocused: item,
-      with: cell.view,
-      in: section)
-  }
-
-  func collectionViewCellDidLoseFocus(cell: CollectionViewCell) {
-    guard let (item, section) = itemAndSectionModel(for: cell) else { return }
-
-    accessibilityDelegate?.collectionView(
-      self,
-      itemDidLoseFocus: item,
-      with: cell.view,
-      in: section)
   }
 }
 
