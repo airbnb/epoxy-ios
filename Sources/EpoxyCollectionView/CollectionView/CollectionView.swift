@@ -164,6 +164,15 @@ open class CollectionView: UICollectionView {
     // https://developer.apple.com/documentation/uikit/uicollectionview/1618020-indexpathsforvisibleitems
     let visibleItems = indexPathsForVisibleItems.sorted()
 
+    // we cache this visibility metadata since it can often be accessed rapidly in response to the
+    // `scrollViewDidScroll` callback
+    if
+      let (indexPaths, visibilityMetadata) = cachedVisibilityMetadataForVisibleIndexPaths,
+        indexPaths == visibleItems
+    {
+      return visibilityMetadata
+    }
+
     let visibleSupplementaryItems = epoxyDataSource.supplementaryViewElementKinds
       .reduce(into: [String: [IndexPath]]()) { result, kind in
         let indexPaths = indexPathsForVisibleSupplementaryElements(ofKind: kind).sorted()
@@ -179,10 +188,10 @@ open class CollectionView: UICollectionView {
         let items: [CollectionViewVisibilityMetadata.Item] = visibleItems.compactMap { indexPath in
           guard
             indexPath.section == sectionIndex,
-            let item = epoxyDataSource.data?.item(at: indexPath)
+            let cell = cellForItem(at: indexPath) as? CollectionViewCell,
+            let (item, _) = itemAndSectionModel(for: cell)
           else { return nil }
-          let view = (cellForItem(at: indexPath) as? CollectionViewCell)?.view
-          return CollectionViewVisibilityMetadata.Item(model: item, view: view)
+          return CollectionViewVisibilityMetadata.Item(model: item, view: cell.view)
         }
 
         let supplementaryItems = visibleSupplementaryItems.reduce(
@@ -191,22 +200,28 @@ open class CollectionView: UICollectionView {
           result[element.key] = element.value.compactMap { indexPath in
             guard
               indexPath.section == sectionIndex,
-              let item = epoxyDataSource.data?.supplementaryItem(
-                ofKind: element.key,
-                at: indexPath)
+              let supplementaryView = supplementaryView(
+                forElementKind: element.key,
+                at: indexPath) as? CollectionViewReusableView,
+              let (item, _) = itemAndSectionModel(
+                for: supplementaryView,
+                forElementKind: element.key)
             else { return nil }
-            let supplementaryView = self.supplementaryView(
-              forElementKind: element.key,
-              at: indexPath)
-            let view = (supplementaryView as? CollectionViewReusableView)?.view
-            return CollectionViewVisibilityMetadata.SupplementaryItem(model: item, view: view)
+            return CollectionViewVisibilityMetadata.SupplementaryItem(
+              model: item,
+              view: supplementaryView.view)
           }
         }
 
         return .init(model: section, items: items, supplementaryItems: supplementaryItems)
       }
 
-    return CollectionViewVisibilityMetadata(sections: sections, collectionView: self)
+    let visibilityMetadata = CollectionViewVisibilityMetadata(
+      sections: sections,
+      collectionView: self)
+    cachedVisibilityMetadataForVisibleIndexPaths = (visibleItems, visibilityMetadata)
+
+    return visibilityMetadata
   }
 
   /// Updates the sections of this collection view to the provided `sections`, optionally animating
@@ -512,6 +527,9 @@ open class CollectionView: UICollectionView {
   /// A dictionary used to track visible sections, keyed by `SectionModel.dataID` and with a value
   /// of the `Set` of visible items in that section, else an empty `Set` or `nil` if there are none.
   private var visibleSectionItems = [AnyHashable: Set<SectionVisibleItemID>]()
+
+  /// A cache of the last accessed visibility metadata for a given array of visible index paths
+  private var cachedVisibilityMetadataForVisibleIndexPaths: ([IndexPath], CollectionViewVisibilityMetadata)?
 
   private lazy var scrollToItemHelper = CollectionViewScrollToItemHelper(collectionView: self)
 
