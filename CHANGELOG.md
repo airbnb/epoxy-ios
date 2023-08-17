@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fixed a possible index out of bounds assertion when accessing `visibilityMetadata` during a 
   batch update.
 - Added caching for `visibilityMetadata` calculations.
+- Fixed an issue that could cause SwiftUI views to be incorrectly sized in a collection view.
 
 ## [0.10.0](https://github.com/airbnb/epoxy-ios/compare/0.9.0...0.10.0) - 2023-06-29
 
