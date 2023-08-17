@@ -133,11 +133,45 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   public override func didMoveToWindow() {
     super.didMoveToWindow()
 
-    // We'll only be able to discover a valid parent `viewController` once we're added to a window,
-    // so we do so here in addition to the `handleWillDisplay(…)` method.
-    if window != nil {
-      addViewControllerIfNeeded()
-    }
+    // Having our window set is an indicator that we should try adding our `viewController` as a
+    // child. We try this from a few other places to cover all of our bases.
+    addViewControllerIfNeededAndReady()
+  }
+
+  public override func didMoveToSuperview() {
+    super.didMoveToSuperview()
+
+    // Having our superview set is an indicator that we should try adding our `viewController` as a
+    // child. We try this from a few other places to cover all of our bases.
+    //
+    // Previously, we did not implement this function, and instead relied on `didMoveToWindow` being
+    // called to know when to attempt adding our `viewController` as a child. This resulted in a
+    // cell sizing issue, where the cell would return an estimated size. This was due to a timing
+    // issue with adding our `viewController` as a child. The order of events that caused the bug is
+    // as follows:
+    // 1. `collectionView(_:cellForItemAt:)` is called
+    // 2. An `EpoxySwiftUIHostingView` is created via `makeView()`
+    // 3. The hosting view is added as a subview of, and constrained to, the cell's `contentView`
+    // via a call to `setViewIfNeeded(view:)`
+    // 4. The hosting view's `didMoveToSuperview` function is called, but prior to this change, we
+    //    did nothing in this function
+    // 5. We return from `collectionView(_:cellForItemAt:)`
+    // 6. `UICollectionView` calls the cell's `preferredLayoutAttributesFitting:` function, which
+    //    returns an estimated size
+    // 7. The hosting view's `didMoveToWindow` function is called, and we finally add our
+    //    `viewController` as a child
+    // 8. No additional sizing attempt is made by `UICollectionViewFlowLayout` or `MagazineLayout`
+    //    (for some reason compositional layout recovers)
+    //
+    // A reliable repro case for this bug is the following setup:
+    // 1. Have a tab bar controller with two tabs - the first containing an Epoxy collection view,
+    //    the second containing nothing
+    // 2. Have a reload function on the first view controller that sets one section with a few
+    //    SwiftUI items (`Color.red.frame(width: 300, height: 300`).itemModel(dataID: ...)`)
+    // 3. Switch away from the tab containing the collection view
+    // 4. Call the reload function on the collection view on the tab that's no longer visible
+    // 4. Upon returning to the first tab, the collection view will contain incorrectly sized cells
+    addViewControllerIfNeededAndReady()
   }
 
   public func setContent(_ content: Content, animated _: Bool) {
@@ -147,9 +181,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     dataID = content.dataID ?? DefaultDataID.noneProvided as AnyHashable
 
     // The view controller must be added to the view controller hierarchy to measure its content.
-    if window != nil {
-      addViewControllerIfNeeded()
-    }
+    addViewControllerIfNeededAndReady()
 
     // As of iOS 15.2, `UIHostingController` now renders updated content asynchronously, and as such
     // this view will get sized incorrectly with the previous content when reused unless we invoke
@@ -219,7 +251,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     switch (to: state, from: self.state) {
     case (to: .appearing(let animated), from: .disappeared):
       viewController.beginAppearanceTransition(true, animated: animated)
-      addViewControllerIfNeeded()
+      addViewControllerIfNeededAndReady()
     case (to: .disappearing(let animated), from: .appeared):
       viewController.beginAppearanceTransition(false, animated: animated)
     case (to: .disappeared, from: .disappearing):
@@ -237,7 +269,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
       removeViewControllerIfNeeded()
     case (to: .appeared, from: .disappeared):
       viewController.beginAppearanceTransition(true, animated: false)
-      addViewControllerIfNeeded()
+      addViewControllerIfNeededAndReady()
       viewController.endAppearanceTransition()
     case (to: .appearing(let animated), from: .appeared):
       viewController.beginAppearanceTransition(false, animated: animated)
@@ -246,7 +278,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
       viewController.beginAppearanceTransition(true, animated: animated)
     case (to: .disappearing(let animated), from: .disappeared):
       viewController.beginAppearanceTransition(true, animated: animated)
-      addViewControllerIfNeeded()
+      addViewControllerIfNeededAndReady()
       viewController.beginAppearanceTransition(false, animated: animated)
     case (to: .disappearing(let animated), from: .appearing):
       viewController.beginAppearanceTransition(false, animated: animated)
@@ -261,13 +293,29 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     self.state = state
   }
 
-  private func addViewControllerIfNeeded() {
+  private func addViewControllerIfNeededAndReady() {
+    guard let superview = superview else {
+      // If our superview is nil, we're too early and have no chance of finding a view controller
+      // up the responder chain.
+      return
+    }
+
     // This isn't great, and means that we're going to add this view controller as a child view
     // controller of a view controller somewhere else in the hierarchy, which the author of that
     // view controller may not be expecting. However there's not really a better pathway forward
     // here without requiring a view controller instance to be passed all the way through, which is
     // both burdensome and error-prone.
-    guard let nextViewController = superview?.next(UIViewController.self) else {
+    let nextViewController = superview.next(UIViewController.self)
+
+    if nextViewController == nil, window == nil {
+      // If the view controller is nil, but our window is also nil, we're a bit too early. It's
+      // possible to find a view controller up the responder chain without having a window, which is
+      // why we don't guard or assert on having a window.
+      return
+    }
+
+    guard let nextViewController = nextViewController else {
+      // One of the two previous early returns should have prevented us from getting here.
       EpoxyLogger.shared.assertionFailure(
         """
         Unable to add a UIHostingController view, could not locate a UIViewController in the \
