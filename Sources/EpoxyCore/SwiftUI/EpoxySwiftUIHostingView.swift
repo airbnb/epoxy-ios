@@ -62,6 +62,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   // MARK: Lifecycle
 
   public init(style: Style) {
+    usesPublicLayoutApisForSwiftUIHostingControllers = style.usesPublicLayoutApisForSwiftUIHostingControllers
     // Ignore the safe area to ensure the view isn't laid out incorrectly when being sized while
     // overlapping the safe area.
     epoxyContent = EpoxyHostingContent(rootView: style.initialContent.rootView)
@@ -97,20 +98,23 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   // MARK: Public
 
   public struct Style: Hashable {
-    public init(reuseBehavior: SwiftUIHostingViewReuseBehavior, initialContent: Content) {
+    public init(reuseBehavior: SwiftUIHostingViewReuseBehavior, initialContent: Content, usesPublicLayoutApisForSwiftUIHostingControllers: Bool = false) {
       self.reuseBehavior = reuseBehavior
       self.initialContent = initialContent
+      self.usesPublicLayoutApisForSwiftUIHostingControllers = usesPublicLayoutApisForSwiftUIHostingControllers
     }
 
     public var reuseBehavior: SwiftUIHostingViewReuseBehavior
     public var initialContent: Content
+    public var usesPublicLayoutApisForSwiftUIHostingControllers: Bool
 
     public static func == (lhs: Style, rhs: Style) -> Bool {
-      lhs.reuseBehavior == rhs.reuseBehavior
+      lhs.reuseBehavior == rhs.reuseBehavior && lhs.usesPublicLayoutApisForSwiftUIHostingControllers == rhs.usesPublicLayoutApisForSwiftUIHostingControllers
     }
 
     public func hash(into hasher: inout Hasher) {
       hasher.combine(reuseBehavior)
+      hasher.combine(usesPublicLayoutApisForSwiftUIHostingControllers)
     }
   }
 
@@ -183,12 +187,18 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     // The view controller must be added to the view controller hierarchy to measure its content.
     addViewControllerIfNeededAndReady()
 
-    // As of iOS 15.2, `UIHostingController` now renders updated content asynchronously, and as such
-    // this view will get sized incorrectly with the previous content when reused unless we invoke
-    // this semi-private API. We couldn't find any other method to get the view to resize
-    // synchronously after updating `rootView`, but hopefully this will become a public API soon so
-    // we can remove this call.
-    viewController._render(seconds: 0)
+    if usesPublicLayoutApisForSwiftUIHostingControllers {
+      // We need to layout the view to ensure it gets resized properly when cells are re-used
+      viewController.view.setNeedsLayout()
+      viewController.view.layoutIfNeeded()
+    } else {
+      // As of iOS 15.2, `UIHostingController` now renders updated content asynchronously, and as such
+      // this view will get sized incorrectly with the previous content when reused unless we invoke
+      // this semi-private API. We couldn't find any other method to get the view to resize
+      // synchronously after updating `rootView`, but hopefully this will become a public API soon so
+      // we can remove this call.
+      viewController._render(seconds: 0)
+    }
 
     // This is required to ensure that views with new content are properly resized.
     viewController.view.invalidateIntrinsicContentSize()
@@ -241,6 +251,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   private let epoxyEnvironment = EpoxyHostingEnvironment()
   private var dataID: AnyHashable
   private var state: AppearanceState = .disappeared
+  private var usesPublicLayoutApisForSwiftUIHostingControllers: Bool = false
 
   /// Updates the appearance state of the `viewController`.
   private func transition(to state: AppearanceState) {
@@ -342,10 +353,6 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     parent.addChild(viewController)
 
     addSubview(viewController.view)
-
-    // Get the view controller's view to be sized correctly so that we don't have to wait for
-    // autolayout to perform a pass to do so.
-    viewController.view.frame = bounds
 
     viewController.view.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
