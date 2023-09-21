@@ -57,12 +57,11 @@ extension CallbackContextEpoxyModeled
 /// the API is private and 3) the `_UIHostingView` doesn't not accept setting a new `View` instance.
 ///
 /// - SeeAlso: `EpoxySwiftUIHostingController`
-public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableView {
+public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableView, SwiftUIRenderingConfigurable {
 
   // MARK: Lifecycle
 
   public init(style: Style) {
-    usesPublicLayoutApisForSwiftUIHostingControllers = style.usesPublicLayoutApisForSwiftUIHostingControllers
     // Ignore the safe area to ensure the view isn't laid out incorrectly when being sized while
     // overlapping the safe area.
     epoxyContent = EpoxyHostingContent(rootView: style.initialContent.rootView)
@@ -98,23 +97,20 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   // MARK: Public
 
   public struct Style: Hashable {
-    public init(reuseBehavior: SwiftUIHostingViewReuseBehavior, initialContent: Content, usesPublicLayoutApisForSwiftUIHostingControllers: Bool = false) {
+    public init(reuseBehavior: SwiftUIHostingViewReuseBehavior, initialContent: Content) {
       self.reuseBehavior = reuseBehavior
       self.initialContent = initialContent
-      self.usesPublicLayoutApisForSwiftUIHostingControllers = usesPublicLayoutApisForSwiftUIHostingControllers
     }
 
     public var reuseBehavior: SwiftUIHostingViewReuseBehavior
     public var initialContent: Content
-    public var usesPublicLayoutApisForSwiftUIHostingControllers: Bool
 
     public static func == (lhs: Style, rhs: Style) -> Bool {
-      lhs.reuseBehavior == rhs.reuseBehavior && lhs.usesPublicLayoutApisForSwiftUIHostingControllers == rhs.usesPublicLayoutApisForSwiftUIHostingControllers
+      lhs.reuseBehavior == rhs.reuseBehavior
     }
 
     public func hash(into hasher: inout Hasher) {
       hasher.combine(reuseBehavior)
-      hasher.combine(usesPublicLayoutApisForSwiftUIHostingControllers)
     }
   }
 
@@ -133,6 +129,9 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
       false
     }
   }
+
+  /// See `CollectionViewConfiguration.forcesEarlySwiftUIRendering` for an explanation of this behavior.
+  public var forcesEarlySwiftUIRendering = true
 
   public override func didMoveToWindow() {
     super.didMoveToWindow()
@@ -187,17 +186,17 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     // The view controller must be added to the view controller hierarchy to measure its content.
     addViewControllerIfNeededAndReady()
 
-    if usesPublicLayoutApisForSwiftUIHostingControllers {
-      // We need to layout the view to ensure it gets resized properly when cells are re-used
-      viewController.view.setNeedsLayout()
-      viewController.view.layoutIfNeeded()
-    } else {
+    if forcesEarlySwiftUIRendering {
       // As of iOS 15.2, `UIHostingController` now renders updated content asynchronously, and as such
       // this view will get sized incorrectly with the previous content when reused unless we invoke
       // this semi-private API. We couldn't find any other method to get the view to resize
       // synchronously after updating `rootView`, but hopefully this will become a public API soon so
       // we can remove this call.
       viewController._render(seconds: 0)
+    } else {
+      // We need to layout the view to ensure it gets resized properly when cells are re-used
+      viewController.view.setNeedsLayout()
+      viewController.view.layoutIfNeeded()
     }
 
     // This is required to ensure that views with new content are properly resized.
@@ -251,7 +250,6 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   private let epoxyEnvironment = EpoxyHostingEnvironment()
   private var dataID: AnyHashable
   private var state: AppearanceState = .disappeared
-  private var usesPublicLayoutApisForSwiftUIHostingControllers: Bool = false
 
   /// Updates the appearance state of the `viewController`.
   private func transition(to state: AppearanceState) {
@@ -439,3 +437,10 @@ struct EpoxyHostingWrapper<Content: View>: View {
 }
 
 #endif
+
+// MARK: - SwiftUIRenderingConfigurable
+
+public protocol SwiftUIRenderingConfigurable: AnyObject {
+  /// See `CollectionViewConfiguration.forcesEarlySwiftUIRendering` for an explanation of this behavior.
+  var forcesEarlySwiftUIRendering: Bool { get set }
+}

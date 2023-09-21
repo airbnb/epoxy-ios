@@ -13,8 +13,7 @@ extension View {
   ///   - reuseBehavior: The reuse behavior of the `EpoxySwiftUIHostingView`.
   public func itemModel(
     dataID: AnyHashable,
-    reuseBehavior: SwiftUIHostingViewReuseBehavior = .reusable,
-    usesPublicLayoutApisForSwiftUIHostingControllers: Bool = false)
+    reuseBehavior: SwiftUIHostingViewReuseBehavior = .reusable)
     -> ItemModel<EpoxySwiftUIHostingView<Self>>
   {
     EpoxySwiftUIHostingView<Self>.itemModel(
@@ -22,8 +21,7 @@ extension View {
       content: .init(rootView: self, dataID: dataID),
       style: .init(
         reuseBehavior: reuseBehavior,
-        initialContent: .init(rootView: self, dataID: dataID),
-        usesPublicLayoutApisForSwiftUIHostingControllers: usesPublicLayoutApisForSwiftUIHostingControllers))
+        initialContent: .init(rootView: self, dataID: dataID)))
       .linkDisplayLifecycle()
   }
 }
