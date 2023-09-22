@@ -13,11 +13,13 @@ public struct CollectionViewConfiguration {
   public init(
     usesBatchUpdatesForAllReloads: Bool = true,
     usesCellPrefetching: Bool = true,
-    usesAccurateScrollToItem: Bool = true)
+    usesAccurateScrollToItem: Bool = true,
+    forcesEarlySwiftUIRendering: Bool = true)
   {
     self.usesBatchUpdatesForAllReloads = usesBatchUpdatesForAllReloads
     self.usesCellPrefetching = usesCellPrefetching
     self.usesAccurateScrollToItem = usesAccurateScrollToItem
+    self.forcesEarlySwiftUIRendering = forcesEarlySwiftUIRendering
   }
 
   // MARK: Public
@@ -66,4 +68,10 @@ public struct CollectionViewConfiguration {
   ///
   /// - SeeAlso: `CollectionViewScrollToItemHelper`
   public var usesAccurateScrollToItem: Bool
+
+  /// Flag to use a semi-private API to force an early render of a SwiftUI view embedded in a `UIHostingController`. This is used
+  /// to synchronously resize after updating the `rootView`. When disabled, layout is forced using standard UIKit functions, a newer
+  /// approach which is being tested for viability and to resolve issues where SwiftUI views in collection view cells undergo a layout pass
+  /// with unexpected dimensions.
+  public var forcesEarlySwiftUIRendering: Bool
 }
