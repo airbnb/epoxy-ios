@@ -445,7 +445,6 @@ open class CollectionView: UICollectionView {
     }
 
     cell.itemPath = itemPath
-    cell.forcesEarlySwiftUIRendering = configuration.forcesEarlySwiftUIRendering
 
     let metadata = ItemCellMetadata(
       traitCollection: traitCollection,
@@ -470,7 +469,6 @@ open class CollectionView: UICollectionView {
     animated: Bool)
   {
     supplementaryView.itemPath = itemPath
-    supplementaryView.forcesEarlySwiftUIRendering = configuration.forcesEarlySwiftUIRendering
     model.configure(
       reusableView: supplementaryView,
       traitCollection: traitCollection,

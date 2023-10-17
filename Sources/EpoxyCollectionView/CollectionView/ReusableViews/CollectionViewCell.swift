@@ -7,7 +7,7 @@ import UIKit
 // MARK: - CollectionViewCell
 
 /// An internal cell class for use in a `CollectionView`.
-public final class CollectionViewCell: UICollectionViewCell, ItemCellView, SwiftUIRenderingConfigurable {
+public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
 
   // MARK: Lifecycle
 
@@ -26,13 +26,6 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView, Swift
   public private(set) var view: UIView?
 
   public var selectedBackgroundColor: UIColor?
-
-  /// See `CollectionViewConfiguration.forcesEarlySwiftUIRendering` for an explanation of this behavior.
-  public var forcesEarlySwiftUIRendering = true {
-    didSet {
-      updateForcesEarlySwiftUIRendering()
-    }
-  }
 
   override public var isSelected: Bool {
     didSet {
@@ -66,8 +59,6 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView, Swift
       view.topAnchor.constraint(equalTo: contentView.topAnchor),
       view.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
     ])
-
-    updateForcesEarlySwiftUIRendering()
   }
 
   override public func preferredLayoutAttributesFitting(
@@ -158,12 +149,6 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView, Swift
       view?.backgroundColor = selectedBackgroundColor
     } else {
       view?.backgroundColor = normalViewBackgroundColor
-    }
-  }
-
-  private func updateForcesEarlySwiftUIRendering() {
-    if let configurableView = view as? SwiftUIRenderingConfigurable {
-      configurableView.forcesEarlySwiftUIRendering = forcesEarlySwiftUIRendering
     }
   }
 
