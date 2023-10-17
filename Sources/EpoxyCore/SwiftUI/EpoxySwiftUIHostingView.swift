@@ -57,7 +57,7 @@ extension CallbackContextEpoxyModeled
 /// the API is private and 3) the `_UIHostingView` doesn't not accept setting a new `View` instance.
 ///
 /// - SeeAlso: `EpoxySwiftUIHostingController`
-public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableView, SwiftUIRenderingConfigurable {
+public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableView {
 
   // MARK: Lifecycle
 
@@ -130,9 +130,6 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     }
   }
 
-  /// See `CollectionViewConfiguration.forcesEarlySwiftUIRendering` for an explanation of this behavior.
-  public var forcesEarlySwiftUIRendering = true
-
   public override func didMoveToWindow() {
     super.didMoveToWindow()
 
@@ -186,18 +183,9 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     // The view controller must be added to the view controller hierarchy to measure its content.
     addViewControllerIfNeededAndReady()
 
-    if forcesEarlySwiftUIRendering {
-      // As of iOS 15.2, `UIHostingController` now renders updated content asynchronously, and as such
-      // this view will get sized incorrectly with the previous content when reused unless we invoke
-      // this semi-private API. We couldn't find any other method to get the view to resize
-      // synchronously after updating `rootView`, but hopefully this will become a public API soon so
-      // we can remove this call.
-      viewController._render(seconds: 0)
-    } else {
-      // We need to layout the view to ensure it gets resized properly when cells are re-used
-      viewController.view.setNeedsLayout()
-      viewController.view.layoutIfNeeded()
-    }
+    // We need to layout the view to ensure it gets resized properly when cells are re-used
+    viewController.view.setNeedsLayout()
+    viewController.view.layoutIfNeeded()
 
     // This is required to ensure that views with new content are properly resized.
     viewController.view.invalidateIntrinsicContentSize()
@@ -437,10 +425,3 @@ struct EpoxyHostingWrapper<Content: View>: View {
 }
 
 #endif
-
-// MARK: - SwiftUIRenderingConfigurable
-
-public protocol SwiftUIRenderingConfigurable: AnyObject {
-  /// See `CollectionViewConfiguration.forcesEarlySwiftUIRendering` for an explanation of this behavior.
-  var forcesEarlySwiftUIRendering: Bool { get set }
-}

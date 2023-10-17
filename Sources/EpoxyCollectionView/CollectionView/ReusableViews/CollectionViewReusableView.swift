@@ -5,7 +5,7 @@ import EpoxyCore
 import UIKit
 
 /// An internal collection reusable view class for use in a `CollectionView`.
-public final class CollectionViewReusableView: UICollectionReusableView, SwiftUIRenderingConfigurable {
+public final class CollectionViewReusableView: UICollectionReusableView {
 
   // MARK: Lifecycle
 
@@ -22,13 +22,6 @@ public final class CollectionViewReusableView: UICollectionReusableView, SwiftUI
   // MARK: Public
 
   public private(set) var view: UIView?
-
-  /// See `CollectionViewConfiguration.forcesEarlySwiftUIRendering` for an explanation of this behavior.
-  public var forcesEarlySwiftUIRendering = false {
-    didSet {
-      updateForcesEarlySwiftUIRendering()
-    }
-  }
 
   /// Pass a view for this view's element kind and reuseID that the view will pin to its edges.
   public func setViewIfNeeded(view: UIView) {
@@ -47,8 +40,6 @@ public final class CollectionViewReusableView: UICollectionReusableView, SwiftUI
       view.bottomAnchor.constraint(equalTo: bottomAnchor),
     ])
     self.view = view
-
-    updateForcesEarlySwiftUIRendering()
   }
 
   override public func preferredLayoutAttributesFitting(
@@ -85,13 +76,5 @@ public final class CollectionViewReusableView: UICollectionReusableView, SwiftUI
   /// view provides view display callbacks, if it is mid update, we need this to see if the view came from pre-update data or
   /// post-update data.
   var itemPath: SupplementaryItemPath?
-
-  // MARK: Private
-
-  private func updateForcesEarlySwiftUIRendering() {
-    if let configurableView = view as? SwiftUIRenderingConfigurable {
-      configurableView.forcesEarlySwiftUIRendering = forcesEarlySwiftUIRendering
-    }
-  }
 
 }
