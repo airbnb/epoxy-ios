@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `configuredView(traitCollection:)` API to `SupplementaryItemModeling`
 - Changed `NavigationModel`'s `remove()` method access modifier to public (previously internal).
 - Changed `NavigationModel`'s `handleDidRemove()` method access modifier to public (previously internal).
+- Changed `AnyItemModel` to implement the `ErasedContentProviding` protocol.
+- Changed `ErasedContentProviding` protocol to use its type name instead of `Self` in the keys of its `EpoxyModelProperty` properties `contentProperty` and `isContentEqualProperty `.
 
 ## [0.9.0](https://github.com/airbnb/epoxy-ios/compare/0.8.0...0.9.0) - 2022-10-25
 
