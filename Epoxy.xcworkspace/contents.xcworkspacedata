@@ -5,6 +5,9 @@
       location = "group:">
    </FileRef>
    <FileRef
+      location = "group:Sources/EpoxyCore/EpoxyCore.xcodeproj">
+   </FileRef>
+   <FileRef
       location = "group:Example/EpoxyExample.xcodeproj">
    </FileRef>
 </Workspace>

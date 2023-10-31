@@ -26,9 +26,9 @@ extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurable
     content: Content,
     style: Style,
     behaviors: Behaviors? = nil)
-    -> SwiftUIUIView<Self, (content: Content, style: Style)>
+    -> SwiftUIView<Self, (content: Content, style: Style)>
   {
-    SwiftUIUIView(storage: (content: content, style: style)) {
+    SwiftUIView(storage: (content: content, style: style)) {
       let view = Self(style: style)
       view.setContent(content, animated: false)
       return view
@@ -74,9 +74,9 @@ extension StyledView
   public static func swiftUIView(
     content: Content,
     behaviors: Behaviors? = nil)
-    -> SwiftUIUIView<Self, Content>
+    -> SwiftUIView<Self, Content>
   {
-    SwiftUIUIView(storage: content) {
+    SwiftUIView(storage: content) {
       let view = Self()
       view.setContent(content, animated: false)
       return view
@@ -118,9 +118,9 @@ extension StyledView
   public static func swiftUIView(
     style: Style,
     behaviors: Behaviors? = nil)
-    -> SwiftUIUIView<Self, Style>
+    -> SwiftUIView<Self, Style>
   {
-    SwiftUIUIView(storage: style) {
+    SwiftUIView(storage: style) {
       Self(style: style)
     }
     .configure { context in
@@ -157,8 +157,8 @@ extension StyledView
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
   /// The sizing defaults to `.automatic`.
-  public static func swiftUIView(behaviors: Behaviors? = nil) -> SwiftUIUIView<Self, Void> {
-    SwiftUIUIView {
+  public static func swiftUIView(behaviors: Behaviors? = nil) -> SwiftUIView<Self, Void> {
+    SwiftUIView {
       Self()
     }
     .configure { context in

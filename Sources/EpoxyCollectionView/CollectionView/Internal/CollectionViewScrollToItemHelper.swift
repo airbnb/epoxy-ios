@@ -154,12 +154,25 @@ final class CollectionViewScrollToItemHelper {
   {
     self.scrollToItemContext = nil
 
-    collectionView?.scrollToItem(
-      at: scrollToItemContext.targetIndexPath,
-      at: scrollToItemContext.targetScrollPosition,
-      animated: animated)
+    guard let collectionView = collectionView else { return }
 
-    if let collectionView = collectionView, !animated {
+    // Calling `scrollToItem(…)` with in invalid index path raises an exception:
+    // > NSInternalInconsistencyException: Attempted to scroll the collection view to an out-of-
+    // >  bounds item
+    // We must guard against this to check to ensure that this never happens, as we call this method
+    // repeatedly and the items/section may change out from under us.
+    if
+      case let indexPath = scrollToItemContext.targetIndexPath,
+      indexPath.section < collectionView.numberOfSections,
+      indexPath.item < collectionView.numberOfItems(inSection: indexPath.section)
+    {
+      collectionView.scrollToItem(
+        at: indexPath,
+        at: scrollToItemContext.targetScrollPosition,
+        animated: animated)
+    }
+
+    if !animated {
       collectionView.delegate?.scrollViewDidEndScrollingAnimation?(collectionView)
     }
   }

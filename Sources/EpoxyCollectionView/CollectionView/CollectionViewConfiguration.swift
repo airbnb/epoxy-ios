@@ -66,5 +66,4 @@ public struct CollectionViewConfiguration {
   ///
   /// - SeeAlso: `CollectionViewScrollToItemHelper`
   public var usesAccurateScrollToItem: Bool
-
 }

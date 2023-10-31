@@ -191,13 +191,17 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
   ///
   /// Additionally keeps the scroll views pinned to their current offsets during the inset changes.
   private func updateInsets() {
+    let hasHierarchyScaleTransform = hasHierarchyScaleTransform()
+
     let scrollViewsAtEdge = scrollViewsAtEdge
 
-    updateAdditionalSafeAreaInset(additionalSafeAreaInsetsTop)
+    updateAdditionalSafeAreaInset(
+      additionalSafeAreaInsetsTop,
+      hasHierarchyScaleTransform: hasHierarchyScaleTransform)
 
     let margin = layoutMarginsTop + extraLayoutMarginsTop
     updateScrollViewInset(allScrollViews, margin: margin)
-    setLayoutMargin(margin)
+    setLayoutMargin(margin, hasHierarchyScaleTransform: hasHierarchyScaleTransform)
 
     // Make sure to keep any scroll views at top/bottom when adjusting content/safe area insets.
     scrollToEdge(scrollViewsAtEdge)
@@ -237,29 +241,4 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
     viewController?.view.layoutIfNeeded()
   }
 
-}
-
-// MARK: - UIViewController
-
-extension UIViewController {
-  @nonobjc
-  fileprivate var originalSafeAreaInsetTop: CGFloat {
-    view.safeAreaInsets.top - additionalSafeAreaInsets.top
-  }
-}
-
-// MARK: - UIScrollView
-
-extension UIScrollView {
-  /// The content offset at which this scroll view is scrolled to its top.
-  @nonobjc
-  fileprivate var topContentOffset: CGFloat {
-    -adjustedContentInset.top
-  }
-
-  /// The content offset at which this scroll view is scrolled to its bottom.
-  @nonobjc
-  fileprivate var bottomContentOffset: CGFloat {
-    max(contentSize.height - bounds.height + adjustedContentInset.bottom, topContentOffset)
-  }
 }

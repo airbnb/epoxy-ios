@@ -160,22 +160,17 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
   /// Updates the view controller insets (either safe area or scroll view content inset) in response
   /// to the safe area, center, or bounds changing.
   private func updateInsets() {
-    updateAdditionalSafeAreaInset(additionalSafeAreaInsetsBottom)
+    let hasHierarchyScaleTransform = hasHierarchyScaleTransform()
+
+    updateAdditionalSafeAreaInset(
+      additionalSafeAreaInsetsBottom,
+      hasHierarchyScaleTransform: hasHierarchyScaleTransform)
 
     // If offset from the bottom, use the original layout margins rather than the safe area margins,
     // as the safe area no longer overlaps the bar.
     let margin = (bottomOffset > 0) ? 0 : viewController?.originalSafeAreaInsetBottom ?? 0
     updateScrollViewInset(allScrollViews, margin: margin)
-    setLayoutMargin(margin)
+    setLayoutMargin(margin, hasHierarchyScaleTransform: hasHierarchyScaleTransform)
   }
 
-}
-
-// MARK: - UIViewController
-
-extension UIViewController {
-  @nonobjc
-  fileprivate var originalSafeAreaInsetBottom: CGFloat {
-    view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom
-  }
 }

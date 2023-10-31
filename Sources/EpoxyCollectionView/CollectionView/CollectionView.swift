@@ -164,6 +164,15 @@ open class CollectionView: UICollectionView {
     // https://developer.apple.com/documentation/uikit/uicollectionview/1618020-indexpathsforvisibleitems
     let visibleItems = indexPathsForVisibleItems.sorted()
 
+    // we cache this visibility metadata since it can often be accessed rapidly in response to the
+    // `scrollViewDidScroll` callback
+    if
+      let (indexPaths, visibilityMetadata) = cachedVisibilityMetadataForVisibleIndexPaths,
+      indexPaths == visibleItems
+    {
+      return visibilityMetadata
+    }
+
     let visibleSupplementaryItems = epoxyDataSource.supplementaryViewElementKinds
       .reduce(into: [String: [IndexPath]]()) { result, kind in
         let indexPaths = indexPathsForVisibleSupplementaryElements(ofKind: kind).sorted()
@@ -179,10 +188,10 @@ open class CollectionView: UICollectionView {
         let items: [CollectionViewVisibilityMetadata.Item] = visibleItems.compactMap { indexPath in
           guard
             indexPath.section == sectionIndex,
-            let item = epoxyDataSource.data?.item(at: indexPath)
+            let cell = cellForItem(at: indexPath) as? CollectionViewCell,
+            let (item, _) = itemAndSectionModel(for: cell)
           else { return nil }
-          let view = (cellForItem(at: indexPath) as? CollectionViewCell)?.view
-          return CollectionViewVisibilityMetadata.Item(model: item, view: view)
+          return CollectionViewVisibilityMetadata.Item(model: item, view: cell.view)
         }
 
         let supplementaryItems = visibleSupplementaryItems.reduce(
@@ -191,22 +200,28 @@ open class CollectionView: UICollectionView {
           result[element.key] = element.value.compactMap { indexPath in
             guard
               indexPath.section == sectionIndex,
-              let item = epoxyDataSource.data?.supplementaryItem(
-                ofKind: element.key,
-                at: indexPath)
+              let supplementaryView = supplementaryView(
+                forElementKind: element.key,
+                at: indexPath) as? CollectionViewReusableView,
+              let (item, _) = itemAndSectionModel(
+                for: supplementaryView,
+                forElementKind: element.key)
             else { return nil }
-            let supplementaryView = self.supplementaryView(
-              forElementKind: element.key,
-              at: indexPath)
-            let view = (supplementaryView as? CollectionViewReusableView)?.view
-            return CollectionViewVisibilityMetadata.SupplementaryItem(model: item, view: view)
+            return CollectionViewVisibilityMetadata.SupplementaryItem(
+              model: item,
+              view: supplementaryView.view)
           }
         }
 
         return .init(model: section, items: items, supplementaryItems: supplementaryItems)
       }
 
-    return CollectionViewVisibilityMetadata(sections: sections, collectionView: self)
+    let visibilityMetadata = CollectionViewVisibilityMetadata(
+      sections: sections,
+      collectionView: self)
+    cachedVisibilityMetadataForVisibleIndexPaths = (visibleItems, visibilityMetadata)
+
+    return visibilityMetadata
   }
 
   /// Updates the sections of this collection view to the provided `sections`, optionally animating
@@ -286,15 +301,6 @@ open class CollectionView: UICollectionView {
       return
     }
     UIAccessibility.post(notification: notification, argument: cell)
-  }
-
-  /// Moves accessibility focus to item that was most previously focused.
-  ///
-  /// The item view must be visible at the time this method is called, else this method will have
-  /// no effect.
-  public func moveAccessibilityFocusToLastFocusedElement() {
-    guard let lastFocusedDataID = lastFocusedDataID else { return }
-    moveAccessibilityFocusToItem(at: lastFocusedDataID)
   }
 
   public func selectItem(at path: ItemPath, animated: Bool) {
@@ -393,12 +399,17 @@ open class CollectionView: UICollectionView {
   public func reloadItem(at indexPath: IndexPath, animated: Bool) {
     guard
       let cell = cellForItem(at: indexPath as IndexPath) as? CollectionViewCell,
-      let item = epoxyDataSource.data?.item(at: indexPath)
+      let item = epoxyDataSource.data?.item(at: indexPath),
+      let section = epoxyDataSource.data?.section(at: indexPath.section)
     else {
       return
     }
 
-    configure(cell: cell, with: item, animated: animated)
+    configure(
+      cell: cell,
+      with: item,
+      at: .init(itemDataID: item.dataID, section: .dataID(section.dataID)),
+      animated: animated)
   }
 
   /// Invalidates the layout of this collection view's underlying `collectionViewLayout`.
@@ -419,7 +430,12 @@ open class CollectionView: UICollectionView {
       withReuseIdentifier: supplementaryViewReuseID)
   }
 
-  func configure(cell: CollectionViewCell, with item: AnyItemModel, animated: Bool) {
+  func configure(
+    cell: CollectionViewCell,
+    with item: AnyItemModel,
+    at itemPath: ItemPath,
+    animated: Bool)
+  {
     let cellSelectionStyle = item.selectionStyle ?? selectionStyle
     switch cellSelectionStyle {
     case .noBackground:
@@ -428,7 +444,7 @@ open class CollectionView: UICollectionView {
       cell.selectedBackgroundColor = selectionColor
     }
 
-    cell.accessibilityDelegate = self
+    cell.itemPath = itemPath
 
     let metadata = ItemCellMetadata(
       traitCollection: traitCollection,
@@ -449,8 +465,10 @@ open class CollectionView: UICollectionView {
   func configure(
     supplementaryView: CollectionViewReusableView,
     with model: AnySupplementaryItemModel,
+    at itemPath: SupplementaryItemPath,
     animated: Bool)
   {
+    supplementaryView.itemPath = itemPath
     model.configure(
       reusableView: supplementaryView,
       traitCollection: traitCollection,
@@ -505,11 +523,13 @@ open class CollectionView: UICollectionView {
 
   private var updateState = UpdateState.notUpdating
   private var ephemeralStateCache = [AnyHashable: Any?]()
-  private var lastFocusedDataID: ItemPath?
 
   /// A dictionary used to track visible sections, keyed by `SectionModel.dataID` and with a value
   /// of the `Set` of visible items in that section, else an empty `Set` or `nil` if there are none.
   private var visibleSectionItems = [AnyHashable: Set<SectionVisibleItemID>]()
+
+  /// A cache of the last accessed visibility metadata for a given array of visible index paths
+  private var cachedVisibilityMetadataForVisibleIndexPaths: ([IndexPath], CollectionViewVisibilityMetadata)?
 
   private lazy var scrollToItemHelper = CollectionViewScrollToItemHelper(collectionView: self)
 
@@ -661,26 +681,102 @@ open class CollectionView: UICollectionView {
     }
   }
 
-  private func itemForCell(_ cell: CollectionViewCell) -> AnyItemModel? {
-    guard
-      let indexPath = indexPath(for: cell),
-      let model = epoxyDataSource.data?.item(at: indexPath)
-    else {
-      EpoxyLogger.shared.assertionFailure("item not found")
+  /// Helper function which provides the correct models for a given cell taking into account the current update state of the collection view.
+  ///
+  /// This is used in cases where the collection view might be mid-update and we need to find the underlying item for a cell, but there is
+  /// no guarantee of whether the cell is from the pre-update data or post-update data (so we check both).
+  private func itemAndSectionModel(
+    for cell: CollectionViewCell)
+    -> (AnyItemModel, SectionModel)?
+  {
+    guard let itemPath = cell.itemPath else {
+      EpoxyLogger.shared.assertionFailure("View is missing item path.")
       return nil
     }
-    return model
+
+    func itemAndSectionModel(
+      from data: CollectionViewData?,
+      for indexPath: IndexPath)
+      -> (AnyItemModel, SectionModel)?
+    {
+      guard
+        let item = data?.item(at: indexPath),
+        let section = data?.section(at: indexPath.section) else
+      {
+        EpoxyLogger.shared.assertionFailure("Unable to find models in view data.")
+        return nil
+      }
+      return (item, section)
+    }
+
+    switch updateState {
+    case .notUpdating, .preparingUpdate:
+      guard let indexPath = epoxyDataSource.data?.indexPathForItem(at: itemPath) else {
+        EpoxyLogger.shared.assertionFailure("Unable to find models in view data.")
+        return nil
+      }
+      return itemAndSectionModel(from: epoxyDataSource.data, for: indexPath)
+    case .updating(from: let oldData):
+      if let indexPath = oldData.indexPathForItem(at: itemPath) {
+        return itemAndSectionModel(from: oldData, for: indexPath)
+      } else if let indexPath = epoxyDataSource.data?.indexPathForItem(at: itemPath) {
+        return itemAndSectionModel(from: epoxyDataSource.data, for: indexPath)
+      } else {
+        EpoxyLogger.shared.assertionFailure(
+          "Cell not found in either old or new data during an update.")
+        return nil
+      }
+    }
   }
 
-  private func sectionForCell(_ cell: CollectionViewCell) -> SectionModel? {
-    guard
-      let indexPath = indexPath(for: cell),
-      let section = epoxyDataSource.data?.section(at: indexPath.section)
-    else {
-      EpoxyLogger.shared.assertionFailure("item not found")
+  /// Helper function which provides the correct models for a given reusable view taking into account the current update state of the
+  /// collection view.
+  ///
+  /// This is used in cases where the collection view might be mid-update and we need to find the underlying supplementary item for a
+  /// view, but there is no guarantee of whether the view is from the pre-update data or post-update data (so we check both).
+  private func itemAndSectionModel(
+    for view: CollectionViewReusableView,
+    forElementKind elementKind: String)
+    -> (AnySupplementaryItemModel, SectionModel)?
+  {
+    guard let itemPath = view.itemPath else {
+      EpoxyLogger.shared.assertionFailure("View is missing item path.")
       return nil
     }
-    return section
+
+    func itemAndSectionModel(
+      from data: CollectionViewData?,
+      for indexPath: IndexPath)
+      -> (AnySupplementaryItemModel, SectionModel)?
+    {
+      guard
+        let item = data?.supplementaryItem(ofKind: elementKind, at: indexPath),
+        let section = data?.section(at: indexPath.section) else
+      {
+        EpoxyLogger.shared.assertionFailure("Unable to find models in view data.")
+        return nil
+      }
+      return (item, section)
+    }
+
+    switch updateState {
+    case .notUpdating, .preparingUpdate:
+      guard let indexPath = epoxyDataSource.data?.indexPathForSupplementaryItem(at: itemPath) else {
+        EpoxyLogger.shared.assertionFailure("Unable to find models in view data.")
+        return nil
+      }
+      return itemAndSectionModel(from: epoxyDataSource.data, for: indexPath)
+    case .updating(from: let oldData):
+      if let indexPath = oldData.indexPathForSupplementaryItem(at: itemPath) {
+        return itemAndSectionModel(from: oldData, for: indexPath)
+      } else if let indexPath = epoxyDataSource.data?.indexPathForSupplementaryItem(at: itemPath) {
+        return itemAndSectionModel(from: epoxyDataSource.data, for: indexPath)
+      } else {
+        EpoxyLogger.shared.assertionFailure(
+          "View not found in either old or new data during an update.")
+        return nil
+      }
+    }
   }
 }
 
@@ -781,21 +877,16 @@ extension CollectionView: UICollectionViewDelegate {
   public func collectionView(
     _: UICollectionView,
     willDisplay cell: UICollectionViewCell,
-    forItemAt indexPath: IndexPath)
+    forItemAt _: IndexPath)
   {
-    guard
-      let item = epoxyDataSource.data?.item(at: indexPath),
-      let section = epoxyDataSource.data?.section(at: indexPath.section)
-    else {
-      return
-    }
-
-    handleSection(section, itemWillDisplay: .item(dataID: item.dataID))
-
     guard let cell = cell as? CollectionViewCell else {
       EpoxyLogger.shared.assertionFailure("Cell does not match expected type CollectionViewCell.")
       return
     }
+
+    guard let (item, section) = itemAndSectionModel(for: cell) else { return }
+
+    handleSection(section, itemWillDisplay: .item(dataID: item.dataID))
 
     item.handleWillDisplay(
       cell,
@@ -809,30 +900,16 @@ extension CollectionView: UICollectionViewDelegate {
   public func collectionView(
     _: UICollectionView,
     didEndDisplaying cell: UICollectionViewCell,
-    forItemAt indexPath: IndexPath)
+    forItemAt _: IndexPath)
   {
-    // When updating, items ending display correspond to items in the old data.
-    let data: CollectionViewData?
-    switch updateState {
-    case .notUpdating, .preparingUpdate:
-      data = epoxyDataSource.data
-    case .updating(from: let oldData):
-      data = oldData
-    }
-
-    guard
-      let item = data?.itemIfPresent(at: indexPath),
-      let section = data?.sectionIfPresent(at: indexPath.section)
-    else {
-      return
-    }
-
-    handleSection(section, itemDidEndDisplaying: .item(dataID: item.dataID))
-
     guard let cell = cell as? CollectionViewCell else {
       EpoxyLogger.shared.assertionFailure("Cell does not match expected type CollectionViewCell.")
       return
     }
+
+    guard let (item, section) = itemAndSectionModel(for: cell) else { return }
+
+    handleSection(section, itemDidEndDisplaying: .item(dataID: item.dataID))
 
     item.handleDidEndDisplaying(
       cell,
@@ -847,26 +924,22 @@ extension CollectionView: UICollectionViewDelegate {
     _: UICollectionView,
     willDisplaySupplementaryView view: UICollectionReusableView,
     forElementKind elementKind: String,
-    at indexPath: IndexPath)
+    at _: IndexPath)
   {
-    // We don't assert since `UICollectionViewCompositionalLayout` can create and configure its own
-    // supplementary views e.g. with a `.list(using: .init(appearance: .plain))` config.
-    guard
-      let section = epoxyDataSource.data?.sectionIfPresent(at: indexPath.section),
-      let item = epoxyDataSource.data?.supplementaryItemIfPresent(ofKind: elementKind, at: indexPath)
-    else {
+    guard let view = view as? CollectionViewReusableView else {
+      // We don't assert since `UICollectionViewCompositionalLayout` can create and configure its
+      // own supplementary views e.g. with a `.list(using: .init(appearance: .plain))` config.
       return
     }
+
+    guard
+      let (item, section) = itemAndSectionModel(
+        for: view,
+        forElementKind: elementKind) else { return }
 
     handleSection(
       section,
       itemWillDisplay: .supplementaryItem(elementKind: elementKind, dataID: item.dataID))
-
-    guard let view = view as? CollectionViewReusableView else {
-      EpoxyLogger.shared.assertionFailure(
-        "Supplementary view does not match expected type CollectionViewReusableView.")
-      return
-    }
 
     item.handleWillDisplay(view, traitCollection: traitCollection, animated: false)
 
@@ -884,35 +957,22 @@ extension CollectionView: UICollectionViewDelegate {
     _: UICollectionView,
     didEndDisplayingSupplementaryView view: UICollectionReusableView,
     forElementOfKind elementKind: String,
-    at indexPath: IndexPath)
+    at _: IndexPath)
   {
-    // When updating, items ending display correspond to items in the old data.
-    let data: CollectionViewData?
-    switch updateState {
-    case .notUpdating, .preparingUpdate:
-      data = epoxyDataSource.data
-    case .updating(from: let oldData):
-      data = oldData
-    }
-
-    // We don't assert since `UICollectionViewCompositionalLayout` can create and configure its own
-    // supplementary views e.g. with a `.list(using: .init(appearance: .plain))` config.
-    guard
-      let section = data?.sectionIfPresent(at: indexPath.section),
-      let item = data?.supplementaryItemIfPresent(ofKind: elementKind, at: indexPath)
-    else {
+    guard let view = view as? CollectionViewReusableView else {
+      // We don't assert since `UICollectionViewCompositionalLayout` can create and configure its
+      // own supplementary views e.g. with a `.list(using: .init(appearance: .plain))` config.
       return
     }
+
+    guard
+      let (item, section) = itemAndSectionModel(
+        for: view,
+        forElementKind: elementKind) else { return }
 
     handleSection(
       section,
       itemDidEndDisplaying: .supplementaryItem(elementKind: elementKind, dataID: item.dataID))
-
-    guard let view = view as? CollectionViewReusableView else {
-      EpoxyLogger.shared.assertionFailure(
-        "Supplementary view does not match expected type CollectionViewReusableView.")
-      return
-    }
 
     item.handleDidEndDisplaying(view, traitCollection: traitCollection, animated: false)
 
@@ -1103,42 +1163,6 @@ extension CollectionView: CollectionViewDataSourceReorderingDelegate {
         inSection: sourceSection,
         toDestinationItem: destinationItem,
         inSection: destinationSection)
-  }
-}
-
-// MARK: CollectionViewCellAccessibilityDelegate
-
-extension CollectionView: CollectionViewCellAccessibilityDelegate {
-  func collectionViewCellDidBecomeFocused(cell: CollectionViewCell) {
-    guard
-      let model = itemForCell(cell),
-      let section = sectionForCell(cell)
-    else {
-      return
-    }
-
-    lastFocusedDataID = .init(itemDataID: model.dataID, section: .dataID(section.dataID))
-
-    accessibilityDelegate?.collectionView(
-      self,
-      itemDidBecomeFocused: model,
-      with: cell.view,
-      in: section)
-  }
-
-  func collectionViewCellDidLoseFocus(cell: CollectionViewCell) {
-    guard
-      let model = itemForCell(cell),
-      let section = sectionForCell(cell)
-    else {
-      return
-    }
-
-    accessibilityDelegate?.collectionView(
-      self,
-      itemDidLoseFocus: model,
-      with: cell.view,
-      in: section)
   }
 }
 

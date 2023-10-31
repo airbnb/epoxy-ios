@@ -1,6 +1,7 @@
 //  Created by Laura Skelton on 9/8/17.
 //  Copyright © 2017 Airbnb. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 /// An internal collection reusable view class for use in a `CollectionView`.
@@ -28,6 +29,9 @@ public final class CollectionViewReusableView: UICollectionReusableView {
       return
     }
     view.translatesAutoresizingMaskIntoConstraints = false
+    // Use the existing view size so that we don't have to wait for auto layout to give this
+    // wrapped view an initial size.
+    view.frame = bounds
     addSubview(view)
     NSLayoutConstraint.activate([
       view.leadingAnchor.constraint(equalTo: leadingAnchor),
@@ -65,4 +69,12 @@ public final class CollectionViewReusableView: UICollectionReusableView {
 
     return layoutAttributes
   }
+
+  // MARK: Internal
+
+  /// The item path of the supplementary view from its last configuration update. Used to associate the view with the underlying data. When collection
+  /// view provides view display callbacks, if it is mid update, we need this to see if the view came from pre-update data or
+  /// post-update data.
+  var itemPath: SupplementaryItemPath?
+
 }

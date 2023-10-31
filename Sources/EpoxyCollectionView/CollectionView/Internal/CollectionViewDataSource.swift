@@ -174,6 +174,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
   {
     guard
       let item = data?.item(at: indexPath),
+      let section = data?.section(at: indexPath.section),
       let reuseID = reuseIDStore.registeredReuseID(for: item.viewDifferentiator)
     else {
       // The `item(…)` or `registeredReuseID(…)` methods will assert in this scenario.
@@ -183,7 +184,11 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseID, for: indexPath)
 
     if let cell = cell as? CollectionViewCell {
-      self.collectionView?.configure(cell: cell, with: item, animated: false)
+      self.collectionView?.configure(
+        cell: cell,
+        with: item,
+        at: .init(itemDataID: item.dataID, section: .dataID(section.dataID)),
+        animated: false)
     } else {
       EpoxyLogger.shared.assertionFailure(
         "Only CollectionViewCell and subclasses are allowed in a CollectionView.")
@@ -199,6 +204,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
   {
     guard
       let item = data?.supplementaryItem(ofKind: kind, at: indexPath),
+      let section = data?.section(at: indexPath.section),
       let reuseID = reuseIDStore.registeredReuseID(for: item.viewDifferentiator)
     else {
       // The `supplementaryItem(…)` or `registeredReuseID(…)` methods will assert in this scenario.
@@ -214,6 +220,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
       self.collectionView?.configure(
         supplementaryView: supplementaryView,
         with: item,
+        at: .init(elementKind: kind, itemDataID: item.dataID, section: .dataID(section.dataID)),
         animated: false)
     } else {
       EpoxyLogger.shared.assertionFailure(

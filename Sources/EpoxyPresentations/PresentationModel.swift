@@ -79,7 +79,7 @@ public struct PresentationModel {
   /// Any previously added `didPresent` closures are called prior to the given closure.
   public func didPresent(_ didPresent: @escaping (() -> Void)) -> PresentationModel {
     var copy = self
-    copy._didPresent = { [oldDidPresent = self._didPresent] in
+    copy._didPresent = { [oldDidPresent = _didPresent] in
       oldDidPresent?()
       didPresent()
     }
@@ -91,7 +91,7 @@ public struct PresentationModel {
   /// Any previously added `didDismiss` closures are called prior to the given closure.
   public func didDismiss(_ didDismiss: @escaping (() -> Void)) -> PresentationModel {
     var copy = self
-    copy._didDismiss = { [oldDidDismiss = self._didDismiss] in
+    copy._didDismiss = { [oldDidDismiss = _didDismiss] in
       oldDidDismiss?()
       didDismiss()
     }

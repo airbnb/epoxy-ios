@@ -49,6 +49,9 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
     normalViewBackgroundColor = view.backgroundColor
 
     view.translatesAutoresizingMaskIntoConstraints = false
+    // Use the existing content view size so that we don't have to wait for auto layout to give this
+    // view an initial size.
+    view.frame = contentView.bounds
     contentView.addSubview(view)
     NSLayoutConstraint.activate([
       view.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
@@ -126,8 +129,12 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
 
   // MARK: Internal
 
-  weak var accessibilityDelegate: CollectionViewCellAccessibilityDelegate?
   var ephemeralViewCachedStateProvider: ((Any?) -> Void)?
+
+  /// The item path of the cell from its last configuration update. Used to associate the view with the underlying data. When collection
+  /// view provides view display callbacks, if it is mid update, we need this to see if the view came from pre-update data or
+  /// post-update data.
+  var itemPath: ItemPath?
 
   // MARK: Private
 
@@ -167,15 +174,5 @@ extension CollectionViewCell {
       return super.accessibilityElementsHidden
     }
     set { super.accessibilityElementsHidden = newValue }
-  }
-
-  public override func accessibilityElementDidBecomeFocused() {
-    super.accessibilityElementDidBecomeFocused()
-    accessibilityDelegate?.collectionViewCellDidBecomeFocused(cell: self)
-  }
-
-  public override func accessibilityElementDidLoseFocus() {
-    super.accessibilityElementDidLoseFocus()
-    accessibilityDelegate?.collectionViewCellDidLoseFocus(cell: self)
   }
 }

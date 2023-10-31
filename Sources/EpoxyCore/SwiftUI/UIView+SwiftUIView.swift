@@ -3,9 +3,9 @@
 
 import SwiftUI
 
-// MARK: - UIViewProtocol + swiftUIView
+// MARK: - ViewTypeProtocol + swiftUIView
 
-extension UIViewProtocol {
+extension ViewTypeProtocol {
   /// Returns a SwiftUI `View` representing this `UIView`, constructed with the given `makeView`
   /// closure and sized with the given sizing configuration.
   ///
@@ -24,16 +24,16 @@ extension UIViewProtocol {
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
   /// The sizing defaults to `.automatic`.
-  public static func swiftUIView(makeView: @escaping () -> Self) -> SwiftUIUIView<Self, Void> {
-    SwiftUIUIView(makeContent: makeView)
+  public static func swiftUIView(makeView: @escaping () -> Self) -> SwiftUIView<Self, Void> {
+    SwiftUIView(makeContent: makeView)
   }
 }
 
-// MARK: - UIViewProtocol
+// MARK: - ViewTypeProtocol
 
 /// A protocol that all `UIView`s conform to, enabling extensions that have a `Self` reference.
-public protocol UIViewProtocol: UIView { }
+public protocol ViewTypeProtocol: ViewType { }
 
-// MARK: - UIView + UIViewProtocol
+// MARK: - ViewType + ViewTypeProtocol
 
-extension UIView: UIViewProtocol { }
+extension ViewType: ViewTypeProtocol { }

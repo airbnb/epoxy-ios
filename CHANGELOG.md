@@ -4,18 +4,46 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.9.0...HEAD)
+## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.10.0...HEAD)
+
+### Changed
+- `AnyItemModel` now implements the `ErasedContentProviding` protocol.
+- Updated `ErasedContentProviding` protocol to use its type name instead of `Self` in the keys of its `EpoxyModelProperty` properties `contentProperty` and `isContentEqualProperty `.
+
+### Fixed
+- Fixed an issue causing incorrect view callbacks and a corresponding assertion when a view 
+  disappears during a collection view update and is only in the post-update data.
+- Removed non-functioning `accessibilityDelegate` and associated code.
+- Fixed a possible index out of bounds assertion when accessing `visibilityMetadata` during a 
+  batch update.
+- Added caching for `visibilityMetadata` calculations.
+- Fixed an issue that could cause SwiftUI views to be incorrectly sized in a collection view.
+- Added `forcesEarlySwiftUIRendering` flag to `CollectionViewConfiguration` to test a SwiftUI layout
+  approach to resolve an issue that could cause collection view cells to layout with 
+  unexpected dimensions
+- Made new layout-based SwiftUI cell rendering option the default.
+
+## [0.10.0](https://github.com/airbnb/epoxy-ios/compare/0.9.0...0.10.0) - 2023-06-29
 
 ### Changed
 - Dropped support for Swift 5.4.
+- EpoxyCore now supports macOS and tvOS.
+- Renamed EpoxyCore's `SwiftUIUIView` to `SwiftUIView`.
+- Renamed EpoxyCore's `MeasuringUIViewRepresentable` to `MeasuringViewRepresentable`.
 - Added `UIScrollView.keyboardAdjustsBottomBarOffset` escape hatch to disable bottom bar keyboard
   avoidance for cases where the keyboard is avoided at a higher level (e.g. a
-  `UIPresentationController` subclass)
-- Added `configuredView(traitCollection:)` API to `SupplementaryItemModeling`
+  `UIPresentationController` subclass).
+- Added `configuredView(traitCollection:)` API to `SupplementaryItemModeling`.
 - Changed `NavigationModel`'s `remove()` method access modifier to public (previously internal).
-- Changed `NavigationModel`'s `handleDidRemove()` method access modifier to public (previously internal).
-- Changed `AnyItemModel` to implement the `ErasedContentProviding` protocol.
-- Changed `ErasedContentProviding` protocol to use its type name instead of `Self` in the keys of its `EpoxyModelProperty` properties `contentProperty` and `isContentEqualProperty `.
+- Changed `NavigationModel`'s `handleDidRemove()` method access modifier to public (previously 
+  internal).
+
+### Fixed
+- For top and bottom bars, if any view in the hierarchy has a scale transform, wait to apply the 
+  insets as they may be incorrect.
+- Pass initial size to embedded view from `CollectionViewCell`/`CollectionViewReusableView` to 
+  better load embedded SwiftUI views.
+- Guard against a UIKit crash caused by attempting to scroll to an item that no longer exists.
 
 ## [0.9.0](https://github.com/airbnb/epoxy-ios/compare/0.8.0...0.9.0) - 2022-10-25
 
