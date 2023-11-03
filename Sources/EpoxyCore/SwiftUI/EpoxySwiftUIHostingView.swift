@@ -343,7 +343,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     viewController.view.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       viewController.view.leadingAnchor.constraint(equalTo: leadingAnchor),
-      viewController.view.topAnchor.constraint(equalTo: topAnchor),
+      viewController.view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
       viewController.view.trailingAnchor.constraint(equalTo: trailingAnchor),
       viewController.view.bottomAnchor.constraint(equalTo: bottomAnchor),
     ])
