@@ -87,7 +87,6 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
       }
     })
     layoutMargins = .zero
-    insetsLayoutMarginsFromSafeArea = false
   }
 
   @available(*, unavailable)
@@ -346,11 +345,11 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
       viewController.view.leadingAnchor.constraint(equalTo: leadingAnchor),
       // Pining the hosting view controller to layoutMarginsGuide ensures the content respects the top safe area
       // when installed inside a `TopBarContainer`
-      viewController.view.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
+      viewController.view.topAnchor.constraint(equalTo: topAnchor),
       viewController.view.trailingAnchor.constraint(equalTo: trailingAnchor),
       // Pining the hosting view controller to layoutMarginsGuide ensures the content respects the bottom safe area
       // when installed inside a `BottomBarContainer`
-      viewController.view.bottomAnchor.constraint(equalTo: layoutMarginsGuide.bottomAnchor),
+      viewController.view.bottomAnchor.constraint(equalTo: bottomAnchor),
     ])
 
     viewController.didMove(toParent: parent)
