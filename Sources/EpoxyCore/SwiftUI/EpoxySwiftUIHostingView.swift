@@ -87,6 +87,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
       }
     })
     layoutMargins = .zero
+    insetsLayoutMarginsFromSafeArea = false
   }
 
   @available(*, unavailable)
