@@ -97,18 +97,24 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   // MARK: Public
 
   public struct Style: Hashable {
+
+    // MARK: Lifecycle
+
     public init(
       reuseBehavior: SwiftUIHostingViewReuseBehavior,
-       initialContent: Content,
-       ignoreSafeArea: Bool = true) {
+      initialContent: Content,
+      ignoreSafeArea: Bool = true)
+    {
       self.reuseBehavior = reuseBehavior
       self.initialContent = initialContent
       self.ignoreSafeArea = ignoreSafeArea
     }
 
+    // MARK: Public
+
     public var reuseBehavior: SwiftUIHostingViewReuseBehavior
     public var initialContent: Content
-    public var ignoreSafeArea: Bool 
+    public var ignoreSafeArea: Bool
 
     public static func == (lhs: Style, rhs: Style) -> Bool {
       lhs.reuseBehavior == rhs.reuseBehavior
