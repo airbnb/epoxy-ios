@@ -11,7 +11,7 @@ extension View {
   ///   - dataID: An ID that uniquely identifies this item relative to other items in the
   ///     same collection.
   ///   - reuseBehavior: The reuse behavior of the `EpoxySwiftUIHostingView`.
-  ///   - ignoreSafeArea: Weather or not the underlying`EpoxySwiftUIHostingController` will ignore its safe area.
+  ///   - ignoreSafeArea: Whether or not the underlying `EpoxySwiftUIHostingController` will ignore its safe area.
   ///     Only set this to `false` when installing this BarModel using `BarContainerInsetBehavior.barHeightContentInset` or `BarContainerInsetBehavior.none`.
   public func barModel(
     dataID: AnyHashable? = nil,
