@@ -12,10 +12,11 @@ extension View {
   ///     same collection.
   ///   - reuseBehavior: The reuse behavior of the `EpoxySwiftUIHostingView`.
   ///   - ignoreSafeArea: Weather or not the underlying`EpoxySwiftUIHostingController` will ignore its safe area.
+  ///     Only set this to `false` when installing this BarModel using `BarContainerInsetBehavior.barHeightContentInset` or `BarContainerInsetBehavior.none`.
   public func barModel(
     dataID: AnyHashable? = nil,
     reuseBehavior: SwiftUIHostingViewReuseBehavior = .reusable,
-    ignoreSafeArea: Bool = false)
+    ignoreSafeArea: Bool = true)
     -> BarModel<EpoxySwiftUIHostingView<Self>>
   {
     EpoxySwiftUIHostingView<Self>.barModel(
