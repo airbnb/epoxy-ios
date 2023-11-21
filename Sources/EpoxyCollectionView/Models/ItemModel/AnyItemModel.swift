@@ -35,7 +35,7 @@ public struct AnyItemModel: EpoxyModeled {
 
 // MARK: ErasedContentProviding
 
-extension AnyItemModel: ErasedContentProviding {}
+extension AnyItemModel: ErasedContentProviding { }
 
 // MARK: WillDisplayProviding
 
