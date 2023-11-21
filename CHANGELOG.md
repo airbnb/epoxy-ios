@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.10.0...HEAD)
 
 ### Changed
-- ...
+- `AnyItemModel` now implements the `ErasedContentProviding` protocol.
+- Updated `ErasedContentProviding` protocol to use its type name instead of `Self` in the keys of its `EpoxyModelProperty` properties `contentProperty` and `isContentEqualProperty `.
 
 ### Fixed
 - Fixed an issue causing incorrect view callbacks and a corresponding assertion when a view 
