@@ -14,6 +14,7 @@ enum Example: CaseIterable {
   case layoutGroups
   case swiftUIToEpoxy
   case epoxyToSwiftUI
+  case epoxyToSwiftUISizingStrategies
   case swiftUIToEpoxyResizing
 
   // MARK: Internal
@@ -42,6 +43,8 @@ enum Example: CaseIterable {
       return "SwiftUI in Epoxy"
     case .epoxyToSwiftUI:
       return "Epoxy in SwiftUI"
+    case .epoxyToSwiftUISizingStrategies:
+      return "Epoxy in SwiftUI, Sizing Strategies"
     case .swiftUIToEpoxyResizing:
       return "SwiftUI in Epoxy, Resizing Cells"
     }
@@ -71,6 +74,8 @@ enum Example: CaseIterable {
       return "An example of SwiftUI views being embedded in Epoxy"
     case .epoxyToSwiftUI:
       return "An example of Epoxy views being embedded in SwiftUI"
+    case .epoxyToSwiftUISizingStrategies:
+      return "An example of the different strategies to size Epoxy views being embedded in SwiftUI"
     case .swiftUIToEpoxyResizing:
       return "An example of SwiftUI views being embedded in Epoxy that can invalidate their size"
     }
