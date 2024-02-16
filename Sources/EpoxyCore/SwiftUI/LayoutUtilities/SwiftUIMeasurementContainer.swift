@@ -1,6 +1,11 @@
 // Created by Bryn Bodayle on 1/24/22.
 // Copyright © 2022 Airbnb Inc. All rights reserved.
 
+#if os(iOS) || os(tvOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 import SwiftUI
 
 // MARK: - SwiftUIMeasurementContainer
@@ -212,8 +217,9 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
       topConstraint,
       maxWidthConstraint,
       fixedWidthConstraint,
-      fixedHeightConstraint]
-      .compactMap { $0 }
+      fixedHeightConstraint,
+    ]
+    .compactMap { $0 }
     NSLayoutConstraint.deactivate(oldConstraints)
 
     leadingConstraint = content.leadingAnchor.constraint(equalTo: leadingAnchor)
@@ -232,7 +238,8 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
     let constraints = [
       maxWidthConstraint,
       fixedWidthConstraint,
-      fixedHeightConstraint].compactMap { $0 }
+      fixedHeightConstraint,
+    ].compactMap { $0 }
     NSLayoutConstraint.deactivate(constraints)
 
     // avoid creating negative value constraints
@@ -267,7 +274,6 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
 
       case .intrinsic:
         break // no op, all size constraints already deactivated
-        
       }
     }
   }
@@ -295,7 +301,7 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
     case .intrinsicHeightProposedOrIntrinsicWidth:
       let fittingSize = content.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
       measuredSize = CGSize(
-        width: min(fittingSize.width, (proposedSize.width > 0 ? proposedSize.width : fittingSize.width)),
+        width: min(fittingSize.width, proposedSize.width > 0 ? proposedSize.width : fittingSize.width),
         height: fittingSize.height)
 
     case .intrinsic(let size):

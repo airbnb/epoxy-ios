@@ -5,7 +5,7 @@ import Epoxy
 import SwiftUI
 import UIKit
 
-// MARK: - EpoxyInSwiftUISizingStrategiesViewViewController
+// MARK: - EpoxyInSwiftUISizingStrategiesViewController
 
 /// Demo of the various sizing strategies for UIKit views bridged to SwiftUI
 final class EpoxyInSwiftUISizingStrategiesViewController: UIHostingController<EpoxyInSwiftUISizingStrategiesView> {
@@ -18,10 +18,14 @@ final class EpoxyInSwiftUISizingStrategiesViewController: UIHostingController<Ep
   }
 }
 
-// MARK: - EpoxyInSwiftUIView
+// MARK: - EpoxyInSwiftUISizingStrategiesView
 
 struct EpoxyInSwiftUISizingStrategiesView: View {
+
+  // MARK: Internal
+
   let text = "The text"
+
   var body: some View {
     ScrollView {
       LazyVStack(alignment: .leading, spacing: 12) {
@@ -40,28 +44,37 @@ struct EpoxyInSwiftUISizingStrategiesView: View {
             text: BeloIpsum.sentence(count: 1, wordCount: Int(wordCount)),
             measurementStrategy: value)
             .frame(width: value.proposedWidth, height: value.proposedHeight)
-          .border(.red)
+            .border(.red)
         }
       }
     }
   }
 
+  // MARK: Private
+
   @State private var wordCount = 12.0
 }
 
+// MARK: - SwiftUIMeasurementContainerStrategy + Identifiable, CaseIterable
+
 extension SwiftUIMeasurementContainerStrategy: Identifiable, CaseIterable {
+
+  // MARK: Public
+
   public static var allCases: [SwiftUIMeasurementContainerStrategy] = [
     .automatic,
     .proposed,
     .intrinsicHeightProposedOrIntrinsicWidth,
     .intrinsicHeightProposedWidth,
     .intrinsicWidthProposedHeight,
-    .intrinsic
+    .intrinsic,
   ]
 
   public var id: Self {
     self
   }
+
+  // MARK: Internal
 
   var displayString: String {
     switch self {
@@ -98,6 +111,8 @@ extension SwiftUIMeasurementContainerStrategy: Identifiable, CaseIterable {
     }
   }
 }
+
+// MARK: - LabelView
 
 struct LabelView: UIViewConfiguringSwiftUIView {
 

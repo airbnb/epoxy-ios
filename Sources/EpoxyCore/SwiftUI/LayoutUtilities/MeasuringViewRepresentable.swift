@@ -56,10 +56,12 @@ extension MeasuringViewRepresentable {
 
     // Creates a `CGSize` by replacing `nil`s with `UIView.noIntrinsicMetric`
     uiView.proposedSize = .init(
-      width: (children.first { $0.label == "width" }?
-        .value as? CGFloat ?? ViewType.noIntrinsicMetric).constraintSafeValue,
-      height: (children.first { $0.label == "height" }?
-        .value as? CGFloat ?? ViewType.noIntrinsicMetric).constraintSafeValue)
+      width: (
+        children.first { $0.label == "width" }?
+          .value as? CGFloat ?? ViewType.noIntrinsicMetric).constraintSafeValue,
+      height: (
+        children.first { $0.label == "height" }?
+          .value as? CGFloat ?? ViewType.noIntrinsicMetric).constraintSafeValue)
     size = uiView.measuredFittingSize
   }
 
@@ -111,7 +113,6 @@ extension MeasuringViewRepresentable {
 
 #if swift(>=5.7) // Proxy check for being built with the iOS 15 SDK
 @available(iOS 16.0, tvOS 16.0, macOS 13.0, *)
-
 extension ProposedViewSize {
   /// Creates a size by replacing `nil`s with `UIView.noIntrinsicMetric`
   var viewTypeValue: CGSize {
@@ -124,15 +125,16 @@ extension ProposedViewSize {
 #endif
 
 extension CGFloat {
-  /// Returns a value suitable for configuring auto layout constraints
-  var constraintSafeValue: CGFloat {
-    isInfinite ? .maxConstraintValue : self
-  }
-
   static var maxConstraintValue: CGFloat {
     // On iOS 15 and below, configuring an auto layout constraint with the constant
     // `.greatestFiniteMagnitude` exceeds an internal limit and logs an exception to console. To
     // avoid, we use a significantly large value.
     1_000_000
   }
+
+  /// Returns a value suitable for configuring auto layout constraints
+  var constraintSafeValue: CGFloat {
+    isInfinite ? .maxConstraintValue : self
+  }
+
 }
