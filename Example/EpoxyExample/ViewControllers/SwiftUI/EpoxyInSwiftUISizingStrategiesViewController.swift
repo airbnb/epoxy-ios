@@ -79,17 +79,17 @@ extension SwiftUIMeasurementContainerStrategy: Identifiable, CaseIterable {
   var displayString: String {
     switch self {
     case .automatic:
-      "Automatic"
+      return "Automatic"
     case .proposed:
-      "Proposed"
+      return "Proposed"
     case .intrinsicHeightProposedOrIntrinsicWidth:
-      "Intrinsic Height, Proposed Width or Intrinsic Width"
+      return "Intrinsic Height, Proposed Width or Intrinsic Width"
     case .intrinsicHeightProposedWidth:
-      "Intrinsic Height, Proposed Width"
+      return "Intrinsic Height, Proposed Width"
     case .intrinsicWidthProposedHeight:
-      "Intrinsic Width, Proposed Height"
+      return "Intrinsic Width, Proposed Height"
     case .intrinsic:
-      "Intrinsic"
+      return "Intrinsic"
     }
   }
 

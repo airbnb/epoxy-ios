@@ -82,7 +82,7 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
 
       // The proposed size is only used by the measurement, so just re-measure.
       _measuredFittingSize = nil
-      setNeedsUpdateConstraints()
+      setNeedsUpdateConstraintsForPlatform()
     }
   }
 
@@ -165,7 +165,7 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
   /// The cached `measuredFittingSize` to prevent unnecessary re-measurements.
   private var _measuredFittingSize: CGSize? {
     didSet {
-      setNeedsUpdateConstraints()
+      setNeedsUpdateConstraintsForPlatform()
     }
   }
 
@@ -278,9 +278,25 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
     }
   }
 
+  private func setNeedsUpdateConstraintsForPlatform() {
+    #if os(iOS) || os(tvOS)
+    setNeedsUpdateConstraints()
+    #elseif os(macOS)
+    needsUpdateConstraints = true
+    #endif
+  }
+
+  private func updateConstraintsForPlatformIfNeeded() {
+    #if os(iOS) || os(tvOS)
+    updateConstraintsIfNeeded()
+    #elseif os(macOS)
+    updateConstraintsForSubtreeIfNeeded()
+    #endif
+  }
+
   /// Measures the `uiView`, storing the resulting size in `measuredIntrinsicContentSize`.
   private func measureView() -> CGSize {
-    updateConstraintsIfNeeded()
+    updateConstraintsForPlatformIfNeeded()
     latestMeasurementBoundsSize = bounds.size
 
     var measuredSize: CGSize
@@ -299,7 +315,7 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
       measuredSize.height = ViewType.noIntrinsicMetric
 
     case .intrinsicHeightProposedOrIntrinsicWidth:
-      let fittingSize = content.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+      let fittingSize = content.systemLayoutFittingIntrinsicSize()
       measuredSize = CGSize(
         width: min(fittingSize.width, proposedSize.width > 0 ? proposedSize.width : fittingSize.width),
         height: fittingSize.height)

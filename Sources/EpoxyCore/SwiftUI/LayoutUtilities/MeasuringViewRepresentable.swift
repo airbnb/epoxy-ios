@@ -65,7 +65,7 @@ extension MeasuringViewRepresentable {
     size = uiView.measuredFittingSize
   }
 
-  #if swift(>=5.7) // Proxy check for being built with the iOS 15 SDK
+  #if swift(>=5.7.1) // Proxy check for being built with the iOS 15 SDK
   @available(iOS 16.0, tvOS 16.0, macOS 13.0, *)
   public func sizeThatFits(
     _ proposal: ProposedViewSize,
@@ -90,7 +90,13 @@ extension MeasuringViewRepresentable {
   {
     nsView.strategy = sizing
     let children = Mirror(reflecting: proposedSize).children
-    nsView.proposedSize = proposal.viewTypeValue
+    nsView.proposedSize = .init(
+      width: (
+        children.first { $0.label == "width" }?
+          .value as? CGFloat ?? ViewType.noIntrinsicMetric).constraintSafeValue,
+      height: (
+        children.first { $0.label == "height" }?
+          .value as? CGFloat ?? ViewType.noIntrinsicMetric).constraintSafeValue)
     size = nsView.measuredFittingSize
   }
 
@@ -111,7 +117,7 @@ extension MeasuringViewRepresentable {
 }
 #endif
 
-#if swift(>=5.7) // Proxy check for being built with the iOS 15 SDK
+#if swift(>=5.7.1) // Proxy check for being built with the iOS 15 SDK
 @available(iOS 16.0, tvOS 16.0, macOS 13.0, *)
 extension ProposedViewSize {
   /// Creates a size by replacing `nil`s with `UIView.noIntrinsicMetric`
