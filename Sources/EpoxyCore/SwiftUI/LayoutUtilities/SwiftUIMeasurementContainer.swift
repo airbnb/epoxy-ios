@@ -78,7 +78,6 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
   public var proposedSize = CGSize.noIntrinsicMetric {
     didSet {
       guard oldValue != proposedSize else { return }
-      _resolvedStrategy = nil
 
       // The proposed size is only used by the measurement, so just re-measure.
       _measuredFittingSize = nil
@@ -296,6 +295,8 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
 
   /// Measures the `uiView`, storing the resulting size in `measuredIntrinsicContentSize`.
   private func measureView() -> CGSize {
+    // immediately update constraints to the latest values so that the measurements below take them
+    // into account
     updateConstraintsForPlatformIfNeeded()
     latestMeasurementBoundsSize = bounds.size
 
@@ -354,8 +355,8 @@ public enum SwiftUIMeasurementContainerStrategy {
   /// Typically used for views that should expand greedily in both axes, e.g. a background view.
   case proposed
 
-  /// The `uiView`'s receives either its intrinsic width or the proposed width, whichever is smaller. The view receives its height based
-  /// on the chosen width.
+  /// The `uiView`'s receives either its intrinsic width or the proposed width, whichever is smaller. The view receives its intrinsic height
+  /// based on the chosen width.
   ///
   /// Typically used for views that have a height that's a function of their width, e.g. a row with
   /// text that can wrap to multiple lines.
