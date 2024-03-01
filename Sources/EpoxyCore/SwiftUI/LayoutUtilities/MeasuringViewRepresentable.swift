@@ -56,13 +56,16 @@ extension MeasuringViewRepresentable {
 
     // Creates a `CGSize` by replacing `nil`s with `UIView.noIntrinsicMetric`
     uiView.proposedSize = .init(
-      width: children.first { $0.label == "width" }?.value as? CGFloat ?? ViewType.noIntrinsicMetric,
-      height: children.first { $0.label == "height" }?.value as? CGFloat ?? ViewType.noIntrinsicMetric)
-
+      width: (
+        children.first { $0.label == "width" }?
+          .value as? CGFloat ?? ViewType.noIntrinsicMetric).constraintSafeValue,
+      height: (
+        children.first { $0.label == "height" }?
+          .value as? CGFloat ?? ViewType.noIntrinsicMetric).constraintSafeValue)
     size = uiView.measuredFittingSize
   }
 
-  #if swift(>=5.7) // Proxy check for being built with the iOS 15 SDK
+  #if swift(>=5.7.1) // Proxy check for being built with the iOS 15 SDK
   @available(iOS 16.0, tvOS 16.0, macOS 13.0, *)
   public func sizeThatFits(
     _ proposal: ProposedViewSize,
@@ -71,12 +74,7 @@ extension MeasuringViewRepresentable {
     -> CGSize?
   {
     uiView.strategy = sizing
-
-    // Creates a size by replacing `nil`s with `UIView.noIntrinsicMetric`
-    uiView.proposedSize = .init(
-      width: proposal.width ?? ViewType.noIntrinsicMetric,
-      height: proposal.height ?? ViewType.noIntrinsicMetric)
-
+    uiView.proposedSize = proposal.viewTypeValue
     return uiView.measuredFittingSize
   }
   #endif
@@ -91,14 +89,14 @@ extension MeasuringViewRepresentable {
     nsView: NSViewType)
   {
     nsView.strategy = sizing
-
     let children = Mirror(reflecting: proposedSize).children
-
-    // Creates a `CGSize` by replacing `nil`s with `UIView.noIntrinsicMetric`
     nsView.proposedSize = .init(
-      width: children.first { $0.label == "width" }?.value as? CGFloat ?? ViewType.noIntrinsicMetric,
-      height: children.first { $0.label == "height" }?.value as? CGFloat ?? ViewType.noIntrinsicMetric)
-
+      width: (
+        children.first { $0.label == "width" }?
+          .value as? CGFloat ?? ViewType.noIntrinsicMetric).constraintSafeValue,
+      height: (
+        children.first { $0.label == "height" }?
+          .value as? CGFloat ?? ViewType.noIntrinsicMetric).constraintSafeValue)
     size = nsView.measuredFittingSize
   }
 
@@ -112,14 +110,38 @@ extension MeasuringViewRepresentable {
     -> CGSize?
   {
     nsView.strategy = sizing
-
-    // Creates a size by replacing `nil`s with `UIView.noIntrinsicMetric`
-    nsView.proposedSize = .init(
-      width: proposal.width ?? ViewType.noIntrinsicMetric,
-      height: proposal.height ?? ViewType.noIntrinsicMetric)
-
+    nsView.proposedSize = proposal.viewTypeValue
     return nsView.measuredFittingSize
   }
   #endif
 }
 #endif
+
+#if swift(>=5.7.1) // Proxy check for being built with the iOS 15 SDK
+@available(iOS 16.0, tvOS 16.0, macOS 13.0, *)
+extension ProposedViewSize {
+  /// Creates a size suitable for the current platform's view building framework by capping infinite values to a significantly large value and
+  /// replacing `nil`s with `UIView.noIntrinsicMetric`
+  var viewTypeValue: CGSize {
+    .init(
+      width: width?.constraintSafeValue ?? ViewType.noIntrinsicMetric,
+      height: height?.constraintSafeValue ?? ViewType.noIntrinsicMetric)
+  }
+}
+
+#endif
+
+extension CGFloat {
+  static var maxConstraintValue: CGFloat {
+    // On iOS 15 and below, configuring an auto layout constraint with the constant
+    // `.greatestFiniteMagnitude` exceeds an internal limit and logs an exception to console. To
+    // avoid, we use a significantly large value.
+    1_000_000
+  }
+
+  /// Returns a value suitable for configuring auto layout constraints
+  var constraintSafeValue: CGFloat {
+    isInfinite ? .maxConstraintValue : self
+  }
+
+}

@@ -120,6 +120,8 @@ final class MainViewController: NavigationController {
       return SwiftUIInEpoxyViewController()
     case .epoxyToSwiftUI:
       return EpoxyInSwiftUIViewController()
+    case .epoxyToSwiftUISizingStrategies:
+      return EpoxyInSwiftUISizingStrategiesViewController()
     case .swiftUIToEpoxyResizing:
       return SwiftUIInEpoxyResizingViewController()
     }
