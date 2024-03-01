@@ -343,7 +343,7 @@ public enum SwiftUIMeasurementContainerStrategy {
   /// - The `uiView` will be given its intrinsic width and/or height when measurement in that
   ///   dimension produces a positive value, while zero/negative values will result in that
   ///   dimension receiving the available space proposed by the parent.
-  /// - If the view contains `UILabel` subviews that require a double layout pass as determined by support multiple lines of text
+  /// - If the view contains `UILabel` subviews that require a double layout pass as determined by supporting multiple lines of text
   ///   the view will default to `intrinsicHeightProposedOrIntrinsicWidth` to allow the labels to wrap.
   ///
   /// If you would like to opt out of automatic sizing for performance or to override the default
