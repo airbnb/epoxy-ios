@@ -42,6 +42,6 @@ struct LayoutDemoView: View {
 
 extension NSImage {
   static var example: NSImage {
-    NSImage(resource: ImageResource(name: "ExampleImage", bundle: .main))
+    NSImage(named: "ExampleImage")!
   }
 }
