@@ -51,7 +51,7 @@ jobs:
       - name: Build iOS Example
         run: bundle exec rake build:example:iOS
 
-build-example-macOS:
+  build-example-macOS:
     runs-on: macos-latest
     strategy:
       matrix:
