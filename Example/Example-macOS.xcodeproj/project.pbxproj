@@ -9,20 +9,20 @@
 /* Begin PBXBuildFile section */
 		089C38CC2B9A268800BB4B36 /* ExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C38CB2B9A268800BB4B36 /* ExampleApp.swift */; };
 		089C38CE2B9A268800BB4B36 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 089C38CD2B9A268800BB4B36 /* ContentView.swift */; };
-		08CA71052B9A276800355283 /* EpoxyCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08CA71042B9A276800355283 /* EpoxyCore.framework */; };
-		08CA71062B9A276800355283 /* EpoxyCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 08CA71042B9A276800355283 /* EpoxyCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		08CA710B2B9A28E300355283 /* AppKitImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 08CA710A2B9A28E300355283 /* AppKitImageView.swift */; };
 		08CA71112B9A2BD700355283 /* ExampleImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 08CA71102B9A2BD600355283 /* ExampleImage.png */; };
+		08CA71142B9A2ECD00355283 /* EpoxyCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08CA71042B9A276800355283 /* EpoxyCore.framework */; };
+		08CA71152B9A2ECD00355283 /* EpoxyCore.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 08CA71042B9A276800355283 /* EpoxyCore.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		08CA71072B9A276800355283 /* Embed Frameworks */ = {
+		08CA71162B9A2ECD00355283 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				08CA71062B9A276800355283 /* EpoxyCore.framework in Embed Frameworks */,
+				08CA71152B9A2ECD00355283 /* EpoxyCore.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -44,7 +44,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				08CA71052B9A276800355283 /* EpoxyCore.framework in Frameworks */,
+				08CA71142B9A2ECD00355283 /* EpoxyCore.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,13 +98,15 @@
 				089C38C42B9A268800BB4B36 /* Sources */,
 				089C38C52B9A268800BB4B36 /* Frameworks */,
 				089C38C62B9A268800BB4B36 /* Resources */,
-				08CA71072B9A276800355283 /* Embed Frameworks */,
+				08CA71162B9A2ECD00355283 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = "Example-macOS";
+			packageProductDependencies = (
+			);
 			productName = "Example-macOS";
 			productReference = 089C38C82B9A268800BB4B36 /* Example-macOS.app */;
 			productType = "com.apple.product-type.application";

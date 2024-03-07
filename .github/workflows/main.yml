@@ -48,8 +48,23 @@ jobs:
       - uses: ./.github/actions/setup
         with:
           xcode: ${{ matrix.xcode }}
-      - name: Build Example
-        run: bundle exec rake build:example
+      - name: Build iOS Example
+        run: bundle exec rake build:example:iOS
+
+build-example-macOS:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        xcode:
+        - '13.2.1' # Swift 5.5 (lowest)
+        - '14.0.1' # Swift 5.7 (highest)
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/setup
+        with:
+          xcode: ${{ matrix.xcode }}
+      - name: Build macOS Example
+        run: bundle exec rake build:example:macOS
 
   test-package:
     runs-on: macos-latest

@@ -10,4 +10,7 @@
    <FileRef
       location = "group:Example/EpoxyExample.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:Example/Example-macOS.xcodeproj">
+   </FileRef>
 </Workspace>
