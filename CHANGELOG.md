@@ -22,8 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   approach to resolve an issue that could cause collection view cells to layout with 
   unexpected dimensions
 - Made new layout-based SwiftUI cell rendering option the default.
-- Fixed an issue where a UIKit view bridged to SwiftUI that wraps would always take up the proposed
-  size instead of its intrinsic width. 
 
 ## [0.10.0](https://github.com/airbnb/epoxy-ios/compare/0.9.0...0.10.0) - 2023-06-29
 

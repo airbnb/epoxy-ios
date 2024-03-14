@@ -64,7 +64,6 @@ extension SwiftUIMeasurementContainerStrategy: Identifiable, CaseIterable {
   public static var allCases: [SwiftUIMeasurementContainerStrategy] = [
     .automatic,
     .proposed,
-    .intrinsicHeightProposedOrIntrinsicWidth,
     .intrinsicHeightProposedWidth,
     .intrinsicWidthProposedHeight,
     .intrinsic,
@@ -82,8 +81,6 @@ extension SwiftUIMeasurementContainerStrategy: Identifiable, CaseIterable {
       return "Automatic"
     case .proposed:
       return "Proposed"
-    case .intrinsicHeightProposedOrIntrinsicWidth:
-      return "Intrinsic Height, Proposed Width or Intrinsic Width"
     case .intrinsicHeightProposedWidth:
       return "Intrinsic Height, Proposed Width"
     case .intrinsicWidthProposedHeight:
