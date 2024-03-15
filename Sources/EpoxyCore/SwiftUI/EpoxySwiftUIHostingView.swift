@@ -67,7 +67,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     epoxyContent = EpoxyHostingContent(rootView: style.initialContent.rootView)
     viewController = EpoxySwiftUIHostingController(
       rootView: .init(content: epoxyContent, environment: epoxyEnvironment),
-      ignoreSafeArea: style.ignoreSafeArea)
+      ignoreSafeArea: true)
 
     dataID = style.initialContent.dataID ?? DefaultDataID.noneProvided as AnyHashable
 
@@ -97,24 +97,13 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   // MARK: Public
 
   public struct Style: Hashable {
-
-    // MARK: Lifecycle
-
-    public init(
-      reuseBehavior: SwiftUIHostingViewReuseBehavior,
-      initialContent: Content,
-      ignoreSafeArea: Bool = true)
-    {
+    public init(reuseBehavior: SwiftUIHostingViewReuseBehavior, initialContent: Content) {
       self.reuseBehavior = reuseBehavior
       self.initialContent = initialContent
-      self.ignoreSafeArea = ignoreSafeArea
     }
-
-    // MARK: Public
 
     public var reuseBehavior: SwiftUIHostingViewReuseBehavior
     public var initialContent: Content
-    public var ignoreSafeArea: Bool
 
     public static func == (lhs: Style, rhs: Style) -> Bool {
       lhs.reuseBehavior == rhs.reuseBehavior
@@ -354,12 +343,8 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     viewController.view.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       viewController.view.leadingAnchor.constraint(equalTo: leadingAnchor),
-      // Pining the hosting view controller to layoutMarginsGuide ensures the content respects the top safe area
-      // when installed inside a `TopBarContainer`
       viewController.view.topAnchor.constraint(equalTo: topAnchor),
       viewController.view.trailingAnchor.constraint(equalTo: trailingAnchor),
-      // Pining the hosting view controller to layoutMarginsGuide ensures the content respects the bottom safe area
-      // when installed inside a `BottomBarContainer`
       viewController.view.bottomAnchor.constraint(equalTo: bottomAnchor),
     ])
 

@@ -11,12 +11,9 @@ extension View {
   ///   - dataID: An ID that uniquely identifies this item relative to other items in the
   ///     same collection.
   ///   - reuseBehavior: The reuse behavior of the `EpoxySwiftUIHostingView`.
-  ///   - ignoreSafeArea: Whether or not the underlying `EpoxySwiftUIHostingController` will ignore its safe area.
-  ///     Only set this to `false` when installing this BarModel using `BarContainerInsetBehavior.barHeightContentInset` or `BarContainerInsetBehavior.none`.
   public func barModel(
     dataID: AnyHashable? = nil,
-    reuseBehavior: SwiftUIHostingViewReuseBehavior = .reusable,
-    ignoreSafeArea: Bool = true)
+    reuseBehavior: SwiftUIHostingViewReuseBehavior = .reusable)
     -> BarModel<EpoxySwiftUIHostingView<Self>>
   {
     EpoxySwiftUIHostingView<Self>.barModel(
@@ -24,8 +21,7 @@ extension View {
       content: .init(rootView: self, dataID: dataID),
       style: .init(
         reuseBehavior: reuseBehavior,
-        initialContent: .init(rootView: self, dataID: dataID),
-        ignoreSafeArea: ignoreSafeArea))
+        initialContent: .init(rootView: self, dataID: dataID)))
       .linkDisplayLifecycle()
   }
 }
