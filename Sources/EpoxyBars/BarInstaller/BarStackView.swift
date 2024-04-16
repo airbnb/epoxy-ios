@@ -295,7 +295,10 @@ public class BarStackView: UIStackView, EpoxyableView {
     for (index, wrapper) in zOrderedWrappers.enumerated() {
       // We pick 1000 as a sensible max to decrement from since we would never have that may bars.
       // We don't decrement from 0 since that causes bars to be invisible for some reason.
-      wrapper.layer.zPosition = CGFloat(1000 - index)
+      // Due to a bug on visionOS, we need to clamp this to be between -1 and 1, otherwise
+      // interaction breaks for SwiftUI views.
+      // http://openradar.appspot.com/radar?id=5534724382523392
+      wrapper.layer.zPosition = CGFloat(1000 - index) / 1000
       wrapper.zOrder = zOrder
     }
   }
