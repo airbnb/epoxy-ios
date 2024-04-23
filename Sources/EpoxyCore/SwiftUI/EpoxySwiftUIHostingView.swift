@@ -70,6 +70,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
       ignoreSafeArea: true)
 
     dataID = style.initialContent.dataID ?? DefaultDataID.noneProvided as AnyHashable
+    forceLayoutOnLayoutMarginsChange = style.forceLayoutOnLayoutMarginsChange
 
     super.init(frame: .zero)
 
@@ -97,20 +98,33 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   // MARK: Public
 
   public struct Style: Hashable {
-    public init(reuseBehavior: SwiftUIHostingViewReuseBehavior, initialContent: Content) {
+
+    // MARK: Lifecycle
+
+    public init(
+      reuseBehavior: SwiftUIHostingViewReuseBehavior,
+      forceLayoutOnLayoutMarginsChange: Bool,
+      initialContent: Content)
+    {
       self.reuseBehavior = reuseBehavior
+      self.forceLayoutOnLayoutMarginsChange = forceLayoutOnLayoutMarginsChange
       self.initialContent = initialContent
     }
 
+    // MARK: Public
+
     public var reuseBehavior: SwiftUIHostingViewReuseBehavior
+    public var forceLayoutOnLayoutMarginsChange: Bool
     public var initialContent: Content
 
     public static func == (lhs: Style, rhs: Style) -> Bool {
-      lhs.reuseBehavior == rhs.reuseBehavior
+      lhs.reuseBehavior == rhs.reuseBehavior &&
+        lhs.forceLayoutOnLayoutMarginsChange == rhs.forceLayoutOnLayoutMarginsChange
     }
 
     public func hash(into hasher: inout Hasher) {
       hasher.combine(reuseBehavior)
+      hasher.combine(forceLayoutOnLayoutMarginsChange)
     }
   }
 
@@ -212,10 +226,22 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
         trailing: margins.right)
     }
 
-    // Allow the layout margins update to fully propagate through to the SwiftUI View before
-    // invalidating the layout.
-    DispatchQueue.main.async {
-      self.viewController.view.invalidateIntrinsicContentSize()
+    if forceLayoutOnLayoutMarginsChange {
+      // If we don't force a layout pass and size invalidation synchronously after the layout
+      // margins change, it's possible for the hosting view to render with incorrect margins,
+      // causing a visual jump as the layout resolves over multiple runloop iterations. This seems
+      // to be more common with top and bottom bars, since they can be laid out early during view
+      // controller transitions. If this works well, we may make this the default behavior for all
+      // SwiftUI views.
+      viewController.view.setNeedsLayout()
+      viewController.view.layoutIfNeeded()
+      viewController.view.invalidateIntrinsicContentSize()
+    } else {
+      // Allow the layout margins update to fully propagate through to the SwiftUI View before
+      // invalidating the layout.
+      DispatchQueue.main.async {
+        self.viewController.view.invalidateIntrinsicContentSize()
+      }
     }
   }
 
@@ -236,6 +262,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   private let viewController: EpoxySwiftUIHostingController<EpoxyHostingWrapper<RootView>>
   private let epoxyContent: EpoxyHostingContent<RootView>
   private let epoxyEnvironment = EpoxyHostingEnvironment()
+  private let forceLayoutOnLayoutMarginsChange: Bool
   private var dataID: AnyHashable
   private var state: AppearanceState = .disappeared
 

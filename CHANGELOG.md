@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   unexpected dimensions
 - Made new layout-based SwiftUI cell rendering option the default.
 - Fixed interaction of SwiftUI bars on visionOS
+- Added flag for forcing layout on a hosted SwiftUI view after layout margins change
 
 ## [0.10.0](https://github.com/airbnb/epoxy-ios/compare/0.9.0...0.10.0) - 2023-06-29
 

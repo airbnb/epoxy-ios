@@ -21,6 +21,7 @@ extension View {
       content: .init(rootView: self, dataID: dataID),
       style: .init(
         reuseBehavior: reuseBehavior,
+        forceLayoutOnLayoutMarginsChange: false,
         initialContent: .init(rootView: self, dataID: dataID)))
       .linkDisplayLifecycle()
   }
