@@ -11,9 +11,16 @@ namespace :build do
     xcodebuild 'build -scheme EpoxyCore -destination generic/platform=macOS'
   end
 
-  desc 'Builds the EpoxyExample app'
-  task :example do
-    xcodebuild 'build -scheme EpoxyExample -destination "platform=iOS Simulator,name=iPhone 12"'
+  namespace :example do
+    desc 'Builds the iOS EpoxyExample app'
+    task :iOS do
+      xcodebuild 'build -scheme EpoxyExample -destination "platform=iOS Simulator,name=iPhone 12"'
+    end
+
+    desc 'Builds the macOS Example app'
+    task :macOS do
+      xcodebuild 'build -workspace Example/Example-macOS.xcworkspace -scheme Example-macOS -destination generic/platform=macOS'
+    end
   end
 end
 
