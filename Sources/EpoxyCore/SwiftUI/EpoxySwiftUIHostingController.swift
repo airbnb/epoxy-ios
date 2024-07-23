@@ -19,7 +19,7 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
 
   /// Creates a `UIHostingController` that optionally ignores the `safeAreaInsets` when laying out
   /// its contained `RootView`.
-  public convenience init(rootView: Content, ignoreSafeArea: Bool) {
+  public convenience init(rootView: Content, ignoresSafeArea: Bool, ignoresKeyboardAvoidance: Bool) {
     self.init(rootView: rootView)
 
     // We unfortunately need to call a private API to disable the safe area. We can also accomplish
@@ -27,7 +27,11 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
     // `safeAreaInsets` property and returning `.zero`. An implementation of that logic is
     // available in this file in the `2d28b3181cca50b89618b54836f7a9b6e36ea78e` commit if this API
     // no longer functions in future SwiftUI versions.
-    _disableSafeArea = ignoreSafeArea
+    _disableSafeArea = ignoresSafeArea
+
+    if ignoresKeyboardAvoidance {
+      disableKeyboardAvoidance()
+    }
   }
 
   // MARK: Open
@@ -40,6 +44,54 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
     // other view controllers we default the background color to clear so we can see the views
     // below, e.g. to draw highlight states in a `CollectionView`.
     view.backgroundColor = .clear
+  }
+
+  // MARK: Private
+
+  /// Creates a dynamic subclass of this hosting controller's view that disables its keyboard
+  /// avoidance behavior.
+  /// Setting `safeAreaRegions` to `.container` also works but cannot be used since it's
+  /// supported on 16.4+ and we need to support older versions.
+  /// See [here](https://steipete.com/posts/disabling-keyboard-avoidance-in-swiftui-uihostingcontroller/) for more info.
+  private func disableKeyboardAvoidance() {
+    guard let viewClass = object_getClass(view) else {
+      EpoxyLogger.shared.assertionFailure("Unable to determine class of \(String(describing: view))")
+      return
+    }
+
+    let viewClassName = class_getName(viewClass)
+    let viewSubclassName = String(cString: viewClassName).appending("_IgnoresKeyboard")
+
+    // If subclass already exists, just set the class of `view` and return.
+    if let subclass = NSClassFromString(viewSubclassName) {
+      object_setClass(view, subclass)
+      return
+    }
+
+    guard let viewSubclassNameUTF8 = (viewSubclassName as NSString).utf8String else {
+      EpoxyLogger.shared.assertionFailure("Unable to get utf8String of \(viewSubclassName)")
+      return
+    }
+    guard let viewSubclass = objc_allocateClassPair(viewClass, viewSubclassNameUTF8, 0) else {
+      EpoxyLogger.shared.assertionFailure(
+        "Unable to subclass \(viewClass) with \(viewSubclassNameUTF8)")
+      return
+    }
+
+    let selector = NSSelectorFromString("keyboardWillShowWithNotification:")
+    guard let method = class_getInstanceMethod(viewClass, selector) else {
+      EpoxyLogger.shared.assertionFailure("Unable to locate method \(selector) on \(viewClass)")
+      objc_disposeClassPair(viewSubclass)
+      return
+    }
+
+    let keyboardWillShowOverride: @convention(block) (AnyObject, AnyObject) -> Void = { _, _ in }
+    let implementation = imp_implementationWithBlock(keyboardWillShowOverride)
+    let typeEncoding = method_getTypeEncoding(method)
+    class_addMethod(viewSubclass, selector, implementation, typeEncoding)
+
+    objc_registerClassPair(viewSubclass)
+    object_setClass(view, viewSubclass)
   }
 }
 #endif

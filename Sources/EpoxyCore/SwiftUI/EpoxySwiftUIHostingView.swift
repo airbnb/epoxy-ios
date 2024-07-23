@@ -67,7 +67,8 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     epoxyContent = EpoxyHostingContent(rootView: style.initialContent.rootView)
     viewController = EpoxySwiftUIHostingController(
       rootView: .init(content: epoxyContent, environment: epoxyEnvironment),
-      ignoreSafeArea: true)
+      ignoresSafeArea: true,
+      ignoresKeyboardAvoidance: true)
 
     dataID = style.initialContent.dataID ?? DefaultDataID.noneProvided as AnyHashable
     forceLayoutOnLayoutMarginsChange = style.forceLayoutOnLayoutMarginsChange
