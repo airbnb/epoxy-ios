@@ -12,8 +12,8 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '13.2.1' # Swift 5.5 (lowest)
-        - '14.0.1' # Swift 5.7 (highest)
+        - '14.1' # Swift 5.7 (lowest)
+        - '15.2' # Swift 5.9.2 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -27,7 +27,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '14.0.1' # Swift 5.7 (highest)
+        - '15.2' # Swift 5.9.2 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -41,8 +41,8 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '13.2.1' # Swift 5.5 (lowest)
-        - '14.0.1' # Swift 5.7 (highest)
+        - '14.1' # Swift 5.7 (lowest)
+        - '15.2' # Swift 5.9.2 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -56,8 +56,8 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '13.2.1' # Swift 5.5  (lowest)
-        - '14.0.1' # Swift 5.7 (highest)
+        - '14.1' # Swift 5.7 (lowest)
+        - '15.2' # Swift 5.9.2 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
