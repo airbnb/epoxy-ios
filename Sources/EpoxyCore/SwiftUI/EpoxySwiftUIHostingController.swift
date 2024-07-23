@@ -46,6 +46,8 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
     view.backgroundColor = .clear
   }
 
+  // MARK: Private
+
   /// Creates a dynamic subclass of this hosting controller's view that disables its keyboard
   /// avoidance behavior.
   /// Setting `safeAreaRegions` to `.container` also works but cannot be used since it's
