@@ -43,7 +43,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   ///   - alignment: The alignment used within the group. Individual item alignments will
   ///                 take precedence over this value
   ///   - accessibilityAlignment: The accessibility alignment for the items within a group.
-  ///                              these will only be used when `reflowsForAccessibiltyTypeSizes` is `true`
+  ///                              these will only be used when `reflowsForAccessibilityTypeSizes` is `true`
   ///                              and when the `preferredContentSizeCategory.isAccessibilityCategory` is `true`.
   ///                              These will also be used if `forceVerticalAccessibilityLayout` is set to `true`.
   ///                              Individual item alignments will take precedence over this value
@@ -81,7 +81,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   ///   - alignment: The alignment used within the group. Individual item alignments will
   ///                 take precedence over this value
   ///   - accessibilityAlignment: The accessibility alignment for the items within a group.
-  ///                              these will only be used when `reflowsForAccessibiltyTypeSizes` is `true`
+  ///                              these will only be used when `reflowsForAccessibilityTypeSizes` is `true`
   ///                              and when the `preferredContentSizeCategory.isAccessibilityCategory` is `true`.
   ///                              These will also be used if `forceVerticalAccessibilityLayout` is set to `true`.
   ///                              Individual item alignments will take precedence over this value
@@ -118,14 +118,14 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     ///   - alignment: The alignment used within the group. Individual item alignments will
     ///                 take precedence over this value
     ///   - accessibilityAlignment: The accessibility alignment for the items within a group.
-    ///                              these will only be used when `reflowsForAccessibiltyTypeSizes` is `true`
+    ///                              these will only be used when `reflowsForAccessibilityTypeSizes` is `true`
     ///                              and when the `preferredContentSizeCategory.isAccessibilityCategory` is `true`.
     ///                              These will also be used if `forceVerticalAccessibilityLayout` is set to `true`.
     ///                              Individual item alignments will take precedence over this value.
     ///                              The default value of this property is `.leading`
     ///   - spacing: the spacing between items of the group
     ///   - reflowsForAccessibilityTypeSizes: whether or not this group should reflow when DynamicType
-    ///                                         is enabled and is an accessiblity size category.
+    ///                                         is enabled and is an accessibility size category.
     ///                                         The default value is `true`
     ///   - forceVerticalAccessibilityLayout: force the group to use the the vertical accessibility layout
     ///   - animation: define style properties for animated group updates, with a default `spring` animation curve.

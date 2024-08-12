@@ -9,7 +9,7 @@ import UIKit
 /// The interface that's available to a `NavigationQueue` to manage the visible view controllers
 /// within a navigation stack.
 ///
-/// Rougly matches the API of `UINavigationController`.
+/// Roughly matches the API of `UINavigationController`.
 protocol NavigationInterface: AnyObject {
   /// The active transition coordinator object.
   var transitionCoordinator: UIViewControllerTransitionCoordinator? { get }

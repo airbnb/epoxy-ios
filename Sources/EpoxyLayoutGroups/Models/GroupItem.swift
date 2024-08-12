@@ -150,7 +150,7 @@ extension GroupItem where ItemType: UIView {
   /// Set the content compression resistance priority for the underlying UIView.
   /// Calling this method on a GroupItem for a non-UIView class will do nothing.
   /// - Parameters:
-  ///   - priority: the content compression resitance priority
+  ///   - priority: the content compression resistance priority
   ///   - axis: the axis this priority should be applied to
   /// - Returns: a copy of the model with the priority set
   public func contentCompressionResistancePriority(

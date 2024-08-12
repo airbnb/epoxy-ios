@@ -73,7 +73,7 @@ extension StubTransitionCoordinator: UIViewControllerTransitionCoordinator {
 
   // swiftlint:disable unavailable_function
   func notifyWhenInteractionChanges(_: @escaping (UIViewControllerTransitionCoordinatorContext) -> Void) {
-    fatalError("Not implmented")
+    fatalError("Not implemented")
   }
 
   func viewController(forKey key: UITransitionContextViewControllerKey) -> UIViewController? {

@@ -34,7 +34,7 @@ public struct BarModel<View: UIView>: ViewEpoxyModeled {
   ///   - dataID: An optional ID that uniquely identifies this bar relative to other bars in the
   ///     same bar stack.
   ///   - content: The content of the bar view that will be applied to the view in the `setContent`
-  ///     closure whenver it has changed.
+  ///     closure whenever it has changed.
   ///   - setContent: A closure that's called to configure the view with its content, both
   ///     immediately following its construction in `makeView` and subsequently whenever a new bar
   ///     model that replaced an old bar model with the same `dataID` has content that is not equal
@@ -65,7 +65,7 @@ public struct BarModel<View: UIView>: ViewEpoxyModeled {
   ///   - params: The parameters used to construct an instance of the view, passed into the
   ///     `makeView` function and used as a view reuse identifier.
   ///   - content: The content of the bar view that will be applied to the view in the
-  ///     `setContent` closure whenver it has changed.
+  ///     `setContent` closure whenever it has changed.
   ///   - makeView: A closure that's called with `params` to construct view instances as required.
   ///   - setContent: A closure that's called to configure the view with its content, both
   ///     immediately following its construction in `makeView` and subsequently whenever a new bar

@@ -72,14 +72,14 @@ final class ComplexDeclarativeViewController: UIViewController {
       ("Purple", UIColor.systemPurple),
     ]
     let numberOfItems = Int.random(in: 1..<possibleItems.count)
-    let allIndicies = Array(0...numberOfItems).shuffled()
+    let allIndices = Array(0...numberOfItems).shuffled()
     let textStyles: [UIFont.TextStyle] = [
       .title2,
       .title3,
       .body,
     ]
 
-    return allIndicies.map { index in
+    return allIndices.map { index in
       let color = possibleItems[index]
       let textStyle = textStyles.randomElement() ?? .title3
       return HGroupItem(

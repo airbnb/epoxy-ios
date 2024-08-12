@@ -28,7 +28,7 @@ extension EpoxyModeled where Self: AccessibilityAlignmentProviding {
     set { self[accessibilityAlignmentProperty] = newValue }
   }
 
-  /// Returns a copy of this model replacing the `accessibiltyAlignment` value
+  /// Returns a copy of this model replacing the `accessibilityAlignment` value
   /// with the one provided.
   public func accessibilityAlignment(_ value: VGroup.ItemAlignment?) -> Self {
     copy(updating: accessibilityAlignmentProperty, to: value)

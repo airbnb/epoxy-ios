@@ -89,7 +89,7 @@ final class CollectionDiffSpec: QuickSpec {
     ]
 
     describe("makeChangeset") {
-      context("with called on an indentical collection") {
+      context("with called on an identical collection") {
         it("returns an empty changeset") {
           let changeset = intArray.makeChangeset(from: intArray)
           expect(changeset.inserts).to(beEmpty())
@@ -550,7 +550,7 @@ final class CollectionDiffSpec: QuickSpec {
     }
 
     describe("makeSectionedChangeset") {
-      context("with called on an indentical collection") {
+      context("with called on an identical collection") {
         it("returns an empty changeset") {
           let changeset = testSectionedDiffableArray.makeSectionedChangeset(
             from: testSectionedDiffableArray)

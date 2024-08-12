@@ -6,7 +6,7 @@ import UIKit
 
 // MARK: - Constrainable
 
-/// Defines something that can be constrainted with AutoLayout
+/// Defines something that can be constrained with AutoLayout
 public protocol Constrainable {
   var leadingAnchor: NSLayoutXAxisAnchor { get }
   var trailingAnchor: NSLayoutXAxisAnchor { get }

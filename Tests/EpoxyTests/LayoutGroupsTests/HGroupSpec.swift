@@ -112,7 +112,7 @@ final class HGroupSpec: QuickSpec {
       }
     }
 
-    // MARK: reflowsForAccessibiltiyTypeSizes = true
+    // MARK: reflowsForAccessibilityTypeSizes = true
 
     describe("when reflowsForAccessibilityTypeSizes is true") {
       describe("when the preferred type size is not an accessibility size") {

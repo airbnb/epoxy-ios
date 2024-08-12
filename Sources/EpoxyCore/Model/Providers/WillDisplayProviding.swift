@@ -17,11 +17,11 @@ extension CallbackContextEpoxyModeled where Self: WillDisplayProviding {
   // MARK: Public
 
   /// A closure that's called when a view is about to be displayed, before it has been added to the
-  /// view hierarcy.
+  /// view hierarchy.
   public typealias WillDisplay = (_ context: CallbackContext) -> Void
 
   /// A closure that's called when the view is about to be displayed, before it has been added to
-  /// the view hierarcy.
+  /// the view hierarchy.
   public var willDisplay: WillDisplay? {
     get { self[willDisplayProperty] }
     set { self[willDisplayProperty] = newValue }

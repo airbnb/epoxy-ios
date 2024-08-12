@@ -84,7 +84,7 @@ public final class BarWrapperView: UIView {
 
     guard let view = view else { return nil }
 
-    /// We allow bar views to recieve touches outside of this wrapper,
+    /// We allow bar views to receive touches outside of this wrapper,
     /// so we manually hit test the bar view.
     return view.hitTest(view.convert(point, from: self), with: event)
   }
@@ -188,7 +188,7 @@ public final class BarWrapperView: UIView {
       if !oldValue.isDiffableItemEqual(to: model) {
         model.configureContent(view, traitCollection: traitCollection, animated: animated)
       }
-      // The behavior is configured regardless of content equality sice behavior is not equatable.
+      // The behavior is configured regardless of content equality since behavior is not equatable.
       model.configureBehavior(view, traitCollection: traitCollection)
     } else {
       let view = makeView(
