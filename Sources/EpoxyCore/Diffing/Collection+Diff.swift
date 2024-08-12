@@ -203,7 +203,7 @@ extension Collection where Element: DiffableSection, Index == Int {
 
 // MARK: - Entry
 
-/// A bookkeeping refrence type for the diffing algorithm.
+/// A bookkeeping reference type for the diffing algorithm.
 private final class Entry {
 
   // MARK: Internal

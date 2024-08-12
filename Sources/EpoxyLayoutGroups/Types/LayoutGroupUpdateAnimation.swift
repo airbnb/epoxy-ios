@@ -34,7 +34,7 @@ extension LayoutGroupUpdateAnimation {
   ///   - duration: a TimeInterval for animation duration, with a default value of `0.5`
   ///   - delay: a TimeInterval for animation duration, with a default value of `0.0`
   ///   - dampingRatio: a value for spring damping ratio, with a default value of `1.0`
-  ///   - initialSpringVelocity: a value for initial spring velocity, wiht a default value of `0.0`
+  ///   - initialSpringVelocity: a value for initial spring velocity, with a default value of `0.0`
   public static func spring(
     duration: TimeInterval = 0.5,
     delay: TimeInterval = 0.0,

@@ -10,7 +10,7 @@ public protocol ReflowsForAccessibilityTypeSizeProviding {
   /// Only used in HGroup. Whether or not the HGroup should reflow for accessibility
   /// type sizes. When this value is `true` the `HGroup` will reflow when
   /// `preferredContentSizeCategory.isAccessibilityCategory` is `true`. The `HGroup` reflows
-  /// to model a `VGroup` and uses the `accessibiltyAlignment` value to determine item alignments.
+  /// to model a `VGroup` and uses the `accessibilityAlignment` value to determine item alignments.
   var reflowsForAccessibilityTypeSizes: Bool { get }
 }
 
