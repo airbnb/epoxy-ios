@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.10.0...HEAD)
 
+### Added
+- Expose `forceLayout` in `EpoxySwiftUIHostingView` for updating the hosting view size from outside.
+
 ### Changed
 - `AnyItemModel` now implements the `ErasedContentProviding` protocol.
 - Updated `ErasedContentProviding` protocol to use its type name instead of `Self` in the keys of its `EpoxyModelProperty` properties `contentProperty` and `isContentEqualProperty `.

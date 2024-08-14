@@ -198,12 +198,9 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     // The view controller must be added to the view controller hierarchy to measure its content.
     addViewControllerIfNeededAndReady()
 
-    // We need to layout the view to ensure it gets resized properly when cells are re-used
-    viewController.view.setNeedsLayout()
-    viewController.view.layoutIfNeeded()
-
-    // This is required to ensure that views with new content are properly resized.
-    viewController.view.invalidateIntrinsicContentSize()
+    // In this method `setNeedsLayout` and `layoutIfNeeded` are called. We need to layout the view to ensure it gets resized properly when cells are re-used
+    // In this method `invalidateIntrinsicContentSize` is called. This is required to ensure that views with new content are properly resized.
+    forceLayout()
   }
 
   public override func layoutMarginsDidChange() {
@@ -234,9 +231,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
       // to be more common with top and bottom bars, since they can be laid out early during view
       // controller transitions. If this works well, we may make this the default behavior for all
       // SwiftUI views.
-      viewController.view.setNeedsLayout()
-      viewController.view.layoutIfNeeded()
-      viewController.view.invalidateIntrinsicContentSize()
+      forceLayout()
     } else {
       // Allow the layout margins update to fully propagate through to the SwiftUI View before
       // invalidating the layout.
@@ -244,6 +239,12 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
         self.viewController.view.invalidateIntrinsicContentSize()
       }
     }
+  }
+
+  public func forceLayout() {
+    viewController.view.setNeedsLayout()
+    viewController.view.layoutIfNeeded()
+    viewController.view.invalidateIntrinsicContentSize()
   }
 
   public func handleWillDisplay(animated: Bool) {
