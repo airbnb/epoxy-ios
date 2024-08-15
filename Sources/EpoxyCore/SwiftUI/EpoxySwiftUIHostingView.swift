@@ -241,6 +241,8 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     }
   }
 
+  /// Force relayout the UIHostingView and invalidate its intrinsic content size.
+  /// This is used for updating the view size manually.
   public func forceLayout() {
     viewController.view.setNeedsLayout()
     viewController.view.layoutIfNeeded()
