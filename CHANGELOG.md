@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Expose `forceLayout` in `EpoxySwiftUIHostingView` for updating the hosting view size from outside.
+- CollectionViewController init param `usesSafeAreaLayoutGuideLeadingTrailing: Bool` to respect leading/trailing layoutGuide anchors which are needed for landscape orientation. Defaults to `false` and uses the view's `leadingAnchor` or `trailingAnchor`. When `true` it will use the view's `safeAreaLayoutGuide` `leadingAnchor` and `trailingAnchor`.
 
 ### Changed
 - `AnyItemModel` now implements the `ErasedContentProviding` protocol.
