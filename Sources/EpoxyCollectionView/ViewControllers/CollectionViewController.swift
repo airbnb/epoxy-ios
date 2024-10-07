@@ -152,7 +152,6 @@ open class CollectionViewController: UIViewController {
     view.addSubview(collectionView)
     collectionView.layoutDelegate = self
 
-    collectionView.backgroundColor = .green
     let layoutGuide = view.safeAreaLayoutGuide
     let leadingAnchor = usesSafeAreaLayoutGuideLeadingTrailing ? layoutGuide.leadingAnchor : view.leadingAnchor
     let trailingAnchor = usesSafeAreaLayoutGuideLeadingTrailing ? layoutGuide.trailingAnchor : view.trailingAnchor
