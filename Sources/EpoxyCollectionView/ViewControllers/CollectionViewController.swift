@@ -18,11 +18,13 @@ open class CollectionViewController: UIViewController {
   public init(
     layout: UICollectionViewLayout,
     sections: [SectionModel]? = nil,
-    configuration: CollectionViewConfiguration = .shared)
+    configuration: CollectionViewConfiguration = .shared,
+    usesSafeAreaLayoutGuideLeadingTrailing: Bool = false)
   {
     self.layout = layout
     initialSections = sections
     self.configuration = configuration
+    self.usesSafeAreaLayoutGuideLeadingTrailing = usesSafeAreaLayoutGuideLeadingTrailing
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -33,10 +35,11 @@ open class CollectionViewController: UIViewController {
   public convenience init(
     layout: UICollectionViewLayout,
     items: [ItemModeling],
-    configuration: CollectionViewConfiguration = .shared)
+    configuration: CollectionViewConfiguration = .shared,
+    usesSafeAreaLayoutGuideLeadingTrailing: Bool = false)
   {
     let section = SectionModel(dataID: DefaultDataID.noneProvided, items: items)
-    self.init(layout: layout, sections: [section], configuration: configuration)
+    self.init(layout: layout, sections: [section], configuration: configuration, usesSafeAreaLayoutGuideLeadingTrailing: usesSafeAreaLayoutGuideLeadingTrailing)
   }
 
   /// Initializes a collection view controller and configures its collection view with the provided
@@ -44,9 +47,10 @@ open class CollectionViewController: UIViewController {
   public convenience init(
     layout: UICollectionViewLayout,
     @SectionModelBuilder sections: () -> [SectionModel],
-    configuration: CollectionViewConfiguration = .shared)
+    configuration: CollectionViewConfiguration = .shared,
+    usesSafeAreaLayoutGuideLeadingTrailing: Bool = false)
   {
-    self.init(layout: layout, sections: sections(), configuration: configuration)
+    self.init(layout: layout, sections: sections(), configuration: configuration, usesSafeAreaLayoutGuideLeadingTrailing: usesSafeAreaLayoutGuideLeadingTrailing)
   }
 
   /// Initializes a collection view controller and configures its collection view with the provided
@@ -56,9 +60,10 @@ open class CollectionViewController: UIViewController {
   public convenience init(
     layout: UICollectionViewLayout,
     @ItemModelBuilder items: () -> [ItemModeling],
-    configuration: CollectionViewConfiguration = .shared)
+    configuration: CollectionViewConfiguration = .shared,
+    usesSafeAreaLayoutGuideLeadingTrailing: Bool = false)
   {
-    self.init(layout: layout, items: items(), configuration: configuration)
+    self.init(layout: layout, items: items(), configuration: configuration, usesSafeAreaLayoutGuideLeadingTrailing: usesSafeAreaLayoutGuideLeadingTrailing)
   }
 
   @available(*, unavailable)
@@ -134,6 +139,8 @@ open class CollectionViewController: UIViewController {
   /// The sections that should be set on the collection view when it loads, else `nil`.
   private var initialSections: [SectionModel]?
 
+  private let usesSafeAreaLayoutGuideLeadingTrailing: Bool
+
   /// Loads the collection view or returns it if already loaded.
   @discardableResult
   private func loadCollectionView() -> CollectionView {
@@ -145,12 +152,17 @@ open class CollectionViewController: UIViewController {
     view.addSubview(collectionView)
     collectionView.layoutDelegate = self
 
+    collectionView.backgroundColor = .green
+    let layoutGuide = view.safeAreaLayoutGuide
+    let leadingAnchor = usesSafeAreaLayoutGuideLeadingTrailing ? layoutGuide.leadingAnchor : view.leadingAnchor
+    let trailingAnchor = usesSafeAreaLayoutGuideLeadingTrailing ? layoutGuide.trailingAnchor : view.trailingAnchor
+
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-      collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
       collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-      collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+      collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
     ])
 
     if let sections = initialSections {
