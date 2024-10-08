@@ -145,12 +145,17 @@ open class CollectionViewController: UIViewController {
     view.addSubview(collectionView)
     collectionView.layoutDelegate = self
 
+    let layoutGuide = view.safeAreaLayoutGuide
+    let useLayoutGuide = configuration.usesSafeAreaLayoutGuideLeadingTrailingAnchors
+    let leadingAnchor = useLayoutGuide ? layoutGuide.leadingAnchor : view.leadingAnchor
+    let trailingAnchor = useLayoutGuide ? layoutGuide.trailingAnchor : view.trailingAnchor
+
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
       collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-      collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+      collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
       collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-      collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+      collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
     ])
 
     if let sections = initialSections {

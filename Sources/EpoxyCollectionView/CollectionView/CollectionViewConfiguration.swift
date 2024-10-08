@@ -13,11 +13,13 @@ public struct CollectionViewConfiguration {
   public init(
     usesBatchUpdatesForAllReloads: Bool = true,
     usesCellPrefetching: Bool = true,
-    usesAccurateScrollToItem: Bool = true)
+    usesAccurateScrollToItem: Bool = true,
+    usesSafeAreaLayoutGuideLeadingTrailingAnchors: Bool = false)
   {
     self.usesBatchUpdatesForAllReloads = usesBatchUpdatesForAllReloads
     self.usesCellPrefetching = usesCellPrefetching
     self.usesAccurateScrollToItem = usesAccurateScrollToItem
+    self.usesSafeAreaLayoutGuideLeadingTrailingAnchors = usesSafeAreaLayoutGuideLeadingTrailingAnchors
   }
 
   // MARK: Public
@@ -66,4 +68,10 @@ public struct CollectionViewConfiguration {
   ///
   /// - SeeAlso: `CollectionViewScrollToItemHelper`
   public var usesAccurateScrollToItem: Bool
+
+  /// Respects leading and trailing safe areas from the `UILayoutGuide` when `true`. Helpful
+  /// for supporting landscape orientation so that content is not rendered in the notch area.
+  ///
+  /// Defaults to `false`
+  public var usesSafeAreaLayoutGuideLeadingTrailingAnchors: Bool
 }
