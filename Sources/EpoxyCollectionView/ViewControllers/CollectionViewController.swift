@@ -18,13 +18,11 @@ open class CollectionViewController: UIViewController {
   public init(
     layout: UICollectionViewLayout,
     sections: [SectionModel]? = nil,
-    configuration: CollectionViewConfiguration = .shared,
-    usesSafeAreaLayoutGuideLeadingTrailing: Bool = false)
+    configuration: CollectionViewConfiguration = .shared)
   {
     self.layout = layout
     initialSections = sections
     self.configuration = configuration
-    self.usesSafeAreaLayoutGuideLeadingTrailing = usesSafeAreaLayoutGuideLeadingTrailing
     super.init(nibName: nil, bundle: nil)
   }
 
@@ -35,11 +33,10 @@ open class CollectionViewController: UIViewController {
   public convenience init(
     layout: UICollectionViewLayout,
     items: [ItemModeling],
-    configuration: CollectionViewConfiguration = .shared,
-    usesSafeAreaLayoutGuideLeadingTrailing: Bool = false)
+    configuration: CollectionViewConfiguration = .shared)
   {
     let section = SectionModel(dataID: DefaultDataID.noneProvided, items: items)
-    self.init(layout: layout, sections: [section], configuration: configuration, usesSafeAreaLayoutGuideLeadingTrailing: usesSafeAreaLayoutGuideLeadingTrailing)
+    self.init(layout: layout, sections: [section], configuration: configuration)
   }
 
   /// Initializes a collection view controller and configures its collection view with the provided
@@ -47,10 +44,9 @@ open class CollectionViewController: UIViewController {
   public convenience init(
     layout: UICollectionViewLayout,
     @SectionModelBuilder sections: () -> [SectionModel],
-    configuration: CollectionViewConfiguration = .shared,
-    usesSafeAreaLayoutGuideLeadingTrailing: Bool = false)
+    configuration: CollectionViewConfiguration = .shared)
   {
-    self.init(layout: layout, sections: sections(), configuration: configuration, usesSafeAreaLayoutGuideLeadingTrailing: usesSafeAreaLayoutGuideLeadingTrailing)
+    self.init(layout: layout, sections: sections(), configuration: configuration)
   }
 
   /// Initializes a collection view controller and configures its collection view with the provided
@@ -60,10 +56,9 @@ open class CollectionViewController: UIViewController {
   public convenience init(
     layout: UICollectionViewLayout,
     @ItemModelBuilder items: () -> [ItemModeling],
-    configuration: CollectionViewConfiguration = .shared,
-    usesSafeAreaLayoutGuideLeadingTrailing: Bool = false)
+    configuration: CollectionViewConfiguration = .shared)
   {
-    self.init(layout: layout, items: items(), configuration: configuration, usesSafeAreaLayoutGuideLeadingTrailing: usesSafeAreaLayoutGuideLeadingTrailing)
+    self.init(layout: layout, items: items(), configuration: configuration)
   }
 
   @available(*, unavailable)
@@ -139,8 +134,6 @@ open class CollectionViewController: UIViewController {
   /// The sections that should be set on the collection view when it loads, else `nil`.
   private var initialSections: [SectionModel]?
 
-  private let usesSafeAreaLayoutGuideLeadingTrailing: Bool
-
   /// Loads the collection view or returns it if already loaded.
   @discardableResult
   private func loadCollectionView() -> CollectionView {
@@ -153,8 +146,9 @@ open class CollectionViewController: UIViewController {
     collectionView.layoutDelegate = self
 
     let layoutGuide = view.safeAreaLayoutGuide
-    let leadingAnchor = usesSafeAreaLayoutGuideLeadingTrailing ? layoutGuide.leadingAnchor : view.leadingAnchor
-    let trailingAnchor = usesSafeAreaLayoutGuideLeadingTrailing ? layoutGuide.trailingAnchor : view.trailingAnchor
+    let useLayoutGuide = configuration.usesSafeAreaLayoutGuideLeadingTrailingAnchors
+    let leadingAnchor = useLayoutGuide ? layoutGuide.leadingAnchor : view.leadingAnchor
+    let trailingAnchor = useLayoutGuide ? layoutGuide.trailingAnchor : view.trailingAnchor
 
     collectionView.translatesAutoresizingMaskIntoConstraints = false
     NSLayoutConstraint.activate([
