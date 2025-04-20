@@ -236,8 +236,7 @@ open class CollectionView: UICollectionView {
     setSections(sections, strategy: strategy)
   }
 
-  /// Updates the sections of this collection view to the provided `sections`, optionally animating
-  /// the differences from the current sections.
+  /// Updates the underlying dataSource of this collection to the provided `sections` without performing any differencing.
   public func setSections(
     _ sections: [SectionModel],
     performBatchUpdates: @escaping () -> Void
@@ -375,6 +374,8 @@ open class CollectionView: UICollectionView {
     epoxyDataSource.data?.indexPathForItem(at: path)
   }
   
+  /// Returns the `Int` index corresponding to the given section `dataID`, logging a warning if the
+  /// index corresponds to multiple items due to duplicate data IDs.
   public func indexForSection(at dataID: AnyHashable) -> Int? {
     epoxyDataSource.data?.indexForSection(at: dataID)
   }
@@ -666,6 +667,7 @@ open class CollectionView: UICollectionView {
       case .manual(newData: let data, performBatchUpdates: _):
         if initialDataNotLoaded {
           let oldData = epoxyDataSource.data ?? .make(sections: [])
+          epoxyDataSource.modifySectionsWithoutUpdating(data.sections)
           updateState = .updating(from: oldData)
           reloadData()
           completeUpdates()
