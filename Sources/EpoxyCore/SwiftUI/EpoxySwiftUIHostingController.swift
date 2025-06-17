@@ -53,7 +53,7 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
   /// Setting `safeAreaRegions` to `.container` is preferred on iOS 16.4+, as this approach breaks on iOS 26.
   /// See [here](https://steipete.com/posts/disabling-keyboard-avoidance-in-swiftui-uihostingcontroller/) for more info.
   private func disableKeyboardAvoidance() {
-    if #available(iOS 16.4, *) {
+    if #available(iOS 16.4, tvOS 16.4, *) {
       self.safeAreaRegions = .container
       return
     }
