@@ -13,7 +13,7 @@ namespace :build do
 
   desc 'Builds the EpoxyExample app'
   task :example do
-    xcodebuild 'build -scheme EpoxyExample -destination "platform=iOS Simulator,name=iPhone 14"'
+    xcodebuild 'build -scheme EpoxyExample -destination "platform=iOS Simulator,name=iPhone 16"'
   end
 end
 
@@ -23,12 +23,12 @@ namespace :test do
 
   desc 'Runs unit tests'
   task :unit do
-    xcodebuild 'test -scheme EpoxyTests -destination "platform=iOS Simulator,name=iPhone 14"'
+    xcodebuild 'test -scheme EpoxyTests -destination "platform=iOS Simulator,name=iPhone 16"'
   end
 
   desc 'Runs performance tests'
   task :performance do
-    xcodebuild 'test -scheme PerformanceTests -destination "platform=iOS Simulator,name=iPhone 14"'
+    xcodebuild 'test -scheme PerformanceTests -destination "platform=iOS Simulator,name=iPhone 16"'
   end
 end
 
