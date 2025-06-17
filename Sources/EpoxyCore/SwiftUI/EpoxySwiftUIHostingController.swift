@@ -50,10 +50,14 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
 
   /// Creates a dynamic subclass of this hosting controller's view that disables its keyboard
   /// avoidance behavior.
-  /// Setting `safeAreaRegions` to `.container` also works but cannot be used since it's
-  /// supported on 16.4+ and we need to support older versions.
+  /// Setting `safeAreaRegions` to `.container` is preferred on iOS 16.4+, as this approach breaks on iOS 26.
   /// See [here](https://steipete.com/posts/disabling-keyboard-avoidance-in-swiftui-uihostingcontroller/) for more info.
   private func disableKeyboardAvoidance() {
+    if #available(iOS 16.4, tvOS 16.4, *) {
+      self.safeAreaRegions = .container
+      return
+    }
+
     guard let viewClass = object_getClass(view) else {
       EpoxyLogger.shared.assertionFailure("Unable to determine class of \(String(describing: view))")
       return

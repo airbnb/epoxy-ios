@@ -8,12 +8,11 @@ on:
 
 jobs:
   build-package:
-    runs-on: macos-latest
+    runs-on: macos-15
     strategy:
       matrix:
         xcode:
-        - '14.3.1' # Swift 5.8 (lowest)
-        - '15.4' # Swift 5.10 (highest)
+        - '16.2' # Swift 6.0.3 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -23,11 +22,11 @@ jobs:
         run: bundle exec rake build:package
 
   build-epoxy-core:
-    runs-on: macos-latest
+    runs-on: macos-15
     strategy:
       matrix:
         xcode:
-        - '15.4' # Swift 5.10 (highest)
+        - '16.2' # Swift 6.0.3 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -37,12 +36,11 @@ jobs:
         run: bundle exec rake build:EpoxyCore
 
   build-example:
-    runs-on: macos-latest
+    runs-on: macos-15
     strategy:
       matrix:
         xcode:
-        - '14.3.1' # Swift 5.8 (lowest)
-        - '15.4' # Swift 5.10 (highest)
+        - '16.2' # Swift 6.0.3 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -52,12 +50,11 @@ jobs:
         run: bundle exec rake build:example
 
   test-package:
-    runs-on: macos-latest
+    runs-on: macos-15
     strategy:
       matrix:
         xcode:
-        - '14.3.1' # Swift 5.8 (lowest)
-        - '15.4' # Swift 5.10 (highest)
+        - '16.2' # Swift 6.0.3 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -67,7 +64,7 @@ jobs:
         run: bundle exec rake test:package
 
   lint-swift:
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
