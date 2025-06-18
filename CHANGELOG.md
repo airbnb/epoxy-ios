@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.10.0...HEAD)
 
 ### Added
+- 
+
+### Changed
+- 
+
+### Fixed
+- 
+
+## [0.11.0](https://github.com/airbnb/epoxy-ios/compare/0.10.0...0.11.0) - 2025-06-18
+
+### Added
 - Expose `forceLayout` in `EpoxySwiftUIHostingView` for updating the hosting view size from outside.
 - Added `CollectionViewConfiguration.usesSafeAreaLayoutGuideLeadingTrailingAnchors` to respect leading/trailing layoutGuide anchors which are needed for landscape orientation. Defaults to `false` and uses the view's `leadingAnchor` and `trailingAnchor`. When `true` it will use the view's `safeAreaLayoutGuide` `leadingAnchor` and `trailingAnchor`.
 
