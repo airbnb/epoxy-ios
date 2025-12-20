@@ -56,7 +56,8 @@ public final class ReuseIDStore {
       mutated _after_ being set on a view, causing it to be unequal to the styleID that was \
       originally registered. Attempting to dequeue another view of the same type. This is \
       programmer error.
-      """)
+      """
+    )
 
     return reuseIDsForViewDifferentiators
       .filter { $0.key.viewTypeDescription == viewDifferentiator.viewTypeDescription }

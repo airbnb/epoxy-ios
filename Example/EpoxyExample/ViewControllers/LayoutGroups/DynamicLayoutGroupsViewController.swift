@@ -21,7 +21,7 @@ final class DynamicLayoutGroupsViewController: CollectionViewController {
     case row3
   }
 
-  private var openOptions: [AnyHashable: Bool] = [:]
+  private var openOptions = [AnyHashable: Bool]()
 
   private var items: [ItemModeling] {
     DataID.allCases.map { id in
@@ -32,7 +32,8 @@ final class DynamicLayoutGroupsViewController: CollectionViewController {
           subtitle: "Tap below to reveal a set of options you can choose from",
           revealOptionsButton: openOptions(id) ? nil : "Reveal options",
           options: options(for: id),
-          footer: "Thank you"),
+          footer: "Thank you"
+        ),
         behaviors: .init(didTapRevealOptions: { [weak self] in
           self?.openOptions[id] = true
           self?.updateData()
@@ -41,7 +42,8 @@ final class DynamicLayoutGroupsViewController: CollectionViewController {
           print("Selected option \(option)")
           self?.openOptions[id] = false
           self?.updateData()
-        }))
+        })
+      )
     }
   }
 

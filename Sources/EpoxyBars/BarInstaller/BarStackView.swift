@@ -6,8 +6,8 @@ import UIKit
 
 // MARK: - BarStackView
 
-/// A stack of arbitrary bar views, typically fixed to either the top or bottom of a view
-/// controller. It can also be used as a stack view that supports selection.
+/// Base class for a stack of arbitrary bar views, typically fixed to either the top or bottom
+/// of a view controller. It can also be used as a stack view that supports selection.
 public class BarStackView: UIStackView, EpoxyableView {
 
   // MARK: Lifecycle
@@ -167,10 +167,12 @@ public class BarStackView: UIStackView, EpoxyableView {
 
   // MARK: Private
 
-  // An empty subview to ensure this stack view doesn't size subviews weirdly (e.g. massive width
-  // values).
+  /// An empty subview to ensure this stack view doesn't size subviews weirdly (e.g. massive width
+  /// values).
   private final class Spacer: UIView {
-    override class var layerClass: AnyClass { CATransformLayer.self }
+    override class var layerClass: AnyClass {
+      CATransformLayer.self
+    }
   }
 
   /// The updates resulting from a call to `updateModels(_:animated:)`
@@ -322,7 +324,8 @@ public class BarStackView: UIStackView, EpoxyableView {
         initialSpringVelocity: 0,
         options: [.allowUserInteraction, .beginFromCurrentState],
         animations: { self.animateWrapperUpdates(updates) },
-        completion: { [weak self] _ in self?.completeAnimatedWrapperUpdates(updates) })
+        completion: { [weak self] _ in self?.completeAnimatedWrapperUpdates(updates) }
+      )
     } else {
       updates.moved.forEach(insertArrangedSubview(_:at:))
 
@@ -376,8 +379,8 @@ public class BarStackView: UIStackView, EpoxyableView {
     }
   }
 
-  // Transforms the added wrapper views either beneath the next visible wrapper or below the bottom
-  // of this container if none are visible so that they animatedly slide up into view in a stack.
+  /// Transforms the added wrapper views either beneath the next visible wrapper or below the bottom
+  /// of this container if none are visible so that they animatedly slide up into view in a stack.
   private func transformAddedWrappers() {
     switch zOrder {
     case .lastToFirst:
@@ -391,6 +394,7 @@ public class BarStackView: UIStackView, EpoxyableView {
           wrapper.transform = .init(translationX: 0, y: bounds.height)
         }
       }
+
     case .firstToLast:
       // This could use some logic to ensure that shown bars slide out as a stack rather than
       // overlapping one another creating an "unfurling" effect.
@@ -409,6 +413,7 @@ public class BarStackView: UIStackView, EpoxyableView {
         let barHeight = wrapper.view?.frame.height ?? 0
         wrapper.transform = .init(translationX: 0, y: -barHeight)
       }
+
     case .lastToFirst:
       // This could use some logic to ensure that hidden bars slide out as a stack rather than
       // overlapping one another creating an "furling" effect.
@@ -421,11 +426,11 @@ public class BarStackView: UIStackView, EpoxyableView {
     guard !changeset.duplicates.isEmpty else { return }
 
     EpoxyLogger.shared.warn({
-      var message: [String] = [
+      var message = [
         """
         Warning! Duplicate data IDs detected. Bars with the same view type should have unique data \
         IDs within a bar stack. Duplicate data IDs can cause undefined behavior. Digest:
-        """,
+        """
       ]
 
       for duplicateIndexes in changeset.duplicates {
@@ -474,8 +479,8 @@ extension BarStackView {
     public init(
       models: [BarModeling],
       selectedBackgroundColor: UIColor? = nil,
-      zOrder: ZOrder = .firstToLast)
-    {
+      zOrder: ZOrder = .firstToLast
+    ) {
       self.models = models
       self.selectedBackgroundColor = selectedBackgroundColor
       self.zOrder = zOrder

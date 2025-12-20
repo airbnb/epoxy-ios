@@ -13,8 +13,6 @@ final class ReuseIDStoreTests: XCTestCase {
 
   // MARK: Internal
 
-  // MARK: Setup/Teardown
-
   override func setUp() {
     reuseIDStore = ReuseIDStore()
     assertionFailures = []
@@ -22,7 +20,9 @@ final class ReuseIDStoreTests: XCTestCase {
       assert: { _, _, _, _ in },
       assertionFailure: { [weak self] message, fileID, line in
         self?.assertionFailures.append((message(), fileID, line))
-      }, warn: { _, _, _ in })
+      },
+      warn: { _, _, _ in }
+    )
   }
 
   override func tearDown() {
@@ -30,15 +30,15 @@ final class ReuseIDStoreTests: XCTestCase {
     EpoxyLogger.shared = EpoxyLogger()
   }
 
-  // MARK: Tests
-
   func test_reuseIDByRegistering_withSameViewTypeSameStyleID_returnSameReuseID() {
     let viewDifferentiator1 = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "red")
+      styleID: "red"
+    )
     let viewDifferentiator2 = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "red")
+      styleID: "red"
+    )
     let firstReuseID = reuseIDStore.reuseID(byRegistering: viewDifferentiator1)
     let secondReuseID = reuseIDStore.reuseID(byRegistering: viewDifferentiator2)
     XCTAssertEqual(firstReuseID, secondReuseID)
@@ -47,10 +47,12 @@ final class ReuseIDStoreTests: XCTestCase {
   func test_reuseIDByRegistering_withDifferentViewTypeSameStyleID_returnDifferentReuseID() {
     let viewDifferentiator1 = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "red")
+      styleID: "red"
+    )
     let viewDifferentiator2 = ViewDifferentiator(
       viewType: MySecondView.self,
-      styleID: "red")
+      styleID: "red"
+    )
     let firstReuseID = reuseIDStore.reuseID(byRegistering: viewDifferentiator1)
     let secondReuseID = reuseIDStore.reuseID(byRegistering: viewDifferentiator2)
     XCTAssertNotEqual(firstReuseID, secondReuseID)
@@ -59,10 +61,12 @@ final class ReuseIDStoreTests: XCTestCase {
   func test_reuseIDByRegistering_withSameViewTypeDifferentStyleID_returnDifferentReuseID() {
     let viewDifferentiator1 = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "red")
+      styleID: "red"
+    )
     let viewDifferentiator2 = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "blue")
+      styleID: "blue"
+    )
     let firstReuseID = reuseIDStore.reuseID(byRegistering: viewDifferentiator1)
     let secondReuseID = reuseIDStore.reuseID(byRegistering: viewDifferentiator2)
     XCTAssertNotEqual(firstReuseID, secondReuseID)
@@ -71,10 +75,12 @@ final class ReuseIDStoreTests: XCTestCase {
   func test_registeredReuseIDFor_withSameViewTypeSameStyleID_returnSameReuseID() {
     let viewDifferentiator1 = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "red")
+      styleID: "red"
+    )
     let viewDifferentiator2 = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "red")
+      styleID: "red"
+    )
     let reuseIDByRegistering = reuseIDStore.reuseID(byRegistering: viewDifferentiator1)
     let registeredReuseIDFor = reuseIDStore.registeredReuseID(for: viewDifferentiator2)
     XCTAssertEqual(reuseIDByRegistering, registeredReuseIDFor)
@@ -83,7 +89,8 @@ final class ReuseIDStoreTests: XCTestCase {
   func test_registeredReuseIDFor_whenNotRegistered_returnsNil() {
     let viewDifferentiator = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "red")
+      styleID: "red"
+    )
     let reuseID = reuseIDStore.registeredReuseID(for: viewDifferentiator)
     XCTAssertNil(reuseID)
   }
@@ -91,7 +98,8 @@ final class ReuseIDStoreTests: XCTestCase {
   func test_registeredReuseIDFor_whenNotRegistered_asserts() {
     let viewDifferentiator = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "red")
+      styleID: "red"
+    )
     XCTAssertTrue(assertionFailures.isEmpty)
     _ = reuseIDStore.registeredReuseID(for: viewDifferentiator)
     XCTAssertFalse(assertionFailures.isEmpty)
@@ -100,10 +108,12 @@ final class ReuseIDStoreTests: XCTestCase {
   func test_registeredReuseIDFor_withSameViewTypeDifferentStyleID_returnsFallbackReuseID() {
     let viewDifferentiator1 = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "red")
+      styleID: "red"
+    )
     let viewDifferentiator2 = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "blue")
+      styleID: "blue"
+    )
     let reuseIDByRegistering = reuseIDStore.reuseID(byRegistering: viewDifferentiator1)
     let registeredReuseIDFor = reuseIDStore.registeredReuseID(for: viewDifferentiator2)
     XCTAssertEqual(reuseIDByRegistering, registeredReuseIDFor)
@@ -112,13 +122,16 @@ final class ReuseIDStoreTests: XCTestCase {
   func test_registeredReuseIDFor_afterSubsequentRegisterWithDifferentStyleID_returnsSameFallbackReuseID() {
     let viewDifferentiator1 = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "red")
+      styleID: "red"
+    )
     let viewDifferentiator2 = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "green")
+      styleID: "green"
+    )
     let viewDifferentiator3 = ViewDifferentiator(
       viewType: MyFirstView.self,
-      styleID: "blue")
+      styleID: "blue"
+    )
     _ = reuseIDStore.reuseID(byRegistering: viewDifferentiator1)
     let registeredReuseIDFor1 = reuseIDStore.registeredReuseID(for: viewDifferentiator3)
 
@@ -136,12 +149,12 @@ final class ReuseIDStoreTests: XCTestCase {
 
 // MARK: - MyFirstView
 
-private class MyFirstView {
+private final class MyFirstView {
   init() { }
 }
 
 // MARK: - MySecondView
 
-private class MySecondView {
+private final class MySecondView {
   init() { }
 }

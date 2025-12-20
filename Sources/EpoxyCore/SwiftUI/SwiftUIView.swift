@@ -33,9 +33,9 @@ public struct SwiftUIView<Content: ViewType, Storage>: MeasuringViewRepresentabl
 
   // MARK: Public
 
-  public var configurations: [Configuration] = []
+  public var configurations = [Configuration]()
 
-  public var sizing: SwiftUIMeasurementContainerStrategy = .automatic
+  public var sizing = SwiftUIMeasurementContainerStrategy.automatic
 
   // MARK: Private
 
@@ -66,7 +66,8 @@ extension SwiftUIView {
     let configurationContext = ConfigurationContext(
       oldStorage: oldStorage,
       viewRepresentableContext: context,
-      container: uiView)
+      container: uiView
+    )
 
     for configuration in configurations {
       configuration(configurationContext)
@@ -84,7 +85,8 @@ extension SwiftUIView {
     let configurationContext = ConfigurationContext(
       oldStorage: oldStorage,
       viewRepresentableContext: context,
-      container: uiView)
+      container: uiView
+    )
 
     for configuration in configurations {
       configuration(configurationContext)

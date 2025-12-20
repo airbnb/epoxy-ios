@@ -50,6 +50,7 @@ extension SectionModel {
     .init(
       keyPath: \CompositionalLayoutSectionProviderProviding.compositionalLayoutSectionProvider,
       defaultValue: nil,
-      updateStrategy: .replace)
+      updateStrategy: .replace
+    )
   }
 }

@@ -11,8 +11,8 @@ public struct BarInstallerConfiguration {
   // MARK: Lifecycle
 
   public init(
-    applyBars: ((_ container: BarContainer, _ bars: [BarModeling], _ animated: Bool) -> Void)? = nil)
-  {
+    applyBars: ((_ container: BarContainer, _ bars: [BarModeling], _ animated: Bool) -> Void)? = nil
+  ) {
     self.applyBars = applyBars
   }
 

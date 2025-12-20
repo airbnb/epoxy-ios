@@ -11,8 +11,8 @@ public struct BarCoordinatorProperty<Property> {
   public init<Coordinator>(
     keyPath: ReferenceWritableKeyPath<Coordinator, Property>,
     `default`: @escaping @autoclosure () -> Property,
-    function: String = #function)
-  {
+    function: String = #function
+  ) {
     self.keyPath = keyPath
     self.default = `default`
     self.function = function
@@ -56,14 +56,14 @@ public protocol BarCoordinatorPropertyConfigurable: AnyObject {
   /// - Returns: A token which must be retained to keep the observation active.
   func observe<Property>(
     _ property: BarCoordinatorProperty<Property>,
-    observer: @escaping (Property) -> Void)
-    -> AnyObject
+    observer: @escaping (Property) -> Void
+  ) -> AnyObject
 }
 
 // MARK: - BarCoordinatorPropertyKey
 
 /// A key that uniquely identifies a `BarCoordinatorProperty`.
 struct BarCoordinatorPropertyKey: Hashable {
-  public var keyPath: AnyKeyPath
-  public var function: String
+  var keyPath: AnyKeyPath
+  var function: String
 }

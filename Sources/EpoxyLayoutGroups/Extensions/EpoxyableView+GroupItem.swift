@@ -16,9 +16,8 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
     dataID: AnyHashable,
     content: Content,
     behaviors: Behaviors? = nil,
-    style: Style)
-    -> GroupItem<Self>
-  {
+    style: Style
+  ) -> GroupItem<Self> {
     GroupItem<Self>(
       dataID: dataID,
       params: style,
@@ -26,10 +25,11 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
       make: { Self(style: $0) },
       setContent: { context, content in
         context.constrainable.setContent(content, animated: context.animated)
-      })
-      .setBehaviors { context in
-        context.constrainable.setBehaviors(behaviors)
       }
+    )
+    .setBehaviors { context in
+      context.constrainable.setBehaviors(behaviors)
+    }
   }
 }
 
@@ -43,19 +43,19 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   public static func groupItem(
     dataID: AnyHashable,
     content: Content,
-    behaviors: Behaviors? = nil)
-    -> GroupItem<Self>
-  {
+    behaviors: Behaviors? = nil
+  ) -> GroupItem<Self> {
     GroupItem<Self>(
       dataID: dataID,
       content: content,
       make: { Self() },
       setContent: { context, content in
         context.constrainable.setContent(content, animated: context.animated)
-      })
-      .setBehaviors { context in
-        context.constrainable.setBehaviors(behaviors)
       }
+    )
+    .setBehaviors { context in
+      context.constrainable.setBehaviors(behaviors)
+    }
   }
 }
 
@@ -69,15 +69,15 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   public static func groupItem(
     dataID: AnyHashable,
     behaviors: Behaviors? = nil,
-    style: Style)
-    -> GroupItem<Self>
-  {
+    style: Style
+  ) -> GroupItem<Self> {
     GroupItem<Self>(
       dataID: dataID,
-      make: { Self(style: style) })
-      .setBehaviors { context in
-        context.constrainable.setBehaviors(behaviors)
-      }
+      make: { Self(style: style) }
+    )
+    .setBehaviors { context in
+      context.constrainable.setBehaviors(behaviors)
+    }
   }
 }
 
@@ -94,14 +94,14 @@ extension StyledView
   /// - Returns: a group item model representing the view
   public static func groupItem(
     dataID: AnyHashable,
-    behaviors: Behaviors? = nil)
-    -> GroupItem<Self>
-  {
+    behaviors: Behaviors? = nil
+  ) -> GroupItem<Self> {
     GroupItem<Self>(
       dataID: dataID,
-      make: { Self() })
-      .setBehaviors { context in
-        context.constrainable.setBehaviors(behaviors)
-      }
+      make: { Self() }
+    )
+    .setBehaviors { context in
+      context.constrainable.setBehaviors(behaviors)
+    }
   }
 }

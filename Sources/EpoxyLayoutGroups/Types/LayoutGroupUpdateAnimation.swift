@@ -18,8 +18,8 @@ public struct LayoutGroupUpdateAnimation {
   /// finished.
   public typealias Animate = (
     _ animations: @escaping () -> Void,
-    _ completion: @escaping (_ completed: Bool) -> Void)
-    -> Void
+    _ completion: @escaping (_ completed: Bool) -> Void
+  ) -> Void
 
   /// An identifier that uniquely identifies this update animation.
   public var id: AnyHashable
@@ -29,7 +29,7 @@ public struct LayoutGroupUpdateAnimation {
 
 extension LayoutGroupUpdateAnimation {
 
-  // Creates a spring style `LayoutGroupUpdateAnimation` instance with default or custom values
+  /// Creates a spring style `LayoutGroupUpdateAnimation` instance with default or custom values
   /// - Parameters:
   ///   - duration: a TimeInterval for animation duration, with a default value of `0.5`
   ///   - delay: a TimeInterval for animation duration, with a default value of `0.0`
@@ -39,15 +39,14 @@ extension LayoutGroupUpdateAnimation {
     duration: TimeInterval = 0.5,
     delay: TimeInterval = 0.0,
     dampingRatio: CGFloat = 1.0,
-    initialSpringVelocity: CGFloat = 0.0)
-    -> LayoutGroupUpdateAnimation
-  {
+    initialSpringVelocity: CGFloat = 0.0
+  ) -> LayoutGroupUpdateAnimation {
     .init(id: SpringAnimationParameters(
       duration: duration,
       delay: delay,
       dampingRatio: dampingRatio,
-      initialSpringVelocity: initialSpringVelocity))
-    { animations, completion in
+      initialSpringVelocity: initialSpringVelocity
+    )) { animations, completion in
       UIView.animate(
         withDuration: duration,
         delay: delay,
@@ -55,7 +54,8 @@ extension LayoutGroupUpdateAnimation {
         initialSpringVelocity: initialSpringVelocity,
         options: [.beginFromCurrentState, .allowUserInteraction],
         animations: animations,
-        completion: completion)
+        completion: completion
+      )
     }
   }
 }
@@ -63,7 +63,7 @@ extension LayoutGroupUpdateAnimation {
 // MARK: Hashable
 
 extension LayoutGroupUpdateAnimation: Hashable {
-  public static func == (lhs: LayoutGroupUpdateAnimation, rhs: LayoutGroupUpdateAnimation) -> Bool {
+  public static func ==(lhs: LayoutGroupUpdateAnimation, rhs: LayoutGroupUpdateAnimation) -> Bool {
     lhs.id == rhs.id
   }
 

@@ -38,6 +38,7 @@ extension EpoxyModeled where Self: ReflowsForAccessibilityTypeSizeProviding {
     .init(
       keyPath: \ReflowsForAccessibilityTypeSizeProviding.reflowsForAccessibilityTypeSizes,
       defaultValue: true,
-      updateStrategy: .replace)
+      updateStrategy: .replace
+    )
   }
 }

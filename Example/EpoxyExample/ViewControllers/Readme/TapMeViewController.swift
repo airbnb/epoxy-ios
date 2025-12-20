@@ -17,10 +17,12 @@ extension CollectionViewController {
         TextRow.itemModel(
           dataID: DataID.row,
           content: .init(title: "Tap me!"),
-          style: .small)
-          .didSelect { _ in
-            // Handle selection
-          }
-      })
+          style: .small
+        )
+        .didSelect { _ in
+          // Handle selection
+        }
+      }
+    )
   }
 }

@@ -15,7 +15,8 @@ public protocol CollectionViewDisplayDelegate: AnyObject {
     _ collectionView: CollectionView,
     willDisplayItem item: AnyItemModel,
     with view: UIView?,
-    in section: SectionModel)
+    in section: SectionModel
+  )
 
   /// Called after an item ends displaying.
   ///
@@ -24,7 +25,8 @@ public protocol CollectionViewDisplayDelegate: AnyObject {
     _ collectionView: CollectionView,
     didEndDisplayingItem item: AnyItemModel,
     with view: UIView?,
-    in section: SectionModel)
+    in section: SectionModel
+  )
 
   /// Called when a supplementary item is about to be displayed.
   ///
@@ -35,7 +37,8 @@ public protocol CollectionViewDisplayDelegate: AnyObject {
     willDisplaySupplementaryItem item: AnySupplementaryItemModel,
     forElementKind elementKind: String,
     with view: UIView?,
-    in section: SectionModel)
+    in section: SectionModel
+  )
 
   /// Called after a supplementary item ends displaying.
   ///
@@ -46,5 +49,6 @@ public protocol CollectionViewDisplayDelegate: AnyObject {
     didEndDisplayingSupplementaryItem item: AnySupplementaryItemModel,
     forElementKind elementKind: String,
     with view: UIView?,
-    in section: SectionModel)
+    in section: SectionModel
+  )
 }

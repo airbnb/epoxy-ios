@@ -6,10 +6,9 @@ import XCTest
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-class GroupPerformanceTests: XCTestCase {
+final class GroupPerformanceTests: XCTestCase {
 
-  let window = UIWindow(frame: .init(x: 0, y: 0, width: 375, height: 667))
-  var view: UIView!
+  // MARK: Internal
 
   override func setUp() {
     view = UIView(frame: .init(x: 0, y: 0, width: 350, height: 400))
@@ -17,7 +16,7 @@ class GroupPerformanceTests: XCTestCase {
     window.addSubview(view)
   }
 
-  // tests that VGroup performance is at least as good as UIStackView's performance
+  /// tests that VGroup performance is at least as good as UIStackView's performance
   func testPerformanceOfVGroupAgainstUIStackView() {
     let vGroupItems: [GroupItemModeling] = (0...10).map { _ in
       let label = UILabel.example
@@ -81,5 +80,10 @@ class GroupPerformanceTests: XCTestCase {
     let epsilon = 1.0 / 120.0
     XCTAssertLessThanOrEqual(hGroupPerformance, stackViewPerformance + epsilon)
   }
+
+  // MARK: Private
+
+  private let window = UIWindow(frame: .init(x: 0, y: 0, width: 375, height: 667))
+  private var view: UIView!
 
 }

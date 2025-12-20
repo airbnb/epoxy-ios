@@ -28,21 +28,25 @@ final class CardStackViewController: CollectionViewController {
                 ImageMarquee.barModel(
                   // swiftlint:disable:next force_unwrapping
                   content: .init(imageURL: imageURL),
-                  style: .init(height: 150, contentMode: .scaleAspectFill))
-                  .didSelect { _ in
-                    // swiftlint:disable:next no_direct_standard_out_logs
-                    print("Selected Image Marquee \(dataID)")
-                  },
+                  style: .init(height: 150, contentMode: .scaleAspectFill)
+                )
+                .didSelect { _ in
+                  // swiftlint:disable:next no_direct_standard_out_logs
+                  print("Selected Image Marquee \(dataID)")
+                },
                 TextRow.barModel(
                   content: .init(title: "Row \(dataID)", body: BeloIpsum.paragraph(count: 1, seed: dataID)),
-                  style: .small)
-                  .didSelect { _ in
-                    // swiftlint:disable:next no_direct_standard_out_logs
-                    print("Selected Text Row \(dataID)")
-                  },
+                  style: .small
+                )
+                .didSelect { _ in
+                  // swiftlint:disable:next no_direct_standard_out_logs
+                  print("Selected Text Row \(dataID)")
+                },
               ],
-              selectedBackgroundColor: .secondarySystemBackground),
-            style: .init(card: .init()))
+              selectedBackgroundColor: .secondarySystemBackground
+            ),
+            style: .init(card: .init())
+          )
         }
       }
     }

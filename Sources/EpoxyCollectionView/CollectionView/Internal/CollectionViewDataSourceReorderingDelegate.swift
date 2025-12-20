@@ -9,5 +9,6 @@ protocol CollectionViewDataSourceReorderingDelegate: AnyObject {
     moveItem sourceItem: AnyItemModel,
     inSection sourceSection: SectionModel,
     toDestinationItem destinationItem: AnyItemModel,
-    inSection destinationSection: SectionModel)
+    inSection destinationSection: SectionModel
+  )
 }

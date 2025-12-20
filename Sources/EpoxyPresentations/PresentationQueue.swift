@@ -8,15 +8,13 @@ import UIKit
 /// A data structure that maintains a FIFO 2-queue of presentations.
 final class PresentationQueue {
 
-  // MARK: Public
+  // MARK: Internal
 
   /// The next presentation in this queue.
-  public enum Next {
+  enum Next {
     case none
     case pending(PresentationModel?)
   }
-
-  // MARK: Internal
 
   /// Enqueues the given presentation in this queue, performing it immediately if a transition is
   /// not in progress, otherwise performing once the in-progress transition completes.
@@ -34,14 +32,15 @@ final class PresentationQueue {
 
   /// The current presentation of this queue.
   private struct Presentation {
-    var model: PresentationModel
-    var state: State
-
     /// The state that the current presentation can be in: either presented or dismissed.
     enum State {
       case presented(PresentationModel.Dismissible)
       case dismissed
     }
+
+    var model: PresentationModel
+    var state: State
+
   }
 
   /// The current presentation on the queue, or `nil` if there is no current.
@@ -58,15 +57,16 @@ final class PresentationQueue {
   private func apply(
     _ changes: Changes,
     animated: Bool,
-    to presenter: UIViewController)
-    -> (current: Presentation?, next: Next)
-  {
+    to presenter: UIViewController
+  ) -> (current: Presentation?, next: Next) {
     switch changes {
     case .none:
       return (current: current, next: next)
+
     case .dismiss(let dismissible, let model, let newDataID, let next):
       dismiss(dismissible, model: model, newDataID: newDataID, animated: animated, from: presenter)
       return (current: Presentation(model: model, state: .dismissed), next: next)
+
     case .present(let model):
       let state = display(model, animated: animated, from: presenter)
       return (current: Presentation(model: model, state: state), next: .none)
@@ -79,8 +79,8 @@ final class PresentationQueue {
     model: PresentationModel,
     newDataID: Bool,
     animated: Bool,
-    from presenter: UIViewController)
-  {
+    from presenter: UIViewController
+  ) {
     dismissible(animated, nil)
     if let coordinator = presenter.transitionCoordinator {
       transitionAlongside(coordinator, animated: animated, from: presenter) { context in
@@ -98,9 +98,8 @@ final class PresentationQueue {
   private func display(
     _ model: PresentationModel,
     animated: Bool,
-    from presenter: UIViewController)
-    -> Presentation.State
-  {
+    from presenter: UIViewController
+  ) -> Presentation.State {
     guard let presentable = model.makePresentable() else {
       return .dismissed
     }
@@ -111,7 +110,8 @@ final class PresentationQueue {
       didPresent: model.handleDidPresent,
       didDismiss: { [weak self] in
         self?.handleDidDismiss(model)
-      }))
+      }
+    ))
 
     // If for some reason the presentation failed (e.g. not in a window), make sure not to errantly
     // set current to a value.
@@ -130,8 +130,8 @@ final class PresentationQueue {
       let current = current,
       current.model.dataID == model.dataID,
       current.model.isValueEqual(to: model),
-      case .presented = current.state else
-    {
+      case .presented = current.state
+    else {
       return
     }
 
@@ -144,6 +144,7 @@ final class PresentationQueue {
       if current.model.dataID == nextModel.dataID, current.model.isValueEqual(to: nextModel) {
         next = .none
       }
+
     case .none, .pending(nil):
       break
     }
@@ -168,8 +169,8 @@ final class PresentationQueue {
     _ coordinator: UIViewControllerTransitionCoordinator,
     animated: Bool,
     from presenter: UIViewController,
-    completion: ((UIViewControllerTransitionCoordinatorContext) -> Void)? = nil)
-  {
+    completion: ((UIViewControllerTransitionCoordinatorContext) -> Void)? = nil
+  ) {
     isTransitioning = true
 
     coordinator.animate(
@@ -179,7 +180,8 @@ final class PresentationQueue {
         if let self = self, let presenter = presenter {
           self.stopTransition(presenter: presenter, animated: animated)
         }
-      })
+      }
+    )
   }
 
   /// Sets `isTransitioning` to `false` at the completion of a transition and enqueues the next
@@ -260,6 +262,7 @@ extension PresentationQueue {
         } else {
           return .none
         }
+
       case .dismissed:
         return .present(model)
       }

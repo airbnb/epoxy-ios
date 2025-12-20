@@ -19,14 +19,16 @@ final class FormNavigationController: NavigationController {
   // MARK: Private
 
   private enum DataID {
-    case step1, step2
+    case step1
+    case step2
   }
 
   private var showStep2 = false {
     didSet { setStack(stack, animated: true) }
   }
 
-  @NavigationModelBuilder private var stack: [NavigationModel] {
+  @NavigationModelBuilder
+  private var stack: [NavigationModel] {
     .root(dataID: DataID.step1) { [weak self] in
       Step1ViewController(didTapNext: {
         self?.showStep2 = true
@@ -43,7 +45,8 @@ final class FormNavigationController: NavigationController {
         },
         remove: { [weak self] in
           self?.showStep2 = false
-        })
+        }
+      )
     }
   }
 }
@@ -58,7 +61,7 @@ final class Step1ViewController: CollectionViewController {
     super.init(layout: UICollectionViewCompositionalLayout.list)
     title = "Step 1"
     bottomBarInstaller.setBars([
-      ButtonRow.barModel(content: .init(text: "Show step 2"), behaviors: .init(didTap: didTapNext)),
+      ButtonRow.barModel(content: .init(text: "Show step 2"), behaviors: .init(didTap: didTapNext))
     ], animated: false)
   }
 
@@ -84,7 +87,7 @@ final class Step2ViewController: CollectionViewController {
     super.init(layout: UICollectionViewCompositionalLayout.list)
     title = "Step 2"
     bottomBarInstaller.setBars([
-      ButtonRow.barModel(content: .init(text: "Finish"), behaviors: .init(didTap: didTapNext)),
+      ButtonRow.barModel(content: .init(text: "Finish"), behaviors: .init(didTap: didTapNext))
     ], animated: false)
   }
 

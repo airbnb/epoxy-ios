@@ -13,16 +13,17 @@ extension View {
   ///   - reuseBehavior: The reuse behavior of the `EpoxySwiftUIHostingView`.
   public func barModel(
     dataID: AnyHashable? = nil,
-    reuseBehavior: SwiftUIHostingViewReuseBehavior = .reusable)
-    -> BarModel<EpoxySwiftUIHostingView<Self>>
-  {
+    reuseBehavior: SwiftUIHostingViewReuseBehavior = .reusable
+  ) -> BarModel<EpoxySwiftUIHostingView<Self>> {
     EpoxySwiftUIHostingView<Self>.barModel(
       dataID: dataID,
       content: .init(rootView: self, dataID: dataID),
       style: .init(
         reuseBehavior: reuseBehavior,
         forceLayoutOnLayoutMarginsChange: true,
-        initialContent: .init(rootView: self, dataID: dataID)))
-      .linkDisplayLifecycle()
+        initialContent: .init(rootView: self, dataID: dataID)
+      )
+    )
+    .linkDisplayLifecycle()
   }
 }

@@ -126,7 +126,8 @@ final class HGroupSpec: QuickSpec {
           NotificationCenter.default.post(
             name: UIContentSizeCategory.didChangeNotification,
             object: nil,
-            userInfo: [UIContentSizeCategory.newValueUserInfoKey: UIContentSizeCategory.accessibilityLarge])
+            userInfo: [UIContentSizeCategory.newValueUserInfoKey: UIContentSizeCategory.accessibilityLarge]
+          )
           expect(group.constraints is VGroupConstraints).to(beTrue())
         }
       }
@@ -150,7 +151,8 @@ final class HGroupSpec: QuickSpec {
           NotificationCenter.default.post(
             name: UIContentSizeCategory.didChangeNotification,
             object: nil,
-            userInfo: [UIContentSizeCategory.newValueUserInfoKey: UIContentSizeCategory.accessibilityLarge])
+            userInfo: [UIContentSizeCategory.newValueUserInfoKey: UIContentSizeCategory.accessibilityLarge]
+          )
           expect(group.constraints is HGroupConstraints).to(beTrue())
         }
       }
@@ -174,7 +176,8 @@ final class HGroupSpec: QuickSpec {
           NotificationCenter.default.post(
             name: UIContentSizeCategory.didChangeNotification,
             object: nil,
-            userInfo: [UIContentSizeCategory.newValueUserInfoKey: UIContentSizeCategory.accessibilityLarge])
+            userInfo: [UIContentSizeCategory.newValueUserInfoKey: UIContentSizeCategory.accessibilityLarge]
+          )
           expect(group.constraints is VGroupConstraints).to(beTrue())
         }
       }

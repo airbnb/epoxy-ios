@@ -22,8 +22,8 @@ public final class BottomBarInstaller: NSObject {
     viewController: UIViewController,
     avoidsKeyboard: Bool = false,
     bars: [BarModeling] = [],
-    configuration: BarInstallerConfiguration = .shared)
-  {
+    configuration: BarInstallerConfiguration = .shared
+  ) {
     self.viewController = viewController
     keyboardPositionWatcher.enabled = avoidsKeyboard
     installer = .init(viewController: viewController, configuration: configuration)
@@ -34,8 +34,8 @@ public final class BottomBarInstaller: NSObject {
   public convenience init(
     viewController: UIViewController,
     avoidsKeyboard: Bool = false,
-    @BarModelBuilder bars: () -> [BarModeling])
-  {
+    @BarModelBuilder bars: () -> [BarModeling]
+  ) {
     self.init(viewController: viewController, avoidsKeyboard: avoidsKeyboard, bars: bars())
   }
 
@@ -44,7 +44,9 @@ public final class BottomBarInstaller: NSObject {
   /// The container installed in the view controller's view that contains the bar stack.
   ///
   /// Non-`nil` while installed, `nil` otherwise.
-  public var container: BottomBarContainer? { installer.container }
+  public var container: BottomBarContainer? {
+    installer.container
+  }
 
   /// Whether this installer's bar stack should be offset to avoid the keyboard as it is shown and
   /// hidden.
@@ -117,7 +119,8 @@ public final class BottomBarInstaller: NSObject {
 
     guard let view = viewController?.viewIfLoaded else {
       EpoxyLogger.shared.assertionFailure(
-        "Should only watch keyboard for a view controller that's loaded its view")
+        "Should only watch keyboard for a view controller that's loaded its view"
+      )
       return
     }
 
@@ -146,9 +149,8 @@ extension BottomBarInstaller: BarCoordinatorPropertyConfigurable {
 
   public func observe<Property>(
     _ property: BarCoordinatorProperty<Property>,
-    observer: @escaping (Property) -> Void)
-    -> AnyObject
-  {
+    observer: @escaping (Property) -> Void
+  ) -> AnyObject {
     installer.observe(property, observer: observer)
   }
 }

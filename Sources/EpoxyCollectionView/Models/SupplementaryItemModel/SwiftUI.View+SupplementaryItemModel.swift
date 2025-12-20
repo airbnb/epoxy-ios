@@ -13,16 +13,17 @@ extension View {
   ///   - reuseBehavior: The reuse behavior of the `EpoxySwiftUIHostingView`.
   public func supplementaryItemModel(
     dataID: AnyHashable,
-    reuseBehavior: SwiftUIHostingViewReuseBehavior = .reusable)
-    -> SupplementaryItemModel<EpoxySwiftUIHostingView<Self>>
-  {
+    reuseBehavior: SwiftUIHostingViewReuseBehavior = .reusable
+  ) -> SupplementaryItemModel<EpoxySwiftUIHostingView<Self>> {
     EpoxySwiftUIHostingView<Self>.supplementaryItemModel(
       dataID: dataID,
       content: .init(rootView: self, dataID: dataID),
       style: .init(
         reuseBehavior: reuseBehavior,
         forceLayoutOnLayoutMarginsChange: false,
-        initialContent: .init(rootView: self, dataID: dataID)))
-      .linkDisplayLifecycle()
+        initialContent: .init(rootView: self, dataID: dataID)
+      )
+    )
+    .linkDisplayLifecycle()
   }
 }

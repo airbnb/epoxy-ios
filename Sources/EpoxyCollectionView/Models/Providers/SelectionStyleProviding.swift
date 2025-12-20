@@ -34,6 +34,7 @@ extension EpoxyModeled where Self: SelectionStyleProviding {
     .init(
       keyPath: \SelectionStyleProviding.selectionStyle,
       defaultValue: nil,
-      updateStrategy: .replace)
+      updateStrategy: .replace
+    )
   }
 }

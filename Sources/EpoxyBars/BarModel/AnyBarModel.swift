@@ -16,11 +16,6 @@ public struct AnyBarModel: EpoxyModeled {
     self.model = model
   }
 
-  // MARK: Internal
-
-  /// Intentionally not public.
-  var model: InternalBarCoordinating
-
   /// Implemented as a passthrough to the backing model's storage to allow custom model properties
   /// to be accessed and modified through this type eraser.
   public var storage: EpoxyModelStorage {
@@ -28,12 +23,19 @@ public struct AnyBarModel: EpoxyModeled {
     set { model.storage = newValue }
   }
 
+  // MARK: Internal
+
+  /// Intentionally not public.
+  var model: InternalBarCoordinating
+
 }
 
 // MARK: BarModeling
 
 extension AnyBarModel: BarModeling {
-  public func eraseToAnyBarModel() -> AnyBarModel { self }
+  public func eraseToAnyBarModel() -> AnyBarModel {
+    self
+  }
 }
 
 // MARK: DataIDProviding
@@ -69,8 +71,8 @@ extension AnyBarModel: CallbackContextEpoxyModeled {
     public init(
       view: UIView,
       traitCollection: UITraitCollection,
-      animated: Bool)
-    {
+      animated: Bool
+    ) {
       self.view = view
       self.traitCollection = traitCollection
       self.animated = animated

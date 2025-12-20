@@ -30,7 +30,7 @@ public protocol ItemCellView: ItemWrapperView {
 extension ItemCellView {
   /// The state of this cell view.
   public var state: ItemCellState {
-    var state: ItemCellState = .normal
+    var state = ItemCellState.normal
     if isHighlighted {
       state = .highlighted
     }

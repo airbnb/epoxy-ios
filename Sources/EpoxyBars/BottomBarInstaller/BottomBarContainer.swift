@@ -42,7 +42,7 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
     }
   }
 
-  public var insetBehavior: BarContainerInsetBehavior = .barHeightSafeArea {
+  public var insetBehavior = BarContainerInsetBehavior.barHeightSafeArea {
     didSet { updateInsetBehavior(from: oldValue) }
   }
 
@@ -164,7 +164,8 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
 
     updateAdditionalSafeAreaInset(
       additionalSafeAreaInsetsBottom,
-      hasHierarchyScaleTransform: hasHierarchyScaleTransform)
+      hasHierarchyScaleTransform: hasHierarchyScaleTransform
+    )
 
     // If offset from the bottom, use the original layout margins rather than the safe area margins,
     // as the safe area no longer overlaps the bar.

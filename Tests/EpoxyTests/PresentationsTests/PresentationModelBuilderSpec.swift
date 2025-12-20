@@ -24,7 +24,8 @@ final class PresentationModelBuilderSpec: QuickSpec {
             dataID: "1",
             presentation: .system,
             makeViewController: UIViewController.init,
-            dismiss: { })
+            dismiss: { }
+          )
         }
         expect(builder.model?.dataID as? String) == "1"
       }
@@ -37,12 +38,14 @@ final class PresentationModelBuilderSpec: QuickSpec {
             dataID: "1",
             presentation: .system,
             makeViewController: UIViewController.init,
-            dismiss: { })
+            dismiss: { }
+          )
           PresentationModel(
             dataID: "2",
             presentation: .system,
             makeViewController: UIViewController.init,
-            dismiss: { })
+            dismiss: { }
+          )
         }
         expect(builder.model?.dataID as? String) == "1"
       }
@@ -55,14 +58,16 @@ final class PresentationModelBuilderSpec: QuickSpec {
             dataID: "1",
             presentation: .system,
             makeViewController: UIViewController.init,
-            dismiss: { })
+            dismiss: { }
+          )
           let builder = TestBuilder {
             optionalPresentation
             PresentationModel(
               dataID: "2",
               presentation: .system,
               makeViewController: UIViewController.init,
-              dismiss: { })
+              dismiss: { }
+            )
           }
           expect(builder.model?.dataID as? String) == "1"
         }
@@ -77,7 +82,8 @@ final class PresentationModelBuilderSpec: QuickSpec {
               dataID: "2",
               presentation: .system,
               makeViewController: UIViewController.init,
-              dismiss: { })
+              dismiss: { }
+            )
           }
           expect(builder.model?.dataID as? String) == "2"
         }
@@ -94,13 +100,15 @@ final class PresentationModelBuilderSpec: QuickSpec {
                 dataID: "1",
                 presentation: .system,
                 makeViewController: UIViewController.init,
-                dismiss: { })
+                dismiss: { }
+              )
             }
             PresentationModel(
               dataID: "2",
               presentation: .system,
               makeViewController: UIViewController.init,
-              dismiss: { })
+              dismiss: { }
+            )
           }
           expect(builder.model?.dataID as? String) == "2"
         }
@@ -115,13 +123,15 @@ final class PresentationModelBuilderSpec: QuickSpec {
                 dataID: "1",
                 presentation: .system,
                 makeViewController: UIViewController.init,
-                dismiss: { })
+                dismiss: { }
+              )
             }
             PresentationModel(
               dataID: "2",
               presentation: .system,
               makeViewController: UIViewController.init,
-              dismiss: { })
+              dismiss: { }
+            )
           }
           expect(builder.model?.dataID as? String) == "1"
         }
@@ -138,13 +148,15 @@ final class PresentationModelBuilderSpec: QuickSpec {
                 dataID: "1",
                 presentation: .system,
                 makeViewController: UIViewController.init,
-                dismiss: { })
+                dismiss: { }
+              )
             } else {
               PresentationModel(
                 dataID: "2",
                 presentation: .system,
                 makeViewController: UIViewController.init,
-                dismiss: { })
+                dismiss: { }
+              )
             }
           }
           expect(builder.model?.dataID as? String) == "2"
@@ -160,13 +172,15 @@ final class PresentationModelBuilderSpec: QuickSpec {
                 dataID: "1",
                 presentation: .system,
                 makeViewController: UIViewController.init,
-                dismiss: { })
+                dismiss: { }
+              )
             } else {
               PresentationModel(
                 dataID: "2",
                 presentation: .system,
                 makeViewController: UIViewController.init,
-                dismiss: { })
+                dismiss: { }
+              )
             }
           }
           expect(builder.model?.dataID as? String) == "1"
@@ -182,7 +196,8 @@ final class PresentationModelBuilderSpec: QuickSpec {
               dataID: dataID,
               presentation: .system,
               makeViewController: UIViewController.init,
-              dismiss: { })
+              dismiss: { }
+            )
           }
         }
         expect(builder.model?.dataID as? Int) == 2

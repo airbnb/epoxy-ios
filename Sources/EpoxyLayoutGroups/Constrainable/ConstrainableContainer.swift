@@ -50,13 +50,13 @@ public struct ConstrainableContainer: Constrainable, AnchoringContainer, EpoxyMo
     return constrainable
   }
 
-  // MARK: AnchoringContainer
+  public var anchor: Constrainable {
+    constrainable
+  }
 
-  public var anchor: Constrainable { constrainable }
-
-  // MARK: Constrainable
-
-  public var dataID: AnyHashable { constrainable.dataID }
+  public var dataID: AnyHashable {
+    constrainable.dataID
+  }
 
   public func install(in view: UIView) {
     constrainable.install(in: view)

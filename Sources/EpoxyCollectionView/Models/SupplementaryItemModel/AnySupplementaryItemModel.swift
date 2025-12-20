@@ -62,7 +62,9 @@ extension AnySupplementaryItemModel: StyleIDProviding { }
 // MARK: SupplementaryItemModeling
 
 extension AnySupplementaryItemModel: SupplementaryItemModeling {
-  public func eraseToAnySupplementaryItemModel() -> AnySupplementaryItemModel { self }
+  public func eraseToAnySupplementaryItemModel() -> AnySupplementaryItemModel {
+    self
+  }
 }
 
 // MARK: InternalSupplementaryItemModeling
@@ -88,8 +90,8 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
   func configure(
     reusableView: CollectionViewReusableView,
     traitCollection: UITraitCollection,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     model.configure(reusableView: reusableView, traitCollection: traitCollection, animated: animated)
     if let view = reusableView.view {
       setContent?(.init(view: view, traitCollection: traitCollection, animated: animated))
@@ -99,8 +101,8 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
   func handleWillDisplay(
     _ view: CollectionViewReusableView,
     traitCollection: UITraitCollection,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     model.handleWillDisplay(view, traitCollection: traitCollection, animated: animated)
     if let view = view.view {
       willDisplay?(.init(view: view, traitCollection: traitCollection, animated: animated))
@@ -110,8 +112,8 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
   func handleDidEndDisplaying(
     _ view: CollectionViewReusableView,
     traitCollection: UITraitCollection,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     model.handleDidEndDisplaying(view, traitCollection: traitCollection, animated: animated)
     if let view = view.view {
       didEndDisplaying?(.init(view: view, traitCollection: traitCollection, animated: animated))
@@ -121,8 +123,8 @@ extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
   func setBehavior(
     reusableView: CollectionViewReusableView,
     traitCollection: UITraitCollection,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     model.setBehavior(reusableView: reusableView, traitCollection: traitCollection, animated: animated)
     if let view = reusableView.view {
       setBehaviors?(.init(view: view, traitCollection: traitCollection, animated: animated))

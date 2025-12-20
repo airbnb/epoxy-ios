@@ -26,8 +26,8 @@ public final class LayoutSpacer: UILayoutGuide, Constrainable {
     maxHeight: CGFloat? = nil,
     maxWidth: CGFloat? = nil,
     fixedHeight: CGFloat? = nil,
-    fixedWidth: CGFloat? = nil)
-  {
+    fixedWidth: CGFloat? = nil
+  ) {
     self.init(
       style: .init(
         minHeight: minHeight,
@@ -35,7 +35,9 @@ public final class LayoutSpacer: UILayoutGuide, Constrainable {
         maxHeight: maxHeight,
         maxWidth: maxWidth,
         fixedHeight: fixedHeight,
-        fixedWidth: fixedWidth))
+        fixedWidth: fixedWidth
+      )
+    )
   }
 
   @available(*, unavailable)
@@ -55,8 +57,8 @@ public final class LayoutSpacer: UILayoutGuide, Constrainable {
       maxHeight: CGFloat? = nil,
       maxWidth: CGFloat? = nil,
       fixedHeight: CGFloat? = nil,
-      fixedWidth: CGFloat? = nil)
-    {
+      fixedWidth: CGFloat? = nil
+    ) {
       self.minHeight = minHeight
       self.minWidth = minWidth
       self.maxHeight = maxHeight
@@ -77,10 +79,13 @@ public final class LayoutSpacer: UILayoutGuide, Constrainable {
 
   public let style: Style
 
-  // MARK: Constrainable
+  public var firstBaselineAnchor: NSLayoutYAxisAnchor {
+    topAnchor
+  }
 
-  public var firstBaselineAnchor: NSLayoutYAxisAnchor { topAnchor }
-  public var lastBaselineAnchor: NSLayoutYAxisAnchor { bottomAnchor }
+  public var lastBaselineAnchor: NSLayoutYAxisAnchor {
+    bottomAnchor
+  }
 
   public func install(in view: UIView) {
     view.addLayoutGuide(self)
@@ -98,7 +103,7 @@ public final class LayoutSpacer: UILayoutGuide, Constrainable {
 
   // MARK: Private
 
-  private var constraints: [NSLayoutConstraint] = []
+  private var constraints = [NSLayoutConstraint]()
 
   private func installConstraints() {
     NSLayoutConstraint.deactivate(constraints)

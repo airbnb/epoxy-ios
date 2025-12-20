@@ -4,7 +4,7 @@
 import EpoxyCollectionView
 import UIKit
 
-class LayoutGroupsReadmeExamplesViewController: CollectionViewController {
+final class LayoutGroupsReadmeExamplesViewController: CollectionViewController {
 
   // MARK: Lifecycle
 
@@ -22,13 +22,17 @@ class LayoutGroupsReadmeExamplesViewController: CollectionViewController {
       content: .init(
         title: "Title text",
         subtitle: "Subtitle text",
-        actionText: "Perform action"))
+        actionText: "Perform action"
+      )
+    )
     IconRow.itemModel(
       dataID: DataID.iconRow,
       content: .init(
         title: "This is an IconRow",
         // swiftlint:disable:next force_unwrapping
-        icon: UIImage(systemName: "person.fill")!))
+        icon: UIImage(systemName: "person.fill")!
+      )
+    )
   }
 
   // MARK: Private

@@ -35,9 +35,8 @@ extension EpoxyModeled where Self: SupplementaryItemsProviding {
   /// with the provided `value`.
   public func supplementaryItems(
     ofKind elementKind: String,
-    _ value: [SupplementaryItemModeling]?)
-    -> Self
-  {
+    _ value: [SupplementaryItemModeling]?
+  ) -> Self {
     var copy = self
     copy.supplementaryItems[elementKind] = value
     return copy
@@ -49,6 +48,7 @@ extension EpoxyModeled where Self: SupplementaryItemsProviding {
     .init(
       keyPath: \SupplementaryItemsProviding.supplementaryItems,
       defaultValue: [:],
-      updateStrategy: .replace)
+      updateStrategy: .replace
+    )
   }
 }

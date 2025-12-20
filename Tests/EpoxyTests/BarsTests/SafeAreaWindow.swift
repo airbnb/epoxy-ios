@@ -3,16 +3,16 @@
 
 import UIKit
 
-// A `UIWindow` subclass that can provide safe area insets
-// to simulate default device safe area insets (e.g. from the status bar)
+/// A `UIWindow` subclass that can provide safe area insets
+/// to simulate default device safe area insets (e.g. from the status bar)
 final class SafeAreaWindow: UIWindow {
 
   // MARK: Lifecycle
 
   init(
     frame: CGRect,
-    safeAreaInsets: UIEdgeInsets)
-  {
+    safeAreaInsets: UIEdgeInsets
+  ) {
     customSafeAreaInsets = safeAreaInsets
     super.init(frame: frame)
   }

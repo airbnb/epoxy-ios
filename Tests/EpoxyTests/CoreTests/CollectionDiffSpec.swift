@@ -553,7 +553,8 @@ final class CollectionDiffSpec: QuickSpec {
       context("with called on an identical collection") {
         it("returns an empty changeset") {
           let changeset = testSectionedDiffableArray.makeSectionedChangeset(
-            from: testSectionedDiffableArray)
+            from: testSectionedDiffableArray
+          )
 
           expect(changeset.itemChangeset.inserts).to(beEmpty())
           expect(changeset.itemChangeset.deletes).to(beEmpty())
@@ -584,7 +585,8 @@ final class CollectionDiffSpec: QuickSpec {
 
           it("returns the correct changeset") {
             let changeset = otherTestSectionedDiffableArray.makeSectionedChangeset(
-              from: otherTestSectionedDiffableArray)
+              from: otherTestSectionedDiffableArray
+            )
             expect(changeset.sectionChangeset.duplicates) == [
               [1, 2],
               [3, 4, 5],
@@ -612,7 +614,8 @@ final class CollectionDiffSpec: QuickSpec {
 
           it("returns the correct changeset") {
             let changeset = otherTestSectionedDiffableArray.makeSectionedChangeset(
-              from: otherTestSectionedDiffableArray)
+              from: otherTestSectionedDiffableArray
+            )
             expect(changeset.itemChangeset.duplicates) == [
               [[0, 1], [0, 2]],
               [[0, 3], [0, 4], [0, 5]],
@@ -633,7 +636,8 @@ final class CollectionDiffSpec: QuickSpec {
 
         it("returns the correct changeset") {
           let changeset = otherTestSectionedDiffableArray.makeSectionedChangeset(
-            from: testSectionedDiffableArray)
+            from: testSectionedDiffableArray
+          )
           expect(changeset.itemChangeset.isEmpty).to(beTrue())
 
           expect(changeset.sectionChangeset.inserts).to(equal([3]))
@@ -652,7 +656,8 @@ final class CollectionDiffSpec: QuickSpec {
 
         it("returns the correct changeset") {
           let changeset = otherTestSectionedDiffableArray.makeSectionedChangeset(
-            from: testSectionedDiffableArray)
+            from: testSectionedDiffableArray
+          )
           expect(changeset.itemChangeset.isEmpty).to(beTrue())
 
           expect(changeset.sectionChangeset.inserts).to(beEmpty())
@@ -672,7 +677,8 @@ final class CollectionDiffSpec: QuickSpec {
 
         it("returns the correct changeset") {
           let changeset = otherTestSectionedDiffableArray.makeSectionedChangeset(
-            from: testSectionedDiffableArray)
+            from: testSectionedDiffableArray
+          )
           expect(changeset.itemChangeset.isEmpty).to(beTrue())
 
           expect(changeset.sectionChangeset.moves).to(haveCount(3))

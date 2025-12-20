@@ -43,9 +43,8 @@ public final class CollectionViewReusableView: UICollectionReusableView {
   }
 
   override public func preferredLayoutAttributesFitting(
-    _ layoutAttributes: UICollectionViewLayoutAttributes)
-    -> UICollectionViewLayoutAttributes
-  {
+    _ layoutAttributes: UICollectionViewLayoutAttributes
+  ) -> UICollectionViewLayoutAttributes {
     guard let fittingPrioritiesProvider = layoutAttributes as? FittingPrioritiesProvidingLayoutAttributes else {
       return super.preferredLayoutAttributesFitting(layoutAttributes)
     }
@@ -59,7 +58,8 @@ public final class CollectionViewReusableView: UICollectionReusableView {
       size = super.systemLayoutSizeFitting(
         layoutAttributes.size,
         withHorizontalFittingPriority: horizontalFittingPriority,
-        verticalFittingPriority: verticalFittingPriority)
+        verticalFittingPriority: verticalFittingPriority
+      )
     } else {
       // No self-sizing is required; respect whatever size the layout determined.
       size = layoutAttributes.size

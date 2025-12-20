@@ -28,11 +28,13 @@ extension UICollectionViewCompositionalLayout {
   static var listNoDividers: UICollectionViewCompositionalLayout {
     UICollectionViewCompositionalLayout { _, _ in
       let item = NSCollectionLayoutItem(
-        layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50)))
+        layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
+      )
 
       let group = NSCollectionLayoutGroup.vertical(
         layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50)),
-        subitems: [item])
+        subitems: [item]
+      )
 
       return NSCollectionLayoutSection(group: group)
     }
@@ -44,11 +46,13 @@ extension UICollectionViewCompositionalLayout {
 extension NSCollectionLayoutSection {
   static var carouselWithHeader: NSCollectionLayoutSection {
     let item = NSCollectionLayoutItem(
-      layoutSize: .init(widthDimension: .fractionalWidth(0.8), heightDimension: .estimated(50)))
+      layoutSize: .init(widthDimension: .fractionalWidth(0.8), heightDimension: .estimated(50))
+    )
 
     let group = NSCollectionLayoutGroup.horizontal(
       layoutSize: .init(widthDimension: .fractionalWidth(0.8), heightDimension: .estimated(50)),
-      subitems: [item])
+      subitems: [item]
+    )
     group.contentInsets = .zero
 
     let section = NSCollectionLayoutSection(group: group)
@@ -57,7 +61,8 @@ extension NSCollectionLayoutSection {
     let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
       layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)),
       elementKind: UICollectionView.elementKindSectionHeader,
-      alignment: .top)
+      alignment: .top
+    )
 
     section.boundarySupplementaryItems = [sectionHeader]
 
@@ -65,15 +70,15 @@ extension NSCollectionLayoutSection {
   }
 
   static func listWithHeader(
-    layoutEnvironment: NSCollectionLayoutEnvironment)
-    -> NSCollectionLayoutSection
-  {
+    layoutEnvironment: NSCollectionLayoutEnvironment
+  ) -> NSCollectionLayoutSection {
     let section = list(layoutEnvironment: layoutEnvironment)
 
     let sectionHeader = NSCollectionLayoutBoundarySupplementaryItem(
       layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(50)),
       elementKind: UICollectionView.elementKindSectionHeader,
-      alignment: .top)
+      alignment: .top
+    )
 
     section.boundarySupplementaryItems = [sectionHeader]
 
@@ -86,11 +91,13 @@ extension NSCollectionLayoutSection {
     }
 
     let item = NSCollectionLayoutItem(
-      layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50)))
+      layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
+    )
 
     let group = NSCollectionLayoutGroup.vertical(
       layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50)),
-      subitems: [item])
+      subitems: [item]
+    )
 
     return NSCollectionLayoutSection(group: group)
   }

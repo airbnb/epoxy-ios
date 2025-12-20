@@ -54,7 +54,8 @@ final class NavigationQueue {
 
     guard let current = current else {
       EpoxyLogger.shared.assertionFailure(
-        "Popped \(popped) with no current, this is programmer error.")
+        "Popped \(popped) with no current, this is programmer error."
+      )
       return
     }
 
@@ -74,7 +75,8 @@ final class NavigationQueue {
           (self.current, self.next) = self.applyPopped(popped, from: current, next: self.next)
         }
         self.stopTransition(interface: interface, animated: animated)
-      })
+      }
+    )
   }
 
   // MARK: Private
@@ -93,9 +95,8 @@ final class NavigationQueue {
   private func nextFrom(
     _ models: [NavigationModel],
     previous: NavigationStack?,
-    interface: NavigationInterface)
-    -> (stack: NavigationStack, changes: NavigationStack.AppliedChanges)
-  {
+    interface: NavigationInterface
+  ) -> (stack: NavigationStack, changes: NavigationStack.AppliedChanges) {
     guard var next = previous else {
       let stack = NavigationStack(models: models, wrapNavigation: interface.wrapNavigation)
       return (stack: stack, changes: .init(removals: [], additions: stack.added))
@@ -109,17 +110,17 @@ final class NavigationQueue {
     _ next: (stack: NavigationStack, changes: NavigationStack.AppliedChanges),
     from previous: NavigationStack?,
     animated: Bool,
-    to interface: NavigationInterface)
-  {
+    to interface: NavigationInterface
+  ) {
     interface.setStack(next.stack.viewControllerStack, animated: animated)
 
     // We want to make sure not to capture any removed view controllers.
     let notify = { [changes = next.changes, next = next.stack.addedTop, prev = previous?.addedTop?.model] in
-      changes.removals.forEach { change in
+      for change in changes.removals {
         change.remove()
         change.handleDidRemove()
       }
-      changes.additions.forEach { $0.model.handleDidAdd($0.viewController.made) }
+      for addition in changes.additions { addition.model.handleDidAdd(addition.viewController.made) }
       NavigationStack.Added.handleTopChange(from: prev, to: next)
     }
 
@@ -135,7 +136,8 @@ final class NavigationQueue {
             notify()
           }
           self?.stopTransition(interface: interface, animated: animated)
-        })
+        }
+      )
     } else {
       isTransitioning = true
       notify()
@@ -159,8 +161,8 @@ final class NavigationQueue {
   private func transitionAlongside(
     _ coordinator: UIViewControllerTransitionCoordinator,
     animated: Bool,
-    from interface: NavigationInterface)
-  {
+    from interface: NavigationInterface
+  ) {
     isTransitioning = true
 
     coordinator.animate(
@@ -168,7 +170,8 @@ final class NavigationQueue {
       completion: { [weak self, weak interface] _ in
         guard let interface = interface else { return }
         self?.stopTransition(interface: interface, animated: animated)
-      })
+      }
+    )
   }
 
   /// Sets `isTransitioning` to `false` at the completion of a transition and enqueues the `next`
@@ -188,13 +191,12 @@ final class NavigationQueue {
   private func applyPopped(
     _ popped: [UIViewController],
     from current: NavigationStack,
-    next: [NavigationModel]?)
-    -> (current: NavigationStack, next: [NavigationModel]?)
-  {
+    next: [NavigationModel]?
+  ) -> (current: NavigationStack, next: [NavigationModel]?) {
     var updatedCurrent = current
     let removals = updatedCurrent.applyPopped(popped)
 
-    removals.forEach { removed in
+    for removed in removals {
       removed.remove()
       removed.handleDidRemove()
     }
@@ -265,9 +267,8 @@ private struct NavigationStack {
   /// removed and added from the stack.
   mutating func applyModels(
     _ newModels: [NavigationModel],
-    wrapNavigation: (UINavigationController) -> UIViewController)
-    -> AppliedChanges
-  {
+    wrapNavigation: (UINavigationController) -> UIViewController
+  ) -> AppliedChanges {
     var newViewControllers = viewControllers
     let changeset = newModels.makeChangeset(from: models)
     var changes = AppliedChanges(removals: [], additions: [])
@@ -282,8 +283,10 @@ private struct NavigationStack {
       case (from: .some, to: nil):
         changes.removals.append(models[from])
         makeFailures.insert(to)
+
       case (from: nil, to: let toViewController?):
         changes.additions.append(.init(model: toModel, viewController: toViewController))
+
       case (from: nil, to: nil), (from: .some, to: .some):
         break
       }
@@ -336,7 +339,8 @@ private struct NavigationStack {
     for element in popped {
       guard let index = viewControllers.firstIndex(where: { $0?.stackable === element }) else {
         EpoxyLogger.shared.assertionFailure(
-          "\(element) not in \(viewControllers), this is programmer error.")
+          "\(element) not in \(viewControllers), this is programmer error."
+        )
         continue
       }
       viewControllers.remove(at: index)
@@ -362,10 +366,13 @@ extension NavigationStack {
           previous.handleDidHide()
           next.model.handleDidShow(next.viewController.made)
         }
+
       case (nil, .some(let next)):
         next.model.handleDidShow(next.viewController.made)
+
       case (.some(let previous), nil):
         previous.handleDidHide()
+
       case (nil, nil):
         break
       }

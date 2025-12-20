@@ -28,8 +28,8 @@ final class CollectionViewScrollToItemHelper {
   func accuratelyScrollToItem(
     at indexPath: IndexPath,
     position: UICollectionView.ScrollPosition,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     if animated {
       accurateScrollToItemWithAnimation(itemIndexPath: indexPath, position: position)
     } else {
@@ -60,8 +60,8 @@ final class CollectionViewScrollToItemHelper {
 
   private func accurateScrollToItemWithoutAnimation(
     itemIndexPath: IndexPath,
-    position: UICollectionView.ScrollPosition)
-  {
+    position: UICollectionView.ScrollPosition
+  ) {
     guard let collectionView = collectionView else { return }
 
     // Programmatically scrolling to an item, even without an animation, when using self-sizing
@@ -74,7 +74,8 @@ final class CollectionViewScrollToItemHelper {
     // attempts, we'll stop trying since we're blocking the main thread during these attempts.
     var previousContentOffset = CGPoint(
       x: CGFloat.greatestFiniteMagnitude,
-      y: CGFloat.greatestFiniteMagnitude)
+      y: CGFloat.greatestFiniteMagnitude
+    )
     var numberOfAttempts = 1
     while
 
@@ -95,14 +96,15 @@ final class CollectionViewScrollToItemHelper {
 
     if numberOfAttempts > 5 {
       EpoxyLogger.shared.warn(
-        "Gave up scrolling to an item without an animation because it took more than 5 attempts.")
+        "Gave up scrolling to an item without an animation because it took more than 5 attempts."
+      )
     }
   }
 
   private func accurateScrollToItemWithAnimation(
     itemIndexPath: IndexPath,
-    position: UICollectionView.ScrollPosition)
-  {
+    position: UICollectionView.ScrollPosition
+  ) {
     guard let collectionView = collectionView else { return }
 
     let scrollPosition: UICollectionView.ScrollPosition
@@ -110,7 +112,8 @@ final class CollectionViewScrollToItemHelper {
       guard
         let closestScrollPosition = closestRestingScrollPosition(
           forTargetItemIndexPath: itemIndexPath,
-          collectionView: collectionView)
+          collectionView: collectionView
+        )
       else {
         // If we can't find a closest-scroll-position, it's because the item is already fully
         // visible. In this situation, we can return early / do nothing.
@@ -124,7 +127,8 @@ final class CollectionViewScrollToItemHelper {
     scrollToItemContext = ScrollToItemContext(
       targetIndexPath: itemIndexPath,
       targetScrollPosition: scrollPosition,
-      animationStartTime: CACurrentMediaTime())
+      animationStartTime: CACurrentMediaTime()
+    )
 
     startScrollingTowardTargetItem()
   }
@@ -132,13 +136,15 @@ final class CollectionViewScrollToItemHelper {
   private func startScrollingTowardTargetItem() {
     let scrollToItemDisplayLink = CADisplayLink(
       target: self,
-      selector: #selector(scrollToItemDisplayLinkFired))
+      selector: #selector(scrollToItemDisplayLinkFired)
+    )
     if #available(iOS 15.1, *) {
       #if swift(>=5.5) // Proxy check for being built with the iOS 14 & below SDK, running on iOS 15.
       scrollToItemDisplayLink.preferredFrameRateRange = CAFrameRateRange(
         minimum: 80,
         maximum: 120,
-        preferred: 120)
+        preferred: 120
+      )
       #endif
     }
     scrollToItemDisplayLink.add(to: .main, forMode: .common)
@@ -150,8 +156,8 @@ final class CollectionViewScrollToItemHelper {
   /// position.
   private func finalizeScrollingTowardItem(
     for scrollToItemContext: ScrollToItemContext,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     self.scrollToItemContext = nil
 
     guard let collectionView = collectionView else { return }
@@ -169,7 +175,8 @@ final class CollectionViewScrollToItemHelper {
       collectionView.scrollToItem(
         at: indexPath,
         at: scrollToItemContext.targetScrollPosition,
-        animated: animated)
+        animated: animated
+      )
     }
 
     if !animated {
@@ -185,7 +192,8 @@ final class CollectionViewScrollToItemHelper {
         """
         Expected `scrollToItemContext` to be non-nil when programmatically scrolling toward an \
         item.
-        """)
+        """
+      )
       return
     }
 
@@ -204,7 +212,8 @@ final class CollectionViewScrollToItemHelper {
 
     let maximumPerAnimationTickOffset = maximumPerAnimationTickOffset(
       for: scrollAxis,
-      collectionView: collectionView)
+      collectionView: collectionView
+    )
 
     // After 3 seconds, the scrolling reaches is maximum speed.
     let secondsSinceAnimationStart = CACurrentMediaTime() - scrollToItemContext.animationStartTime
@@ -215,7 +224,8 @@ final class CollectionViewScrollToItemHelper {
     // per second.
     let positionBeforeLayout = positionRelativeToVisibleBounds(
       forTargetItemIndexPath: scrollToItemContext.targetIndexPath,
-      collectionView: collectionView)
+      collectionView: collectionView
+    )
 
     switch positionBeforeLayout {
     case .before:
@@ -235,7 +245,8 @@ final class CollectionViewScrollToItemHelper {
         contentSize: collectionView.contentSize,
         adjustedContentInset: collectionView.adjustedContentInset,
         targetScrollPosition: scrollToItemContext.targetScrollPosition,
-        scrollAxis: scrollAxis)
+        scrollAxis: scrollAxis
+      )
 
       let targetOffset = targetContentOffset[scrollAxis]
       let currentOffset = collectionView.contentOffset[scrollAxis]
@@ -283,9 +294,8 @@ final class CollectionViewScrollToItemHelper {
 
   private func maximumPerAnimationTickOffset(
     for scrollAxis: ScrollAxis,
-    collectionView: UICollectionView)
-    -> CGFloat
-  {
+    collectionView: UICollectionView
+  ) -> CGFloat {
     let offset: CGFloat
     switch scrollAxis {
     case .vertical: offset = collectionView.bounds.height
@@ -299,9 +309,8 @@ final class CollectionViewScrollToItemHelper {
   /// Note that the position (before, after, visible) is agnostic of scroll axis.
   private func positionRelativeToVisibleBounds(
     forTargetItemIndexPath targetIndexPath: IndexPath,
-    collectionView: UICollectionView)
-    -> PositionRelativeToVisibleBounds?
-  {
+    collectionView: UICollectionView
+  ) -> PositionRelativeToVisibleBounds? {
     let indexPathsForVisibleItems = collectionView.indexPathsForVisibleItems.sorted()
 
     if let targetItemFrame = collectionView.layoutAttributesForItem(at: targetIndexPath)?.frame {
@@ -318,7 +327,8 @@ final class CollectionViewScrollToItemHelper {
       return .after
     } else {
       EpoxyLogger.shared.assertionFailure(
-        "Could not find a position relative to the visible bounds for item at \(targetIndexPath)")
+        "Could not find a position relative to the visible bounds for item at \(targetIndexPath)"
+      )
       return nil
     }
   }
@@ -328,34 +338,40 @@ final class CollectionViewScrollToItemHelper {
   /// this function returns `nil`.
   private func closestRestingScrollPosition(
     forTargetItemIndexPath targetIndexPath: IndexPath,
-    collectionView: UICollectionView)
-    -> UICollectionView.ScrollPosition?
-  {
+    collectionView: UICollectionView
+  ) -> UICollectionView.ScrollPosition? {
     guard let scrollAxis = scrollAxis(for: collectionView) else {
       return nil
     }
 
     let positionRelativeToVisibleBounds = positionRelativeToVisibleBounds(
       forTargetItemIndexPath: targetIndexPath,
-      collectionView: collectionView)
+      collectionView: collectionView
+    )
 
     let insetBounds = collectionView.bounds.inset(by: collectionView.adjustedContentInset)
 
     switch (scrollAxis, positionRelativeToVisibleBounds) {
     case (.vertical, .before):
       return .top
+
     case (.vertical, .after):
       return .bottom
+
     case (.vertical, .partiallyOrFullyVisible(let itemFrame)):
       guard !insetBounds.contains(itemFrame) else { return nil }
       return itemFrame.midY < insetBounds.midY ? .top : .bottom
+
     case (.horizontal, .before):
       return .left
+
     case (.horizontal, .after):
       return .right
+
     case (.horizontal, .partiallyOrFullyVisible(let itemFrame)):
       guard !insetBounds.contains(itemFrame) else { return nil }
       return itemFrame.midX < insetBounds.midX ? .left : .right
+
     default:
       EpoxyLogger.shared.assertionFailure("Unsupported scroll position.")
       return nil
@@ -372,10 +388,13 @@ final class CollectionViewScrollToItemHelper {
     contentSize: CGSize,
     adjustedContentInset: UIEdgeInsets,
     targetScrollPosition: UICollectionView.ScrollPosition,
-    scrollAxis: ScrollAxis)
-    -> CGPoint
-  {
-    let itemPosition, itemSize, viewportSize, minContentOffset, maxContentOffset: CGFloat
+    scrollAxis: ScrollAxis
+  ) -> CGPoint {
+    let itemPosition: CGFloat
+    let itemSize: CGFloat
+    let viewportSize: CGFloat
+    let minContentOffset: CGFloat
+    let maxContentOffset: CGFloat
     let visibleBounds = bounds.inset(by: adjustedContentInset)
     switch scrollAxis {
     case .vertical:
@@ -384,6 +403,7 @@ final class CollectionViewScrollToItemHelper {
       viewportSize = visibleBounds.height
       minContentOffset = -adjustedContentInset.top
       maxContentOffset = -adjustedContentInset.top + contentSize.height - visibleBounds.height
+
     case .horizontal:
       itemPosition = itemFrame.minX
       itemSize = itemFrame.width

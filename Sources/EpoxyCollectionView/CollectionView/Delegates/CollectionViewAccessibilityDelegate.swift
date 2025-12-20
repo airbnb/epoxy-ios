@@ -12,7 +12,8 @@ public protocol CollectionViewAccessibilityDelegate: AnyObject {
     _ collectionView: CollectionView,
     itemDidBecomeFocused item: AnyItemModel,
     with view: UIView?,
-    in section: SectionModel)
+    in section: SectionModel
+  )
 
   /// Called when an item loses accessibility focus.
   ///
@@ -21,5 +22,6 @@ public protocol CollectionViewAccessibilityDelegate: AnyObject {
     _ collectionView: CollectionView,
     itemDidLoseFocus item: AnyItemModel,
     with view: UIView?,
-    in section: SectionModel)
+    in section: SectionModel
+  )
 }

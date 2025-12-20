@@ -11,10 +11,9 @@ enum BeloIpsum {
   static func sentence(
     count: Int,
     wordCount: Int = 5,
-    seed: Int = 0)
-    -> String
-  {
-    var sentences: [String] = []
+    seed: Int = 0
+  ) -> String {
+    var sentences = [String]()
     if count > 0 {
       let range = 1...count
       var generator = SeededRandomNumberGenerator(seed: UInt64(seed))
@@ -34,9 +33,8 @@ enum BeloIpsum {
   static func paragraph(
     count: Int,
     sentencesPerParagraph: Int = 5,
-    seed: Int = 0)
-    -> String
-  {
+    seed: Int = 0
+  ) -> String {
     let range = 0..<count
 
     let paragraphs = range.map { index -> String in
@@ -98,13 +96,13 @@ enum BeloIpsum {
   ]
 
   private static func makeSentence(wordCount: Int, startingAt: Int) -> (String, Int) {
-    var words: [String] = []
+    var words = [String]()
     let range = 0..<Int(wordCount)
     var i = startingAt
 
-    range.forEach { _ in
+    for _ in range {
       let availableSpace = Int(wordCount) - words.count
-      if availableSpace == 0 { return }
+      if availableSpace == 0 { continue }
 
       i += 1
       if i > propertyTypes.count - 1 {
@@ -146,7 +144,7 @@ import class GameplayKit.GKMersenneTwisterRandomSource
 
 // MARK: - SeededRandomNumberGenerator
 
-// Adapted from https://stackoverflow.com/a/57370987/4076325
+/// Adapted from https://stackoverflow.com/a/57370987/4076325
 private struct SeededRandomNumberGenerator: RandomNumberGenerator {
 
   init(seed: UInt64) {

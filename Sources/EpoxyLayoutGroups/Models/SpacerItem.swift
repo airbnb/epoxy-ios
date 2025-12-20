@@ -11,8 +11,8 @@ public struct SpacerItem {
 
   public init(
     dataID: AnyHashable,
-    style: LayoutSpacer.Style = .init())
-  {
+    style: LayoutSpacer.Style = .init()
+  ) {
     self.dataID = dataID
     self.style = style
   }

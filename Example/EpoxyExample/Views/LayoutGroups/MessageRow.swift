@@ -54,30 +54,34 @@ final class MessageRow: BaseRow, EpoxyableView {
         content: UIImage(systemName: "person.crop.circle"),
         style: .init(
           size: .init(width: 48, height: 48),
-          tintColor: .black))
-        .set(\IconView.layer.cornerRadius, value: 24)
+          tintColor: .black
+        )
+      )
+      .set(\IconView.layer.cornerRadius, value: 24)
       VGroupItem(
         dataID: DataID.contentGroup,
-        style: .init(spacing: 8))
-      {
+        style: .init(spacing: 8)
+      ) {
         HGroupItem(
           dataID: DataID.topContainer,
-          style: .init(alignment: .center, spacing: 8))
-        {
+          style: .init(alignment: .center, spacing: 8)
+        ) {
           HGroupItem(
             dataID: DataID.nameGroup,
-            style: .init(alignment: .center, spacing: 8))
-          {
+            style: .init(alignment: .center, spacing: 8)
+          ) {
             Label.groupItem(
               dataID: DataID.name,
               content: content.name,
-              style: .style(with: .title3))
-              .numberOfLines(1)
+              style: .style(with: .title3)
+            )
+            .numberOfLines(1)
             if style.showUnread {
               ColorView.groupItem(
                 dataID: DataID.unread,
-                style: .init(size: .init(width: 8, height: 8), color: .systemBlue))
-                .set(\ColorView.layer.cornerRadius, value: 4)
+                style: .init(size: .init(width: 8, height: 8), color: .systemBlue)
+              )
+              .set(\ColorView.layer.cornerRadius, value: 4)
             }
           }
           .reflowsForAccessibilityTypeSizes(false)
@@ -86,21 +90,24 @@ final class MessageRow: BaseRow, EpoxyableView {
 
           HGroupItem(
             dataID: DataID.disclosureGroup,
-            style: .init(alignment: .center, spacing: 8))
-          {
+            style: .init(alignment: .center, spacing: 8)
+          ) {
             Label.groupItem(
               dataID: DataID.date,
               content: content.date,
-              style: .style(with: .subheadline))
-              .contentCompressionResistancePriority(.required, for: .horizontal)
+              style: .style(with: .subheadline)
+            )
+            .contentCompressionResistancePriority(.required, for: .horizontal)
             IconView.groupItem(
               dataID: DataID.disclosureArrow,
               content: UIImage(systemName: "chevron.right"),
               style: .init(
                 size: .init(width: 12, height: 16),
-                tintColor: .black))
-              .contentMode(.center)
-              .contentCompressionResistancePriority(.required, for: .horizontal)
+                tintColor: .black
+              )
+            )
+            .contentMode(.center)
+            .contentCompressionResistancePriority(.required, for: .horizontal)
           }
           .reflowsForAccessibilityTypeSizes(false)
         }
@@ -108,12 +115,14 @@ final class MessageRow: BaseRow, EpoxyableView {
         Label.groupItem(
           dataID: DataID.message,
           content: content.messagePreview,
-          style: .style(with: .body))
-          .numberOfLines(3)
+          style: .style(with: .body)
+        )
+        .numberOfLines(3)
         Label.groupItem(
           dataID: DataID.seen,
           content: content.seenText,
-          style: .style(with: .footnote))
+          style: .style(with: .footnote)
+        )
       }
     }
   }

@@ -5,7 +5,7 @@ import Epoxy
 import UIKit
 
 /// Source code for `EpoxyBars` "Bottom Button" example from `README.md`:
-class BottomButtonViewController: UIViewController {
+final class BottomButtonViewController: UIViewController {
 
   // MARK: Internal
 
@@ -19,13 +19,16 @@ class BottomButtonViewController: UIViewController {
 
   private lazy var bottomBarInstaller = BottomBarInstaller(
     viewController: self,
-    bars: bars)
+    bars: bars
+  )
 
-  @BarModelBuilder private var bars: [BarModeling] {
+  @BarModelBuilder
+  private var bars: [BarModeling] {
     ButtonRow.barModel(
       content: .init(text: "Click me!"),
       behaviors: .init(didTap: {
         // Handle button selection
-      }))
+      })
+    )
   }
 }

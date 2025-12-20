@@ -18,7 +18,8 @@ final class GroupItemSpec: QuickSpec {
       groupItem = TestStyledLabel.groupItem(
         dataID: 1,
         content: "text",
-        style: .init(textStyle: .body))
+        style: .init(textStyle: .body)
+      )
     }
 
     describe("when modifiers are applied") {
@@ -65,13 +66,15 @@ final class GroupItemSpec: QuickSpec {
       let other = TestStyledLabel.groupItem(
         dataID: 1,
         content: "Different",
-        style: .init(textStyle: .body))
+        style: .init(textStyle: .body)
+      )
       expect(groupItem.isDiffableItemEqual(to: other)).to(beFalse())
 
       let otherEqual = TestStyledLabel.groupItem(
         dataID: 1,
         content: "text",
-        style: .init(textStyle: .body))
+        style: .init(textStyle: .body)
+      )
       expect(groupItem.isDiffableItemEqual(to: otherEqual)).to(beTrue())
     }
 
@@ -80,14 +83,16 @@ final class GroupItemSpec: QuickSpec {
         groupItem = TestStyledLabel.groupItem(
           dataID: "1",
           content: "Hello",
-          style: .init(textStyle: .body))
+          style: .init(textStyle: .body)
+        )
       }
 
       it("has the same diffIdentifier with different content and the same style") {
         let otherItem = TestStyledLabel.groupItem(
           dataID: "1",
           content: "Hello, other label",
-          style: .init(textStyle: .body))
+          style: .init(textStyle: .body)
+        )
         expect(groupItem.diffIdentifier).to(equal(otherItem.diffIdentifier))
       }
 
@@ -95,7 +100,8 @@ final class GroupItemSpec: QuickSpec {
         let otherItem = TestStyledLabel.groupItem(
           dataID: "1",
           content: "Hello",
-          style: .init(textStyle: .body))
+          style: .init(textStyle: .body)
+        )
         expect(groupItem.diffIdentifier).to(equal(otherItem.diffIdentifier))
       }
 
@@ -103,7 +109,8 @@ final class GroupItemSpec: QuickSpec {
         let otherItem = TestStyledLabel.groupItem(
           dataID: "1",
           content: "Hello",
-          style: .init(textStyle: .title2))
+          style: .init(textStyle: .title2)
+        )
         expect(groupItem.diffIdentifier).toNot(equal(otherItem.diffIdentifier))
       }
     }

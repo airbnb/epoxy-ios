@@ -53,16 +53,20 @@ final class MessageRowStackView: BaseRow, EpoxyableView {
   private let style: Style
   private let avatar = IconView(
     image: UIImage(systemName: "person.crop.circle"),
-    size: .init(width: 48, height: 48))
+    size: .init(width: 48, height: 48)
+  )
   private let unreadIndicator = ColorView(
     style: .init(
       size: .init(width: 8, height: 8),
-      color: .systemBlue))
+      color: .systemBlue
+    )
+  )
   private let nameLabel = Label(style: .style(with: .title3))
   private let dateLabel = Label(style: .style(with: .subheadline))
   private let disclosureIcon = IconView(
     image: UIImage(systemName: "chevron.right"),
-    size: .init(width: 12, height: 16))
+    size: .init(width: 12, height: 16)
+  )
   private let messageLabel = Label(style: .style(with: .body))
   private let seenLabel = Label(style: .style(with: .footnote))
   private var stackView: UIStackView?

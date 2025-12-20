@@ -68,7 +68,9 @@ extension AnyItemModel: StyleIDProviding { }
 // MARK: ItemModeling
 
 extension AnyItemModel: ItemModeling {
-  public func eraseToAnyItemModel() -> AnyItemModel { self }
+  public func eraseToAnyItemModel() -> AnyItemModel {
+    self
+  }
 }
 
 // MARK: InternalItemModeling
@@ -160,8 +162,8 @@ extension AnyItemModel: CallbackContextEpoxyModeled {
       view: UIView,
       traitCollection: UITraitCollection,
       state: ItemCellState,
-      animated: Bool)
-    {
+      animated: Bool
+    ) {
       self.view = view
       self.traitCollection = traitCollection
       self.state = state

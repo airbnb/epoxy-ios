@@ -36,8 +36,8 @@ public struct NavigationModel {
     params: Params,
     dataID: AnyHashable,
     makeViewController: @escaping (Params) -> UIViewController?,
-    remove: @escaping () -> Void)
-  {
+    remove: @escaping () -> Void
+  ) {
     self.dataID = dataID
     value = params as Any
     _makeViewController = { makeViewController(params) }
@@ -65,8 +65,8 @@ public struct NavigationModel {
   public init(
     dataID: AnyHashable,
     makeViewController: @escaping () -> UIViewController?,
-    remove: @escaping () -> Void)
-  {
+    remove: @escaping () -> Void
+  ) {
     self.dataID = dataID
     value = ()
     _makeViewController = makeViewController
@@ -94,9 +94,8 @@ public struct NavigationModel {
   ///     added to the navigation stack.
   public static func root(
     dataID: AnyHashable,
-    makeViewController: @escaping () -> UIViewController?)
-    -> NavigationModel
-  {
+    makeViewController: @escaping () -> UIViewController?
+  ) -> NavigationModel {
     .init(dataID: dataID, makeViewController: makeViewController, remove: { })
   }
 
@@ -210,7 +209,9 @@ public struct NavigationModel {
 // MARK: Diffable
 
 extension NavigationModel: Diffable {
-  public var diffIdentifier: AnyHashable { dataID }
+  public var diffIdentifier: AnyHashable {
+    dataID
+  }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let otherDiffableItem = otherDiffableItem as? NavigationModel else { return false }

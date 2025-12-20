@@ -32,7 +32,7 @@ final class IconView: UIImageView, EpoxyableView {
 
   struct Style: Hashable {
     var size: CGSize
-    var tintColor: UIColor = .systemBlue
+    var tintColor = UIColor.systemBlue
 
     func hash(into hasher: inout Hasher) {
       hasher.combine(size.width)

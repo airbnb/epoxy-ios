@@ -30,7 +30,8 @@ final class TextFieldViewController: CollectionViewController {
   private lazy var bottomBarInstaller = BottomBarInstaller(
     viewController: self,
     avoidsKeyboard: true,
-    bars: [buttonRowBar])
+    bars: [buttonRowBar]
+  )
 
   private var username = "@airbnb" {
     didSet { setItems([textFieldRowItem], animated: true) }
@@ -43,7 +44,8 @@ final class TextFieldViewController: CollectionViewController {
       behaviors: .init(didUpdateText: { [weak self] username in
         self?.username = username ?? ""
       }),
-      style: .base)
+      style: .base
+    )
   }
 
   private var buttonRowBar: BarModeling {
@@ -55,6 +57,7 @@ final class TextFieldViewController: CollectionViewController {
         self.view.endEditing(true)
         // swiftlint:disable:next no_direct_standard_out_logs
         print("Submitted '\(self.username)'")
-      }))
+      })
+    )
   }
 }

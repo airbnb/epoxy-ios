@@ -54,7 +54,7 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
   /// See [here](https://steipete.com/posts/disabling-keyboard-avoidance-in-swiftui-uihostingcontroller/) for more info.
   private func disableKeyboardAvoidance() {
     if #available(iOS 16.4, tvOS 16.4, *) {
-      self.safeAreaRegions = .container
+      safeAreaRegions = .container
       return
     }
 
@@ -78,7 +78,8 @@ open class EpoxySwiftUIHostingController<Content: View>: UIHostingController<Con
     }
     guard let viewSubclass = objc_allocateClassPair(viewClass, viewSubclassNameUTF8, 0) else {
       EpoxyLogger.shared.assertionFailure(
-        "Unable to subclass \(viewClass) with \(viewSubclassNameUTF8)")
+        "Unable to subclass \(viewClass) with \(viewSubclassNameUTF8)"
+      )
       return
     }
 

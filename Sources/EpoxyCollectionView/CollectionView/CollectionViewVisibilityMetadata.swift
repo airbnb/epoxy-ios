@@ -26,15 +26,19 @@ extension CollectionViewVisibilityMetadata {
   /// Metadata about the items that are visible in a `CollectionView` section.
   public struct Section {
 
+    // MARK: Lifecycle
+
     public init(
       model: SectionModel,
       items: [Item],
-      supplementaryItems: [String: [SupplementaryItem]])
-    {
+      supplementaryItems: [String: [SupplementaryItem]]
+    ) {
       self.model = model
       self.items = items
       self.supplementaryItems = supplementaryItems
     }
+
+    // MARK: Public
 
     /// The corresponding model for this visible section.
     public let model: SectionModel

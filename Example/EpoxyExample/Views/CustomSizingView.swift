@@ -33,9 +33,9 @@ final class CustomSizingView: UIView, EpoxyableView {
 
   // MARK: Private
 
-  // Because this component has an intrinsicContentSize calculation based on its width, it requires
-  // a second layout pass. Only UILabel will receive this second layout pass from the table /
-  // collection view.
+  /// Because this component has an intrinsicContentSize calculation based on its width, it requires
+  /// a second layout pass. Only UILabel will receive this second layout pass from the table /
+  /// collection view.
   private let sizingLabel = SizingLabel()
 
   private func setUpViews() {
@@ -65,7 +65,7 @@ final class CustomSizingView: UIView, EpoxyableView {
 
 // MARK: - SizingLabel
 
-private class SizingLabel: UILabel {
+private final class SizingLabel: UILabel {
 
   var contentSize: ((CGFloat) -> CGSize)?
 

@@ -9,20 +9,6 @@ import Foundation
 /// A snapshot of the underlying data stored in a `CollectionView`.
 struct CollectionViewData {
 
-  // MARK: Lifecycle
-
-  private init(
-    sections: [SectionModel],
-    sectionIndexMap: SectionIndexMap,
-    itemIndexMap: ItemIndexMap,
-    supplementaryItemIndexMap: SupplementaryItemIndexMap)
-  {
-    self.sections = sections
-    self.sectionIndexMap = sectionIndexMap
-    self.itemIndexMap = itemIndexMap
-    self.supplementaryItemIndexMap = supplementaryItemIndexMap
-  }
-
   // MARK: Internal
 
   let sections: [SectionModel]
@@ -61,7 +47,8 @@ struct CollectionViewData {
       sections: sections,
       sectionIndexMap: sectionIndexMap,
       itemIndexMap: itemIndexMap,
-      supplementaryItemIndexMap: supplementaryItemIndexMap)
+      supplementaryItemIndexMap: supplementaryItemIndexMap
+    )
   }
 
   func makeChangeset(from otherData: Self) -> CollectionViewChangeset {
@@ -69,12 +56,14 @@ struct CollectionViewData {
 
     let supplementaryItem = supplementaryItemChangeset(
       from: otherData,
-      sectionChangeset: section.sectionChangeset)
+      sectionChangeset: section.sectionChangeset
+    )
 
     let changeset = CollectionViewChangeset(
       sectionChangeset: section.sectionChangeset,
       itemChangeset: section.itemChangeset,
-      supplementaryItemChangeset: supplementaryItem)
+      supplementaryItemChangeset: supplementaryItem
+    )
 
     warnOnDuplicates(in: changeset)
 
@@ -94,7 +83,8 @@ struct CollectionViewData {
         """
         Item index \(indexPath.item) is out of bounds \(section.items.count). Make sure your \
         section models and item models all have unique dataIDs.
-        """)
+        """
+      )
       return nil
     }
 
@@ -108,7 +98,8 @@ struct CollectionViewData {
         """
         Section index \(index) is out of bounds \(sections.count). Make sure your section models \
         and item models all have unique dataIDs.
-        """)
+        """
+      )
       return nil
     }
 
@@ -119,9 +110,8 @@ struct CollectionViewData {
   /// does not exist.
   func supplementaryItem(
     ofKind elementKind: String,
-    at indexPath: IndexPath)
-    -> AnySupplementaryItemModel?
-  {
+    at indexPath: IndexPath
+  ) -> AnySupplementaryItemModel? {
     guard indexPath.section < sections.count else {
       EpoxyLogger.shared.assertionFailure("Index of supplementary view is out of bounds.")
       return nil
@@ -134,7 +124,8 @@ struct CollectionViewData {
         """
         Supplementary item model not found for the given element kind \(elementKind) and index \
         path \(indexPath).
-        """)
+        """
+      )
       return nil
     }
 
@@ -199,9 +190,8 @@ struct CollectionViewData {
 
   private func supplementaryItemChangeset(
     from otherData: Self,
-    sectionChangeset: IndexSetChangeset)
-    -> [String: IndexPathChangeset]
-  {
+    sectionChangeset: IndexSetChangeset
+  ) -> [String: IndexPathChangeset] {
     var supplementaryItem = [String: IndexPathChangeset]()
 
     for fromSectionIndex in otherData.sections.indices {
@@ -220,7 +210,8 @@ struct CollectionViewData {
         let itemIndexChangeset = toSupplementaryItems.makeIndexPathChangeset(
           from: fromSupplementaryItems,
           fromSection: fromSectionIndex,
-          toSection: toSectionIndex)
+          toSection: toSectionIndex
+        )
 
         supplementaryItem[elementKind, default: .init()] += itemIndexChangeset
       }
@@ -237,12 +228,12 @@ struct CollectionViewData {
     guard sectionDuplicates || itemDuplicates || supplementaryItemDuplicates else { return }
 
     EpoxyLogger.shared.warn({
-      var message: [String] = [
+      var message = [
         """
         Warning! Duplicate data IDs detected. Items should have unique data IDs within a section \
         and sections should have unique data IDs within a collection. Duplicate data IDs can cause \
         undefined behavior. Digest:
-        """,
+        """
       ]
 
       if sectionDuplicates {
@@ -252,7 +243,8 @@ struct CollectionViewData {
           // swiftlint:disable:next force_unwrapping
           let duplicateID = sections[duplicateIndexes.first!].dataID
           message.append(
-            "  - Section ID \(duplicateID) duplicated at indexes \(duplicateIndexes.map { $0 })")
+            "  - Section ID \(duplicateID) duplicated at indexes \(duplicateIndexes.map { $0 })"
+          )
         }
       }
 
@@ -268,7 +260,8 @@ struct CollectionViewData {
             """
               - In section with ID \(duplicateSectionID) at index \(firstIndex.section) item \
             with ID \(duplicateItemID) duplicated at indexes \(duplicateIndexes.map { $0.item })
-            """)
+            """
+          )
         }
       }
 
@@ -289,7 +282,8 @@ struct CollectionViewData {
                 - In section with ID \(duplicateSectionID) at index \(firstIndex.section) \
               supplementary item of kind \(elementKind) with ID \(duplicateItemID) duplicated at \
               indexes \(duplicateIndexes.map { $0.item })
-              """)
+              """
+            )
           }
         }
       }
@@ -301,9 +295,8 @@ struct CollectionViewData {
   private func indexPath(
     from itemIndexMapBySectionID: ItemIndexMap,
     for itemDataID: AnyHashable,
-    in section: ItemSectionPath)
-    -> IndexPath?
-  {
+    in section: ItemSectionPath
+  ) -> IndexPath? {
     guard let itemIndexMapBySectionID = itemIndexMapBySectionID[itemDataID] else {
       return nil
     }

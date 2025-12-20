@@ -4,7 +4,7 @@
 import EpoxyCollectionView
 import UIKit
 
-class TextRowExampleViewController: CollectionViewController {
+final class TextRowExampleViewController: CollectionViewController {
 
   // MARK: Lifecycle
 
@@ -20,15 +20,18 @@ class TextRowExampleViewController: CollectionViewController {
     AlignableTextRow.itemModel(
       dataID: DataID.leading,
       content: .init(title: "Title Text", subtitle: "The title in this row uses .horizontalAlignment(.leading)"),
-      style: .leadingTitle)
+      style: .leadingTitle
+    )
     AlignableTextRow.itemModel(
       dataID: DataID.center,
       content: .init(title: "Title Text", subtitle: "The title in this row uses .horizontalAlignment(.center)"),
-      style: .centerTitle)
+      style: .centerTitle
+    )
     AlignableTextRow.itemModel(
       dataID: DataID.trailing,
       content: .init(title: "Title Text", subtitle: "The title in this row uses .horizontalAlignment(.trailing)"),
-      style: .trailingTitle)
+      style: .trailingTitle
+    )
   }
 
   // MARK: Private

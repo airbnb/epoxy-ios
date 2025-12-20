@@ -62,9 +62,8 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
   }
 
   override public func preferredLayoutAttributesFitting(
-    _ layoutAttributes: UICollectionViewLayoutAttributes)
-    -> UICollectionViewLayoutAttributes
-  {
+    _ layoutAttributes: UICollectionViewLayoutAttributes
+  ) -> UICollectionViewLayoutAttributes {
     // There's a downstream `EXC_BAD_ACCESS` crash that would indicate that `layoutAttributes` can
     // sometimes be `null`, even though it's bridged as `nonnull`. This check serves 2 purposes:
     // - Guarding against the case where `layoutAttributes` is `nil` (which prevents the
@@ -109,7 +108,8 @@ public final class CollectionViewCell: UICollectionViewCell, ItemCellView {
         size = super.systemLayoutSizeFitting(
           layoutAttributes.size,
           withHorizontalFittingPriority: horizontalFittingPriority,
-          verticalFittingPriority: verticalFittingPriority)
+          verticalFittingPriority: verticalFittingPriority
+        )
       } else {
         // No self-sizing is required; respect whatever size the layout determined.
         size = layoutAttributes.size

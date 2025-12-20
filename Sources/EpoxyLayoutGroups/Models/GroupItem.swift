@@ -17,8 +17,8 @@ public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
   ///   - make: a closure that creates an instance of `ItemType`
   public init(
     dataID: AnyHashable,
-    make: @escaping () -> ItemType)
-  {
+    make: @escaping () -> ItemType
+  ) {
     self.make = make
     self.dataID = dataID
   }
@@ -33,8 +33,8 @@ public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
     dataID: AnyHashable,
     content: Content,
     make: @escaping () -> ItemType,
-    setContent: @escaping (CallbackContext, Content) -> Void)
-  {
+    setContent: @escaping (CallbackContext, Content) -> Void
+  ) {
     self.make = make
     self.dataID = dataID
     erasedContent = content
@@ -58,8 +58,8 @@ public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
     params: Params,
     content: Content,
     make: @escaping (Params) -> ItemType,
-    setContent: @escaping (CallbackContext, Content) -> Void)
-  {
+    setContent: @escaping (CallbackContext, Content) -> Void
+  ) {
     self.make = { make(params) }
     self.dataID = dataID
     self.styleID = params
@@ -119,7 +119,7 @@ public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
   ///   .numberOfLines(2)
   /// ```
   public subscript<Value>(dynamicMember keypath: ReferenceWritableKeyPath<ItemType, Value>) -> ((_ value: Value) -> Self) {
-    return { value in
+    { value in
       set(keypath, value: value)
     }
   }
@@ -137,7 +137,7 @@ public struct GroupItem<ItemType: Constrainable>: EpoxyModeled {
   public subscript<Value: Equatable>(dynamicMember keypath: ReferenceWritableKeyPath<ItemType, Value>)
     -> ((_ value: Value) -> Self)
   {
-    return { value in
+    { value in
       set(keypath, value: value)
     }
   }
@@ -155,9 +155,8 @@ extension GroupItem where ItemType: UIView {
   /// - Returns: a copy of the model with the priority set
   public func contentCompressionResistancePriority(
     _ priority: UILayoutPriority,
-    for axis: NSLayoutConstraint.Axis)
-    -> Self
-  {
+    for axis: NSLayoutConstraint.Axis
+  ) -> Self {
     setBehaviors { context in
       context.constrainable.setContentCompressionResistancePriority(priority, for: axis)
     }
@@ -171,9 +170,8 @@ extension GroupItem where ItemType: UIView {
   /// - Returns: a copy of the model with the priority set
   public func contentHuggingPriority(
     _ priority: UILayoutPriority,
-    for axis: NSLayoutConstraint.Axis)
-    -> Self
-  {
+    for axis: NSLayoutConstraint.Axis
+  ) -> Self {
     setBehaviors { context in
       context.constrainable.setContentHuggingPriority(priority, for: axis)
     }
@@ -220,13 +218,14 @@ extension GroupItem: VerticalAlignmentProviding { }
 
 extension GroupItem: CallbackContextEpoxyModeled {
   public struct CallbackContext {
-    public let constrainable: ItemType
-    public let animated: Bool
-
     public init(constrainable: ItemType, animated: Bool) {
       self.constrainable = constrainable
       self.animated = animated
     }
+
+    public let constrainable: ItemType
+    public let animated: Bool
+
   }
 }
 
@@ -259,7 +258,8 @@ extension GroupItem: InternalGroupItemModeling {
     guard let item = toUpdate as? ItemType else {
       EpoxyLogger.shared
         .assertionFailure(
-          "Attempt to update constrainable of the wrong type. This should never happen and is a failure of the system, please file a bug report.")
+          "Attempt to update constrainable of the wrong type. This should never happen and is a failure of the system, please file a bug report."
+        )
       return
     }
     setContent?(.init(constrainable: item, animated: animated))
@@ -275,7 +275,8 @@ extension GroupItem: InternalGroupItemModeling {
     guard let item = toUpdate as? ItemType else {
       EpoxyLogger.shared
         .assertionFailure(
-          "Attempt to update constrainable of the wrong type. This should never happen and is a failure of the system, please file a bug report.")
+          "Attempt to update constrainable of the wrong type. This should never happen and is a failure of the system, please file a bug report."
+        )
       return
     }
     setBehaviors?(.init(constrainable: item, animated: false))
@@ -292,7 +293,8 @@ extension GroupItem {
       accessibilityAlignment: accessibilityAlignment,
       horizontalAlignment: horizontalAlignment,
       padding: padding,
-      verticalAlignment: verticalAlignment)
+      verticalAlignment: verticalAlignment
+    )
   }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {

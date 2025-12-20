@@ -12,7 +12,8 @@ public protocol CollectionViewPrefetchingDelegate: AnyObject {
   /// Corresponds to `UICollectionViewDataSourcePrefetching.collectionView(_:prefetchItemsAt:)`.
   func collectionView(
     _ collectionView: CollectionView,
-    prefetch items: [AnyItemModel])
+    prefetch items: [AnyItemModel]
+  )
 
   /// Invoked when the prefetching for the given items should be cancelled.
   ///
@@ -20,5 +21,6 @@ public protocol CollectionViewPrefetchingDelegate: AnyObject {
   /// `UICollectionViewDataSourcePrefetching.collectionView(_:cancelPrefetchingForItemsAt:)`.
   func collectionView(
     _ collectionView: CollectionView,
-    cancelPrefetchingOf items: [AnyItemModel])
+    cancelPrefetchingOf items: [AnyItemModel]
+  )
 }

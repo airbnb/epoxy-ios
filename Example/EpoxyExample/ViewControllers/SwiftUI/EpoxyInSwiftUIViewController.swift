@@ -26,15 +26,16 @@ struct EpoxyInSwiftUIView: View {
         ForEach(1...100, id: \.self) { index in
           TextRow.swiftUIView(
             content: .init(title: "Row \(index)", body: BeloIpsum.sentence(count: 1, wordCount: index)),
-            style: .small)
-            .configure { context in
-              // swiftlint:disable:next no_direct_standard_out_logs
-              print("Configuring \(context.view)")
-            }
-            .onTapGesture {
-              // swiftlint:disable:next no_direct_standard_out_logs
-              print("Row \(index) tapped!")
-            }
+            style: .small
+          )
+          .configure { context in
+            // swiftlint:disable:next no_direct_standard_out_logs
+            print("Configuring \(context.view)")
+          }
+          .onTapGesture {
+            // swiftlint:disable:next no_direct_standard_out_logs
+            print("Row \(index) tapped!")
+          }
         }
       }
     }

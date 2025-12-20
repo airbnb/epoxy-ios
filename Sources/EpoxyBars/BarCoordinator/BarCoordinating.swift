@@ -6,8 +6,6 @@
 /// The behavior of `BarCoordinating` without an associated type.
 public protocol AnyBarCoordinating: AnyObject {
 
-  // MARK: Optional
-
   /// `self` in the default case, else the backing instance if a `AnyBarCoordinator`.
   var backing: AnyBarCoordinating { get }
 
@@ -16,7 +14,9 @@ public protocol AnyBarCoordinating: AnyObject {
 // MARK: Defaults
 
 extension AnyBarCoordinating {
-  public var backing: AnyBarCoordinating { self }
+  public var backing: AnyBarCoordinating {
+    self
+  }
 }
 
 // MARK: - BarCoordinating
@@ -81,6 +81,8 @@ final class DefaultBarCoordinator<BarModel: BarModeling>: BarCoordinating {
 
   // MARK: Internal
 
-  func barModel(for model: BarModel) -> BarModeling { model }
+  func barModel(for model: BarModel) -> BarModeling {
+    model
+  }
 
 }

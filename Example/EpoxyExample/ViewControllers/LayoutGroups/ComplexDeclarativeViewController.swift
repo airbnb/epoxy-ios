@@ -57,7 +57,8 @@ final class ComplexDeclarativeViewController: UIViewController {
         behaviors: .init { [weak self] _ in
           self?.updateGroup()
         },
-        style: .init())
+        style: .init()
+      )
       randomColorItems()
     }, animated: true)
   }
@@ -84,16 +85,18 @@ final class ComplexDeclarativeViewController: UIViewController {
       let textStyle = textStyles.randomElement() ?? .title3
       return HGroupItem(
         dataID: color.0,
-        style: .init(spacing: 8))
-      {
+        style: .init(spacing: 8)
+      ) {
         Label.groupItem(
           dataID: color.0 + "label",
           content: color.0,
-          style: .style(with: textStyle))
+          style: .style(with: textStyle)
+        )
         SpacerItem(dataID: DataID.spacer)
         ColorView.groupItem(
           dataID: color.1,
-          style: .init(size: .init(width: 44, height: 44), color: color.1))
+          style: .init(size: .init(width: 44, height: 44), color: color.1)
+        )
       }
     }
   }

@@ -20,8 +20,8 @@ public final class TopBarInstaller: NSObject {
   public init(
     viewController: UIViewController,
     bars: [BarModeling] = [],
-    configuration: BarInstallerConfiguration = .shared)
-  {
+    configuration: BarInstallerConfiguration = .shared
+  ) {
     self.viewController = viewController
     installer = .init(viewController: viewController, configuration: configuration)
     super.init()
@@ -34,8 +34,8 @@ public final class TopBarInstaller: NSObject {
 
   public convenience init(
     viewController: UIViewController,
-    @BarModelBuilder bars: () -> [BarModeling])
-  {
+    @BarModelBuilder bars: () -> [BarModeling]
+  ) {
     self.init(viewController: viewController, bars: bars())
   }
 
@@ -44,7 +44,9 @@ public final class TopBarInstaller: NSObject {
   /// The container installed in the view controller's view that contains the bar stack.
   ///
   /// Non-`nil` while installed, `nil` otherwise.
-  public var container: TopBarContainer? { installer.container }
+  public var container: TopBarContainer? {
+    installer.container
+  }
 
   /// Updates the bar stack to the given bar models, ordered from top to bottom.
   ///
@@ -104,9 +106,8 @@ extension TopBarInstaller: BarCoordinatorPropertyConfigurable {
 
   public func observe<Property>(
     _ property: BarCoordinatorProperty<Property>,
-    observer: @escaping (Property) -> Void)
-    -> AnyObject
-  {
+    observer: @escaping (Property) -> Void
+  ) -> AnyObject {
     installer.observe(property, observer: observer)
   }
 }

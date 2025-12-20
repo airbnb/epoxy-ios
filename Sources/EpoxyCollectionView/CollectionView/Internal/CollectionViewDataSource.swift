@@ -98,7 +98,8 @@ final class CollectionViewDataSource: NSObject {
   private func registerViewDifferentiators(with sections: [SectionModel]?) {
     let newViewDifferentiators = sections?.getItemViewDifferentiators() ?? []
     registerNewViewDifferentiators(
-      newViewDifferentiators.subtracting(registeredCellViewDifferentiators))
+      newViewDifferentiators.subtracting(registeredCellViewDifferentiators)
+    )
     registeredCellViewDifferentiators =
       registeredCellViewDifferentiators.union(newViewDifferentiators)
   }
@@ -110,7 +111,8 @@ final class CollectionViewDataSource: NSObject {
         ?? []
       registerNewSupplementaryViewDifferentiator(
         newElementViewDifferentiators.subtracting(existingViewDifferentiators),
-        forKind: elementKind)
+        forKind: elementKind
+      )
       registeredSupplementaryViewDifferentiators[elementKind] = existingViewDifferentiators
         .union(newElementViewDifferentiators)
     }
@@ -119,7 +121,8 @@ final class CollectionViewDataSource: NSObject {
   private func registerNewViewDifferentiators(_ newViewDifferentiators: Set<ViewDifferentiator>) {
     guard let collectionView = collectionView else {
       EpoxyLogger.shared.assertionFailure(
-        "Trying to register reuse IDs before the CollectionView was set.")
+        "Trying to register reuse IDs before the CollectionView was set."
+      )
       return
     }
     for viewDifferentiator in newViewDifferentiators {
@@ -130,18 +133,20 @@ final class CollectionViewDataSource: NSObject {
 
   private func registerNewSupplementaryViewDifferentiator(
     _ newViewDifferentiators: Set<ViewDifferentiator>,
-    forKind elementKind: String)
-  {
+    forKind elementKind: String
+  ) {
     guard let collectionView = collectionView else {
       EpoxyLogger.shared.assertionFailure(
-        "Trying to register reuse IDs before the CollectionView was set.")
+        "Trying to register reuse IDs before the CollectionView was set."
+      )
       return
     }
     for viewDifferentiator in newViewDifferentiators {
       let reuseID = reuseIDStore.reuseID(byRegistering: viewDifferentiator)
       collectionView.register(
         supplementaryViewReuseID: reuseID,
-        forKind: elementKind)
+        forKind: elementKind
+      )
     }
   }
 
@@ -159,9 +164,8 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
 
   func collectionView(
     _: UICollectionView,
-    numberOfItemsInSection section: Int)
-    -> Int
-  {
+    numberOfItemsInSection section: Int
+  ) -> Int {
     guard let data = data else { return 0 }
 
     return data.sections[section].items.count
@@ -169,9 +173,8 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
 
   func collectionView(
     _ collectionView: UICollectionView,
-    cellForItemAt indexPath: IndexPath)
-    -> UICollectionViewCell
-  {
+    cellForItemAt indexPath: IndexPath
+  ) -> UICollectionViewCell {
     guard
       let item = data?.item(at: indexPath),
       let section = data?.section(at: indexPath.section),
@@ -188,10 +191,12 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
         cell: cell,
         with: item,
         at: .init(itemDataID: item.dataID, section: .dataID(section.dataID)),
-        animated: false)
+        animated: false
+      )
     } else {
       EpoxyLogger.shared.assertionFailure(
-        "Only CollectionViewCell and subclasses are allowed in a CollectionView.")
+        "Only CollectionViewCell and subclasses are allowed in a CollectionView."
+      )
     }
     return cell
   }
@@ -199,9 +204,8 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
   func collectionView(
     _ collectionView: UICollectionView,
     viewForSupplementaryElementOfKind kind: String,
-    at indexPath: IndexPath)
-    -> UICollectionReusableView
-  {
+    at indexPath: IndexPath
+  ) -> UICollectionReusableView {
     guard
       let item = data?.supplementaryItem(ofKind: kind, at: indexPath),
       let section = data?.section(at: indexPath.section),
@@ -214,17 +218,20 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
     let supplementaryView = collectionView.dequeueReusableSupplementaryView(
       ofKind: kind,
       withReuseIdentifier: reuseID,
-      for: indexPath)
+      for: indexPath
+    )
 
     if let supplementaryView = supplementaryView as? CollectionViewReusableView {
       self.collectionView?.configure(
         supplementaryView: supplementaryView,
         with: item,
         at: .init(elementKind: kind, itemDataID: item.dataID, section: .dataID(section.dataID)),
-        animated: false)
+        animated: false
+      )
     } else {
       EpoxyLogger.shared.assertionFailure(
-        "Only CollectionViewReusableView and subclasses are allowed in a CollectionView.")
+        "Only CollectionViewReusableView and subclasses are allowed in a CollectionView."
+      )
     }
 
     return supplementaryView
@@ -232,9 +239,8 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
 
   func collectionView(
     _: UICollectionView,
-    canMoveItemAt indexPath: IndexPath)
-    -> Bool
-  {
+    canMoveItemAt indexPath: IndexPath
+  ) -> Bool {
     guard let item = data?.item(at: indexPath) else { return false }
     return item.isMovable
   }
@@ -242,8 +248,8 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
   func collectionView(
     _: UICollectionView,
     moveItemAt sourceIndexPath: IndexPath,
-    to destinationIndexPath: IndexPath)
-  {
+    to destinationIndexPath: IndexPath
+  ) {
     guard
       let data = data,
       let sourceItem = data.item(at: sourceIndexPath),
@@ -255,7 +261,8 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
 
     let beforeIndexPath = IndexPath(
       item: destinationIndexPath.item,
-      section: destinationIndexPath.section)
+      section: destinationIndexPath.section
+    )
 
     if
       data.sections[beforeIndexPath.section].items.count >= beforeIndexPath.item + 1,
@@ -267,7 +274,8 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
           moveItem: sourceItem,
           inSection: sourceSection,
           toDestinationItem: destinationItem,
-          inSection: destinationSection)
+          inSection: destinationSection
+        )
     }
   }
 

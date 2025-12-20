@@ -47,7 +47,7 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
     }
   }
 
-  public var insetBehavior: BarContainerInsetBehavior = .barHeightSafeArea {
+  public var insetBehavior = BarContainerInsetBehavior.barHeightSafeArea {
     didSet { updateInsetBehavior(from: oldValue) }
   }
 
@@ -61,7 +61,7 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
   /// The behavior of the status bar when it's hidden.
   ///
   /// Can be called from within an animation block to animate changes to the hiding behavior.
-  public var statusBarInsetBehavior: StatusBarInsetBehavior = .visible {
+  public var statusBarInsetBehavior = StatusBarInsetBehavior.visible {
     didSet {
       guard statusBarInsetBehavior != oldValue else { return }
       updateStatusBarInsetBehavior()
@@ -129,7 +129,8 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
   /// A flag indicating whether a scroll view is currently scrolled to its top or bottom edge within
   /// the view controller's view.
   private enum ScrollViewEdge {
-    case top, bottom
+    case top
+    case bottom
   }
 
   /// An extra top margin applied to the layout margins.
@@ -197,7 +198,8 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
 
     updateAdditionalSafeAreaInset(
       additionalSafeAreaInsetsTop,
-      hasHierarchyScaleTransform: hasHierarchyScaleTransform)
+      hasHierarchyScaleTransform: hasHierarchyScaleTransform
+    )
 
     let margin = layoutMarginsTop + extraLayoutMarginsTop
     updateScrollViewInset(allScrollViews, margin: margin)

@@ -84,7 +84,8 @@ extension SectionModel {
     *,
     deprecated,
     renamed: "init(dataID:items:)",
-    message: "SectionModel requires an explicit dataID")
+    message: "SectionModel requires an explicit dataID"
+  )
   public init(items: [ItemModeling]) {
     self.items = items
   }
@@ -93,7 +94,8 @@ extension SectionModel {
     *,
     deprecated,
     renamed: "init(dataID:items:)",
-    message: "SectionModel requires an explicit dataID")
+    message: "SectionModel requires an explicit dataID"
+  )
   public init(@ItemModelBuilder items: () -> [ItemModeling]) {
     self.items = items()
   }

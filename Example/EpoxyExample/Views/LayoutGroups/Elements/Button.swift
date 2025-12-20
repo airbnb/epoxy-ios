@@ -16,7 +16,8 @@ final class Button: UIButton, EpoxyableView {
     addTarget(
       self,
       action: #selector(handleButtonTapped(_:)),
-      for: .touchUpInside)
+      for: .touchUpInside
+    )
   }
 
   required init?(coder _: NSCoder) {
@@ -24,8 +25,6 @@ final class Button: UIButton, EpoxyableView {
   }
 
   // MARK: Internal
-
-  // MARK: EpoxyableView
 
   struct Style: Hashable {
     let color = UIColor.systemGreen

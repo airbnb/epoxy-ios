@@ -68,7 +68,8 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     viewController = EpoxySwiftUIHostingController(
       rootView: .init(content: epoxyContent, environment: epoxyEnvironment),
       ignoresSafeArea: true,
-      ignoresKeyboardAvoidance: true)
+      ignoresKeyboardAvoidance: true
+    )
 
     dataID = style.initialContent.dataID ?? DefaultDataID.noneProvided as AnyHashable
     forceLayoutOnLayoutMarginsChange = style.forceLayoutOnLayoutMarginsChange
@@ -105,8 +106,8 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     public init(
       reuseBehavior: SwiftUIHostingViewReuseBehavior,
       forceLayoutOnLayoutMarginsChange: Bool,
-      initialContent: Content)
-    {
+      initialContent: Content
+    ) {
       self.reuseBehavior = reuseBehavior
       self.forceLayoutOnLayoutMarginsChange = forceLayoutOnLayoutMarginsChange
       self.initialContent = initialContent
@@ -118,7 +119,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     public var forceLayoutOnLayoutMarginsChange: Bool
     public var initialContent: Content
 
-    public static func == (lhs: Style, rhs: Style) -> Bool {
+    public static func ==(lhs: Style, rhs: Style) -> Bool {
       lhs.reuseBehavior == rhs.reuseBehavior &&
         lhs.forceLayoutOnLayoutMarginsChange == rhs.forceLayoutOnLayoutMarginsChange
     }
@@ -138,7 +139,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     public var rootView: RootView
     public var dataID: AnyHashable?
 
-    public static func == (_: Content, _: Content) -> Bool {
+    public static func ==(_: Content, _: Content) -> Bool {
       // The content should never be equal since we need the `rootView` to be updated on every
       // content change.
       false
@@ -213,15 +214,19 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
         top: margins.top,
         leading: margins.right,
         bottom: margins.bottom,
-        trailing: margins.left)
+        trailing: margins.left
+      )
+
     case .leftToRight:
       fallthrough
+
     @unknown default:
       epoxyEnvironment.layoutMargins = .init(
         top: margins.top,
         leading: margins.left,
         bottom: margins.bottom,
-        trailing: margins.right)
+        trailing: margins.right
+      )
     }
 
     if forceLayoutOnLayoutMarginsChange {
@@ -268,7 +273,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
   private let epoxyEnvironment = EpoxyHostingEnvironment()
   private let forceLayoutOnLayoutMarginsChange: Bool
   private var dataID: AnyHashable
-  private var state: AppearanceState = .disappeared
+  private var state = AppearanceState.disappeared
 
   /// Updates the appearance state of the `viewController`.
   private func transition(to state: AppearanceState) {
@@ -280,36 +285,48 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
     case (to: .appearing(let animated), from: .disappeared):
       viewController.beginAppearanceTransition(true, animated: animated)
       addViewControllerIfNeededAndReady()
+
     case (to: .disappearing(let animated), from: .appeared):
       viewController.beginAppearanceTransition(false, animated: animated)
+
     case (to: .disappeared, from: .disappearing):
       removeViewControllerIfNeeded()
+
     case (to: .appeared, from: .appearing):
       viewController.endAppearanceTransition()
+
     case (to: .disappeared, from: .appeared):
       viewController.beginAppearanceTransition(false, animated: true)
       removeViewControllerIfNeeded()
+
     case (to: .appeared, from: .disappearing(let animated)):
       viewController.beginAppearanceTransition(true, animated: animated)
       viewController.endAppearanceTransition()
+
     case (to: .disappeared, from: .appearing(let animated)):
       viewController.beginAppearanceTransition(false, animated: animated)
       removeViewControllerIfNeeded()
+
     case (to: .appeared, from: .disappeared):
       viewController.beginAppearanceTransition(true, animated: false)
       addViewControllerIfNeededAndReady()
       viewController.endAppearanceTransition()
+
     case (to: .appearing(let animated), from: .appeared):
       viewController.beginAppearanceTransition(false, animated: animated)
       viewController.beginAppearanceTransition(true, animated: animated)
+
     case (to: .appearing(let animated), from: .disappearing):
       viewController.beginAppearanceTransition(true, animated: animated)
+
     case (to: .disappearing(let animated), from: .disappeared):
       viewController.beginAppearanceTransition(true, animated: animated)
       addViewControllerIfNeededAndReady()
       viewController.beginAppearanceTransition(false, animated: animated)
+
     case (to: .disappearing(let animated), from: .appearing):
       viewController.beginAppearanceTransition(false, animated: animated)
+
     case (to: .appearing, from: .appearing),
          (to: .appeared, from: .appeared),
          (to: .disappearing, from: .disappearing),
@@ -348,7 +365,8 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableVie
         """
         Unable to add a UIHostingController view, could not locate a UIViewController in the \
         responder chain for view with ID \(dataID) of type \(RootView.self).
-        """)
+        """
+      )
       return
     }
 
