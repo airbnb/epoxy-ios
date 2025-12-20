@@ -14,8 +14,8 @@ import UIKit
 protocol BaseBarInstallerSpec {
   func installBarContainer(
     in viewController: UIViewController,
-    configuration: BarInstallerConfiguration)
-    -> (container: InternalBarContainer, setBars: ([BarModeling], Bool) -> Void)
+    configuration: BarInstallerConfiguration
+  ) -> (container: InternalBarContainer, setBars: ([BarModeling], Bool) -> Void)
 }
 
 // MARK: Spec implementation
@@ -33,7 +33,8 @@ extension BaseBarInstallerSpec {
     beforeEach {
       window = SafeAreaWindow(
         frame: .init(origin: CGPoint(x: 0, y: 100), size: CGSize(width: 300, height: 300)),
-        safeAreaInsets: UIEdgeInsets(top: defaultSafeAreaInset, left: 0, bottom: defaultSafeAreaInset, right: 0))
+        safeAreaInsets: UIEdgeInsets(top: defaultSafeAreaInset, left: 0, bottom: defaultSafeAreaInset, right: 0)
+      )
 
       viewController = UIViewController()
       viewController.loadView()

@@ -39,8 +39,8 @@ public struct SupplementaryItemModel<View: UIView>: ViewEpoxyModeled {
   public init<Content: Equatable>(
     dataID: AnyHashable,
     content: Content,
-    setContent: @escaping (CallbackContext, Content) -> Void)
-  {
+    setContent: @escaping (CallbackContext, Content) -> Void
+  ) {
     self.dataID = dataID
     erasedContent = content
     self.setContent = { setContent($0, content) }
@@ -71,8 +71,8 @@ public struct SupplementaryItemModel<View: UIView>: ViewEpoxyModeled {
     params: Params,
     content: Content,
     makeView: @escaping (Params) -> View,
-    setContent: @escaping (CallbackContext, Content) -> Void)
-  {
+    setContent: @escaping (CallbackContext, Content) -> Void
+  ) {
     self.dataID = dataID
     styleID = params
     erasedContent = content
@@ -105,7 +105,8 @@ public struct SupplementaryItemModel<View: UIView>: ViewEpoxyModeled {
         """
         Overriding existing view \(reusableViewView) on view \(reusableView), which is not of \
         expected type \(View.self). This is programmer error.
-        """)
+        """
+      )
       view = makeView()
     }
     reusableView.setViewIfNeeded(view: view)
@@ -167,8 +168,8 @@ extension SupplementaryItemModel: InternalSupplementaryItemModeling {
   public func configure(
     reusableView: CollectionViewReusableView,
     traitCollection: UITraitCollection,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     // Even if there's no `setContent` closure, we need to make sure to call
     // `viewForReusableView` to ensure that the view is created.
     let view = viewForReusableView(reusableView)
@@ -180,7 +181,8 @@ extension SupplementaryItemModel: InternalSupplementaryItemModeling {
     let context = CallbackContext(
       view: view,
       traitCollection: traitCollection,
-      animated: false)
+      animated: false
+    )
     setContent?(context)
     setBehaviors?(context)
     return view
@@ -189,8 +191,8 @@ extension SupplementaryItemModel: InternalSupplementaryItemModeling {
   public func setBehavior(
     reusableView: CollectionViewReusableView,
     traitCollection: UITraitCollection,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     setBehaviors?(.init(view: viewForReusableView(reusableView), traitCollection: traitCollection, animated: animated))
   }
 
@@ -199,16 +201,16 @@ extension SupplementaryItemModel: InternalSupplementaryItemModeling {
   func handleWillDisplay(
     _ reusableView: CollectionViewReusableView,
     traitCollection: UITraitCollection,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     willDisplay?(.init(view: viewForReusableView(reusableView), traitCollection: traitCollection, animated: animated))
   }
 
   func handleDidEndDisplaying(
     _ reusableView: CollectionViewReusableView,
     traitCollection: UITraitCollection,
-    animated: Bool)
-  {
+    animated: Bool
+  ) {
     didEndDisplaying?(.init(view: viewForReusableView(reusableView), traitCollection: traitCollection, animated: animated))
   }
 }

@@ -21,9 +21,8 @@ extension UICollectionViewCompositionalLayout {
   /// `layoutSectionProvider` of its `CollectionView`'s corresponding `SectionModel` for each
   /// section.
   public static func epoxy(
-    configuration: UICollectionViewCompositionalLayoutConfiguration)
-    -> UICollectionViewCompositionalLayout
-  {
+    configuration: UICollectionViewCompositionalLayoutConfiguration
+  ) -> UICollectionViewCompositionalLayout {
     epoxy { provider in
       UICollectionViewCompositionalLayout(sectionProvider: provider, configuration: configuration)
     }
@@ -35,9 +34,8 @@ extension UICollectionViewCompositionalLayout {
     -> UICollectionViewCompositionalLayout
 
   private static func epoxy(
-    _ makeLayout: MakeLayout)
-    -> UICollectionViewCompositionalLayout
-  {
+    _ makeLayout: MakeLayout
+  ) -> UICollectionViewCompositionalLayout {
     weak var layoutReference: UICollectionViewCompositionalLayout?
 
     let provider: UICollectionViewCompositionalLayoutSectionProvider = { index, environment in
@@ -46,7 +44,8 @@ extension UICollectionViewCompositionalLayout {
           """
           Epoxy compositional layout does not have a corresponding CollectionView. This is \
           programmer error.
-          """)
+          """
+        )
         return nil
       }
 

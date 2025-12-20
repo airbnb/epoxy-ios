@@ -14,8 +14,8 @@ public struct CollectionViewConfiguration {
     usesBatchUpdatesForAllReloads: Bool = true,
     usesCellPrefetching: Bool = true,
     usesAccurateScrollToItem: Bool = true,
-    usesSafeAreaLayoutGuideLeadingTrailingAnchors: Bool = false)
-  {
+    usesSafeAreaLayoutGuideLeadingTrailingAnchors: Bool = false
+  ) {
     self.usesBatchUpdatesForAllReloads = usesBatchUpdatesForAllReloads
     self.usesCellPrefetching = usesCellPrefetching
     self.usesAccurateScrollToItem = usesAccurateScrollToItem

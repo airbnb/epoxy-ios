@@ -15,7 +15,7 @@ final class StaticHeightBar: UIView, EpoxyableView {
     translatesAutoresizingMaskIntoConstraints = false
 
     NSLayoutConstraint.activate([
-      heightAnchor.constraint(equalToConstant: style.height),
+      heightAnchor.constraint(equalToConstant: style.height)
     ])
   }
 

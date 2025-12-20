@@ -21,8 +21,6 @@ final class ColorsRow: BaseRow, EpoxyableView {
 
   // MARK: Internal
 
-  // MARK: EpoxyableView
-
   struct Style: Hashable {
     enum Variant: Equatable, Hashable {
       case hGroup(_ alignment: HGroup.ItemAlignment)
@@ -70,33 +68,40 @@ final class ColorsRow: BaseRow, EpoxyableView {
     case .hGroup(let alignment):
       group = HGroupItem(
         dataID: DataID.hGroup,
-        style: .init(alignment: alignment, spacing: 8))
-      {
+        style: .init(alignment: alignment, spacing: 8)
+      ) {
         ColorView.groupItem(
           dataID: DataID.red,
-          style: .init(size: .init(width: 30, height: 30), color: .systemRed))
+          style: .init(size: .init(width: 30, height: 30), color: .systemRed)
+        )
         ColorView.groupItem(
           dataID: DataID.orange,
-          style: .init(size: .init(width: 50, height: 50), color: .systemOrange))
+          style: .init(size: .init(width: 50, height: 50), color: .systemOrange)
+        )
         ColorView.groupItem(
           dataID: DataID.yellow,
-          style: .init(size: .init(width: 70, height: 70), color: .systemYellow))
+          style: .init(size: .init(width: 70, height: 70), color: .systemYellow)
+        )
       }
       outerGroupAlignment = .leading
+
     case .vGroup(let alignment):
       group = VGroupItem(
         dataID: DataID.vGroup,
-        style: .init(alignment: alignment, spacing: 8))
-      {
+        style: .init(alignment: alignment, spacing: 8)
+      ) {
         ColorView.groupItem(
           dataID: DataID.green,
-          style: .init(size: .init(width: 30, height: 30), color: .systemGreen))
+          style: .init(size: .init(width: 30, height: 30), color: .systemGreen)
+        )
         ColorView.groupItem(
           dataID: DataID.blue,
-          style: .init(size: .init(width: 50, height: 50), color: .systemBlue))
+          style: .init(size: .init(width: 50, height: 50), color: .systemBlue)
+        )
         ColorView.groupItem(
           dataID: DataID.purple,
-          style: .init(size: .init(width: 70, height: 70), color: .systemPurple))
+          style: .init(size: .init(width: 70, height: 70), color: .systemPurple)
+        )
       }
       outerGroupAlignment = .fill
     }
@@ -105,7 +110,8 @@ final class ColorsRow: BaseRow, EpoxyableView {
       Label.groupItem(
         dataID: DataID.title,
         content: currentTitle,
-        style: .style(with: .title2))
+        style: .style(with: .title2)
+      )
       group
     }
     outerGroup.install(in: self)

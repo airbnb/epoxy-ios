@@ -26,15 +26,11 @@ final class Label: UILabel, EpoxyableView {
 
   // MARK: Internal
 
-  // MARK: StyledView
-
   struct Style: Hashable {
     let font: UIFont
     let showLabelBackground: Bool
     var numberOfLines = 0
   }
-
-  // MARK: ContentConfigurableView
 
   typealias Content = String
 
@@ -47,11 +43,11 @@ final class Label: UILabel, EpoxyableView {
 extension Label.Style {
   static func style(
     with textStyle: UIFont.TextStyle,
-    showBackground: Bool = false)
-    -> Label.Style
-  {
+    showBackground: Bool = false
+  ) -> Label.Style {
     .init(
       font: UIFont.preferredFont(forTextStyle: textStyle),
-      showLabelBackground: showBackground)
+      showLabelBackground: showBackground
+    )
   }
 }

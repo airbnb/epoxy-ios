@@ -41,7 +41,8 @@ final class FlowLayoutSpec: QuickSpec {
         let itemSize = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          sizeForItemAt: IndexPath(item: 0, section: 0))
+          sizeForItemAt: IndexPath(item: 0, section: 0)
+        )
         expect(itemSize).to(equal(layout.itemSize))
       }
 
@@ -49,7 +50,8 @@ final class FlowLayoutSpec: QuickSpec {
         let sectionInset = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          insetForSectionAt: 0)
+          insetForSectionAt: 0
+        )
         expect(sectionInset).to(equal(layout.sectionInset))
       }
 
@@ -57,7 +59,8 @@ final class FlowLayoutSpec: QuickSpec {
         let lineSpacing = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          minimumLineSpacingForSectionAt: 0)
+          minimumLineSpacingForSectionAt: 0
+        )
         expect(lineSpacing).to(equal(layout.minimumLineSpacing))
       }
 
@@ -65,7 +68,8 @@ final class FlowLayoutSpec: QuickSpec {
         let interitemSpacing = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          minimumInteritemSpacingForSectionAt: 0)
+          minimumInteritemSpacingForSectionAt: 0
+        )
         expect(interitemSpacing).to(equal(layout.minimumInteritemSpacing))
       }
 
@@ -73,7 +77,8 @@ final class FlowLayoutSpec: QuickSpec {
         let headerSize = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          referenceSizeForHeaderInSection: 0)
+          referenceSizeForHeaderInSection: 0
+        )
         expect(headerSize).to(equal(layout.headerReferenceSize))
       }
 
@@ -81,7 +86,8 @@ final class FlowLayoutSpec: QuickSpec {
         let footerSize = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          referenceSizeForFooterInSection: 0)
+          referenceSizeForFooterInSection: 0
+        )
         expect(footerSize).to(equal(layout.footerReferenceSize))
       }
     }
@@ -98,7 +104,8 @@ final class FlowLayoutSpec: QuickSpec {
         let itemSize = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          sizeForItemAt: IndexPath(item: 0, section: 0))
+          sizeForItemAt: IndexPath(item: 0, section: 0)
+        )
         expect(itemSize).to(equal(CGSize(width: 5, height: 5)))
       }
     }
@@ -114,7 +121,8 @@ final class FlowLayoutSpec: QuickSpec {
         let itemSize = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          sizeForItemAt: IndexPath(item: 0, section: 0))
+          sizeForItemAt: IndexPath(item: 0, section: 0)
+        )
         expect(itemSize).to(equal(CGSize(width: 6, height: 6)))
       }
     }
@@ -134,7 +142,8 @@ final class FlowLayoutSpec: QuickSpec {
         let sectionInset = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          insetForSectionAt: 0)
+          insetForSectionAt: 0
+        )
         expect(sectionInset).to(equal(UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)))
       }
 
@@ -142,7 +151,8 @@ final class FlowLayoutSpec: QuickSpec {
         let lineSpacing = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          minimumLineSpacingForSectionAt: 0)
+          minimumLineSpacingForSectionAt: 0
+        )
         expect(lineSpacing).to(equal(8))
       }
 
@@ -150,7 +160,8 @@ final class FlowLayoutSpec: QuickSpec {
         let interitemSpacing = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          minimumInteritemSpacingForSectionAt: 0)
+          minimumInteritemSpacingForSectionAt: 0
+        )
         expect(interitemSpacing).to(equal(9))
       }
 
@@ -158,7 +169,8 @@ final class FlowLayoutSpec: QuickSpec {
         let headerSize = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          referenceSizeForHeaderInSection: 0)
+          referenceSizeForHeaderInSection: 0
+        )
         expect(headerSize).to(equal(CGSize(width: 10, height: 10)))
       }
 
@@ -166,7 +178,8 @@ final class FlowLayoutSpec: QuickSpec {
         let footerSize = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          referenceSizeForFooterInSection: 0)
+          referenceSizeForFooterInSection: 0
+        )
         expect(footerSize).to(equal(CGSize(width: 11, height: 11)))
       }
     }
@@ -188,7 +201,8 @@ final class FlowLayoutSpec: QuickSpec {
         let sectionInset = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          insetForSectionAt: 0)
+          insetForSectionAt: 0
+        )
         expect(sectionInset).to(equal(layoutDelegate.sectionInset))
       }
 
@@ -196,7 +210,8 @@ final class FlowLayoutSpec: QuickSpec {
         let lineSpacing = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          minimumLineSpacingForSectionAt: 0)
+          minimumLineSpacingForSectionAt: 0
+        )
         expect(lineSpacing).to(equal(layoutDelegate.minimumLineSpacing))
       }
 
@@ -204,7 +219,8 @@ final class FlowLayoutSpec: QuickSpec {
         let interitemSpacing = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          minimumInteritemSpacingForSectionAt: 0)
+          minimumInteritemSpacingForSectionAt: 0
+        )
         expect(interitemSpacing).to(equal(layoutDelegate.minimumInteritemSpacing))
       }
 
@@ -212,7 +228,8 @@ final class FlowLayoutSpec: QuickSpec {
         let headerSize = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          referenceSizeForHeaderInSection: 0)
+          referenceSizeForHeaderInSection: 0
+        )
         expect(headerSize).to(equal(layoutDelegate.headerSize))
       }
 
@@ -220,7 +237,8 @@ final class FlowLayoutSpec: QuickSpec {
         let footerSize = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          referenceSizeForFooterInSection: 0)
+          referenceSizeForFooterInSection: 0
+        )
         expect(footerSize).to(equal(layoutDelegate.footerSize))
       }
     }
@@ -236,7 +254,8 @@ final class FlowLayoutSpec: QuickSpec {
         let itemSize = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          sizeForItemAt: IndexPath(item: 0, section: 0))
+          sizeForItemAt: IndexPath(item: 0, section: 0)
+        )
         expect(itemSize).to(equal(CGSize(width: 50, height: 50)))
       }
 
@@ -244,7 +263,8 @@ final class FlowLayoutSpec: QuickSpec {
         let sectionInset = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          insetForSectionAt: 0)
+          insetForSectionAt: 0
+        )
         expect(sectionInset).to(equal(.zero))
       }
 
@@ -252,7 +272,8 @@ final class FlowLayoutSpec: QuickSpec {
         let lineSpacing = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          minimumLineSpacingForSectionAt: 0)
+          minimumLineSpacingForSectionAt: 0
+        )
         expect(lineSpacing).to(equal(10))
       }
 
@@ -260,7 +281,8 @@ final class FlowLayoutSpec: QuickSpec {
         let interitemSpacing = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          minimumInteritemSpacingForSectionAt: 0)
+          minimumInteritemSpacingForSectionAt: 0
+        )
         expect(interitemSpacing).to(equal(10))
       }
 
@@ -268,7 +290,8 @@ final class FlowLayoutSpec: QuickSpec {
         let headerSize = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          referenceSizeForHeaderInSection: 0)
+          referenceSizeForHeaderInSection: 0
+        )
         expect(headerSize).to(equal(.zero))
       }
 
@@ -276,7 +299,8 @@ final class FlowLayoutSpec: QuickSpec {
         let footerSize = collectionView.collectionView(
           collectionView,
           layout: collectionView.collectionViewLayout,
-          referenceSizeForFooterInSection: 0)
+          referenceSizeForFooterInSection: 0
+        )
         expect(footerSize).to(equal(.zero))
       }
     }

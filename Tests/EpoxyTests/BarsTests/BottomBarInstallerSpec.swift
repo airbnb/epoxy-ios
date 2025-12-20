@@ -11,16 +11,16 @@ final class BottomBarInstallerSpec: QuickSpec, BaseBarInstallerSpec {
 
   func installBarContainer(
     in viewController: UIViewController,
-    configuration: BarInstallerConfiguration)
-    -> (container: InternalBarContainer, setBars: ([BarModeling], Bool) -> Void)
-  {
+    configuration: BarInstallerConfiguration
+  ) -> (container: InternalBarContainer, setBars: ([BarModeling], Bool) -> Void) {
     let barInstaller = BottomBarInstaller(viewController: viewController, configuration: configuration)
     viewController.view.layoutIfNeeded()
     barInstaller.install()
 
     return (
       container: barInstaller.container!,
-      setBars: { barInstaller.setBars($0, animated: $1) })
+      setBars: { barInstaller.setBars($0, animated: $1) }
+    )
   }
 
   override func spec() {

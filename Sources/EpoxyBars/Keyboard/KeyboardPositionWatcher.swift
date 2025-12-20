@@ -9,7 +9,7 @@ import UIKit
 
 /// Watches for changes to the keyboard position and triggers a closure within an animation
 /// transaction so that the consumer can animate it's UI in-sync with the keyboard.
-public class KeyboardPositionWatcher {
+public final class KeyboardPositionWatcher {
 
   // MARK: Lifecycle
 
@@ -18,12 +18,14 @@ public class KeyboardPositionWatcher {
       self,
       selector: #selector(keyboardWillShowOrHide),
       name: UIResponder.keyboardWillShowNotification,
-      object: nil)
+      object: nil
+    )
     NotificationCenter.default.addObserver(
       self,
       selector: #selector(keyboardWillShowOrHide),
       name: UIResponder.keyboardWillHideNotification,
-      object: nil)
+      object: nil
+    )
   }
 
   // MARK: Public
@@ -46,8 +48,8 @@ public class KeyboardPositionWatcher {
   /// `containingView`, from to the top of the keyboard to the max Y of the view's bounds.
   public func observeOverlap(
     in containingView: UIView?,
-    _ observer: @escaping (_ overlap: CGFloat) -> Void)
-  {
+    _ observer: @escaping (_ overlap: CGFloat) -> Void
+  ) {
     guard let view = containingView else { return }
     observers[ObjectIdentifier(view)] = Observer(observer: observer, view: view)
   }
@@ -87,7 +89,7 @@ public class KeyboardPositionWatcher {
   // MARK: Private
 
   /// A specific observer of keyboard notifications for a given view.
-  private class Observer {
+  private final class Observer {
 
     // MARK: Lifecycle
 
@@ -106,7 +108,7 @@ public class KeyboardPositionWatcher {
   }
 
   /// The observers, keyed by their view's identifier.
-  private var observers: [ObjectIdentifier: Observer] = [:]
+  private var observers = [ObjectIdentifier: Observer]()
 
   /// The current frame of the keyboard, in the main screen's coordinate space.
   private var keyboardFrame: CGRect?
@@ -126,7 +128,7 @@ public class KeyboardPositionWatcher {
 
     // Handle the keyboard frame being `.zero` when floating on iPad as an overlap of zero.
     guard keyboardFrame != .zero else {
-      observers.forEach { $0.observer(0) }
+      for item in observers { item.observer(0) }
       return
     }
 
@@ -142,9 +144,8 @@ public class KeyboardPositionWatcher {
   private func overlap(
     for view: UIView,
     keyboardFrame: CGRect,
-    in screen: UIScreen)
-    -> CGFloat
-  {
+    in screen: UIScreen
+  ) -> CGFloat {
     // If the keyboard is offscreen (hidden), always consider it to have a zero overlap to ensure we
     // don't consider slightly offscreen views as still having keyboard overlap.
     guard keyboardFrame.intersects(screen.bounds) else { return 0 }
@@ -200,8 +201,8 @@ private struct BottomInsets {
   init(
     content: CGFloat,
     verticalScrollIndicator: CGFloat,
-    horizontalScrollIndicator: CGFloat)
-  {
+    horizontalScrollIndicator: CGFloat
+  ) {
     self.content = content
     self.verticalScrollIndicator = verticalScrollIndicator
     self.horizontalScrollIndicator = horizontalScrollIndicator
@@ -256,7 +257,8 @@ extension UIScrollView {
       BottomInsets(
         content: contentInset.bottom,
         verticalScrollIndicator: verticalScrollIndicatorInsets.bottom,
-        horizontalScrollIndicator: horizontalScrollIndicatorInsets.bottom)
+        horizontalScrollIndicator: horizontalScrollIndicatorInsets.bottom
+      )
     }
     set {
       contentInset.bottom = newValue.content
@@ -297,7 +299,8 @@ extension UIScrollView {
     return .init(
       content: content,
       verticalScrollIndicator: scrollIndicator,
-      horizontalScrollIndicator: scrollIndicator)
+      horizontalScrollIndicator: scrollIndicator
+    )
   }
 
 }

@@ -62,7 +62,7 @@ final class BarStackViewSpec: QuickSpec {
               .dataID(4),
           ], animated: false)
 
-          expect(view.arrangedBarViewTags).to(equal([1,2,3,4]))
+          expect(view.arrangedBarViewTags).to(equal([1, 2, 3, 4]))
 
           view.setBars([
             TestView.barModel(content: 10).styleID(StyleID.loaded)
@@ -75,7 +75,7 @@ final class BarStackViewSpec: QuickSpec {
               .dataID(4),
           ], animated: false)
 
-          expect(view.arrangedBarViewTags).to(equal([10,2,30,4]))
+          expect(view.arrangedBarViewTags).to(equal([10, 2, 30, 4]))
         }
       }
     }

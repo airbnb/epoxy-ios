@@ -39,8 +39,6 @@ public final class VGroupView: UIView, EpoxyableView {
 
   // MARK: Public
 
-  // MARK: Style
-
   public struct Style: Hashable {
     /// Creates a Style for the `VGroupView`
     /// - Parameters:
@@ -48,8 +46,8 @@ public final class VGroupView: UIView, EpoxyableView {
     ///   - edgeInsets: the adaptive edge insets for this view
     public init(
       vGroupStyle: VGroup.Style = .init(),
-      edgeInsets: GroupEdgeInsets = .zero)
-    {
+      edgeInsets: GroupEdgeInsets = .zero
+    ) {
       self.vGroupStyle = vGroupStyle
       self.edgeInsets = edgeInsets
     }
@@ -57,8 +55,6 @@ public final class VGroupView: UIView, EpoxyableView {
     public var vGroupStyle: VGroup.Style
     public var edgeInsets: GroupEdgeInsets
   }
-
-  // MARK: Content
 
   /// Creates a Content model for the `VGroupView`
   /// - Parameter items: the items the `VGroup` will render

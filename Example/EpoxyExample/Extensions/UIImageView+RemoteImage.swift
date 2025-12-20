@@ -52,9 +52,10 @@ extension UIImageView {
   // MARK: Private
 
   private struct Storage {
+    static var key = 0
+
     var url: URL
     var dataTask: URLSessionDataTask
-    static var key = 0
   }
 
   @nonobjc

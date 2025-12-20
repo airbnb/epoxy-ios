@@ -20,8 +20,6 @@ final class DynamicRow: BaseRow, EpoxyableView {
 
   // MARK: Internal
 
-  // MARK: ContentConfigurableView
-
   struct Content: Equatable {
     let title: String
     let subtitle: String
@@ -29,8 +27,6 @@ final class DynamicRow: BaseRow, EpoxyableView {
     let options: [String]?
     let footer: String
   }
-
-  // MARK: BehaviorsConfigurableView
 
   struct Behaviors {
     let didTapRevealOptions: (() -> Void)?
@@ -42,16 +38,18 @@ final class DynamicRow: BaseRow, EpoxyableView {
       Label.groupItem(
         dataID: DataID.title,
         content: content.title,
-        style: Label.Style.style(with: .title2))
-        // force text to hug tightly to avoid height changes during animation
-        .contentHuggingPriority(.required, for: .vertical)
+        style: Label.Style.style(with: .title2)
+      )
+      // force text to hug tightly to avoid height changes during animation
+      .contentHuggingPriority(.required, for: .vertical)
 
       Label.groupItem(
         dataID: DataID.subtitle,
         content: content.subtitle,
-        style: Label.Style.style(with: .body))
-        // force text to hug tightly to avoid height changes during animation
-        .contentHuggingPriority(.required, for: .vertical)
+        style: Label.Style.style(with: .body)
+      )
+      // force text to hug tightly to avoid height changes during animation
+      .contentHuggingPriority(.required, for: .vertical)
 
       if let revealOptionsText = content.revealOptionsButton {
         Button.groupItem(
@@ -60,7 +58,8 @@ final class DynamicRow: BaseRow, EpoxyableView {
           behaviors: .init { [weak self] _ in
             self?.didTapRevealOptions?()
           },
-          style: .init())
+          style: .init()
+        )
       } else if let options = content.options {
         options.map { option in
           Button.groupItem(
@@ -69,14 +68,16 @@ final class DynamicRow: BaseRow, EpoxyableView {
             behaviors: .init { [weak self] _ in
               self?.didTapOption?(option)
             },
-            style: .init())
+            style: .init()
+          )
         }
       }
 
       Label.groupItem(
         dataID: DataID.footer,
         content: content.footer,
-        style: .style(with: .footnote))
+        style: .style(with: .footnote)
+      )
     }
   }
 

@@ -15,14 +15,15 @@ public protocol BarContainer: BarStackView {
   /// the bar view.
   var viewController: UIViewController? { get set }
 
+  /// The inset behavior of this bar container.
+  var insetBehavior: BarContainerInsetBehavior { get set }
+
   /// Adds this container to the given superview.
   func add(to superview: UIView)
 
   /// Removes this container from its current superview.
   func remove()
 
-  /// The inset behavior of this bar container.
-  var insetBehavior: BarContainerInsetBehavior { get set }
 }
 
 // MARK: - BarContainerInsetBehavior
@@ -142,9 +143,9 @@ extension InternalBarContainer {
     setNeedsLayout()
   }
 
-  // Adjusts the content inset of the given scroll views based on the `insetBehavior`.
-  //
-  // Should be called whenever the frame (bounds.size/center) or safe area of this bar changes.
+  /// Adjusts the content inset of the given scroll views based on the `insetBehavior`.
+  ///
+  /// Should be called whenever the frame (bounds.size/center) or safe area of this bar changes.
   func updateScrollViewInset(_ scrollViews: [UIScrollView], margin: CGFloat) {
     guard insetBehavior == .barHeightContentInset || needsScrollViewInsetReset else { return }
 
@@ -189,7 +190,7 @@ extension InternalBarContainer {
     }
   }
 
-  // Adjusts the additional safe area inset of the view controller based on the `insetBehavior`.
+  /// Adjusts the additional safe area inset of the view controller based on the `insetBehavior`.
   func updateAdditionalSafeAreaInset(_ inset: CGFloat?, hasHierarchyScaleTransform: Bool) {
     guard let viewController = viewController else { return }
 
@@ -215,12 +216,14 @@ extension InternalBarContainer {
 
     EpoxyLogger.shared.assert(
       viewController.isViewLoaded,
-      "The view controller's view should be loaded when it has a bar container added")
+      "The view controller's view should be loaded when it has a bar container added"
+    )
 
     // Bar pinning won't work within a scroll view, e.g. with `UITableViewController`.
     EpoxyLogger.shared.assert(
       !(viewController.view is UIScrollView),
-      "The view controller's view must not be a scroll view. Nest any scroll views in a container.")
+      "The view controller's view must not be a scroll view. Nest any scroll views in a container."
+    )
   }
 
   /// Sets the `layoutMargin` corresponding to the container's `position`
@@ -263,7 +266,8 @@ extension InternalBarContainer {
 
     EpoxyLogger.shared.assert(
       others.count < 2,
-      "Found two or more bar containers in \(viewController as Any): \(others + [self]). This is programmer error.")
+      "Found two or more bar containers in \(viewController as Any): \(others + [self]). This is programmer error."
+    )
 
     return others.first
   }

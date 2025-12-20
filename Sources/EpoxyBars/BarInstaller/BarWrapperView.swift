@@ -52,8 +52,6 @@ public final class BarWrapperView: UIView {
     _setModel(model, animated: animated)
   }
 
-  // MARK: UIView
-
   public override func layoutSubviews() {
     super.layoutSubviews()
 
@@ -72,6 +70,7 @@ public final class BarWrapperView: UIView {
     case .max:
       view.layoutMargins.top = max(layoutMargins.top, margins.top)
       view.layoutMargins.bottom = max(layoutMargins.bottom, margins.bottom)
+
     case .sum:
       view.layoutMargins.top = layoutMargins.top + margins.top
       view.layoutMargins.bottom = layoutMargins.bottom + margins.bottom
@@ -173,7 +172,8 @@ public final class BarWrapperView: UIView {
         """
         Unable to extract an InternalBarModeling from \(underlyingBarModel), nesting BarModeling models \
         deeper than two layers is not supported
-        """)
+        """
+      )
       return
     }
 
@@ -194,7 +194,8 @@ public final class BarWrapperView: UIView {
       let view = makeView(
         from: model,
         originalModel: originalModel as? InternalBarModeling,
-        animated: animated)
+        animated: animated
+      )
       let animations = { self.view = view }
       if animated {
         // We do not allow consumers to pass in this duration as they can configure it by wrapping
@@ -207,7 +208,8 @@ public final class BarWrapperView: UIView {
           completion: { [weak self] _ in
             guard let self = self else { return }
             model.didDisplay(view, traitCollection: self.traitCollection, animated: animated)
-          })
+          }
+        )
       } else {
         animations()
         model.didDisplay(view, traitCollection: traitCollection, animated: animated)
@@ -218,9 +220,8 @@ public final class BarWrapperView: UIView {
   private func makeView(
     from model: InternalBarModeling,
     originalModel: InternalBarModeling?,
-    animated: Bool)
-    -> UIView
-  {
+    animated: Bool
+  ) -> UIView {
     let view = model.makeConfiguredView(traitCollection: traitCollection)
 
     willDisplayBar?(view)

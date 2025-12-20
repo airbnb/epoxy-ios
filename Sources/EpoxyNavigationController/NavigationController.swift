@@ -53,9 +53,8 @@ open class NavigationController: UINavigationController {
   @discardableResult
   open override func popToViewController(
     _ viewController: UIViewController,
-    animated: Bool)
-    -> [UIViewController]?
-  {
+    animated: Bool
+  ) -> [UIViewController]? {
     guard let popped = super.popToViewController(viewController, animated: animated) else {
       return nil
     }
@@ -70,18 +69,18 @@ open class NavigationController: UINavigationController {
 
   // MARK: Public
 
-  // MARK: UINavigationController
-
   @available(*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
   public final override func setViewControllers(_: [UIViewController], animated _: Bool) {
     EpoxyLogger.shared.assertionFailure(
-      "Manual management of view controllers is not allowed, use `setStack(...)`")
+      "Manual management of view controllers is not allowed, use `setStack(...)`"
+    )
   }
 
   @available(*, unavailable, message: "Manual management is not allowed, use `setStack(...)`")
   public final override func pushViewController(_: UIViewController, animated _: Bool) {
     EpoxyLogger.shared.assertionFailure(
-      "Manual management of view controllers is not allowed, use `setStack(...)`")
+      "Manual management of view controllers is not allowed, use `setStack(...)`"
+    )
   }
 
   /// Updates the navigation stack to the provided array of navigation models, optionally animating

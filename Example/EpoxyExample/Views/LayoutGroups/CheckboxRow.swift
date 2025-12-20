@@ -40,19 +40,23 @@ final class CheckboxRow: BaseRow, EpoxyableView {
         content: UIImage(systemName: content.isChecked ? "checkmark.square.fill" : "checkmark.square"),
         style: .init(
           size: .init(width: 24, height: 24),
-          tintColor: content.isChecked ? .systemGreen : .systemGray))
+          tintColor: content.isChecked ? .systemGreen : .systemGray
+        )
+      )
       VGroupItem(
         dataID: DataID.verticalGroup,
-        style: .init(spacing: 4))
-      {
+        style: .init(spacing: 4)
+      ) {
         Label.groupItem(
           dataID: DataID.title,
           content: content.title,
-          style: .style(with: .title2))
+          style: .style(with: .title2)
+        )
         Label.groupItem(
           dataID: DataID.subtitle,
           content: content.subtitle,
-          style: .style(with: .body))
+          style: .style(with: .body)
+        )
       }
     }
   }

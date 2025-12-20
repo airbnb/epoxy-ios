@@ -53,9 +53,10 @@ final class PresentationQueueSpec: QuickSpec {
         dataID: PresentationID.one,
         presentation: presentation,
         makeViewController: { presented },
-        dismiss: { boolPresentedBacking = false })
-        .didPresent { didPresent.append(()) }
-        .didDismiss { didDismiss.append(()) }
+        dismiss: { boolPresentedBacking = false }
+      )
+      .didPresent { didPresent.append(()) }
+      .didDismiss { didDismiss.append(()) }
 
       optionalPresentedBacking = 1
       optionalModel = PresentationModel(
@@ -63,9 +64,10 @@ final class PresentationQueueSpec: QuickSpec {
         dataID: PresentationID.one,
         presentation: presentation,
         makeViewController: { _ in presented },
-        dismiss: { optionalPresentedBacking = nil })
-        .didPresent { didPresent.append(()) }
-        .didDismiss { didDismiss.append(()) }
+        dismiss: { optionalPresentedBacking = nil }
+      )
+      .didPresent { didPresent.append(()) }
+      .didDismiss { didDismiss.append(()) }
     }
 
     afterEach {
@@ -127,7 +129,8 @@ final class PresentationQueueSpec: QuickSpec {
                 dataID: PresentationID.one,
                 presentation: .system,
                 makeViewController: { nil },
-                dismiss: { boolPresentedBacking = false })
+                dismiss: { boolPresentedBacking = false }
+              )
 
               presenter.setPresentation(boolModel, animated: true)
 
@@ -143,7 +146,8 @@ final class PresentationQueueSpec: QuickSpec {
                 dataID: PresentationID.one,
                 presentation: .system,
                 makeViewController: { _ in nil },
-                dismiss: { optionalPresentedBacking = nil })
+                dismiss: { optionalPresentedBacking = nil }
+              )
 
               presenter.setPresentation(optionalModel, animated: true)
 
@@ -193,14 +197,16 @@ final class PresentationQueueSpec: QuickSpec {
                 dataID: PresentationID.one,
                 presentation: .system,
                 makeViewController: { otherPresented },
-                dismiss: { otherBoolPresentedBacking = false })
+                dismiss: { otherBoolPresentedBacking = false }
+              )
               otherOptionalPresentedBacking = 2
               otherOptionalModel = PresentationModel(
                 params: otherOptionalPresentedBacking,
                 dataID: PresentationID.one,
                 presentation: .system,
                 makeViewController: { _ in otherPresented },
-                dismiss: { otherOptionalPresentedBacking = nil })
+                dismiss: { otherOptionalPresentedBacking = nil }
+              )
             }
 
             afterEach {
@@ -339,7 +345,8 @@ final class PresentationQueueSpec: QuickSpec {
                     dataID: PresentationID.one,
                     presentation: .system,
                     makeViewController: { nil },
-                    dismiss: { otherBoolPresentedBacking = false })
+                    dismiss: { otherBoolPresentedBacking = false }
+                  )
                 }
 
                 it("should keep the current dismissal") {
@@ -373,7 +380,8 @@ final class PresentationQueueSpec: QuickSpec {
                 dataID: PresentationID.two,
                 presentation: .system,
                 makeViewController: { _ in otherPresented },
-                dismiss: { optionalPresentedBacking = nil })
+                dismiss: { optionalPresentedBacking = nil }
+              )
             }
 
             afterEach {
@@ -532,7 +540,8 @@ final class PresentationQueueSpec: QuickSpec {
                   dataID: PresentationID.two,
                   presentation: .system,
                   makeViewController: { _ in otherPresented },
-                  dismiss: { optionalPresentedBacking = nil })
+                  dismiss: { optionalPresentedBacking = nil }
+                )
               }
 
               it("should present a new set model during dismissal once complete") {
@@ -607,7 +616,8 @@ final class MockPresentingViewController: UIViewController {
   var present: (
     presented: UIViewController,
     animated: Bool,
-    completion: (() -> Void)?)?
+    completion: (() -> Void)?
+  )?
 
   override var transitionCoordinator: UIViewControllerTransitionCoordinator? {
     coordinator
@@ -616,8 +626,8 @@ final class MockPresentingViewController: UIViewController {
   override func present(
     _ viewControllerToPresent: UIViewController,
     animated: Bool,
-    completion: (() -> Void)? = nil)
-  {
+    completion: (() -> Void)? = nil
+  ) {
     coordinator = StubTransitionCoordinator()
     present = (presented: viewControllerToPresent, animated: animated, completion: completion)
   }

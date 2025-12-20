@@ -34,7 +34,8 @@ protocol InternalSupplementaryItemModeling: SupplementaryItemModeling,
   func configure(
     reusableView: CollectionViewReusableView,
     traitCollection: UITraitCollection,
-    animated: Bool)
+    animated: Bool
+  )
 
   /// Creates view for this supplementary item. This should only be used to create a view outside of a collection
   /// view.
@@ -49,17 +50,20 @@ protocol InternalSupplementaryItemModeling: SupplementaryItemModeling,
   func setBehavior(
     reusableView: CollectionViewReusableView,
     traitCollection: UITraitCollection,
-    animated: Bool)
+    animated: Bool
+  )
 
   /// Informs consumers that this item is about to be displayed.
   func handleWillDisplay(
     _ view: CollectionViewReusableView,
     traitCollection: UITraitCollection,
-    animated: Bool)
+    animated: Bool
+  )
 
   /// Informs consumers that this item is no longer displayed.
   func handleDidEndDisplaying(
     _ view: CollectionViewReusableView,
     traitCollection: UITraitCollection,
-    animated: Bool)
+    animated: Bool
+  )
 }

@@ -41,10 +41,10 @@ final class ColorView: UIView, EpoxyableView {
 // MARK: - ColorView.Style
 
 extension ColorView.Style {
-  static var red: ColorView.Style = .init(color: .systemRed)
-  static var orange: ColorView.Style = .init(color: .systemOrange)
-  static var yellow: ColorView.Style = .init(color: .systemYellow)
-  static var green: ColorView.Style = .init(color: .systemGreen)
-  static var blue: ColorView.Style = .init(color: .systemBlue)
-  static var purple: ColorView.Style = .init(color: .systemPurple)
+  static var red = ColorView.Style(color: .systemRed)
+  static var orange = ColorView.Style(color: .systemOrange)
+  static var yellow = ColorView.Style(color: .systemYellow)
+  static var green = ColorView.Style(color: .systemGreen)
+  static var blue = ColorView.Style(color: .systemBlue)
+  static var purple = ColorView.Style(color: .systemPurple)
 }

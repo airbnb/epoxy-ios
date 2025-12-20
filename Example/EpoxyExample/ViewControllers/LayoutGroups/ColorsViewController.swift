@@ -4,7 +4,7 @@
 import EpoxyCollectionView
 import UIKit
 
-class ColorsViewController: CollectionViewController {
+final class ColorsViewController: CollectionViewController {
 
   // MARK: Lifecycle
 

@@ -26,7 +26,8 @@ final class TextRow: UIView, EpoxyableView {
   // MARK: Internal
 
   enum Style {
-    case small, large
+    case small
+    case large
   }
 
   struct Content: Equatable {
@@ -42,6 +43,7 @@ final class TextRow: UIView, EpoxyableView {
     case .large:
       titleStyle = .headline
       bodyStyle = .body
+
     case .small:
       titleStyle = .body
       bodyStyle = .caption1
@@ -52,18 +54,20 @@ final class TextRow: UIView, EpoxyableView {
         Label.groupItem(
           dataID: DataID.title,
           content: title,
-          style: .style(with: titleStyle))
-          .adjustsFontForContentSizeCategory(true)
-          .textColor(UIColor.label)
+          style: .style(with: titleStyle)
+        )
+        .adjustsFontForContentSizeCategory(true)
+        .textColor(UIColor.label)
       }
       if let body = content.body {
         Label.groupItem(
           dataID: DataID.body,
           content: body,
-          style: .style(with: bodyStyle))
-          .adjustsFontForContentSizeCategory(true)
-          .numberOfLines(0)
-          .textColor(UIColor.secondaryLabel)
+          style: .style(with: bodyStyle)
+        )
+        .adjustsFontForContentSizeCategory(true)
+        .numberOfLines(0)
+        .textColor(UIColor.secondaryLabel)
       }
     }
   }

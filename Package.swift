@@ -29,7 +29,8 @@ let package = Package(
         "EpoxyNavigationController",
         "EpoxyPresentations",
         "EpoxyLayoutGroups",
-      ]),
+      ]
+    ),
     .target(name: "EpoxyCore"),
     .target(name: "EpoxyCollectionView", dependencies: ["EpoxyCore"]),
     .target(name: "EpoxyBars", dependencies: ["EpoxyCore"]),
@@ -38,7 +39,8 @@ let package = Package(
     .target(name: "EpoxyLayoutGroups", dependencies: ["EpoxyCore"]),
     .testTarget(name: "EpoxyTests", dependencies: ["Epoxy", "Quick", "Nimble"]),
     .testTarget(name: "PerformanceTests", dependencies: ["EpoxyCore"]),
-  ])
+  ]
+)
 
 #if swift(>=5.6)
 // Add the Airbnb Swift formatting plugin if possible

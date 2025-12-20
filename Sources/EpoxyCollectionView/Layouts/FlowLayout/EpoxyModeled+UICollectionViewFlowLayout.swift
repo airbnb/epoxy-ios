@@ -29,7 +29,8 @@ extension EpoxyModeled where Self: UICollectionViewFlowLayoutItemSizeProvider {
     .init(
       keyPath: \UICollectionViewFlowLayoutItemSizeProvider.flowLayoutItemSize,
       defaultValue: nil,
-      updateStrategy: .replace)
+      updateStrategy: .replace
+    )
   }
 
 }
@@ -71,7 +72,8 @@ extension EpoxyModeled where Self: UICollectionViewFlowLayoutSectionInsetProvide
     .init(
       keyPath: \UICollectionViewFlowLayoutSectionInsetProvider.flowLayoutSectionInset,
       defaultValue: nil,
-      updateStrategy: .replace)
+      updateStrategy: .replace
+    )
   }
 
 }
@@ -105,7 +107,8 @@ extension EpoxyModeled where Self: UICollectionViewFlowLayoutMinimumLineSpacingP
     .init(
       keyPath: \UICollectionViewFlowLayoutMinimumLineSpacingProvider.flowLayoutMinimumLineSpacing,
       defaultValue: nil,
-      updateStrategy: .replace)
+      updateStrategy: .replace
+    )
   }
 
 }
@@ -139,7 +142,8 @@ extension EpoxyModeled where Self: UICollectionViewFlowLayoutMinimumInteritemSpa
     .init(
       keyPath: \UICollectionViewFlowLayoutMinimumInteritemSpacing.flowLayoutMinimumInteritemSpacing,
       defaultValue: nil,
-      updateStrategy: .replace)
+      updateStrategy: .replace
+    )
   }
 
 }
@@ -173,7 +177,8 @@ extension EpoxyModeled where Self: UICollectionViewFlowLayoutHeaderReferenceSize
     .init(
       keyPath: \UICollectionViewFlowLayoutHeaderReferenceSizeProvider.flowLayoutHeaderReferenceSize,
       defaultValue: nil,
-      updateStrategy: .replace)
+      updateStrategy: .replace
+    )
   }
 
 }
@@ -207,7 +212,8 @@ extension EpoxyModeled where Self: UICollectionViewFlowLayoutFooterReferenceSize
     .init(
       keyPath: \UICollectionViewFlowLayoutFooterReferenceSizeProvider.flowLayoutFooterReferenceSize,
       defaultValue: nil,
-      updateStrategy: .replace)
+      updateStrategy: .replace
+    )
   }
 
 }

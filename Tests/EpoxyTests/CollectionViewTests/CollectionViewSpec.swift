@@ -29,7 +29,8 @@ final class CollectionViewSpec: QuickSpec {
     let cell = CollectionViewCell(frame: .zero)
     cell.itemPath = .init(
       itemDataID: DefaultDataID.noneProvided,
-      section: .dataID(DefaultDataID.noneProvided))
+      section: .dataID(DefaultDataID.noneProvided)
+    )
     return cell
   }
 
@@ -38,7 +39,8 @@ final class CollectionViewSpec: QuickSpec {
     cell.itemPath = .init(
       elementKind: UICollectionView.elementKindSectionHeader,
       itemDataID: DefaultDataID.noneProvided,
-      section: .dataID(DefaultDataID.noneProvided))
+      section: .dataID(DefaultDataID.noneProvided)
+    )
     return cell
   }
 
@@ -104,7 +106,8 @@ final class CollectionViewSpec: QuickSpec {
             collectionView.delegate?.collectionView?(
               collectionView,
               willDisplay: self.mockCell,
-              forItemAt: IndexPath(item: 0, section: 0))
+              forItemAt: IndexPath(item: 0, section: 0)
+            )
           }
 
           it("should call willAppear") {
@@ -118,7 +121,8 @@ final class CollectionViewSpec: QuickSpec {
             collectionView.delegate?.collectionView?(
               collectionView,
               didEndDisplaying: self.mockCell,
-              forItemAt: IndexPath(item: 0, section: 0))
+              forItemAt: IndexPath(item: 0, section: 0)
+            )
           }
 
           it("should call didEndDisplaying") {
@@ -177,7 +181,8 @@ final class CollectionViewSpec: QuickSpec {
               collectionView,
               willDisplaySupplementaryView: self.mockHeaderView,
               forElementKind: UICollectionView.elementKindSectionHeader,
-              at: IndexPath(item: 0, section: 0))
+              at: IndexPath(item: 0, section: 0)
+            )
           }
 
           it("should call willAppear") {
@@ -192,7 +197,8 @@ final class CollectionViewSpec: QuickSpec {
               collectionView,
               didEndDisplayingSupplementaryView: self.mockHeaderView,
               forElementOfKind: UICollectionView.elementKindSectionHeader,
-              at: IndexPath(item: 0, section: 0))
+              at: IndexPath(item: 0, section: 0)
+            )
           }
 
           it("should call didEndDisplaying") {
@@ -239,7 +245,8 @@ final class CollectionViewSpec: QuickSpec {
               collectionView.delegate?.collectionView?(
                 collectionView,
                 willDisplay: self.mockCell,
-                forItemAt: IndexPath(item: 0, section: 0))
+                forItemAt: IndexPath(item: 0, section: 0)
+              )
             }
 
             it("should call willAppear") {
@@ -255,7 +262,8 @@ final class CollectionViewSpec: QuickSpec {
                 collectionView.delegate?.collectionView?(
                   collectionView,
                   didEndDisplaying: self.mockCell,
-                  forItemAt: IndexPath(item: 0, section: 0))
+                  forItemAt: IndexPath(item: 0, section: 0)
+                )
               }
 
               it("should call didEndDisplaying") {
@@ -267,7 +275,8 @@ final class CollectionViewSpec: QuickSpec {
                   collectionView.delegate?.collectionView?(
                     collectionView,
                     willDisplay: self.mockCell,
-                    forItemAt: IndexPath(item: 0, section: 0))
+                    forItemAt: IndexPath(item: 0, section: 0)
+                  )
                 }
 
                 it("should call willAppear again") {
@@ -286,7 +295,8 @@ final class CollectionViewSpec: QuickSpec {
                   collectionView,
                   willDisplaySupplementaryView: self.mockHeaderView,
                   forElementKind: UICollectionView.elementKindSectionHeader,
-                  at: IndexPath(item: 0, section: 0))
+                  at: IndexPath(item: 0, section: 0)
+                )
               }
 
               it("should not call willAppear again") {
@@ -298,12 +308,14 @@ final class CollectionViewSpec: QuickSpec {
                   collectionView.delegate?.collectionView?(
                     collectionView,
                     didEndDisplaying: self.mockCell,
-                    forItemAt: IndexPath(item: 0, section: 0))
+                    forItemAt: IndexPath(item: 0, section: 0)
+                  )
                   collectionView.delegate?.collectionView?(
                     collectionView,
                     didEndDisplayingSupplementaryView: self.mockHeaderView,
                     forElementOfKind: UICollectionView.elementKindSectionHeader,
-                    at: IndexPath(item: 0, section: 0))
+                    at: IndexPath(item: 0, section: 0)
+                  )
                 }
 
                 it("should not call willAppear again") {
@@ -531,7 +543,8 @@ final class CollectionViewSpec: QuickSpec {
             // didHighlightItemAt is being used to trigger didChangeState
             collectionView.delegate?.collectionView?(
               collectionView,
-              didHighlightItemAt: IndexPath(item: 0, section: 0))
+              didHighlightItemAt: IndexPath(item: 0, section: 0)
+            )
           }
 
           it("should call didSetBehaviors") {
@@ -578,7 +591,8 @@ final class CollectionViewSpec: QuickSpec {
         beforeEach {
           collectionView.delegate?.collectionView?(
             collectionView,
-            didSelectItemAt: IndexPath(item: 0, section: 0))
+            didSelectItemAt: IndexPath(item: 0, section: 0)
+          )
         }
 
         it("should call didSelect") {
@@ -604,14 +618,16 @@ final class CollectionViewSpec: QuickSpec {
           dataID: TestID.section,
           items: [
             itemModel.dataID(TestID.item)
-              .makeView { itemView },
-          ])
-          .supplementaryItems(
-            ofKind: UICollectionView.elementKindSectionHeader,
-            [
-              supplementaryItemModel.dataID(TestID.supplementaryItem)
-                .makeView { supplementaryItemView },
-            ])
+              .makeView { itemView }
+          ]
+        )
+        .supplementaryItems(
+          ofKind: UICollectionView.elementKindSectionHeader,
+          [
+            supplementaryItemModel.dataID(TestID.supplementaryItem)
+              .makeView { supplementaryItemView }
+          ]
+        )
 
         collectionView.setSections([section], animated: false)
         // Required to prevent a index path out of bounds exception during selection.

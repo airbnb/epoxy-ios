@@ -19,6 +19,9 @@ public protocol InternalItemModeling: ItemModeling,
   SelectionStyleProviding,
   IsMovableProviding
 {
+  /// Whether the cell should be selectable.
+  var isSelectable: Bool { get }
+
   /// Configures the cell for presentation.
   func configure(cell: ItemWrapperView, with metadata: ItemCellMetadata)
 
@@ -38,9 +41,6 @@ public protocol InternalItemModeling: ItemModeling,
 
   /// Informs consumers that this item is no longer displayed.
   func handleDidEndDisplaying(_ cell: ItemWrapperView, with metadata: ItemCellMetadata)
-
-  /// Whether the cell should be selectable.
-  var isSelectable: Bool { get }
 
   /// Creates view for this item. This should only be used to create a view outside of a collection
   /// view.

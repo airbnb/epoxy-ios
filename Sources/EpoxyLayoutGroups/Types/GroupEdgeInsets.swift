@@ -19,8 +19,8 @@ public struct GroupEdgeInsets: Hashable {
     top: CGFloat,
     leading: CGFloat,
     bottom: CGFloat,
-    trailing: CGFloat)
-  {
+    trailing: CGFloat
+  ) {
     self.top = .fixed(top)
     self.leading = .fixed(leading)
     self.bottom = .fixed(bottom)
@@ -37,8 +37,8 @@ public struct GroupEdgeInsets: Hashable {
     top: AdaptiveFloat,
     leading: AdaptiveFloat,
     bottom: AdaptiveFloat,
-    trailing: AdaptiveFloat)
-  {
+    trailing: AdaptiveFloat
+  ) {
     self.top = top
     self.leading = leading
     self.bottom = bottom
@@ -47,10 +47,8 @@ public struct GroupEdgeInsets: Hashable {
 
   // MARK: Public
 
-  // MARK: AdaptiveFloat
-
-  // This type is nested to avoid conflicts with types like this that are common
-  // in other codebases
+  /// This type is nested to avoid conflicts with types like this that are common
+  /// in other codebases
   public enum AdaptiveFloat: Equatable, Hashable {
     /// Holds a single style for both size classes
     case fixed(CGFloat)
@@ -63,7 +61,8 @@ public struct GroupEdgeInsets: Hashable {
       compact: CGFloat,
       compactAccessibilitySizes: CGFloat,
       regular: CGFloat,
-      regularAccessibilitySizes: CGFloat)
+      regularAccessibilitySizes: CGFloat
+    )
   }
 
   public let top: AdaptiveFloat
@@ -76,7 +75,8 @@ public struct GroupEdgeInsets: Hashable {
       top: top.value(with: traitCollection),
       left: leading.value(with: traitCollection),
       bottom: bottom.value(with: traitCollection),
-      right: trailing.value(with: traitCollection))
+      right: trailing.value(with: traitCollection)
+    )
   }
 
   public func directionalEdgeInsets(with traitCollection: UITraitCollection) -> NSDirectionalEdgeInsets {
@@ -84,7 +84,8 @@ public struct GroupEdgeInsets: Hashable {
       top: top.value(with: traitCollection),
       leading: leading.value(with: traitCollection),
       bottom: bottom.value(with: traitCollection),
-      trailing: trailing.value(with: traitCollection))
+      trailing: trailing.value(with: traitCollection)
+    )
   }
 }
 
@@ -115,7 +116,8 @@ extension GroupEdgeInsets.AdaptiveFloat {
       compact: let compact,
       compactAccessibilitySizes: let compactAccessibility,
       regular: let regular,
-      regularAccessibilitySizes: let regularAccessibility):
+      regularAccessibilitySizes: let regularAccessibility
+    ):
       switch (traitCollection.horizontalSizeClass, traitCollection.preferredContentSizeCategory.isAccessibilityCategory) {
       case (.compact, false), (.unspecified, false):
         return compact

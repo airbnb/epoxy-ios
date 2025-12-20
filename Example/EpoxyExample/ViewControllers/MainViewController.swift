@@ -32,7 +32,8 @@ final class MainViewController: NavigationController {
     didSet { setStack(stack, animated: true) }
   }
 
-  @NavigationModelBuilder private var stack: [NavigationModel] {
+  @NavigationModelBuilder
+  private var stack: [NavigationModel] {
     NavigationModel.root(dataID: DataID.index) { [weak self] in
       self?.makeExampleIndexViewController()
     }
@@ -45,7 +46,8 @@ final class MainViewController: NavigationController {
         },
         remove: { [weak self] in
           self?.state.showExample = nil
-        })
+        }
+      )
     }
 
     if let example = state.showReadmeExample {
@@ -56,7 +58,8 @@ final class MainViewController: NavigationController {
         },
         remove: { [weak self] in
           self?.state.showReadmeExample = nil
-        })
+        }
+      )
     }
 
     if let example = state.showLayoutGroupsExample {
@@ -67,7 +70,8 @@ final class MainViewController: NavigationController {
         },
         remove: { [weak self] in
           self?.state.showLayoutGroupsExample = nil
-        })
+        }
+      )
     }
   }
 
@@ -79,12 +83,14 @@ final class MainViewController: NavigationController {
           TextRow.itemModel(
             dataID: example,
             content: .init(title: example.title, body: example.body),
-            style: .small)
-            .didSelect { [weak self] _ in
-              self?.state.showExample = example
-            }
+            style: .small
+          )
+          .didSelect { [weak self] _ in
+            self?.state.showExample = example
+          }
         }
-      })
+      }
+    )
     viewController.title = "Epoxy"
     return viewController
   }
@@ -96,32 +102,46 @@ final class MainViewController: NavigationController {
       viewController = CollectionViewController.readmeExamplesViewController(
         didSelect: { [weak self] example in
           self?.state.showReadmeExample = example
-        })
+        }
+      )
+
     case .compositionalLayout:
       viewController = CompositionalLayoutViewController()
+
     case .shuffle:
       viewController = ShuffleViewController()
+
     case .customSelfSizing:
       viewController = CustomSelfSizingContentViewController()
+
     case .product:
       viewController = ProductViewController()
+
     case .flowLayout:
       viewController = FlowLayoutViewController()
+
     case .cardStack:
       viewController = CardStackViewController()
+
     case .textField:
       viewController = TextFieldViewController()
+
     case .layoutGroups:
       viewController = CollectionViewController.layoutGroupsExampleViewController(
         didSelect: { [weak self] example in
           self?.state.showLayoutGroupsExample = example
-        })
+        }
+      )
+
     case .swiftUIToEpoxy:
       return SwiftUIInEpoxyViewController()
+
     case .epoxyToSwiftUI:
       return EpoxyInSwiftUIViewController()
+
     case .epoxyToSwiftUISizingStrategies:
       return EpoxyInSwiftUISizingStrategiesViewController()
+
     case .swiftUIToEpoxyResizing:
       return SwiftUIInEpoxyResizingViewController()
     }

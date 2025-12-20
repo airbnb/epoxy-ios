@@ -23,10 +23,8 @@ final class AlignableTextRow: BaseRow, EpoxyableView {
 
   // MARK: Internal
 
-  // MARK: EpoxyableView
-
   struct Style: Hashable {
-    var titleAlignment: VGroup.ItemAlignment = .leading
+    var titleAlignment = VGroup.ItemAlignment.leading
     var showLabelBackgrounds = false
   }
 
@@ -42,14 +40,16 @@ final class AlignableTextRow: BaseRow, EpoxyableView {
       Label.groupItem(
         dataID: DataID.title,
         content: content.title,
-        style: .style(with: .title2, showBackground: showLabelBackgrounds))
-        .horizontalAlignment(style.titleAlignment)
+        style: .style(with: .title2, showBackground: showLabelBackgrounds)
+      )
+      .horizontalAlignment(style.titleAlignment)
 
       if let subtitle = content.subtitle {
         Label.groupItem(
           dataID: DataID.subtitle,
           content: subtitle,
-          style: .style(with: .body, showBackground: showLabelBackgrounds))
+          style: .style(with: .body, showBackground: showLabelBackgrounds)
+        )
       }
     }
   }

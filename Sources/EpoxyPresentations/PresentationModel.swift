@@ -32,12 +32,13 @@ public struct PresentationModel {
     dataID: AnyHashable,
     presentation: Presentation,
     makeViewController: @escaping () -> UIViewController?,
-    dismiss: @escaping () -> Void)
-  {
+    dismiss: @escaping () -> Void
+  ) {
     self.init(
       dataID: dataID,
       makePresentable: { makeViewController().map(presentation.present) },
-      dismiss: dismiss)
+      dismiss: dismiss
+    )
   }
 
   /// Constructs a presentation model identified by its `dataID`, able to create a
@@ -63,13 +64,14 @@ public struct PresentationModel {
     dataID: AnyHashable,
     presentation: Presentation,
     makeViewController: @escaping (Params) -> UIViewController?,
-    dismiss: @escaping () -> Void)
-  {
+    dismiss: @escaping () -> Void
+  ) {
     self.init(
       params: params,
       dataID: dataID,
       makePresentable: { makeViewController($0).map(presentation.present) },
-      dismiss: dismiss)
+      dismiss: dismiss
+    )
   }
 
   // MARK: Public
@@ -143,7 +145,9 @@ public struct PresentationModel {
 // MARK: Diffable
 
 extension PresentationModel: Diffable {
-  public var diffIdentifier: AnyHashable { dataID }
+  public var diffIdentifier: AnyHashable {
+    dataID
+  }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let otherDiffableItem = otherDiffableItem as? PresentationModel else { return false }
@@ -174,8 +178,8 @@ extension PresentationModel {
   public init(
     dataID: AnyHashable,
     makePresentable: @escaping () -> Presentable?,
-    dismiss: @escaping () -> Void)
-  {
+    dismiss: @escaping () -> Void
+  ) {
     self.dataID = dataID
     value = ()
     _makePresentable = makePresentable
@@ -209,8 +213,8 @@ extension PresentationModel {
     params: Params,
     dataID: AnyHashable,
     makePresentable: @escaping (Params) -> Presentable?,
-    dismiss: @escaping () -> Void)
-  {
+    dismiss: @escaping () -> Void
+  ) {
     self.dataID = dataID
     _makePresentable = { makePresentable(params) }
     _dismiss = dismiss
@@ -294,12 +298,14 @@ extension PresentationModel.Presentation {
               guard token != nil else { return }
               token = nil
               didDismiss()
-            })
+            }
+          )
 
         context.presenting.present(
           presented,
           animated: context.animated,
-          completion: context.didPresent)
+          completion: context.didPresent
+        )
 
         return { [weak presented] animated, completion in
           // Dismiss using `presentingViewController` instead of `context.presenting` to handle the

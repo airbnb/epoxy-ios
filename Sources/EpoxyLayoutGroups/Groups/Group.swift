@@ -79,7 +79,8 @@ extension Constrainable where Self: InternalGroup {
     guard index >= 0, index < constrainableContainers.count else {
       EpoxyLogger.shared
         .assertionFailure(
-          "Attempt to access a constrainable out of bounds. Make sure you've called this method only after updating the group, the view has rendered, and layoutSubviews has been called.")
+          "Attempt to access a constrainable out of bounds. Make sure you've called this method only after updating the group, the view has rendered, and layoutSubviews has been called."
+        )
       return nil
     }
     return constrainableContainers[index].wrapped
@@ -92,7 +93,8 @@ extension Constrainable where Self: InternalGroup {
     guard index >= 0, index < items.count else {
       EpoxyLogger.shared
         .assertionFailure(
-          "Attempt to access a group item out of bounds. Make sure you've called this method only after setting the items on the group.")
+          "Attempt to access a group item out of bounds. Make sure you've called this method only after setting the items on the group."
+        )
       return nil
     }
     return items[index]
@@ -220,10 +222,11 @@ extension Constrainable where Self: InternalGroup {
     guard constrainableContainers.count == items.count else {
       EpoxyLogger.shared
         .assertionFailure(
-          "Containers and items are mismatched, this should never happen and is a failure of the system. Please file a bug report.")
+          "Containers and items are mismatched, this should never happen and is a failure of the system. Please file a bug report."
+        )
       return
     }
-    zip(constrainableContainers, items).forEach { container, item in
+    for (container, item) in zip(constrainableContainers, items) {
       item.setBehaviors(on: container)
     }
   }
@@ -297,7 +300,7 @@ extension Constrainable where Self: InternalGroup {
 
   func resetIndexMap() {
     dataIDIndexMap.removeAll()
-    items.enumerated().forEach { idx, item in
+    for (idx, item) in items.enumerated() {
       dataIDIndexMap[item.dataID] = idx
     }
   }
@@ -308,13 +311,13 @@ extension InternalGroup where Self: UILayoutGuide {
   /// shared implementation of install(in view:)
   func _install(in view: UIView) {
     view.addLayoutGuide(self)
-    constrainableContainers.forEach { $0.install(in: view) }
+    for constrainableContainer in constrainableContainers { constrainableContainer.install(in: view) }
     installConstraintsIfNeeded()
   }
 
   /// shared implementation of uninstall()
   func _uninstall() {
-    constrainableContainers.forEach { $0.uninstall() }
+    for constrainableContainer in constrainableContainers { constrainableContainer.uninstall() }
     owningView?.removeLayoutGuide(self)
   }
 }

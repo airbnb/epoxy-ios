@@ -21,9 +21,8 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
     dataID: AnyHashable? = nil,
     content: Content,
     behaviors: Behaviors? = nil,
-    style: Style)
-    -> BarModel<Self>
-  {
+    style: Style
+  ) -> BarModel<Self> {
     BarModel<Self>(
       dataID: dataID,
       params: style,
@@ -31,10 +30,11 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
       makeView: Self.init(style:),
       setContent: { context, content in
         context.view.setContent(content, animated: context.animated)
-      })
-      .setBehaviors { context in
-        context.view.setBehaviors(behaviors)
       }
+    )
+    .setBehaviors { context in
+      context.view.setBehaviors(behaviors)
+    }
   }
 }
 
@@ -54,18 +54,18 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   public static func barModel(
     dataID: AnyHashable? = nil,
     content: Content,
-    behaviors: Behaviors? = nil)
-    -> BarModel<Self>
-  {
+    behaviors: Behaviors? = nil
+  ) -> BarModel<Self> {
     BarModel<Self>(
       dataID: dataID,
       content: content,
       setContent: { context, content in
         context.view.setContent(content, animated: context.animated)
-      })
-      .setBehaviors { context in
-        context.view.setBehaviors(behaviors)
       }
+    )
+    .setBehaviors { context in
+      context.view.setBehaviors(behaviors)
+    }
   }
 }
 
@@ -84,9 +84,8 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   public static func barModel(
     dataID: AnyHashable? = nil,
     behaviors: Behaviors? = nil,
-    style: Style)
-    -> BarModel<Self>
-  {
+    style: Style
+  ) -> BarModel<Self> {
     BarModel<Self>(dataID: dataID)
       .styleID(style)
       .makeView { Self(style: style) }
@@ -114,9 +113,8 @@ extension StyledView
   /// - Returns: A `BarModel` with an instance of this view as its bar view.
   public static func barModel(
     dataID: AnyHashable? = nil,
-    behaviors: Behaviors? = nil)
-    -> BarModel<Self>
-  {
+    behaviors: Behaviors? = nil
+  ) -> BarModel<Self> {
     BarModel<Self>(dataID: dataID)
       .setBehaviors { context in
         context.view.setBehaviors(behaviors)

@@ -16,8 +16,8 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   ///   - items: the items that this HGroup will render. These can be set later with setItems()
   public init(
     style: Style = .init(),
-    items: [GroupItemModeling] = [])
-  {
+    items: [GroupItemModeling] = []
+  ) {
     let erasedItems = items.eraseToAnyGroupItems()
     animation = style.animation
     alignment = style.alignment
@@ -53,14 +53,16 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     alignment: ItemAlignment = .fill,
     accessibilityAlignment: VGroup.ItemAlignment = .leading,
     spacing: CGFloat = 0,
-    items: [GroupItemModeling] = [])
-  {
+    items: [GroupItemModeling] = []
+  ) {
     self.init(
       style: .init(
         alignment: alignment,
         accessibilityAlignment: accessibilityAlignment,
-        spacing: spacing),
-      items: items)
+        spacing: spacing
+      ),
+      items: items
+    )
   }
 
   /// Creates a new HGroup using a result builder syntax for the items
@@ -69,11 +71,12 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   ///   - content: the builder that provides the items for the group
   public convenience init(
     style: Style = .init(),
-    @GroupModelBuilder _ content: () -> [GroupItemModeling])
-  {
+    @GroupModelBuilder _ content: () -> [GroupItemModeling]
+  ) {
     self.init(
       style: style,
-      items: content())
+      items: content()
+    )
   }
 
   /// Creates a new HGroup using a builder syntax for the items
@@ -91,14 +94,16 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     alignment: ItemAlignment = .fill,
     accessibilityAlignment: VGroup.ItemAlignment = .leading,
     spacing: CGFloat = 0,
-    @GroupModelBuilder _ content: () -> [GroupItemModeling])
-  {
+    @GroupModelBuilder _ content: () -> [GroupItemModeling]
+  ) {
     self.init(
       style: .init(
         alignment: alignment,
         accessibilityAlignment: accessibilityAlignment,
-        spacing: spacing),
-      items: content())
+        spacing: spacing
+      ),
+      items: content()
+    )
   }
 
   @available(*, unavailable)
@@ -135,8 +140,8 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
       spacing: CGFloat = 0,
       reflowsForAccessibilityTypeSizes: Bool = true,
       forceVerticalAccessibilityLayout: Bool = false,
-      animation: LayoutGroupUpdateAnimation = .spring())
-    {
+      animation: LayoutGroupUpdateAnimation = .spring()
+    ) {
       self.alignment = alignment
       self.accessibilityAlignment = accessibilityAlignment
       self.spacing = spacing
@@ -172,9 +177,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   /// initial velocity of `0.0`.
   public let animation: LayoutGroupUpdateAnimation
 
-  // MARK: Group
-
-  public internal(set) var items: [AnyGroupItem] = [] {
+  public internal(set) var items = [AnyGroupItem]() {
     didSet {
       resetIndexMap()
     }
@@ -200,8 +203,6 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   public var spacing: CGFloat {
     didSet { constraints?.itemSpacing = spacing }
   }
-
-  // MARK: Constrainable
 
   public var firstBaselineAnchor: NSLayoutYAxisAnchor {
     constrainableContainers.first?.firstBaselineAnchor ?? topAnchor
@@ -254,8 +255,8 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
 
   // MARK: Internal
 
-  var constrainableContainers: [ConstrainableContainer] = []
-  var dataIDIndexMap: [AnyHashable: Int] = [:]
+  var constrainableContainers = [ConstrainableContainer]()
+  var dataIDIndexMap = [AnyHashable: Int]()
   var constraints: GroupConstraints? = nil
 
   /// This is internal as it's only used for animated changes. If you want to remove
@@ -297,7 +298,8 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
       self,
       selector: #selector(handleContentSizeCategoryChangeNotification(notification:)),
       name: UIContentSizeCategory.didChangeNotification,
-      object: nil)
+      object: nil
+    )
   }
 
   @objc
@@ -325,7 +327,8 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
       for: constrainableContainers,
       in: self,
       groupAlignment: alignment,
-      itemSpacing: spacing)
+      itemSpacing: spacing
+    )
   }
 
   private func accessibilityVerticalAxisConstraints() -> GroupConstraints {
@@ -334,7 +337,8 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
       in: self,
       groupAlignment: accessibilityAlignment,
       itemSpacing: spacing,
-      useAccessibilityAlignment: true)
+      useAccessibilityAlignment: true
+    )
   }
 
 }

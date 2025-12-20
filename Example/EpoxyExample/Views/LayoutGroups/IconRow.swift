@@ -34,7 +34,8 @@ final class IconRow: BaseRow, EpoxyableView {
 
   private let imageView = IconView(
     image: nil,
-    size: .init(width: 24, height: 24))
+    size: .init(width: 24, height: 24)
+  )
   private let titleLabel = Label(style: .style(with: .title2))
 
   private lazy var group = HGroup(spacing: 8) {

@@ -26,7 +26,7 @@ struct TestSection: DiffableSection {
   var diffIdentifier: AnyHashable
   var diffableItems: [Int]
 
-  public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
+  func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let other = otherDiffableItem as? TestSection else {
       return false
     }
@@ -72,7 +72,7 @@ import class GameplayKit.GKMersenneTwisterRandomSource
 
 // MARK: - SeededRandomNumberGenerator
 
-// Adapted from https://stackoverflow.com/a/57370987/4076325
+/// Adapted from https://stackoverflow.com/a/57370987/4076325
 private struct SeededRandomNumberGenerator: RandomNumberGenerator {
 
   init(seed: UInt64) {

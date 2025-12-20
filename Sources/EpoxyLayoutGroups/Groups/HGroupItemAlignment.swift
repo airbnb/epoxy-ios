@@ -35,11 +35,10 @@ extension HGroup {
     ///     constrainable: the constrainable that this alignment is affecting
     case custom(
       alignmentID: AnyHashable,
-      layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint])
+      layoutProvider: (_ container: Constrainable, _ constrainable: Constrainable) -> [NSLayoutConstraint]
+    )
 
     // MARK: Public
-
-    // MARK: Equatable
 
     public static func ==(lhs: ItemAlignment, rhs: ItemAlignment)
       -> Bool
@@ -58,8 +57,6 @@ extension HGroup {
         return false
       }
     }
-
-    // MARK: Hashable
 
     public func hash(into hasher: inout Hasher) {
       switch self {
@@ -81,7 +78,10 @@ extension HGroup {
     // MARK: Private
 
     private enum HashableAlignment {
-      case fill, top, bottom, center
+      case fill
+      case top
+      case bottom
+      case center
     }
   }
 }

@@ -39,8 +39,8 @@ public struct ItemModel<View: UIView>: ViewEpoxyModeled {
   public init<Content: Equatable>(
     dataID: AnyHashable,
     content: Content,
-    setContent: @escaping (CallbackContext, Content) -> Void)
-  {
+    setContent: @escaping (CallbackContext, Content) -> Void
+  ) {
     self.dataID = dataID
     erasedContent = content
     self.setContent = { setContent($0, content) }
@@ -71,8 +71,8 @@ public struct ItemModel<View: UIView>: ViewEpoxyModeled {
     params: Params,
     content: Content,
     makeView: @escaping (Params) -> View,
-    setContent: @escaping (CallbackContext, Content) -> Void)
-  {
+    setContent: @escaping (CallbackContext, Content) -> Void
+  ) {
     self.dataID = dataID
     styleID = params
     erasedContent = content
@@ -105,7 +105,8 @@ public struct ItemModel<View: UIView>: ViewEpoxyModeled {
         """
         Overriding existing view \(cellView) on cell \(cell), which is not of expected type \
         \(View.self). This is programmer error.
-        """)
+        """
+      )
       view = makeView()
     }
     cell.setViewIfNeeded(view: view)
@@ -214,7 +215,8 @@ extension ItemModel: InternalItemModeling {
       view: view,
       traitCollection: traitCollection,
       cellState: .normal,
-      animated: false)
+      animated: false
+    )
     setContent?(context)
     setBehaviors?(context)
     return view
@@ -249,8 +251,8 @@ extension ItemModel: CallbackContextEpoxyModeled {
       view: View,
       traitCollection: UITraitCollection,
       cellState: ItemCellState,
-      animated: Bool)
-    {
+      animated: Bool
+    ) {
       self.view = view
       self.traitCollection = traitCollection
       self.cellState = cellState
@@ -262,7 +264,8 @@ extension ItemModel: CallbackContextEpoxyModeled {
         view: view,
         traitCollection: metadata.traitCollection,
         cellState: metadata.state,
-        animated: metadata.animated)
+        animated: metadata.animated
+      )
     }
 
     // MARK: Public

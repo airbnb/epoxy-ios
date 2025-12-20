@@ -66,7 +66,8 @@ extension StaticGroupItem: InternalGroupItemModeling {
       accessibilityAlignment: accessibilityAlignment,
       horizontalAlignment: horizontalAlignment,
       padding: padding,
-      verticalAlignment: verticalAlignment)
+      verticalAlignment: verticalAlignment
+    )
   }
 
   public func eraseToAnyGroupItem() -> AnyGroupItem {

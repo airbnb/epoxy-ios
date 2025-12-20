@@ -4,7 +4,7 @@
 import EpoxyCollectionView
 import UIKit
 
-class MessagesViewController: CollectionViewController {
+final class MessagesViewController: CollectionViewController {
 
   // MARK: Lifecycle
 
@@ -23,24 +23,30 @@ class MessagesViewController: CollectionViewController {
           name: "Sara Bareilles",
           date: "Jan 25, 2021",
           messagePreview: BeloIpsum.sentence(count: 5),
-          seenText: "Seen"),
-        style: .init(showUnread: true)),
+          seenText: "Seen"
+        ),
+        style: .init(showUnread: true)
+      ),
       MessageRow.itemModel(
         dataID: DataID.beyonce,
         content: .init(
           name: "Beyoncé Knowles",
           date: "Jan 22, 2021",
           messagePreview: BeloIpsum.sentence(count: 2),
-          seenText: "Unread"),
-        style: .init(showUnread: false)),
+          seenText: "Unread"
+        ),
+        style: .init(showUnread: false)
+      ),
       MessageRow.itemModel(
         dataID: DataID.taylor,
         content: .init(
           name: "Taylor Swift",
           date: "Dec 21, 2020",
           messagePreview: BeloIpsum.sentence(count: 1),
-          seenText: "Seen"),
-        style: .init(showUnread: false)),
+          seenText: "Seen"
+        ),
+        style: .init(showUnread: false)
+      ),
     ]
     return Array(repeating: sampleRows, count: 100).flatMap { $0 }
   }

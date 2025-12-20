@@ -19,8 +19,8 @@ public struct HGroupItem: EpoxyModeled {
   public init(
     dataID: AnyHashable,
     style: HGroup.Style,
-    groupItems: [GroupItemModeling])
-  {
+    groupItems: [GroupItemModeling]
+  ) {
     self.style = style
     self.dataID = dataID
     self.groupItems = groupItems
@@ -34,12 +34,13 @@ public struct HGroupItem: EpoxyModeled {
   public init(
     dataID: AnyHashable,
     style: HGroup.Style,
-    @GroupModelBuilder _ groupItemsBuilder: () -> [GroupItemModeling])
-  {
+    @GroupModelBuilder _ groupItemsBuilder: () -> [GroupItemModeling]
+  ) {
     self.init(
       dataID: dataID,
       style: style,
-      groupItems: groupItemsBuilder())
+      groupItems: groupItemsBuilder()
+    )
   }
 
   // MARK: Public
@@ -95,18 +96,20 @@ extension HGroupItem: InternalGroupItemModeling {
       accessibilityAlignment: accessibilityAlignment,
       horizontalAlignment: horizontalAlignment,
       padding: padding,
-      verticalAlignment: verticalAlignment)
+      verticalAlignment: verticalAlignment
+    )
   }
 
   public func makeConstrainable() -> Constrainable {
     HGroup(
       style: style,
-      items: groupItems)
-      .reflowsForAccessibilityTypeSizes(reflowsForAccessibilityTypeSizes)
-      .accessibilityAlignment(accessibilityAlignment)
-      .horizontalAlignment(horizontalAlignment)
-      .padding(padding)
-      .verticalAlignment(verticalAlignment)
+      items: groupItems
+    )
+    .reflowsForAccessibilityTypeSizes(reflowsForAccessibilityTypeSizes)
+    .accessibilityAlignment(accessibilityAlignment)
+    .horizontalAlignment(horizontalAlignment)
+    .padding(padding)
+    .verticalAlignment(verticalAlignment)
   }
 
   public func update(_ constrainable: Constrainable, animated: Bool) {
@@ -119,7 +122,8 @@ extension HGroupItem: InternalGroupItemModeling {
     guard let hGroup = toUpdate as? HGroup else {
       EpoxyLogger.shared
         .assertionFailure(
-          "Attempt to update the wrong item type. This should never happen and is a failure of the system, please file a bug report")
+          "Attempt to update the wrong item type. This should never happen and is a failure of the system, please file a bug report"
+        )
       return
     }
     hGroup.setItems(groupItems, animated: animated)

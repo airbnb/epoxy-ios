@@ -37,11 +37,13 @@ final class ActionButtonRow: BaseRow, EpoxyableView {
       Label.groupItem(
         dataID: DataID.title,
         content: content.title,
-        style: .style(with: .title2))
+        style: .style(with: .title2)
+      )
       Label.groupItem(
         dataID: DataID.subtitle,
         content: content.subtitle,
-        style: .style(with: .body))
+        style: .style(with: .body)
+      )
       Button.groupItem(
         dataID: DataID.action,
         content: .init(title: content.actionText),
@@ -49,7 +51,8 @@ final class ActionButtonRow: BaseRow, EpoxyableView {
           // swiftlint:disable:next no_direct_standard_out_logs
           print("Tapped the button \(button)")
         },
-        style: .init())
+        style: .init()
+      )
     }
   }
 

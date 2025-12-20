@@ -39,8 +39,6 @@ public final class HGroupView: UIView, EpoxyableView {
 
   // MARK: Public
 
-  // MARK: Style
-
   public struct Style: Hashable {
     /// Creates a Style for the `HGroupView`
     /// - Parameters:
@@ -48,8 +46,8 @@ public final class HGroupView: UIView, EpoxyableView {
     ///   - edgeInsets: the adaptive edge insets to use for this view
     public init(
       hGroupStyle: HGroup.Style = .init(),
-      edgeInsets: GroupEdgeInsets = .zero)
-    {
+      edgeInsets: GroupEdgeInsets = .zero
+    ) {
       self.hGroupStyle = hGroupStyle
       self.edgeInsets = edgeInsets
     }
@@ -58,9 +56,9 @@ public final class HGroupView: UIView, EpoxyableView {
     public var edgeInsets: GroupEdgeInsets
   }
 
-  // MARK: Content
-
   public struct Content: Equatable {
+
+    // MARK: Lifecycle
 
     /// Creates a Content model for the `HGroupView`
     /// - Parameter items: the items the `HGroup` will render
@@ -73,6 +71,8 @@ public final class HGroupView: UIView, EpoxyableView {
     public init(@GroupModelBuilder _ itemBuilder: () -> [GroupItemModeling]) {
       items = itemBuilder().eraseToAnyGroupItems()
     }
+
+    // MARK: Public
 
     public var items: [AnyGroupItem]
 

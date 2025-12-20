@@ -42,8 +42,8 @@ public struct BarModel<View: UIView>: ViewEpoxyModeled {
   public init<Content: Equatable>(
     dataID: AnyHashable? = nil,
     content: Content,
-    setContent: @escaping (CallbackContext, Content) -> Void)
-  {
+    setContent: @escaping (CallbackContext, Content) -> Void
+  ) {
     if let dataID = dataID {
       self.dataID = dataID
     }
@@ -76,8 +76,8 @@ public struct BarModel<View: UIView>: ViewEpoxyModeled {
     params: Params,
     content: Content,
     makeView: @escaping (Params) -> View,
-    setContent: @escaping (CallbackContext, Content) -> Void)
-  {
+    setContent: @escaping (CallbackContext, Content) -> Void
+  ) {
     if let dataID = dataID {
       self.dataID = dataID
     }
@@ -97,8 +97,8 @@ public struct BarModel<View: UIView>: ViewEpoxyModeled {
 
   /// Replaces the default closure to construct the coordinator with the given closure.
   public func makeCoordinator<Coordinator: BarCoordinating>(
-    _ makeCoordinator: @escaping (_ update: @escaping (_ animated: Bool) -> Void) -> Coordinator)
-    -> Self where
+    _ makeCoordinator: @escaping (_ update: @escaping (_ animated: Bool) -> Void) -> Coordinator
+  ) -> Self where
     Coordinator.Model == Self
   {
     var copy = self
@@ -117,7 +117,8 @@ public struct BarModel<View: UIView>: ViewEpoxyModeled {
   private func castOrAssert(_ view: UIView) -> View {
     guard let typedView = view as? View else {
       EpoxyLogger.shared.assertionFailure(
-        "\(view) is not of the expected type \(View.self). This is programmer error.")
+        "\(view) is not of the expected type \(View.self). This is programmer error."
+      )
       return makeView()
     }
     return typedView
@@ -168,7 +169,9 @@ extension BarModel: DidSelectProviding { }
 // MARK: BarModeling
 
 extension BarModel: BarModeling {
-  public func eraseToAnyBarModel() -> AnyBarModel { .init(self) }
+  public func eraseToAnyBarModel() -> AnyBarModel {
+    .init(self)
+  }
 }
 
 // MARK: InternalBarModeling
@@ -218,7 +221,8 @@ extension BarModel: InternalBarCoordinating {
   public func barModel(for coordinator: AnyBarCoordinating) -> BarModeling {
     guard let typedCoordinator = coordinator as? Coordinator else {
       EpoxyLogger.shared.assertionFailure(
-        "\(coordinator) is not of the expected type \(Coordinator.self). This is programmer error.")
+        "\(coordinator) is not of the expected type \(Coordinator.self). This is programmer error."
+      )
       return self
     }
     return typedCoordinator.barModel(for: self)
@@ -259,8 +263,8 @@ extension BarModel: CallbackContextEpoxyModeled {
     public init(
       view: View,
       traitCollection: UITraitCollection,
-      animated: Bool)
-    {
+      animated: Bool
+    ) {
       self.view = view
       self.traitCollection = traitCollection
       self.animated = animated
@@ -282,6 +286,6 @@ extension BarModel: CallbackContextEpoxyModeled {
 /// removed and a new bar view will be created and inserted in its place.
 struct DiffIdentifier: Hashable {
   var dataID: AnyHashable
-  // The `View.Type` wrapped in a `ClassReference` since `AnyClass` is not `Hashable`.
+  /// The `View.Type` wrapped in a `ClassReference` since `AnyClass` is not `Hashable`.
   var viewClass: ClassReference
 }

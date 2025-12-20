@@ -13,6 +13,6 @@ public protocol CollectionViewTransitionLayoutDelegate: AnyObject {
   func collectionView(
     _ collectionView: CollectionView,
     transitionLayoutForOldLayout fromLayout: UICollectionViewLayout,
-    newLayout toLayout: UICollectionViewLayout)
-    -> UICollectionViewTransitionLayout
+    newLayout toLayout: UICollectionViewLayout
+  ) -> UICollectionViewTransitionLayout
 }

@@ -27,7 +27,8 @@ public protocol CollectionViewReorderingDelegate: AnyObject {
     shouldMoveItem sourceItem: AnyItemModel,
     inSection sourceSection: SectionModel,
     toDestinationItem destinationItem: AnyItemModel,
-    inSection destinationSection: SectionModel) -> Bool
+    inSection destinationSection: SectionModel
+  ) -> Bool
 
   /// Move the specified item to the given new location.
   ///
@@ -37,7 +38,8 @@ public protocol CollectionViewReorderingDelegate: AnyObject {
     moveItem sourceItem: AnyItemModel,
     inSection sourceSection: SectionModel,
     toDestinationItem destinationItem: AnyItemModel,
-    inSection destinationSection: SectionModel)
+    inSection destinationSection: SectionModel
+  )
 }
 
 extension CollectionViewReorderingDelegate {
@@ -47,9 +49,8 @@ extension CollectionViewReorderingDelegate {
     shouldMoveItem _: AnyItemModel,
     inSection _: SectionModel,
     toDestinationItem _: AnyItemModel,
-    inSection _: SectionModel)
-    -> Bool
-  {
+    inSection _: SectionModel
+  ) -> Bool {
     true
   }
 }

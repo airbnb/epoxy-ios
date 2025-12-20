@@ -13,16 +13,51 @@ public protocol AnchoringContainer {
 }
 
 extension Constrainable where Self: AnchoringContainer {
-  public var leadingAnchor: NSLayoutXAxisAnchor { anchor.leadingAnchor }
-  public var trailingAnchor: NSLayoutXAxisAnchor { anchor.trailingAnchor }
-  public var leftAnchor: NSLayoutXAxisAnchor { anchor.leftAnchor }
-  public var rightAnchor: NSLayoutXAxisAnchor { anchor.rightAnchor }
-  public var topAnchor: NSLayoutYAxisAnchor { anchor.topAnchor }
-  public var bottomAnchor: NSLayoutYAxisAnchor { anchor.bottomAnchor }
-  public var widthAnchor: NSLayoutDimension { anchor.widthAnchor }
-  public var heightAnchor: NSLayoutDimension { anchor.heightAnchor }
-  public var centerXAnchor: NSLayoutXAxisAnchor { anchor.centerXAnchor }
-  public var centerYAnchor: NSLayoutYAxisAnchor { anchor.centerYAnchor }
-  public var firstBaselineAnchor: NSLayoutYAxisAnchor { anchor.firstBaselineAnchor }
-  public var lastBaselineAnchor: NSLayoutYAxisAnchor { anchor.lastBaselineAnchor }
+  public var leadingAnchor: NSLayoutXAxisAnchor {
+    anchor.leadingAnchor
+  }
+
+  public var trailingAnchor: NSLayoutXAxisAnchor {
+    anchor.trailingAnchor
+  }
+
+  public var leftAnchor: NSLayoutXAxisAnchor {
+    anchor.leftAnchor
+  }
+
+  public var rightAnchor: NSLayoutXAxisAnchor {
+    anchor.rightAnchor
+  }
+
+  public var topAnchor: NSLayoutYAxisAnchor {
+    anchor.topAnchor
+  }
+
+  public var bottomAnchor: NSLayoutYAxisAnchor {
+    anchor.bottomAnchor
+  }
+
+  public var widthAnchor: NSLayoutDimension {
+    anchor.widthAnchor
+  }
+
+  public var heightAnchor: NSLayoutDimension {
+    anchor.heightAnchor
+  }
+
+  public var centerXAnchor: NSLayoutXAxisAnchor {
+    anchor.centerXAnchor
+  }
+
+  public var centerYAnchor: NSLayoutYAxisAnchor {
+    anchor.centerYAnchor
+  }
+
+  public var firstBaselineAnchor: NSLayoutYAxisAnchor {
+    anchor.firstBaselineAnchor
+  }
+
+  public var lastBaselineAnchor: NSLayoutYAxisAnchor {
+    anchor.lastBaselineAnchor
+  }
 }

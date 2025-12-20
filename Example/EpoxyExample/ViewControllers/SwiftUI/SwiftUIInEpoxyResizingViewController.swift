@@ -33,6 +33,11 @@ final class SwiftUIInEpoxyResizingViewController: CollectionViewController {
 
 /// An implementation of an expandable row in SwiftUI, which has a local isExpanded state.
 struct SwiftUIExpandableRow: View {
+
+  // MARK: Internal
+
+  @Environment(\.epoxyIntrinsicContentSizeInvalidator) var invalidateIntrinsicContentSize
+
   var title: String
   var subtitle: String
 
@@ -60,6 +65,7 @@ struct SwiftUIExpandableRow: View {
     }
   }
 
+  // MARK: Private
+
   @State private var isExpanded = false
-  @Environment(\.epoxyIntrinsicContentSizeInvalidator) var invalidateIntrinsicContentSize
 }

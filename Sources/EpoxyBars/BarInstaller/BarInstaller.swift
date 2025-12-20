@@ -52,7 +52,8 @@ final class BarInstaller<Container: BarContainer> {
 
     guard let view = viewController?.viewIfLoaded else {
       EpoxyLogger.shared.assertionFailure(
-        "A bar should only be installed on a view controller that's loaded its view")
+        "A bar should only be installed on a view controller that's loaded its view"
+      )
       return
     }
 
@@ -83,7 +84,7 @@ final class BarInstaller<Container: BarContainer> {
   private let configuration: BarInstallerConfiguration
 
   /// The bar models that will be set on the container once it's visible.
-  private var bars: [BarModeling] = []
+  private var bars = [BarModeling]()
 
   /// Closures that are called whenever the bar coordinator property changes.
   private var observers = [BarCoordinatorPropertyKey: [UUID: (Any) -> Void]]()
@@ -142,11 +143,11 @@ final class BarInstaller<Container: BarContainer> {
 // MARK: BarCoordinatorPropertyConfigurable
 
 extension BarInstaller: BarCoordinatorPropertyConfigurable {
-  public var coordinators: [AnyBarCoordinating] {
+  var coordinators: [AnyBarCoordinating] {
     container?.coordinators ?? []
   }
 
-  public subscript<Property>(property: BarCoordinatorProperty<Property>) -> Property {
+  subscript<Property>(property: BarCoordinatorProperty<Property>) -> Property {
     get {
       (storage[property.key]?.value as? Property) ?? property.default()
     }
@@ -157,11 +158,10 @@ extension BarInstaller: BarCoordinatorPropertyConfigurable {
     }
   }
 
-  public func observe<Property>(
+  func observe<Property>(
     _ property: BarCoordinatorProperty<Property>,
-    observer: @escaping (Property) -> Void)
-    -> AnyObject
-  {
+    observer: @escaping (Property) -> Void
+  ) -> AnyObject {
     let uuid = UUID()
     // We can safely force cast as all writes to observers flow through a generic setter above
     // swiftlint:disable:next force_cast

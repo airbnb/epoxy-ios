@@ -328,7 +328,8 @@ extension EpoxyModeled where Self: TestArity0ClosureProviding {
     EpoxyModelProperty(
       keyPath: \Self.testArity0Closure,
       defaultValue: nil,
-      updateStrategy: .chain())
+      updateStrategy: .chain()
+    )
   }
 
   func testArity0Closure(_ value: (() -> Void)?) -> Self {
@@ -347,7 +348,8 @@ extension EpoxyModeled where Self: TestArity1ClosureProviding {
     EpoxyModelProperty(
       keyPath: \Self.testArity1Closure,
       defaultValue: nil,
-      updateStrategy: .chain())
+      updateStrategy: .chain()
+    )
   }
 
   func testArity1Closure(_ value: ((String) -> Void)?) -> Self {
@@ -366,7 +368,8 @@ extension EpoxyModeled where Self: TestArity2ClosureProviding {
     EpoxyModelProperty(
       keyPath: \Self.testArity2Closure,
       defaultValue: nil,
-      updateStrategy: .chain())
+      updateStrategy: .chain()
+    )
   }
 
   func testArity2Closure(_ value: ((String, String) -> Void)?) -> Self {
@@ -385,7 +388,8 @@ extension EpoxyModeled where Self: TestArity3ClosureProviding {
     EpoxyModelProperty(
       keyPath: \Self.testArity3Closure,
       defaultValue: nil,
-      updateStrategy: .chain())
+      updateStrategy: .chain()
+    )
   }
 
   func testArity3Closure(_ value: ((String, String, String) -> Void)?) -> Self {
@@ -404,7 +408,8 @@ extension EpoxyModeled where Self: TestArity4ClosureProviding {
     EpoxyModelProperty(
       keyPath: \Self.testArity4Closure,
       defaultValue: nil,
-      updateStrategy: .chain())
+      updateStrategy: .chain()
+    )
   }
 
   func testArity4Closure(_ value: ((String, String, String, String) -> Void)?) -> Self {

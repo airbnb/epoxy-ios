@@ -23,7 +23,7 @@ final class StubTransitionCoordinator: NSObject {
 
   func complete() {
     // Calling completion handlers in reverse order that they're added matches UIKit behavior.
-    completeHandlers.reversed().forEach { $0(self) }
+    for completeHandler in completeHandlers.reversed() { completeHandler(self) }
     completeHandlers = []
   }
 
@@ -33,22 +33,50 @@ final class StubTransitionCoordinator: NSObject {
 
 extension StubTransitionCoordinator: UIViewControllerTransitionCoordinator {
 
-  var initiallyInteractive: Bool { fatalError("Not implemented") }
-  var isInterruptible: Bool { fatalError("Not implemented") }
-  var isInteractive: Bool { fatalError("Not implemented") }
-  var transitionDuration: TimeInterval { fatalError("Not implemented") }
-  var percentComplete: CGFloat { fatalError("Not implemented") }
-  var presentationStyle: UIModalPresentationStyle { fatalError("Not implemented") }
-  var completionVelocity: CGFloat { fatalError("Not implemented") }
-  var completionCurve: UIView.AnimationCurve { fatalError("Not implemented") }
-  var containerView: UIView { fatalError("Not implemented") }
-  var targetTransform: CGAffineTransform { fatalError("Not implemented") }
+  var initiallyInteractive: Bool {
+    fatalError("Not implemented")
+  }
+
+  var isInterruptible: Bool {
+    fatalError("Not implemented")
+  }
+
+  var isInteractive: Bool {
+    fatalError("Not implemented")
+  }
+
+  var transitionDuration: TimeInterval {
+    fatalError("Not implemented")
+  }
+
+  var percentComplete: CGFloat {
+    fatalError("Not implemented")
+  }
+
+  var presentationStyle: UIModalPresentationStyle {
+    fatalError("Not implemented")
+  }
+
+  var completionVelocity: CGFloat {
+    fatalError("Not implemented")
+  }
+
+  var completionCurve: UIView.AnimationCurve {
+    fatalError("Not implemented")
+  }
+
+  var containerView: UIView {
+    fatalError("Not implemented")
+  }
+
+  var targetTransform: CGAffineTransform {
+    fatalError("Not implemented")
+  }
 
   func animate(
     alongsideTransition animation: ((UIViewControllerTransitionCoordinatorContext) -> Void)?,
-    completion: ((UIViewControllerTransitionCoordinatorContext) -> Void)? = nil)
-    -> Bool
-  {
+    completion: ((UIViewControllerTransitionCoordinatorContext) -> Void)? = nil
+  ) -> Bool {
     animation?(self)
     completion.map { completeHandlers.append($0) }
     return true
@@ -58,16 +86,15 @@ extension StubTransitionCoordinator: UIViewControllerTransitionCoordinator {
   func animateAlongsideTransition(
     in _: UIView?,
     animation _: ((UIViewControllerTransitionCoordinatorContext) -> Void)?,
-    completion _: ((UIViewControllerTransitionCoordinatorContext) -> Void)? = nil)
-    -> Bool
-  {
+    completion _: ((UIViewControllerTransitionCoordinatorContext) -> Void)? = nil
+  ) -> Bool {
     fatalError("Not implemented")
   }
 
   // swiftlint:disable unavailable_function
   func notifyWhenInteractionEnds(
-    _: @escaping (UIViewControllerTransitionCoordinatorContext) -> Void)
-  {
+    _: @escaping (UIViewControllerTransitionCoordinatorContext) -> Void
+  ) {
     fatalError("Not implemented")
   }
 

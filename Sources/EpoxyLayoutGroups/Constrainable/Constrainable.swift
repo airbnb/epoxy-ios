@@ -37,13 +37,17 @@ public protocol Constrainable {
 }
 
 extension Constrainable where Self: NSObject {
-  public var dataID: AnyHashable { ObjectIdentifier(self) }
+  public var dataID: AnyHashable {
+    ObjectIdentifier(self)
+  }
 }
 
 // MARK: Diffable
 
 extension Constrainable {
-  public var diffIdentifier: AnyHashable { dataID }
+  public var diffIdentifier: AnyHashable {
+    dataID
+  }
 
   public func isDiffableItemEqual(to otherDiffableItem: Diffable) -> Bool {
     guard let other = otherDiffableItem as? Constrainable else {

@@ -19,11 +19,12 @@ import SwiftUI
 /// }
 /// ```
 public struct EpoxyIntrinsicContentSizeInvalidator {
-  let invalidate: () -> Void
-
   public func callAsFunction() {
     invalidate()
   }
+
+  let invalidate: () -> Void
+
 }
 
 // MARK: - EnvironmentValues

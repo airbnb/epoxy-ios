@@ -95,10 +95,11 @@ extension AnyGroupItem: SetBehaviorsProviding { }
 
 extension AnyGroupItem: CallbackContextEpoxyModeled {
   public struct CallbackContext {
-    public let constrainable: Constrainable
-
     public init(constrainable: Constrainable) {
       self.constrainable = constrainable
     }
+
+    public let constrainable: Constrainable
+
   }
 }

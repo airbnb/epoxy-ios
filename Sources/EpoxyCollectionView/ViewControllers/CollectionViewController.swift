@@ -18,8 +18,8 @@ open class CollectionViewController: UIViewController {
   public init(
     layout: UICollectionViewLayout,
     sections: [SectionModel]? = nil,
-    configuration: CollectionViewConfiguration = .shared)
-  {
+    configuration: CollectionViewConfiguration = .shared
+  ) {
     self.layout = layout
     initialSections = sections
     self.configuration = configuration
@@ -33,8 +33,8 @@ open class CollectionViewController: UIViewController {
   public convenience init(
     layout: UICollectionViewLayout,
     items: [ItemModeling],
-    configuration: CollectionViewConfiguration = .shared)
-  {
+    configuration: CollectionViewConfiguration = .shared
+  ) {
     let section = SectionModel(dataID: DefaultDataID.noneProvided, items: items)
     self.init(layout: layout, sections: [section], configuration: configuration)
   }
@@ -44,8 +44,8 @@ open class CollectionViewController: UIViewController {
   public convenience init(
     layout: UICollectionViewLayout,
     @SectionModelBuilder sections: () -> [SectionModel],
-    configuration: CollectionViewConfiguration = .shared)
-  {
+    configuration: CollectionViewConfiguration = .shared
+  ) {
     self.init(layout: layout, sections: sections(), configuration: configuration)
   }
 
@@ -56,8 +56,8 @@ open class CollectionViewController: UIViewController {
   public convenience init(
     layout: UICollectionViewLayout,
     @ItemModelBuilder items: () -> [ItemModeling],
-    configuration: CollectionViewConfiguration = .shared)
-  {
+    configuration: CollectionViewConfiguration = .shared
+  ) {
     self.init(layout: layout, items: items(), configuration: configuration)
   }
 

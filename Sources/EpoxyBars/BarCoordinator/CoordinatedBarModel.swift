@@ -17,8 +17,8 @@ public struct CoordinatedBarModel {
     content: Content,
     viewType: View.Type,
     barModel: Coordinator.Model,
-    makeCoordinator: @escaping (_ update: @escaping (_ animated: Bool) -> Void) -> Coordinator)
-  {
+    makeCoordinator: @escaping (_ update: @escaping (_ animated: Bool) -> Void) -> Coordinator
+  ) {
     self.content = content
     viewClass = viewType
 
@@ -29,7 +29,8 @@ public struct CoordinatedBarModel {
     _barModel = { coordinator in
       guard let typedCoordinator = coordinator as? CoordinatorWrapper else {
         EpoxyLogger.shared.assertionFailure(
-          "\(coordinator) is not of the expected type \(CoordinatorWrapper.self)")
+          "\(coordinator) is not of the expected type \(CoordinatorWrapper.self)"
+        )
         return nil
       }
       return typedCoordinator.barModel(for: barModel)
@@ -38,7 +39,8 @@ public struct CoordinatedBarModel {
     _canReuseCoordinator = { coordinator in
       guard let typedCoordinator = coordinator as? CoordinatorWrapper else {
         EpoxyLogger.shared.assertionFailure(
-          "\(coordinator) is not of the expected type \(CoordinatorWrapper.self)")
+          "\(coordinator) is not of the expected type \(CoordinatorWrapper.self)"
+        )
         return false
       }
       return typedCoordinator.type == Coordinator.self
@@ -81,7 +83,9 @@ extension CoordinatedBarModel: StyleIDProviding { }
 // MARK: BarModeling
 
 extension CoordinatedBarModel: BarModeling {
-  public func eraseToAnyBarModel() -> AnyBarModel { .init(self) }
+  public func eraseToAnyBarModel() -> AnyBarModel {
+    .init(self)
+  }
 }
 
 // MARK: InternalBarCoordinating

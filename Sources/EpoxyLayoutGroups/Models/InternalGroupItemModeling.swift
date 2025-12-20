@@ -8,6 +8,7 @@ import Foundation
 protocol InternalGroupItemModeling: GroupItemModeling, EpoxyModeled {
   /// The unique identifier for this group item
   var dataID: AnyHashable { get }
+
   /// create a constrainable that this group item represents
   func makeConstrainable() -> Constrainable
   /// update the constrainable with the current content

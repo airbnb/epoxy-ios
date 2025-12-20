@@ -16,8 +16,8 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   ///   - items: the items that this VGroup will render. These can be set later with setItems()
   public init(
     style: Style = .init(),
-    items: [GroupItemModeling] = [])
-  {
+    items: [GroupItemModeling] = []
+  ) {
     let erasedItems = items.eraseToAnyGroupItems()
     animation = style.animation
     alignment = style.alignment
@@ -43,11 +43,12 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   public convenience init(
     alignment: ItemAlignment = .fill,
     spacing: CGFloat = 0,
-    items: [GroupItemModeling] = [])
-  {
+    items: [GroupItemModeling] = []
+  ) {
     self.init(
       style: .init(alignment: alignment, spacing: spacing),
-      items: items)
+      items: items
+    )
   }
 
   /// Creates a new VGroup using a result builder syntax for the items
@@ -56,11 +57,12 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   ///   - content: the builder that provides the items for the group
   public convenience init(
     style: Style = .init(),
-    @GroupModelBuilder _ content: () -> [GroupItemModeling])
-  {
+    @GroupModelBuilder _ content: () -> [GroupItemModeling]
+  ) {
     self.init(
       style: style,
-      items: content())
+      items: content()
+    )
   }
 
   /// Creates a new VGroup
@@ -72,11 +74,12 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   public convenience init(
     alignment: ItemAlignment = .fill,
     spacing: CGFloat = 0,
-    @GroupModelBuilder _ content: () -> [GroupItemModeling])
-  {
+    @GroupModelBuilder _ content: () -> [GroupItemModeling]
+  ) {
     self.init(
       style: .init(alignment: alignment, spacing: spacing),
-      items: content())
+      items: content()
+    )
   }
 
   @available(*, unavailable)
@@ -91,8 +94,8 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     public init(
       alignment: VGroup.ItemAlignment = .fill,
       spacing: CGFloat = 0,
-      animation: LayoutGroupUpdateAnimation = .spring())
-    {
+      animation: LayoutGroupUpdateAnimation = .spring()
+    ) {
       self.alignment = alignment
       self.spacing = spacing
       self.animation = animation
@@ -116,9 +119,7 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   /// initial velocity of `0.0`.
   public let animation: LayoutGroupUpdateAnimation
 
-  // MARK: Group
-
-  public internal(set) var items: [AnyGroupItem] = [] {
+  public internal(set) var items = [AnyGroupItem]() {
     didSet {
       resetIndexMap()
     }
@@ -130,8 +131,6 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   public var spacing: CGFloat {
     didSet { constraints?.itemSpacing = spacing }
   }
-
-  // MARK: Constrainable
 
   public var firstBaselineAnchor: NSLayoutYAxisAnchor {
     constrainableContainers.first?.firstBaselineAnchor ?? topAnchor
@@ -172,8 +171,8 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
 
   // MARK: Internal
 
-  var constrainableContainers: [ConstrainableContainer] = []
-  var dataIDIndexMap: [AnyHashable: Int] = [:]
+  var constrainableContainers = [ConstrainableContainer]()
+  var dataIDIndexMap = [AnyHashable: Int]()
   var constraints: GroupConstraints? = nil
 
   /// This is internal as it's only used for animated changes. If you want to remove
@@ -192,7 +191,8 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
       for: constrainableContainers,
       in: self,
       groupAlignment: alignment,
-      itemSpacing: spacing)
+      itemSpacing: spacing
+    )
   }
 
 }

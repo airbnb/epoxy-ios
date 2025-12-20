@@ -24,7 +24,9 @@ final class ProductViewController: CollectionViewController {
 
   private enum DataID {
     enum Item {
-      case headerImage, titleRow, imageRow
+      case headerImage
+      case titleRow
+      case imageRow
     }
 
     enum Presentation {
@@ -38,32 +40,39 @@ final class ProductViewController: CollectionViewController {
     didSet { setPresentation(presentation, animated: true) }
   }
 
-  @ItemModelBuilder private var items: [ItemModeling] {
+  @ItemModelBuilder
+  private var items: [ItemModeling] {
     ImageMarquee.itemModel(
       dataID: DataID.Item.headerImage,
       // swiftlint:disable:next force_unwrapping
       content: .init(imageURL: URL(string: "https://picsum.photos/id/350/500/500")!),
-      style: .init(height: 250, contentMode: .scaleAspectFill))
+      style: .init(height: 250, contentMode: .scaleAspectFill)
+    )
     TextRow.itemModel(
       dataID: DataID.Item.titleRow,
       content: .init(title: "Our Great Product"),
-      style: .large)
+      style: .large
+    )
     ImageRow.itemModel(
       dataID: DataID.Item.imageRow,
       content: .init(
         title: "Here is our exciting product",
         subtitle: "We think you should buy it.",
         // swiftlint:disable:next force_unwrapping
-        imageURL: URL(string: "https://picsum.photos/id/350/500/500")!))
+        imageURL: URL(string: "https://picsum.photos/id/350/500/500")!
+      )
+    )
   }
 
-  @BarModelBuilder private var bars: [BarModeling] {
+  @BarModelBuilder
+  private var bars: [BarModeling] {
     ButtonRow.barModel(content: .init(text: "Buy now"), behaviors: .init(didTap: { [weak self] in
       self?.showBuy = true
     }))
   }
 
-  @PresentationModelBuilder private var presentation: PresentationModel? {
+  @PresentationModelBuilder
+  private var presentation: PresentationModel? {
     if showBuy {
       PresentationModel(
         dataID: DataID.Presentation.buy,
@@ -80,13 +89,17 @@ final class ProductViewController: CollectionViewController {
                 dataID: DataID.titleRow,
                 content: .init(
                   title: "You bought it, congrats!",
-                  body: "Let's check out"),
-                style: .large)
-            })
+                  body: "Let's check out"
+                ),
+                style: .large
+              )
+            }
+          )
         },
         dismiss: { [weak self] in
           self?.showBuy = false
-        })
+        }
+      )
     }
   }
 

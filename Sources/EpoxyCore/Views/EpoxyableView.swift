@@ -2,4 +2,4 @@
 // Copyright © 2021 Airbnb Inc. All rights reserved.
 
 /// A `UIView` that can be declaratively configured via a concrete `EpoxyableModel` instance.
-public typealias EpoxyableView = StyledView & ContentConfigurableView & BehaviorsConfigurableView
+public typealias EpoxyableView = BehaviorsConfigurableView & ContentConfigurableView & StyledView

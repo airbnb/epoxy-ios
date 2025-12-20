@@ -31,7 +31,8 @@ final class PresentationViewController: UIViewController {
     didSet { setPresentation(presentation, animated: true) }
   }
 
-  @PresentationModelBuilder private var presentation: PresentationModel? {
+  @PresentationModelBuilder
+  private var presentation: PresentationModel? {
     if showDetail {
       PresentationModel(
         dataID: DataID.detail,
@@ -43,7 +44,8 @@ final class PresentationViewController: UIViewController {
         },
         dismiss: { [weak self] in
           self?.showDetail = false
-        })
+        }
+      )
     }
   }
 
@@ -58,7 +60,7 @@ final class DetailViewController: CollectionViewController {
   init(didTapDismiss: @escaping () -> Void) {
     super.init(layout: UICollectionViewCompositionalLayout.list)
     topBarInstaller.setBars([
-      ButtonRow.barModel(content: .init(text: "Dismiss"), behaviors: .init(didTap: didTapDismiss)),
+      ButtonRow.barModel(content: .init(text: "Dismiss"), behaviors: .init(didTap: didTapDismiss))
     ], animated: false)
   }
 

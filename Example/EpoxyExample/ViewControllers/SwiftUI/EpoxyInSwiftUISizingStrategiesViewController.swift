@@ -42,9 +42,10 @@ struct EpoxyInSwiftUISizingStrategiesView: View {
             .padding()
           LabelView(
             text: BeloIpsum.sentence(count: 1, wordCount: Int(wordCount)),
-            measurementStrategy: value)
-            .frame(width: value.proposedWidth, height: value.proposedHeight)
-            .border(.red)
+            measurementStrategy: value
+          )
+          .frame(width: value.proposedWidth, height: value.proposedHeight)
+          .border(.red)
         }
       }
     }

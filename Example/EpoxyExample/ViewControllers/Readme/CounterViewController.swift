@@ -5,7 +5,7 @@ import Epoxy
 import UIKit
 
 /// Source code for `EpoxyCollectionView` "Counter" example from `README.md`:
-class CounterViewController: CollectionViewController {
+final class CounterViewController: CollectionViewController {
 
   // MARK: Lifecycle
 
@@ -24,15 +24,18 @@ class CounterViewController: CollectionViewController {
     didSet { setItems(items, animated: true) }
   }
 
-  @ItemModelBuilder private var items: [ItemModeling] {
+  @ItemModelBuilder
+  private var items: [ItemModeling] {
     TextRow.itemModel(
       dataID: DataID.row,
       content: .init(
         title: "Count \(count)",
-        body: "Tap to increment"),
-      style: .large)
-      .didSelect { [weak self] _ in
-        self?.count += 1
-      }
+        body: "Tap to increment"
+      ),
+      style: .large
+    )
+    .didSelect { [weak self] _ in
+      self?.count += 1
+    }
   }
 }

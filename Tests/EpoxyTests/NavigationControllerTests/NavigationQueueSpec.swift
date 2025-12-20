@@ -46,22 +46,24 @@ final class NavigationQueueSpec: QuickSpec {
       boolModel = NavigationModel(
         dataID: NavigationID.one,
         makeViewController: { presented },
-        remove: { boolAddedBacking = false })
-        .didShow { didShow.append($0) }
-        .didHide { didHide.append(()) }
-        .didAdd { didAdd.append($0) }
-        .didRemove { didRemove.append(()) }
+        remove: { boolAddedBacking = false }
+      )
+      .didShow { didShow.append($0) }
+      .didHide { didHide.append(()) }
+      .didAdd { didAdd.append($0) }
+      .didRemove { didRemove.append(()) }
 
       optionalAddedBacking = 1
       optionalModel = NavigationModel(
         params: optionalAddedBacking,
         dataID: NavigationID.one,
         makeViewController: { _ in presented },
-        remove: { optionalAddedBacking = nil })
-        .didShow { didShow.append($0) }
-        .didHide { didHide.append(()) }
-        .didAdd { didAdd.append($0) }
-        .didRemove { didRemove.append(()) }
+        remove: { optionalAddedBacking = nil }
+      )
+      .didShow { didShow.append($0) }
+      .didHide { didHide.append(()) }
+      .didAdd { didAdd.append($0) }
+      .didRemove { didRemove.append(()) }
     }
 
     afterEach {
@@ -119,11 +121,12 @@ final class NavigationQueueSpec: QuickSpec {
                   boolModel = NavigationModel(
                     dataID: NavigationID.one,
                     makeViewController: { navigationController },
-                    remove: { boolAddedBacking = false })
-                    .didShow { didShow.append($0) }
-                    .didHide { didHide.append(()) }
-                    .didAdd { didAdd.append($0) }
-                    .didRemove { didRemove.append(()) }
+                    remove: { boolAddedBacking = false }
+                  )
+                  .didShow { didShow.append($0) }
+                  .didHide { didHide.append(()) }
+                  .didAdd { didAdd.append($0) }
+                  .didRemove { didRemove.append(()) }
                 }
 
                 it("should present the wrapper view controller") {
@@ -161,7 +164,8 @@ final class NavigationQueueSpec: QuickSpec {
                     let anotherBoolModel = NavigationModel(
                       dataID: NavigationID.one,
                       makeViewController: { anotherViewController },
-                      remove: { boolAddedBacking = false })
+                      remove: { boolAddedBacking = false }
+                    )
 
                     queue.enqueue([anotherBoolModel], animated: true, from: presenter)
 
@@ -184,7 +188,8 @@ final class NavigationQueueSpec: QuickSpec {
                     let anotherBoolModel = NavigationModel(
                       dataID: NavigationID.two,
                       makeViewController: { anotherViewController },
-                      remove: { boolAddedBacking = false })
+                      remove: { boolAddedBacking = false }
+                    )
 
                     queue.enqueue([anotherBoolModel], animated: true, from: presenter)
 
@@ -209,7 +214,8 @@ final class NavigationQueueSpec: QuickSpec {
                   boolModel = NavigationModel(
                     dataID: NavigationID.one,
                     makeViewController: { presented },
-                    remove: { boolAddedBacking = false })
+                    remove: { boolAddedBacking = false }
+                  )
 
                   queue.enqueue([], animated: true, from: presenter)
 
@@ -237,7 +243,8 @@ final class NavigationQueueSpec: QuickSpec {
                 boolModel = NavigationModel(
                   dataID: NavigationID.one,
                   makeViewController: { presented },
-                  remove: { boolAddedBacking = false })
+                  remove: { boolAddedBacking = false }
+                )
 
                 queue.enqueue([boolModel], animated: true, from: presenter)
 
@@ -251,7 +258,8 @@ final class NavigationQueueSpec: QuickSpec {
                 boolModel = NavigationModel(
                   dataID: NavigationID.one,
                   makeViewController: { nil },
-                  remove: { boolAddedBacking = false })
+                  remove: { boolAddedBacking = false }
+                )
               }
 
               it("should not present the model") {
@@ -272,7 +280,8 @@ final class NavigationQueueSpec: QuickSpec {
                 boolModel = NavigationModel(
                   dataID: NavigationID.one,
                   makeViewController: { presented },
-                  remove: { boolAddedBacking = false })
+                  remove: { boolAddedBacking = false }
+                )
 
                 queue.enqueue([boolModel], animated: true, from: presenter)
 
@@ -324,7 +333,8 @@ final class NavigationQueueSpec: QuickSpec {
                         params: otherPresentedBacking,
                         dataID: NavigationID.one,
                         makeViewController: { _ in otherPresented },
-                        remove: { otherPresentedBacking = nil })
+                        remove: { otherPresentedBacking = nil }
+                      )
 
                       queue.enqueue([otherModel], animated: true, from: presenter)
 
@@ -357,7 +367,8 @@ final class NavigationQueueSpec: QuickSpec {
                       params: optionalAddedBacking,
                       dataID: NavigationID.one,
                       makeViewController: { _ in presented },
-                      remove: { optionalAddedBacking = nil })
+                      remove: { optionalAddedBacking = nil }
+                    )
 
                     queue.enqueue([optionalModel], animated: true, from: presenter)
 
@@ -381,7 +392,8 @@ final class NavigationQueueSpec: QuickSpec {
                         params: optionalAddedBacking,
                         dataID: NavigationID.one,
                         makeViewController: { _ in nil },
-                        remove: { optionalAddedBacking = nil })
+                        remove: { optionalAddedBacking = nil }
+                      )
 
                       queue.enqueue([optionalModel], animated: true, from: presenter)
 
@@ -406,7 +418,8 @@ final class NavigationQueueSpec: QuickSpec {
                       params: optionalAddedBacking,
                       dataID: NavigationID.one,
                       makeViewController: { _ in nil },
-                      remove: { optionalAddedBacking = nil })
+                      remove: { optionalAddedBacking = nil }
+                    )
 
                     queue.enqueue([optionalModel], animated: true, from: presenter)
 
@@ -420,7 +433,8 @@ final class NavigationQueueSpec: QuickSpec {
                       params: optionalAddedBacking,
                       dataID: NavigationID.one,
                       makeViewController: { _ in nil },
-                      remove: { optionalAddedBacking = nil })
+                      remove: { optionalAddedBacking = nil }
+                    )
 
                     queue.enqueue([optionalModel], animated: true, from: presenter)
 
@@ -433,7 +447,8 @@ final class NavigationQueueSpec: QuickSpec {
                       params: optionalAddedBacking,
                       dataID: NavigationID.one,
                       makeViewController: { _ in presented },
-                      remove: { optionalAddedBacking = nil })
+                      remove: { optionalAddedBacking = nil }
+                    )
 
                     queue.enqueue([optionalModel], animated: true, from: presenter)
 
@@ -449,7 +464,8 @@ final class NavigationQueueSpec: QuickSpec {
                     params: optionalAddedBacking,
                     dataID: NavigationID.one,
                     makeViewController: { _ in nil },
-                    remove: { optionalAddedBacking = nil })
+                    remove: { optionalAddedBacking = nil }
+                  )
                 }
 
                 it("should not present the model") {
@@ -472,7 +488,8 @@ final class NavigationQueueSpec: QuickSpec {
                       params: optionalAddedBacking,
                       dataID: NavigationID.one,
                       makeViewController: { _ in presented },
-                      remove: { optionalAddedBacking = nil })
+                      remove: { optionalAddedBacking = nil }
+                    )
 
                     queue.enqueue([optionalModel], animated: true, from: presenter)
 
@@ -507,9 +524,10 @@ final class NavigationQueueSpec: QuickSpec {
               anotherModel = NavigationModel(
                 dataID: NavigationID.two,
                 makeViewController: { anotherPresented },
-                remove: { anotherAddedBacking = false })
-                .didShow { anotherDidShow.append($0) }
-                .didRemove { anotherDidRemove.append(()) }
+                remove: { anotherAddedBacking = false }
+              )
+              .didShow { anotherDidShow.append($0) }
+              .didRemove { anotherDidRemove.append(()) }
 
               yetAnotherDidShow = []
               yetAnotherDidRemove = []
@@ -520,11 +538,12 @@ final class NavigationQueueSpec: QuickSpec {
               yetAnotherModel = NavigationModel(
                 dataID: "3",
                 makeViewController: { yetAnotherPresented },
-                remove: { yetAnotherAddedBacking = false })
-                .didShow { yetAnotherDidShow.append($0) }
-                .didHide { yetAnotherDidHide.append(()) }
-                .didAdd { yetAnotherDidAdd.append($0) }
-                .didRemove { yetAnotherDidRemove.append(()) }
+                remove: { yetAnotherAddedBacking = false }
+              )
+              .didShow { yetAnotherDidShow.append($0) }
+              .didHide { yetAnotherDidHide.append(()) }
+              .didAdd { yetAnotherDidAdd.append($0) }
+              .didRemove { yetAnotherDidRemove.append(()) }
             }
 
             afterEach {
@@ -735,7 +754,8 @@ final class NavigationQueueSpec: QuickSpec {
               anotherBoolModel = NavigationModel(
                 dataID: NavigationID.two,
                 makeViewController: { anotherViewController },
-                remove: { boolAddedBacking = false })
+                remove: { boolAddedBacking = false }
+              )
             }
 
             it("should show a new set model during a pop once complete") {

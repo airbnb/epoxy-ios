@@ -10,6 +10,9 @@ import UIKit
 ///
 /// Used to reference a `BarModel` without a generic type.
 protocol InternalBarModeling: Diffable, EpoxyModeled, StyleIDProviding {
+  /// Whether the bar model should be selectable.
+  var isSelectable: Bool { get }
+
   /// Constructs a configured bar view.
   func makeConfiguredView(traitCollection: UITraitCollection) -> UIView
 
@@ -31,8 +34,6 @@ protocol InternalBarModeling: Diffable, EpoxyModeled, StyleIDProviding {
   /// Should inform consumers that this bar model has been selected.
   func didSelect(_ view: UIView, traitCollection: UITraitCollection, animated: Bool)
 
-  /// Whether the bar model should be selectable.
-  var isSelectable: Bool { get }
 }
 
 // MARK: - InternalBarCoordinating

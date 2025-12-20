@@ -15,7 +15,7 @@ struct TodoItem {
 
 // MARK: - TodoListViewController
 
-class TodoListViewController: CollectionViewController {
+final class TodoListViewController: CollectionViewController {
 
   // MARK: Lifecycle
 
@@ -30,7 +30,8 @@ class TodoListViewController: CollectionViewController {
     demoItems.map { item in
       CheckboxRow.itemModel(
         dataID: item.id,
-        content: .with(todoItem: item))
+        content: .with(todoItem: item)
+      )
     }
   }
 
@@ -51,6 +52,7 @@ extension CheckboxRow.Content {
     .init(
       title: todoItem.title,
       subtitle: todoItem.notes,
-      isChecked: todoItem.isComplete)
+      isChecked: todoItem.isComplete
+    )
   }
 }

@@ -21,9 +21,8 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
     dataID: AnyHashable,
     content: Content,
     behaviors: Behaviors? = nil,
-    style: Style)
-    -> SupplementaryItemModel<Self>
-  {
+    style: Style
+  ) -> SupplementaryItemModel<Self> {
     SupplementaryItemModel<Self>(
       dataID: dataID,
       params: style,
@@ -31,10 +30,11 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
       makeView: Self.init(style:),
       setContent: { context, content in
         context.view.setContent(content, animated: context.animated)
-      })
-      .setBehaviors { context in
-        context.view.setBehaviors(behaviors)
       }
+    )
+    .setBehaviors { context in
+      context.view.setBehaviors(behaviors)
+    }
   }
 }
 
@@ -54,18 +54,18 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   public static func supplementaryItemModel(
     dataID: AnyHashable,
     content: Content,
-    behaviors: Behaviors? = nil)
-    -> SupplementaryItemModel<Self>
-  {
+    behaviors: Behaviors? = nil
+  ) -> SupplementaryItemModel<Self> {
     SupplementaryItemModel<Self>(
       dataID: dataID,
       content: content,
       setContent: { context, content in
         context.view.setContent(content, animated: context.animated)
-      })
-      .setBehaviors { context in
-        context.view.setBehaviors(behaviors)
       }
+    )
+    .setBehaviors { context in
+      context.view.setBehaviors(behaviors)
+    }
   }
 }
 
@@ -84,9 +84,8 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   public static func supplementaryItemModel(
     dataID: AnyHashable,
     behaviors: Behaviors? = nil,
-    style: Style)
-    -> SupplementaryItemModel<Self>
-  {
+    style: Style
+  ) -> SupplementaryItemModel<Self> {
     SupplementaryItemModel<Self>(dataID: dataID)
       .styleID(style)
       .makeView { Self(style: style) }
@@ -114,9 +113,8 @@ extension StyledView
   /// - Returns: An `SupplementaryItemModel` with an instance of this view as its item view.
   public static func supplementaryItemModel(
     dataID: AnyHashable,
-    behaviors: Behaviors? = nil)
-    -> SupplementaryItemModel<Self>
-  {
+    behaviors: Behaviors? = nil
+  ) -> SupplementaryItemModel<Self> {
     SupplementaryItemModel<Self>(dataID: dataID)
       .setBehaviors { context in
         context.view.setBehaviors(behaviors)
