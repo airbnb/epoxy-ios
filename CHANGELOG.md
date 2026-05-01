@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 
 
 ### Fixed
-- 
+- Fixed a `CALayerInvalidGeometry` crash and multi-minute layout hang when a `SwiftUIView` using `.resizable().scaledToFill()` is presented in a `fullScreenCover` on iOS 26. The crash was caused by a zero initial frame producing an infinite scale, and the hang was caused by rapid `invalidateIntrinsicContentSize` calls during the spring-based modal presentation animation. ([#2624](https://github.com/airbnb/lottie-ios/issues/2624))
 
 ## [0.11.0](https://github.com/airbnb/epoxy-ios/compare/0.10.0...0.11.0) - 2025-06-18
 
