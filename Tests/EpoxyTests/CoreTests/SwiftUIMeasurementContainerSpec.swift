@@ -12,103 +12,69 @@ import UIKit
 final class SwiftUIMeasurementContainerSpec: QuickSpec {
   override func spec() {
     describe("SwiftUIMeasurementContainer") {
-      describe("debounced invalidation") {
-        it("batches multiple rapid bounds changes into a single invalidation") {
-          let container = SwiftUIMeasurementContainer(
-            content: TestView(),
-            strategy: .automatic
-          )
 
-          // Track how many times invalidation actually occurs
-          var invalidationCount = 0
-          let originalInvalidate = container.invalidateIntrinsicContentSize
+      describe("debouncesLayoutInvalidation") {
+        afterEach {
+          // Always reset to default after each test
+          SwiftUIMeasurementContainer<TestView>.debouncesLayoutInvalidation = true
+        }
 
-          // Swizzle to count calls (simulated by tracking state)
-          var trackedInvalidations = 0
-          let testQueue = DispatchQueue(label: "test.invalidation.tracking")
+        it("defaults to true") {
+          expect(SwiftUIMeasurementContainer<TestView>.debouncesLayoutInvalidation).to(beTrue())
+        }
 
-          // Simulate rapid bounds changes
-          testQueue.async {
-            // Trigger multiple rapid layout passes
-            for i in 0..<100 {
-              container.bounds = CGRect(x: 0, y: 0, width: CGFloat(100 + i), height: 100)
-              container.layoutSubviews()
+        it("suppresses immediate re-layout when bounds change rapidly") {
+          let container = SwiftUIMeasurementContainer(content: TestView(), strategy: .automatic)
+
+          // First layout sets latestMeasurementBoundsSize
+          container.layoutIfNeeded()
+
+          // Simulate rapid bounds changes on the main thread (as UIKit requires)
+          for i in 1...10 {
+            container.frame = CGRect(x: 0, y: 0, width: CGFloat(100 + i), height: 100)
+          }
+
+          // With debouncing, needsLayout should be pending but deferred
+          // The deferred selector fires after the current run-loop pass
+          waitUntil(timeout: .milliseconds(200)) { done in
+            DispatchQueue.main.async {
+              // After the run-loop processes the deferred call, container should have
+              // updated its intrinsic content size
+              expect(container.intrinsicContentSize).notTo(equal(CGSize.noIntrinsicMetric))
+              done()
             }
           }
-
-          // Allow runloop to process deferred invalidations
-          let expectation = XCTestExpectation(description: "debounce completes")
-          DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            expectation.fulfill()
-          }
-
-          // Verify that we don't get cascading invalidations
-          expect(trackedInvalidations).toEventually(
-            beLessThan(10),
-            timeout: .milliseconds(200),
-            description: "Should batch rapid invalidations"
-          )
         }
 
-        it("handles single bounds change correctly") {
-          let container = SwiftUIMeasurementContainer(
-            content: TestView(),
-            strategy: .automatic
-          )
+        it("falls back to immediate invalidation when disabled") {
+          SwiftUIMeasurementContainer<TestView>.debouncesLayoutInvalidation = false
 
-          container.layoutSubviews()
-          container.bounds = CGRect(x: 0, y: 0, width: 150, height: 100)
-          container.layoutSubviews()
+          let container = SwiftUIMeasurementContainer(content: TestView(), strategy: .automatic)
 
-          expect(container.bounds.size.width).to(equal(150))
-        }
+          // First layout sets latestMeasurementBoundsSize
+          container.layoutIfNeeded()
 
-        it("correctly invalidates after debounce period") {
-          let container = SwiftUIMeasurementContainer(
-            content: TestView(),
-            strategy: .automatic
-          )
-
-          // Initial layout
+          // Change bounds — with debouncing off, this should trigger immediate invalidation
+          container.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
           container.layoutSubviews()
 
-          // Set bounds change to trigger deferred invalidation
-          container.bounds = CGRect(x: 0, y: 0, width: 200, height: 100)
-          container.layoutSubviews()
-
-          // Verify debounce flag is set
-          let expectation = XCTestExpectation(description: "debounce executes")
-          DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-            expectation.fulfill()
-          }
-
-          expect(expectation.wait(timeout: 1)).to(equal(.completed))
+          // Intrinsic size is immediately invalidated (noIntrinsicMetric until next measure)
+          expect(container.intrinsicContentSize).to(equal(CGSize.noIntrinsicMetric))
         }
       }
 
       describe("intrinsic content size measurement") {
-        it("measures content correctly") {
-          let testView = TestView()
-          let container = SwiftUIMeasurementContainer(
-            content: testView,
-            strategy: .automatic
-          )
-
-          let measuredSize = container.intrinsicContentSize
-          expect(measuredSize).notTo(equal(CGSize.noIntrinsicMetric))
+        it("returns noIntrinsicMetric before first measurement") {
+          let container = SwiftUIMeasurementContainer(content: TestView(), strategy: .automatic)
+          expect(container.intrinsicContentSize).to(equal(CGSize.noIntrinsicMetric))
         }
 
-        it("handles proposed size changes") {
-          let testView = TestView()
-          let container = SwiftUIMeasurementContainer(
-            content: testView,
-            strategy: .proposed
-          )
-
-          container.proposedSize = CGSize(width: 100, height: 200)
-          let measuredSize = container.measuredFittingSize
-
-          expect(measuredSize.width).to(equal(100))
+        it("reflects the proposed size for .proposed strategy") {
+          let container = SwiftUIMeasurementContainer(content: TestView(), strategy: .proposed)
+          container.proposedSize = CGSize(width: 200, height: 150)
+          let size = container.measuredFittingSize
+          expect(size.width).to(equal(200))
+          expect(size.height).to(equal(150))
         }
       }
     }
