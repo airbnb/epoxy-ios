@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '16.2' # Swift 6.0.3 (highest)
+        - '16.4' # Swift 6.0.3 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '16.2' # Swift 6.0.3 (highest)
+        - '16.4' # Swift 6.0.3 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -40,7 +40,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '16.2' # Swift 6.0.3 (highest)
+        - '16.4' # Swift 6.0.3 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -54,7 +54,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '16.2' # Swift 6.0.3 (highest)
+        - '16.4' # Swift 6.0.3 (highest)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
