@@ -21,6 +21,7 @@
 /// - SeeAlso: `ContentConfigurableView`
 /// - SeeAlso: `BehaviorsConfigurableView`
 /// - SeeAlso: `EpoxyableView`
+@MainActor
 public protocol StyledView: ViewType {
   /// The style type of this view, passed into its initializer to configure the resulting instance.
   ///

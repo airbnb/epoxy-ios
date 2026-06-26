@@ -22,30 +22,34 @@ extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurable
   /// ```
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
-  public static func swiftUIView(
+  public nonisolated static func swiftUIView(
     content: Content,
     style: Style,
     behaviors: Behaviors? = nil)
     -> SwiftUIView<Self, (content: Content, style: Style)>
   {
     SwiftUIView(storage: (content: content, style: style)) {
-      let view = Self(style: style)
-      view.setContent(content, animated: false)
-      return view
+      MainActor.assumeIsolated {
+        let view = Self(style: style)
+        view.setContent(content, animated: false)
+        return view
+      }
     }
     .configure { context in
-      // We need to create a new view instance when the style changes.
-      if context.oldStorage.style != style {
-        context.view = Self(style: style)
-        context.view.setContent(content, animated: context.animated)
-      }
-      // Otherwise, if the just the content changes, we need to update it.
-      else if context.oldStorage.content != content {
-        context.view.setContent(content, animated: context.animated)
-        context.container.invalidateIntrinsicContentSize()
-      }
+      MainActor.assumeIsolated {
+        // We need to create a new view instance when the style changes.
+        if context.oldStorage.style != style {
+          context.view = Self(style: style)
+          context.view.setContent(content, animated: context.animated)
+        }
+        // Otherwise, if the just the content changes, we need to update it.
+        else if context.oldStorage.content != content {
+          context.view.setContent(content, animated: context.animated)
+          context.container.invalidateIntrinsicContentSize()
+        }
 
-      context.view.setBehaviors(behaviors)
+        context.view.setBehaviors(behaviors)
+      }
     }
   }
 }
@@ -71,24 +75,28 @@ extension StyledView
   /// ```
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
-  public static func swiftUIView(
+  public nonisolated static func swiftUIView(
     content: Content,
     behaviors: Behaviors? = nil)
     -> SwiftUIView<Self, Content>
   {
     SwiftUIView(storage: content) {
-      let view = Self()
-      view.setContent(content, animated: false)
-      return view
+      MainActor.assumeIsolated {
+        let view = Self()
+        view.setContent(content, animated: false)
+        return view
+      }
     }
     .configure { context in
-      // We need to update the content of the existing view when the content is updated.
-      if context.oldStorage != content {
-        context.view.setContent(content, animated: context.animated)
-        context.container.invalidateIntrinsicContentSize()
-      }
+      MainActor.assumeIsolated {
+        // We need to update the content of the existing view when the content is updated.
+        if context.oldStorage != content {
+          context.view.setContent(content, animated: context.animated)
+          context.container.invalidateIntrinsicContentSize()
+        }
 
-      context.view.setBehaviors(behaviors)
+        context.view.setBehaviors(behaviors)
+      }
     }
   }
 }
@@ -115,21 +123,23 @@ extension StyledView
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
   /// The sizing defaults to `.automatic`.
-  public static func swiftUIView(
+  public nonisolated static func swiftUIView(
     style: Style,
     behaviors: Behaviors? = nil)
     -> SwiftUIView<Self, Style>
   {
     SwiftUIView(storage: style) {
-      Self(style: style)
+      MainActor.assumeIsolated { Self(style: style) }
     }
     .configure { context in
-      // We need to create a new view instance when the style changes.
-      if context.oldStorage != style {
-        context.view = Self(style: style)
-      }
+      MainActor.assumeIsolated {
+        // We need to create a new view instance when the style changes.
+        if context.oldStorage != style {
+          context.view = Self(style: style)
+        }
 
-      context.view.setBehaviors(behaviors)
+        context.view.setBehaviors(behaviors)
+      }
     }
   }
 }
@@ -157,12 +167,14 @@ extension StyledView
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
   /// The sizing defaults to `.automatic`.
-  public static func swiftUIView(behaviors: Behaviors? = nil) -> SwiftUIView<Self, Void> {
+  public nonisolated static func swiftUIView(behaviors: Behaviors? = nil) -> SwiftUIView<Self, Void> {
     SwiftUIView {
-      Self()
+      MainActor.assumeIsolated { Self() }
     }
     .configure { context in
-      context.view.setBehaviors(behaviors)
+      MainActor.assumeIsolated {
+        context.view.setBehaviors(behaviors)
+      }
     }
   }
 }

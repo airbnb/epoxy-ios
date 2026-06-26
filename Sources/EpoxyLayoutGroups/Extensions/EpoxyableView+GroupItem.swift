@@ -12,7 +12,7 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   ///   - behaviors: the behaviors for the view
   ///   - style: the style for the view
   /// - Returns: a group item model representing the view
-  public static func groupItem(
+  public nonisolated static func groupItem(
     dataID: AnyHashable,
     content: Content,
     behaviors: Behaviors? = nil,
@@ -23,12 +23,12 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
       dataID: dataID,
       params: style,
       content: content,
-      make: { Self(style: $0) },
+      make: { style in MainActor.assumeIsolated { Self(style: style) } },
       setContent: { context, content in
-        context.constrainable.setContent(content, animated: context.animated)
+        MainActor.assumeIsolated { context.constrainable.setContent(content, animated: context.animated) }
       })
       .setBehaviors { context in
-        context.constrainable.setBehaviors(behaviors)
+        MainActor.assumeIsolated { context.constrainable.setBehaviors(behaviors) }
       }
   }
 }
@@ -40,7 +40,7 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   ///   - content: the content for this item's view
   ///   - behaviors: the behaviors for the view
   /// - Returns: a group item model representing the view
-  public static func groupItem(
+  public nonisolated static func groupItem(
     dataID: AnyHashable,
     content: Content,
     behaviors: Behaviors? = nil)
@@ -49,12 +49,12 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
     GroupItem<Self>(
       dataID: dataID,
       content: content,
-      make: { Self() },
+      make: { MainActor.assumeIsolated { Self() } },
       setContent: { context, content in
-        context.constrainable.setContent(content, animated: context.animated)
+        MainActor.assumeIsolated { context.constrainable.setContent(content, animated: context.animated) }
       })
       .setBehaviors { context in
-        context.constrainable.setBehaviors(behaviors)
+        MainActor.assumeIsolated { context.constrainable.setBehaviors(behaviors) }
       }
   }
 }
@@ -66,7 +66,7 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   ///   - behaviors: the behaviors for the view
   ///   - style: the style for the view
   /// - Returns: a group item model representing the view
-  public static func groupItem(
+  public nonisolated static func groupItem(
     dataID: AnyHashable,
     behaviors: Behaviors? = nil,
     style: Style)
@@ -74,9 +74,9 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   {
     GroupItem<Self>(
       dataID: dataID,
-      make: { Self(style: style) })
+      make: { MainActor.assumeIsolated { Self(style: style) } })
       .setBehaviors { context in
-        context.constrainable.setBehaviors(behaviors)
+        MainActor.assumeIsolated { context.constrainable.setBehaviors(behaviors) }
       }
   }
 }
@@ -92,16 +92,16 @@ extension StyledView
   ///   - dataID: the unique identifier for this item
   ///   - behaviors: the behaviors for the view
   /// - Returns: a group item model representing the view
-  public static func groupItem(
+  public nonisolated static func groupItem(
     dataID: AnyHashable,
     behaviors: Behaviors? = nil)
     -> GroupItem<Self>
   {
     GroupItem<Self>(
       dataID: dataID,
-      make: { Self() })
+      make: { MainActor.assumeIsolated { Self() } })
       .setBehaviors { context in
-        context.constrainable.setBehaviors(behaviors)
+        MainActor.assumeIsolated { context.constrainable.setBehaviors(behaviors) }
       }
   }
 }
