@@ -22,7 +22,8 @@ extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurable
   /// ```
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
-  public nonisolated static func swiftUIView(
+  @MainActor
+  public static func swiftUIView(
     content: Content,
     style: Style,
     behaviors: Behaviors? = nil)
@@ -75,7 +76,8 @@ extension StyledView
   /// ```
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
-  public nonisolated static func swiftUIView(
+  @MainActor
+  public static func swiftUIView(
     content: Content,
     behaviors: Behaviors? = nil)
     -> SwiftUIView<Self, Content>
@@ -123,7 +125,8 @@ extension StyledView
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
   /// The sizing defaults to `.automatic`.
-  public nonisolated static func swiftUIView(
+  @MainActor
+  public static func swiftUIView(
     style: Style,
     behaviors: Behaviors? = nil)
     -> SwiftUIView<Self, Style>
@@ -167,7 +170,8 @@ extension StyledView
   /// MyView.swiftUIView(…).sizing(.intrinsicSize)
   /// ```
   /// The sizing defaults to `.automatic`.
-  public nonisolated static func swiftUIView(behaviors: Behaviors? = nil) -> SwiftUIView<Self, Void> {
+  @MainActor
+  public static func swiftUIView(behaviors: Behaviors? = nil) -> SwiftUIView<Self, Void> {
     SwiftUIView {
       MainActor.assumeIsolated { Self() }
     }
