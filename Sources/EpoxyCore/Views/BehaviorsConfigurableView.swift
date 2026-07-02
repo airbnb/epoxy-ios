@@ -18,7 +18,7 @@
 /// - SeeAlso: `ContentConfigurableView`
 /// - SeeAlso: `StyledView`
 /// - SeeAlso: `EpoxyableView`
-@MainActor
+@preconcurrency @MainActor
 public protocol BehaviorsConfigurableView: ViewType {
   /// The non-`Equatable` properties that can be changed over of the lifecycle this View's
   /// instances, e.g. callback closures or delegates.

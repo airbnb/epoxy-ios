@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - 
 
 ### Changed
-- Annotated the `StyledView`, `ContentConfigurableView`, and `BehaviorsConfigurableView` view protocols as `@MainActor` so their conformances are usable without warnings from consumers building under strict concurrency / the Swift 6 language mode. The model-builder DSL entry points (`itemModel`/`barModel`/`supplementaryItemModel`/`groupItem`/`swiftUIView`) remain `nonisolated`; their deferred view-construction and configuration closures bridge to the main actor with `MainActor.assumeIsolated`.
+- Annotated the `StyledView`, `ContentConfigurableView`, and `BehaviorsConfigurableView` view protocols as `@preconcurrency @MainActor` so their conformances are usable without warnings from consumers building under strict concurrency / the Swift 6 language mode. The model-builder DSL entry points (`itemModel`/`barModel`/`supplementaryItemModel`/`groupItem`/`swiftUIView`) are also annotated as `@preconcurrency @MainActor`, while their deferred view-construction and configuration closures bridge to the main actor with `MainActor.assumeIsolated`.
 
 ### Fixed
 - 

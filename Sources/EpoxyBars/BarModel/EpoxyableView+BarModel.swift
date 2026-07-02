@@ -17,7 +17,8 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   ///     method whenever this model is updated. Defaults to no behaviors.
   ///   - style: The style of the bar view that uniquely identifies.
   /// - Returns: A `BarModel` with an instance of this view as its bar view.
-  public nonisolated static func barModel(
+  @preconcurrency @MainActor
+  public static func barModel(
     dataID: AnyHashable? = nil,
     content: Content,
     behaviors: Behaviors? = nil,
@@ -51,7 +52,8 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   ///   - behaviors: The behaviors that will be applied to the bar view via the `setBehaviors(_:)`
   ///     method whenever this model is updated. Defaults to no behaviors.
   /// - Returns: A `BarModel` with an instance of this view as its bar view.
-  public nonisolated static func barModel(
+  @preconcurrency @MainActor
+  public static func barModel(
     dataID: AnyHashable? = nil,
     content: Content,
     behaviors: Behaviors? = nil)
@@ -81,7 +83,8 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   ///     method whenever this model is updated. Defaults to no behaviors.
   ///   - style: The style of the bar view that uniquely identifies.
   /// - Returns: A `BarModel` with an instance of this view as its bar view.
-  public nonisolated static func barModel(
+  @preconcurrency @MainActor
+  public static func barModel(
     dataID: AnyHashable? = nil,
     behaviors: Behaviors? = nil,
     style: Style)
@@ -112,7 +115,8 @@ extension StyledView
   ///   - behaviors: The behaviors that will be applied to the bar view via the `setBehaviors(_:)`
   ///     method whenever this model is updated. Defaults to no behaviors.
   /// - Returns: A `BarModel` with an instance of this view as its bar view.
-  public nonisolated static func barModel(
+  @preconcurrency @MainActor
+  public static func barModel(
     dataID: AnyHashable? = nil,
     behaviors: Behaviors? = nil)
     -> BarModel<Self>
