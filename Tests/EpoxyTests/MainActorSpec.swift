@@ -5,15 +5,13 @@ import Quick
 
 // MARK: - MainActorSpec
 
-/// Opt-in for `QuickSpec`s that exercise `@MainActor` types (e.g. the `@MainActor`
-/// `NavigationQueue` / `PresentationQueue`).
+/// Opt-in for `QuickSpec`s that exercise `@MainActor` types.
 ///
 /// Quick's `spec()` stores its `beforeEach` / `it` / `afterEach` closures as nonisolated
 /// `@escaping` closures and invokes them later, so a `@MainActor` annotation on the spec class or
-/// on `spec()` doesn't reach them. Quick runs every example on the main thread (via XCTest), so
-/// conforming to `MainActorSpec` shadows the global Quick DSL with `@MainActor` variants that
-/// bridge to it through `MainActor.assumeIsolated`, letting the spec call into `@MainActor` types
-/// directly without annotating every closure.
+/// on `spec()` doesn't reach them.
+/// Conforming to `MainActorSpec` bridges through `MainActor.assumeIsolated`,
+/// letting the spec call into `@MainActor` types directly without annotating every closure.
 protocol MainActorSpec: QuickSpec {}
 
 extension MainActorSpec {
