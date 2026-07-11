@@ -12,7 +12,7 @@ import UIKit
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-final class NavigationQueueSpec: QuickSpec {
+final class NavigationQueueSpec: QuickSpec, MainActorSpec {
 
   override func spec() {
     enum NavigationID {
