@@ -12,7 +12,7 @@ import Quick
 /// on `spec()` doesn't reach them.
 /// Conforming to `MainActorSpec` bridges through `MainActor.assumeIsolated`,
 /// letting the spec call into `@MainActor` types directly without annotating every closure.
-protocol MainActorSpec: QuickSpec {}
+protocol MainActorSpec: QuickSpec { }
 
 extension MainActorSpec {
   func beforeEach(_ closure: @escaping @MainActor () -> Void) {
