@@ -261,7 +261,7 @@ extension PresentationModel {
 
     /// A closure that's invoked to perform the presentation from the provided context, returning a
     /// `Dismissible` that can be used to dismiss the presentation.
-    public var present: @MainActor (_ presented: UIViewController) -> Presentable
+    public var present: (_ presented: UIViewController) -> Presentable
   }
 
   /// A closure to present the `presented` view controller passed to the `present` closure of a

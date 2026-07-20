@@ -12,13 +12,13 @@ import UIKit
 final class HGroupSpec: QuickSpec, MainActorSpec {
 
   override func spec() {
-    let initialItems = [
-      TestView.groupItem(dataID: 1),
-      TestView.groupItem(dataID: 2),
-    ]
     var group: HGroup!
 
     beforeEach {
+      let initialItems = [
+        TestView.groupItem(dataID: 1),
+        TestView.groupItem(dataID: 2),
+      ]
       let view = UIView(frame: .init(x: 0, y: 0, width: 320, height: 500))
       group = HGroup(items: initialItems)
       group.install(in: view)

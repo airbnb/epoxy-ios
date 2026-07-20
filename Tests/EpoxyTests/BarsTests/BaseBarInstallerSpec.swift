@@ -180,10 +180,11 @@ extension BaseBarInstallerSpec {
         }
 
         context("when setting subsequent bars") {
-          let bars = [StaticHeightBar.barModel(style: .init(height: 100))]
+          var bars: [BarModel<StaticHeightBar>]!
           let animated = false
 
           beforeEach {
+            bars = [StaticHeightBar.barModel(style: .init(height: 100))]
             setBars(bars, animated)
           }
 

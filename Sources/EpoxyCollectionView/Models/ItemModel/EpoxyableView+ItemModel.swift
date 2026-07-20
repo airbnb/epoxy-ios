@@ -17,7 +17,7 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   ///     method whenever this model is updated. Defaults to no behaviors.
   ///   - style: The style of the item view that uniquely identifies.
   /// - Returns: An `ItemModel` with an instance of this view as its item view.
-  @preconcurrency @MainActor
+  @MainActor
   public static func itemModel(
     dataID: AnyHashable,
     content: Content,
@@ -52,7 +52,7 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   ///   - behaviors: The behaviors that will be applied to the item view via the `setBehaviors(_:)`
   ///     method whenever this model is updated. Defaults to no behaviors.
   /// - Returns: An `ItemModel` with an instance of this view as its item view.
-  @preconcurrency @MainActor
+  @MainActor
   public static func itemModel(
     dataID: AnyHashable,
     content: Content,
@@ -83,7 +83,7 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   ///     method whenever this model is updated. Defaults to no behaviors.
   ///   - style: The style of the item view that uniquely identifies.
   /// - Returns: An `ItemModel` with an instance of this view as its item view.
-  @preconcurrency @MainActor
+  @MainActor
   public static func itemModel(
     dataID: AnyHashable,
     behaviors: Behaviors? = nil,
@@ -115,7 +115,7 @@ extension StyledView
   ///   - behaviors: The behaviors that will be applied to the item view via the `setBehaviors(_:)`
   ///     method whenever this model is updated. Defaults to no behaviors.
   /// - Returns: An `ItemModel` with an instance of this view as its item view.
-  @preconcurrency @MainActor
+  @MainActor
   public static func itemModel(
     dataID: AnyHashable,
     behaviors: Behaviors? = nil)
