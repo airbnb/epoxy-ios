@@ -9,9 +9,9 @@ import UIKit
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-final class ConstraniableContainerSpec: QuickSpec, MainActorSpec {
+final class ConstraniableContainerSpec: QuickSpec {
 
-  override func spec() {
+  override class func spec() {
     var constrainable: Constrainable!
 
     beforeEach {

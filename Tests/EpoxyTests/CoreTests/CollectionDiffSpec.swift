@@ -67,9 +67,9 @@ extension TestDiffableSection: DiffableSection {
 
 // MARK: - CollectionDiffSpec
 
-final class CollectionDiffSpec: QuickSpec, MainActorSpec {
+final class CollectionDiffSpec: QuickSpec {
 
-  override func spec() {
+  override class func spec() {
     let intArray = [1, 2, 3, 4, 5, 6, 7]
 
     let testDiffableArray = [

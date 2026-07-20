@@ -6,7 +6,7 @@ import Nimble
 import Quick
 import UIKit
 
-final class EpoxyModelBuilderArraySpec: QuickSpec, MainActorSpec {
+final class EpoxyModelBuilderArraySpec: QuickSpec {
   typealias TestBuilder = EpoxyModelArrayBuilder<Int>
 
   struct BuilderTest {
@@ -17,7 +17,7 @@ final class EpoxyModelBuilderArraySpec: QuickSpec, MainActorSpec {
     var models: [Int]
   }
 
-  override func spec() {
+  override class func spec() {
     context("with a single model expression") {
       it("should build the model") {
         let builder = BuilderTest {

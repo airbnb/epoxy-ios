@@ -11,9 +11,9 @@ import UIKit
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-protocol BaseBarInstallerSpec: MainActorSpec {
+protocol BaseBarInstallerSpec: QuickSpec {
   @MainActor
-  func installBarContainer(
+  static func installBarContainer(
     in viewController: UIViewController,
     configuration: BarInstallerConfiguration)
     -> (container: InternalBarContainer, setBars: ([BarModeling], Bool) -> Void)
@@ -23,7 +23,7 @@ protocol BaseBarInstallerSpec: MainActorSpec {
 
 extension BaseBarInstallerSpec {
 
-  func baseSpec() {
+  static func baseSpec() {
     let defaultSafeAreaInset: CGFloat = 20
     var window: UIWindow!
     var viewController: UIViewController!
@@ -45,7 +45,7 @@ extension BaseBarInstallerSpec {
       window.rootViewController = viewController
       window.makeKeyAndVisible()
 
-      (container, setBars) = self.installBarContainer(in: viewController, configuration: configuration)
+      (container, setBars) = installBarContainer(in: viewController, configuration: configuration)
     }
 
     afterEach {
@@ -162,7 +162,7 @@ extension BaseBarInstallerSpec {
             container.setBars(bars, animated: animated)
           })
 
-          (container, setBars) = self.installBarContainer(in: viewController, configuration: configuration)
+          (container, setBars) = installBarContainer(in: viewController, configuration: configuration)
         }
 
         afterEach {

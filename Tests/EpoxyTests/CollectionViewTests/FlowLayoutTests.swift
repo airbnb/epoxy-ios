@@ -9,9 +9,9 @@ import XCTest
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-final class FlowLayoutSpec: QuickSpec, MainActorSpec {
+final class FlowLayoutSpec: QuickSpec {
 
-  override func spec() {
+  override class func spec() {
     var itemModel: ItemModel<UIView>!
     var collectionView: CollectionView!
     var layout: UICollectionViewFlowLayout!

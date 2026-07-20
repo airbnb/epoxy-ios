@@ -30,8 +30,8 @@ let package = Package(
     .library(name: "EpoxyLayoutGroups", targets: ["EpoxyLayoutGroups"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/Quick/Quick.git", .upToNextMajor(from: "4.0.0")),
-    .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "9.0.0")),
+    .package(url: "https://github.com/Quick/Quick.git", .upToNextMajor(from: "7.6.2")),
+    .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "14.0.0")),
   ],
   targets: [
     .target(

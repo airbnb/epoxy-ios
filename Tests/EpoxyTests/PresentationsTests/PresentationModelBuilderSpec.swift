@@ -7,7 +7,7 @@ import UIKit
 
 @testable import EpoxyPresentations
 
-final class PresentationModelBuilderSpec: QuickSpec, MainActorSpec {
+final class PresentationModelBuilderSpec: QuickSpec {
   struct TestBuilder {
     init(@PresentationModelBuilder _ build: @escaping () -> PresentationModel?) {
       model = build()
@@ -16,7 +16,7 @@ final class PresentationModelBuilderSpec: QuickSpec, MainActorSpec {
     var model: PresentationModel?
   }
 
-  override func spec() {
+  override class func spec() {
     context("with a single presentation model expression") {
       it("should build the first presentation") {
         let builder = TestBuilder {

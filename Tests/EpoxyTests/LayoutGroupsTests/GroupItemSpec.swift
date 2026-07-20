@@ -9,9 +9,9 @@ import UIKit
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-final class GroupItemSpec: QuickSpec, MainActorSpec {
+final class GroupItemSpec: QuickSpec {
 
-  override func spec() {
+  override class func spec() {
     var groupItem: GroupItem<TestStyledLabel>!
 
     beforeEach {

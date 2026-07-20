@@ -9,8 +9,8 @@ import Quick
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-final class EpoxyModeledSpec: QuickSpec, MainActorSpec {
-  override func spec() {
+final class EpoxyModeledSpec: QuickSpec {
+  override class func spec() {
     var model: TestModel!
 
     beforeEach {

@@ -12,7 +12,7 @@ import UIKit
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-final class BarStackViewSpec: QuickSpec, MainActorSpec {
+final class BarStackViewSpec: QuickSpec {
   enum StyleID {
     case loading
     case loaded
@@ -39,7 +39,7 @@ final class BarStackViewSpec: QuickSpec, MainActorSpec {
     }
   }
 
-  override func spec() {
+  override class func spec() {
     var view: BarStackView!
     beforeEach {
       view = BarStackView()
