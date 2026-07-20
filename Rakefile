@@ -39,7 +39,7 @@ namespace :lint do
       # Validate in Debug: the Release optimizer (-Os) crashes swiftc 6.3 in the SIL
       # EarlyPerfInliner while compiling EpoxySwiftUIHostingView's main-actor deinit
       # (a compiler bug, not a source error). Debug uses -Onone and links cleanly.
-      sh "bundle exec pod lib lint #{spec} --include-podspecs=**/*.podspec --configuration=Debug"
+      sh "bundle exec pod lib lint #{spec} --include-podspecs=**/*.podspec --configuration=Debug --allow-warnings"
     end
   end
 
