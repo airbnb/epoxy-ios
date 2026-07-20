@@ -9,6 +9,7 @@ import UIKit
 
 final class TopBarInstallerSpec: QuickSpec, BaseBarInstallerSpec {
 
+  @MainActor
   func installBarContainer(
     in viewController: UIViewController,
     configuration: BarInstallerConfiguration)

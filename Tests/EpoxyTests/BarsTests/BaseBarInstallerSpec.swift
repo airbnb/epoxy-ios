@@ -11,7 +11,8 @@ import UIKit
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-protocol BaseBarInstallerSpec {
+protocol BaseBarInstallerSpec: MainActorSpec {
+  @MainActor
   func installBarContainer(
     in viewController: UIViewController,
     configuration: BarInstallerConfiguration)

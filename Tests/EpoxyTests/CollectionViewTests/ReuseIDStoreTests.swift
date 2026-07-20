@@ -9,6 +9,7 @@ import XCTest
 
 // swiftlint:disable implicitly_unwrapped_optional
 
+@MainActor
 final class ReuseIDStoreTests: XCTestCase {
 
   // MARK: Internal

@@ -7,7 +7,7 @@ import UIKit
 
 @testable import EpoxyPresentations
 
-final class PresentationModelBuilderSpec: QuickSpec {
+final class PresentationModelBuilderSpec: QuickSpec, MainActorSpec {
   struct TestBuilder {
     init(@PresentationModelBuilder _ build: @escaping () -> PresentationModel?) {
       model = build()

@@ -9,7 +9,7 @@ import UIKit
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-final class HGroupItemSpec: QuickSpec {
+final class HGroupItemSpec: QuickSpec, MainActorSpec {
 
   override func spec() {
     var groupItem: HGroupItem!

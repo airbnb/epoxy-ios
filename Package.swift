@@ -48,12 +48,26 @@ let package = Package(
     .target(name: "EpoxyNavigationController", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
     .target(name: "EpoxyPresentations", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
     .target(name: "EpoxyLayoutGroups", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
-    // NOTE: The test targets keep the default (nonisolated) isolation. Specs that exercise the (now
-    // main-actor) library API bridge to the main actor via the `MainActorSpec` protocol, whose DSL
-    // takes `@MainActor` closures. Isolating the whole target instead would conflict with
-    // `QuickSpec`'s nonisolated `spec()` / `init()` overrides.
-    .testTarget(name: "EpoxyTests", dependencies: ["Epoxy", "Quick", "Nimble"]),
-    .testTarget(name: "PerformanceTests", dependencies: ["EpoxyCore"]),
+    // The test targets keep the default (nonisolated) isolation and stay on the Swift 5 language
+    // mode, for two reasons:
+    //   1. `QuickSpec`'s `spec()` / `init()` are nonisolated, so a target-wide `@MainActor` default
+    //      would conflict with those overrides.
+    //   2. Quick specs share non-`Sendable` state (e.g. `GroupItem`, model storage) through captured
+    //      `var`s across the bridged `@MainActor` closures. That state never leaves the main thread,
+    //      but Swift 6's region-based `sending` analysis can't prove it. Region isolation is only
+    //      enforced in the Swift 6 language mode, so Swift 5 mode keeps the tests compiling without
+    //      resorting to `nonisolated(unsafe)`.
+    // Actor-isolation (the guarantee this spike validates) is still enforced: specs that drive the
+    // now-main-actor API conform to the `MainActorSpec` bridge, and test-only helpers that model
+    // main-actor library protocols are annotated `@MainActor`.
+    .testTarget(
+      name: "EpoxyTests",
+      dependencies: ["Epoxy", "Quick", "Nimble"],
+      swiftSettings: [.swiftLanguageMode(.v5)]),
+    .testTarget(
+      name: "PerformanceTests",
+      dependencies: ["EpoxyCore"],
+      swiftSettings: [.swiftLanguageMode(.v5)]),
   ])
 
 #if swift(>=5.6)

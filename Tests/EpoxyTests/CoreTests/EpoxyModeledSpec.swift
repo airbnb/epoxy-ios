@@ -9,7 +9,7 @@ import Quick
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-final class EpoxyModeledSpec: QuickSpec {
+final class EpoxyModeledSpec: QuickSpec, MainActorSpec {
   override func spec() {
     var model: TestModel!
 
@@ -266,42 +266,49 @@ final class EpoxyModeledSpec: QuickSpec {
 
 // MARK: - TestStringProviding
 
+@MainActor
 private protocol TestStringProviding {
   var testString: String? { get }
 }
 
 // MARK: - TestArity0ClosureProviding
 
+@MainActor
 private protocol TestArity0ClosureProviding {
   var testArity0Closure: (() -> Void)? { get }
 }
 
 // MARK: - TestArity1ClosureProviding
 
+@MainActor
 private protocol TestArity1ClosureProviding {
   var testArity1Closure: ((String) -> Void)? { get }
 }
 
 // MARK: - TestArity2ClosureProviding
 
+@MainActor
 private protocol TestArity2ClosureProviding {
   var testArity2Closure: ((String, String) -> Void)? { get }
 }
 
 // MARK: - TestArity3ClosureProviding
 
+@MainActor
 private protocol TestArity3ClosureProviding {
   var testArity3Closure: ((String, String, String) -> Void)? { get }
 }
 
 // MARK: - TestArity4ClosureProviding
 
+@MainActor
 private protocol TestArity4ClosureProviding {
   var testArity4Closure: ((String, String, String, String) -> Void)? { get }
 }
 
 // MARK: - EpoxyModeled
 
+@MainActor
 extension EpoxyModeled where Self: TestStringProviding {
   var testString: String? {
     get { self[testStringProperty] }
@@ -318,6 +325,7 @@ extension EpoxyModeled where Self: TestStringProviding {
 
 }
 
+@MainActor
 extension EpoxyModeled where Self: TestArity0ClosureProviding {
   var testArity0Closure: (() -> Void)? {
     get { self[testArity0ClosureProperty] }
@@ -337,6 +345,7 @@ extension EpoxyModeled where Self: TestArity0ClosureProviding {
 
 }
 
+@MainActor
 extension EpoxyModeled where Self: TestArity1ClosureProviding {
   var testArity1Closure: ((String) -> Void)? {
     get { self[testArity1ClosureProperty] }
@@ -356,6 +365,7 @@ extension EpoxyModeled where Self: TestArity1ClosureProviding {
 
 }
 
+@MainActor
 extension EpoxyModeled where Self: TestArity2ClosureProviding {
   var testArity2Closure: ((String, String) -> Void)? {
     get { self[testArity2ClosureProperty] }
@@ -375,6 +385,7 @@ extension EpoxyModeled where Self: TestArity2ClosureProviding {
 
 }
 
+@MainActor
 extension EpoxyModeled where Self: TestArity3ClosureProviding {
   var testArity3Closure: ((String, String, String) -> Void)? {
     get { self[testArity3ClosureProperty] }
@@ -394,6 +405,7 @@ extension EpoxyModeled where Self: TestArity3ClosureProviding {
 
 }
 
+@MainActor
 extension EpoxyModeled where Self: TestArity4ClosureProviding {
   var testArity4Closure: ((String, String, String, String) -> Void)? {
     get { self[testArity4ClosureProperty] }
@@ -415,6 +427,7 @@ extension EpoxyModeled where Self: TestArity4ClosureProviding {
 
 // MARK: - TestModel
 
+@MainActor
 private struct TestModel: EpoxyModeled {
   var storage = EpoxyModelStorage()
 }

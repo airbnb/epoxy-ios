@@ -9,16 +9,16 @@ import UIKit
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-final class VGroupSpec: QuickSpec {
+final class VGroupSpec: QuickSpec, MainActorSpec {
 
   override func spec() {
-    let initialItems = [
-      TestView.groupItem(dataID: 1),
-      TestView.groupItem(dataID: 2),
-    ]
     var group: VGroup!
 
     beforeEach {
+      let initialItems = [
+        TestView.groupItem(dataID: 1),
+        TestView.groupItem(dataID: 2),
+      ]
       let view = UIView(frame: .init(x: 0, y: 0, width: 320, height: 500))
       group = VGroup(items: initialItems)
       group.install(in: view)

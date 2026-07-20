@@ -6,7 +6,7 @@ import Nimble
 import Quick
 import UIKit
 
-final class EpoxyModelBuilderArraySpec: QuickSpec {
+final class EpoxyModelBuilderArraySpec: QuickSpec, MainActorSpec {
   typealias TestBuilder = EpoxyModelArrayBuilder<Int>
 
   struct BuilderTest {

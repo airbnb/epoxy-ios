@@ -12,7 +12,7 @@ import UIKit
 
 // MARK: - CollectionViewSpec
 
-final class CollectionViewSpec: QuickSpec {
+final class CollectionViewSpec: QuickSpec, MainActorSpec {
   final class TestView: UIView, EpoxyableView {
     init() {
       super.init(frame: .zero)
@@ -25,6 +25,7 @@ final class CollectionViewSpec: QuickSpec {
     }
   }
 
+  @MainActor
   var mockCell: CollectionViewCell {
     let cell = CollectionViewCell(frame: .zero)
     cell.itemPath = .init(
@@ -33,6 +34,7 @@ final class CollectionViewSpec: QuickSpec {
     return cell
   }
 
+  @MainActor
   var mockHeaderView: CollectionViewReusableView {
     let cell = CollectionViewReusableView(frame: .zero)
     cell.itemPath = .init(
@@ -43,12 +45,15 @@ final class CollectionViewSpec: QuickSpec {
   }
 
   override func spec() {
-    let itemModel = ItemModel<TestView>(dataID: DefaultDataID.noneProvided)
-    let supplementaryItemModel = SupplementaryItemModel<TestView>(dataID: DefaultDataID.noneProvided)
+    var itemModel: ItemModel<TestView>!
+    var supplementaryItemModel: SupplementaryItemModel<TestView>!
 
     var collectionView: CollectionView!
 
     beforeEach {
+      itemModel = ItemModel<TestView>(dataID: DefaultDataID.noneProvided)
+      supplementaryItemModel = SupplementaryItemModel<TestView>(dataID: DefaultDataID.noneProvided)
+
       let layout = UICollectionViewFlowLayout()
       layout.itemSize = CGSize(width: 50, height: 50)
       layout.headerReferenceSize = CGSize(width: 50, height: 50)
