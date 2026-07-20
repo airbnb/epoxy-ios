@@ -36,7 +36,7 @@ namespace :lint do
   desc 'Lints the podspec'
   task :podspec do
     Dir.glob('*.podspec') do |spec|
-      sh "bundle exec pod lib lint #{spec} --include-podspecs=**/*.podspec"
+      sh "bundle exec pod lib lint #{spec} --include-podspecs=**/*.podspec --verbose"
     end
   end
 
