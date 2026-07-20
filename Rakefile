@@ -90,7 +90,7 @@ def xcodebuild(command)
   `which mint`
 
   if $?.success?
-    sh "set -o pipefail && xcodebuild #{command} | mint run thii/xcbeautify@0.10.2"
+    sh "set -o pipefail && xcodebuild #{command} 2>&1 | tee /tmp/xcodebuild-raw.log | mint run thii/xcbeautify@0.10.2 || (echo '===== RAW XCODEBUILD TAIL ====='; tail -400 /tmp/xcodebuild-raw.log; false)"
   else
     sh "xcodebuild #{command}"
   end
