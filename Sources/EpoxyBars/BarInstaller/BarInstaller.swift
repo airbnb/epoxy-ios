@@ -102,7 +102,7 @@ final class BarInstaller<Container: BarContainer> {
   private func setBars(_ bars: [BarModeling], animated: Bool, in view: UIView) {
     self.bars = bars
 
-    guard let container = container else {
+    guard let container else {
       installContainer(in: view, with: bars, animated: animated)
       return
     }
@@ -132,7 +132,7 @@ final class BarInstaller<Container: BarContainer> {
   }
 
   private func uninstallContainer() {
-    guard let container = container else { return }
+    guard let container else { return }
     container.remove()
     self.container = nil
   }
@@ -175,20 +175,23 @@ extension BarInstaller: BarCoordinatorPropertyConfigurable {
 
 // MARK: - Token
 
-private final class Token {
+// `Token` is `nonisolated` so its `deinit` isn't main-actor isolated: an isolated `deinit` is only
+// available in iOS 18.4+, but Epoxy deploys back to iOS 13. The `dispose` closure updates
+// main-actor state, so the `deinit` hops to the main actor to run it.
+private nonisolated final class Token {
 
   // MARK: Lifecycle
 
-  init(dispose: @escaping () -> Void) {
+  init(dispose: @escaping @MainActor () -> Void) {
     self.dispose = dispose
   }
 
-  isolated deinit {
-    dispose()
+  deinit {
+    Task { @MainActor [dispose] in dispose() }
   }
 
   // MARK: Private
 
-  private let dispose: () -> Void
+  private let dispose: @MainActor () -> Void
 
 }
