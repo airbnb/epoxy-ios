@@ -36,7 +36,10 @@ namespace :lint do
   desc 'Lints the podspec'
   task :podspec do
     Dir.glob('*.podspec') do |spec|
-      sh "bundle exec pod lib lint #{spec} --include-podspecs=**/*.podspec --verbose"
+      # Validate in Debug: the Release optimizer (-Os) crashes swiftc 6.3 in the SIL
+      # EarlyPerfInliner while compiling EpoxySwiftUIHostingView's main-actor deinit
+      # (a compiler bug, not a source error). Debug uses -Onone and links cleanly.
+      sh "bundle exec pod lib lint #{spec} --include-podspecs=**/*.podspec --configuration=Debug"
     end
   end
 
@@ -90,7 +93,7 @@ def xcodebuild(command)
   `which mint`
 
   if $?.success?
-    sh "set -o pipefail && xcodebuild #{command} 2>&1 | tee /tmp/xcodebuild-raw.log | mint run thii/xcbeautify@0.10.2 || (echo '===== RAW XCODEBUILD TAIL ====='; tail -400 /tmp/xcodebuild-raw.log; false)"
+    sh "set -o pipefail && xcodebuild #{command} | mint run thii/xcbeautify@0.10.2"
   else
     sh "xcodebuild #{command}"
   end
