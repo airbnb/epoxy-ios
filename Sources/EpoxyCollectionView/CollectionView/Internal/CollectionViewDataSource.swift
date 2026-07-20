@@ -117,7 +117,7 @@ final class CollectionViewDataSource: NSObject {
   }
 
   private func registerNewViewDifferentiators(_ newViewDifferentiators: Set<ViewDifferentiator>) {
-    guard let collectionView = collectionView else {
+    guard let collectionView else {
       EpoxyLogger.shared.assertionFailure(
         "Trying to register reuse IDs before the CollectionView was set.")
       return
@@ -132,7 +132,7 @@ final class CollectionViewDataSource: NSObject {
     _ newViewDifferentiators: Set<ViewDifferentiator>,
     forKind elementKind: String)
   {
-    guard let collectionView = collectionView else {
+    guard let collectionView else {
       EpoxyLogger.shared.assertionFailure(
         "Trying to register reuse IDs before the CollectionView was set.")
       return
@@ -152,7 +152,7 @@ final class CollectionViewDataSource: NSObject {
 extension CollectionViewDataSource: UICollectionViewDataSource {
 
   func numberOfSections(in _: UICollectionView) -> Int {
-    guard let data = data else { return 0 }
+    guard let data else { return 0 }
 
     return data.sections.count
   }
@@ -162,7 +162,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
     numberOfItemsInSection section: Int)
     -> Int
   {
-    guard let data = data else { return 0 }
+    guard let data else { return 0 }
 
     return data.sections[section].items.count
   }
@@ -245,7 +245,7 @@ extension CollectionViewDataSource: UICollectionViewDataSource {
     to destinationIndexPath: IndexPath)
   {
     guard
-      let data = data,
+      let data,
       let sourceItem = data.item(at: sourceIndexPath),
       let sourceSection = data.section(at: sourceIndexPath.section),
       let destinationSection = data.section(at: destinationIndexPath.section)

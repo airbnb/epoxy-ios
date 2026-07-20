@@ -12,7 +12,8 @@ import UIKit
 ///
 /// - SeeAlso: `BottomBarInstaller`
 /// - SeeAlso: `TopBarInstaller`
-public struct BarModel<View: UIView>: @MainActor ViewEpoxyModeled {
+public struct BarModel<View: UIView>: @MainActor
+ViewEpoxyModeled {
 
   // MARK: Lifecycle
 
@@ -22,7 +23,7 @@ public struct BarModel<View: UIView>: @MainActor ViewEpoxyModeled {
   ///   - dataID: An optional ID that uniquely identifies this bar relative to other bars in the
   ///     same bar stack.
   public init(dataID: AnyHashable? = nil) {
-    if let dataID = dataID {
+    if let dataID {
       self.dataID = dataID
     }
   }
@@ -44,7 +45,7 @@ public struct BarModel<View: UIView>: @MainActor ViewEpoxyModeled {
     content: Content,
     setContent: @escaping (CallbackContext, Content) -> Void)
   {
-    if let dataID = dataID {
+    if let dataID {
       self.dataID = dataID
     }
     erasedContent = content
@@ -78,7 +79,7 @@ public struct BarModel<View: UIView>: @MainActor ViewEpoxyModeled {
     makeView: @escaping (Params) -> View,
     setContent: @escaping (CallbackContext, Content) -> Void)
   {
-    if let dataID = dataID {
+    if let dataID {
       self.dataID = dataID
     }
     styleID = params
@@ -173,7 +174,8 @@ extension BarModel: BarModeling {
 
 // MARK: InternalBarModeling
 
-extension BarModel: @MainActor InternalBarModeling {
+extension BarModel: @MainActor
+InternalBarModeling {
   var isSelectable: Bool {
     didSelect != nil
   }
@@ -214,7 +216,8 @@ extension BarModel: @MainActor InternalBarModeling {
 
 // MARK: InternalBarCoordinating
 
-extension BarModel: @MainActor InternalBarCoordinating {
+extension BarModel: @MainActor
+InternalBarCoordinating {
   public func barModel(for coordinator: AnyBarCoordinating) -> BarModeling {
     guard let typedCoordinator = coordinator as? Coordinator else {
       EpoxyLogger.shared.assertionFailure(
@@ -249,7 +252,8 @@ extension BarModel: Diffable {
 
 // MARK: CallbackContextEpoxyModeled
 
-extension BarModel: @MainActor CallbackContextEpoxyModeled {
+extension BarModel: @MainActor
+CallbackContextEpoxyModeled {
 
   /// The context passed to callbacks on an `BarModel`.
   public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {

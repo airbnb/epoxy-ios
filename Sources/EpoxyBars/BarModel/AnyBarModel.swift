@@ -64,7 +64,8 @@ extension AnyBarModel: Diffable {
 
 // MARK: CallbackContextEpoxyModeled
 
-extension AnyBarModel: @MainActor CallbackContextEpoxyModeled {
+extension AnyBarModel: @MainActor
+CallbackContextEpoxyModeled {
   public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {
     public init(
       view: UIView,

@@ -106,7 +106,7 @@ extension InternalBarContainer {
 
   /// All immediate scroll view subviews of this bar container's view controller.
   var allScrollViews: [UIScrollView] {
-    guard let viewController = viewController else { return [] }
+    guard let viewController else { return [] }
     return viewController.view.subviews.compactMap { $0 as? UIScrollView }
   }
 
@@ -191,9 +191,9 @@ extension InternalBarContainer {
 
   // Adjusts the additional safe area inset of the view controller based on the `insetBehavior`.
   func updateAdditionalSafeAreaInset(_ inset: CGFloat?, hasHierarchyScaleTransform: Bool) {
-    guard let viewController = viewController else { return }
+    guard let viewController else { return }
 
-    if let inset = inset {
+    if let inset {
       // If any view in the hierarchy has a 3D transform, it's not valid to lessen the insets as
       // they may be too short; we should wait until there is no transform to so do.
       if hasHierarchyScaleTransform {
@@ -211,7 +211,7 @@ extension InternalBarContainer {
 
   /// Asserts that the view controller this bar container was added to is in a valid state.
   func verifyViewController() {
-    guard let viewController = viewController else { return }
+    guard let viewController else { return }
 
     EpoxyLogger.shared.assert(
       viewController.isViewLoaded,

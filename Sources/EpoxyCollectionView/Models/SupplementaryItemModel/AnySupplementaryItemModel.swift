@@ -67,7 +67,8 @@ extension AnySupplementaryItemModel: SupplementaryItemModeling {
 
 // MARK: InternalSupplementaryItemModeling
 
-extension AnySupplementaryItemModel: @MainActor InternalSupplementaryItemModeling {
+extension AnySupplementaryItemModel: @MainActor
+InternalSupplementaryItemModeling {
 
   // MARK: Public
 

@@ -137,7 +137,7 @@ public final class BottomBarContainer: BarStackView, InternalBarContainer {
   private var bottomConstraint: NSLayoutConstraint?
 
   private var additionalSafeAreaInsetsBottom: CGFloat? {
-    guard let viewController = viewController else { return nil }
+    guard let viewController else { return nil }
     guard case .barHeightSafeArea = insetBehavior else { return nil }
 
     // Using the frame.minY here causes us to compute an temporarily invalid safe area inset bottom

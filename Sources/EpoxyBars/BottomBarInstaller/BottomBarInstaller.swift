@@ -91,7 +91,7 @@ public final class BottomBarInstaller: NSObject {
   /// The distance that the keyboard overlaps with `viewController.view` from its bottom edge.
   var keyboardOverlap: CGFloat = 0 {
     didSet {
-      guard keyboardOverlap != oldValue, let container = container else { return }
+      guard keyboardOverlap != oldValue, let container else { return }
 
       // If keyboardAdjustsBottomBarOffset changes on a visible scroll view the keyboard overlap
       // will have to change for us to clear it out.

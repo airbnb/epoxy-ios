@@ -63,11 +63,11 @@ final class ShuffleViewController: CollectionViewController {
 
   private func addTimer() {
     Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { [weak self] timer in
-      guard let self = self else {
+      guard let self else {
         timer.invalidate()
         return
       }
-      self.state.randomize()
+      state.randomize()
     }
   }
 

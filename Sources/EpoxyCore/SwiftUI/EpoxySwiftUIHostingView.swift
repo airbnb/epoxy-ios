@@ -57,7 +57,8 @@ extension CallbackContextEpoxyModeled
 /// the API is private and 3) the `_UIHostingView` doesn't not accept setting a new `View` instance.
 ///
 /// - SeeAlso: `EpoxySwiftUIHostingController`
-public final class EpoxySwiftUIHostingView<RootView: View>: UIView, @MainActor EpoxyableView {
+public final class EpoxySwiftUIHostingView<RootView: View>: UIView, @MainActor
+EpoxyableView {
 
   // MARK: Lifecycle
 
@@ -322,7 +323,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, @MainActor E
   }
 
   private func addViewControllerIfNeededAndReady() {
-    guard let superview = superview else {
+    guard let superview else {
       // If our superview is nil, we're too early and have no chance of finding a view controller
       // up the responder chain.
       return
@@ -342,7 +343,7 @@ public final class EpoxySwiftUIHostingView<RootView: View>: UIView, @MainActor E
       return
     }
 
-    guard let nextViewController = nextViewController else {
+    guard let nextViewController else {
       // One of the two previous early returns should have prevented us from getting here.
       EpoxyLogger.shared.assertionFailure(
         """

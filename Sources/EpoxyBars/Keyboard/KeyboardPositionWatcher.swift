@@ -55,12 +55,12 @@ public class KeyboardPositionWatcher {
   /// Adjusts the `contentInset.bottom` and `scrollIndicatorInsets.bottom` of the given scroll view
   /// as the keyboard is shown and hidden.
   public func adjustBottomContentInset(of scrollView: UIScrollView?) {
-    guard let scrollView = scrollView else { return }
+    guard let scrollView else { return }
 
     var previousOverlap: CGFloat = 0
 
     observeOverlap(in: scrollView) { [weak scrollView] overlap in
-      guard let scrollView = scrollView, scrollView.keyboardAdjustsBottomContentInset else { return }
+      guard let scrollView, scrollView.keyboardAdjustsBottomContentInset else { return }
 
       var insets = scrollView.insets(for: overlap)
 
@@ -119,7 +119,7 @@ public class KeyboardPositionWatcher {
 
   /// Calls each observer with their relevant overlap.
   private func updateObservers() {
-    guard enabled, let keyboardFrame = keyboardFrame else { return }
+    guard enabled, let keyboardFrame else { return }
 
     let observers = validObservers()
     guard !observers.isEmpty else { return }
@@ -244,7 +244,7 @@ extension UIScrollView {
   /// for the keyboard by a `KeyboardPositionWatcher`, else `nil` if no adjustment has occurred.
   @nonobjc
   public var keyboardContentInsetAdjustment: CGFloat? {
-    guard let originalBottomInsets = originalBottomInsets else { return nil }
+    guard let originalBottomInsets else { return nil }
     return max(contentInset.bottom - originalBottomInsets.content, 0)
   }
 

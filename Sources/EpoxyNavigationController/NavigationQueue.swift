@@ -54,7 +54,7 @@ final class NavigationQueue {
   func didPop(_ popped: [UIViewController], animated: Bool, from interface: NavigationInterface) {
     guard !popped.isEmpty else { return }
 
-    guard let current = current else {
+    guard let current else {
       EpoxyLogger.shared.assertionFailure(
         "Popped \(popped) with no current, this is programmer error.")
       return
@@ -71,11 +71,11 @@ final class NavigationQueue {
     coordinator.animate(
       alongsideTransition: nil,
       completion: { [weak self, weak interface] context in
-        guard let self = self, let interface = interface else { return }
+        guard let self, let interface else { return }
         if !context.isCancelled {
-          (self.current, self.next) = self.applyPopped(popped, from: current, next: self.next)
+          (self.current, next) = applyPopped(popped, from: current, next: next)
         }
-        self.stopTransition(interface: interface, animated: animated)
+        stopTransition(interface: interface, animated: animated)
       })
   }
 
@@ -132,7 +132,7 @@ final class NavigationQueue {
       coordinator.animate(
         alongsideTransition: nil,
         completion: { [weak self, weak interface] context in
-          guard let interface = interface else { return }
+          guard let interface else { return }
           if !context.isCancelled {
             notify()
           }
@@ -168,7 +168,7 @@ final class NavigationQueue {
     coordinator.animate(
       alongsideTransition: nil,
       completion: { [weak self, weak interface] _ in
-        guard let interface = interface else { return }
+        guard let interface else { return }
         self?.stopTransition(interface: interface, animated: animated)
       })
   }
@@ -179,7 +179,7 @@ final class NavigationQueue {
     guard isTransitioning else { return }
     isTransitioning = false
 
-    if let next = next {
+    if let next {
       self.next = nil
       enqueue(next, animated: animated, from: interface)
     }
@@ -301,7 +301,7 @@ private struct NavigationStack {
       let model = newModels[index]
       let viewController = ViewController(model: model, wrapNavigation: wrapNavigation)
       newViewControllers.insert(viewController, at: index)
-      if let viewController = viewController {
+      if let viewController {
         changes.additions.append(.init(model: model, viewController: viewController))
       } else {
         makeFailures.insert(index)

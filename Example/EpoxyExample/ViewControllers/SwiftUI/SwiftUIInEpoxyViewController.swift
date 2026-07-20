@@ -71,7 +71,7 @@ struct SwiftUITextRow: View {
       Text(title)
         .font(Font.body)
         .foregroundColor(Color(.label))
-      if let subtitle = subtitle {
+      if let subtitle {
         Text(subtitle)
           .font(Font.caption)
           .foregroundColor(Color(.secondaryLabel))

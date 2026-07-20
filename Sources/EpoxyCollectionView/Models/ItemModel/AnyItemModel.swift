@@ -67,13 +67,15 @@ extension AnyItemModel: StyleIDProviding { }
 
 // MARK: ItemModeling
 
-extension AnyItemModel: @MainActor ItemModeling {
+extension AnyItemModel: @MainActor
+ItemModeling {
   public func eraseToAnyItemModel() -> AnyItemModel { self }
 }
 
 // MARK: InternalItemModeling
 
-extension AnyItemModel: @MainActor InternalItemModeling {
+extension AnyItemModel: @MainActor
+InternalItemModeling {
   public var viewDifferentiator: ViewDifferentiator {
     model.viewDifferentiator
   }

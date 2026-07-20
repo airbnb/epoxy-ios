@@ -12,10 +12,10 @@ public struct CoordinatedBarModel {
 
   // MARK: Lifecycle
 
-  public init<Coordinator: BarCoordinating, Content: Equatable, View: UIView>(
+  public init<Coordinator: BarCoordinating, Content: Equatable>(
     dataID: AnyHashable? = nil,
     content: Content,
-    viewType: View.Type,
+    viewType: (some UIView).Type,
     barModel: Coordinator.Model,
     makeCoordinator: @escaping (_ update: @escaping (_ animated: Bool) -> Void) -> Coordinator)
   {
@@ -50,7 +50,7 @@ public struct CoordinatedBarModel {
       return otherContent == content
     }
 
-    if let dataID = dataID {
+    if let dataID {
       self.dataID = dataID
     }
   }
@@ -86,7 +86,8 @@ extension CoordinatedBarModel: BarModeling {
 
 // MARK: InternalBarCoordinating
 
-extension CoordinatedBarModel: @MainActor InternalBarCoordinating {
+extension CoordinatedBarModel: @MainActor
+InternalBarCoordinating {
   public func makeCoordinator(update: @escaping (Bool) -> Void) -> AnyBarCoordinating {
     _makeCoordinator(update)
   }

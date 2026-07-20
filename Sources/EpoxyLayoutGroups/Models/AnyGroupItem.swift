@@ -50,7 +50,8 @@ public struct AnyGroupItem: Diffable {
 
 // MARK: GroupItemModeling
 
-extension AnyGroupItem: @MainActor GroupItemModeling {
+extension AnyGroupItem: @MainActor
+GroupItemModeling {
   public func eraseToAnyGroupItem() -> AnyGroupItem {
     self
   }
@@ -58,7 +59,8 @@ extension AnyGroupItem: @MainActor GroupItemModeling {
 
 // MARK: InternalGroupItemModeling
 
-extension AnyGroupItem: @MainActor InternalGroupItemModeling {
+extension AnyGroupItem: @MainActor
+InternalGroupItemModeling {
   public var dataID: AnyHashable {
     model.dataID
   }

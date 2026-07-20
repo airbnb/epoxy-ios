@@ -12,7 +12,7 @@ public protocol GroupItemModeling: Diffable {
   func eraseToAnyGroupItem() -> AnyGroupItem
 }
 
-extension Array where Element == GroupItemModeling {
+extension [GroupItemModeling] {
   public func eraseToAnyGroupItems() -> [AnyGroupItem] {
     map { $0.eraseToAnyGroupItem() }
   }

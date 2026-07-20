@@ -218,7 +218,8 @@ extension GroupItem: VerticalAlignmentProviding { }
 
 // MARK: CallbackContextEpoxyModeled
 
-extension GroupItem: @MainActor CallbackContextEpoxyModeled {
+extension GroupItem: @MainActor
+CallbackContextEpoxyModeled {
   public struct CallbackContext {
     public let constrainable: ItemType
     public let animated: Bool
@@ -232,7 +233,8 @@ extension GroupItem: @MainActor CallbackContextEpoxyModeled {
 
 // MARK: GroupItemModeling
 
-extension GroupItem: @MainActor GroupItemModeling {
+extension GroupItem: @MainActor
+GroupItemModeling {
   public func eraseToAnyGroupItem() -> AnyGroupItem {
     .init(internalGroupItemModel: self)
   }
@@ -240,7 +242,8 @@ extension GroupItem: @MainActor GroupItemModeling {
 
 // MARK: InternalGroupItemModeling
 
-extension GroupItem: @MainActor InternalGroupItemModeling {
+extension GroupItem: @MainActor
+InternalGroupItemModeling {
   public func makeConstrainable() -> Constrainable {
     make()
       .accessibilityAlignment(accessibilityAlignment)
