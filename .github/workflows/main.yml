@@ -50,11 +50,11 @@ jobs:
         run: bundle exec rake build:example
 
   test-package:
-    runs-on: macos-15
+    runs-on: macos-26
     strategy:
       matrix:
         xcode:
-        - '26.3' # Swift 6.2 (required for -default-isolation)
+        - '26.5' # Swift 6.3; iOS 26.5 simulator (matches local green run)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
