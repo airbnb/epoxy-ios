@@ -1,4 +1,4 @@
-// swift-tools-version:6.2
+// swift-tools-version:6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -6,11 +6,12 @@ import PackageDescription
 // SPIKE: Broadly isolate all Epoxy modules to the main actor by default, to explore whether we can
 // satisfy the Swift Concurrency compiler's guarantees with `@MainActor`. See branch
 // `agc--mainactor-isolation-spike`.
+//
+// NOTE: We drive default main-actor isolation through the `-default-isolation` frontend flag (via
+// `.unsafeFlags`) rather than the `.defaultIsolation(MainActor.self)` package setting, because the
+// latter requires swift-tools-version 6.2 and CI is pinned to Swift 6.1.
 let mainActorIsolation: [SwiftSetting] = [
-  .defaultIsolation(MainActor.self),
-  // With default main-actor isolation, a `@MainActor` type's protocol conformances must also be
-  // main-actor isolated. This upcoming feature infers that automatically so we don't have to
-  // annotate every `: @MainActor SomeProtocol` conformance by hand.
+  .unsafeFlags(["-default-isolation", "MainActor"]),
   .enableUpcomingFeature("InferIsolatedConformances"),
 ]
 
