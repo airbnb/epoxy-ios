@@ -9,7 +9,9 @@ import PackageDescription
 //
 // NOTE: We drive default main-actor isolation through the `-default-isolation` frontend flag (via
 // `.unsafeFlags`) rather than the `.defaultIsolation(MainActor.self)` package setting, because the
-// latter requires swift-tools-version 6.2 and CI is pinned to Swift 6.1.
+// latter requires swift-tools-version 6.2, which would raise the minimum toolchain for all
+// consumers. The flag requires a Swift 6.2 toolchain to build (CI uses Xcode 26.x); it is rejected
+// by Swift 6.1 and earlier.
 let mainActorIsolation: [SwiftSetting] = [
   .unsafeFlags(["-default-isolation", "MainActor"]),
   .enableUpcomingFeature("InferIsolatedConformances"),
