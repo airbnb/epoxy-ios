@@ -183,7 +183,7 @@ private final class Token {
     self.dispose = dispose
   }
 
-  deinit {
+  isolated deinit {
     dispose()
   }
 

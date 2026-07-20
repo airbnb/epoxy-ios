@@ -11,7 +11,7 @@ import UIKit
 ///
 /// Designed to be used with a `CollectionView` to lazily create and configure views as they are
 /// recycled in a `UICollectionView`.
-public struct SupplementaryItemModel<View: UIView>: ViewEpoxyModeled {
+public struct SupplementaryItemModel<View: UIView>: @MainActor ViewEpoxyModeled {
 
   // MARK: Lifecycle
 
@@ -156,7 +156,7 @@ extension SupplementaryItemModel: SupplementaryItemModeling {
 
 // MARK: InternalSupplementaryItemModeling
 
-extension SupplementaryItemModel: InternalSupplementaryItemModeling {
+extension SupplementaryItemModel: @MainActor InternalSupplementaryItemModeling {
 
   // MARK: Public
 
@@ -230,7 +230,7 @@ extension SupplementaryItemModel: Diffable {
 
 // MARK: CallbackContextEpoxyModeled
 
-extension SupplementaryItemModel: CallbackContextEpoxyModeled {
+extension SupplementaryItemModel: @MainActor CallbackContextEpoxyModeled {
 
   /// The context passed to callbacks on an `SupplementaryItemModel`.
   public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {

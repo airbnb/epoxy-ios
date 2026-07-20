@@ -67,7 +67,7 @@ extension AnySupplementaryItemModel: SupplementaryItemModeling {
 
 // MARK: InternalSupplementaryItemModeling
 
-extension AnySupplementaryItemModel: InternalSupplementaryItemModeling {
+extension AnySupplementaryItemModel: @MainActor InternalSupplementaryItemModeling {
 
   // MARK: Public
 
@@ -150,7 +150,7 @@ extension AnySupplementaryItemModel: Diffable {
 
 // MARK: CallbackContextEpoxyModeled
 
-extension AnySupplementaryItemModel: CallbackContextEpoxyModeled {
+extension AnySupplementaryItemModel: @MainActor CallbackContextEpoxyModeled {
 
   /// The context passed to callbacks on an `AnySupplementaryItemModel`.
   public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {

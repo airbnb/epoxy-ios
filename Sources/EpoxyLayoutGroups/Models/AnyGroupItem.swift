@@ -50,7 +50,7 @@ public struct AnyGroupItem: Diffable {
 
 // MARK: GroupItemModeling
 
-extension AnyGroupItem: GroupItemModeling {
+extension AnyGroupItem: @MainActor GroupItemModeling {
   public func eraseToAnyGroupItem() -> AnyGroupItem {
     self
   }
@@ -58,7 +58,7 @@ extension AnyGroupItem: GroupItemModeling {
 
 // MARK: InternalGroupItemModeling
 
-extension AnyGroupItem: InternalGroupItemModeling {
+extension AnyGroupItem: @MainActor InternalGroupItemModeling {
   public var dataID: AnyHashable {
     model.dataID
   }
@@ -93,7 +93,7 @@ extension AnyGroupItem: SetBehaviorsProviding { }
 
 // MARK: CallbackContextEpoxyModeled
 
-extension AnyGroupItem: CallbackContextEpoxyModeled {
+extension AnyGroupItem: @MainActor CallbackContextEpoxyModeled {
   public struct CallbackContext {
     public let constrainable: Constrainable
 

@@ -1,6 +1,7 @@
 // Created by eric_horacek on 8/20/19.
 // Copyright © 2019 Airbnb Inc. All rights reserved.
 
+import EpoxyCore
 import UIKit
 
 // MARK: - BottomBarContainer

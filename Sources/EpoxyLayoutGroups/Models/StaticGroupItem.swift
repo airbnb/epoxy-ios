@@ -52,7 +52,7 @@ public struct StaticGroupItem {
 
 // MARK: InternalGroupItemModeling
 
-extension StaticGroupItem: InternalGroupItemModeling {
+@MainActor extension StaticGroupItem: @MainActor InternalGroupItemModeling {
 
   // MARK: Public
 

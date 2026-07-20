@@ -12,7 +12,7 @@ import UIKit
 ///
 /// - SeeAlso: `BottomBarInstaller`
 /// - SeeAlso: `TopBarInstaller`
-public struct BarModel<View: UIView>: ViewEpoxyModeled {
+public struct BarModel<View: UIView>: @MainActor ViewEpoxyModeled {
 
   // MARK: Lifecycle
 
@@ -173,7 +173,7 @@ extension BarModel: BarModeling {
 
 // MARK: InternalBarModeling
 
-extension BarModel: InternalBarModeling {
+extension BarModel: @MainActor InternalBarModeling {
   var isSelectable: Bool {
     didSelect != nil
   }
@@ -214,7 +214,7 @@ extension BarModel: InternalBarModeling {
 
 // MARK: InternalBarCoordinating
 
-extension BarModel: InternalBarCoordinating {
+extension BarModel: @MainActor InternalBarCoordinating {
   public func barModel(for coordinator: AnyBarCoordinating) -> BarModeling {
     guard let typedCoordinator = coordinator as? Coordinator else {
       EpoxyLogger.shared.assertionFailure(
@@ -249,7 +249,7 @@ extension BarModel: Diffable {
 
 // MARK: CallbackContextEpoxyModeled
 
-extension BarModel: CallbackContextEpoxyModeled {
+extension BarModel: @MainActor CallbackContextEpoxyModeled {
 
   /// The context passed to callbacks on an `BarModel`.
   public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {

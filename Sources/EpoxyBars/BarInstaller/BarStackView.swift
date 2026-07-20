@@ -8,7 +8,7 @@ import UIKit
 
 /// A stack of arbitrary bar views, typically fixed to either the top or bottom of a view
 /// controller. It can also be used as a stack view that supports selection.
-public class BarStackView: UIStackView, EpoxyableView {
+public class BarStackView: UIStackView, @MainActor EpoxyableView {
 
   // MARK: Lifecycle
 

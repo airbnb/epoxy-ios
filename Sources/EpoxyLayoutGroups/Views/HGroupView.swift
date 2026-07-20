@@ -5,7 +5,7 @@ import EpoxyCore
 import UIKit
 
 /// A view backed version of HGroup that can also be used seamlessly with Epoxy
-public final class HGroupView: UIView, EpoxyableView {
+public final class HGroupView: UIView, @MainActor EpoxyableView {
 
   // MARK: Lifecycle
 

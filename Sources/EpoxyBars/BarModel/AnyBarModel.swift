@@ -64,7 +64,7 @@ extension AnyBarModel: Diffable {
 
 // MARK: CallbackContextEpoxyModeled
 
-extension AnyBarModel: CallbackContextEpoxyModeled {
+extension AnyBarModel: @MainActor CallbackContextEpoxyModeled {
   public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {
     public init(
       view: UIView,
@@ -90,7 +90,7 @@ extension AnyBarModel: WillDisplayProviding { }
 
 // MARK: InternalBarModeling
 
-extension AnyBarModel: InternalBarModeling {
+extension AnyBarModel: @MainActor InternalBarModeling {
 
   var isSelectable: Bool {
     EpoxyLogger.shared.assertionFailure("isSelectable is unimplemented on AnyBarModel and should never be called")

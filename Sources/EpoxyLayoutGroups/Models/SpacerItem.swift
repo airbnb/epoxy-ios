@@ -25,7 +25,7 @@ public struct SpacerItem {
 
 // MARK: GroupItemModeling
 
-extension SpacerItem: GroupItemModeling {
+extension SpacerItem: @MainActor GroupItemModeling {
   public var diffIdentifier: AnyHashable {
     DiffIdentifier(dataID: dataID, style: style)
   }

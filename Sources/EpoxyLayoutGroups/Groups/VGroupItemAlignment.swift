@@ -5,7 +5,7 @@ import UIKit
 
 extension VGroup {
   /// Horizontal alignment options to use within `VGroup`
-  public enum ItemAlignment: Hashable, Equatable {
+  public nonisolated enum ItemAlignment: Hashable, Equatable {
 
     /// Align leading and trailing edges of the item tightly to the leading and trailing edges of the group.
     /// Components shorter than the group's width will be stretched to the width of the group

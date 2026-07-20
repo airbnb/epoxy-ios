@@ -1,7 +1,18 @@
-// swift-tools-version:5.5
+// swift-tools-version:6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
+
+// SPIKE: Broadly isolate all Epoxy modules to the main actor by default, to explore whether we can
+// satisfy the Swift Concurrency compiler's guarantees with `@MainActor`. See branch
+// `agc--mainactor-isolation-spike`.
+let mainActorIsolation: [SwiftSetting] = [
+  .defaultIsolation(MainActor.self),
+  // With default main-actor isolation, a `@MainActor` type's protocol conformances must also be
+  // main-actor isolated. This upcoming feature infers that automatically so we don't have to
+  // annotate every `: @MainActor SomeProtocol` conformance by hand.
+  .enableUpcomingFeature("InferIsolatedConformances"),
+]
 
 let package = Package(
   name: "Epoxy",
@@ -29,13 +40,18 @@ let package = Package(
         "EpoxyNavigationController",
         "EpoxyPresentations",
         "EpoxyLayoutGroups",
-      ]),
-    .target(name: "EpoxyCore"),
-    .target(name: "EpoxyCollectionView", dependencies: ["EpoxyCore"]),
-    .target(name: "EpoxyBars", dependencies: ["EpoxyCore"]),
-    .target(name: "EpoxyNavigationController", dependencies: ["EpoxyCore"]),
-    .target(name: "EpoxyPresentations", dependencies: ["EpoxyCore"]),
-    .target(name: "EpoxyLayoutGroups", dependencies: ["EpoxyCore"]),
+      ],
+      swiftSettings: mainActorIsolation),
+    .target(name: "EpoxyCore", swiftSettings: mainActorIsolation),
+    .target(name: "EpoxyCollectionView", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
+    .target(name: "EpoxyBars", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
+    .target(name: "EpoxyNavigationController", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
+    .target(name: "EpoxyPresentations", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
+    .target(name: "EpoxyLayoutGroups", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
+    // NOTE: The test targets keep the default (nonisolated) isolation. Specs that exercise the (now
+    // main-actor) library API bridge to the main actor via the `MainActorSpec` protocol, whose DSL
+    // takes `@MainActor` closures. Isolating the whole target instead would conflict with
+    // `QuickSpec`'s nonisolated `spec()` / `init()` overrides.
     .testTarget(name: "EpoxyTests", dependencies: ["Epoxy", "Quick", "Nimble"]),
     .testTarget(name: "PerformanceTests", dependencies: ["EpoxyCore"]),
   ])
