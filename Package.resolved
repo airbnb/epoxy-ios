@@ -1,5 +1,5 @@
 {
-  "originHash" : "56ad277b5a0503aa6ee4affdb38d6c5be0d1e32ba3688f8436bddea40305cf4c",
+  "originHash" : "7f191177e887b2a6c920cdcdc34840efceff69412506feee90476ddd886e4487",
   "pins" : [
     {
       "identity" : "cwlcatchexception",
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/airbnb/swift",
       "state" : {
-        "revision" : "07bb2e0822ca6e464bf3610ed452568931fdbf65",
-        "version" : "1.0.3"
+        "revision" : "1bf961396cc9c690db37936bfbdc8b5f29e844af",
+        "version" : "1.0.1"
       }
     },
     {
