@@ -175,10 +175,7 @@ extension BarInstaller: BarCoordinatorPropertyConfigurable {
 
 // MARK: - Token
 
-// `Token` is `nonisolated` so its `deinit` isn't main-actor isolated: an isolated `deinit` is only
-// available in iOS 18.4+, but Epoxy deploys back to iOS 13. The `dispose` closure updates
-// main-actor state, so the `deinit` hops to the main actor to run it.
-private nonisolated final class Token {
+private final class Token {
 
   // MARK: Lifecycle
 
@@ -186,8 +183,10 @@ private nonisolated final class Token {
     self.dispose = dispose
   }
 
-  deinit {
-    Task { @MainActor [dispose] in dispose() }
+  // `Token` is main-actor isolated (like the rest of the package), so its `dispose` closure — which
+  // updates main-actor state — can run synchronously in an isolated `deinit` (iOS 18.4+).
+  isolated deinit {
+    dispose()
   }
 
   // MARK: Private

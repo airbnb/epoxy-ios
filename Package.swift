@@ -1,16 +1,16 @@
-// swift-tools-version:6.0
+// swift-tools-version:6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let mainActorIsolation: [SwiftSetting] = [
-  .unsafeFlags(["-default-isolation", "MainActor"]),
+  .defaultIsolation(MainActor.self),
   .enableUpcomingFeature("InferIsolatedConformances"),
 ]
 
 let package = Package(
   name: "Epoxy",
-  platforms: [.iOS(.v13)],
+  platforms: [.iOS("18.4")],
   products: [
     .library(name: "Epoxy", targets: ["Epoxy"]),
     .library(name: "EpoxyCore", targets: ["EpoxyCore"]),
