@@ -152,13 +152,11 @@ public struct NavigationModel {
 
   /// Informs consumers of this model that its view controller has been removed from the navigation
   /// stack.
-  @MainActor
   public func handleDidRemove() {
     _didRemove?()
   }
 
   /// Updates the underlying state backing this model to remove it.
-  @MainActor
   public func remove() {
     _remove()
   }
@@ -170,28 +168,24 @@ public struct NavigationModel {
 
   /// Vends a closure that can be invoked to construct the view controller for this model if the
   /// `shown` value indicates shown, else `nil` if the `shown` value is dismissed.
-  @MainActor
   func makeViewController() -> UIViewController? {
     _makeViewController()
   }
 
   /// Informs consumers of this model that its view controller has become visible at the top of a
   /// navigation stack that it has been added to.
-  @MainActor
   func handleDidShow(_ viewController: UIViewController) {
     _didShow?(viewController)
   }
 
   /// Informs consumers of this model that its view controller is no longer visible at the top of
   /// a navigation stack that it has been added to.
-  @MainActor
   func handleDidHide() {
     _didHide?()
   }
 
   /// Informs consumers of this model that its view controller has been added to the navigation
   /// stack.
-  @MainActor
   func handleDidAdd(_ viewController: UIViewController) {
     _didAdd?(viewController)
   }

@@ -14,13 +14,7 @@ def configure(spec:, name:, summary:, local_deps: [])
   spec.source = { git: 'https://github.com/airbnb/epoxy-ios.git', tag: version }
   spec.source_files = "Sources/#{name}/**/*.swift"
   spec.ios.deployment_target = '13.0'
-  spec.swift_versions = ['6.0']
-  # Match the SwiftPM build's default main-actor isolation (see Package.swift). CocoaPods doesn't
-  # read the package's `swiftSettings`, so pass the same flags here to keep the isolation — and the
-  # compiler's guarantees — identical across both distribution channels.
-  spec.pod_target_xcconfig = {
-    'OTHER_SWIFT_FLAGS' => '-default-isolation MainActor -enable-upcoming-feature InferIsolatedConformances',
-  }
+  spec.swift_versions = ['5.5']
 
   local_deps.each do |dep|
     spec.dependency dep, version

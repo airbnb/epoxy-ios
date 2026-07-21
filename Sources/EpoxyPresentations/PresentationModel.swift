@@ -105,22 +105,18 @@ public struct PresentationModel {
 
   /// Vends a closure that can be invoked to construct the `Presentable` for this presentation if
   /// the `presentation` value is presented, else `nil` if the `presentation` value is dismissed.
-  @MainActor
   func makePresentable() -> Presentable? {
     _makePresentable()
   }
 
-  @MainActor
   func dismiss() {
     _dismiss()
   }
 
-  @MainActor
   func handleDidDismiss() {
     _didDismiss?()
   }
 
-  @MainActor
   func handleDidPresent() {
     _didPresent?()
   }

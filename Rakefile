@@ -23,12 +23,12 @@ namespace :test do
 
   desc 'Runs unit tests'
   task :unit do
-    xcodebuild 'test -scheme EpoxyTests -destination "platform=iOS Simulator,name=iPhone 17 Pro Max"'
+    xcodebuild 'test -scheme EpoxyTests -destination "platform=iOS Simulator,name=iPhone 16"'
   end
 
   desc 'Runs performance tests'
   task :performance do
-    xcodebuild 'test -scheme PerformanceTests -destination "platform=iOS Simulator,name=iPhone 17 Pro Max"'
+    xcodebuild 'test -scheme PerformanceTests -destination "platform=iOS Simulator,name=iPhone 16"'
   end
 end
 
@@ -36,10 +36,7 @@ namespace :lint do
   desc 'Lints the podspec'
   task :podspec do
     Dir.glob('*.podspec') do |spec|
-      # Validate in Debug: the Release optimizer (-Os) crashes swiftc 6.3 in the SIL
-      # EarlyPerfInliner while compiling EpoxySwiftUIHostingView's main-actor deinit
-      # (a compiler bug, not a source error). Debug uses -Onone and links cleanly.
-      sh "bundle exec pod lib lint #{spec} --include-podspecs=**/*.podspec --configuration=Debug --allow-warnings"
+      sh "bundle exec pod lib lint #{spec} --include-podspecs=**/*.podspec"
     end
   end
 

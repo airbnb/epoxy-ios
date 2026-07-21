@@ -10,7 +10,6 @@ import UIKit
 /// within a navigation stack.
 ///
 /// Roughly matches the API of `UINavigationController`.
-@MainActor
 protocol NavigationInterface: AnyObject {
   /// The active transition coordinator object.
   var transitionCoordinator: UIViewControllerTransitionCoordinator? { get }
@@ -28,7 +27,6 @@ protocol NavigationInterface: AnyObject {
 /// A data structure that maintains a FIFO 2-queue of navigation stacks.
 ///
 /// Enables a declarative API for managing a navigation controller's stack.
-@MainActor
 final class NavigationQueue {
 
   // MARK: Internal
@@ -219,7 +217,6 @@ final class NavigationQueue {
 // MARK: - NavigationStack
 
 /// A navigation stack on the queue.
-@MainActor
 private struct NavigationStack {
 
   // MARK: Lifecycle
@@ -358,7 +355,6 @@ extension NavigationStack {
     var model: NavigationModel
     var viewController: ViewController
 
-    @MainActor
     static func handleTopChange(from previous: NavigationModel?, to next: Added?) {
       switch (previous: previous, next: next) {
       case (.some(let previous), .some(let next)):
@@ -391,7 +387,6 @@ extension NavigationStack {
 
     // MARK: Lifecycle
 
-    @MainActor
     init?(model: NavigationModel, wrapNavigation: (UINavigationController) -> UIViewController) {
       guard let viewController = model.makeViewController() else { return nil }
 

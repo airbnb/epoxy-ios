@@ -6,7 +6,6 @@ import UIKit
 // MARK: - PresentationQueue
 
 /// A data structure that maintains a FIFO 2-queue of presentations.
-@MainActor
 final class PresentationQueue {
 
   // MARK: Public
