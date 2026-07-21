@@ -36,7 +36,7 @@ extension SectionModel {
 
 // MARK: - Array
 
-extension [SectionModel] {
+extension Array where Element == SectionModel {
   /// Gets all items' view differentiators from these sections.
   public func getItemViewDifferentiators() -> Set<ViewDifferentiator> {
     var newViewDifferentiators = Set<ViewDifferentiator>()

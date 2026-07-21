@@ -62,7 +62,7 @@ final class CollectionViewScrollToItemHelper {
     itemIndexPath: IndexPath,
     position: UICollectionView.ScrollPosition)
   {
-    guard let collectionView else { return }
+    guard let collectionView = collectionView else { return }
 
     // Programmatically scrolling to an item, even without an animation, when using self-sizing
     // cells usually results in slightly incorrect scroll offsets. By invoking `scrollToItem`
@@ -103,7 +103,7 @@ final class CollectionViewScrollToItemHelper {
     itemIndexPath: IndexPath,
     position: UICollectionView.ScrollPosition)
   {
-    guard let collectionView else { return }
+    guard let collectionView = collectionView else { return }
 
     let scrollPosition: UICollectionView.ScrollPosition
     if position == [] {
@@ -154,7 +154,7 @@ final class CollectionViewScrollToItemHelper {
   {
     self.scrollToItemContext = nil
 
-    guard let collectionView else { return }
+    guard let collectionView = collectionView else { return }
 
     // Calling `scrollToItem(…)` with in invalid index path raises an exception:
     // > NSInternalInconsistencyException: Attempted to scroll the collection view to an out-of-
@@ -179,8 +179,8 @@ final class CollectionViewScrollToItemHelper {
 
   @objc
   private func scrollToItemDisplayLinkFired() {
-    guard let collectionView else { return }
-    guard let scrollToItemContext else {
+    guard let collectionView = collectionView else { return }
+    guard let scrollToItemContext = scrollToItemContext else {
       EpoxyLogger.shared.assertionFailure(
         """
         Expected `scrollToItemContext` to be non-nil when programmatically scrolling toward an \

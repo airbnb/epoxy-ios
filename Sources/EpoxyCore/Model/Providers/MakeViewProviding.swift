@@ -9,7 +9,7 @@ public protocol MakeViewProviding {
   associatedtype View: ViewType
 
   /// A closure that's called to construct an instance of `View`.
-  typealias MakeView = () -> View
+  typealias MakeView = @MainActor () -> View
 
   /// A closure that's called to construct an instance of `View`.
   var makeView: MakeView { get }

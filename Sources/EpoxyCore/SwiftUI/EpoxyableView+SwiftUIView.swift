@@ -30,27 +30,23 @@ extension StyledView where Self: ContentConfigurableView & BehaviorsConfigurable
     -> SwiftUIView<Self, (content: Content, style: Style)>
   {
     SwiftUIView(storage: (content: content, style: style)) {
-      MainActor.assumeIsolated {
-        let view = Self(style: style)
-        view.setContent(content, animated: false)
-        return view
-      }
+      let view = Self(style: style)
+      view.setContent(content, animated: false)
+      return view
     }
     .configure { context in
-      MainActor.assumeIsolated {
-        // We need to create a new view instance when the style changes.
-        if context.oldStorage.style != style {
-          context.view = Self(style: style)
-          context.view.setContent(content, animated: context.animated)
-        }
-        // Otherwise, if the just the content changes, we need to update it.
-        else if context.oldStorage.content != content {
-          context.view.setContent(content, animated: context.animated)
-          context.container.invalidateIntrinsicContentSize()
-        }
-
-        context.view.setBehaviors(behaviors)
+      // We need to create a new view instance when the style changes.
+      if context.oldStorage.style != style {
+        context.view = Self(style: style)
+        context.view.setContent(content, animated: context.animated)
       }
+      // Otherwise, if the just the content changes, we need to update it.
+      else if context.oldStorage.content != content {
+        context.view.setContent(content, animated: context.animated)
+        context.container.invalidateIntrinsicContentSize()
+      }
+
+      context.view.setBehaviors(behaviors)
     }
   }
 }
@@ -83,22 +79,18 @@ extension StyledView
     -> SwiftUIView<Self, Content>
   {
     SwiftUIView(storage: content) {
-      MainActor.assumeIsolated {
-        let view = Self()
-        view.setContent(content, animated: false)
-        return view
-      }
+      let view = Self()
+      view.setContent(content, animated: false)
+      return view
     }
     .configure { context in
-      MainActor.assumeIsolated {
-        // We need to update the content of the existing view when the content is updated.
-        if context.oldStorage != content {
-          context.view.setContent(content, animated: context.animated)
-          context.container.invalidateIntrinsicContentSize()
-        }
-
-        context.view.setBehaviors(behaviors)
+      // We need to update the content of the existing view when the content is updated.
+      if context.oldStorage != content {
+        context.view.setContent(content, animated: context.animated)
+        context.container.invalidateIntrinsicContentSize()
       }
+
+      context.view.setBehaviors(behaviors)
     }
   }
 }
@@ -132,17 +124,15 @@ extension StyledView
     -> SwiftUIView<Self, Style>
   {
     SwiftUIView(storage: style) {
-      MainActor.assumeIsolated { Self(style: style) }
+      Self(style: style)
     }
     .configure { context in
-      MainActor.assumeIsolated {
-        // We need to create a new view instance when the style changes.
-        if context.oldStorage != style {
-          context.view = Self(style: style)
-        }
-
-        context.view.setBehaviors(behaviors)
+      // We need to create a new view instance when the style changes.
+      if context.oldStorage != style {
+        context.view = Self(style: style)
       }
+
+      context.view.setBehaviors(behaviors)
     }
   }
 }
@@ -173,12 +163,10 @@ extension StyledView
   @MainActor
   public static func swiftUIView(behaviors: Behaviors? = nil) -> SwiftUIView<Self, Void> {
     SwiftUIView {
-      MainActor.assumeIsolated { Self() }
+      Self()
     }
     .configure { context in
-      MainActor.assumeIsolated {
-        context.view.setBehaviors(behaviors)
-      }
+      context.view.setBehaviors(behaviors)
     }
   }
 }

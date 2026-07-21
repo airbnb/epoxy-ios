@@ -19,14 +19,14 @@ public struct SwiftUIView<Content: ViewType, Storage>: MeasuringViewRepresentabl
 
   /// Creates a SwiftUI representation of the content view with the given storage and the provided
   /// `makeContent` closure to construct the content whenever `makeUIView(…)` is invoked.
-  init(storage: Storage, makeContent: @escaping () -> Content) {
+  init(storage: Storage, makeContent: @escaping @MainActor () -> Content) {
     self.storage = storage
     self.makeContent = makeContent
   }
 
   /// Creates a SwiftUI representation of the content view with the provided `makeContent` closure
   /// to construct it whenever `makeUIView(…)` is invoked.
-  init(makeContent: @escaping () -> Content) where Storage == Void {
+  init(makeContent: @escaping @MainActor () -> Content) where Storage == Void {
     storage = ()
     self.makeContent = makeContent
   }
@@ -44,7 +44,7 @@ public struct SwiftUIView<Content: ViewType, Storage>: MeasuringViewRepresentabl
   private var storage: Storage
 
   /// A closure that's invoked to construct the represented content view.
-  private var makeContent: () -> Content
+  private var makeContent: @MainActor () -> Content
 }
 
 // MARK: UIViewRepresentable

@@ -149,7 +149,7 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
   }()
 
   private var additionalSafeAreaInsetsTop: CGFloat? {
-    guard let viewController else { return nil }
+    guard let viewController = viewController else { return nil }
     guard case .barHeightSafeArea = insetBehavior else { return nil }
 
     // Using the frame.maxY here causes us to compute an temporarily invalid safe area inset top
@@ -170,7 +170,7 @@ public final class TopBarContainer: BarStackView, InternalBarContainer {
   }
 
   private var layoutMarginsTop: CGFloat {
-    guard let viewController else { return 0 }
+    guard let viewController = viewController else { return 0 }
     return viewController.originalSafeAreaInsetTop
   }
 

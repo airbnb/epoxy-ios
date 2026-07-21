@@ -855,7 +855,7 @@ extension CollectionView: UICollectionViewDelegate {
     -> IndexPath
   {
     guard
-      let reorderingDelegate,
+      let reorderingDelegate = reorderingDelegate,
       let originalItem = epoxyDataSource.data?.item(at: originalIndexPath),
       let originalSection = epoxyDataSource.data?.section(at: originalIndexPath.section),
       let proposedItem = epoxyDataSource.data?.item(at: proposedIndexPath),

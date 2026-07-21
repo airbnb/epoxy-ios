@@ -261,7 +261,7 @@ extension PresentationModel {
 
     /// A closure that's invoked to perform the presentation from the provided context, returning a
     /// `Dismissible` that can be used to dismiss the presentation.
-    public var present: (_ presented: UIViewController) -> Presentable
+    public var present: @MainActor (_ presented: UIViewController) -> Presentable
   }
 
   /// A closure to present the `presented` view controller passed to the `present` closure of a
@@ -308,7 +308,7 @@ extension PresentationModel.Presentation {
         return { [weak presented] animated, completion in
           // Dismiss using `presentingViewController` instead of `context.presenting` to handle the
           // presented view controller being "re-hosted" into a new presented view controller.
-          guard let presented, let presenting = presented.presentingViewController else {
+          guard let presented = presented, let presenting = presented.presentingViewController else {
             completion?()
             return
           }
@@ -316,7 +316,7 @@ extension PresentationModel.Presentation {
           // Only dismiss if not transitioning, to prevent errantly double-dismissing in cases where
           // dismissal triggers overlap.
           if let transitionCoordinator = presenting.transitionCoordinator {
-            if let completion {
+            if let completion = completion {
               transitionCoordinator.animate(alongsideTransition: nil, completion: { _ in
                 completion()
               })

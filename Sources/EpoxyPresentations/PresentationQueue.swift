@@ -128,7 +128,7 @@ final class PresentationQueue {
     // Only update current to dismissed and update the state if it is still at current and
     // presented. This only occurs when a dismissal occurs outside of an `enqueue(...)`
     guard
-      let current,
+      let current = current,
       current.model.dataID == model.dataID,
       current.model.isValueEqual(to: model),
       case .presented = current.state else
@@ -177,8 +177,8 @@ final class PresentationQueue {
       alongsideTransition: nil,
       completion: { [weak self, weak presenter] context in
         completion?(context)
-        if let self, let presenter {
-          stopTransition(presenter: presenter, animated: animated)
+        if let self = self, let presenter = presenter {
+          self.stopTransition(presenter: presenter, animated: animated)
         }
       })
   }
@@ -217,14 +217,14 @@ extension PresentationQueue {
     /// Vends the change to update the current presentation (if there is one) to the given model or
     /// nil.
     static func fromCurrent(_ current: Presentation?, to model: PresentationModel?) -> Changes {
-      guard let model else {
-        if let current, case .presented(let dismissible) = current.state {
+      guard let model = model else {
+        if let current = current, case .presented(let dismissible) = current.state {
           return .dismiss(dismissible, current.model, newDataID: true)
         }
         return .none
       }
 
-      if let current {
+      if let current = current {
         return from(current, to: model)
       }
       return .present(model)

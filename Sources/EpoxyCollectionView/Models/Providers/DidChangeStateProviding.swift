@@ -17,7 +17,7 @@ extension CallbackContextEpoxyModeled where Self: DidChangeStateProviding {
   // MARK: Public
 
   /// A closure that's called to configure the state of this model's view when it changes.
-  public typealias DidChangeState = (CallbackContext) -> Void
+  public typealias DidChangeState = @MainActor (CallbackContext) -> Void
 
   /// A closure that's called to configure the state of this model's view when it changes.
   public var didChangeState: DidChangeState? {

@@ -13,8 +13,8 @@ extension UIImageView {
 
   func setURL(_ url: URL?) {
     // Currently loading an image, URL is updated to nil:
-    guard let url else {
-      if let storage {
+    guard let url = url else {
+      if let storage = storage {
         self.storage = nil
         storage.dataTask.cancel()
         image = nil
@@ -23,7 +23,7 @@ extension UIImageView {
     }
 
     // We're already actively loading an image with this URL:
-    if let storage, storage.url == url {
+    if let storage = storage, storage.url == url {
       return
     }
 
@@ -32,7 +32,7 @@ extension UIImageView {
     let task = URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
       guard
         self?.storage?.url == url,
-        let data,
+        let data = data,
         error == nil,
         let image = UIImage(data: data)
       else {

@@ -115,6 +115,19 @@ extension EpoxyModelProperty.UpdateStrategy {
     }
   }
 
+  /// `@MainActor` variant of `chain()` for main-actor-isolated single-argument closure properties
+  /// (e.g. `setContent` / `setBehaviors`).
+  public static func chain<A>() -> EpoxyModelProperty<(@MainActor (A) -> Void)?>.UpdateStrategy {
+    .init { old, new in
+      guard let new else { return old }
+      guard let old else { return new }
+      return { @MainActor a in
+        old(a)
+        new(a)
+      }
+    }
+  }
+
   /// Chains the new closure value onto the old closure value, returning a new closure that first
   /// calls the old closure and then subsequently calls the new closure.
   public static func chain<A, B>() -> EpoxyModelProperty<((A, B) -> Void)?>.UpdateStrategy {

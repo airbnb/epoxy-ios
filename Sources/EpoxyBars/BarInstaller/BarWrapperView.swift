@@ -57,7 +57,7 @@ public final class BarWrapperView: UIView {
   public override func layoutSubviews() {
     super.layoutSubviews()
 
-    guard let view else { return }
+    guard let view = view else { return }
 
     let margins: UIEdgeInsets
     if let originalMargins = originalViewLayoutMargins {
@@ -82,7 +82,7 @@ public final class BarWrapperView: UIView {
     // Validate hitTest preconditions, since we aren't calling super.
     guard isUserInteractionEnabled, !isHidden, alpha >= 0.01 else { return nil }
 
-    guard let view else { return nil }
+    guard let view = view else { return nil }
 
     /// We allow bar views to receive touches outside of this wrapper,
     /// so we manually hit test the bar view.
@@ -127,12 +127,12 @@ public final class BarWrapperView: UIView {
   }
 
   func handleSelection(animated: Bool) {
-    guard let view, _model?.isSelectable == true else { return }
+    guard let view = view, _model?.isSelectable == true else { return }
     _model?.didSelect(view, traitCollection: traitCollection, animated: animated)
   }
 
   func handleDidEndDisplaying(animated: Bool) {
-    guard let view else { return }
+    guard let view = view else { return }
     _model?.didEndDisplaying(view, traitCollection: traitCollection, animated: animated)
   }
 
@@ -180,8 +180,8 @@ public final class BarWrapperView: UIView {
     _model = model
 
     if
-      let oldValue,
-      let view,
+      let oldValue = oldValue,
+      let view = view,
       oldValue.diffIdentifier == model.diffIdentifier,
       oldValue.styleID == model.styleID
     {
@@ -205,8 +205,8 @@ public final class BarWrapperView: UIView {
           options: .transitionCrossDissolve,
           animations: animations,
           completion: { [weak self] _ in
-            guard let self else { return }
-            model.didDisplay(view, traitCollection: traitCollection, animated: animated)
+            guard let self = self else { return }
+            model.didDisplay(view, traitCollection: self.traitCollection, animated: animated)
           })
       } else {
         animations()
@@ -238,9 +238,9 @@ public final class BarWrapperView: UIView {
 
     var canUpdate = false
     let coordinator = model.makeCoordinator(update: { [weak self] animated in
-      guard canUpdate, let self else { return }
+      guard canUpdate, let self = self else { return }
       // We pass the original model here so we don't stack coordinator models atop one another.
-      setModel(self.model, animated: animated)
+      self.setModel(self.model, animated: animated)
     })
 
     _coordinator = coordinator
@@ -259,7 +259,7 @@ public final class BarWrapperView: UIView {
 
     oldValue?.removeFromSuperview()
 
-    if let view {
+    if let view = view {
       view.translatesAutoresizingMaskIntoConstraints = false
       view.insetsLayoutMarginsFromSafeArea = false
       addSubview(view)

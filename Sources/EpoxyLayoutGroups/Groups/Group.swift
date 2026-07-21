@@ -148,7 +148,7 @@ extension Constrainable where Self: InternalGroup {
       let container = ConstrainableContainer(constrainable)
       item.update(constrainable, animated: animated)
       newConstrainableContainers.insert(container, at: index)
-      if let owningView {
+      if let owningView = owningView {
         container.install(in: owningView)
       }
       intermediateContainers.insert(container, at: index)
@@ -180,7 +180,7 @@ extension Constrainable where Self: InternalGroup {
 
     assert(validateConstrainables(constrainableContainers))
 
-    if let owningView {
+    if let owningView = owningView {
       let oldConstraints = constraints
       let newConstraints = generateConstraints()
       constraints = newConstraints

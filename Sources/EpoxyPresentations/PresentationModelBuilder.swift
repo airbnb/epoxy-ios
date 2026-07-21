@@ -32,7 +32,7 @@ public enum PresentationModelBuilder {
 
   public static func buildBlock(_ children: Component...) -> Component {
     for child in children {
-      if let child {
+      if let child = child {
         return child
       }
     }
@@ -60,7 +60,7 @@ public enum PresentationModelBuilder {
 
   public static func buildArray(_ components: [Component]) -> Component {
     for child in components {
-      if let child {
+      if let child = child {
         return child
       }
     }

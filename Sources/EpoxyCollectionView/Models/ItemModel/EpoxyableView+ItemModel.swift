@@ -29,12 +29,12 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
       dataID: dataID,
       params: style,
       content: content,
-      makeView: { style in MainActor.assumeIsolated { Self(style: style) } },
+      makeView: { style in Self(style: style) },
       setContent: { context, content in
-        MainActor.assumeIsolated { context.view.setContent(content, animated: context.animated) }
+        context.view.setContent(content, animated: context.animated)
       })
       .setBehaviors { context in
-        MainActor.assumeIsolated { context.view.setBehaviors(behaviors) }
+        context.view.setBehaviors(behaviors)
       }
   }
 }
@@ -63,10 +63,10 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
       dataID: dataID,
       content: content,
       setContent: { context, content in
-        MainActor.assumeIsolated { context.view.setContent(content, animated: context.animated) }
+        context.view.setContent(content, animated: context.animated)
       })
       .setBehaviors { context in
-        MainActor.assumeIsolated { context.view.setBehaviors(behaviors) }
+        context.view.setBehaviors(behaviors)
       }
   }
 }
@@ -92,9 +92,9 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   {
     ItemModel<Self>(dataID: dataID)
       .styleID(style)
-      .makeView { MainActor.assumeIsolated { Self(style: style) } }
+      .makeView { Self(style: style) }
       .setBehaviors { context in
-        MainActor.assumeIsolated { context.view.setBehaviors(behaviors) }
+        context.view.setBehaviors(behaviors)
       }
   }
 }
@@ -123,7 +123,7 @@ extension StyledView
   {
     ItemModel<Self>(dataID: dataID)
       .setBehaviors { context in
-        MainActor.assumeIsolated { context.view.setBehaviors(behaviors) }
+        context.view.setBehaviors(behaviors)
       }
   }
 }
