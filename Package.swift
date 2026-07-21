@@ -3,15 +3,6 @@
 
 import PackageDescription
 
-// SPIKE: Broadly isolate all Epoxy modules to the main actor by default, to explore whether we can
-// satisfy the Swift Concurrency compiler's guarantees with `@MainActor`. See branch
-// `agc--mainactor-isolation-spike`.
-//
-// NOTE: We drive default main-actor isolation through the `-default-isolation` frontend flag (via
-// `.unsafeFlags`) rather than the `.defaultIsolation(MainActor.self)` package setting, because the
-// latter requires swift-tools-version 6.2, which would raise the minimum toolchain for all
-// consumers. The flag requires a Swift 6.2 toolchain to build (CI uses Xcode 26.x); it is rejected
-// by Swift 6.1 and earlier.
 let mainActorIsolation: [SwiftSetting] = [
   .unsafeFlags(["-default-isolation", "MainActor"]),
   .enableUpcomingFeature("InferIsolatedConformances"),
@@ -75,5 +66,5 @@ let package = Package(
 
 #if swift(>=5.6)
 // Add the Airbnb Swift formatting plugin if possible
-package.dependencies.append(.package(url: "https://github.com/airbnb/swift", exact: "1.0.1"))
+package.dependencies.append(.package(url: "https://github.com/airbnb/swift", .upToNextMajor(from: "1.0.1")))
 #endif
