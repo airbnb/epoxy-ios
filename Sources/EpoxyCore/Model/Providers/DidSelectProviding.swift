@@ -31,6 +31,6 @@ extension CallbackContextEpoxyModeled where Self: DidSelectProviding {
   // MARK: Private
 
   private var didSelectProperty: EpoxyModelProperty<DidSelect?> {
-    .init(keyPath: \Self.didSelect, defaultValue: nil, updateStrategy: .chain())
+    .init(keyPath: \Self.didSelect, defaultValue: nil, updateStrategy: .chainMainActor())
   }
 }

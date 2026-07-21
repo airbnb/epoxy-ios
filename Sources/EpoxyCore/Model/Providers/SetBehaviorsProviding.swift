@@ -33,6 +33,6 @@ extension CallbackContextEpoxyModeled where Self: SetBehaviorsProviding {
   // MARK: Private
 
   private var setBehaviorsProperty: EpoxyModelProperty<SetBehaviors?> {
-    .init(keyPath: \Self.setBehaviors, defaultValue: nil, updateStrategy: .chain())
+    .init(keyPath: \Self.setBehaviors, defaultValue: nil, updateStrategy: .chainMainActor())
   }
 }

@@ -36,6 +36,6 @@ extension CallbackContextEpoxyModeled where Self: WillDisplayProviding {
   // MARK: Private
 
   private var willDisplayProperty: EpoxyModelProperty<WillDisplay?> {
-    .init(keyPath: \Self.willDisplay, defaultValue: nil, updateStrategy: .chain())
+    .init(keyPath: \Self.willDisplay, defaultValue: nil, updateStrategy: .chainMainActor())
   }
 }

@@ -34,6 +34,6 @@ extension CallbackContextEpoxyModeled where Self: DidChangeStateProviding {
   // MARK: Private
 
   private var didChangeStateProperty: EpoxyModelProperty<DidChangeState?> {
-    .init(keyPath: \Self.didChangeState, defaultValue: nil, updateStrategy: .chain())
+    .init(keyPath: \Self.didChangeState, defaultValue: nil, updateStrategy: .chainMainActor())
   }
 }

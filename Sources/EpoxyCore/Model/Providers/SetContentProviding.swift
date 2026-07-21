@@ -33,6 +33,6 @@ extension CallbackContextEpoxyModeled where Self: SetContentProviding {
   // MARK: Private
 
   private var setContentProperty: EpoxyModelProperty<SetContent?> {
-    .init(keyPath: \Self.setContent, defaultValue: nil, updateStrategy: .chain())
+    .init(keyPath: \Self.setContent, defaultValue: nil, updateStrategy: .chainMainActor())
   }
 }
