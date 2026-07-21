@@ -5,7 +5,7 @@ import UIKit
 
 extension HGroup {
   /// `ItemAlignment` values that are supported by `HGroup`
-  public nonisolated enum ItemAlignment: Hashable, Equatable {
+  public enum ItemAlignment: Hashable, Equatable {
     /// Align top and bottom edges of the item tightly to the leading and trailing edges of the group.
     /// Components shorter than the group's height will be stretched to the height of the group
     case fill

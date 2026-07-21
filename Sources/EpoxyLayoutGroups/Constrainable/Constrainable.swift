@@ -21,7 +21,7 @@ public protocol Constrainable {
   var firstBaselineAnchor: NSLayoutYAxisAnchor { get }
   var lastBaselineAnchor: NSLayoutYAxisAnchor { get }
   /// unique identifier for this constrainable
-  nonisolated var dataID: AnyHashable { get }
+  var dataID: AnyHashable { get }
   /// View that owns this constrainable
   var owningView: UIView? { get }
   /// The frame of the Constrainable in its owningView's coordinate system.
@@ -33,11 +33,11 @@ public protocol Constrainable {
   /// uninstalls the Constrainable
   func uninstall()
   /// equality function
-  nonisolated func isEqual(to constrainable: Constrainable) -> Bool
+  func isEqual(to constrainable: Constrainable) -> Bool
 }
 
 extension Constrainable where Self: NSObject {
-  public nonisolated var dataID: AnyHashable { ObjectIdentifier(self) }
+  public var dataID: AnyHashable { ObjectIdentifier(self) }
 }
 
 // MARK: Diffable
@@ -72,7 +72,7 @@ extension UIView: Constrainable {
     removeFromSuperview()
   }
 
-  public nonisolated func isEqual(to constrainable: Constrainable) -> Bool {
+  public func isEqual(to constrainable: Constrainable) -> Bool {
     guard let other = constrainable as? UIView else { return false }
     return other == self
   }
