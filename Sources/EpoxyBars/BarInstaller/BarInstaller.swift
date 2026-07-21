@@ -102,7 +102,7 @@ final class BarInstaller<Container: BarContainer> {
   private func setBars(_ bars: [BarModeling], animated: Bool, in view: UIView) {
     self.bars = bars
 
-    guard let container else {
+    guard let container = container else {
       installContainer(in: view, with: bars, animated: animated)
       return
     }
@@ -132,7 +132,7 @@ final class BarInstaller<Container: BarContainer> {
   }
 
   private func uninstallContainer() {
-    guard let container else { return }
+    guard let container = container else { return }
     container.remove()
     self.container = nil
   }

@@ -323,7 +323,7 @@ EpoxyableView {
   }
 
   private func addViewControllerIfNeededAndReady() {
-    guard let superview else {
+    guard let superview = superview else {
       // If our superview is nil, we're too early and have no chance of finding a view controller
       // up the responder chain.
       return
@@ -343,7 +343,7 @@ EpoxyableView {
       return
     }
 
-    guard let nextViewController else {
+    guard let nextViewController = nextViewController else {
       // One of the two previous early returns should have prevented us from getting here.
       EpoxyLogger.shared.assertionFailure(
         """

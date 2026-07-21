@@ -140,12 +140,12 @@ public final class LayoutSpacer: UILayoutGuide, @MainActor Constrainable {
     // The height anchor is >= 50 and <= 100. Which value between 50 and 100
     // should the Auto Layout engine use? To answer this question, we need to pick a value like 50,
     // but give it a lower priority than the >= and <= inequality constraints.
-    if let height {
+    if let height = height {
       let heightConstraint = heightAnchor.constraint(equalToConstant: height)
       heightConstraint.priority = UILayoutPriority(rawValue: 1)
       constraints.append(heightConstraint)
     }
-    if let width {
+    if let width = width {
       let widthConstraint = widthAnchor.constraint(equalToConstant: width)
       widthConstraint.priority = UILayoutPriority(rawValue: 1)
       constraints.append(widthConstraint)

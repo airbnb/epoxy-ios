@@ -12,10 +12,10 @@ public struct CoordinatedBarModel {
 
   // MARK: Lifecycle
 
-  public init<Coordinator: BarCoordinating, Content: Equatable>(
+  public init<Coordinator: BarCoordinating, Content: Equatable, View: UIView>(
     dataID: AnyHashable? = nil,
     content: Content,
-    viewType: (some UIView).Type,
+    viewType: View.Type,
     barModel: Coordinator.Model,
     makeCoordinator: @escaping (_ update: @escaping (_ animated: Bool) -> Void) -> Coordinator)
   {
@@ -50,7 +50,7 @@ public struct CoordinatedBarModel {
       return otherContent == content
     }
 
-    if let dataID {
+    if let dataID = dataID {
       self.dataID = dataID
     }
   }

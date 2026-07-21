@@ -80,7 +80,7 @@ extension UIView: Constrainable {
 
 extension Constrainable {
   public func constrainToMargins(insets: NSDirectionalEdgeInsets = .zero) {
-    guard let owningView else {
+    guard let owningView = owningView else {
       EpoxyLogger.shared.assertionFailure("Did you forget to install the LayoutGuide?")
       return
     }
@@ -97,7 +97,7 @@ extension Constrainable {
   /// The bottom constraint's priority is set to `defaultHigh` to avoid layout errors when used
   /// in Epoxy cells
   public func constrainToMarginsWithHighPriorityBottom() {
-    guard let owningView else {
+    guard let owningView = owningView else {
       EpoxyLogger.shared.assertionFailure("Did you forget to install the LayoutGuide?")
       return
     }
@@ -113,7 +113,7 @@ extension Constrainable {
   }
 
   public func constrainToSuperview() {
-    guard let owningView else {
+    guard let owningView = owningView else {
       EpoxyLogger.shared.assertionFailure("Did you forget to install the LayoutGuide?")
       return
     }

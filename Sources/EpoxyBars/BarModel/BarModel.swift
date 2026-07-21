@@ -23,7 +23,7 @@ ViewEpoxyModeled {
   ///   - dataID: An optional ID that uniquely identifies this bar relative to other bars in the
   ///     same bar stack.
   public init(dataID: AnyHashable? = nil) {
-    if let dataID {
+    if let dataID = dataID {
       self.dataID = dataID
     }
   }
@@ -45,7 +45,7 @@ ViewEpoxyModeled {
     content: Content,
     setContent: @escaping (CallbackContext, Content) -> Void)
   {
-    if let dataID {
+    if let dataID = dataID {
       self.dataID = dataID
     }
     erasedContent = content
@@ -79,7 +79,7 @@ ViewEpoxyModeled {
     makeView: @escaping (Params) -> View,
     setContent: @escaping (CallbackContext, Content) -> Void)
   {
-    if let dataID {
+    if let dataID = dataID {
       self.dataID = dataID
     }
     styleID = params
