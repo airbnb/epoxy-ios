@@ -63,7 +63,8 @@ extension SectionModel: Diffable {
 
 // MARK: DiffableSection
 
-extension SectionModel: DiffableSection {
+extension SectionModel: @MainActor
+DiffableSection {
   public var diffableItems: [AnyItemModel] {
     items.map { $0.eraseToAnyItemModel() }
   }
@@ -71,7 +72,8 @@ extension SectionModel: DiffableSection {
 
 // MARK: CallbackContextEpoxyModeled
 
-extension SectionModel: CallbackContextEpoxyModeled {
+extension SectionModel: @MainActor
+CallbackContextEpoxyModeled {
   /// There's no additional context available on a Section callback as it does not represent a
   /// `UIView`, and instead is just a grouping mechanism.
   public typealias CallbackContext = Void

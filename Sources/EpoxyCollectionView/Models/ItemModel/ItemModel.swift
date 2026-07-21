@@ -11,7 +11,8 @@ import UIKit
 ///
 /// Designed to be used with a `CollectionView` to lazily create and configure views as they are
 /// recycled in a `UICollectionView`.
-public struct ItemModel<View: UIView>: ViewEpoxyModeled {
+public struct ItemModel<View: UIView>: @MainActor
+ViewEpoxyModeled {
 
   // MARK: Lifecycle
 
@@ -164,7 +165,8 @@ extension ItemModel: WillDisplayProviding { }
 
 // MARK: ItemModeling
 
-extension ItemModel: ItemModeling {
+extension ItemModel: @MainActor
+ItemModeling {
   public func eraseToAnyItemModel() -> AnyItemModel {
     .init(internalItemModel: self)
   }
@@ -172,7 +174,8 @@ extension ItemModel: ItemModeling {
 
 // MARK: InternalItemModeling
 
-extension ItemModel: InternalItemModeling {
+extension ItemModel: @MainActor
+InternalItemModeling {
   public var viewDifferentiator: ViewDifferentiator {
     .init(viewType: View.self, styleID: styleID)
   }
@@ -238,7 +241,8 @@ extension ItemModel: Diffable {
 
 // MARK: CallbackContextEpoxyModeled
 
-extension ItemModel: CallbackContextEpoxyModeled {
+extension ItemModel: @MainActor
+CallbackContextEpoxyModeled {
 
   /// The context passed to callbacks on an `ItemModel`.
   public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {

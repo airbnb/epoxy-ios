@@ -5,7 +5,7 @@ import EpoxyCore
 import UIKit
 
 /// A view backed version of VGroup that can also be used seamlessly with Epoxy
-public final class VGroupView: UIView, EpoxyableView {
+public final class VGroupView: UIView, @MainActor EpoxyableView {
 
   // MARK: Lifecycle
 

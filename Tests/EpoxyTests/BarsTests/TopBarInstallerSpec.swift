@@ -9,7 +9,8 @@ import UIKit
 
 final class TopBarInstallerSpec: QuickSpec, BaseBarInstallerSpec {
 
-  func installBarContainer(
+  @MainActor
+  static func installBarContainer(
     in viewController: UIViewController,
     configuration: BarInstallerConfiguration)
     -> (container: InternalBarContainer, setBars: ([BarModeling], Bool) -> Void)
@@ -23,7 +24,7 @@ final class TopBarInstallerSpec: QuickSpec, BaseBarInstallerSpec {
       setBars: { barInstaller.setBars($0, animated: $1) })
   }
 
-  override func spec() {
+  override class func spec() {
     baseSpec()
 
     describe("TopBarContainer") {

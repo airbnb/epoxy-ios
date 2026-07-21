@@ -14,7 +14,7 @@ import UIKit
 
 final class NavigationQueueSpec: QuickSpec {
 
-  override func spec() {
+  override class func spec() {
     enum NavigationID {
       case one, two
     }

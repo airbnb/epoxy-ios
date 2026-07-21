@@ -13,7 +13,7 @@ public protocol UIViewConfiguringSwiftUIView: View {
   associatedtype ConfigurationContext: ViewProviding
 
   /// A closure that is invoked to configure the represented content view.
-  typealias Configuration = (ConfigurationContext) -> Void
+  typealias Configuration = @MainActor (ConfigurationContext) -> Void
 
   /// A mutable array of configuration closures that should each be invoked with the
   /// `ConfigurationContext` whenever `updateUIView` is called in a `UIViewRepresentable`.

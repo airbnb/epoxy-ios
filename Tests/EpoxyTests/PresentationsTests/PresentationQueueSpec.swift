@@ -13,7 +13,7 @@ import UIKit
 
 final class PresentationQueueSpec: QuickSpec {
 
-  override func spec() {
+  override class func spec() {
     enum PresentationID {
       case one, two
     }

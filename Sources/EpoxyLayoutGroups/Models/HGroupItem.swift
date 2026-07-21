@@ -78,7 +78,8 @@ extension HGroupItem: GroupItemsProviding { }
 
 // MARK: GroupItemModeling
 
-extension HGroupItem: GroupItemModeling {
+extension HGroupItem: @MainActor
+GroupItemModeling {
   public func eraseToAnyGroupItem() -> AnyGroupItem {
     .init(internalGroupItemModel: self)
   }
@@ -86,7 +87,8 @@ extension HGroupItem: GroupItemModeling {
 
 // MARK: InternalGroupItemModeling
 
-extension HGroupItem: InternalGroupItemModeling {
+extension HGroupItem: @MainActor
+InternalGroupItemModeling {
   public var diffIdentifier: AnyHashable {
     DiffIdentifier(
       dataID: dataID,

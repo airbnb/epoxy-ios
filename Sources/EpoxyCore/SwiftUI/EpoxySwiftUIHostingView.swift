@@ -57,7 +57,8 @@ extension CallbackContextEpoxyModeled
 /// the API is private and 3) the `_UIHostingView` doesn't not accept setting a new `View` instance.
 ///
 /// - SeeAlso: `EpoxySwiftUIHostingController`
-public final class EpoxySwiftUIHostingView<RootView: View>: UIView, EpoxyableView {
+public final class EpoxySwiftUIHostingView<RootView: View>: UIView, @MainActor
+EpoxyableView {
 
   // MARK: Lifecycle
 

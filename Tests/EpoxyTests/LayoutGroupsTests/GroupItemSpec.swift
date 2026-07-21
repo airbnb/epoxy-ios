@@ -11,7 +11,7 @@ import UIKit
 
 final class GroupItemSpec: QuickSpec {
 
-  override func spec() {
+  override class func spec() {
     var groupItem: GroupItem<TestStyledLabel>!
 
     beforeEach {

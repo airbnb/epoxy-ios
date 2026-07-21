@@ -18,7 +18,7 @@ extension CallbackContextEpoxyModeled where Self: WillDisplayProviding {
 
   /// A closure that's called when a view is about to be displayed, before it has been added to the
   /// view hierarchy.
-  public typealias WillDisplay = (_ context: CallbackContext) -> Void
+  public typealias WillDisplay = @MainActor (_ context: CallbackContext) -> Void
 
   /// A closure that's called when the view is about to be displayed, before it has been added to
   /// the view hierarchy.
@@ -36,6 +36,6 @@ extension CallbackContextEpoxyModeled where Self: WillDisplayProviding {
   // MARK: Private
 
   private var willDisplayProperty: EpoxyModelProperty<WillDisplay?> {
-    .init(keyPath: \Self.willDisplay, defaultValue: nil, updateStrategy: .chain())
+    .init(keyPath: \Self.willDisplay, defaultValue: nil, updateStrategy: .chainMainActor())
   }
 }

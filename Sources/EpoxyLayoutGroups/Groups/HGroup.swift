@@ -6,7 +6,7 @@ import UIKit
 
 /// A generic layout guide that models SwiftUI's `HStack`.
 /// Please see the README for usage information
-public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
+public final class HGroup: UILayoutGuide, @MainActor Constrainable, @MainActor InternalGroup {
 
   // MARK: Lifecycle
 

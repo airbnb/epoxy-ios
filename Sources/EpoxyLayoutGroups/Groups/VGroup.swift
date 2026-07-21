@@ -6,7 +6,7 @@ import UIKit
 
 /// A generic layout guide that models SwiftUI's `VStack`.
 /// Please see the README for usage information
-public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
+public final class VGroup: UILayoutGuide, @MainActor Constrainable, @MainActor InternalGroup {
 
   // MARK: Lifecycle
 

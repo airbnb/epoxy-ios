@@ -16,7 +16,7 @@ final class PresentationModelBuilderSpec: QuickSpec {
     var model: PresentationModel?
   }
 
-  override func spec() {
+  override class func spec() {
     context("with a single presentation model expression") {
       it("should build the first presentation") {
         let builder = TestBuilder {

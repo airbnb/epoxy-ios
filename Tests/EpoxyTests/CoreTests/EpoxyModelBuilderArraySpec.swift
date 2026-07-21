@@ -17,7 +17,7 @@ final class EpoxyModelBuilderArraySpec: QuickSpec {
     var models: [Int]
   }
 
-  override func spec() {
+  override class func spec() {
     context("with a single model expression") {
       it("should build the model") {
         let builder = BuilderTest {

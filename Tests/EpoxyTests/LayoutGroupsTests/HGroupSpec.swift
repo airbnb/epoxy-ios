@@ -11,14 +11,14 @@ import UIKit
 
 final class HGroupSpec: QuickSpec {
 
-  override func spec() {
-    let initialItems = [
-      TestView.groupItem(dataID: 1),
-      TestView.groupItem(dataID: 2),
-    ]
+  override class func spec() {
     var group: HGroup!
 
     beforeEach {
+      let initialItems = [
+        TestView.groupItem(dataID: 1),
+        TestView.groupItem(dataID: 2),
+      ]
       let view = UIView(frame: .init(x: 0, y: 0, width: 320, height: 500))
       group = HGroup(items: initialItems)
       group.install(in: view)
@@ -26,9 +26,9 @@ final class HGroupSpec: QuickSpec {
     }
 
     it("should render the provided views") {
-      expect(group.items[0].dataID).to(be(1))
+      expect(group.items[0].dataID).to(equal(1))
       expect(group.constrainableContainers[0].wrapped is TestView).to(beTrue())
-      expect(group.items[1].dataID).to(be(2))
+      expect(group.items[1].dataID).to(equal(2))
       expect(group.constrainableContainers[1].wrapped is TestView).to(beTrue())
     }
 
@@ -57,7 +57,7 @@ final class HGroupSpec: QuickSpec {
         }
         expect(currentContainer.isEqual(to: group.constrainableContainers[0])).to(beFalse())
         expect(group.constrainableContainers).to(haveCount(1))
-        expect(group.items[0].dataID).to(be(2))
+        expect(group.items[0].dataID).to(equal(2))
       }
     }
 
@@ -71,7 +71,7 @@ final class HGroupSpec: QuickSpec {
           TestView.groupItem(dataID: 3)
         }
         expect(group.constrainableContainers).to(haveCount(3))
-        expect(group.items[2].dataID).to(be(3))
+        expect(group.items[2].dataID).to(equal(3))
       }
     }
 
@@ -86,8 +86,8 @@ final class HGroupSpec: QuickSpec {
           TestView.groupItem(dataID: 1)
         }
         expect(group.constrainableContainers).to(haveCount(2))
-        expect(group.items[0].dataID).to(be(2))
-        expect(group.items[1].dataID).to(be(1))
+        expect(group.items[0].dataID).to(equal(2))
+        expect(group.items[1].dataID).to(equal(1))
         expect(currentContainer1.isEqual(to: group.constrainableContainers[1])).to(beTrue())
         expect(currentContainer2.isEqual(to: group.constrainableContainers[0])).to(beTrue())
       }
@@ -108,7 +108,7 @@ final class HGroupSpec: QuickSpec {
           TestLabel.groupItem(dataID: 1, content: .init(text: "New title"))
         }
         expect(currentContainer1.isEqual(to: group.constrainableContainers[0])).to(beTrue())
-        expect((currentContainer1.wrapped as! TestLabel).text).to(be("New title"))
+        expect((currentContainer1.wrapped as! TestLabel).text).to(equal("New title"))
       }
     }
 

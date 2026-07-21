@@ -11,17 +11,17 @@ import XCTest
 
 final class FlowLayoutSpec: QuickSpec {
 
-  override func spec() {
-    let itemModel = ItemModel(dataID: DefaultDataID.noneProvided)
-      .setContent { context in
-        context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-      }
-
+  override class func spec() {
+    var itemModel: ItemModel<UIView>!
     var collectionView: CollectionView!
     var layout: UICollectionViewFlowLayout!
 
     beforeEach {
+      itemModel = ItemModel(dataID: DefaultDataID.noneProvided)
+        .setContent { context in
+          context.view.widthAnchor.constraint(equalToConstant: 50).isActive = true
+          context.view.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        }
       layout = UICollectionViewFlowLayout()
       layout.minimumLineSpacing = 1
       layout.minimumInteritemSpacing = 2

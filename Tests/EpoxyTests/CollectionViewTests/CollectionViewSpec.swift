@@ -25,7 +25,8 @@ final class CollectionViewSpec: QuickSpec {
     }
   }
 
-  var mockCell: CollectionViewCell {
+  @MainActor
+  static var mockCell: CollectionViewCell {
     let cell = CollectionViewCell(frame: .zero)
     cell.itemPath = .init(
       itemDataID: DefaultDataID.noneProvided,
@@ -33,7 +34,8 @@ final class CollectionViewSpec: QuickSpec {
     return cell
   }
 
-  var mockHeaderView: CollectionViewReusableView {
+  @MainActor
+  static var mockHeaderView: CollectionViewReusableView {
     let cell = CollectionViewReusableView(frame: .zero)
     cell.itemPath = .init(
       elementKind: UICollectionView.elementKindSectionHeader,
@@ -42,13 +44,16 @@ final class CollectionViewSpec: QuickSpec {
     return cell
   }
 
-  override func spec() {
-    let itemModel = ItemModel<TestView>(dataID: DefaultDataID.noneProvided)
-    let supplementaryItemModel = SupplementaryItemModel<TestView>(dataID: DefaultDataID.noneProvided)
+  override class func spec() {
+    var itemModel: ItemModel<TestView>!
+    var supplementaryItemModel: SupplementaryItemModel<TestView>!
 
     var collectionView: CollectionView!
 
     beforeEach {
+      itemModel = ItemModel<TestView>(dataID: DefaultDataID.noneProvided)
+      supplementaryItemModel = SupplementaryItemModel<TestView>(dataID: DefaultDataID.noneProvided)
+
       let layout = UICollectionViewFlowLayout()
       layout.itemSize = CGSize(width: 50, height: 50)
       layout.headerReferenceSize = CGSize(width: 50, height: 50)
@@ -103,7 +108,7 @@ final class CollectionViewSpec: QuickSpec {
           beforeEach {
             collectionView.delegate?.collectionView?(
               collectionView,
-              willDisplay: self.mockCell,
+              willDisplay: mockCell,
               forItemAt: IndexPath(item: 0, section: 0))
           }
 
@@ -117,7 +122,7 @@ final class CollectionViewSpec: QuickSpec {
           beforeEach {
             collectionView.delegate?.collectionView?(
               collectionView,
-              didEndDisplaying: self.mockCell,
+              didEndDisplaying: mockCell,
               forItemAt: IndexPath(item: 0, section: 0))
           }
 
@@ -175,7 +180,7 @@ final class CollectionViewSpec: QuickSpec {
           beforeEach {
             collectionView.delegate?.collectionView?(
               collectionView,
-              willDisplaySupplementaryView: self.mockHeaderView,
+              willDisplaySupplementaryView: mockHeaderView,
               forElementKind: UICollectionView.elementKindSectionHeader,
               at: IndexPath(item: 0, section: 0))
           }
@@ -190,7 +195,7 @@ final class CollectionViewSpec: QuickSpec {
           beforeEach {
             collectionView.delegate?.collectionView?(
               collectionView,
-              didEndDisplayingSupplementaryView: self.mockHeaderView,
+              didEndDisplayingSupplementaryView: mockHeaderView,
               forElementOfKind: UICollectionView.elementKindSectionHeader,
               at: IndexPath(item: 0, section: 0))
           }
@@ -238,7 +243,7 @@ final class CollectionViewSpec: QuickSpec {
             beforeEach {
               collectionView.delegate?.collectionView?(
                 collectionView,
-                willDisplay: self.mockCell,
+                willDisplay: mockCell,
                 forItemAt: IndexPath(item: 0, section: 0))
             }
 
@@ -254,7 +259,7 @@ final class CollectionViewSpec: QuickSpec {
               beforeEach {
                 collectionView.delegate?.collectionView?(
                   collectionView,
-                  didEndDisplaying: self.mockCell,
+                  didEndDisplaying: mockCell,
                   forItemAt: IndexPath(item: 0, section: 0))
               }
 
@@ -266,7 +271,7 @@ final class CollectionViewSpec: QuickSpec {
                 beforeEach {
                   collectionView.delegate?.collectionView?(
                     collectionView,
-                    willDisplay: self.mockCell,
+                    willDisplay: mockCell,
                     forItemAt: IndexPath(item: 0, section: 0))
                 }
 
@@ -284,7 +289,7 @@ final class CollectionViewSpec: QuickSpec {
               beforeEach {
                 collectionView.delegate?.collectionView?(
                   collectionView,
-                  willDisplaySupplementaryView: self.mockHeaderView,
+                  willDisplaySupplementaryView: mockHeaderView,
                   forElementKind: UICollectionView.elementKindSectionHeader,
                   at: IndexPath(item: 0, section: 0))
               }
@@ -297,11 +302,11 @@ final class CollectionViewSpec: QuickSpec {
                 beforeEach {
                   collectionView.delegate?.collectionView?(
                     collectionView,
-                    didEndDisplaying: self.mockCell,
+                    didEndDisplaying: mockCell,
                     forItemAt: IndexPath(item: 0, section: 0))
                   collectionView.delegate?.collectionView?(
                     collectionView,
-                    didEndDisplayingSupplementaryView: self.mockHeaderView,
+                    didEndDisplayingSupplementaryView: mockHeaderView,
                     forElementOfKind: UICollectionView.elementKindSectionHeader,
                     at: IndexPath(item: 0, section: 0))
                 }

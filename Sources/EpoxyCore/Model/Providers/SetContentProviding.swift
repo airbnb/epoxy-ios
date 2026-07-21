@@ -15,7 +15,7 @@ extension CallbackContextEpoxyModeled where Self: SetContentProviding {
 
   /// A closure that's called to set the content on this model's view when it is first created and
   /// subsequently when the content changes.
-  public typealias SetContent = (CallbackContext) -> Void
+  public typealias SetContent = @MainActor (CallbackContext) -> Void
 
   /// A closure that's called to set the content on this model's view when it is first created and
   /// subsequently when the content changes.
@@ -33,6 +33,6 @@ extension CallbackContextEpoxyModeled where Self: SetContentProviding {
   // MARK: Private
 
   private var setContentProperty: EpoxyModelProperty<SetContent?> {
-    .init(keyPath: \Self.setContent, defaultValue: nil, updateStrategy: .chain())
+    .init(keyPath: \Self.setContent, defaultValue: nil, updateStrategy: .chainMainActor())
   }
 }

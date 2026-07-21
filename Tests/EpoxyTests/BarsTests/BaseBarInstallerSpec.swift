@@ -11,8 +11,9 @@ import UIKit
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-protocol BaseBarInstallerSpec {
-  func installBarContainer(
+protocol BaseBarInstallerSpec: QuickSpec {
+  @MainActor
+  static func installBarContainer(
     in viewController: UIViewController,
     configuration: BarInstallerConfiguration)
     -> (container: InternalBarContainer, setBars: ([BarModeling], Bool) -> Void)
@@ -22,7 +23,7 @@ protocol BaseBarInstallerSpec {
 
 extension BaseBarInstallerSpec {
 
-  func baseSpec() {
+  static func baseSpec() {
     let defaultSafeAreaInset: CGFloat = 20
     var window: UIWindow!
     var viewController: UIViewController!
@@ -44,7 +45,7 @@ extension BaseBarInstallerSpec {
       window.rootViewController = viewController
       window.makeKeyAndVisible()
 
-      (container, setBars) = self.installBarContainer(in: viewController, configuration: configuration)
+      (container, setBars) = installBarContainer(in: viewController, configuration: configuration)
     }
 
     afterEach {
@@ -161,7 +162,7 @@ extension BaseBarInstallerSpec {
             container.setBars(bars, animated: animated)
           })
 
-          (container, setBars) = self.installBarContainer(in: viewController, configuration: configuration)
+          (container, setBars) = installBarContainer(in: viewController, configuration: configuration)
         }
 
         afterEach {
@@ -179,10 +180,11 @@ extension BaseBarInstallerSpec {
         }
 
         context("when setting subsequent bars") {
-          let bars = [StaticHeightBar.barModel(style: .init(height: 100))]
+          var bars: [BarModel<StaticHeightBar>]!
           let animated = false
 
           beforeEach {
+            bars = [StaticHeightBar.barModel(style: .init(height: 100))]
             setBars(bars, animated)
           }
 

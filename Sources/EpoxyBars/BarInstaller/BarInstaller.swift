@@ -179,16 +179,18 @@ private final class Token {
 
   // MARK: Lifecycle
 
-  init(dispose: @escaping () -> Void) {
+  init(dispose: @escaping @MainActor () -> Void) {
     self.dispose = dispose
   }
 
-  deinit {
+  // `Token` is main-actor isolated (like the rest of the package), so its `dispose` closure — which
+  // updates main-actor state — can run synchronously in an isolated `deinit` (iOS 18.4+).
+  isolated deinit {
     dispose()
   }
 
   // MARK: Private
 
-  private let dispose: () -> Void
+  private let dispose: @MainActor () -> Void
 
 }

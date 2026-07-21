@@ -17,7 +17,6 @@
 /// - SeeAlso: `BehaviorsConfigurableView`
 /// - SeeAlso: `StyledView`
 /// - SeeAlso: `EpoxyableView`
-@MainActor
 public protocol ContentConfigurableView: ViewType {
   /// The `Equatable` properties that can be updated on instances of this view, e.g. text `String`s
   /// or image `URL`s.

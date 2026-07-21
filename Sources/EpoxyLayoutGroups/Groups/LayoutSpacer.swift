@@ -11,7 +11,7 @@ import UIKit
 ///   LayoutSpacer(fixedHeight: 16)
 ///   subtitleLabel
 /// }
-public final class LayoutSpacer: UILayoutGuide, Constrainable {
+public final class LayoutSpacer: UILayoutGuide, @MainActor Constrainable {
 
   // MARK: Lifecycle
 

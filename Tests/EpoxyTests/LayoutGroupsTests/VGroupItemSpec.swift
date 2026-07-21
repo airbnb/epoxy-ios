@@ -11,7 +11,7 @@ import UIKit
 
 final class VGroupItemSpec: QuickSpec {
 
-  override func spec() {
+  override class func spec() {
     var groupItem: VGroupItem!
 
     beforeEach {

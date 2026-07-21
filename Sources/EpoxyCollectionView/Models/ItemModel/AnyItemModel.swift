@@ -67,13 +67,15 @@ extension AnyItemModel: StyleIDProviding { }
 
 // MARK: ItemModeling
 
-extension AnyItemModel: ItemModeling {
+extension AnyItemModel: @MainActor
+ItemModeling {
   public func eraseToAnyItemModel() -> AnyItemModel { self }
 }
 
 // MARK: InternalItemModeling
 
-extension AnyItemModel: InternalItemModeling {
+extension AnyItemModel: @MainActor
+InternalItemModeling {
   public var viewDifferentiator: ViewDifferentiator {
     model.viewDifferentiator
   }
@@ -149,7 +151,7 @@ extension AnyItemModel: Diffable {
 
 // MARK: CallbackContextEpoxyModeled
 
-extension AnyItemModel: CallbackContextEpoxyModeled {
+extension AnyItemModel: @MainActor CallbackContextEpoxyModeled {
 
   /// The context passed to callbacks on an `AnyItemModel`.
   public struct CallbackContext: ViewProviding, TraitCollectionProviding, AnimatedProviding {

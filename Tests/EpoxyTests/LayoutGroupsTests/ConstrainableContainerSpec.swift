@@ -11,7 +11,7 @@ import UIKit
 
 final class ConstraniableContainerSpec: QuickSpec {
 
-  override func spec() {
+  override class func spec() {
     var constrainable: Constrainable!
 
     beforeEach {

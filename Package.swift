@@ -1,11 +1,16 @@
-// swift-tools-version:5.5
+// swift-tools-version:6.2
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
+let mainActorIsolation: [SwiftSetting] = [
+  .defaultIsolation(MainActor.self),
+  .enableUpcomingFeature("InferIsolatedConformances"),
+]
+
 let package = Package(
   name: "Epoxy",
-  platforms: [.iOS(.v13)],
+  platforms: [.iOS("18.4")],
   products: [
     .library(name: "Epoxy", targets: ["Epoxy"]),
     .library(name: "EpoxyCore", targets: ["EpoxyCore"]),
@@ -16,8 +21,8 @@ let package = Package(
     .library(name: "EpoxyLayoutGroups", targets: ["EpoxyLayoutGroups"]),
   ],
   dependencies: [
-    .package(url: "https://github.com/Quick/Quick.git", .upToNextMajor(from: "4.0.0")),
-    .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "9.0.0")),
+    .package(url: "https://github.com/Quick/Quick.git", .upToNextMajor(from: "7.6.2")),
+    .package(url: "https://github.com/Quick/Nimble.git", .upToNextMajor(from: "14.0.0")),
   ],
   targets: [
     .target(
@@ -29,15 +34,34 @@ let package = Package(
         "EpoxyNavigationController",
         "EpoxyPresentations",
         "EpoxyLayoutGroups",
-      ]),
-    .target(name: "EpoxyCore"),
-    .target(name: "EpoxyCollectionView", dependencies: ["EpoxyCore"]),
-    .target(name: "EpoxyBars", dependencies: ["EpoxyCore"]),
-    .target(name: "EpoxyNavigationController", dependencies: ["EpoxyCore"]),
-    .target(name: "EpoxyPresentations", dependencies: ["EpoxyCore"]),
-    .target(name: "EpoxyLayoutGroups", dependencies: ["EpoxyCore"]),
-    .testTarget(name: "EpoxyTests", dependencies: ["Epoxy", "Quick", "Nimble"]),
-    .testTarget(name: "PerformanceTests", dependencies: ["EpoxyCore"]),
+      ],
+      swiftSettings: mainActorIsolation),
+    .target(name: "EpoxyCore", swiftSettings: mainActorIsolation),
+    .target(name: "EpoxyCollectionView", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
+    .target(name: "EpoxyBars", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
+    .target(name: "EpoxyNavigationController", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
+    .target(name: "EpoxyPresentations", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
+    .target(name: "EpoxyLayoutGroups", dependencies: ["EpoxyCore"], swiftSettings: mainActorIsolation),
+    // The test targets keep the default (nonisolated) isolation and stay on the Swift 5 language
+    // mode, for two reasons:
+    //   1. `QuickSpec`'s `spec()` / `init()` are nonisolated, so a target-wide `@MainActor` default
+    //      would conflict with those overrides.
+    //   2. Quick specs share non-`Sendable` state (e.g. `GroupItem`, model storage) through captured
+    //      `var`s across the bridged `@MainActor` closures. That state never leaves the main thread,
+    //      but Swift 6's region-based `sending` analysis can't prove it. Region isolation is only
+    //      enforced in the Swift 6 language mode, so Swift 5 mode keeps the tests compiling without
+    //      resorting to `nonisolated(unsafe)`.
+    // Actor-isolation (the guarantee this spike validates) is still enforced: specs that drive the
+    // now-main-actor API conform to the `MainActorSpec` bridge, and test-only helpers that model
+    // main-actor library protocols are annotated `@MainActor`.
+    .testTarget(
+      name: "EpoxyTests",
+      dependencies: ["Epoxy", "Quick", "Nimble"],
+      swiftSettings: [.swiftLanguageMode(.v5)]),
+    .testTarget(
+      name: "PerformanceTests",
+      dependencies: ["EpoxyCore"],
+      swiftSettings: [.swiftLanguageMode(.v5)]),
   ])
 
 #if swift(>=5.6)

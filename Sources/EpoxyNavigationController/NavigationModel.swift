@@ -35,8 +35,8 @@ public struct NavigationModel {
   public init<Params: Equatable>(
     params: Params,
     dataID: AnyHashable,
-    makeViewController: @escaping (Params) -> UIViewController?,
-    remove: @escaping () -> Void)
+    makeViewController: @escaping @MainActor (Params) -> UIViewController?,
+    remove: @escaping @MainActor () -> Void)
   {
     self.dataID = dataID
     value = params as Any
@@ -64,8 +64,8 @@ public struct NavigationModel {
   ///     when its view controller is removed from the navigation stack.
   public init(
     dataID: AnyHashable,
-    makeViewController: @escaping () -> UIViewController?,
-    remove: @escaping () -> Void)
+    makeViewController: @escaping @MainActor () -> UIViewController?,
+    remove: @escaping @MainActor () -> Void)
   {
     self.dataID = dataID
     value = ()
@@ -94,7 +94,7 @@ public struct NavigationModel {
   ///     added to the navigation stack.
   public static func root(
     dataID: AnyHashable,
-    makeViewController: @escaping () -> UIViewController?)
+    makeViewController: @escaping @MainActor () -> UIViewController?)
     -> NavigationModel
   {
     .init(dataID: dataID, makeViewController: makeViewController, remove: { })
@@ -104,7 +104,7 @@ public struct NavigationModel {
   /// navigation stack that it has been added to.
   ///
   /// Any previously added `didShow` closures are called prior to the given closure.
-  public func didShow(_ didShow: @escaping ((UIViewController) -> Void)) -> NavigationModel {
+  public func didShow(_ didShow: @escaping @MainActor (UIViewController) -> Void) -> NavigationModel {
     var copy = self
     copy._didShow = { [oldDidShow = _didShow] viewController in
       oldDidShow?(viewController)
@@ -117,7 +117,7 @@ public struct NavigationModel {
   /// a navigation stack that it has been added to.
   ///
   /// Any previously added `didHide` closures are called prior to the given closure.
-  public func didHide(_ didHide: @escaping (() -> Void)) -> NavigationModel {
+  public func didHide(_ didHide: @escaping @MainActor () -> Void) -> NavigationModel {
     var copy = self
     copy._didHide = { [oldDidHide = _didHide] in
       oldDidHide?()
@@ -129,7 +129,7 @@ public struct NavigationModel {
   /// Calls the given closure when this model's view controller is added to a navigation stack.
   ///
   /// Any previously added `didAdd` closures are called prior to the given closure.
-  public func didAdd(_ didAdd: @escaping ((UIViewController) -> Void)) -> NavigationModel {
+  public func didAdd(_ didAdd: @escaping @MainActor (UIViewController) -> Void) -> NavigationModel {
     var copy = self
     copy._didAdd = { [oldDidAdd = _didAdd] viewController in
       oldDidAdd?(viewController)
@@ -141,7 +141,7 @@ public struct NavigationModel {
   /// Calls the given closure when this model's view controller is removed from a navigation stack.
   ///
   /// Any previously added `didRemove` closures are called prior to the given closure.
-  public func didRemove(_ didRemove: @escaping (() -> Void)) -> NavigationModel {
+  public func didRemove(_ didRemove: @escaping @MainActor () -> Void) -> NavigationModel {
     var copy = self
     copy._didRemove = { [oldDidRemove = _didRemove] in
       oldDidRemove?()
@@ -192,12 +192,12 @@ public struct NavigationModel {
 
   // MARK: Private
 
-  private let _makeViewController: () -> UIViewController?
-  private let _remove: () -> Void
-  private var _didShow: ((UIViewController) -> Void)?
-  private var _didHide: (() -> Void)?
-  private var _didAdd: ((UIViewController) -> Void)?
-  private var _didRemove: (() -> Void)?
+  private let _makeViewController: @MainActor () -> UIViewController?
+  private let _remove: @MainActor () -> Void
+  private var _didShow: (@MainActor (UIViewController) -> Void)?
+  private var _didHide: (@MainActor () -> Void)?
+  private var _didAdd: (@MainActor (UIViewController) -> Void)?
+  private var _didRemove: (@MainActor () -> Void)?
 
   /// Whether the given model's value is equal to this model's value.
   private var _isValueEqual: (NavigationModel) -> Bool

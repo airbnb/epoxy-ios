@@ -39,7 +39,7 @@ final class BarStackViewSpec: QuickSpec {
     }
   }
 
-  override func spec() {
+  override class func spec() {
     var view: BarStackView!
     beforeEach {
       view = BarStackView()

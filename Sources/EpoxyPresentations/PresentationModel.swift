@@ -31,8 +31,8 @@ public struct PresentationModel {
   public init(
     dataID: AnyHashable,
     presentation: Presentation,
-    makeViewController: @escaping () -> UIViewController?,
-    dismiss: @escaping () -> Void)
+    makeViewController: @escaping @MainActor () -> UIViewController?,
+    dismiss: @escaping @MainActor () -> Void)
   {
     self.init(
       dataID: dataID,
@@ -62,8 +62,8 @@ public struct PresentationModel {
     params: Params,
     dataID: AnyHashable,
     presentation: Presentation,
-    makeViewController: @escaping (Params) -> UIViewController?,
-    dismiss: @escaping () -> Void)
+    makeViewController: @escaping @MainActor (Params) -> UIViewController?,
+    dismiss: @escaping @MainActor () -> Void)
   {
     self.init(
       params: params,
@@ -77,7 +77,7 @@ public struct PresentationModel {
   /// Calls the given closure when the presentation completes successfully.
   ///
   /// Any previously added `didPresent` closures are called prior to the given closure.
-  public func didPresent(_ didPresent: @escaping (() -> Void)) -> PresentationModel {
+  public func didPresent(_ didPresent: @escaping @MainActor () -> Void) -> PresentationModel {
     var copy = self
     copy._didPresent = { [oldDidPresent = _didPresent] in
       oldDidPresent?()
@@ -89,7 +89,7 @@ public struct PresentationModel {
   /// Calls the given closure when dismissal completes successfully.
   ///
   /// Any previously added `didDismiss` closures are called prior to the given closure.
-  public func didDismiss(_ didDismiss: @escaping (() -> Void)) -> PresentationModel {
+  public func didDismiss(_ didDismiss: @escaping @MainActor () -> Void) -> PresentationModel {
     var copy = self
     copy._didDismiss = { [oldDidDismiss = _didDismiss] in
       oldDidDismiss?()
@@ -127,10 +127,10 @@ public struct PresentationModel {
 
   // MARK: Private
 
-  private var _dismiss: () -> Void
-  private var _didPresent: (() -> Void)?
-  private var _didDismiss: (() -> Void)?
-  private var _makePresentable: () -> Presentable?
+  private var _dismiss: @MainActor () -> Void
+  private var _didPresent: (@MainActor () -> Void)?
+  private var _didDismiss: (@MainActor () -> Void)?
+  private var _makePresentable: @MainActor () -> Presentable?
 
   /// Whether the given model's value is equal to this model's value.
   private var _isValueEqual: (PresentationModel) -> Bool
@@ -173,8 +173,8 @@ extension PresentationModel {
   ///     presentable is dismissed.
   public init(
     dataID: AnyHashable,
-    makePresentable: @escaping () -> Presentable?,
-    dismiss: @escaping () -> Void)
+    makePresentable: @escaping @MainActor () -> Presentable?,
+    dismiss: @escaping @MainActor () -> Void)
   {
     self.dataID = dataID
     value = ()
@@ -208,8 +208,8 @@ extension PresentationModel {
   public init<Params: Equatable>(
     params: Params,
     dataID: AnyHashable,
-    makePresentable: @escaping (Params) -> Presentable?,
-    dismiss: @escaping () -> Void)
+    makePresentable: @escaping @MainActor (Params) -> Presentable?,
+    dismiss: @escaping @MainActor () -> Void)
   {
     self.dataID = dataID
     _makePresentable = { makePresentable(params) }
@@ -234,7 +234,7 @@ extension PresentationModel {
 
     /// Creates a `Presentation` with a closure that's invoked to perform the presentation from the
     /// provided context, returning a `Dismissible` that can be used to dismiss the presentation.
-    public init(present: @escaping (_ presented: UIViewController) -> Presentable) {
+    public init(present: @escaping @MainActor (_ presented: UIViewController) -> Presentable) {
       self.present = present
     }
 
@@ -257,19 +257,19 @@ extension PresentationModel {
 
     /// A closure that's invoked to perform the presentation from the provided context, returning a
     /// `Dismissible` that can be used to dismiss the presentation.
-    public var present: (_ presented: UIViewController) -> Presentable
+    public var present: @MainActor (_ presented: UIViewController) -> Presentable
   }
 
   /// A closure to present the `presented` view controller passed to the `present` closure of a
   /// `Presentation` using the details from the given `context`, returning a `Dismissible` that can
   /// be called subsequently to dismiss the presentation.
-  public typealias Presentable = (_ context: Presentation.Context) -> Dismissible
+  public typealias Presentable = @MainActor (_ context: Presentation.Context) -> Dismissible
 
   /// The means to dismiss a `Presentation` of a view controller and optionally receive a callback
   /// upon the dismissal's completion.
   ///
   /// Matches the signature of `UIViewController.dismiss(animated:completion:)`
-  public typealias Dismissible = (_ animated: Bool, _ completion: (() -> Void)?) -> Void
+  public typealias Dismissible = @MainActor (_ animated: Bool, _ completion: (() -> Void)?) -> Void
 }
 
 // MARK: System

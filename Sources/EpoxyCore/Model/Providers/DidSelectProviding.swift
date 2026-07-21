@@ -14,7 +14,7 @@ extension CallbackContextEpoxyModeled where Self: DidSelectProviding {
   // MARK: Public
 
   /// A closure that's called to handle this model's view being selected.
-  public typealias DidSelect = (CallbackContext) -> Void
+  public typealias DidSelect = @MainActor (CallbackContext) -> Void
 
   /// A closure that's called to handle this model's view being selected.
   public var didSelect: DidSelect? {
@@ -31,6 +31,6 @@ extension CallbackContextEpoxyModeled where Self: DidSelectProviding {
   // MARK: Private
 
   private var didSelectProperty: EpoxyModelProperty<DidSelect?> {
-    .init(keyPath: \Self.didSelect, defaultValue: nil, updateStrategy: .chain())
+    .init(keyPath: \Self.didSelect, defaultValue: nil, updateStrategy: .chainMainActor())
   }
 }

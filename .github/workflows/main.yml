@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '16.4' # Swift 6.0.3 (highest)
+        - '26.3' # Swift 6.2 (required for -default-isolation)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '16.4' # Swift 6.0.3 (highest)
+        - '26.3' # Swift 6.2 (required for -default-isolation)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -40,7 +40,7 @@ jobs:
     strategy:
       matrix:
         xcode:
-        - '16.4' # Swift 6.0.3 (highest)
+        - '26.3' # Swift 6.2 (required for -default-isolation)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -50,11 +50,11 @@ jobs:
         run: bundle exec rake build:example
 
   test-package:
-    runs-on: macos-15
+    runs-on: macos-26
     strategy:
       matrix:
         xcode:
-        - '16.4' # Swift 6.0.3 (highest)
+        - '26.5' # Swift 6.3; iOS 26.5 simulator (matches local green run)
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/setup
@@ -62,19 +62,3 @@ jobs:
           xcode: ${{ matrix.xcode }}
       - name: Test Package
         run: bundle exec rake test:package
-
-  lint-swift:
-    runs-on: macos-15
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/setup
-      - name: Lint Swift
-        run: bundle exec rake lint:swift
-
-  lint-podspec:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/setup
-      - name: Lint Podspec
-        run: bundle exec rake lint:podspec

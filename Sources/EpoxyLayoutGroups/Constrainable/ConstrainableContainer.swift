@@ -8,7 +8,8 @@ import UIKit
 
 /// Wrapper around Constrainable-conforming instances that allows
 /// for extensions to be added such as alignment
-public struct ConstrainableContainer: Constrainable, AnchoringContainer, EpoxyModeled {
+public struct ConstrainableContainer: @MainActor
+Constrainable, AnchoringContainer, EpoxyModeled {
 
   // MARK: Lifecycle
 

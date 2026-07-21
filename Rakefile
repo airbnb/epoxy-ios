@@ -23,12 +23,12 @@ namespace :test do
 
   desc 'Runs unit tests'
   task :unit do
-    xcodebuild 'test -scheme EpoxyTests -destination "platform=iOS Simulator,name=iPhone 16"'
+    xcodebuild 'test -scheme EpoxyTests -destination "platform=iOS Simulator,name=iPhone 17 Pro Max"'
   end
 
   desc 'Runs performance tests'
   task :performance do
-    xcodebuild 'test -scheme PerformanceTests -destination "platform=iOS Simulator,name=iPhone 16"'
+    xcodebuild 'test -scheme PerformanceTests -destination "platform=iOS Simulator,name=iPhone 17 Pro Max"'
   end
 end
 

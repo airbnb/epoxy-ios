@@ -18,7 +18,7 @@ extension CallbackContextEpoxyModeled where Self: DidDisplayProviding {
 
   /// A closure that's called after a view has been added to the view hierarchy following any
   /// appearance animations.
-  public typealias DidDisplay = (_ context: CallbackContext) -> Void
+  public typealias DidDisplay = @MainActor (_ context: CallbackContext) -> Void
 
   /// A closure that's called after the view has been added to the view hierarchy following any
   /// appearance animations.
@@ -36,6 +36,6 @@ extension CallbackContextEpoxyModeled where Self: DidDisplayProviding {
   // MARK: Private
 
   private var didDisplayProperty: EpoxyModelProperty<DidDisplay?> {
-    .init(keyPath: \Self.didDisplay, defaultValue: nil, updateStrategy: .chain())
+    .init(keyPath: \Self.didDisplay, defaultValue: nil, updateStrategy: .chainMainActor())
   }
 }

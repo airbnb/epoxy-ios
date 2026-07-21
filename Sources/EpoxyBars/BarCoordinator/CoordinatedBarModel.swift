@@ -86,7 +86,8 @@ extension CoordinatedBarModel: BarModeling {
 
 // MARK: InternalBarCoordinating
 
-extension CoordinatedBarModel: InternalBarCoordinating {
+extension CoordinatedBarModel: @MainActor
+InternalBarCoordinating {
   public func makeCoordinator(update: @escaping (Bool) -> Void) -> AnyBarCoordinating {
     _makeCoordinator(update)
   }
