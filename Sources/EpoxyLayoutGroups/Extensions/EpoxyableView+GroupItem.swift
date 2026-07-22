@@ -12,8 +12,7 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   ///   - behaviors: the behaviors for the view
   ///   - style: the style for the view
   /// - Returns: a group item model representing the view
-  @preconcurrency @MainActor
-  public static func groupItem(
+  public nonisolated static func groupItem(
     dataID: AnyHashable,
     content: Content,
     behaviors: Behaviors? = nil,
@@ -41,8 +40,7 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   ///   - content: the content for this item's view
   ///   - behaviors: the behaviors for the view
   /// - Returns: a group item model representing the view
-  @preconcurrency @MainActor
-  public static func groupItem(
+  public nonisolated static func groupItem(
     dataID: AnyHashable,
     content: Content,
     behaviors: Behaviors? = nil)
@@ -68,8 +66,7 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
   ///   - behaviors: the behaviors for the view
   ///   - style: the style for the view
   /// - Returns: a group item model representing the view
-  @preconcurrency @MainActor
-  public static func groupItem(
+  public nonisolated static func groupItem(
     dataID: AnyHashable,
     behaviors: Behaviors? = nil,
     style: Style)
@@ -95,8 +92,7 @@ extension StyledView
   ///   - dataID: the unique identifier for this item
   ///   - behaviors: the behaviors for the view
   /// - Returns: a group item model representing the view
-  @preconcurrency @MainActor
-  public static func groupItem(
+  public nonisolated static func groupItem(
     dataID: AnyHashable,
     behaviors: Behaviors? = nil)
     -> GroupItem<Self>
