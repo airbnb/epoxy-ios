@@ -11,7 +11,7 @@ import UIKit
 
 // swiftlint:disable implicitly_unwrapped_optional
 
-final class PresentationQueueSpec: QuickSpec {
+final class PresentationQueueSpec: QuickSpec, MainActorSpec {
 
   override func spec() {
     enum PresentationID {
