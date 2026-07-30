@@ -40,7 +40,24 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
     fatalError("init(coder:) has not been implemented")
   }
 
+  deinit {
+    NSObject.cancelPreviousPerformRequests(
+      withTarget: self,
+      selector: #selector(deferredInvalidateIntrinsicContentSize),
+      object: nil)
+  }
+
   // MARK: Public
+
+  /// When `true` (the default), `invalidateIntrinsicContentSize` calls triggered from
+  /// `layoutSubviews` are debounced to the next run-loop pass, coalescing multiple calls
+  /// within the same pass into one. This prevents a per-frame SwiftUI re-layout during
+  /// spring-based animated presentations (e.g. `fullScreenCover` on iOS 26) that can
+  /// otherwise cause a multi-minute layout hang.
+  ///
+  /// Set to `false` to restore the previous immediate-invalidation behaviour if the
+  /// debouncing causes unexpected issues in your app.
+  public static var debouncesLayoutInvalidation = true
 
   /// The  most recently measured fitting size of the `uiView` that fits within the current
   /// `proposedSize`.
@@ -113,11 +130,27 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
     // We need to re-measure the view whenever the size of the bounds changes, as the previous size
     // may now be incorrect.
     if latestMeasurementBoundsSize != nil, bounds.size != latestMeasurementBoundsSize {
-      // This will trigger SwiftUI to re-measure the view.
-      super.invalidateIntrinsicContentSize()
+      if SwiftUIMeasurementContainer.debouncesLayoutInvalidation, !_hasPendingInvalidation {
+        // Defer invalidation to debounce during rapid bounds changes (e.g., fullScreenCover
+        // animation on iOS 26), preventing a per-frame SwiftUI re-layout that causes a hang.
+        _hasPendingInvalidation = true
+        NSObject.cancelPreviousPerformRequests(
+          withTarget: self,
+          selector: #selector(deferredInvalidateIntrinsicContentSize),
+          object: nil)
+        perform(#selector(deferredInvalidateIntrinsicContentSize), with: nil, afterDelay: 0)
+      } else {
+        // This will trigger SwiftUI to re-measure the view.
+        super.invalidateIntrinsicContentSize()
+      }
     }
   }
   #endif
+
+  @objc private func deferredInvalidateIntrinsicContentSize() {
+    _hasPendingInvalidation = false
+    super.invalidateIntrinsicContentSize()
+  }
 
   public override func invalidateIntrinsicContentSize() {
     super.invalidateIntrinsicContentSize()
@@ -139,6 +172,9 @@ public final class SwiftUIMeasurementContainer<Content: ViewType>: ViewType {
 
   /// The bounds size at the time of the latest measurement.
   private var latestMeasurementBoundsSize: CGSize?
+
+  /// Whether a deferred invalidation of intrinsic content size is pending (used for debouncing).
+  private var _hasPendingInvalidation = false
 
   /// The most recently updated set of constraints constraining `uiView` to `self`.
   private var uiViewConstraints = [NSLayoutConstraint.Attribute: NSLayoutConstraint]()
