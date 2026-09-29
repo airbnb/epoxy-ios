@@ -4,17 +4,13 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.10.0...HEAD)
+## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.12.0...HEAD)
 
-### Added
-- 
+## [0.12.0](https://github.com/airbnb/epoxy-ios/compare/0.11.0...0.12.0)
 
 ### Changed
 - Annotated the `StyledView`, `ContentConfigurableView`, and `BehaviorsConfigurableView` view protocols as `@preconcurrency @MainActor` so their conformances are usable without warnings from consumers building under strict concurrency / the Swift 6 language mode. The model-builder DSL entry points (`itemModel`/`barModel`/`supplementaryItemModel`/`groupItem`/`swiftUIView`) are also annotated as `@preconcurrency @MainActor`, while their deferred view-construction and configuration closures bridge to the main actor with `MainActor.assumeIsolated`.
 - Annotated `PresentationModel` and `NavigationModel`'s `makeViewController`/`makePresentable`/`dismiss`/`remove`/`didPresent`/`didDismiss`/`didShow`/`didHide`/`didAdd`/`didRemove` closures — and their backing `PresentationQueue`/`NavigationQueue` — as `@MainActor`. These closures only ever run on the main thread (they construct and configure `UIViewController`s, driven from `UIViewController.setPresentation(_:animated:)` and `NavigationController.setStack(_:animated:)`), so this lets strict-concurrency consumers build and dismiss modally-presented and navigation-stacked view controllers from `@MainActor` contexts without warnings or `MainActor.assumeIsolated`. The `Diffable` conformance and model identity/equality remain nonisolated so model diffing can continue off the main thread.
-
-### Fixed
-- 
 
 ## [0.11.0](https://github.com/airbnb/epoxy-ios/compare/0.10.0...0.11.0) - 2025-06-18
 
