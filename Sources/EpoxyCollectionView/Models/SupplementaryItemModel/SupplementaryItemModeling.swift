@@ -41,11 +41,13 @@ protocol InternalSupplementaryItemModeling: SupplementaryItemModeling,
   ///
   /// - Parameter traitCollection: The trait collection to create the view for
   /// - Returns: The configured view for this supplementary item model.
+  @MainActor
   func configuredView(traitCollection: UITraitCollection) -> UIView
 
   /// Set behaviors needed by the view.
   ///
   /// Called before presentation and when cells are reordered.
+  @MainActor
   func setBehavior(
     reusableView: CollectionViewReusableView,
     traitCollection: UITraitCollection,
