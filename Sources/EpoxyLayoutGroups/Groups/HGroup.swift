@@ -4,9 +4,11 @@
 import Foundation
 import UIKit
 
+// MARK: - HGroup
+
 /// A generic layout guide that models SwiftUI's `HStack`.
 /// Please see the README for usage information
-public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
+public final class HGroup: UILayoutGuide, InternalGroup {
 
   // MARK: Lifecycle
 
@@ -247,7 +249,7 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
     _uninstall()
   }
 
-  public func isEqual(to constrainable: Constrainable) -> Bool {
+  public nonisolated func isEqual(to constrainable: Constrainable) -> Bool {
     guard let other = constrainable as? HGroup else { return false }
     return other == self
   }
@@ -338,3 +340,10 @@ public final class HGroup: UILayoutGuide, Constrainable, InternalGroup {
   }
 
 }
+
+// Keep identity and equality available outside the main actor when conformance isolation is inferred.
+#if compiler(>=6.2)
+extension HGroup: nonisolated Constrainable { }
+#else
+extension HGroup: Constrainable { }
+#endif

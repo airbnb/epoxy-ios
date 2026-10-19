@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased](https://github.com/airbnb/epoxy-ios/compare/0.12.0...HEAD)
 
+### Changed
+- Isolate `Constrainable` layout operations to the main actor while preserving nonisolated identity, equality, and model construction. Explicit nonisolated conformances are used on Swift 6.2 and newer without raising the package tools or deployment minimums.
+
 ## [0.12.0](https://github.com/airbnb/epoxy-ios/compare/0.11.0...0.12.0)
 
 ### Changed

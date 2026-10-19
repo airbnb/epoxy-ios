@@ -22,7 +22,7 @@ final class VGroupSpec: QuickSpec {
       let view = UIView(frame: .init(x: 0, y: 0, width: 320, height: 500))
       group = VGroup(items: initialItems)
       group.install(in: view)
-      group.constrainToSuperview()
+      MainActor.assumeIsolated { group.constrainToSuperview() }
     }
 
     it("should render the provided views") {

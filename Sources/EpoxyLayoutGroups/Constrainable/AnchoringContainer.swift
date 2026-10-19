@@ -12,6 +12,7 @@ public protocol AnchoringContainer {
   var anchor: Constrainable { get }
 }
 
+@MainActor
 extension Constrainable where Self: AnchoringContainer {
   public var leadingAnchor: NSLayoutXAxisAnchor { anchor.leadingAnchor }
   public var trailingAnchor: NSLayoutXAxisAnchor { anchor.trailingAnchor }

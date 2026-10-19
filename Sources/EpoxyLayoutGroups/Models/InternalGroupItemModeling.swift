@@ -9,8 +9,10 @@ protocol InternalGroupItemModeling: GroupItemModeling, EpoxyModeled {
   /// The unique identifier for this group item
   var dataID: AnyHashable { get }
   /// create a constrainable that this group item represents
+  @MainActor
   func makeConstrainable() -> Constrainable
   /// update the constrainable with the current content
+  @MainActor
   func update(_ constrainable: Constrainable, animated: Bool)
   /// set any behaviors on the constrainable (this is called more frequently than update)
   func setBehaviors(on constrainable: Constrainable)
