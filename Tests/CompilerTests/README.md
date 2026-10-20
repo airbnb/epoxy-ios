@@ -1,6 +1,9 @@
 # Behavior isolation compiler contracts
 
-With Swift 6.2 or newer and an iOS Simulator SDK:
+The `test-compiler` CI job builds the simulator modules and runs these contracts on every pull
+request to `master` and every push to `master`, using Xcode 26.0.1 (Swift 6.2).
+
+To run locally with Swift 6.2 or newer and an iOS Simulator SDK:
 
 ```sh
 xcodebuild build -scheme Epoxy -destination 'generic/platform=iOS Simulator' -derivedDataPath /tmp/epoxy-behaviors

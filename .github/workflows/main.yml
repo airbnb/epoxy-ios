@@ -63,6 +63,21 @@ jobs:
       - name: Test Package
         run: bundle exec rake test:package
 
+  test-compiler:
+    runs-on: macos-15
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.0.1.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build simulator modules
+        run: >-
+          xcodebuild build -scheme Epoxy
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath "$RUNNER_TEMP/epoxy-compiler"
+          CODE_SIGNING_ALLOWED=NO
+      - name: Test compiler contracts (Swift 5 and Swift 6 modes)
+        run: bash Tests/CompilerTests/check-set-behaviors.sh "$RUNNER_TEMP/epoxy-compiler/Build/Products/Debug-iphonesimulator"
+
   lint-swift:
     runs-on: macos-15
     steps:
