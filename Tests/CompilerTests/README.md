@@ -1,6 +1,10 @@
 # Layout isolation compiler contracts
 
-With Swift 6.2 or newer and an iOS Simulator SDK:
+The `test-compiler` CI job builds the layout simulator modules with isolation inference and runs
+these contracts on every pull request to `master` and every push to `master`, using Xcode 26.0.1
+(Swift 6.2).
+
+To run locally with Swift 6.2 or newer and an iOS Simulator SDK:
 
 ```sh
 xcodebuild build -scheme EpoxyLayoutGroups -destination 'generic/platform=iOS Simulator' -derivedDataPath /tmp/epoxy-layout SWIFT_STRICT_CONCURRENCY=complete OTHER_SWIFT_FLAGS='$(inherited) -enable-upcoming-feature InferIsolatedConformances'
