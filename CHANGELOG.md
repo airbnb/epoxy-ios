@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Run `SetBehaviors` callbacks on the main actor, including chained callbacks, while keeping model construction and callback storage nonisolated.
+- Explicitly isolate `ItemWrapperView` and `ItemCellView` to the main actor so inherited wrapper conformances work with strict concurrency and `InferIsolatedConformances`.
 
 ## [0.12.0](https://github.com/airbnb/epoxy-ios/compare/0.11.0...0.12.0)
 

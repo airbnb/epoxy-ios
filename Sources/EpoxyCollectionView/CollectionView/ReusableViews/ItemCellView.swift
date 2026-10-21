@@ -6,6 +6,7 @@ import UIKit
 // MARK: - ItemWrapperView
 
 /// A reusable view that contains an item view.
+@preconcurrency @MainActor
 public protocol ItemWrapperView: UIView {
   /// The view if it has been set via `setViewIfNeeded(view:)`, else `nil`.
   var view: UIView? { get }
@@ -17,6 +18,7 @@ public protocol ItemWrapperView: UIView {
 // MARK: - ItemCellView
 
 /// A reusable cell that contains an item view.
+@preconcurrency @MainActor
 public protocol ItemCellView: ItemWrapperView {
   /// Whether this cell is highlighted.
   var isHighlighted: Bool { get }

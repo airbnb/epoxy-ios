@@ -75,8 +75,10 @@ jobs:
           -destination 'generic/platform=iOS Simulator'
           -derivedDataPath "$RUNNER_TEMP/epoxy-compiler"
           CODE_SIGNING_ALLOWED=NO
-      - name: Test compiler contracts (Swift 5 and Swift 6 modes)
+      - name: Test behavior compiler contracts (Swift 5 and Swift 6 modes)
         run: bash Tests/CompilerTests/check-set-behaviors.sh "$RUNNER_TEMP/epoxy-compiler/Build/Products/Debug-iphonesimulator"
+      - name: Test wrapper compiler contracts (Swift 5 and Swift 6 modes)
+        run: bash Tests/CompilerTests/check-item-wrapper.sh
 
   lint-swift:
     runs-on: macos-15
