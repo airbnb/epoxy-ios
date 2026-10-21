@@ -77,8 +77,10 @@ jobs:
           SWIFT_STRICT_CONCURRENCY=complete
           OTHER_SWIFT_FLAGS='$(inherited) -enable-upcoming-feature InferIsolatedConformances'
           CODE_SIGNING_ALLOWED=NO
-      - name: Test compiler contracts (Swift 5 and Swift 6 modes)
+      - name: Test layout compiler contracts (Swift 5 and Swift 6 modes)
         run: bash Tests/CompilerTests/check-constrainable.sh "$RUNNER_TEMP/epoxy-compiler/Build/Products/Debug-iphonesimulator"
+      - name: Test wrapper compiler contracts (Swift 5 and Swift 6 modes)
+        run: bash Tests/CompilerTests/check-item-wrapper.sh
 
   lint-swift:
     runs-on: macos-15
