@@ -33,7 +33,7 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
         MainActor.assumeIsolated { context.view.setContent(content, animated: context.animated) }
       })
       .setBehaviors { context in
-        MainActor.assumeIsolated { context.view.setBehaviors(behaviors) }
+        context.view.setBehaviors(behaviors)
       }
   }
 }
@@ -64,7 +64,7 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
         MainActor.assumeIsolated { context.view.setContent(content, animated: context.animated) }
       })
       .setBehaviors { context in
-        MainActor.assumeIsolated { context.view.setBehaviors(behaviors) }
+        context.view.setBehaviors(behaviors)
       }
   }
 }
@@ -91,7 +91,7 @@ extension StyledView where Self: BehaviorsConfigurableView & ContentConfigurable
       .styleID(style)
       .makeView { MainActor.assumeIsolated { Self(style: style) } }
       .setBehaviors { context in
-        MainActor.assumeIsolated { context.view.setBehaviors(behaviors) }
+        context.view.setBehaviors(behaviors)
       }
   }
 }
@@ -119,7 +119,7 @@ extension StyledView
   {
     ItemModel<Self>(dataID: dataID)
       .setBehaviors { context in
-        MainActor.assumeIsolated { context.view.setBehaviors(behaviors) }
+        context.view.setBehaviors(behaviors)
       }
   }
 }

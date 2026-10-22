@@ -11,12 +11,14 @@ import UIKit
 /// Used to reference a `BarModel` without a generic type.
 protocol InternalBarModeling: Diffable, EpoxyModeled, StyleIDProviding {
   /// Constructs a configured bar view.
+  @MainActor
   func makeConfiguredView(traitCollection: UITraitCollection) -> UIView
 
   /// Configures the content of an existing bar view
   func configureContent(_ view: UIView, traitCollection: UITraitCollection, animated: Bool)
 
   /// Configures the behavior of an existing bar view.
+  @MainActor
   func configureBehavior(_ view: UIView, traitCollection: UITraitCollection)
 
   /// Should inform consumers that this bar model will be displayed.

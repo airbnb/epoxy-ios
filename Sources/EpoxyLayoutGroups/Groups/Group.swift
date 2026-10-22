@@ -103,6 +103,7 @@ extension Constrainable where Self: InternalGroup {
   ///   - newItems: the new set of items to set on the group
   ///   - animated: `Bool` indicating whether the update should be animated or not
   ///   - animation: `LayoutGroupUpdateAnimation` with animation customization
+  @MainActor
   func _setItems(_ newItems: [GroupItemModeling], animated: Bool, animation: LayoutGroupUpdateAnimation) {
     assert(validateItems(newItems))
     let oldItems = items
@@ -216,6 +217,7 @@ extension Constrainable where Self: InternalGroup {
     }
   }
 
+  @MainActor
   func resetBehaviors() {
     guard constrainableContainers.count == items.count else {
       EpoxyLogger.shared
