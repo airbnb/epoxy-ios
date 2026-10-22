@@ -25,6 +25,7 @@ public protocol InternalItemModeling: ItemModeling,
   /// Set behaviors needed by the view.
   ///
   /// Called before presentation and when cells are reordered.
+  @MainActor
   func setBehavior(cell: ItemWrapperView, with metadata: ItemCellMetadata)
 
   /// Updates the cell based on a state change.
@@ -47,5 +48,6 @@ public protocol InternalItemModeling: ItemModeling,
   ///
   /// - Parameter traitCollection: The trait collection to create the view for
   /// - Returns: The configured view for this item model.
+  @MainActor
   func configuredView(traitCollection: UITraitCollection) -> UIView
 }

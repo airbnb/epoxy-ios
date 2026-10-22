@@ -154,5 +154,17 @@ extension EpoxyModelProperty.UpdateStrategy {
     }
   }
 
+  /// Chains main actor callbacks, calling the old closure before the new closure.
+  public static func chainMainActor<A>() -> EpoxyModelProperty<(@MainActor (A) -> Void)?>.UpdateStrategy {
+    .init { old, new in
+      guard let new = new else { return old }
+      guard let old = old else { return new }
+      return { a in
+        old(a)
+        new(a)
+      }
+    }
+  }
+
   // Add more arities as needed
 }

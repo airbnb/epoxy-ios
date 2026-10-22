@@ -69,16 +69,24 @@ jobs:
       DEVELOPER_DIR: /Applications/Xcode_26.0.1.app/Contents/Developer
     steps:
       - uses: actions/checkout@v4
-      - name: Build simulator modules with isolation inference
+      - name: Build simulator modules
+        run: >-
+          xcodebuild build -scheme Epoxy
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath "$RUNNER_TEMP/epoxy-compiler"
+          CODE_SIGNING_ALLOWED=NO
+      - name: Test behavior compiler contracts (Swift 5 and Swift 6 modes)
+        run: bash Tests/CompilerTests/check-set-behaviors.sh "$RUNNER_TEMP/epoxy-compiler/Build/Products/Debug-iphonesimulator"
+      - name: Build layout simulator modules with isolation inference
         run: >-
           xcodebuild build -scheme EpoxyLayoutGroups
           -destination 'generic/platform=iOS Simulator'
-          -derivedDataPath "$RUNNER_TEMP/epoxy-compiler"
+          -derivedDataPath "$RUNNER_TEMP/epoxy-layout-compiler"
           SWIFT_STRICT_CONCURRENCY=complete
           OTHER_SWIFT_FLAGS='$(inherited) -enable-upcoming-feature InferIsolatedConformances'
           CODE_SIGNING_ALLOWED=NO
       - name: Test layout compiler contracts (Swift 5 and Swift 6 modes)
-        run: bash Tests/CompilerTests/check-constrainable.sh "$RUNNER_TEMP/epoxy-compiler/Build/Products/Debug-iphonesimulator"
+        run: bash Tests/CompilerTests/check-constrainable.sh "$RUNNER_TEMP/epoxy-layout-compiler/Build/Products/Debug-iphonesimulator"
       - name: Test wrapper compiler contracts (Swift 5 and Swift 6 modes)
         run: bash Tests/CompilerTests/check-item-wrapper.sh
 

@@ -15,7 +15,8 @@ extension CallbackContextEpoxyModeled where Self: SetBehaviorsProviding {
 
   /// A closure that's called to set the content on this model's view with behaviors (e.g. tap handler
   /// closures) whenever this model is updated.
-  public typealias SetBehaviors = (CallbackContext) -> Void
+  /// The closure runs on the main actor; storing it on a model does not require the main actor.
+  public typealias SetBehaviors = @MainActor (CallbackContext) -> Void
 
   /// A closure that's called to set the content on this model's view with behaviors (e.g. tap handler
   /// closures) whenever this model is updated.
@@ -33,6 +34,6 @@ extension CallbackContextEpoxyModeled where Self: SetBehaviorsProviding {
   // MARK: Private
 
   private var setBehaviorsProperty: EpoxyModelProperty<SetBehaviors?> {
-    .init(keyPath: \Self.setBehaviors, defaultValue: nil, updateStrategy: .chain())
+    .init(keyPath: \Self.setBehaviors, defaultValue: nil, updateStrategy: .chainMainActor())
   }
 }

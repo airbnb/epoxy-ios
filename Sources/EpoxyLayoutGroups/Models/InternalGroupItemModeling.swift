@@ -15,5 +15,6 @@ protocol InternalGroupItemModeling: GroupItemModeling, EpoxyModeled {
   @MainActor
   func update(_ constrainable: Constrainable, animated: Bool)
   /// set any behaviors on the constrainable (this is called more frequently than update)
+  @MainActor
   func setBehaviors(on constrainable: Constrainable)
 }
