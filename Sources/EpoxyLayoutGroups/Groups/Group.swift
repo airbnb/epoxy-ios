@@ -65,11 +65,14 @@ protocol InternalGroup: AnyObject, Group {
   var dataIDIndexMap: [AnyHashable: Int] { get set }
 
   /// Uninstalls and re-installs all constraints
+  @MainActor
   func installConstraintsIfNeeded()
   /// returns a set of constraints for the current state
+  @MainActor
   func generateConstraints() -> GroupConstraints?
 }
 
+@MainActor
 extension Constrainable where Self: InternalGroup {
 
   func _constrainable(with dataID: AnyHashable) -> Constrainable? {
@@ -306,6 +309,7 @@ extension Constrainable where Self: InternalGroup {
 
 }
 
+@MainActor
 extension InternalGroup where Self: UILayoutGuide {
   /// shared implementation of install(in view:)
   func _install(in view: UIView) {

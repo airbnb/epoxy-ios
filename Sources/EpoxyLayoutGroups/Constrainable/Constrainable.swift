@@ -7,37 +7,41 @@ import UIKit
 // MARK: - Constrainable
 
 /// Defines something that can be constrained with AutoLayout
+///
+/// Layout operations require the main actor. Identity and equality remain nonisolated for diffing.
 public protocol Constrainable {
-  var leadingAnchor: NSLayoutXAxisAnchor { get }
-  var trailingAnchor: NSLayoutXAxisAnchor { get }
-  var leftAnchor: NSLayoutXAxisAnchor { get }
-  var rightAnchor: NSLayoutXAxisAnchor { get }
-  var topAnchor: NSLayoutYAxisAnchor { get }
-  var bottomAnchor: NSLayoutYAxisAnchor { get }
-  var widthAnchor: NSLayoutDimension { get }
-  var heightAnchor: NSLayoutDimension { get }
-  var centerXAnchor: NSLayoutXAxisAnchor { get }
-  var centerYAnchor: NSLayoutYAxisAnchor { get }
-  var firstBaselineAnchor: NSLayoutYAxisAnchor { get }
-  var lastBaselineAnchor: NSLayoutYAxisAnchor { get }
+  @MainActor var leadingAnchor: NSLayoutXAxisAnchor { get }
+  @MainActor var trailingAnchor: NSLayoutXAxisAnchor { get }
+  @MainActor var leftAnchor: NSLayoutXAxisAnchor { get }
+  @MainActor var rightAnchor: NSLayoutXAxisAnchor { get }
+  @MainActor var topAnchor: NSLayoutYAxisAnchor { get }
+  @MainActor var bottomAnchor: NSLayoutYAxisAnchor { get }
+  @MainActor var widthAnchor: NSLayoutDimension { get }
+  @MainActor var heightAnchor: NSLayoutDimension { get }
+  @MainActor var centerXAnchor: NSLayoutXAxisAnchor { get }
+  @MainActor var centerYAnchor: NSLayoutYAxisAnchor { get }
+  @MainActor var firstBaselineAnchor: NSLayoutYAxisAnchor { get }
+  @MainActor var lastBaselineAnchor: NSLayoutYAxisAnchor { get }
   /// unique identifier for this constrainable
-  var dataID: AnyHashable { get }
+  nonisolated var dataID: AnyHashable { get }
   /// View that owns this constrainable
-  var owningView: UIView? { get }
+  @MainActor var owningView: UIView? { get }
   /// The frame of the Constrainable in its owningView's coordinate system.
   /// Valid by the time the owningView receives `layoutSubviews()`.
-  var layoutFrame: CGRect { get }
+  @MainActor var layoutFrame: CGRect { get }
 
   /// install the Constrainable into the provided view
+  @MainActor
   func install(in view: UIView)
   /// uninstalls the Constrainable
+  @MainActor
   func uninstall()
   /// equality function
-  func isEqual(to constrainable: Constrainable) -> Bool
+  nonisolated func isEqual(to constrainable: Constrainable) -> Bool
 }
 
 extension Constrainable where Self: NSObject {
-  public var dataID: AnyHashable { ObjectIdentifier(self) }
+  public nonisolated var dataID: AnyHashable { ObjectIdentifier(self) }
 }
 
 // MARK: Diffable
@@ -55,7 +59,7 @@ extension Constrainable {
 
 // MARK: - UIView + Constrainable
 
-extension UIView: Constrainable {
+extension UIView {
   public var owningView: UIView? {
     superview
   }
@@ -72,12 +76,13 @@ extension UIView: Constrainable {
     removeFromSuperview()
   }
 
-  public func isEqual(to constrainable: Constrainable) -> Bool {
+  public nonisolated func isEqual(to constrainable: Constrainable) -> Bool {
     guard let other = constrainable as? UIView else { return false }
     return other == self
   }
 }
 
+@MainActor
 extension Constrainable {
   public func constrainToMargins(insets: NSDirectionalEdgeInsets = .zero) {
     guard let owningView = owningView else {
@@ -126,3 +131,10 @@ extension Constrainable {
     ])
   }
 }
+
+// Keep identity and equality available outside the main actor when conformance isolation is inferred.
+#if compiler(>=6.2)
+extension UIView: nonisolated Constrainable { }
+#else
+extension UIView: Constrainable { }
+#endif

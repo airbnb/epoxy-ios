@@ -4,9 +4,11 @@
 import Foundation
 import UIKit
 
+// MARK: - VGroup
+
 /// A generic layout guide that models SwiftUI's `VStack`.
 /// Please see the README for usage information
-public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
+public final class VGroup: UILayoutGuide, InternalGroup {
 
   // MARK: Lifecycle
 
@@ -165,7 +167,7 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
     _uninstall()
   }
 
-  public func isEqual(to constrainable: Constrainable) -> Bool {
+  public nonisolated func isEqual(to constrainable: Constrainable) -> Bool {
     guard let other = constrainable as? VGroup else { return false }
     return other == self
   }
@@ -196,3 +198,10 @@ public final class VGroup: UILayoutGuide, Constrainable, InternalGroup {
   }
 
 }
+
+// Keep identity and equality available outside the main actor when conformance isolation is inferred.
+#if compiler(>=6.2)
+extension VGroup: nonisolated Constrainable { }
+#else
+extension VGroup: Constrainable { }
+#endif

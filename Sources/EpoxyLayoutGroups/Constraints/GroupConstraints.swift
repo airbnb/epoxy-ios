@@ -4,6 +4,7 @@
 import UIKit
 
 /// A protocol to abstract the constraints needed for a given Group
+@MainActor
 protocol GroupConstraints {
   /// Install all constraints
   func install()

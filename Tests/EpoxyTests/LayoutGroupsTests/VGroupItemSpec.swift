@@ -27,7 +27,7 @@ final class VGroupItemSpec: QuickSpec {
           .horizontalAlignment(.center)
           .padding(.init(7))
           .verticalAlignment(.center)
-        let constrainable = updatedItem.makeConstrainable()
+        let constrainable = MainActor.assumeIsolated { updatedItem.makeConstrainable() }
         expect(constrainable is ConstrainableContainer).to(beTrue())
         expect((constrainable as! ConstrainableContainer).accessibilityAlignment)
           .to(equal(VGroup.ItemAlignment.center))

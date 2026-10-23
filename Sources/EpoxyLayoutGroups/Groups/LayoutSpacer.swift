@@ -4,6 +4,8 @@
 import EpoxyCore
 import UIKit
 
+// MARK: - LayoutSpacer
+
 /// Used inside of an HGroup or VGroup to space out components
 /// e.g.:
 /// let vGroup = VGroup {
@@ -11,7 +13,7 @@ import UIKit
 ///   LayoutSpacer(fixedHeight: 16)
 ///   subtitleLabel
 /// }
-public final class LayoutSpacer: UILayoutGuide, Constrainable {
+public final class LayoutSpacer: UILayoutGuide {
 
   // MARK: Lifecycle
 
@@ -45,7 +47,7 @@ public final class LayoutSpacer: UILayoutGuide, Constrainable {
 
   // MARK: Public
 
-  public struct Style: Hashable {
+  public struct Style: Hashable, Sendable {
 
     // MARK: Lifecycle
 
@@ -91,7 +93,7 @@ public final class LayoutSpacer: UILayoutGuide, Constrainable {
     owningView?.removeLayoutGuide(self)
   }
 
-  public func isEqual(to constrainable: Constrainable) -> Bool {
+  public nonisolated func isEqual(to constrainable: Constrainable) -> Bool {
     guard let other = constrainable as? LayoutSpacer else { return false }
     return other.style == style
   }
@@ -155,3 +157,10 @@ public final class LayoutSpacer: UILayoutGuide, Constrainable {
   }
 
 }
+
+// Keep identity and equality available outside the main actor when conformance isolation is inferred.
+#if compiler(>=6.2)
+extension LayoutSpacer: nonisolated Constrainable { }
+#else
+extension LayoutSpacer: Constrainable { }
+#endif

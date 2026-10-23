@@ -77,6 +77,16 @@ jobs:
           CODE_SIGNING_ALLOWED=NO
       - name: Test behavior compiler contracts (Swift 5 and Swift 6 modes)
         run: bash Tests/CompilerTests/check-set-behaviors.sh "$RUNNER_TEMP/epoxy-compiler/Build/Products/Debug-iphonesimulator"
+      - name: Build layout simulator modules with isolation inference
+        run: >-
+          xcodebuild build -scheme EpoxyLayoutGroups
+          -destination 'generic/platform=iOS Simulator'
+          -derivedDataPath "$RUNNER_TEMP/epoxy-layout-compiler"
+          SWIFT_STRICT_CONCURRENCY=complete
+          OTHER_SWIFT_FLAGS='$(inherited) -enable-upcoming-feature InferIsolatedConformances'
+          CODE_SIGNING_ALLOWED=NO
+      - name: Test layout compiler contracts (Swift 5 and Swift 6 modes)
+        run: bash Tests/CompilerTests/check-constrainable.sh "$RUNNER_TEMP/epoxy-layout-compiler/Build/Products/Debug-iphonesimulator"
       - name: Test wrapper compiler contracts (Swift 5 and Swift 6 modes)
         run: bash Tests/CompilerTests/check-item-wrapper.sh
 
