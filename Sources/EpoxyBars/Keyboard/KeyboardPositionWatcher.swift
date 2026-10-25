@@ -62,6 +62,10 @@ public class KeyboardPositionWatcher {
     observeOverlap(in: scrollView) { [weak scrollView] overlap in
       guard let scrollView = scrollView, scrollView.keyboardAdjustsBottomContentInset else { return }
 
+      // UIKit can post a hide without a preceding show, e.g. twice when dismissing on drag. There is
+      // nothing to restore, and writing a zero inset would clobber insets owned by others.
+      guard overlap > 0 || previousOverlap > 0 else { return }
+
       var insets = scrollView.insets(for: overlap)
 
       // Store the previous insets when the keyboard appears and reapply when disappeared.

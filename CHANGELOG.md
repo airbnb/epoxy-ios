@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Run `SetBehaviors` callbacks on the main actor, including chained callbacks, while keeping model construction and callback storage nonisolated.
 - Explicitly isolate `ItemWrapperView` and `ItemCellView` to the main actor so inherited wrapper conformances work with strict concurrency and `InferIsolatedConformances`.
 
+### Fixed
+- Fixed `KeyboardPositionWatcher.adjustBottomContentInset(of:)` zeroing the scroll view's bottom content inset when a keyboard hide notification arrives without a preceding show, e.g. the second hide UIKit posts when dismissing the keyboard on drag. This clobbered insets owned by others, such as a bottom bar's `.barHeightContentInset`.
+
 ## [0.12.0](https://github.com/airbnb/epoxy-ios/compare/0.11.0...0.12.0)
 
 ### Changed
