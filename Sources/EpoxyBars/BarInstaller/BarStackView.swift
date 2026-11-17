@@ -147,11 +147,33 @@ public class BarStackView: UIStackView, EpoxyableView {
   /// Updates the contents of this stack to the stack modeled by the given model array, inserting,
   /// removing, and updating any bars as needed.
   public func setBars(_ bars: [BarModeling], animated: Bool) {
+    // Configuring a bar can synchronously call back into `setBars`, e.g. from a SwiftUI bar's
+    // `onDisappear` or a bar's `setBehaviors`. Applying that update in the middle of this one would
+    // mutate `models` and `wrappers` while they're being iterated, so it waits until this one ends.
+    guard !isUpdatingBars else {
+      if bars.count < models.count {
+        EpoxyLogger.shared.assertionFailure(
+          """
+          setBars(_:animated:) was called with fewer bars while this stack was already updating its \
+          bars, typically from a callback of one of the bars being updated. The call has been \
+          deferred until the in-flight update completes, which may not be the intended result. \
+          Avoid updating the bar stack synchronously from a bar's callbacks.
+          """)
+      }
+      pendingBars = (bars, animated)
+      return
+    }
+
+    isUpdatingBars = true
     let updates = updateModels(bars, animated: animated)
-
     updateWrapperZOrder()
-
     applyWrapperUpdates(updates, animated: animated)
+    isUpdatingBars = false
+
+    if let pendingBars {
+      self.pendingBars = nil
+      setBars(pendingBars.bars, animated: pendingBars.animated)
+    }
   }
 
   // MARK: Internal
@@ -193,6 +215,12 @@ public class BarStackView: UIStackView, EpoxyableView {
 
   /// The wrapper of the model being selected or highlighted.
   private var selectedWrapper: BarWrapperView?
+
+  /// Whether a `setBars(_:animated:)` call is currently being applied.
+  private var isUpdatingBars = false
+
+  /// The most recent bars passed to `setBars(_:animated:)` while another update was being applied.
+  private var pendingBars: (bars: [BarModeling], animated: Bool)?
 
   /// Wrappers ordered by their order in the Z axis (from highest to lowest)
   private var zOrderedWrappers: [BarWrapperView] {
