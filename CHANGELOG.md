@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Explicitly isolate `ItemWrapperView` and `ItemCellView` to the main actor so inherited wrapper conformances work with strict concurrency and `InferIsolatedConformances`.
 
 ### Fixed
+- Fixed a crash in `BarStackView.setBars(_:animated:)` when a bar's callback synchronously calls `setBars` again with fewer bars while an update is in progress. The nested call is now applied once the in-flight update completes, and asserts when it has fewer bars.
 - Fixed `KeyboardPositionWatcher.adjustBottomContentInset(of:)` zeroing the scroll view's bottom content inset when a keyboard hide notification arrives without a preceding show, e.g. the second hide UIKit posts when dismissing the keyboard on drag. This clobbered insets owned by others, such as a bottom bar's `.barHeightContentInset`.
 
 ## [0.12.0](https://github.com/airbnb/epoxy-ios/compare/0.11.0...0.12.0)

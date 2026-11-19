@@ -78,6 +78,111 @@ final class BarStackViewSpec: QuickSpec {
           expect(view.arrangedBarViewTags).to(equal([10,2,30,4]))
         }
       }
+
+      context("when called from a bar's callback during an update") {
+        var failures: [String]!
+        var previousLogger: EpoxyLogger!
+
+        beforeEach {
+          failures = []
+          previousLogger = EpoxyLogger.shared
+          EpoxyLogger.shared = EpoxyLogger(assertionFailure: { message, _, _ in failures.append(message()) })
+        }
+
+        afterEach {
+          EpoxyLogger.shared = previousLogger
+        }
+
+        context("with fewer bars from an updated bar") {
+          it("should apply the nested call after the update and assert") {
+            view.setBars([
+              TestView.barModel(content: 1).dataID(1),
+              TestView.barModel(content: 2).dataID(2),
+              TestView.barModel(content: 3).dataID(3),
+            ], animated: false)
+
+            view.setBars([
+              TestView.barModel(content: 1).dataID(1).setBehaviors { _ in
+                view.setBars([
+                  TestView.barModel(content: 2).dataID(2),
+                  TestView.barModel(content: 3).dataID(3),
+                ], animated: false)
+              },
+              TestView.barModel(content: 2).dataID(2),
+              TestView.barModel(content: 3).dataID(3),
+            ], animated: false)
+
+            expect(view.arrangedBarViewTags).to(equal([2,3]))
+            expect(view.models.map(\.dataID)).to(equal([2,3]))
+            expect(failures).to(haveCount(1))
+          }
+        }
+
+        context("with fewer bars from an inserted bar") {
+          it("should apply the nested call after the update and assert") {
+            view.setBars([
+              TestView.barModel(content: 2).dataID(2),
+              TestView.barModel(content: 3).dataID(3),
+            ], animated: false)
+
+            view.setBars([
+              TestView.barModel(content: 1).dataID(1).setBehaviors { _ in
+                view.setBars([TestView.barModel(content: 3).dataID(3)], animated: false)
+              },
+              TestView.barModel(content: 2).dataID(2),
+              TestView.barModel(content: 3).dataID(3),
+            ], animated: false)
+
+            expect(view.arrangedBarViewTags).to(equal([3]))
+            expect(view.models.map(\.dataID)).to(equal([3]))
+            expect(failures).to(haveCount(1))
+          }
+        }
+
+        context("with as many bars") {
+          it("should apply the nested call after the update without asserting") {
+            view.setBars([
+              TestView.barModel(content: 1).dataID(1),
+              TestView.barModel(content: 2).dataID(2),
+            ], animated: false)
+
+            view.setBars([
+              TestView.barModel(content: 1).dataID(1).setBehaviors { _ in
+                view.setBars([
+                  TestView.barModel(content: 4).dataID(4),
+                  TestView.barModel(content: 2).dataID(2),
+                ], animated: false)
+              },
+              TestView.barModel(content: 2).dataID(2),
+            ], animated: false)
+
+            expect(view.arrangedBarViewTags).to(equal([4,2]))
+            expect(failures).to(beEmpty())
+          }
+        }
+
+        context("more than once") {
+          it("should apply only the latest nested call") {
+            view.setBars([
+              TestView.barModel(content: 1).dataID(1),
+              TestView.barModel(content: 2).dataID(2),
+            ], animated: false)
+
+            view.setBars([
+              TestView.barModel(content: 1).dataID(1).setBehaviors { _ in
+                view.setBars([TestView.barModel(content: 2).dataID(2)], animated: false)
+                view.setBars([
+                  TestView.barModel(content: 4).dataID(4),
+                  TestView.barModel(content: 2).dataID(2),
+                ], animated: false)
+              },
+              TestView.barModel(content: 2).dataID(2),
+            ], animated: false)
+
+            expect(view.arrangedBarViewTags).to(equal([4,2]))
+          }
+        }
+      }
     }
   }
 
