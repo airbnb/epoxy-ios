@@ -67,6 +67,7 @@
 		A6F0929325B9ED0C007D902B /* CounterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F0929225B9ED0C007D902B /* CounterViewController.swift */; };
 		A6F0929625B9EEF3007D902B /* BottomButtonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F0929525B9EEF3007D902B /* BottomButtonViewController.swift */; };
 		A6F0929D25B9EFB9007D902B /* FormNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6F0929C25B9EFB9007D902B /* FormNavigationController.swift */; };
+		AA0000000000000000000002 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000001 /* SceneDelegate.swift */; };
 		BACF3E8C23DBB8DC0001CCD1 /* ShuffleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BACF3E8B23DBB8DC0001CCD1 /* ShuffleViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -132,6 +133,7 @@
 		A6F0929225B9ED0C007D902B /* CounterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterViewController.swift; sourceTree = "<group>"; };
 		A6F0929525B9EEF3007D902B /* BottomButtonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomButtonViewController.swift; sourceTree = "<group>"; };
 		A6F0929C25B9EFB9007D902B /* FormNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormNavigationController.swift; sourceTree = "<group>"; };
+		AA0000000000000000000001 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		BACF3E8B23DBB8DC0001CCD1 /* ShuffleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuffleViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -265,6 +267,7 @@
 			isa = PBXGroup;
 			children = (
 				25627B92232ABF0E00D7327A /* AppDelegate.swift */,
+				AA0000000000000000000001 /* SceneDelegate.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -422,6 +425,7 @@
 				A5AD02A72637CBF9007261BC /* TextFieldRow.swift in Sources */,
 				BACF3E8C23DBB8DC0001CCD1 /* ShuffleViewController.swift in Sources */,
 				25627B93232ABF0F00D7327A /* AppDelegate.swift in Sources */,
+				AA0000000000000000000002 /* SceneDelegate.swift in Sources */,
 				25B6766825AFA67100C00B20 /* ButtonRow.swift in Sources */,
 				A6F0929325B9ED0C007D902B /* CounterViewController.swift in Sources */,
 				25D39B502627809D00B3DBF9 /* BaseRow.swift in Sources */,
@@ -616,7 +620,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5LL7P8E8RA;
 				INFOPLIST_FILE = EpoxyExample/Assets/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -635,7 +639,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 5LL7P8E8RA;
 				INFOPLIST_FILE = EpoxyExample/Assets/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
